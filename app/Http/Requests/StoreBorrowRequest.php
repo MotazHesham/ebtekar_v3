@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Models\Borrow;
+use Gate;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Response;
+
+class StoreBorrowRequest extends FormRequest
+{
+    public function authorize()
+    {
+        return Gate::allows('borrow_create');
+    }
+
+    public function rules()
+    {
+        return [
+            'employee_id' => [
+                'required',
+                'integer',
+            ],
+            'status' => [
+                'required',
+            ],
+        ];
+    }
+}

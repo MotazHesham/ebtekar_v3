@@ -1,0 +1,263 @@
+<?php
+
+Route::redirect('/', '/login');
+Route::get('/home', function () {
+    if (session('status')) {
+        return redirect()->route('admin.home')->with('status', session('status'));
+    }
+
+    return redirect()->route('admin.home');
+});
+
+Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
+Auth::routes();
+
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    // Permissions
+    Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
+    Route::resource('permissions', 'PermissionsController');
+
+    // Roles
+    Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
+    Route::resource('roles', 'RolesController');
+
+    // Users
+    Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
+    Route::post('users/media', 'UsersController@storeMedia')->name('users.storeMedia');
+    Route::post('users/ckmedia', 'UsersController@storeCKEditorImages')->name('users.storeCKEditorImages');
+    Route::resource('users', 'UsersController');
+
+    // Audit Logs
+    Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
+
+    // Task Status
+    Route::delete('task-statuses/destroy', 'TaskStatusController@massDestroy')->name('task-statuses.massDestroy');
+    Route::resource('task-statuses', 'TaskStatusController');
+
+    // Task Tag
+    Route::delete('task-tags/destroy', 'TaskTagController@massDestroy')->name('task-tags.massDestroy');
+    Route::resource('task-tags', 'TaskTagController');
+
+    // Task
+    Route::delete('tasks/destroy', 'TaskController@massDestroy')->name('tasks.massDestroy');
+    Route::post('tasks/media', 'TaskController@storeMedia')->name('tasks.storeMedia');
+    Route::post('tasks/ckmedia', 'TaskController@storeCKEditorImages')->name('tasks.storeCKEditorImages');
+    Route::resource('tasks', 'TaskController');
+
+    // Tasks Calendar
+    Route::resource('tasks-calendars', 'TasksCalendarController', ['except' => ['create', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+    // User Alerts
+    Route::delete('user-alerts/destroy', 'UserAlertsController@massDestroy')->name('user-alerts.massDestroy');
+    Route::get('user-alerts/read', 'UserAlertsController@read');
+    Route::resource('user-alerts', 'UserAlertsController', ['except' => ['edit', 'update']]);
+
+    // Receipt Social
+    Route::delete('receipt-socials/destroy', 'ReceiptSocialController@massDestroy')->name('receipt-socials.massDestroy');
+    Route::resource('receipt-socials', 'ReceiptSocialController');
+
+    // Receipt Social Product
+    Route::delete('receipt-social-products/destroy', 'ReceiptSocialProductController@massDestroy')->name('receipt-social-products.massDestroy');
+    Route::post('receipt-social-products/media', 'ReceiptSocialProductController@storeMedia')->name('receipt-social-products.storeMedia');
+    Route::post('receipt-social-products/ckmedia', 'ReceiptSocialProductController@storeCKEditorImages')->name('receipt-social-products.storeCKEditorImages');
+    Route::resource('receipt-social-products', 'ReceiptSocialProductController');
+
+    // Receipt Client
+    Route::delete('receipt-clients/destroy', 'ReceiptClientController@massDestroy')->name('receipt-clients.massDestroy');
+    Route::resource('receipt-clients', 'ReceiptClientController');
+
+    // Receipt Client Product
+    Route::delete('receipt-client-products/destroy', 'ReceiptClientProductController@massDestroy')->name('receipt-client-products.massDestroy');
+    Route::resource('receipt-client-products', 'ReceiptClientProductController');
+
+    // Receipt Company
+    Route::delete('receipt-companies/destroy', 'ReceiptCompanyController@massDestroy')->name('receipt-companies.massDestroy');
+    Route::post('receipt-companies/media', 'ReceiptCompanyController@storeMedia')->name('receipt-companies.storeMedia');
+    Route::post('receipt-companies/ckmedia', 'ReceiptCompanyController@storeCKEditorImages')->name('receipt-companies.storeCKEditorImages');
+    Route::resource('receipt-companies', 'ReceiptCompanyController');
+
+    // General Settings
+    Route::post('general-settings/media', 'GeneralSettingsController@storeMedia')->name('general-settings.storeMedia');
+    Route::post('general-settings/ckmedia', 'GeneralSettingsController@storeCKEditorImages')->name('general-settings.storeCKEditorImages');
+    Route::resource('general-settings', 'GeneralSettingsController', ['except' => ['create', 'store', 'destroy']]);
+
+    // Customers
+    Route::delete('customers/destroy', 'CustomersController@massDestroy')->name('customers.massDestroy');
+    Route::resource('customers', 'CustomersController');
+
+    // Sellers
+    Route::delete('sellers/destroy', 'SellersController@massDestroy')->name('sellers.massDestroy');
+    Route::post('sellers/media', 'SellersController@storeMedia')->name('sellers.storeMedia');
+    Route::post('sellers/ckmedia', 'SellersController@storeCKEditorImages')->name('sellers.storeCKEditorImages');
+    Route::resource('sellers', 'SellersController');
+
+    // Commission Requests
+    Route::delete('commission-requests/destroy', 'CommissionRequestsController@massDestroy')->name('commission-requests.massDestroy');
+    Route::resource('commission-requests', 'CommissionRequestsController');
+
+    // Admins
+    Route::delete('admins/destroy', 'AdminsController@massDestroy')->name('admins.massDestroy');
+    Route::resource('admins', 'AdminsController');
+
+    // Borrows
+    Route::delete('borrows/destroy', 'BorrowsController@massDestroy')->name('borrows.massDestroy');
+    Route::resource('borrows', 'BorrowsController');
+
+    // Subtractions
+    Route::delete('subtractions/destroy', 'SubtractionsController@massDestroy')->name('subtractions.massDestroy');
+    Route::resource('subtractions', 'SubtractionsController');
+
+    // Employees
+    Route::delete('employees/destroy', 'EmployeesController@massDestroy')->name('employees.massDestroy');
+    Route::resource('employees', 'EmployeesController');
+
+    // Countries
+    Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
+    Route::resource('countries', 'CountriesController');
+
+    // Socials
+    Route::delete('socials/destroy', 'SocialsController@massDestroy')->name('socials.massDestroy');
+    Route::post('socials/media', 'SocialsController@storeMedia')->name('socials.storeMedia');
+    Route::post('socials/ckmedia', 'SocialsController@storeCKEditorImages')->name('socials.storeCKEditorImages');
+    Route::resource('socials', 'SocialsController');
+
+    // Banned Phones
+    Route::delete('banned-phones/destroy', 'BannedPhonesController@massDestroy')->name('banned-phones.massDestroy');
+    Route::resource('banned-phones', 'BannedPhonesController');
+
+    // Polices
+    Route::delete('polices/destroy', 'PolicesController@massDestroy')->name('polices.massDestroy');
+    Route::post('polices/media', 'PolicesController@storeMedia')->name('polices.storeMedia');
+    Route::post('polices/ckmedia', 'PolicesController@storeCKEditorImages')->name('polices.storeCKEditorImages');
+    Route::resource('polices', 'PolicesController');
+
+    // Sliders
+    Route::delete('sliders/destroy', 'SlidersController@massDestroy')->name('sliders.massDestroy');
+    Route::post('sliders/media', 'SlidersController@storeMedia')->name('sliders.storeMedia');
+    Route::post('sliders/ckmedia', 'SlidersController@storeCKEditorImages')->name('sliders.storeCKEditorImages');
+    Route::resource('sliders', 'SlidersController');
+
+    // Banners
+    Route::delete('banners/destroy', 'BannersController@massDestroy')->name('banners.massDestroy');
+    Route::post('banners/media', 'BannersController@storeMedia')->name('banners.storeMedia');
+    Route::post('banners/ckmedia', 'BannersController@storeCKEditorImages')->name('banners.storeCKEditorImages');
+    Route::resource('banners', 'BannersController');
+
+    // Categories
+    Route::delete('categories/destroy', 'CategoriesController@massDestroy')->name('categories.massDestroy');
+    Route::post('categories/media', 'CategoriesController@storeMedia')->name('categories.storeMedia');
+    Route::post('categories/ckmedia', 'CategoriesController@storeCKEditorImages')->name('categories.storeCKEditorImages');
+    Route::resource('categories', 'CategoriesController');
+
+    // Home Categories
+    Route::delete('home-categories/destroy', 'HomeCategoriesController@massDestroy')->name('home-categories.massDestroy');
+    Route::resource('home-categories', 'HomeCategoriesController');
+
+    // Quality Responsible
+    Route::delete('quality-responsibles/destroy', 'QualityResponsibleController@massDestroy')->name('quality-responsibles.massDestroy');
+    Route::post('quality-responsibles/media', 'QualityResponsibleController@storeMedia')->name('quality-responsibles.storeMedia');
+    Route::post('quality-responsibles/ckmedia', 'QualityResponsibleController@storeCKEditorImages')->name('quality-responsibles.storeCKEditorImages');
+    Route::resource('quality-responsibles', 'QualityResponsibleController');
+
+    // Seo Settings
+    Route::delete('seo-settings/destroy', 'SeoSettingsController@massDestroy')->name('seo-settings.massDestroy');
+    Route::resource('seo-settings', 'SeoSettingsController');
+
+    // Conversations
+    Route::delete('conversations/destroy', 'ConversationsController@massDestroy')->name('conversations.massDestroy');
+    Route::resource('conversations', 'ConversationsController');
+
+    // Orders
+    Route::delete('orders/destroy', 'OrdersController@massDestroy')->name('orders.massDestroy');
+    Route::resource('orders', 'OrdersController');
+
+    // Receipt Outgoing
+    Route::delete('receipt-outgoings/destroy', 'ReceiptOutgoingController@massDestroy')->name('receipt-outgoings.massDestroy');
+    Route::resource('receipt-outgoings', 'ReceiptOutgoingController');
+
+    // Receipt Outgoing Product
+    Route::delete('receipt-outgoing-products/destroy', 'ReceiptOutgoingProductController@massDestroy')->name('receipt-outgoing-products.massDestroy');
+    Route::resource('receipt-outgoing-products', 'ReceiptOutgoingProductController');
+
+    // Receipt Price View
+    Route::delete('receipt-price-views/destroy', 'ReceiptPriceViewController@massDestroy')->name('receipt-price-views.massDestroy');
+    Route::resource('receipt-price-views', 'ReceiptPriceViewController');
+
+    // Receipt Price View Product
+    Route::delete('receipt-price-view-products/destroy', 'ReceiptPriceViewProductController@massDestroy')->name('receipt-price-view-products.massDestroy');
+    Route::resource('receipt-price-view-products', 'ReceiptPriceViewProductController');
+
+    // Excel Files
+    Route::delete('excel-files/destroy', 'ExcelFilesController@massDestroy')->name('excel-files.massDestroy');
+    Route::post('excel-files/media', 'ExcelFilesController@storeMedia')->name('excel-files.storeMedia');
+    Route::post('excel-files/ckmedia', 'ExcelFilesController@storeCKEditorImages')->name('excel-files.storeCKEditorImages');
+    Route::resource('excel-files', 'ExcelFilesController');
+
+    // Products
+    Route::delete('products/destroy', 'ProductsController@massDestroy')->name('products.massDestroy');
+    Route::post('products/media', 'ProductsController@storeMedia')->name('products.storeMedia');
+    Route::post('products/ckmedia', 'ProductsController@storeCKEditorImages')->name('products.storeCKEditorImages');
+    Route::resource('products', 'ProductsController');
+
+    // Sub Category
+    Route::delete('sub-categories/destroy', 'SubCategoryController@massDestroy')->name('sub-categories.massDestroy');
+    Route::resource('sub-categories', 'SubCategoryController');
+
+    // Sub Sub Category
+    Route::delete('sub-sub-categories/destroy', 'SubSubCategoryController@massDestroy')->name('sub-sub-categories.massDestroy');
+    Route::resource('sub-sub-categories', 'SubSubCategoryController');
+
+    // Attributes
+    Route::delete('attributes/destroy', 'AttributesController@massDestroy')->name('attributes.massDestroy');
+    Route::resource('attributes', 'AttributesController');
+
+    // Reviews
+    Route::resource('reviews', 'ReviewsController', ['except' => ['create', 'store', 'edit', 'update', 'show', 'destroy']]);
+
+    // Playlist
+    Route::delete('playlists/destroy', 'PlaylistController@massDestroy')->name('playlists.massDestroy');
+    Route::resource('playlists', 'PlaylistController');
+
+    // Faq Category
+    Route::delete('faq-categories/destroy', 'FaqCategoryController@massDestroy')->name('faq-categories.massDestroy');
+    Route::resource('faq-categories', 'FaqCategoryController');
+
+    // Faq Question
+    Route::delete('faq-questions/destroy', 'FaqQuestionController@massDestroy')->name('faq-questions.massDestroy');
+    Route::resource('faq-questions', 'FaqQuestionController');
+
+    // Mockups
+    Route::delete('mockups/destroy', 'MockupsController@massDestroy')->name('mockups.massDestroy');
+    Route::post('mockups/media', 'MockupsController@storeMedia')->name('mockups.storeMedia');
+    Route::post('mockups/ckmedia', 'MockupsController@storeCKEditorImages')->name('mockups.storeCKEditorImages');
+    Route::resource('mockups', 'MockupsController');
+
+    // Designers
+    Route::delete('designers/destroy', 'DesignersController@massDestroy')->name('designers.massDestroy');
+    Route::resource('designers', 'DesignersController');
+
+    // Designes
+    Route::delete('designes/destroy', 'DesignesController@massDestroy')->name('designes.massDestroy');
+    Route::resource('designes', 'DesignesController');
+
+    // Delivery Orders
+    Route::delete('delivery-orders/destroy', 'DeliveryOrdersController@massDestroy')->name('delivery-orders.massDestroy');
+    Route::resource('delivery-orders', 'DeliveryOrdersController');
+
+    // Deliver Man
+    Route::delete('deliver-men/destroy', 'DeliverManController@massDestroy')->name('deliver-men.massDestroy');
+    Route::resource('deliver-men', 'DeliverManController');
+
+    Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
+    Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
+});
+Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
+    // Change password
+    if (file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php'))) {
+        Route::get('password', 'ChangePasswordController@edit')->name('password.edit');
+        Route::post('password', 'ChangePasswordController@update')->name('password.update');
+        Route::post('profile', 'ChangePasswordController@updateProfile')->name('password.updateProfile');
+        Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
+    }
+});
