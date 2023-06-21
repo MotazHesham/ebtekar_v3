@@ -30,9 +30,6 @@ class UpdateReceiptPriceViewProductRequest extends FormRequest
                 'min:-2147483648',
                 'max:2147483647',
             ],
-            'total_cost' => [
-                'required',
-            ],
             'receipt_price_view_id' => [
                 'required',
                 'integer',

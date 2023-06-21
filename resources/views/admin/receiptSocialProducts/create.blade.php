@@ -9,35 +9,37 @@
     <div class="card-body">
         <form method="POST" action="{{ route("admin.receipt-social-products.store") }}" enctype="multipart/form-data">
             @csrf
-            <div class="form-group">
-                <label class="required" for="name">{{ trans('cruds.receiptSocialProduct.fields.name') }}</label>
-                <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', '') }}" required>
-                @if($errors->has('name'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('name') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.receiptSocialProduct.fields.name_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="price">{{ trans('cruds.receiptSocialProduct.fields.price') }}</label>
-                <input class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}" type="number" name="price" id="price" value="{{ old('price', '') }}" step="0.01">
-                @if($errors->has('price'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('price') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.receiptSocialProduct.fields.price_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label class="required" for="commission">{{ trans('cruds.receiptSocialProduct.fields.commission') }}</label>
-                <input class="form-control {{ $errors->has('commission') ? 'is-invalid' : '' }}" type="text" name="commission" id="commission" value="{{ old('commission', '') }}" required>
-                @if($errors->has('commission'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('commission') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.receiptSocialProduct.fields.commission_helper') }}</span>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="required" for="name">{{ trans('cruds.receiptSocialProduct.fields.name') }}</label>
+                    <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', '') }}" required>
+                    @if($errors->has('name'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('name') }}
+                        </div>
+                    @endif
+                    <span class="help-block">{{ trans('cruds.receiptSocialProduct.fields.name_helper') }}</span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="price">{{ trans('cruds.receiptSocialProduct.fields.price') }}</label>
+                    <input class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}" type="number" name="price" id="price" value="{{ old('price', '') }}" step="0.01" required>
+                    @if($errors->has('price'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('price') }}
+                        </div>
+                    @endif
+                    <span class="help-block">{{ trans('cruds.receiptSocialProduct.fields.price_helper') }}</span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="required" for="commission">{{ trans('cruds.receiptSocialProduct.fields.commission') }}</label>
+                    <input class="form-control {{ $errors->has('commission') ? 'is-invalid' : '' }}" type="number" name="commission" id="commission" value="{{ old('commission', '') }}" step="0.01" required>
+                    @if($errors->has('commission'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('commission') }}
+                        </div>
+                    @endif
+                    <span class="help-block">{{ trans('cruds.receiptSocialProduct.fields.commission_helper') }}</span>
+                </div>
             </div>
             <div class="form-group">
                 <label for="photos">{{ trans('cruds.receiptSocialProduct.fields.photos') }}</label>

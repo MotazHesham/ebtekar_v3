@@ -17,7 +17,6 @@ class CreateOrdersTable extends Migration
             $table->string('phone_number');
             $table->string('phone_number_2');
             $table->longText('shipping_address');
-            $table->string('shipping_country_name');
             $table->decimal('shipping_country_cost', 15, 2);
             $table->decimal('shipping_cost_by_seller', 15, 2)->nullable();
             $table->boolean('free_shipping')->default(0)->nullable();
@@ -31,10 +30,10 @@ class CreateOrdersTable extends Migration
             $table->datetime('send_to_playlist_date')->nullable();
             $table->date('date_of_receiving_order')->nullable();
             $table->date('excepected_deliverd_date')->nullable();
-            $table->string('playlist_status')->nullable();
-            $table->string('payment_status');
-            $table->string('delivery_status');
-            $table->string('payment_type');
+            $table->string('delivery_status')->default('pending');
+            $table->string('payment_status')->default('unpaid');
+            $table->string('playlist_status')->default('pending');
+            $table->string('payment_type')->default('cash_on_delivery');
             $table->string('commission_status')->nullable();
             $table->string('deposit_type')->nullable();
             $table->decimal('deposit_amount', 15, 2)->nullable();

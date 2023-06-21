@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::redirect('/', '/login');
 Route::get('/home', function () {
     if (session('status')) {
@@ -14,6 +17,9 @@ Auth::routes();
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
+    Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
+    Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');
+
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');
@@ -54,6 +60,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('user-alerts', 'UserAlertsController', ['except' => ['edit', 'update']]);
 
     // Receipt Social
+    Route::delete('receipt-socials/destroy_product/{id}', 'ReceiptSocialController@destroy_product')->name('receipt-socials.destroy_product');
+    Route::get('receipt-socials/restore/{id}', 'ReceiptSocialController@restore')->name('receipt-socials.restore');
+    Route::get('receipt-socials/print/{id}', 'ReceiptSocialController@print')->name('receipt-socials.print');
+    Route::get('receipt-socials/receive_money/{id}', 'ReceiptSocialController@receive_money')->name('receipt-socials.receive_money');
+    Route::get('receipt-socials/duplicate/{id}', 'ReceiptSocialController@duplicate')->name('receipt-socials.duplicate');
+    Route::post('receipt-socials/upload_fedex', 'ReceiptSocialController@upload_fedex')->name('receipt-socials.upload_fedex');
+    Route::post('receipt-socials/send_to_wasla', 'ReceiptSocialController@send_to_wasla')->name('receipt-socials.send_to_wasla');
+    Route::post('receipt-socials/update_delivery_man', 'ReceiptSocialController@update_delivery_man')->name('receipt-socials.update_delivery_man');
+    Route::post('receipt-socials/update_statuses', 'ReceiptSocialController@update_statuses')->name('receipt-socials.update_statuses');
+    Route::post('receipt-socials/view_products', 'ReceiptSocialController@view_products')->name('receipt-socials.view_products');
+    Route::post('receipt-socials/add_product', 'ReceiptSocialController@add_product')->name('receipt-socials.add_product');
+    Route::post('receipt-socials/edit_product', 'ReceiptSocialController@edit_product')->name('receipt-socials.edit_product');
     Route::delete('receipt-socials/destroy', 'ReceiptSocialController@massDestroy')->name('receipt-socials.massDestroy');
     Route::resource('receipt-socials', 'ReceiptSocialController');
 
@@ -64,6 +82,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('receipt-social-products', 'ReceiptSocialProductController');
 
     // Receipt Client
+    Route::delete('receipt-clients/destroy_product/{id}', 'ReceiptClientController@destroy_product')->name('receipt-clients.destroy_product');
+    Route::get('receipt-clients/restore/{id}', 'ReceiptClientController@restore')->name('receipt-clients.restore');
+    Route::get('receipt-clients/print/{id}', 'ReceiptClientController@print')->name('receipt-clients.print');
+    Route::get('receipt-clients/receive_money/{id}', 'ReceiptClientController@receive_money')->name('receipt-clients.receive_money');
+    Route::get('receipt-clients/duplicate/{id}', 'ReceiptClientController@duplicate')->name('receipt-clients.duplicate');
+    Route::post('receipt-clients/update_statuses', 'ReceiptClientController@update_statuses')->name('receipt-clients.update_statuses');
+    Route::post('receipt-clients/view_products', 'ReceiptClientController@view_products')->name('receipt-clients.view_products');
+    Route::post('receipt-clients/add_product', 'ReceiptClientController@add_product')->name('receipt-clients.add_product');
+    Route::post('receipt-clients/edit_product', 'ReceiptClientController@edit_product')->name('receipt-clients.edit_product');
     Route::delete('receipt-clients/destroy', 'ReceiptClientController@massDestroy')->name('receipt-clients.massDestroy');
     Route::resource('receipt-clients', 'ReceiptClientController');
 
@@ -72,6 +99,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('receipt-client-products', 'ReceiptClientProductController');
 
     // Receipt Company
+    Route::get('receipt-companies/restore/{id}', 'ReceiptCompanyController@restore')->name('receipt-companies.restore');
+    Route::get('receipt-companies/print/{id}', 'ReceiptCompanyController@print')->name('receipt-companies.print');
+    Route::get('receipt-companies/duplicate/{id}', 'ReceiptCompanyController@duplicate')->name('receipt-companies.duplicate');
+    Route::post('receipt-companies/send_to_wasla', 'ReceiptCompanyController@send_to_wasla')->name('receipt-companies.send_to_wasla');
+    Route::post('receipt-companies/update_delivery_man', 'ReceiptCompanyController@update_delivery_man')->name('receipt-companies.update_delivery_man');
+    Route::post('receipt-companies/update_statuses', 'ReceiptCompanyController@update_statuses')->name('receipt-companies.update_statuses');
     Route::delete('receipt-companies/destroy', 'ReceiptCompanyController@massDestroy')->name('receipt-companies.massDestroy');
     Route::post('receipt-companies/media', 'ReceiptCompanyController@storeMedia')->name('receipt-companies.storeMedia');
     Route::post('receipt-companies/ckmedia', 'ReceiptCompanyController@storeCKEditorImages')->name('receipt-companies.storeCKEditorImages');
@@ -173,6 +206,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('orders', 'OrdersController');
 
     // Receipt Outgoing
+    Route::delete('receipt-outgoings/destroy_product/{id}', 'ReceiptOutgoingController@destroy_product')->name('receipt-outgoings.destroy_product');
+    Route::get('receipt-outgoings/restore/{id}', 'ReceiptOutgoingController@restore')->name('receipt-outgoings.restore');
+    Route::get('receipt-outgoings/print/{id}', 'ReceiptOutgoingController@print')->name('receipt-outgoings.print');
+    Route::get('receipt-outgoings/duplicate/{id}', 'ReceiptOutgoingController@duplicate')->name('receipt-outgoings.duplicate');
+    Route::post('receipt-outgoings/update_statuses', 'ReceiptOutgoingController@update_statuses')->name('receipt-outgoings.update_statuses');
+    Route::post('receipt-outgoings/view_products', 'ReceiptOutgoingController@view_products')->name('receipt-outgoings.view_products');
+    Route::post('receipt-outgoings/add_product', 'ReceiptOutgoingController@add_product')->name('receipt-outgoings.add_product');
+    Route::post('receipt-outgoings/edit_product', 'ReceiptOutgoingController@edit_product')->name('receipt-outgoings.edit_product');
     Route::delete('receipt-outgoings/destroy', 'ReceiptOutgoingController@massDestroy')->name('receipt-outgoings.massDestroy');
     Route::resource('receipt-outgoings', 'ReceiptOutgoingController');
 
@@ -181,6 +222,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('receipt-outgoing-products', 'ReceiptOutgoingProductController');
 
     // Receipt Price View
+    Route::delete('receipt-price-views/destroy_product/{id}', 'ReceiptPriceViewController@destroy_product')->name('receipt-price-views.destroy_product');
+    Route::get('receipt-price-views/restore/{id}', 'ReceiptPriceViewController@restore')->name('receipt-price-views.restore');
+    Route::get('receipt-price-views/print/{id}', 'ReceiptPriceViewController@print')->name('receipt-price-views.print');
+    Route::get('receipt-price-views/duplicate/{id}', 'ReceiptPriceViewController@duplicate')->name('receipt-price-views.duplicate');
+    Route::post('receipt-price-views/update_statuses', 'ReceiptPriceViewController@update_statuses')->name('receipt-price-views.update_statuses');
+    Route::post('receipt-price-views/view_products', 'ReceiptPriceViewController@view_products')->name('receipt-price-views.view_products');
+    Route::post('receipt-price-views/add_product', 'ReceiptPriceViewController@add_product')->name('receipt-price-views.add_product');
+    Route::post('receipt-price-views/edit_product', 'ReceiptPriceViewController@edit_product')->name('receipt-price-views.edit_product');
     Route::delete('receipt-price-views/destroy', 'ReceiptPriceViewController@massDestroy')->name('receipt-price-views.massDestroy');
     Route::resource('receipt-price-views', 'ReceiptPriceViewController');
 
@@ -217,7 +266,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Playlist
     Route::delete('playlists/destroy', 'PlaylistController@massDestroy')->name('playlists.massDestroy');
-    Route::resource('playlists', 'PlaylistController');
+    Route::post('playlists/update_playlist_users', 'PlaylistController@update_playlist_users')->name('playlists.update_playlist_users');
+    Route::post('playlists/playlist_users', 'PlaylistController@playlist_users')->name('playlists.playlist_users');
+    Route::post('playlists/update_playlist_status', 'PlaylistController@update_playlist_status')->name('playlists.update_playlist_status');
+    Route::post('playlists/show_details', 'PlaylistController@show_details')->name('playlists.show_details');
+    Route::get('playlists/print/{id}/{model_type}', 'PlaylistController@print')->name('playlists.print');
+    Route::get('playlists/{type}', 'PlaylistController@index')->name('playlists.index');
 
     // Faq Category
     Route::delete('faq-categories/destroy', 'FaqCategoryController@massDestroy')->name('faq-categories.massDestroy');
@@ -253,11 +307,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
+    // Profile
+    Route::post('wasla_login', 'ProfileController@wasla_login')->name('wasla_login');
+    Route::get('wasla_logout','ProfileController@wasla_logout')->name('wasla_logout'); 
+    Route::post('profile', 'ProfileController@updateProfile')->name('updateProfile');
+
     // Change password
     if (file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php'))) {
         Route::get('password', 'ChangePasswordController@edit')->name('password.edit');
         Route::post('password', 'ChangePasswordController@update')->name('password.update');
-        Route::post('profile', 'ChangePasswordController@updateProfile')->name('password.updateProfile');
         Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
     }
 });

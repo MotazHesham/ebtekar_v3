@@ -2,6 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\ReceiptClient;
+use App\Models\ReceiptCompany;
+use App\Models\ReceiptOutgoing;
+use App\Models\ReceiptPriceView;
+use App\Models\ReceiptSocial;
+use App\Observers\ReceiptClientObserver;
+use App\Observers\ReceiptCompanyObserver;
+use App\Observers\ReceiptOutgoingObserver;
+use App\Observers\ReceiptPriceViewObserver;
+use App\Observers\ReceiptSocialObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,7 +35,11 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        ReceiptSocial::observe(ReceiptSocialObserver::class);
+        ReceiptClient::observe(ReceiptClientObserver::class);
+        ReceiptOutgoing::observe(ReceiptOutgoingObserver::class);
+        ReceiptCompany::observe(ReceiptCompanyObserver::class);
+        ReceiptPriceView::observe(ReceiptPriceViewObserver::class);
     }
 
     /**

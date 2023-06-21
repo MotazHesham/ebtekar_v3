@@ -17,7 +17,7 @@ $(document).ready(function () {
   })
 
   $('.datetime').datetimepicker({
-    format: 'DD/MM/YYYY HH:mm:ss',
+    format: "DD/MM/YYYY hh:mm a",
     locale: 'en',
     sideBySide: true,
     icons: {
@@ -29,14 +29,15 @@ $(document).ready(function () {
   })
 
   $('.timepicker').datetimepicker({
-    format: 'HH:mm:ss',
+    format: 'hh:mm a',
+    stepping: 15,
     icons: {
       up: 'fas fa-chevron-up',
       down: 'fas fa-chevron-down',
       previous: 'fas fa-chevron-left',
       next: 'fas fa-chevron-right'
     }
-  })
+  }) 
 
   $('.select-all').click(function () {
     let $select2 = $(this).parent().siblings('.select2')
@@ -72,3 +73,6 @@ $(document).ready(function () {
   });
 
 })
+function aside(){ 
+  $('#aside').toggleClass('hide');
+}

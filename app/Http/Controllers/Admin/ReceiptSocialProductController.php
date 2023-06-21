@@ -23,7 +23,7 @@ class ReceiptSocialProductController extends Controller
         abort_if(Gate::denies('receipt_social_product_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = ReceiptSocialProduct::with(['receipts'])->select(sprintf('%s.*', (new ReceiptSocialProduct)->table));
+            $query = ReceiptSocialProduct::select(sprintf('%s.*', (new ReceiptSocialProduct)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');

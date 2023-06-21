@@ -12,6 +12,7 @@ class CreateUserAlertsTable extends Migration
             $table->bigIncrements('id');
             $table->string('alert_text')->nullable();
             $table->string('alert_link')->nullable();
+            $table->string('type')->default('public');
             $table->timestamps();
         });
     }

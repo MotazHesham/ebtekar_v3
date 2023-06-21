@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\ReceiptSocial;
-use Gate;
+use App\Models\ReceiptSocial; 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class UpdateReceiptSocialRequest extends FormRequest
 {
@@ -25,20 +25,15 @@ class UpdateReceiptSocialRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
             'phone_number_2' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'nullable',
-            ],
-            'shipping_country_name' => [
-                'string',
-                'required',
-            ],
-            'shipping_country_cost' => [
-                'required',
-            ],
+            ], 
             'shipping_address' => [
                 'required',
             ],
@@ -49,19 +44,6 @@ class UpdateReceiptSocialRequest extends FormRequest
             'deliver_date' => [
                 'date_format:' . config('panel.date_format'),
                 'nullable',
-            ],
-            'delivery_status' => [
-                'required',
-            ],
-            'payment_status' => [
-                'required',
-            ],
-            'playlist_status' => [
-                'required',
-            ],
-            'staff_id' => [
-                'required',
-                'integer',
             ],
             'shipping_country_id' => [
                 'required',

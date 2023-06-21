@@ -2,122 +2,315 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ReceiptClientExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyReceiptClientRequest;
 use App\Http\Requests\StoreReceiptClientRequest;
 use App\Http\Requests\UpdateReceiptClientRequest;
+use App\Models\GeneralSetting;
 use App\Models\ReceiptClient;
+use App\Models\ReceiptClientProduct;
+use App\Models\ReceiptClientProductPivot;
 use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class ReceiptClientController extends Controller
 {
+    
+    public function receive_money($id){
+        $receipt = ReceiptClient::find($id);
+        $generalsetting = GeneralSetting::first(); 
+        return view('partials.receive_money',compact('receipt','generalsetting'));
+    }
+
+    public function print($id){
+        $receipts = ReceiptClient::with('receiptsReceiptClientProducts','staff')->whereIn('id',[$id])->get();
+        $generalsetting = GeneralSetting::first();
+        foreach($receipts as $receipt){
+            $receipt->printing_times += 1;
+            $receipt->save();
+        }
+        return view('admin.receiptClients.print',compact('receipts','generalsetting'));
+    }
+
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $receipt = ReceiptClient::findOrFail($request->id);
+        $receipt->$type = $request->status;
+        if (($type == 'done') && $request->status == 1) {
+            $receipt->quickly = 0;
+        }
+        $receipt->save();
+        return 1;
+    }
+
+    public function duplicate($id){
+
+        $receipt_client = ReceiptClient::findOrFail($id); 
+        
+        $new_receipt = new ReceiptClient; 
+        $new_receipt->client_name = $receipt_client->client_name;
+        $new_receipt->phone_number = $receipt_client->phone_number;
+        $new_receipt->total_cost = $receipt_client->total_cost;
+        $new_receipt->note = $receipt_client->note;
+        $new_receipt->save();
+
+        $receipt_products = ReceiptClientProductPivot::where('receipt_client_id',$receipt_client->id)->get();
+        
+        foreach($receipt_products as $row){
+            $new_receipt_product = $row->replicate();
+            $new_receipt_product->receipt_client_id = $new_receipt->id;
+            $new_receipt_product->save();
+        }
+        alert('Receipt has been inserted successfully','','success');
+        return redirect()->route('admin.receipt-clients.index');
+    }
+
+    public function view_products(Request $request){
+        if($request->ajax()){
+            $receipt = ReceiptClient::withTrashed()->find($request->id);
+            $products = ReceiptClientProductPivot::where('receipt_client_id',$request->id)->latest()->get(); 
+            return view('admin.receiptClients.partials.view_products',compact('products','receipt'));
+        }else{
+            return '';
+        }
+    }
+
+    public function destroy_product($id)
+    {
+        $receipt_client_product_pivot = ReceiptClientProductPivot::find($id);
+        $receipt = ReceiptClient::find($receipt_client_product_pivot->receipt_client_id); 
+
+        $receipt_client_product_pivot->delete();
+
+        $receipt_client_products = ReceiptClientProductPivot::where('receipt_client_id', $receipt->id)->get();
+        $sum = 0;
+        foreach ($receipt_client_products as $row) {
+            $sum += $row->total_cost; 
+        }
+        $receipt->total_cost = $sum; 
+        $receipt->save();
+
+        alert(trans('flash.deleted'),'','success'); 
+        return 1;
+    }
+    public function edit_product(Request $request){
+        if($request->ajax()){
+            $receipt_client_product_pivot = ReceiptClientProductPivot::find($request->id); 
+            $products = ReceiptClientProduct::latest()->get();
+            return view('admin.receiptClients.partials.edit_product',compact('receipt_client_product_pivot','products'));
+        }else{ 
+
+            $receipt_product_pivot = ReceiptClientProductPivot::find($request->receipt_product_pivot_id);
+            $receipt = ReceiptClient::find($receipt_product_pivot->receipt_client_id);
+            
+            $product = ReceiptClientProduct::findOrFail($request->product_id); 
+
+            $receipt_product_pivot->receipt_client_product_id = $request->product_id;
+            $receipt_product_pivot->description = $product->name;
+            $receipt_product_pivot->price = $product->price;
+            $receipt_product_pivot->quantity = $request->quantity;
+            $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
+            $receipt_product_pivot->save();
+
+            // calculate the costing of products in receipt
+            $all_receipt_product_pivot = ReceiptClientProductPivot::where('receipt_client_id', $receipt->id)->get();
+            $sum = 0;
+            foreach ($all_receipt_product_pivot as $row) {
+                $sum += $row->total_cost;
+            }
+
+            // update the main receipt with new costing after calculation of its products
+            $receipt->total_cost = $sum;
+            $receipt->save(); 
+            alert('Product has been Updated successfully','','success'); 
+            return redirect()->route('admin.receipt-clients.index');
+        }
+    }
+
+    public function add_product(Request $request){
+        if($request->ajax()){
+            $products = ReceiptClientProduct::latest()->get();
+            $receipt_id = $request->id;
+            return view('admin.receiptClients.partials.add_product',compact('products','receipt_id'));
+        }else{
+            $receipt = ReceiptClient::find($request->receipt_id);  
+
+            $product = ReceiptClientProduct::findOrFail($request->product_id);
+
+            $receipt_product_pivot = new ReceiptClientProductPivot(); 
+            $receipt_product_pivot->receipt_client_id = $request->receipt_id;
+            $receipt_product_pivot->receipt_client_product_id = $request->product_id; 
+            $receipt_product_pivot->description = $product->name;
+            $receipt_product_pivot->price = $product->price;
+            $receipt_product_pivot->quantity = $request->quantity; 
+            $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
+            $receipt_product_pivot->save();
+            
+            $receipt_products = ReceiptClientProductPivot::where('receipt_client_id', $request->receipt_id)->get();
+            $sum = 0;
+            foreach ($receipt_products as $row) {
+                $sum += $row->total_cost;
+            }
+            $receipt->total_cost = $sum;
+            $receipt->save();
+
+            alert(trans('flash.global.success_title'),trans('flash.global.success_body'),'success');
+            return redirect()->route('admin.receipt-clients.index');
+        }
+    }
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('receipt_client_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if ($request->ajax()) {
-            $query = ReceiptClient::with(['staff'])->select(sprintf('%s.*', (new ReceiptClient)->table));
-            $table = Datatables::of($query);
+        $staffs = User::whereIn('user_type', ['staff', 'admin'])->get();
 
-            $table->addColumn('placeholder', '&nbsp;');
-            $table->addColumn('actions', '&nbsp;');
+        $phone = null;
+        $client_name = null;
+        $order_num = null;
+        $staff_id = null;
+        $from = null;
+        $to = null;
+        $from_date = null;
+        $to_date = null;
+        $date_type = null;
+        $exclude = null;
+        $include = null;
+        $quickly = null;
+        $done = null;
+        $description = null; 
+        $deleted = null; 
 
-            $table->editColumn('actions', function ($row) {
-                $viewGate      = 'receipt_client_show';
-                $editGate      = 'receipt_client_edit';
-                $deleteGate    = 'receipt_client_delete';
-                $crudRoutePart = 'receipt-clients';
-
-                return view('partials.datatablesActions', compact(
-                    'viewGate',
-                    'editGate',
-                    'deleteGate',
-                    'crudRoutePart',
-                    'row'
-                ));
-            });
-
-            $table->editColumn('id', function ($row) {
-                return $row->id ? $row->id : '';
-            });
-
-            $table->editColumn('order_num', function ($row) {
-                return $row->order_num ? $row->order_num : '';
-            });
-            $table->editColumn('client_name', function ($row) {
-                return $row->client_name ? $row->client_name : '';
-            });
-            $table->editColumn('phone_number', function ($row) {
-                return $row->phone_number ? $row->phone_number : '';
-            });
-            $table->editColumn('deposit', function ($row) {
-                return $row->deposit ? $row->deposit : '';
-            });
-            $table->editColumn('discount', function ($row) {
-                return $row->discount ? $row->discount : '';
-            });
-            $table->editColumn('note', function ($row) {
-                return $row->note ? $row->note : '';
-            });
-            $table->editColumn('total_cost', function ($row) {
-                return $row->total_cost ? $row->total_cost : '';
-            });
-            $table->editColumn('done', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->done ? 'checked' : null) . '>';
-            });
-            $table->editColumn('quickly', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->quickly ? 'checked' : null) . '>';
-            });
-            $table->editColumn('printing_times', function ($row) {
-                return $row->printing_times ? $row->printing_times : '';
-            });
-            $table->addColumn('staff_name', function ($row) {
-                return $row->staff ? $row->staff->name : '';
-            });
-
-            $table->rawColumns(['actions', 'placeholder', 'done', 'quickly', 'staff']);
-
-            return $table->make(true);
+        if(request('deleted')){
+            $deleted = 1; 
+            $receipts = ReceiptClient::with(['staff:id,name'])->onlyTrashed();  
+        }else{
+            $receipts = ReceiptClient::with(['staff:id,name']);  
         }
 
-        return view('admin.receiptClients.index');
+        if ($request->done != null) {
+            $receipts = $receipts->where('done', $request->done);
+            $done = $request->done;
+        }
+        
+        if ($request->quickly != null) {
+            $receipts = $receipts->where('quickly', $request->quickly);
+            $quickly = $request->quickly;
+        }
+
+        if ($request->staff_id != null) {
+            $receipts = $receipts->where('staff_id', $request->staff_id);
+            $staff_id = $request->staff_id;
+        }
+
+        if ($request->description != null) {
+            $description = $request->description;
+            $receipts = $receipts->whereHas('receiptsReceiptClientProducts', function ($query) use ($description) {
+                $query->where('description', 'like', '%' . $description . '%');
+            });
+        }
+        if ($request->phone != null) {
+            global $phone;
+            $phone = $request->phone;
+            $receipts = $receipts->where('phone_number', 'like', '%' . $phone . '%');
+        }
+        if ($request->client_name != null) {
+            $receipts = $receipts->where('client_name', 'like', '%' . $request->client_name . '%');
+            $client_name = $request->client_name;
+        }
+        if ($request->order_num != null) {
+            $receipts = $receipts->where('order_num', 'like', '%' . $request->order_num . '%');
+            $order_num = $request->order_num;
+        }
+        if ($request->from != null && $request->to != null) {
+            $from = $request->from;
+            $to = $request->to;
+            $receipts = $receipts->whereBetween('order_num', [ 'receipt-client#' . $from,  'receipt-client#' . $to]);
+        }
+        if ($request->from_date != null && $request->to_date != null && $request->date_type != null) {  
+            $from_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->from_date . ' ' . '12:00 am')->format('Y-m-d H:i:s');
+            $to_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->to_date . ' ' . '11:59 pm')->format('Y-m-d H:i:s'); 
+            $date_type = $request->date_type;
+            $receipts = $receipts->whereBetween($date_type, [$from_date, $to_date]);
+        }
+        if ($request->exclude != null) {
+            $exclude = $request->exclude;
+            foreach(explode(',',$exclude) as $exc){
+                $exclude2[] = 'receipt-client#' . $exc;
+            }
+            $receipts = $receipts->whereNotIn('order_num', $exclude2);
+        }
+        if ($request->include != null) {
+            $include = $request->include;
+            foreach(explode(',',$include) as $inc){
+                $include2[] = 'receipt-client#' . $inc;
+            }
+            $receipts = $receipts->whereIn('order_num' ,$include2);
+        }
+
+        if ($request->has('print')) {
+            $receipts = $receipts->with('receiptsReceiptClientProducts')->get();
+            $generalsetting = GeneralSetting::first();
+            foreach($receipts as $receipt){
+                $receipt->printing_times += 1;
+                $receipt->save();
+            }
+            return view('admin.receiptClients.print', compact('receipts','generalsetting'));
+        }
+        
+        if($request->has('download')){
+            return Excel::download(new ReceiptClientExport($receipts->get()), 'client_receipts_('.$from.')_('.$to.')_('. $request->client_name .').xlsx');
+        }
+        
+        $statistics = [  
+            'total_deposit' => $receipts->sum('deposit'),
+            'total_total_cost' => $receipts->sum('total_cost'),
+        ];
+        
+        $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
+
+        return view('admin.receiptClients.index',compact(
+            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from',
+            'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include', 'quickly',
+            'done', 'description', 'receipts', 'statistics','deleted'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         abort_if(Gate::denies('receipt_client_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $staff = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $previous_data = searchByPhone($request->phone_number);
 
-        return view('admin.receiptClients.create', compact('staff'));
+        return view('admin.receiptClients.create', compact('previous_data'));
     }
 
     public function store(StoreReceiptClientRequest $request)
     {
         $receiptClient = ReceiptClient::create($request->all());
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-clients.index');
     }
 
     public function edit(ReceiptClient $receiptClient)
     {
         abort_if(Gate::denies('receipt_client_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $staff = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $receiptClient->load('staff');
 
-        return view('admin.receiptClients.edit', compact('receiptClient', 'staff'));
+        return view('admin.receiptClients.edit', compact('receiptClient'));
     }
 
     public function update(UpdateReceiptClientRequest $request, ReceiptClient $receiptClient)
     {
         $receiptClient->update($request->all());
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.receipt-clients.index');
     }
 
@@ -128,25 +321,34 @@ class ReceiptClientController extends Controller
         $receiptClient->load('staff', 'receiptsReceiptClientProducts');
 
         return view('admin.receiptClients.show', compact('receiptClient'));
-    }
+    } 
 
-    public function destroy(ReceiptClient $receiptClient)
+    public function destroy($id)
     {
         abort_if(Gate::denies('receipt_client_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $receiptClient->delete();
-
-        return back();
-    }
-
-    public function massDestroy(MassDestroyReceiptClientRequest $request)
-    {
-        $receiptClients = ReceiptClient::find(request('ids'));
-
-        foreach ($receiptClients as $receiptClient) {
+        $receiptClient = ReceiptClient::withTrashed()->find($id); 
+        if($receiptClient->deleted_at != null){
+            $receiptClient->forceDelete();
+        }else{
             $receiptClient->delete();
         }
+        
 
-        return response(null, Response::HTTP_NO_CONTENT);
-    }
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
+    } 
+
+    public function restore($id)
+    {
+        abort_if(Gate::denies('receipt_client_restore'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $receiptClient = ReceiptClient::withTrashed()->find($id);
+        $receiptClient->restore();
+
+        alert(trans('flash.restored'),'','success');
+
+        return redirect()->route('admin.receipt-clients.index');
+    } 
 }

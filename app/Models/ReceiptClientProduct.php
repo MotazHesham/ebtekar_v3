@@ -39,6 +39,6 @@ class ReceiptClientProduct extends Model
 
     public function receipts()
     {
-        return $this->belongsToMany(ReceiptClient::class);
+        return $this->hasMany(ReceiptClientProductPivot::class, 'receipt_client_product_id');
     }
 }

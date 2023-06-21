@@ -53,7 +53,7 @@ class ReceiptClient extends Model
 
     public function receiptsReceiptClientProducts()
     {
-        return $this->belongsToMany(ReceiptClientProduct::class);
+        return $this->hasMany(ReceiptClientProductPivot::class,'receipt_client_id');
     }
 
     public function getDateOfReceivingOrderAttribute($value)
@@ -70,4 +70,18 @@ class ReceiptClient extends Model
     {
         return $this->belongsTo(User::class, 'staff_id');
     }
+
+	// operations
+	public function calc_discount(){
+		$total = $this->total_cost / 100;
+		return round( ($total * $this->discount ) , 2);
+	}
+
+	public function calc_total_cost(){
+		return $this->total_cost - $this->calc_discount();
+	}
+
+	public function calc_total_for_client(){
+		return $this->total_cost - $this->calc_discount()  - $this->deposit;
+	}
 }

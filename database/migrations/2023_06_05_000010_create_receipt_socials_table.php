@@ -25,8 +25,7 @@ class CreateReceiptSocialsTable extends Migration
             $table->boolean('confirm')->default(0)->nullable();
             $table->boolean('returned')->default(0)->nullable();
             $table->boolean('supplied')->default(0)->nullable();
-            $table->integer('printing_times')->nullable();
-            $table->string('shipping_country_name');
+            $table->integer('printing_times')->nullable(); 
             $table->decimal('shipping_country_cost', 15, 2);
             $table->longText('shipping_address');
             $table->date('date_of_receiving_order')->nullable();
@@ -36,10 +35,10 @@ class CreateReceiptSocialsTable extends Migration
             $table->datetime('done_time')->nullable();
             $table->longText('cancel_reason')->nullable();
             $table->longText('delay_reason')->nullable();
-            $table->string('delivery_status');
+            $table->string('delivery_status')->default('pending');
             $table->longText('note')->nullable();
-            $table->string('payment_status');
-            $table->string('playlist_status');
+            $table->string('payment_status')->default('unpaid');
+            $table->string('playlist_status')->default('pending');
             $table->timestamps();
             $table->softDeletes();
         });

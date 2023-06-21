@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('verification_token')->nullable();
             $table->string('password')->nullable();
             $table->string('user_type')->nullable();
-            $table->integer('wasla_company')->nullable();
+            $table->integer('wasla_company_id')->nullable();
             $table->string('wasla_token')->nullable();
             $table->string('device_token')->nullable();
             $table->datetime('email_verified_at')->nullable();

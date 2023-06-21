@@ -26,15 +26,9 @@ class UpdateReceiptOutgoingRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
-            ],
-            'total_cost' => [
-                'required',
-            ],
-            'staff_id' => [
-                'required',
-                'integer',
             ],
         ];
     }

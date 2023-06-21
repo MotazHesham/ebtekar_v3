@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class ReceiptSocial extends Model
 {
@@ -76,9 +77,8 @@ class ReceiptSocial extends Model
         'confirm',
         'returned',
         'supplied',
-        'printing_times',
-        'shipping_country_name',
-        'shipping_country_cost',
+        'printing_times', 
+        'shipping_country_cost', 
         'shipping_address',
         'date_of_receiving_order',
         'deliver_date',
@@ -106,11 +106,11 @@ class ReceiptSocial extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
-    }
-
-    public function receiptsReceiptSocialProducts()
+    } 
+    
+    public function getCreatedAtAttribute($value)
     {
-        return $this->belongsToMany(ReceiptSocialProduct::class);
+        return $value ? Carbon::parse($value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
     }
 
     public function getDateOfReceivingOrderAttribute($value)
@@ -161,6 +161,11 @@ class ReceiptSocial extends Model
     public function setDoneTimeAttribute($value)
     {
         $this->attributes['done_time'] = $value ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $value)->format('Y-m-d H:i:s') : null;
+    } 
+
+    public function receiptsReceiptSocialProducts()
+    {
+        return $this->hasMany(ReceiptSocialProductPivot::class,'receipt_social_id');
     }
 
     public function staff()
@@ -202,4 +207,23 @@ class ReceiptSocial extends Model
     {
         return $this->belongsToMany(Social::class);
     }
+    
+	// operations 
+
+	public function calc_total_cost(){
+		return $this->total_cost + $this->extra_commission;
+	}
+
+	public function calc_total_for_delivery(){
+		return $this->total_cost + $this->extra_commission  - $this->deposit;
+	}
+
+	public function calc_total(){
+		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost;
+	}
+
+	public function calc_total_for_client(){
+		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost  - $this->deposit;
+	}
+
 }

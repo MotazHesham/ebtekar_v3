@@ -20,11 +20,7 @@ class UpdateReceiptSocialProductRequest extends FormRequest
             'name' => [
                 'string',
                 'required',
-            ],
-            'commission' => [
-                'string',
-                'required',
-            ],
+            ], 
             'photos' => [
                 'array',
             ],

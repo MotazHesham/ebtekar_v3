@@ -25,11 +25,13 @@ class UpdateReceiptCompanyRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
             'phone_number_2' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'nullable',
             ],
             'deliver_date' => [
@@ -40,13 +42,6 @@ class UpdateReceiptCompanyRequest extends FormRequest
                 'date_format:' . config('panel.date_format'),
                 'nullable',
             ],
-            'shipping_country_name' => [
-                'string',
-                'required',
-            ],
-            'shipping_country_cost' => [
-                'required',
-            ],
             'shipping_address' => [
                 'required',
             ],
@@ -55,16 +50,6 @@ class UpdateReceiptCompanyRequest extends FormRequest
             ],
             'photos' => [
                 'array',
-            ],
-            'delivery_status' => [
-                'required',
-            ],
-            'payment_status' => [
-                'required',
-            ],
-            'staff_id' => [
-                'required',
-                'integer',
             ],
             'shipping_country_id' => [
                 'required',

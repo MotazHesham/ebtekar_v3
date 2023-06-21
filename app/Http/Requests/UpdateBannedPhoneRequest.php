@@ -18,7 +18,8 @@ class UpdateBannedPhoneRequest extends FormRequest
     {
         return [
             'phone' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
             'reason' => [

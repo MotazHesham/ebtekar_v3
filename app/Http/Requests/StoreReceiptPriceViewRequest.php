@@ -26,10 +26,8 @@ class StoreReceiptPriceViewRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                'string',
-                'required',
-            ],
-            'total_cost' => [
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
             'place' => [

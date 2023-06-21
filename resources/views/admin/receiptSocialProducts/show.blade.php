@@ -65,7 +65,7 @@
                         </th>
                         <td>
                             @foreach($receiptSocialProduct->receipts as $key => $receipts)
-                                <span class="label label-info">{{ $receipts->order_num }}</span>
+                                <span class="badge badge-info">{{ $receipts->order_num }}</span>
                             @endforeach
                         </td>
                     </tr>

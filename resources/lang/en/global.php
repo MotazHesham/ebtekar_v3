@@ -323,4 +323,71 @@ return [
     'calendar'                       => 'Calendar',
     'messenger'                      => 'Messenger',
 
+    'download_for_delivery'          => 'تحميل للشحن',
+    'reset'                          => 'أعادة تعيين',
+    'download'                       => 'تحميل',
+    'statistics'                     => 'أحصائيات',
+    'continue'                       => 'أستمرار',
+    'print'                          => 'طباعة',
+    'duplicate'                      => 'تكرار',
+    'receive_money'                  => 'استلام نقدية',
+    'delivery_status' => [
+        'colors' => [
+            'pending' =>  'primary',
+            'on_review' =>  'info',
+            'on_delivery' => 'light',
+            'delivered' => 'success',
+            'delay' =>  'warning',
+            'cancel' =>  'danger',
+        ],
+        'status' => [
+            'pending' => 'قيد الأنتظار',
+            'on_review' => 'قيد المراجعة',
+            'on_delivery' => 'مرسل للشحن',
+            'delivered' => 'تم التوصيل',
+            'delay' => 'تأجيل',
+            'cancel' => 'ألغاء',
+        ],
+    ],
+
+    'countries_type' => [
+        'countries' => 'المحافظات',
+        'districts' => 'المناطق',
+        'metro' => 'المترو',
+    ],
+
+    'payment_status' => [
+        'colors' => [
+            'paid' =>  'dark',
+            'unpaid' =>  'light', 
+        ],
+        'status' => [
+            'paid' => 'تم السداد',
+            'unpaid' => 'لم يتم السداد'
+        ],
+    ],
+
+    'playlist_status' => [
+        'colors' => [
+            'pending' =>  'primary',
+            'design' =>  'info',
+            'manufacturing' => 'light',
+            'prepare' => 'danger',
+            'shipment' =>  'warning',
+            'finish' =>  'success',
+        ],
+        'status' => [
+            'pending' => 'لم يتم الأرسال',
+            'design' => 'مرحلة الديزاين',
+            'manufacturing' => 'مرحلة التصنيع',
+            'prepare' => 'مرحلة التجهيز',
+            'shipment' => 'مرحلة الأرسال للشحن',
+            'finish' => 'تم الأرسال للشحن',
+        ]
+    ],
+
+    'payment_type' => [
+        'cash_on_delivery' => 'الدفع عند الأستلام',
+        'paymob' => 'الدفع paymob'
+    ],  
 ];

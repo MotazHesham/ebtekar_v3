@@ -27,7 +27,7 @@ trait Auditable
         AuditLog::create([
             'description'  => $description,
             'subject_id'   => $model->id ?? null,
-            'subject_type' => sprintf('%s#%s', get_class($model), $model->id) ?? null,
+            'subject_type' => get_class($model) ?? null,
             'user_id'      => auth()->id() ?? null,
             'properties'   => $changes ?: $model,
             'host'         => request()->ip() ?? null,

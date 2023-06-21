@@ -1,4 +1,4 @@
-<div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show">
+<div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" style="background: linear-gradient(86deg,#000000 0%,#05073f 100%)">
 
     <div class="c-sidebar-brand d-md-down-none">
         <a class="c-sidebar-brand-full h4" href="#">
@@ -7,11 +7,7 @@
     </div>
 
     <ul class="c-sidebar-nav">
-        <li>
-            <select class="searchable-field form-control">
-
-            </select>
-        </li>
+        
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.home") }}" class="c-sidebar-nav-link">
                 <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt">
@@ -20,6 +16,193 @@
                 {{ trans('global.dashboard') }}
             </a>
         </li>
+
+        <li class="nav-title">الفواتير</li>
+
+        @can('receipts_managment_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/receipt-socials*") ? "c-show" : "" }} {{ request()->is("admin/receipt-social-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-clients*") ? "c-show" : "" }} {{ request()->is("admin/receipt-client-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-companies*") ? "c-show" : "" }} {{ request()->is("admin/banned-phones*") ? "c-show" : "" }}  {{ request()->is("admin/receipt-outgoings*") ? "c-show" : "" }} {{ request()->is("admin/receipt-outgoing-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-price-views*") ? "c-show" : "" }} {{ request()->is("admin/receipt-price-view-products*") ? "c-show" : "" }} {{ request()->is("admin/excel-files*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-receipt c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.receiptsManagment.title') }}
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('receipt_social_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.receipt-socials.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-socials") || request()->is("admin/receipt-socials/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fab fa-facebook-square c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.receiptSocial.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('receipt_client_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.receipt-clients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-clients") || request()->is("admin/receipt-clients/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.receiptClient.title') }}
+                            </a>
+                        </li>
+                    @endcan 
+                    @can('receipt_company_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.receipt-companies.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-companies") || request()->is("admin/receipt-companies/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-building c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.receiptCompany.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('receipt_outgoing_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.receipt-outgoings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-outgoings") || request()->is("admin/receipt-outgoings/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fab fa-gitter c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.receiptOutgoing.title') }}
+                            </a>
+                        </li>
+                    @endcan 
+                    @can('receipt_price_view_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.receipt-price-views.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-price-views") || request()->is("admin/receipt-price-views/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-hand-holding-usd c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.receiptPriceView.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('banned_phone_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.banned-phones.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/banned-phones") || request()->is("admin/banned-phones/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-ban c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.bannedPhone.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('excel_file_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.excel-files.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/excel-files") || request()->is("admin/excel-files/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-table c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.excelFile.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
+        @can('playlist_access')
+            @php
+                // this is a counter to count the playlist depend on the status (design,manufacturing,prepare,shipment)
+                $playlists_to_count = DB::table('view_playlist_data')
+                                ->whereNotIn('playlist_status',['pending','finish'])
+                                ->select('playlist_status', DB::raw('count(*) as total'))
+                                ->groupBy('playlist_status')
+                                ->get();
+                $playlists_counter = [
+                    'design' => 0,
+                    'manufacturing' => 0,
+                    'prepare' => 0,
+                    'shipment' => 0,
+                ];
+                $playlists_counter_sum = 0;
+                foreach($playlists_to_count as $play_raw_group){
+                    $playlists_counter_sum += $play_raw_group->total;
+                    $playlists_counter[$play_raw_group->playlist_status] = $play_raw_group->total;
+                }
+            @endphp
+        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/playlists/*") ? "c-active" : "" }}">
+            <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
+
+                </i>
+                {{ trans('cruds.playlist.title') }}
+                <span class="badge bg-light-gradient text-dark ms-auto">{{ $playlists_counter_sum }}</span>
+            </a>
+            <ul class="c-sidebar-nav-dropdown-items">
+                <li class="c-sidebar-nav-item">
+                    <a href="{{ route("admin.playlists.index",'design') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/design") ? "c-active" : "" }}">
+                        <i class="fa-fw fas fa-pen-nib c-sidebar-nav-icon">
+
+                        </i>
+                        {{ trans('cruds.playlist.menu.design') }} 
+                        <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>
+                    </a>
+                <li class="c-sidebar-nav-item">
+                </li>
+                    <a href="{{ route("admin.playlists.index",'manufacturing') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/manufacturing") ? "c-active" : "" }}">
+                        <i class="fa-fw fas fa-building c-sidebar-nav-icon"> 
+
+                        </i>
+                        {{ trans('cruds.playlist.menu.manufacturing') }}
+                        <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> 
+                    </a>
+                </li>
+                </li>
+                    <a href="{{ route("admin.playlists.index",'prepare') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/prepare") ? "c-active" : "" }}">
+                        <i class="fa-fw fab fa-envira c-sidebar-nav-icon">
+
+                        </i>
+                        {{ trans('cruds.playlist.menu.prepare') }}
+                        <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> 
+                    </a>
+                </li>
+                </li>
+                    <a href="{{ route("admin.playlists.index",'shipment') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/shipment") ? "c-active" : "" }}">
+                        <i class="fa-fw fas fa-truck c-sidebar-nav-icon">
+
+                        </i>
+                        {{ trans('cruds.playlist.menu.shipment') }}
+                        <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> 
+                    </a>
+                </li>
+            </ul>
+        </li>
+        @endcan
+        @can('delivery_managment_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/delivery-orders*") ? "c-show" : "" }} {{ request()->is("admin/deliver-men*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.deliveryManagment.title') }}
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('delivery_order_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.delivery-orders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/delivery-orders") || request()->is("admin/delivery-orders/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-truck-loading c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.deliveryOrder.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('deliver_man_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.deliver-men.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/deliver-men") || request()->is("admin/deliver-men/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-user-clock c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.deliverMan.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
+
+        <li class="nav-title">الموقع</li>
         @can('product_managment_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/products*") ? "c-show" : "" }} {{ request()->is("admin/categories*") ? "c-show" : "" }} {{ request()->is("admin/sub-categories*") ? "c-show" : "" }} {{ request()->is("admin/sub-sub-categories*") ? "c-show" : "" }} {{ request()->is("admin/attributes*") ? "c-show" : "" }} {{ request()->is("admin/reviews*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -92,190 +275,6 @@
                 </ul>
             </li>
         @endcan
-        @can('receipts_managment_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/receipt-socials*") ? "c-show" : "" }} {{ request()->is("admin/receipt-social-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-clients*") ? "c-show" : "" }} {{ request()->is("admin/receipt-client-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-companies*") ? "c-show" : "" }} {{ request()->is("admin/banned-phones*") ? "c-show" : "" }} {{ request()->is("admin/orders*") ? "c-show" : "" }} {{ request()->is("admin/receipt-outgoings*") ? "c-show" : "" }} {{ request()->is("admin/receipt-outgoing-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-price-views*") ? "c-show" : "" }} {{ request()->is("admin/receipt-price-view-products*") ? "c-show" : "" }} {{ request()->is("admin/excel-files*") ? "c-show" : "" }}">
-                <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-receipt c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.receiptsManagment.title') }}
-                </a>
-                <ul class="c-sidebar-nav-dropdown-items">
-                    @can('receipt_social_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-socials.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-socials") || request()->is("admin/receipt-socials/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fab fa-facebook-square c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptSocial.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('receipt_social_product_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-social-products.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-social-products") || request()->is("admin/receipt-social-products/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptSocialProduct.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('receipt_client_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-clients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-clients") || request()->is("admin/receipt-clients/*") ? "c-active" : "" }}">
-                                <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptClient.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('receipt_client_product_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-client-products.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-client-products") || request()->is("admin/receipt-client-products/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptClientProduct.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('receipt_company_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-companies.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-companies") || request()->is("admin/receipt-companies/*") ? "c-active" : "" }}">
-                                <i class="fa-fw far fa-building c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptCompany.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('banned_phone_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.banned-phones.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/banned-phones") || request()->is("admin/banned-phones/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-ban c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.bannedPhone.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('order_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.orders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/orders") || request()->is("admin/orders/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-gift c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.order.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('receipt_outgoing_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-outgoings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-outgoings") || request()->is("admin/receipt-outgoings/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fab fa-gitter c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptOutgoing.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('receipt_outgoing_product_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-outgoing-products.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-outgoing-products") || request()->is("admin/receipt-outgoing-products/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptOutgoingProduct.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('receipt_price_view_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-price-views.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-price-views") || request()->is("admin/receipt-price-views/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-hand-holding-usd c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptPriceView.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('receipt_price_view_product_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-price-view-products.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-price-view-products") || request()->is("admin/receipt-price-view-products/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.receiptPriceViewProduct.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('excel_file_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.excel-files.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/excel-files") || request()->is("admin/excel-files/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-table c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.excelFile.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        @endcan
-        @can('playlist_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.playlists.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists") || request()->is("admin/playlists/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-align-center c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.playlist.title') }}
-                </a>
-            </li>
-        @endcan
-        @can('delivery_managment_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/delivery-orders*") ? "c-show" : "" }} {{ request()->is("admin/deliver-men*") ? "c-show" : "" }}">
-                <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.deliveryManagment.title') }}
-                </a>
-                <ul class="c-sidebar-nav-dropdown-items">
-                    @can('delivery_order_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.delivery-orders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/delivery-orders") || request()->is("admin/delivery-orders/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-truck-loading c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.deliveryOrder.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('deliver_man_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.deliver-men.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/deliver-men") || request()->is("admin/deliver-men/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-user-clock c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.deliverMan.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        @endcan
-        @can('customer_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.customers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/customers") || request()->is("admin/customers/*") ? "c-active" : "" }}">
-                    <i class="fa-fw far fa-user c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.customer.title') }}
-                </a>
-            </li>
-        @endcan
         @can('seller_managment_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/sellers*") ? "c-show" : "" }} {{ request()->is("admin/commission-requests*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -306,6 +305,29 @@
                         </li>
                     @endcan
                 </ul>
+            </li>
+        @endcan
+        @can('customer_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.customers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/customers") || request()->is("admin/customers/*") ? "c-active" : "" }}">
+                    <i class="fa-fw far fa-user c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.customer.title') }}
+                    <span class="badge bg-success-gradient text-dark ms-auto">6 جديد</span>
+                </a>
+            </li>
+        @endcan
+        
+        @can('order_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.orders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/orders") || request()->is("admin/orders/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-gift c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.order.title') }}
+                    <span class="badge bg-primary-gradient ms-auto">20</span>
+                </a>
             </li>
         @endcan
         @can('mockups_managment_access')
@@ -350,20 +372,64 @@
                 </ul>
             </li>
         @endcan
-        @can('conversation_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.conversations.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/conversations") || request()->is("admin/conversations/*") ? "c-active" : "" }}">
-                    <i class="fa-fw far fa-comments c-sidebar-nav-icon">
+        @can('frontend_setting_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/sliders*") ? "c-show" : "" }} {{ request()->is("admin/banners*") ? "c-show" : "" }} {{ request()->is("admin/home-categories*") ? "c-show" : "" }} {{ request()->is("admin/quality-responsibles*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fab fa-500px c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.conversation.title') }}
+                    {{ trans('cruds.frontendSetting.title') }}
                 </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('slider_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.sliders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/sliders") || request()->is("admin/sliders/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-images c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.slider.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('banner_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.banners.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/banners") || request()->is("admin/banners/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-image c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.banner.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('home_category_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.home-categories.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/home-categories") || request()->is("admin/home-categories/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-assistive-listening-systems c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.homeCategory.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('quality_responsible_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.quality-responsibles.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/quality-responsibles") || request()->is("admin/quality-responsibles/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fab fa-quora c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.qualityResponsible.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
             </li>
         @endcan
+        
+        <li class="nav-title">عام</li>
         @can('setting_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/general-settings*") ? "c-show" : "" }} {{ request()->is("admin/user-alerts*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/socials*") ? "c-show" : "" }} {{ request()->is("admin/polices*") ? "c-show" : "" }} {{ request()->is("admin/seo-settings*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/general-settings*") ? "c-show" : "" }} {{ request()->is("admin/user-alerts*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/socials*") ? "c-show" : "" }} {{ request()->is("admin/polices*") ? "c-show" : "" }} {{ request()->is("admin/seo-settings*") ? "c-show" : "" }} ">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-ellipsis-h c-sidebar-nav-icon">
+                    <i class="fa-fw fas fa-cog c-sidebar-nav-icon">
 
                     </i>
                     {{ trans('cruds.setting.title') }}
@@ -372,7 +438,7 @@
                     @can('general_setting_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.general-settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/general-settings") || request()->is("admin/general-settings/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-cog c-sidebar-nav-icon">
+                                <i class="fa-fw fas fa-wrench c-sidebar-nav-icon">
 
                                 </i>
                                 {{ trans('cruds.generalSetting.title') }}
@@ -464,70 +530,8 @@
                 </ul>
             </li>
         @endcan
-        @can('frontend_setting_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/sliders*") ? "c-show" : "" }} {{ request()->is("admin/banners*") ? "c-show" : "" }} {{ request()->is("admin/home-categories*") ? "c-show" : "" }} {{ request()->is("admin/quality-responsibles*") ? "c-show" : "" }}">
-                <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fab fa-500px c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.frontendSetting.title') }}
-                </a>
-                <ul class="c-sidebar-nav-dropdown-items">
-                    @can('slider_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.sliders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/sliders") || request()->is("admin/sliders/*") ? "c-active" : "" }}">
-                                <i class="fa-fw far fa-images c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.slider.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('banner_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.banners.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/banners") || request()->is("admin/banners/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-image c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.banner.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('home_category_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.home-categories.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/home-categories") || request()->is("admin/home-categories/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-assistive-listening-systems c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.homeCategory.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('quality_responsible_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.quality-responsibles.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/quality-responsibles") || request()->is("admin/quality-responsibles/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fab fa-quora c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.qualityResponsible.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        @endcan
-        @can('admin_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.admins.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/admins") || request()->is("admin/admins/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-user-check c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.admin.title') }}
-                </a>
-            </li>
-        @endcan
         @can('user_management_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/permissions*") ? "c-show" : "" }} {{ request()->is("admin/roles*") ? "c-show" : "" }} {{ request()->is("admin/users*") ? "c-show" : "" }} {{ request()->is("admin/audit-logs*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/permissions*") ? "c-show" : "" }} {{ request()->is("admin/roles*") ? "c-show" : "" }} {{ request()->is("admin/users*") ? "c-show" : "" }} {{ request()->is("admin/audit-logs*") ? "c-show" : "" }} ">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-users c-sidebar-nav-icon">
 
@@ -562,16 +566,6 @@
 
                                 </i>
                                 {{ trans('cruds.user.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('audit_log_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.audit-logs.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/audit-logs") || request()->is("admin/audit-logs/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-file-alt c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.auditLog.title') }}
                             </a>
                         </li>
                     @endcan
@@ -615,6 +609,16 @@
                                     </li>
                                 @endcan
                             </ul>
+                        </li>
+                    @endcan
+                    @can('audit_log_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.audit-logs.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/audit-logs") || request()->is("admin/audit-logs/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-file-alt c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.auditLog.title') }}
+                            </a>
                         </li>
                     @endcan
                 </ul>
@@ -672,6 +676,16 @@
                 </ul>
             </li>
         @endcan
+        @can('admin_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.admins.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/admins") || request()->is("admin/admins/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-user-check c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.admin.title') }}
+                </a>
+            </li>
+        @endcan
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.systemCalendar") }}" class="c-sidebar-nav-link {{ request()->is("admin/system-calendar") || request()->is("admin/system-calendar/*") ? "c-active" : "" }}">
                 <i class="c-sidebar-nav-icon fa-fw fas fa-calendar">
@@ -680,6 +694,17 @@
                 {{ trans('global.systemCalendar') }}
             </a>
         </li>
+        @can('conversation_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.conversations.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/conversations") || request()->is("admin/conversations/*") ? "c-active" : "" }}">
+                    <i class="fa-fw far fa-comments c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.conversation.title') }}
+                    <span class="badge bg-success-gradient text-dark ms-auto">3</span>
+                </a>
+            </li>
+        @endcan
         @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
             @can('profile_password_edit')
                 <li class="c-sidebar-nav-item">

@@ -20,6 +20,7 @@ class UserAlert extends Model
     protected $fillable = [
         'alert_text',
         'alert_link',
+        'type',
         'created_at',
         'updated_at',
     ];

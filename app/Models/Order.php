@@ -85,8 +85,7 @@ class Order extends Model
         'client_name',
         'phone_number',
         'phone_number_2',
-        'shipping_address',
-        'shipping_country_name',
+        'shipping_address', 
         'shipping_country_cost',
         'shipping_cost_by_seller',
         'free_shipping',
@@ -121,7 +120,7 @@ class Order extends Model
         'designer_id',
         'preparer_id',
         'manufacturer_id',
-        'shipment_id',
+        'shipmenter_id',
         'delivery_man_id',
         'created_at',
         'updated_at',
@@ -208,9 +207,9 @@ class Order extends Model
         return $this->belongsTo(User::class, 'manufacturer_id');
     }
 
-    public function shipment()
+    public function shipmenter()
     {
-        return $this->belongsTo(User::class, 'shipment_id');
+        return $this->belongsTo(User::class, 'shipmenter_id');
     }
 
     public function delivery_man()

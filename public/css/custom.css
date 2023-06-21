@@ -26,10 +26,16 @@ table.dataTable tbody th.select-checkbox::after {
 }
 
 .dt-buttons .btn {
-    margin-left: 0.333em;
-    border-radius: 0;
+    margin-left: 0.333em; 
 }
 
+.card{
+    border-radius: 0.5rem;
+}
+
+.btn { 
+    border-radius: 0.5rem;
+}
 .table.datatable {
     box-sizing: border-box;
     border-collapse: collapse;
@@ -129,4 +135,27 @@ table.dataTable thead .sorting_desc {
 
 .custom-select.form-control-sm {
     padding: 0.25rem 1.5rem;
+}
+
+
+.c-sidebar-nav .nav-title {
+    padding: var(--cui-sidebar-nav-title-padding-y) var(--cui-sidebar-nav-title-padding-x);
+    margin-top: var(--cui-sidebar-nav-title-margin-top);
+    font-size: 80%;
+    font-weight: 700;
+    color: var(--cui-sidebar-nav-title-color);
+    text-transform: uppercase;
+    transition: height .15s,margin .15s;
+    padding: 1rem  0.75rem;
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.6)
+}
+.c-sidebar-nav-dropdown .c-sidebar-nav-dropdown-toggle:hover, .c-sidebar .c-sidebar-nav-link:hover , .c-sidebar-nav-dropdown-items .c-sidebar-nav-link:hover {
+    color: rgba(255, 255, 255, 0.87) !important;
+    text-decoration: none;
+    background: rgba(0, 0, 21, 0.33) !important;
+} 
+
+tbody, thead{
+    text-align: center;
 }

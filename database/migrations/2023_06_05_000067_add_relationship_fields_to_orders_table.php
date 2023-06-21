@@ -19,8 +19,8 @@ class AddRelationshipFieldsToOrdersTable extends Migration
             $table->foreign('preparer_id', 'preparer_fk_8582719')->references('id')->on('users');
             $table->unsignedBigInteger('manufacturer_id')->nullable();
             $table->foreign('manufacturer_id', 'manufacturer_fk_8582720')->references('id')->on('users');
-            $table->unsignedBigInteger('shipment_id')->nullable();
-            $table->foreign('shipment_id', 'shipment_fk_8582721')->references('id')->on('users');
+            $table->unsignedBigInteger('shipmenter_id')->nullable();
+            $table->foreign('shipmenter_id', 'shipmenter_fk_8582721')->references('id')->on('users');
             $table->unsignedBigInteger('delivery_man_id')->nullable();
             $table->foreign('delivery_man_id', 'delivery_man_fk_8582722')->references('id')->on('users');
         });

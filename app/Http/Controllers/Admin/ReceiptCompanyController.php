@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ReceiptCompanyExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
+use App\Http\Controllers\WaslaController;
 use App\Http\Requests\MassDestroyReceiptCompanyRequest;
 use App\Http\Requests\StoreReceiptCompanyRequest;
 use App\Http\Requests\UpdateReceiptCompanyRequest;
 use App\Models\Country;
+use App\Models\GeneralSetting;
 use App\Models\ReceiptCompany;
 use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,158 +25,290 @@ class ReceiptCompanyController extends Controller
 {
     use MediaUploadingTrait;
 
+    public function update_delivery_man(Request $request){ 
+        $receipt = ReceiptCompany::find($request->row_id);
+        $receipt->delivery_man_id = $request->delivery_man_id;
+        $receipt->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
+        $receipt->delivery_status = 'on_delivery'; 
+        $receipt->save();
+        toast(trans('flash.global.success_title'),'success');
+        return redirect()->route('admin.receipt-companies.index');
+    } 
+
+    public function print($id){
+        $receipts = ReceiptCompany::with('staff','designer','manufacturer','preparer','shipmenter')->whereIn('id',[$id])->get();
+        $generalsetting = GeneralSetting::first();
+        foreach($receipts as $receipt){
+            $receipt->printing_times += 1;
+            $receipt->save();
+        }
+        return view('admin.receiptCompanies.print',compact('receipts','generalsetting'));
+    }
+
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $receipt = ReceiptCompany::findOrFail($request->id);
+        $receipt->$type = $request->status;
+        if ($type == 'done' && $request->status == 1) {
+            $receipt->quickly = 0;
+        }
+        $receipt->save();
+        return 1;
+    }
+
+    public function duplicate($id){
+
+        $receipt_social = ReceiptCompany::findOrFail($id); 
+        
+        $new_receipt = new ReceiptCompany; 
+        $new_receipt->client_name = $receipt_social->client_name;
+        $new_receipt->phone_number = $receipt_social->phone_number;
+        $new_receipt->phone_number_2 = $receipt_social->phone_number_2;
+        $new_receipt->total_cost = $receipt_social->total_cost;
+        $new_receipt->note = $receipt_social->note;
+        $new_receipt->shipping_country_id = $receipt_social->shipping_country_id; 
+        $new_receipt->shipping_country_cost = $receipt_social->shipping_country_cost;
+        $new_receipt->shipping_address = $receipt_social->shipping_address;
+        $new_receipt->client_type = $receipt_social->client_type;
+        $new_receipt->description = '';
+        $new_receipt->save();
+        
+        alert('Receipt has been inserted successfully','','success');
+        return redirect()->route('admin.receipt-compaines.index');
+    }
+
+    public function send_to_wasla(Request $request){
+        $receipt = ReceiptCompany::findOrFail($request->row_id);
+        $company_id = Auth::user()->wasla_company_id; 
+        
+        $data = [
+            //from receipt
+            'company_id' => $company_id,
+            'receiver_name' => $receipt->client_name,
+            'phone_1' => $receipt->phone_number,
+            'phone_2' => $receipt->phone_number_2,
+            'address' => $receipt->shipping_address,
+            'description' => html_entity_decode(strip_tags(nl2br($receipt->description ?? '...'))),
+            'note' => $receipt->note,
+            'receipt_code' => $receipt->order_num,
+
+            //from form
+            'district' => $request->district,
+            'type' => $request->type,
+            'cost' => $request->cost,
+            'in_return_case' => $request->in_return_case,
+            'country_id' => $request->country_id,
+            'status' => $request->status,
+        ];
+
+        $waslaController = new WaslaController;
+        $response = $waslaController->store_order($data);
+
+        if ($response) {
+            if ($response['errNum'] == 200) {
+                $receipt->sent_to_wasla = 1;
+                $receipt->save();
+                alert('تم أرسال الأوردر لواصلة بنجاح');
+            } elseif ($response['errNum'] == 401) {
+                alert('',$response['msg'],'error'); 
+            } else {
+                alert('SomeThing Went Wrong000','','error');
+            }
+        } else {
+            alert('SomeThing Went Wrong','','error');
+        }
+        return redirect()->route('admin.receipt-companies.index');
+    }
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('receipt_company_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if ($request->ajax()) {
-            $query = ReceiptCompany::with(['staff', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man', 'shipping_country'])->select(sprintf('%s.*', (new ReceiptCompany)->table));
-            $table = Datatables::of($query);
+        $staffs = User::whereIn('user_type', ['staff', 'admin'])->get();
+        $delivery_mans = User::where('user_type', 'delivery_man')->get(); 
+        $countries = Country::where('status',1)->get()->groupBy('type'); 
+        
+        $phone = null;
+        $client_name = null;
+        $order_num = null;
+        $client_type = null;
+        $delivery_status = null;
+        $payment_status = null;
+        $staff_id = null;
+        $delivery_man_id = null;
+        $from = null;
+        $to = null;
+        $from_date = null;
+        $to_date = null;
+        $date_type = null;
+        $exclude = null;
+        $include = null;
+        $sent_to_delivery = null;
+        $calling = null;
+        $quickly = null;
+        $done = null;
+        $no_answer = null;
+        $country_id = null;
+        $playlist_status = null;
+        $description = null; 
+        $confirm = null; 
+        $deleted = null;
 
-            $table->addColumn('placeholder', '&nbsp;');
-            $table->addColumn('actions', '&nbsp;');
-
-            $table->editColumn('actions', function ($row) {
-                $viewGate      = 'receipt_company_show';
-                $editGate      = 'receipt_company_edit';
-                $deleteGate    = 'receipt_company_delete';
-                $crudRoutePart = 'receipt-companies';
-
-                return view('partials.datatablesActions', compact(
-                    'viewGate',
-                    'editGate',
-                    'deleteGate',
-                    'crudRoutePart',
-                    'row'
-                ));
-            });
-
-            $table->editColumn('id', function ($row) {
-                return $row->id ? $row->id : '';
-            });
-            $table->editColumn('order_num', function ($row) {
-                return $row->order_num ? $row->order_num : '';
-            });
-            $table->editColumn('client_name', function ($row) {
-                return $row->client_name ? $row->client_name : '';
-            });
-            $table->editColumn('client_type', function ($row) {
-                return $row->client_type ? ReceiptCompany::CLIENT_TYPE_SELECT[$row->client_type] : '';
-            });
-            $table->editColumn('phone_number', function ($row) {
-                return $row->phone_number ? $row->phone_number : '';
-            });
-            $table->editColumn('phone_number_2', function ($row) {
-                return $row->phone_number_2 ? $row->phone_number_2 : '';
-            });
-            $table->editColumn('deposit', function ($row) {
-                return $row->deposit ? $row->deposit : '';
-            });
-            $table->editColumn('total_cost', function ($row) {
-                return $row->total_cost ? $row->total_cost : '';
-            });
-            $table->editColumn('calling', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->calling ? 'checked' : null) . '>';
-            });
-            $table->editColumn('quickly', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->quickly ? 'checked' : null) . '>';
-            });
-            $table->editColumn('done', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->done ? 'checked' : null) . '>';
-            });
-            $table->editColumn('no_answer', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->no_answer ? 'checked' : null) . '>';
-            });
-            $table->editColumn('supplied', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->supplied ? 'checked' : null) . '>';
-            });
-            $table->editColumn('printing_times', function ($row) {
-                return $row->printing_times ? $row->printing_times : '';
-            });
-
-            $table->editColumn('shipping_country_name', function ($row) {
-                return $row->shipping_country_name ? $row->shipping_country_name : '';
-            });
-            $table->editColumn('shipping_country_cost', function ($row) {
-                return $row->shipping_country_cost ? $row->shipping_country_cost : '';
-            });
-            $table->editColumn('shipping_address', function ($row) {
-                return $row->shipping_address ? $row->shipping_address : '';
-            });
-            $table->editColumn('note', function ($row) {
-                return $row->note ? $row->note : '';
-            });
-            $table->editColumn('cancel_reason', function ($row) {
-                return $row->cancel_reason ? $row->cancel_reason : '';
-            });
-            $table->editColumn('delay_reason', function ($row) {
-                return $row->delay_reason ? $row->delay_reason : '';
-            });
-            $table->editColumn('photos', function ($row) {
-                if (! $row->photos) {
-                    return '';
-                }
-                $links = [];
-                foreach ($row->photos as $media) {
-                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
-                }
-
-                return implode(' ', $links);
-            });
-            $table->editColumn('delivery_status', function ($row) {
-                return $row->delivery_status ? ReceiptCompany::DELIVERY_STATUS_SELECT[$row->delivery_status] : '';
-            });
-            $table->editColumn('payment_status', function ($row) {
-                return $row->payment_status ? ReceiptCompany::PAYMENT_STATUS_SELECT[$row->payment_status] : '';
-            });
-            $table->editColumn('playlist_status', function ($row) {
-                return $row->playlist_status ? ReceiptCompany::PLAYLIST_STATUS_SELECT[$row->playlist_status] : '';
-            });
-            $table->addColumn('staff_name', function ($row) {
-                return $row->staff ? $row->staff->name : '';
-            });
-
-            $table->addColumn('designer_name', function ($row) {
-                return $row->designer ? $row->designer->name : '';
-            });
-
-            $table->addColumn('preparer_name', function ($row) {
-                return $row->preparer ? $row->preparer->name : '';
-            });
-
-            $table->addColumn('manufacturer_name', function ($row) {
-                return $row->manufacturer ? $row->manufacturer->name : '';
-            });
-
-            $table->addColumn('shipmenter_name', function ($row) {
-                return $row->shipmenter ? $row->shipmenter->name : '';
-            });
-
-            $table->addColumn('delivery_man_name', function ($row) {
-                return $row->delivery_man ? $row->delivery_man->name : '';
-            });
-
-            $table->addColumn('shipping_country_name', function ($row) {
-                return $row->shipping_country ? $row->shipping_country->name : '';
-            });
-
-            $table->rawColumns(['actions', 'placeholder', 'calling', 'quickly', 'done', 'no_answer', 'supplied', 'photos', 'staff', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man', 'shipping_country']);
-
-            return $table->make(true);
+        
+        if(request('deleted')){
+            $deleted = 1;
+            $receipts = ReceiptCompany::with(['staff:id,name','delivery_man:id,name','shipping_country'])->onlyTrashed(); 
+        }else{
+            $receipts = ReceiptCompany::with(['staff:id,name','delivery_man:id,name','shipping_country']); 
         }
 
-        return view('admin.receiptCompanies.index');
+        if ($request->client_type != null) {
+            $receipts = $receipts->where('client_type', $request->client_type);
+            $client_type = $request->client_type;
+        }
+        if ($request->country_id != null) {
+            $country_id = $request->country_id;
+            $receipts = $receipts->where('shipping_country_id', $country_id);
+        }
+
+        if ($request->sent_to_delivery != null) {
+            $sent_to_delivery = $request->sent_to_delivery;
+            if($sent_to_delivery){
+                $receipts = $receipts->whereNotNull('send_to_delivery_date');
+            }else{
+                $receipts = $receipts->whereNull('send_to_delivery_date');
+            }
+        } 
+
+        if ($request->done != null) {
+            $receipts = $receipts->where('done', $request->done);
+            $done = $request->done;
+        }
+
+        if ($request->calling != null) {
+            $receipts = $receipts->where('calling', $request->calling);
+            $calling = $request->calling;
+        }
+
+        if ($request->no_answer != null) {
+            $receipts = $receipts->where('no_answer', $request->no_answer);
+            $no_answer = $request->no_answer;
+        }
+
+        if ($request->playlist_status != null) {
+            $receipts = $receipts->where('playlist_status', $request->playlist_status);
+            $playlist_status = $request->playlist_status;
+        } 
+        if ($request->quickly != null) {
+            $receipts = $receipts->where('quickly', $request->quickly);
+            $quickly = $request->quickly;
+        }
+
+        if ($request->staff_id != null) {
+            $receipts = $receipts->where('staff_id', $request->staff_id);
+            $staff_id = $request->staff_id;
+        }
+
+        if ($request->delivery_man_id != null) {
+            $receipts = $receipts->where('delivery_man_id', $request->delivery_man_id);
+            $delivery_man_id = $request->delivery_man_id;
+        }
+
+        if ($request->description != null) {
+            $description = $request->description;
+            $receipts = $receipts->where('description', 'like', '%' . $request->description . '%');
+        }
+        if ($request->phone != null) {
+            global $phone;
+            $phone = $request->phone;
+            $receipts = $receipts->where(function ($query) {
+                $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                    ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+            });
+        }
+        if ($request->client_name != null) {
+            $receipts = $receipts->where('client_name', 'like', '%' . $request->client_name . '%');
+            $client_name = $request->client_name;
+        }
+        if ($request->order_num != null) {
+            $receipts = $receipts->where('order_num', 'like', '%' . $request->order_num . '%');
+            $order_num = $request->order_num;
+        }
+        if ($request->delivery_status != null) {
+            $receipts = $receipts
+                ->where('delivery_status', $request->delivery_status);
+            $delivery_status = $request->delivery_status;
+        }
+        if ($request->payment_status != null) {
+            $receipts = $receipts
+                ->where('payment_status', $request->payment_status);
+            $payment_status = $request->payment_status;
+        }
+        if ($request->from != null && $request->to != null) {
+            $from = $request->from;
+            $to = $request->to;
+            $receipts = $receipts->whereBetween('order_num', [ 'receipt-company#' . $from,  'receipt-company#' . $to]);
+        }
+        if ($request->from_date != null && $request->to_date != null && $request->date_type != null) {  
+            $from_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->from_date . ' ' . '12:00 am')->format('Y-m-d H:i:s');
+            $to_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->to_date . ' ' . '11:59 pm')->format('Y-m-d H:i:s'); 
+            $date_type = $request->date_type;
+            $receipts = $receipts->whereBetween($date_type, [$from_date, $to_date]);
+        }
+        if ($request->exclude != null) {
+            $exclude = $request->exclude;
+            foreach(explode(',',$exclude) as $exc){
+                $exclude2[] = 'receipt-company#' . $exc;
+            }
+            $receipts = $receipts->whereNotIn('order_num', $exclude2);
+        }
+        if ($request->include != null) {
+            $include = $request->include;
+            foreach(explode(',',$include) as $inc){
+                $include2[] = 'receipt-company#' . $inc;
+            }
+            $receipts = $receipts->whereIn('order_num' ,$include2);
+        }
+
+        if ($request->has('download')) {
+            return Excel::download(new ReceiptCompanyExport($receipts->get()), 'company_receipts_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
+        } 
+        if ($request->has('print')) {
+            $receipts = $receipts->get();
+            $generalsetting = GeneralSetting::first();
+            foreach($receipts as $receipt){
+                $receipt->printing_times += 1;
+                $receipt->save();
+            }
+            return view('admin.receiptCompanies.print', compact('receipts','generalsetting'));
+        }
+        
+        $statistics = [
+            'total_shipping_country_cost' => $receipts->sum('shipping_country_cost'),
+            'total_deposit' => $receipts->sum('deposit'),
+            'total_total_cost' => $receipts->sum('total_cost'),
+        ];
+
+        $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
+
+        return view('admin.receiptCompanies.index', compact(
+            'countries', 'statistics','receipts','done','client_type','exclude',
+            'delivery_status','payment_status','sent_to_delivery','calling',
+            'country_id','no_answer','date_type','phone','client_name','order_num', 'deleted',
+            'quickly','playlist_status','description', 'include','delivery_mans',
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs',  
+        )); 
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        abort_if(Gate::denies('receipt_company_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $staff = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        abort_if(Gate::denies('receipt_company_create'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
 
         $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.receiptCompanies.create', compact('shipping_countries', 'staff'));
+        $previous_data = searchByPhone($request->phone_number);
+
+        return view('admin.receiptCompanies.create', compact('shipping_countries','previous_data'));
     }
 
     public function store(StoreReceiptCompanyRequest $request)
@@ -186,6 +323,7 @@ class ReceiptCompanyController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $receiptCompany->id]);
         }
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-companies.index');
     }
 
@@ -193,13 +331,19 @@ class ReceiptCompanyController extends Controller
     {
         abort_if(Gate::denies('receipt_company_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $staff = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $receiptCompany->load('staff', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man', 'shipping_country');
 
-        return view('admin.receiptCompanies.edit', compact('receiptCompany', 'shipping_countries', 'staff'));
+        $general_settings = GeneralSetting::first(); 
+
+        if($general_settings->delivery_system == 'wasla'){
+            $waslaController = new WaslaController;
+            $response = $waslaController->countries();
+        }else{
+            $response = '';
+        }
+        return view('admin.receiptCompanies.edit', compact('receiptCompany', 'shipping_countries','response','general_settings'));
     }
 
     public function update(UpdateReceiptCompanyRequest $request, ReceiptCompany $receiptCompany)
@@ -220,6 +364,7 @@ class ReceiptCompanyController extends Controller
             }
         }
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.receipt-companies.index');
     }
 
@@ -232,25 +377,33 @@ class ReceiptCompanyController extends Controller
         return view('admin.receiptCompanies.show', compact('receiptCompany'));
     }
 
-    public function destroy(ReceiptCompany $receiptCompany)
+    public function destroy($id)
     {
         abort_if(Gate::denies('receipt_company_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $receiptCompany->delete();
-
-        return back();
-    }
-
-    public function massDestroy(MassDestroyReceiptCompanyRequest $request)
-    {
-        $receiptCompanies = ReceiptCompany::find(request('ids'));
-
-        foreach ($receiptCompanies as $receiptCompany) {
+        $receiptCompany = ReceiptCompany::withTrashed()->find($id); 
+        if($receiptCompany->deleted_at != null){
+            $receiptCompany->forceDelete();
+        }else{
             $receiptCompany->delete();
-        }
+        } 
 
-        return response(null, Response::HTTP_NO_CONTENT);
-    }
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
+    } 
+
+    public function restore($id)
+    {
+        abort_if(Gate::denies('receipt_company_restore'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $receiptCompany = ReceiptCompany::withTrashed()->find($id);
+        $receiptCompany->restore();
+
+        alert(trans('flash.restored'),'','success');
+
+        return redirect()->route('admin.receipt-companies.index');
+    } 
 
     public function storeCKEditorImages(Request $request)
     {

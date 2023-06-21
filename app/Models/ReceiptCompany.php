@@ -37,8 +37,7 @@ class ReceiptCompany extends Model implements HasMedia
         'client_name',
         'phone_number',
         'phone_number_2',
-        'description',
-        'photos',
+        'description', 
     ];
 
     protected $dates = [
@@ -88,8 +87,7 @@ class ReceiptCompany extends Model implements HasMedia
         'date_of_receiving_order',
         'send_to_playlist_date',
         'send_to_delivery_date',
-        'done_time',
-        'shipping_country_name',
+        'done_time', 
         'shipping_country_cost',
         'shipping_address',
         'description',
@@ -218,4 +216,17 @@ class ReceiptCompany extends Model implements HasMedia
     {
         return $this->belongsTo(Country::class, 'shipping_country_id');
     }
+
+	// operations 
+	public function calc_total_for_delivery(){
+		return $this->total_cost  - $this->deposit;
+	}
+
+	public function calc_total(){
+		return $this->total_cost + $this->shipping_country_cost;
+	}
+
+	public function calc_total_for_client(){
+		return $this->total_cost + $this->shipping_country_cost  - $this->deposit;
+	}
 }

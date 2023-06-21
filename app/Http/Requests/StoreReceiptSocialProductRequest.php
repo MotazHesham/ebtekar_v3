@@ -21,10 +21,6 @@ class StoreReceiptSocialProductRequest extends FormRequest
                 'string',
                 'required',
             ],
-            'commission' => [
-                'string',
-                'required',
-            ],
             'photos' => [
                 'array',
             ],

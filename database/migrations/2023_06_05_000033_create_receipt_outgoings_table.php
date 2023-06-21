@@ -14,7 +14,7 @@ class CreateReceiptOutgoingsTable extends Migration
             $table->date('date_of_receiving_order')->nullable();
             $table->string('client_name');
             $table->string('phone_number');
-            $table->decimal('total_cost', 15, 2);
+            $table->decimal('total_cost', 15, 2)->nullable();
             $table->longText('note')->nullable();
             $table->boolean('done')->default(0)->nullable();
             $table->integer('printing_times')->nullable();

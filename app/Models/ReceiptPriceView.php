@@ -39,6 +39,7 @@ class ReceiptPriceView extends Model
         'payment',
         'added_value',
         'printing_times',
+        'staff_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -47,6 +48,11 @@ class ReceiptPriceView extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    public function receiptPriceViewReceiptPriceViewProducts()
+    {
+        return $this->hasMany(ReceiptPriceViewProduct::class, 'receipt_price_view_id', 'id');
     }
 
     public function getDateOfReceivingOrderAttribute($value)
@@ -58,4 +64,17 @@ class ReceiptPriceView extends Model
     {
         $this->attributes['date_of_receiving_order'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id');
+    }
+
+	// operations
+	public function calc_added_value(){ 
+		return round( ( ($this->total_cost * 14) / 100 ) , 2);
+	}
+
+	public function calc_total_cost(){
+		return $this->total_cost + $this->calc_added_value();
+	} 
 }

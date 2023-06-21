@@ -30,9 +30,9 @@ class ExcelFilesController extends Controller
             $table->addColumn('actions', '&nbsp;');
 
             $table->editColumn('actions', function ($row) {
-                $viewGate      = 'excel_file_show';
-                $editGate      = 'excel_file_edit';
-                $deleteGate    = 'excel_file_delete';
+                $viewGate      = 'off_excel_file_show';
+                $editGate      = 'off_excel_file_edit';
+                $deleteGate    = 'off_excel_file_delete';
                 $crudRoutePart = 'excel-files';
 
                 return view('partials.datatablesActions', compact(
@@ -57,10 +57,15 @@ class ExcelFilesController extends Controller
                 return $row->result_file ? '<a href="' . $row->result_file->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>' : '';
             });
             $table->editColumn('results', function ($row) {
-                return $row->results ? $row->results : '';
+                $span = '';
+                foreach(json_decode($row->results) as $key => $value){
+                    $class = $key == 'accepted' ? 'success' : 'danger';
+                    $span .= '<span class="badge badge-'.$class.'">' . $key . ' => ' . $value . '</span>'; 
+                }
+                return $span;
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'uploaded_file', 'result_file']);
+            $table->rawColumns(['actions', 'placeholder', 'uploaded_file', 'result_file','results']);
 
             return $table->make(true);
         }

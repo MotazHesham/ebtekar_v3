@@ -6,6 +6,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Server Api Key
+    |--------------------------------------------------------------------------
+    |
+    | This value is the key of your application on FireBase. This value is used when the
+    | framework needs to send notification to users registered on the App.
+    |
+    */
+
+    'server_api_key' => env('SERVER_API_KEY', ''),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
     |
@@ -69,7 +81,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Africa/Cairo',
 
     /*
     |--------------------------------------------------------------------------

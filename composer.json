@@ -9,13 +9,19 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
+        "laravel/socialite": "^5.6",
         "laravel/tinker": "^2.8",
-        "yajra/laravel-datatables-oracle": "^10.3",
         "laraveldaily/laravel-charts": "^0.1.29",
+        "maatwebsite/excel": "^3.1",
         "nuovo/spreadsheet-reader": "^0.5.11",
-        "spatie/laravel-medialibrary": "^10.7"
+        "pusher/pusher-php-server": "^7.2",
+        "realrashid/sweet-alert": "^7.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/laravel-medialibrary": "^10.7",
+        "yajra/laravel-datatables-oracle": "^10.3"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.8",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
@@ -30,7 +36,8 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": ["app/Http/Helpers.php"]
     },
     "autoload-dev": {
         "psr-4": {

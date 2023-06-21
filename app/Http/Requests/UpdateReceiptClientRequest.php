@@ -21,21 +21,14 @@ class UpdateReceiptClientRequest extends FormRequest
                 'date_format:' . config('panel.date_format'),
                 'nullable',
             ],
-            'order_num' => [
-                'string',
-                'nullable',
-            ],
             'client_name' => [
                 'string',
                 'required',
             ],
             'phone_number' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
-            ],
-            'staff_id' => [
-                'required',
-                'integer',
             ],
         ];
     }

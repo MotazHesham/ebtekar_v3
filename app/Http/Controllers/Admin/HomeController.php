@@ -3,9 +3,50 @@
 namespace App\Http\Controllers\Admin;
 
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
+use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
+use App\Models\BannedPhone;
+use App\Models\Order;
+use App\Models\ReceiptClient;
+use App\Models\ReceiptCompany;
+use App\Models\ReceiptSocial;
+use Illuminate\Http\Request;
 
-class HomeController
+class HomeController extends Controller
 {
+    
+    public function receipts_logs(Request $request){
+        $crud_name = $request->crud_name;
+        $logs = AuditLog::where('subject_type',$request->model)->where('subject_id',$request->subject_id)->orderBy('created_at','asc')->get()->reverse();
+        return view('partials.logs',compact('logs','crud_name'));
+    }
+
+    public function search_by_phone(Request $request){
+        global $phone;
+        $phone = $request->phone;
+        $receipt_social = ReceiptSocial::where(function ($query) {
+                                            $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                                    ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                        })->count();
+        $receipt_company = ReceiptCompany::where(function ($query) {
+                                            $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                                    ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                        })->count();
+
+        $receipt_client = ReceiptClient::where('phone_number', 'like', '%'.$phone.'%')->count();
+        $customers_orders = Order::where('order_type','customer')->where(function ($query) {
+                                                                        $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                                                                ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                                                    })->count();
+        $sellers_orders = Order::where('order_type','seller')->where(function ($query) {
+                                                                        $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                                                                ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                                                    })->count();
+
+        $banned_phones = BannedPhone::where('phone',$phone)->first();
+        return view('admin.partials.search_phone',compact('receipt_social','receipt_company','receipt_client','customers_orders','sellers_orders','banned_phones'));
+    }
+
     public function index()
     {
         $settings1 = [

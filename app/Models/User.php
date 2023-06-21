@@ -64,7 +64,7 @@ class User extends Authenticatable implements HasMedia
         'verification_token',
         'password',
         'user_type',
-        'wasla_company',
+        'wasla_company_id',
         'wasla_token',
         'device_token',
         'email_verified_at',
