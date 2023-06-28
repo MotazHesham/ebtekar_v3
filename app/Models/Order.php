@@ -8,12 +8,22 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
 class Order extends Model
 {
     use SoftDeletes, Auditable, HasFactory;
 
     public $table = 'orders';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('completed', function (Builder $builder) {
+            $builder->where('completed', 1);
+        });
+    }
 
     public static $searchable = [
         'order_num',
@@ -32,7 +42,7 @@ class Order extends Model
     ];
 
     public const PAYMENT_TYPE_SELECT = [
-        'cash_on_delivery' => 'cash On Delivery',
+        'cash_on_delivery' => 'Cash On Delivery',
         'paymob'           => 'Paymob',
     ];
 
@@ -93,6 +103,7 @@ class Order extends Model
         'printing_times',
         'completed',
         'calling',
+        'quickly',
         'supplied',
         'done_time',
         'send_to_delivery_date',
@@ -130,6 +141,11 @@ class Order extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
     }
 
     public function getDoneTimeAttribute($value)
@@ -216,4 +232,33 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'delivery_man_id');
     }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id');
+    }
+    
+
+	// operations 
+
+	public function calc_discount(){
+		$total = $this->calc_total_cost() / 100;
+		return round( ($total * $this->discount ) , 2);
+	}
+
+	public function calc_total_cost(){
+		return $this->total_cost + $this->extra_commission;
+	}
+
+	public function calc_total_for_delivery(){
+		return $this->total_cost + $this->extra_commission  - $this->deposit_amount;
+	}
+
+	public function calc_total(){
+		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost;
+	}
+
+	public function calc_total_for_client(){
+		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost  - $this->deposit_amount - $this->calc_discount();
+	}
 }

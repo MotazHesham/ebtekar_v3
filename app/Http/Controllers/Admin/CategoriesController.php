@@ -7,16 +7,24 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use App\Models\Category;
-use Gate;
+use App\Models\Category; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
-
+use Illuminate\Support\Str;
 class CategoriesController extends Controller
 {
     use MediaUploadingTrait;
+
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $category = Category::findOrFail($request->id);
+        $category->$type = $request->status; 
+        $category->save();
+        return 1;
+    }
 
     public function index(Request $request)
     {
@@ -71,23 +79,14 @@ class CategoriesController extends Controller
                 }
 
                 return '';
-            });
-            $table->editColumn('slug', function ($row) {
-                return $row->slug ? $row->slug : '';
-            });
-            $table->editColumn('design', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->design ? 'checked' : null) . '>';
-            });
-            $table->editColumn('featured', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->featured ? 'checked' : null) . '>';
-            });
-            $table->editColumn('meta_title', function ($row) {
-                return $row->meta_title ? $row->meta_title : '';
-            });
-            $table->editColumn('meta_description', function ($row) {
-                return $row->meta_description ? $row->meta_description : '';
-            });
-
+            });  
+            $table->editColumn('featured', function ($row) { 
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'featured\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->featured ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>';
+            }); 
             $table->rawColumns(['actions', 'placeholder', 'banner', 'icon', 'design', 'featured']);
 
             return $table->make(true);
@@ -105,7 +104,9 @@ class CategoriesController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        $category = Category::create($request->all());
+        $validated_request = $request->all();
+        $validated_request['slug'] = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+        $category = Category::create($validated_request);
 
         if ($request->input('banner', false)) {
             $category->addMedia(storage_path('tmp/uploads/' . basename($request->input('banner'))))->toMediaCollection('banner');
@@ -119,6 +120,7 @@ class CategoriesController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $category->id]);
         }
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.categories.index');
     }
 
@@ -155,6 +157,7 @@ class CategoriesController extends Controller
             $category->icon->delete();
         }
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.categories.index');
     }
 
@@ -171,7 +174,8 @@ class CategoriesController extends Controller
 
         $category->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+        return 1;
     }
 
     public function massDestroy(MassDestroyCategoryRequest $request)

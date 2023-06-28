@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Seller;
-use Gate;
+use App\Models\Seller; 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class UpdateSellerRequest extends FormRequest
 {
@@ -16,10 +16,19 @@ class UpdateSellerRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'user_id' => [
+        return [ 
+            'name' => [
+                'string',
                 'required',
-                'integer',
+            ],
+            'email' => [
+                'required',
+                'unique:users,email,' . request()->user_id,
+            ],
+            'phone_number' => [
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
+                'required',
             ],
             'seller_type' => [
                 'required',

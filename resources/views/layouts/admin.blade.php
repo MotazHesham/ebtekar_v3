@@ -44,6 +44,22 @@
     .isset {
         box-shadow: 1px 2px 3px deepskyblue
     }
+    .help-block{
+        font-size: 12px;
+        color: grey;
+    }
+    .quickly{
+        background: linear-gradient(283deg,#ef8181 0%,#ffffff 18%);border: 1px red double;
+    }
+    .returned{
+        background: linear-gradient(283deg,#ecf38d 0%,#ffffff 57%);border: 1px #b2b98d double;
+    }
+    .done{
+        background: linear-gradient(195deg,#000000bd 0%,#ffffff 33%);border: 1px black double;
+    }
+    .no_answer{
+        background: linear-gradient(283deg,#ecf38d 0%,#ffffff 57%);border: 1px #b2b98d double;
+    }
 </style>
 @yield('styles')
 </head>
@@ -122,7 +138,7 @@
     <script src="{{ asset('dashboard_offline/js/vfs_fonts.js') }}"></script>
     <script src="{{ asset('dashboard_offline/js/jszip.min.js') }}"></script>
     <script src="{{ asset('dashboard_offline/js/dataTables.select.min.js') }}"></script>
-    <script src="{{ asset('dashboard_offline/js/ckeditor.js') }}"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
     <script src="{{ asset('dashboard_offline/js/moment.min.js') }}"></script>
     <script src="{{ asset('dashboard_offline/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('dashboard_offline/js/select2.full.min.js') }}"></script>
@@ -137,6 +153,38 @@
 
 
     <script>
+        $(document).ready(function() {
+            // Function to convert Arabic digits to English digits
+            function convertDigitsToEnglish(input) {
+                var arabicDigits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+                var englishDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+                for (var i = 0; i < arabicDigits.length; i++) {
+                var regex = new RegExp(arabicDigits[i], "g");
+                input = input.replace(regex, englishDigits[i]);
+                }
+
+                return input;
+            }
+
+            // Handle keyup event on the input field
+            $('input[name=phone_number]').on('keyup',function() {
+                var inputValue = $(this).val();
+                var englishValue = convertDigitsToEnglish(inputValue);
+                $(this).val(englishValue);
+            });
+            $('input[name=phone_number_2]').on('keyup',function() {
+                var inputValue = $(this).val();
+                var englishValue = convertDigitsToEnglish(inputValue);
+                $(this).val(englishValue);
+            });
+            $('input[name=phone]').on('keyup',function() {
+                var inputValue = $(this).val();
+                var englishValue = convertDigitsToEnglish(inputValue);
+                $(this).val(englishValue);
+            });
+        });
+
         function show_logs(model ,subject_id,crud_name){
             $.post('{{ route('admin.receipts_logs') }}', {_token:'{{ csrf_token() }}' ,model:model ,subject_id:subject_id, crud_name:crud_name}, function(data){
                 $('#AjaxModal .modal-dialog').html(null);

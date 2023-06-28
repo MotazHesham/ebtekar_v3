@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class StoreUserRequest extends FormRequest
 {
@@ -26,13 +26,11 @@ class StoreUserRequest extends FormRequest
                 'unique:users',
             ],
             'phone_number' => [
-                'string',
-                'nullable',
-            ],
-            'password' => [
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
-            'user_type' => [
+            'password' => [
                 'required',
             ],
             'roles.*' => [

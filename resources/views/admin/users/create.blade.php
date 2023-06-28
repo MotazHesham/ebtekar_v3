@@ -38,20 +38,17 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.phone_number_helper') }}</span>
-            </div>
+            </div> 
             <div class="form-group">
-                <div class="form-check {{ $errors->has('approved') ? 'is-invalid' : '' }}">
-                    <input type="hidden" name="approved" value="0">
-                    <input class="form-check-input" type="checkbox" name="approved" id="approved" value="1" {{ old('approved', 0) == 1 ? 'checked' : '' }}>
-                    <label class="form-check-label" for="approved">{{ trans('cruds.user.fields.approved') }}</label>
-                </div>
-                @if($errors->has('approved'))
+                <label for="address">{{ trans('cruds.user.fields.address') }}</label>
+                <input class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" type="text" name="address" id="address" value="{{ old('address', '') }}">
+                @if($errors->has('address'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('approved') }}
+                        {{ $errors->first('address') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.user.fields.approved_helper') }}</span>
-            </div>
+                <span class="help-block">{{ trans('cruds.user.fields.address_helper') }}</span>
+            </div> 
             <div class="form-group">
                 <label class="required" for="password">{{ trans('cruds.user.fields.password') }}</label>
                 <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="password" name="password" id="password" required>
@@ -61,22 +58,7 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.password_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label class="required">{{ trans('cruds.user.fields.user_type') }}</label>
-                <select class="form-control {{ $errors->has('user_type') ? 'is-invalid' : '' }}" name="user_type" id="user_type" required>
-                    <option value disabled {{ old('user_type', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                    @foreach(App\Models\User::USER_TYPE_SELECT as $key => $label)
-                        <option value="{{ $key }}" {{ old('user_type', 'customer') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('user_type'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('user_type') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.user.fields.user_type_helper') }}</span>
-            </div>
+            </div> 
             <div class="form-group">
                 <label for="photo">{{ trans('cruds.user.fields.photo') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('photo') ? 'is-invalid' : '' }}" id="photo-dropzone">

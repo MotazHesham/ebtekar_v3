@@ -26,11 +26,7 @@ class StoreProductRequest extends FormRequest
             ],
             'purchase_price' => [
                 'required',
-            ],
-            'slug' => [
-                'string',
-                'required',
-            ],
+            ], 
             'video_provider' => [
                 'string',
                 'nullable',
@@ -52,15 +48,12 @@ class StoreProductRequest extends FormRequest
             'meta_title' => [
                 'string',
                 'nullable',
-            ],
-            'published' => [
-                'required',
-            ],
-            'user_id' => [
+            ], 
+            'category_id' => [
                 'required',
                 'integer',
             ],
-            'category_id' => [
+            'sub_category_id' => [
                 'required',
                 'integer',
             ],

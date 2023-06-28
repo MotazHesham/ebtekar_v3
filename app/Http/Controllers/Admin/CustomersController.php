@@ -7,9 +7,9 @@ use App\Http\Requests\MassDestroyCustomerRequest;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
-use App\Models\User;
-use Gate;
+use App\Models\User; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -47,6 +47,15 @@ class CustomersController extends Controller
             $table->addColumn('user_name', function ($row) {
                 return $row->user ? $row->user->name : '';
             });
+            $table->addColumn('user_email', function ($row) {
+                return $row->user ? $row->user->email : '';
+            });
+            $table->addColumn('user_phone_number', function ($row) {
+                return $row->user ? $row->user->phone_number : '';
+            });
+            $table->addColumn('user_address', function ($row) {
+                return $row->user ? $row->user->address : '';
+            });
 
             $table->rawColumns(['actions', 'placeholder', 'user']);
 
@@ -67,8 +76,21 @@ class CustomersController extends Controller
 
     public function store(StoreCustomerRequest $request)
     {
-        $customer = Customer::create($request->all());
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            'password' => bcrypt($request->password),
+            'user_type' => 'customer',
+            'approved' => 1,
+        ]);
 
+        $customer = Customer::create([
+            'user_id' => $user->id,
+        ]);
+
+        toast(trans('flash.global.success_title'),'success'); 
         return redirect()->route('admin.customers.index');
     }
 
@@ -85,7 +107,14 @@ class CustomersController extends Controller
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $customer->update($request->all());
+        $user = User::find($customer->user_id);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
+        ]); 
 
         return redirect()->route('admin.customers.index');
     }

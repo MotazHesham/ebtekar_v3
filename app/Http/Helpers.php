@@ -36,32 +36,7 @@ if (!function_exists('combinations')) {
         }
         return $result;
     }
-}
-
-// it helps to create a table of attributes an colors
-if (!function_exists('product_stock_maker')) {
-    function product_stock_maker($set, $get, $path)
-    {
-        $set($path . 'product_stock', null);
-        $choice_options = $get($path . 'choice_options');
-        $colors = $get($path . 'colors');
-        $options = array();
-        if (count($colors) > 0) {
-            array_push($options, $colors);
-        }
-        if (count($choice_options) > 0) {
-            foreach ($choice_options as $cho) {
-                array_push($options, array_filter($cho['tag']));
-            }
-        }
-        $combinations = combinations($options);
-
-
-        foreach ($combinations as $key => $comb) {
-            $set($path . 'product_stock.' . $key . '.variant', implode('-', $comb));
-        }
-    }
-}
+} 
 
 // search by phone number
 if (!function_exists('searchByPhone')) {

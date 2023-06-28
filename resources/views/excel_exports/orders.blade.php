@@ -34,17 +34,17 @@
             @if(count($orders) > 0)
                 @foreach($orders as $order)  
                     <tr>
-                        <td>{{ $order->code }}</td>
+                        <td>{{ $order->order_num }}</td>
                         <td>{{ $order->client_name }}</td>  
-                        <td>{{$order->phone_number}} - {{$order->phone_number2}}</td>
+                        <td>{{$order->phone_number}} - {{$order->phone_number_2}}</td>
                         <td>
-                            {{ single_price($order->required_to_pay + $order->shipping_country_cost -$order->deposit_amount) }}
+                            {{ dashboard_currency($order->calc_total_for_client()) }}
                         </td> 
-                        <td>{{single_price($order->commission)}}</td> 
+                        <td>{{dashboard_currency($order->commission)}}</td> 
                         <td>
-                            {{ ucfirst(str_replace('_', ' ', $order->orderDetails->first()->delivery_status)) }}
+                            {{ $order->delivery_status ? trans('global.delivery_status.status.' . $order->delivery_status) : '' }}
                         </td>  
-                        <td>{{ format_date($order->date) }}</td> 
+                        <td>{{ $order->created_at }}</td> 
                     </tr>
                 @endforeach  
             @endif

@@ -155,14 +155,7 @@
                 <tbody>
 
                     @forelse ($receipts as $receipt)
-                        <tr data-entry-id="{{ $receipt->id }}"
-                            @if($receipt->quickly) 
-                                style="background: linear-gradient(283deg,#ef8181 0%,#ffffff 18%);border: 1px red double;" 
-                            @elseif($receipt->no_answer)
-                                style="background: linear-gradient(283deg,#ecf38d 0%,#ffffff 57%);border: 1px #b2b98d double;"
-                            @elseif($receipt->done)
-                                style="background: linear-gradient(195deg,#000000bd 0%,#ffffff 33%);border: 1px black double;"
-                            @endif>
+                        <tr data-entry-id="{{ $receipt->id }}" class=" @if($receipt->quickly) quickly @elseif($receipt->no_answer) no_answer @elseif($receipt->done) done @endif">
                             <td>
                                 @if ($receipt->printing_times == 0)
                                     <span class="badge rounded-pill text-bg-primary text-white">

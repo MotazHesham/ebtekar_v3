@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Customer;
-use Gate;
+use App\Models\Customer; 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class UpdateCustomerRequest extends FormRequest
 {
@@ -17,9 +17,18 @@ class UpdateCustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => [
+            'name' => [
+                'string',
                 'required',
-                'integer',
+            ],
+            'email' => [
+                'required',
+                'unique:users,email,' . request()->user_id,
+            ],
+            'phone_number' => [
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
+                'required',
             ],
         ];
     }

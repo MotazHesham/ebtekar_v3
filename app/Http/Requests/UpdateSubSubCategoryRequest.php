@@ -20,11 +20,7 @@ class UpdateSubSubCategoryRequest extends FormRequest
             'name' => [
                 'string',
                 'required',
-            ],
-            'slug' => [
-                'string',
-                'required',
-            ],
+            ], 
             'meta_title' => [
                 'string',
                 'nullable',

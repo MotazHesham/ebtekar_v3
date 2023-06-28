@@ -9,7 +9,7 @@
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.categories.index') }}">
+                <a class="btn btn-light" href="{{ route('admin.categories.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
@@ -62,15 +62,7 @@
                         <td>
                             {{ $category->slug }}
                         </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.category.fields.design') }}
-                        </th>
-                        <td>
-                            <input type="checkbox" disabled="disabled" {{ $category->design ? 'checked' : '' }}>
-                        </td>
-                    </tr>
+                    </tr> 
                     <tr>
                         <th>
                             {{ trans('cruds.category.fields.featured') }}
@@ -98,7 +90,7 @@
                 </tbody>
             </table>
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.categories.index') }}">
+                <a class="btn btn-light" href="{{ route('admin.categories.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>

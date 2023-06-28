@@ -12,6 +12,7 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
+
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
 Auth::routes();
 
@@ -179,6 +180,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Categories
     Route::delete('categories/destroy', 'CategoriesController@massDestroy')->name('categories.massDestroy');
+    Route::post('categories/update_statuses', 'CategoriesController@update_statuses')->name('categories.update_statuses');
     Route::post('categories/media', 'CategoriesController@storeMedia')->name('categories.storeMedia');
     Route::post('categories/ckmedia', 'CategoriesController@storeCKEditorImages')->name('categories.storeCKEditorImages');
     Route::resource('categories', 'CategoriesController');
@@ -201,8 +203,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('conversations/destroy', 'ConversationsController@massDestroy')->name('conversations.massDestroy');
     Route::resource('conversations', 'ConversationsController');
 
-    // Orders
-    Route::delete('orders/destroy', 'OrdersController@massDestroy')->name('orders.massDestroy');
+    // Orders  
+    Route::post('orders/send_to_wasla', 'OrdersController@send_to_wasla')->name('orders.send_to_wasla');
+    Route::post('orders/update_delivery_man', 'OrdersController@update_delivery_man')->name('orders.update_delivery_man');
+    Route::delete('orders/destroy_product/{id}', 'OrdersController@destroy_product')->name('orders.destroy_product');
+    Route::get('orders/print/{id}', 'OrdersController@print')->name('orders.print');
+    Route::post('orders/update_order_detail', 'OrdersController@update_order_detail')->name('orders.update_order_detail');
+    Route::post('orders/show_order_detail', 'OrdersController@show_order_detail')->name('orders.show_order_detail');
+    Route::post('orders/update_delivery_man', 'OrdersController@update_delivery_man')->name('orders.update_delivery_man');
+    Route::post('orders/update_statuses', 'OrdersController@update_statuses')->name('orders.update_statuses');
     Route::resource('orders', 'OrdersController');
 
     // Receipt Outgoing
@@ -245,6 +254,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Products
     Route::delete('products/destroy', 'ProductsController@massDestroy')->name('products.massDestroy');
+    Route::post('products/update_product', 'ProductsController@update')->name('products.update_product');
+    Route::post('products/update_statuses', 'ProductsController@update_statuses')->name('products.update_statuses');
+    Route::post('products/sku_combination', 'ProductsController@sku_combination')->name('products.sku_combination');
+    Route::post('products/sku_combination_edit', 'ProductsController@sku_combination_edit')->name('products.sku_combination_edit');
+    Route::post('products/get_sub_categories_by_category', 'ProductsController@get_sub_categories_by_category')->name('products.get_sub_categories_by_category');
+    Route::post('products/get_sub_sub_categories_by_subcategory', 'ProductsController@get_sub_sub_categories_by_subcategory')->name('products.get_sub_sub_categories_by_subcategory');
     Route::post('products/media', 'ProductsController@storeMedia')->name('products.storeMedia');
     Route::post('products/ckmedia', 'ProductsController@storeCKEditorImages')->name('products.storeCKEditorImages');
     Route::resource('products', 'ProductsController');

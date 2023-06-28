@@ -43,10 +43,13 @@ return new class extends Migration
 
                 UNION ALL
 
-                SELECT CONCAT("order") AS model_type,id,order_num,client_name,phone_number,phone_number_2,deposit_amount as deposit,total_cost,shipping_address,shipping_country_id,
-                delivery_status,payment_status,playlist_status,delay_reason,cancel_reason,designer_id,preparer_id,manufacturer_id,user_id As added_by,
-                shipmenter_id,delivery_man_id,note,send_to_playlist_date,send_to_delivery_date,calling as quickly,printing_times,created_at,updated_at,order_num as description
-                FROM orders
+                SELECT CONCAT("order") AS model_type,ords.id,ords.order_num,ords.client_name,ords.phone_number,ords.phone_number_2,ords.deposit_amount as deposit,ords.total_cost,ords.shipping_address,ords.shipping_country_id,
+                ords.delivery_status,ords.payment_status,ords.playlist_status,ords.delay_reason,ords.cancel_reason,ords.designer_id,ords.preparer_id,ords.manufacturer_id,ords.user_id As added_by,
+                ords.shipmenter_id,ords.delivery_man_id,ords.note,ords.send_to_playlist_date,ords.send_to_delivery_date,ords.quickly,ords.printing_times,ords.created_at,ords.updated_at,
+                GROUP_CONCAT(CONCAT(ords_detls.product_id, "(", ords_detls.quantity, ") <br>",ords_detls.description) SEPARATOR "<hr>") AS description
+                FROM orders ords
+                JOIN order_details ords_detls ON ords.id = ords_detls.order_id
+                GROUP BY ords.id 
             ';
     }
 

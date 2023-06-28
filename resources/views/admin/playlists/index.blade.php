@@ -165,24 +165,25 @@
                 <div> 
                     {{ $playlists->appends(request()->input())->links() }} 
                 </div>
-            @endif
+            @endif 
             <div class="row">
                 @if ($view == 'by_date')
                     @foreach ($dates as $key0 => $playlists)
                         <div class="card">
                             <div id="collapse{{ $key0 }}" class="collapse" aria-labelledby="heading{{ $key0 }}">
                                 <div class="card-body">
-
-                                    @include('admin.playlists.partials')
-
+                                    <div class="row"> 
+                                        <h5>{{$key0}}</h5>
+                                        <hr>
+                                        @include('admin.playlists.partials')
+                                    </div> 
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 @else
                     @include('admin.playlists.partials')
-                @endif
-
+                @endif 
             </div>
             @if ($view != 'by_date')
                 <div> 

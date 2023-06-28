@@ -41,17 +41,7 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.category.fields.icon_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label class="required" for="slug">{{ trans('cruds.category.fields.slug') }}</label>
-                <input class="form-control {{ $errors->has('slug') ? 'is-invalid' : '' }}" type="text" name="slug" id="slug" value="{{ old('slug', $category->slug) }}" required>
-                @if($errors->has('slug'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('slug') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.category.fields.slug_helper') }}</span>
-            </div>
+            </div> 
             <div class="form-group">
                 <label for="meta_title">{{ trans('cruds.category.fields.meta_title') }}</label>
                 <input class="form-control {{ $errors->has('meta_title') ? 'is-invalid' : '' }}" type="text" name="meta_title" id="meta_title" value="{{ old('meta_title', $category->meta_title) }}">

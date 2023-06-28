@@ -26,11 +26,7 @@ class UpdateCategoryRequest extends FormRequest
             ],
             'icon' => [
                 'required',
-            ],
-            'slug' => [
-                'string',
-                'required',
-            ],
+            ], 
             'meta_title' => [
                 'string',
                 'nullable',

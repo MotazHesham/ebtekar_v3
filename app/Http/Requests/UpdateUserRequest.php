@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
-use Gate;
+use App\Models\User; 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -26,10 +26,8 @@ class UpdateUserRequest extends FormRequest
                 'unique:users,email,' . request()->route('user')->id,
             ],
             'phone_number' => [
-                'string',
-                'nullable',
-            ],
-            'user_type' => [
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
             'roles.*' => [

@@ -106,7 +106,8 @@ class ReceiptCompanyController extends Controller
 
         if ($response) {
             if ($response['errNum'] == 200) {
-                $receipt->sent_to_wasla = 1;
+                $receipt->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
+                $receipt->delivery_status = 'on_delivery'; 
                 $receipt->save();
                 alert('تم أرسال الأوردر لواصلة بنجاح');
             } elseif ($response['errNum'] == 401) {

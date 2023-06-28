@@ -1,3 +1,4 @@
+
 @foreach ($playlists as $key => $item)
     @php
         if ($type == 'design') {

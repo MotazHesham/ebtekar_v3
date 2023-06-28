@@ -7,11 +7,12 @@ use App\Http\Requests\MassDestroySubSubCategoryRequest;
 use App\Http\Requests\StoreSubSubCategoryRequest;
 use App\Http\Requests\UpdateSubSubCategoryRequest;
 use App\Models\SubCategory;
-use App\Models\SubSubCategory;
-use Gate;
+use App\Models\SubSubCategory; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class SubSubCategoryController extends Controller
 {
@@ -46,10 +47,7 @@ class SubSubCategoryController extends Controller
             });
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
-            });
-            $table->editColumn('slug', function ($row) {
-                return $row->slug ? $row->slug : '';
-            });
+            }); 
             $table->editColumn('meta_title', function ($row) {
                 return $row->meta_title ? $row->meta_title : '';
             });
@@ -78,9 +76,12 @@ class SubSubCategoryController extends Controller
     }
 
     public function store(StoreSubSubCategoryRequest $request)
-    {
-        $subSubCategory = SubSubCategory::create($request->all());
+    { 
+        $validated_request = $request->all();
+        $validated_request['slug'] = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+        $subSubCategory = SubSubCategory::create($validated_request);
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.sub-sub-categories.index');
     }
 
@@ -99,6 +100,7 @@ class SubSubCategoryController extends Controller
     {
         $subSubCategory->update($request->all());
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.sub-sub-categories.index');
     }
 
@@ -117,7 +119,8 @@ class SubSubCategoryController extends Controller
 
         $subSubCategory->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+        return 1;
     }
 
     public function massDestroy(MassDestroySubSubCategoryRequest $request)

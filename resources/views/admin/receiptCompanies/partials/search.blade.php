@@ -19,7 +19,7 @@
                         <option value="">أختر الموظف</option>
                         @foreach ($staffs as $staff)
                             <option value="{{ $staff->id }}" @isset($staff_id) @if ($staff_id == $staff->id) selected @endif @endisset>
-                                {{ $staff->email }}
+                                {{ $staff->name }}
                             </option>
                         @endforeach
                     </select>
@@ -68,7 +68,7 @@
                         <option value="">{{ trans('cruds.receiptCompany.fields.delivery_man_id') }}</option>
                         @foreach ($delivery_mans as $raw)
                             <option value="{{ $raw->id }}" @isset($delivery_man_id) @if ($delivery_man_id == $raw->id) selected @endif @endisset>
-                                {{ $raw->email }}
+                                {{ $raw->name }}
                             </option>
                         @endforeach
                     </select>
@@ -123,9 +123,9 @@
                     <select class="form-control mb-2 @isset($quickly) isset @endisset" name="quickly" id="quickly" onchange="sort_receipt_company()">
                         <option value="">{{ trans('global.extra.quickly') }}</option>
                         <option value="0" @isset($quickly) @if ($quickly == '0') selected @endif @endisset>
-                            {{ trans('cruds.receiptCompany.fields.quickly') }}</option>
+                            {{ trans('global.extra.0_quickly') }}</option>
                         <option value="1" @isset($quickly) @if ($quickly == '1') selected @endif @endisset>
-                            {{ trans('global.extra.not_quickly') }}</option>
+                            {{ trans('global.extra.1_quickly') }}</option>
                     </select>  
 
                     <select class="form-control mb-2 @isset($delivery_status) isset @endisset" name="delivery_status" id="delivery_status" onchange="sort_receipt_company()">

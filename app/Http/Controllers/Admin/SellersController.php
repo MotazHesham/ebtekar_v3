@@ -8,9 +8,9 @@ use App\Http\Requests\MassDestroySellerRequest;
 use App\Http\Requests\StoreSellerRequest;
 use App\Http\Requests\UpdateSellerRequest;
 use App\Models\Seller;
-use App\Models\User;
-use Gate;
+use App\Models\User; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -51,6 +51,15 @@ class SellersController extends Controller
             $table->addColumn('user_name', function ($row) {
                 return $row->user ? $row->user->name : '';
             });
+            $table->addColumn('user_email', function ($row) {
+                return $row->user ? $row->user->email : '';
+            });
+            $table->addColumn('user_address', function ($row) {
+                return $row->user ? $row->user->address : '';
+            });
+            $table->addColumn('user_phone_number', function ($row) {
+                return $row->user ? $row->user->phone_number : '';
+            });
 
             $table->editColumn('seller_type', function ($row) {
                 return $row->seller_type ? Seller::SELLER_TYPE_SELECT[$row->seller_type] : '';
@@ -60,12 +69,6 @@ class SellersController extends Controller
             });
             $table->editColumn('discount_code', function ($row) {
                 return $row->discount_code ? $row->discount_code : '';
-            });
-            $table->editColumn('order_out_website', function ($row) {
-                return $row->order_out_website ? $row->order_out_website : '';
-            });
-            $table->editColumn('order_in_website', function ($row) {
-                return $row->order_in_website ? $row->order_in_website : '';
             });
             $table->editColumn('qualification', function ($row) {
                 return $row->qualification ? $row->qualification : '';
@@ -79,30 +82,8 @@ class SellersController extends Controller
             $table->editColumn('seller_code', function ($row) {
                 return $row->seller_code ? $row->seller_code : '';
             });
-            $table->editColumn('identity_back', function ($row) {
-                if ($photo = $row->identity_back) {
-                    return sprintf(
-                        '<a href="%s" target="_blank"><img src="%s" width="50px" height="50px"></a>',
-                        $photo->url,
-                        $photo->thumbnail
-                    );
-                }
 
-                return '';
-            });
-            $table->editColumn('identity_front', function ($row) {
-                if ($photo = $row->identity_front) {
-                    return sprintf(
-                        '<a href="%s" target="_blank"><img src="%s" width="50px" height="50px"></a>',
-                        $photo->url,
-                        $photo->thumbnail
-                    );
-                }
-
-                return '';
-            });
-
-            $table->rawColumns(['actions', 'placeholder', 'user', 'identity_back', 'identity_front']);
+            $table->rawColumns(['actions', 'placeholder', 'user']);
 
             return $table->make(true);
         }
@@ -112,16 +93,46 @@ class SellersController extends Controller
 
     public function create()
     {
-        abort_if(Gate::denies('seller_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('seller_create'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        return view('admin.sellers.create');
+    }
 
-        return view('admin.sellers.create', compact('users'));
+    public function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ=#%$@&';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     public function store(StoreSellerRequest $request)
     {
-        $seller = Seller::create($request->all());
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            'password' => bcrypt($request->password),
+            'user_type' => 'seller',
+            'approved' => 1,
+        ]);
+
+        $random_string = $this->generateRandomString();
+        
+        $seller = Seller::create([
+            'user_id' => $user->id,
+            'seller_type' => $request->seller_type,
+            'seller_code' => $user->id . $random_string,
+            'discount' => $request->discount,
+            'discount_code' => $request->discount_code,
+            'order_out_website' => $request->order_out_website,
+            'qualification' => $request->qualification,
+            'social_name' => $request->social_name,
+            'social_link' => $request->social_link,
+        ]);
 
         if ($request->input('identity_back', false)) {
             $seller->addMedia(storage_path('tmp/uploads/' . basename($request->input('identity_back'))))->toMediaCollection('identity_back');
@@ -135,6 +146,7 @@ class SellersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $seller->id]);
         }
 
+        toast(trans('flash.global.success_title'),'success'); 
         return redirect()->route('admin.sellers.index');
     }
 
@@ -151,7 +163,25 @@ class SellersController extends Controller
 
     public function update(UpdateSellerRequest $request, Seller $seller)
     {
-        $seller->update($request->all());
+        $seller->update([
+            'seller_type' => $request->seller_type,
+            'discount' => $request->discount,
+            'discount_code' => $request->discount_code,
+            'order_out_website' => $request->order_out_website,
+            'qualification' => $request->qualification,
+            'social_name' => $request->social_name,
+            'social_link' => $request->social_link,
+        ]);
+
+        $user = User::find($seller->user_id);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'address' => $request->address,
+            'phone_number' => $request->phone_number,
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
+        ]);
 
         if ($request->input('identity_back', false)) {
             if (! $seller->identity_back || $request->input('identity_back') !== $seller->identity_back->file_name) {
@@ -175,6 +205,7 @@ class SellersController extends Controller
             $seller->identity_front->delete();
         }
 
+        toast(trans('flash.global.update_title'),'success'); 
         return redirect()->route('admin.sellers.index');
     }
 
@@ -193,7 +224,8 @@ class SellersController extends Controller
 
         $seller->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+        return 1;
     }
 
     public function massDestroy(MassDestroySellerRequest $request)

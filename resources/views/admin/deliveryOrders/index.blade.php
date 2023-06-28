@@ -8,7 +8,7 @@
 
     <div class="card-body">
         <p>
-            Text coming soon...
+            Coming soon...
         </p>
     </div>
 </div>

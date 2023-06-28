@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyAttributeRequest;
 use App\Http\Requests\StoreAttributeRequest;
 use App\Http\Requests\UpdateAttributeRequest;
-use App\Models\Attribute;
-use Gate;
+use App\Models\Attribute; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -66,6 +66,8 @@ class AttributesController extends Controller
     {
         $attribute = Attribute::create($request->all());
 
+
+        toast(trans('flash.global.success_title'),'success'); 
         return redirect()->route('admin.attributes.index');
     }
 
@@ -80,6 +82,7 @@ class AttributesController extends Controller
     {
         $attribute->update($request->all());
 
+        toast(trans('flash.global.update_title'),'success'); 
         return redirect()->route('admin.attributes.index');
     }
 
@@ -95,8 +98,8 @@ class AttributesController extends Controller
         abort_if(Gate::denies('attribute_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $attribute->delete();
-
-        return back();
+        alert(trans('flash.deleted'),'','success');
+        return 1;
     }
 
     public function massDestroy(MassDestroyAttributeRequest $request)

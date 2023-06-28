@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
             $table->decimal('purchase_price', 15, 2);
             $table->string('slug');
             $table->longText('attributes')->nullable();
-            $table->longText('choice_options')->nullable();
+            $table->longText('attribute_options')->nullable();
             $table->longText('colors')->nullable();
             $table->longText('tags')->nullable();
             $table->string('video_provider')->nullable();

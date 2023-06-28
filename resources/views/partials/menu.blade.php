@@ -308,13 +308,53 @@
             </li>
         @endcan
         @can('customer_access')
+            @php 
+                $settings11 = [
+                    'chart_title'           => 'last 7days customers registered',
+                    'chart_type'            => 'number_block',
+                    'report_type'           => 'group_by_date',
+                    'model'                 => 'App\Models\Customer',
+                    'group_by_field'        => 'created_at',
+                    'group_by_period'       => 'day',
+                    'aggregate_function'    => 'count',
+                    'filter_field'          => 'created_at',
+                    'filter_days'           => '7',
+                    'group_by_field_format' => 'd/m/Y H:i:s',
+                    'column_class'          => 'col-md-12',
+                    'entries_number'        => '5',
+                    'translation_key'       => 'customer',
+                ];
+
+                $settings11['total_number'] = 0;
+                if (class_exists($settings11['model'])) {
+                    $settings11['total_number'] = $settings11['model']::when(isset($settings11['filter_field']), function ($query) use ($settings11) {
+                        if (isset($settings11['filter_days'])) {
+                            return $query->where($settings11['filter_field'], '>=',
+                                now()->subDays($settings11['filter_days'])->format('Y-m-d'));
+                        } elseif (isset($settings11['filter_period'])) {
+                            switch ($settings11['filter_period']) {
+                                case 'week': $start = date('Y-m-d', strtotime('last Monday'));
+                                break;
+                                case 'month': $start = date('Y-m') . '-01';
+                                break;
+                                case 'year': $start = date('Y') . '-01-01';
+                                break;
+                            }
+                            if (isset($start)) {
+                                return $query->where($settings11['filter_field'], '>=', $start);
+                            }
+                        }
+                    })
+                        ->{$settings11['aggregate_function'] ?? 'count'}($settings11['aggregate_field'] ?? '*');
+                }
+            @endphp
             <li class="c-sidebar-nav-item">
                 <a href="{{ route("admin.customers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/customers") || request()->is("admin/customers/*") ? "c-active" : "" }}">
                     <i class="fa-fw far fa-user c-sidebar-nav-icon">
 
                     </i>
                     {{ trans('cruds.customer.title') }}
-                    <span class="badge bg-success-gradient text-dark ms-auto">6 جديد</span>
+                    <span class="badge bg-success-gradient text-dark ms-auto">{{ number_format($settings11['total_number']) }} جديد</span>
                 </a>
             </li>
         @endcan
@@ -326,7 +366,7 @@
 
                     </i>
                     {{ trans('cruds.order.title') }}
-                    <span class="badge bg-primary-gradient ms-auto">20</span>
+                    <span class="badge bg-primary-gradient ms-auto">{{\App\Models\Order::where('printing_times',1)->count()}}</span>
                 </a>
             </li>
         @endcan

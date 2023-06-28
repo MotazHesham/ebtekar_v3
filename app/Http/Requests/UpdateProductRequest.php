@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Product;
-use Gate;
+use App\Models\Product; 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -26,11 +26,7 @@ class UpdateProductRequest extends FormRequest
             ],
             'purchase_price' => [
                 'required',
-            ],
-            'slug' => [
-                'string',
-                'required',
-            ],
+            ], 
             'video_provider' => [
                 'string',
                 'nullable',
@@ -52,14 +48,7 @@ class UpdateProductRequest extends FormRequest
             'meta_title' => [
                 'string',
                 'nullable',
-            ],
-            'published' => [
-                'required',
-            ],
-            'user_id' => [
-                'required',
-                'integer',
-            ],
+            ], 
             'category_id' => [
                 'required',
                 'integer',

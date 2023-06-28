@@ -18,7 +18,7 @@
                                 <option value="">أختر الموظف</option>
                                 @foreach ($staffs as $staff)
                                     <option value="{{ $staff->id }}" @isset($staff_id) @if ($staff_id == $staff->id) selected @endif @endisset>
-                                        {{ $staff->email }}
+                                        {{ $staff->name }}
                                     </option>
                                 @endforeach
                             </select>

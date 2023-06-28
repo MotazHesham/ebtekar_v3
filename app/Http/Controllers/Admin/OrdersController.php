@@ -2,177 +2,284 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\OrdersExport;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\WaslaController;
 use App\Http\Requests\MassDestroyOrderRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Models\Category;
 use App\Models\Country;
+use App\Models\GeneralSetting;
 use App\Models\Order;
-use App\Models\User;
-use Gate;
+use App\Models\OrderDetail;
+use App\Models\Product;
+use App\Models\Seller;
+use App\Models\User; 
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\Response; 
 
 class OrdersController extends Controller
 {
-    public function index(Request $request)
-    {
-        abort_if(Gate::denies('order_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $order = Order::findOrFail($request->id);
+        $order->$type = $request->status; 
+        $order->save();
+        return 1;
+    }
 
-        if ($request->ajax()) {
-            $query = Order::with(['user', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipment', 'delivery_man'])->select(sprintf('%s.*', (new Order)->table));
-            $table = Datatables::of($query);
+    public function print($id){
+        $orders = Order::with('orderDetails','user')->whereIn('id',[$id])->get();
+        $generalsetting = GeneralSetting::first();
+        foreach($orders as $order){
+            $order->printing_times += 1;
+            $order->save();
+        }
+        return view('admin.orders.print',compact('orders','generalsetting'));
+    }
 
-            $table->addColumn('placeholder', '&nbsp;');
-            $table->addColumn('actions', '&nbsp;');
+    public function update_delivery_man(Request $request){ 
+        $order = Order::find($request->row_id);
+        $order->delivery_man_id = $request->delivery_man_id;
+        $order->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
+        $order->delivery_status = 'on_delivery'; 
+        $order->save();
+        toast(trans('flash.global.success_title'),'success');
+        return redirect()->route('admin.orders.show',$order->id);
+    }
 
-            $table->editColumn('actions', function ($row) {
-                $viewGate      = 'order_show';
-                $editGate      = 'order_edit';
-                $deleteGate    = 'order_delete';
-                $crudRoutePart = 'orders';
+    public function send_to_wasla(Request $request){
+        $order = Order::findOrFail($request->row_id);
+        $company_id = Auth::user()->wasla_company_id;
 
-                return view('partials.datatablesActions', compact(
-                    'viewGate',
-                    'editGate',
-                    'deleteGate',
-                    'crudRoutePart',
-                    'row'
-                ));
-            });
+        $order_products_pivot = OrderDetail::with('product')->where('order_id', $request->row_id)->orderBy('updated_at', 'desc')->get();
 
-            $table->editColumn('id', function ($row) {
-                return $row->id ? $row->id : '';
-            });
-            $table->editColumn('order_type', function ($row) {
-                return $row->order_type ? Order::ORDER_TYPE_SELECT[$row->order_type] : '';
-            });
-            $table->editColumn('order_num', function ($row) {
-                return $row->order_num ? $row->order_num : '';
-            });
-            $table->editColumn('client_name', function ($row) {
-                return $row->client_name ? $row->client_name : '';
-            });
-            $table->editColumn('phone_number', function ($row) {
-                return $row->phone_number ? $row->phone_number : '';
-            });
-            $table->editColumn('phone_number_2', function ($row) {
-                return $row->phone_number_2 ? $row->phone_number_2 : '';
-            });
-            $table->editColumn('shipping_address', function ($row) {
-                return $row->shipping_address ? $row->shipping_address : '';
-            });
-            $table->editColumn('shipping_country_name', function ($row) {
-                return $row->shipping_country_name ? $row->shipping_country_name : '';
-            });
-            $table->editColumn('shipping_country_cost', function ($row) {
-                return $row->shipping_country_cost ? $row->shipping_country_cost : '';
-            });
-            $table->editColumn('shipping_cost_by_seller', function ($row) {
-                return $row->shipping_cost_by_seller ? $row->shipping_cost_by_seller : '';
-            });
-            $table->editColumn('free_shipping', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->free_shipping ? 'checked' : null) . '>';
-            });
-            $table->editColumn('free_shipping_reason', function ($row) {
-                return $row->free_shipping_reason ? $row->free_shipping_reason : '';
-            });
-            $table->editColumn('printing_times', function ($row) {
-                return $row->printing_times ? $row->printing_times : '';
-            });
-            $table->editColumn('completed', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->completed ? 'checked' : null) . '>';
-            });
-            $table->editColumn('calling', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->calling ? 'checked' : null) . '>';
-            });
-            $table->editColumn('supplied', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->supplied ? 'checked' : null) . '>';
-            });
+        $description = '';
+        $note = '';
+        foreach ($order_products_pivot as $raw) {
+            $description .= $raw->product ? $raw->product->name : '';
+            $description .= ' <br> ';
 
-            $table->editColumn('playlist_status', function ($row) {
-                return $row->playlist_status ? Order::PLAYLIST_STATUS_SELECT[$row->playlist_status] : '';
-            });
-            $table->editColumn('payment_status', function ($row) {
-                return $row->payment_status ? Order::PAYMENT_STATUS_SELECT[$row->payment_status] : '';
-            });
-            $table->editColumn('delivery_status', function ($row) {
-                return $row->delivery_status ? Order::DELIVERY_STATUS_SELECT[$row->delivery_status] : '';
-            });
-            $table->editColumn('payment_type', function ($row) {
-                return $row->payment_type ? Order::PAYMENT_TYPE_SELECT[$row->payment_type] : '';
-            });
-            $table->editColumn('commission_status', function ($row) {
-                return $row->commission_status ? Order::COMMISSION_STATUS_SELECT[$row->commission_status] : '';
-            });
-            $table->editColumn('deposit_type', function ($row) {
-                return $row->deposit_type ? Order::DEPOSIT_TYPE_SELECT[$row->deposit_type] : '';
-            });
-            $table->editColumn('deposit_amount', function ($row) {
-                return $row->deposit_amount ? $row->deposit_amount : '';
-            });
-            $table->editColumn('total_cost_by_seller', function ($row) {
-                return $row->total_cost_by_seller ? $row->total_cost_by_seller : '';
-            });
-            $table->editColumn('total_cost', function ($row) {
-                return $row->total_cost ? $row->total_cost : '';
-            });
-            $table->editColumn('commission', function ($row) {
-                return $row->commission ? $row->commission : '';
-            });
-            $table->editColumn('extra_commission', function ($row) {
-                return $row->extra_commission ? $row->extra_commission : '';
-            });
-            $table->editColumn('discount', function ($row) {
-                return $row->discount ? $row->discount : '';
-            });
-            $table->editColumn('discount_code', function ($row) {
-                return $row->discount_code ? $row->discount_code : '';
-            });
-            $table->editColumn('note', function ($row) {
-                return $row->note ? $row->note : '';
-            });
-            $table->editColumn('cancel_reason', function ($row) {
-                return $row->cancel_reason ? $row->cancel_reason : '';
-            });
-            $table->editColumn('delay_reason', function ($row) {
-                return $row->delay_reason ? $row->delay_reason : '';
-            });
-            $table->addColumn('user_name', function ($row) {
-                return $row->user ? $row->user->name : '';
-            });
-
-            $table->addColumn('shipping_country_name', function ($row) {
-                return $row->shipping_country ? $row->shipping_country->name : '';
-            });
-
-            $table->addColumn('designer_name', function ($row) {
-                return $row->designer ? $row->designer->name : '';
-            });
-
-            $table->addColumn('preparer_name', function ($row) {
-                return $row->preparer ? $row->preparer->name : '';
-            });
-
-            $table->addColumn('manufacturer_name', function ($row) {
-                return $row->manufacturer ? $row->manufacturer->name : '';
-            });
-
-            $table->addColumn('shipment_name', function ($row) {
-                return $row->shipment ? $row->shipment->name : '';
-            });
-
-            $table->addColumn('delivery_man_name', function ($row) {
-                return $row->delivery_man ? $row->delivery_man->name : '';
-            });
-
-            $table->rawColumns(['actions', 'placeholder', 'free_shipping', 'completed', 'calling', 'supplied', 'user', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipment', 'delivery_man']);
-
-            return $table->make(true);
+            $note .= $raw->description;
+            $note .= ' <br> ';
         }
 
-        return view('admin.orders.index');
+        $data = [
+            //from receipt
+            'company_id' => $company_id,
+            'receiver_name' => $order->client_name,
+            'phone_1' => $order->phone_number,
+            'phone_2' => $order->phone_number_2,
+            'address' => $order->shipping_address,
+            'description' => $description,
+            'note' => $note,
+            'receipt_code' => $order->order_num,
+
+            //from form
+            'district' => $request->district,
+            'type' => $request->type,
+            'cost' => $request->cost,
+            'in_return_case' => $request->in_return_case,
+            'country_id' => $request->country_id,
+            'status' => $request->status,
+        ];
+
+        $waslaController = new WaslaController;
+        $response = $waslaController->store_order($data);
+
+        if ($response) {
+            if ($response['errNum'] == 200) {
+                $order->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
+                $order->delivery_status = 'on_delivery'; 
+                $order->save();
+                alert('تم أرسال الأوردر لواصلة بنجاح');
+            } elseif ($response['errNum'] == 401) {
+                alert('',$response['msg'],'error'); 
+            } else {
+                alert('SomeThing Went Wrong000','','error');
+            }
+        } else {
+            alert('SomeThing Went Wrong','','error');
+        }
+        return redirect()->route('admin.receipt-socials.index');
+    }
+    public function index(Request $request)
+    {
+        abort_if(Gate::denies('order_access'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
+
+        $users = User::whereIn('user_type',['customer','seller'])->get();
+        $delivery_mans = User::where('user_type', 'delivery_man')->get();
+        $countries = Country::where('status',1)->get()->groupBy('type'); 
+
+        $phone = null;
+        $client_name = null;
+        $order_num = null;
+        $delivery_status = null;
+        $payment_status = null;
+        $user_id = null;
+        $delivery_man_id = null;
+        $from = null;
+        $to = null;
+        $calling = null;
+        $quickly = null;
+        $country_id = null;
+        $commission_status = null;
+        $playlist_status = null;
+        $sent_to_wasla = null;
+        $order_type = null;
+        $sent_to_delivery = null;
+        $exclude = null;
+        $include = null; 
+        $from_date = null;
+        $to_date = null;
+        $date_type = null;
+        $description = null;
+
+
+        $orders = Order::with(['orderDetails','shipping_country','user','delivery_man']);
+
+        if ($request->order_type != null){
+            $orders = $orders->where('order_type',$request->order_type);
+            $order_type = $request->order_type;
+        }
+
+        if ($request->sent_to_wasla != null){
+            $orders = $orders->where('sent_to_wasla',$request->sent_to_wasla);
+            $sent_to_wasla = $request->sent_to_wasla;
+        }
+        if ($request->delivery_status != null) {
+            $delivery_status = $request->delivery_status;
+            $orders = $orders->where('delivery_status',$delivery_status);
+        }
+
+        if ($request->description != null) {
+            $description = $request->description;
+            $orders = $orders->whereHas('orderDetails', function ($query) use ($description) {
+                $query->where('description', 'like', '%' . $description . '%');
+            });
+        }
+
+        if ($request->sent_to_delivery != null) {
+            $sent_to_delivery = $request->sent_to_delivery;
+            if($sent_to_delivery){
+                $orders = $orders->whereNotNull('send_to_delivery_date');
+            }else{
+                $orders = $orders->whereNull('send_to_delivery_date');
+            }
+        }
+        
+        if ($request->payment_status != null) {
+            $payment_status = $request->payment_status;
+            $orders = $orders->where('payment_status',$payment_status);
+        }
+        if ($request->playlist_status != null) {
+            $playlist_status = $request->playlist_status;
+            $orders = $orders->where('playlist_status',$playlist_status);
+        }
+
+        if ($request->country_id != null) {
+            $country_id = $request->country_id;
+            $orders = $orders->where('shipping_country_id',$country_id);
+        }
+
+        if ($request->commission_status != null) {
+            $commission_status = $request->commission_status;
+            $orders = $orders->where('commission_status',$commission_status);
+        }
+
+
+        if ($request->calling != null) {
+            $calling = $request->calling;
+            $orders = $orders->where('calling',$calling);
+        }
+        if ($request->quickly != null) {
+            $quickly = $request->quickly;
+            $orders = $orders->where('quickly',$quickly);
+        }
+
+        if ($request->client_name != null){
+            $orders = $orders->where('client_name', 'like', '%'.$request->client_name.'%');
+            $client_name = $request->client_name;
+        }
+        if ($request->order_num != null){
+            $orders = $orders->where('order_num', 'like', '%'.$request->order_num.'%');
+            $order_num = $request->order_num;
+        }
+
+        if ($request->user_id != null) {
+            $user_id = $request->user_id;
+            $orders = $orders->where('user_id',$request->user_id);
+        }
+
+        if ($request->delivery_man_id != null) {
+            $delivery_man_id = $request->delivery_man_id;
+            $orders = $orders->where('delivery_man_id',$request->delivery_man_id);
+        }
+
+        if ($request->phone != null){
+            global $phone;
+            $phone = $request->phone;
+            $orders = $orders->where(function ($query) {
+                                    $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                            ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                });
+        }
+
+        if ($request->from != null && $request->to != null && $request->order_type) {
+            $from = $request->from;
+            $to = $request->to;
+            $orders = $orders->whereBetween('order_num', [$request->order_type .'#' . $from, $request->order_type .'#' . $to]);
+        }
+        if ($request->from_date != null && $request->to_date != null && $request->date_type != null) {  
+            $from_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->from_date . ' ' . '12:00 am')->format('Y-m-d H:i:s');
+            $to_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->to_date . ' ' . '11:59 pm')->format('Y-m-d H:i:s'); 
+            $date_type = $request->date_type;
+            $orders = $orders->whereBetween($date_type, [$from_date, $to_date]);
+        }
+        if ($request->exclude != null && $request->order_type) {
+            $exclude = $request->exclude;
+            foreach(explode(',',$exclude) as $exc){
+                $exclude2[] = $request->order_type.'#' . $exc;
+            }
+            $orders = $orders->whereNotIn('order_num', $exclude2);
+        }
+        if ($request->include != null && $request->order_type) {
+            $include = $request->include;
+            foreach(explode(',',$include) as $inc){
+                $include2[] = $request->order_type.'#' . $inc;
+            }
+            $orders = $orders->whereIn('order_num' ,$include2);
+        }
+
+        if($request->has('download')){
+            return Excel::download(new OrdersExport($orders->get()), 'orders.xlsx');
+        } 
+
+        if ($request->has('print')) {
+            $orders = $orders->with('orderDetails.product')->get();
+            $generalsetting = GeneralSetting::first();
+            foreach($orders as $order){
+                $order->printing_times += 1;
+                $order->save();
+            }
+            return view('admin.orders.print', compact('orders','generalsetting'));
+        }
+
+        $statistics = [
+            'total_total_cost' => $orders->sum('total_cost') + $orders->sum('extra_commission'),
+            'total_shipping_country_cost' => $orders->sum('shipping_country_cost'),
+            'total_deposit' => $orders->sum('deposit_amount'),
+            'total_commission' => $orders->sum('commission') + $orders->sum('extra_commission'),
+        ];
+        $orders = $orders->orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.orders.index', compact('statistics','users','orders','country_id','quickly','delivery_man_id',
+                                            'payment_status','delivery_status','calling', 'playlist_status','sent_to_delivery','date_type',
+                                            'client_name','phone' ,'order_num', 'countries','delivery_mans','exclude', 'include', 'from_date',
+                                            'user_id','from' , 'to','commission_status','sent_to_wasla','order_type','to_date','description'));
     }
 
     public function create()
@@ -225,9 +332,17 @@ class OrdersController extends Controller
     {
         abort_if(Gate::denies('order_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $order->load('user', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipment', 'delivery_man');
+        $order->load('user','orderDetails.product', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man');
 
-        return view('admin.orders.show', compact('order'));
+        $general_settings = GeneralSetting::first();
+        
+        if($general_settings->delivery_system == 'wasla'){
+            $waslaController = new WaslaController;
+            $response = $waslaController->countries();
+        }else{
+            $response = '';
+        }
+        return view('admin.orders.show', compact('order','general_settings','response'));
     }
 
     public function destroy(Order $order)
@@ -236,17 +351,51 @@ class OrdersController extends Controller
 
         $order->delete();
 
-        return back();
+        return 1;
     }
 
-    public function massDestroy(MassDestroyOrderRequest $request)
-    {
-        $orders = Order::find(request('ids'));
-
-        foreach ($orders as $order) {
-            $order->delete();
+    public function show_order_detail(Request $request){
+        $orderDetail = OrderDetail::findOrFail($request->id);
+        $orderDetail->load(['product','order']);
+        return view('admin.orders.partials.show_details', compact('orderDetail'));
+    }
+    public function update_order_detail(Request $request){
+        $orderDetail = OrderDetail::findOrFail($request->id);
+        $orderDetail->extra_commission = $request->extra_commission;
+        
+        if($orderDetail->save()){
+            $order = Order::with('orderDetails')->find($orderDetail->order_id);
+            $extra_commission = 0;
+            foreach($order->orderDetails as $raw){
+                $extra_commission = $extra_commission + $raw->extra_commission;
+            }
+            $order->extra_commission = $extra_commission;
+            $order->save();
+        }else{
+            return 0;
         }
+        
+        toast(trans('flash.global.update_title'),'success'); 
+        return redirect()->route('admin.orders.show',$orderDetail->order_id);
+    } 
 
-        return response(null, Response::HTTP_NO_CONTENT);
-    }
+    public function destroy_product($id){
+        $orderDetail = OrderDetail::findOrFail($id);
+
+        $order = Order::find($orderDetail->order_id);
+
+        if($order->playlist_status != 'pending'){
+            alert(trans('flash.cant_delete'),'','error');
+            return 1;
+        }  
+
+        $order->commission = $order->commission - $orderDetail->commission;
+        $order->extra_commission = $order->extra_commission - $orderDetail->extra_commission;
+        $order->total_cost = $order->total_cost - $orderDetail->total_cost;
+        $order->save();
+        
+        $orderDetail->delete();
+        alert(trans('flash.deleted'),'','success');
+        return 1;
+    } 
 }

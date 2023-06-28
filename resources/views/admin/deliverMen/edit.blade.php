@@ -10,6 +10,7 @@
         <form method="POST" action="{{ route("admin.deliver-men.update", [$deliverMan->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
+            <input type="hidden" name="user_id" value="{{$deliverMan->user->id}}">
             <div class="form-group">
                 <label class="required" for="user">{{ trans('cruds.deliverMan.fields.user') }}</label>
                 <input class="form-control {{ $errors->has('user') ? 'is-invalid' : '' }}" type="text" name="user" id="user" value="{{ old('user', $deliverMan->user) }}" required>

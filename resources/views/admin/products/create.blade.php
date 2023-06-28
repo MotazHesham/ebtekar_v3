@@ -1,255 +1,419 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            {{ trans('global.create') }} {{ trans('cruds.product.title_singular') }}
-        </div>
+    <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data" id="store_product">
+        @csrf
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        معلوات المنتج
+                    </div>
+        
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="required" for="name">{{ trans('cruds.product.fields.name') }}</label>
+                            <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name"
+                                id="name" value="{{ old('name', '') }}" required>
+                            @if ($errors->has('name'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('name') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.name_helper') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="required" for="category_id">{{ trans('cruds.product.fields.category') }}</label>
+                            <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category_id" id="category_id" required>
+                                @foreach ($categories as $id => $entry)
+                                    <option value="{{ $id }}" {{ old('category_id') == $id ? 'selected' : '' }}>
+                                        {{ $entry }}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('category'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('category') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.category_helper') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="required" for="sub_category_id">{{ trans('cruds.product.fields.sub_category') }}</label>
+                            <select class="form-control select2 {{ $errors->has('sub_category') ? 'is-invalid' : '' }}"  name="sub_category_id" id="sub_category_id" required>
+                                {{-- ajax call --}}
+                            </select>
+                            @if ($errors->has('sub_category'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('sub_category') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.sub_category_helper') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="sub_sub_category_id">{{ trans('cruds.product.fields.sub_sub_category') }}</label>
+                            <select class="form-control select2 {{ $errors->has('sub_sub_category') ? 'is-invalid' : '' }}" name="sub_sub_category_id" id="sub_sub_category_id">
+                                {{-- ajax call --}}
+                            </select>
+                            @if ($errors->has('sub_sub_category'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('sub_sub_category') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.sub_sub_category_helper') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">{{ trans('cruds.product.fields.tags') }}</label> 
+                            <input type="text" class="form-control {{ $errors->has('tags') ? 'is-invalid' : '' }}" name="tags[]" placeholder="add tags ..." data-role="tagsinput">
+                            @if ($errors->has('tags'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('tags') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.tags_helper') }}</span>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        صور المنتج
+                    </div>
+        
+                    <div class="card-body">
+        
+        
+                        <div class="form-group">
+                            <label class="required" for="photos">{{ trans('cruds.product.fields.photos') }}</label>
+                            <div class="needsclick dropzone {{ $errors->has('photos') ? 'is-invalid' : '' }}" id="photos-dropzone">
+                            </div>
+                            @if ($errors->has('photos'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('photos') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.photos_helper') }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        فيديوهات المنتج
+                    </div>
 
-        <div class="card-body">
-            <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group">
-                    <label class="required" for="name">{{ trans('cruds.product.fields.name') }}</label>
-                    <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name"
-                        id="name" value="{{ old('name', '') }}" required>
-                    @if ($errors->has('name'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('name') }}
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="video_provider">{{ trans('cruds.product.fields.video_provider') }}</label> 
+                            <select class="form-control {{ $errors->has('video_provider') ? 'is-invalid' : '' }}"
+                                name="video_provider" id="video_provider">
+                                <option value disabled {{ old('video_provider', null) === null ? 'selected' : '' }}>
+                                    {{ trans('global.pleaseSelect') }}</option>
+                                @foreach (App\Models\Product::VIDEO_PROVIDER_SELECT as $key => $label)
+                                    <option value="{{ $key }}"
+                                        {{ old('video_provider', 'flat') === (string) $key ? 'selected' : '' }}>{{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('video_provider'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('video_provider') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.video_provider_helper') }}</span>
                         </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.name_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label class="required" for="unit_price">{{ trans('cruds.product.fields.unit_price') }}</label>
-                    <input class="form-control {{ $errors->has('unit_price') ? 'is-invalid' : '' }}" type="number"
-                        name="unit_price" id="unit_price" value="{{ old('unit_price', '') }}" step="0.01" required>
-                    @if ($errors->has('unit_price'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('unit_price') }}
+                        <div class="form-group">
+                            <label for="video_link">{{ trans('cruds.product.fields.video_link') }}</label>
+                            <input class="form-control {{ $errors->has('video_link') ? 'is-invalid' : '' }}" type="text"
+                                name="video_link" id="video_link" value="{{ old('video_link', '') }}">
+                            @if ($errors->has('video_link'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('video_link') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.video_link_helper') }}</span>
                         </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.unit_price_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label class="required" for="purchase_price">{{ trans('cruds.product.fields.purchase_price') }}</label>
-                    <input class="form-control {{ $errors->has('purchase_price') ? 'is-invalid' : '' }}" type="number"
-                        name="purchase_price" id="purchase_price" value="{{ old('purchase_price', '') }}" step="0.01"
-                        required>
-                    @if ($errors->has('purchase_price'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('purchase_price') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.purchase_price_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label class="required" for="slug">{{ trans('cruds.product.fields.slug') }}</label>
-                    <input class="form-control {{ $errors->has('slug') ? 'is-invalid' : '' }}" type="text"
-                        name="slug" id="slug" value="{{ old('slug', '') }}" required>
-                    @if ($errors->has('slug'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('slug') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.slug_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label for="video_provider">{{ trans('cruds.product.fields.video_provider') }}</label>
-                    <input class="form-control {{ $errors->has('video_provider') ? 'is-invalid' : '' }}" type="text"
-                        name="video_provider" id="video_provider" value="{{ old('video_provider', '') }}">
-                    @if ($errors->has('video_provider'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('video_provider') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.video_provider_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label for="video_link">{{ trans('cruds.product.fields.video_link') }}</label>
-                    <input class="form-control {{ $errors->has('video_link') ? 'is-invalid' : '' }}" type="text"
-                        name="video_link" id="video_link" value="{{ old('video_link', '') }}">
-                    @if ($errors->has('video_link'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('video_link') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.video_link_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label for="description">{{ trans('cruds.product.fields.description') }}</label>
-                    <textarea class="form-control ckeditor {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description"
-                        id="description">{!! old('description') !!}</textarea>
-                    @if ($errors->has('description'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('description') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.description_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label class="required" for="photos">{{ trans('cruds.product.fields.photos') }}</label>
-                    <div class="needsclick dropzone {{ $errors->has('photos') ? 'is-invalid' : '' }}" id="photos-dropzone">
                     </div>
-                    @if ($errors->has('photos'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('photos') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.photos_helper') }}</span>
                 </div>
-                <div class="form-group">
-                    <label for="pdf">{{ trans('cruds.product.fields.pdf') }}</label>
-                    <div class="needsclick dropzone {{ $errors->has('pdf') ? 'is-invalid' : '' }}" id="pdf-dropzone">
-                    </div>
-                    @if ($errors->has('pdf'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('pdf') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.pdf_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label>{{ trans('cruds.product.fields.discount_type') }}</label>
-                    <select class="form-control {{ $errors->has('discount_type') ? 'is-invalid' : '' }}"
-                        name="discount_type" id="discount_type">
-                        <option value disabled {{ old('discount_type', null) === null ? 'selected' : '' }}>
-                            {{ trans('global.pleaseSelect') }}</option>
-                        @foreach (App\Models\Product::DISCOUNT_TYPE_SELECT as $key => $label)
-                            <option value="{{ $key }}"
-                                {{ old('discount_type', 'flat') === (string) $key ? 'selected' : '' }}>{{ $label }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('discount_type'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('discount_type') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.discount_type_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label for="discount">{{ trans('cruds.product.fields.discount') }}</label>
-                    <input class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}" type="number"
-                        name="discount" id="discount" value="{{ old('discount', '0') }}" step="0.01">
-                    @if ($errors->has('discount'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('discount') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.discount_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label for="meta_title">{{ trans('cruds.product.fields.meta_title') }}</label>
-                    <input class="form-control {{ $errors->has('meta_title') ? 'is-invalid' : '' }}" type="text"
-                        name="meta_title" id="meta_title" value="{{ old('meta_title', '') }}">
-                    @if ($errors->has('meta_title'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('meta_title') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.meta_title_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label for="meta_description">{{ trans('cruds.product.fields.meta_description') }}</label>
-                    <textarea class="form-control {{ $errors->has('meta_description') ? 'is-invalid' : '' }}" name="meta_description"
-                        id="meta_description">{{ old('meta_description') }}</textarea>
-                    @if ($errors->has('meta_description'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('meta_description') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.meta_description_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <div class="form-check {{ $errors->has('published') ? 'is-invalid' : '' }}">
-                        <input class="form-check-input" type="checkbox" name="published" id="published" value="1"
-                            required {{ old('published', 0) == 1 || old('published') === null ? 'checked' : '' }}>
-                        <label class="required form-check-label"
-                            for="published">{{ trans('cruds.product.fields.published') }}</label>
-                    </div>
-                    @if ($errors->has('published'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('published') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.published_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label class="required" for="user_id">{{ trans('cruds.product.fields.user') }}</label>
-                    <select class="form-control select2 {{ $errors->has('user') ? 'is-invalid' : '' }}" name="user_id"
-                        id="user_id" required>
-                        @foreach ($users as $id => $entry)
-                            <option value="{{ $id }}" {{ old('user_id') == $id ? 'selected' : '' }}>
-                                {{ $entry }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('user'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('user') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.user_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label class="required" for="category_id">{{ trans('cruds.product.fields.category') }}</label>
-                    <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}"
-                        name="category_id" id="category_id" required>
-                        @foreach ($categories as $id => $entry)
-                            <option value="{{ $id }}" {{ old('category_id') == $id ? 'selected' : '' }}>
-                                {{ $entry }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('category'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('category') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.category_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label for="sub_category_id">{{ trans('cruds.product.fields.sub_category') }}</label>
-                    <select class="form-control select2 {{ $errors->has('sub_category') ? 'is-invalid' : '' }}"
-                        name="sub_category_id" id="sub_category_id">
-                        @foreach ($sub_categories as $id => $entry)
-                            <option value="{{ $id }}" {{ old('sub_category_id') == $id ? 'selected' : '' }}>
-                                {{ $entry }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('sub_category'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('sub_category') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.sub_category_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <label for="sub_sub_category_id">{{ trans('cruds.product.fields.sub_sub_category') }}</label>
-                    <select class="form-control select2 {{ $errors->has('sub_sub_category') ? 'is-invalid' : '' }}"
-                        name="sub_sub_category_id" id="sub_sub_category_id">
-                        @foreach ($sub_sub_categories as $id => $entry)
-                            <option value="{{ $id }}"
-                                {{ old('sub_sub_category_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('sub_sub_category'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('sub_sub_category') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.sub_sub_category_helper') }}</span>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-danger" type="submit">
-                        {{ trans('global.save') }}
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        سعر المنتج
+                    </div>
+        
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="required" for="unit_price">{{ trans('cruds.product.fields.unit_price') }}</label>
+                                <input class="form-control {{ $errors->has('unit_price') ? 'is-invalid' : '' }}" type="number"
+                                    name="unit_price" id="unit_price" value="{{ old('unit_price', '') }}" step="0.01" required>
+                                @if ($errors->has('unit_price'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('unit_price') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.product.fields.unit_price_helper') }}</span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="required" for="purchase_price">{{ trans('cruds.product.fields.purchase_price') }}</label>
+                                <input class="form-control {{ $errors->has('purchase_price') ? 'is-invalid' : '' }}" type="number"
+                                    name="purchase_price" id="purchase_price" value="{{ old('purchase_price', '') }}" step="0.01"
+                                    required>
+                                @if ($errors->has('purchase_price'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('purchase_price') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.product.fields.purchase_price_helper') }}</span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>{{ trans('cruds.product.fields.discount_type') }}</label>
+                                <select class="form-control {{ $errors->has('discount_type') ? 'is-invalid' : '' }}"
+                                    name="discount_type" id="discount_type">
+                                    <option value disabled {{ old('discount_type', null) === null ? 'selected' : '' }}>
+                                        {{ trans('global.pleaseSelect') }}</option>
+                                    @foreach (App\Models\Product::DISCOUNT_TYPE_SELECT as $key => $label)
+                                        <option value="{{ $key }}"
+                                            {{ old('discount_type', 'flat') === (string) $key ? 'selected' : '' }}>{{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('discount_type'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('discount_type') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.product.fields.discount_type_helper') }}</span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="discount">{{ trans('cruds.product.fields.discount') }}</label>
+                                <input class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}" type="number"
+                                    name="discount" id="discount" value="{{ old('discount', '0') }}" step="0.01">
+                                @if ($errors->has('discount'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('discount') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.product.fields.discount_helper') }}</span>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="current_stock">{{ trans('cruds.product.fields.current_stock') }}</label>
+                                <input class="form-control {{ $errors->has('current_stock') ? 'is-invalid' : '' }}" type="number"
+                                    name="current_stock" id="current_stock" value="{{ old('current_stock', '0') }}" step="0.01">
+                                @if ($errors->has('current_stock'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('current_stock') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.product.fields.current_stock_helper') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        أنواع المنتج
+                    </div> 
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="colors">{{ trans('cruds.product.fields.colors') }}</label>
+                            <select class="form-control select2 color-var-select {{ $errors->has('colors') ? 'is-invalid' : '' }}" name="colors[]" id="colors" multiple>
+                                @foreach ($colors as $code => $entry)
+                                    <option value="{{ $code }}" {{ old('colors') == $code ? 'selected' : '' }}> {{ $entry }} </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('colors'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('colors') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.colors_helper') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="attributes">{{ trans('cruds.product.fields.attributes') }}</label>
+                            <select class="form-control select2 {{ $errors->has('attributes') ? 'is-invalid' : '' }}" name="attributes[]" id="attributes" multiple>
+                                @foreach ($attributes as $id => $entry)
+                                    <option value="{{ $id }}" {{ old('attributes') == $id ? 'selected' : '' }}> {{ $entry }}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('attributes'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('attributes') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.attributes_helper') }}</span>
+                        </div>
+                        <div id="attribute_options">
+                            {{-- ajax call --}}
+                        </div>
+                    </div>
+                </div>
+                <div id="sku_combination">
+                    {{-- ajax call --}}
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                وصف المنتج
+            </div>
+            <div class="card-body">
+                <div class="row"> 
+                    <div class="form-group col-md-6">
+                        <label for="description">{{ trans('cruds.product.fields.description') }}</label>
+                        <textarea class="form-control ckeditor {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description"
+                            id="description">{!! old('description') !!}</textarea>
+                        @if ($errors->has('description'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('description') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.product.fields.description_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="pdf">{{ trans('cruds.product.fields.pdf') }}</label>
+                        <div class="needsclick dropzone {{ $errors->has('pdf') ? 'is-invalid' : '' }}" id="pdf-dropzone">
+                        </div>
+                        @if ($errors->has('pdf'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('pdf') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.product.fields.pdf_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="meta_title">{{ trans('cruds.product.fields.meta_title') }}</label>
+                        <input class="form-control {{ $errors->has('meta_title') ? 'is-invalid' : '' }}" type="text"
+                            name="meta_title" id="meta_title" value="{{ old('meta_title', '') }}">
+                        @if ($errors->has('meta_title'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('meta_title') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.product.fields.meta_title_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="meta_description">{{ trans('cruds.product.fields.meta_description') }}</label>
+                        <textarea class="form-control {{ $errors->has('meta_description') ? 'is-invalid' : '' }}" name="meta_description"
+                            id="meta_description">{{ old('meta_description') }}</textarea>
+                        @if ($errors->has('meta_description'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('meta_description') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.product.fields.meta_description_helper') }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-danger btn-lg btn-block" type="submit">
+                {{ trans('global.save') }}
+            </button>
+        </div>
+    </form>
 @endsection
 
 @section('scripts')
     <script>
+        $('#attributes').on('change', function() {
+            $('#attribute_options').html(null);
+            $.each($("#attributes option:selected"), function(){ 
+                add_more_attributes_option($(this).val(), $(this).text());
+            });
+            update_sku();
+        });
+
+        function add_more_attributes_option(i, name){
+            $options  = '<div class="row">';
+            $options += '<div class="col-md-4">';
+            $options += '<input type="hidden" name="attribute_options[]" value="'+i+'">';
+            $options += '<input type="text" class="form-control" value="'+name+'" placeholder="Choice Title" readonly>';
+            $options += '</div>';
+            $options += '<div class="col-md-8">';
+            $options += '<input type="text" class="form-control" name="attribute_options_'+i+'[]" placeholder="Enter choice values" data-role="tagsinput" onchange="update_sku()">';
+            $options += '</div>';
+            $options += '</div>';
+            $('#attribute_options').append($options);
+
+            $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
+        }
+
+        $('#colors').on('change', function() {
+            update_sku();
+        });
+
+        $('input[name="unit_price"]').on('keyup', function() {
+            update_sku();
+        });
+        $('input[name="purchase_price"]').on('keyup', function() {
+            update_sku();
+        });
+
+        $('input[name="name"]').on('keyup', function() {
+            update_sku();
+        });
+
+        function delete_row(em){
+            $(em).closest('.form-group').remove();
+            update_sku();
+        }
+
+        function update_sku(){
+            $.ajax({
+                type:"POST",
+                url:'{{ route('admin.products.sku_combination') }}',
+                data:$('#store_product').serialize(),
+                success: function(data){
+                    $('#sku_combination').html(data);
+                }
+            });
+        }
+        
+        $('#category_id').on('change', function() {
+            var category_id = $('#category_id').val();
+            $.post('{{ route('admin.products.get_sub_categories_by_category') }}',{_token:'{{ csrf_token() }}', category_id:category_id}, function(data){
+                $('#sub_category_id').html(null);
+                $('#sub_sub_category_id').html(null);
+
+                for (var i = 0; i < data.length; i++) {
+                    $('#sub_category_id').append($('<option>', {
+                        value: data[i].id,
+                        text: data[i].name
+                    })); 
+                } 
+                get_sub_sub_categories_by_category();
+            });
+        });
+
+        $('#sub_category_id').on('change', function() {
+            get_sub_sub_categories_by_category();
+        });
+
+        function get_sub_sub_categories_by_category(){  
+            var sub_category_id = $('#sub_category_id').val();
+            $.post('{{ route('admin.products.get_sub_sub_categories_by_subcategory') }}',{_token:'{{ csrf_token() }}', sub_category_id:sub_category_id}, function(data){
+                $('#sub_sub_category_id').html(null);
+                $('#sub_sub_category_id').append($('<option>', {
+                    value: null,
+                    text: null
+                }));
+                for (var i = 0; i < data.length; i++) {
+                    $('#sub_sub_category_id').append($('<option>', {
+                        value: data[i].id,
+                        text: data[i].name
+                    })); 
+                } 
+            });
+        }
+
+    </script>
+    <script>  
+
         $(document).ready(function() {
             function SimpleUploadAdapter(editor) {
                 editor.plugins.get('FileRepository').createUploadAdapter = function(loader) {
@@ -284,7 +448,7 @@
                                                     .message ?
                                                     `${genericErrorText}\n${xhr.status} ${response.message}` :
                                                     `${genericErrorText}\n ${xhr.status} ${xhr.statusText}`
-                                                    );
+                                                );
                                             }
 
                                             $('form').append(
@@ -298,7 +462,7 @@
 
                                         if (xhr.upload) {
                                             xhr.upload.addEventListener('progress', function(
-                                            e) {
+                                                e) {
                                                 if (e.lengthComputable) {
                                                     loader.uploadTotal = e.total;
                                                     loader.uploaded = e.loaded;

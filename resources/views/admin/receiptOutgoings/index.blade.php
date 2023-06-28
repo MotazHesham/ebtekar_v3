@@ -109,8 +109,7 @@
                 <tbody>
 
                     @forelse ($receipts as $receipt)
-                        <tr data-entry-id="{{ $receipt->id }}"
-                            @if($receipt->done) style="background: linear-gradient(195deg,#000000bd 0%,#ffffff 33%);border: 1px black double;" @endif>
+                        <tr data-entry-id="{{ $receipt->id }}" @if($receipt->done) class="done" @endif>
                             <td>
                                 @if ($receipt->printing_times == 0)
                                     <span class="badge rounded-pill text-bg-primary text-white">

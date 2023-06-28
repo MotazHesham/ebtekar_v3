@@ -725,6 +725,10 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'order_print',
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'receipt_outgoing_create',
             ],
             [

@@ -12,6 +12,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class SubCategoryController extends Controller
 {
@@ -72,9 +73,12 @@ class SubCategoryController extends Controller
     }
 
     public function store(StoreSubCategoryRequest $request)
-    {
-        $subCategory = SubCategory::create($request->all());
+    { 
+        $validated_request = $request->all();
+        $validated_request['slug'] = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+        $subCategory = SubCategory::create($validated_request);
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.sub-categories.index');
     }
 
@@ -93,6 +97,7 @@ class SubCategoryController extends Controller
     {
         $subCategory->update($request->all());
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.sub-categories.index');
     }
 
@@ -111,7 +116,8 @@ class SubCategoryController extends Controller
 
         $subCategory->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+        return 1;
     }
 
     public function massDestroy(MassDestroySubCategoryRequest $request)

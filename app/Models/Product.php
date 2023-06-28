@@ -37,6 +37,12 @@ class Product extends Model implements HasMedia
         'percent' => 'Percent',
     ];
 
+    public const VIDEO_PROVIDER_SELECT = [
+        'youtube'    => 'Youtube',
+        'dailymotion' => 'Dailymotion',
+        'vimeo' => 'Vimeo',
+    ];
+
     protected $fillable = [
         'name',
         'added_by',
@@ -44,7 +50,7 @@ class Product extends Model implements HasMedia
         'purchase_price',
         'slug',
         'attributes',
-        'choice_options',
+        'attribute_options',
         'colors',
         'tags',
         'video_provider',
@@ -80,6 +86,7 @@ class Product extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')->fit('crop', 50, 50);
         $this->addMediaConversion('preview')->fit('crop', 120, 120);
+        $this->addMediaConversion('preview2')->fit('crop', 700, 600);
     }
 
     public function getPhotosAttribute()
@@ -99,6 +106,11 @@ class Product extends Model implements HasMedia
         return $this->getMedia('pdf')->last();
     }
 
+    public function stocks()
+    {
+        return $this->hasMany(ProductStock::class, 'product_id');
+    }
+    
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
