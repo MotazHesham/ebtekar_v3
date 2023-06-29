@@ -7,9 +7,9 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroySliderRequest;
 use App\Http\Requests\StoreSliderRequest;
 use App\Http\Requests\UpdateSliderRequest;
-use App\Models\Slider;
-use Gate;
+use App\Models\Slider; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,6 +17,15 @@ use Yajra\DataTables\Facades\DataTables;
 class SlidersController extends Controller
 {
     use MediaUploadingTrait;
+
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $slider = Slider::findOrFail($request->id);
+        $slider->$type = $request->status; 
+        $slider->save();
+        return 1;
+    }
+
 
     public function index(Request $request)
     {
@@ -59,7 +68,11 @@ class SlidersController extends Controller
                 return '';
             });
             $table->editColumn('published', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->published ? 'checked' : null) . '>';
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'published\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->published ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>';
             });
             $table->editColumn('link', function ($row) {
                 return $row->link ? $row->link : '';
@@ -92,6 +105,7 @@ class SlidersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $slider->id]);
         }
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.sliders.index');
     }
 
@@ -117,6 +131,7 @@ class SlidersController extends Controller
             $slider->photo->delete();
         }
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.sliders.index');
     }
 
@@ -133,7 +148,9 @@ class SlidersController extends Controller
 
         $slider->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroySliderRequest $request)

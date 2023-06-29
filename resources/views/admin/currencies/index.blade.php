@@ -1,41 +1,44 @@
 @extends('layouts.admin')
 @section('content')
-    @can('banner_create')
+    @can('currency_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.banners.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.banner.title_singular') }}
+                <a class="btn btn-success" href="{{ route('admin.currencies.create') }}">
+                    {{ trans('global.add') }} {{ trans('cruds.currency.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.banner.title_singular') }} {{ trans('global.list') }}
+            {{ trans('cruds.currency.title_singular') }} {{ trans('global.list') }}
         </div>
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class=" table table-bordered table-striped table-hover datatable datatable-Banner">
+                <table class=" table table-bordered table-striped table-hover datatable datatable-Currency">
                     <thead>
                         <tr>
                             <th width="10">
 
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.id') }}
+                                {{ trans('cruds.currency.fields.id') }}
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.photo') }}
+                                {{ trans('cruds.currency.fields.name') }}
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.url') }}
+                                {{ trans('cruds.currency.fields.symbol') }}
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.position') }}
+                                {{ trans('cruds.currency.fields.exchange_rate') }}
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.published') }}
+                                {{ trans('cruds.currency.fields.status') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.currency.fields.code') }}
                             </th>
                             <th>
                                 &nbsp;
@@ -43,55 +46,54 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($banners as $key => $banner)
-                            <tr data-entry-id="{{ $banner->id }}">
+                        @foreach ($currencies as $key => $currency)
+                            <tr data-entry-id="{{ $currency->id }}">
                                 <td>
 
                                 </td>
                                 <td>
-                                    {{ $banner->id ?? '' }}
+                                    {{ $currency->id ?? '' }}
                                 </td>
                                 <td>
-                                    @if ($banner->photo)
-                                        <a href="{{ $banner->photo->getUrl() }}" target="_blank"
-                                            style="display: inline-block">
-                                            <img src="{{ $banner->photo->getUrl('thumb') }}">
-                                        </a>
-                                    @endif
+                                    {{ $currency->name ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $banner->url ?? '' }}
+                                    {{ $currency->symbol ?? '' }}
                                 </td>
                                 <td>
-                                    {{ App\Models\Banner::POSITION_SELECT[$banner->position] ?? '' }}
+                                    {{ $currency->exchange_rate ?? '' }}
                                 </td>
                                 <td>
                                     <label class="c-switch c-switch-pill c-switch-success">
-                                        <input onchange="update_statuses(this,'published')" value="{{ $banner->id }}"
+                                        <input onchange="update_statuses(this,'status')" value="{{ $currency->id }}"
                                             type="checkbox" class="c-switch-input"
-                                            {{ $banner->published ? 'checked' : null }}>
+                                            {{ $currency->status ? 'checked' : null }}>
                                         <span class="c-switch-slider"></span>
                                     </label>
                                 </td>
                                 <td>
-                                    @can('banner_show')
+                                    {{ $currency->code ?? '' }}
+                                </td>
+                                <td>
+                                    @can('currency_show')
                                         <a class="btn btn-xs btn-primary"
-                                            href="{{ route('admin.banners.show', $banner->id) }}">
+                                            href="{{ route('admin.currencies.show', $currency->id) }}">
                                             {{ trans('global.view') }}
                                         </a>
                                     @endcan
 
-                                    @can('banner_edit')
-                                        <a class="btn btn-xs btn-info" href="{{ route('admin.banners.edit', $banner->id) }}">
+                                    @can('currency_edit')
+                                        <a class="btn btn-xs btn-info"
+                                            href="{{ route('admin.currencies.edit', $currency->id) }}">
                                             {{ trans('global.edit') }}
                                         </a>
                                     @endcan
 
-                                    @can('banner_delete')
-                                        <?php $route = route('admin.banners.destroy', $banner->id); ?>
+                                    @can('currency_delete') 
+                                        <?php $route = route('admin.currencies.destroy', $currency->id); ?>
                                         <a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('{{$route}}')">
                                             {{ trans('global.delete') }}  
-                                        </a> 
+                                        </a>  
                                     @endcan
 
                                 </td>
@@ -106,7 +108,7 @@
 @endsection
 @section('scripts')
     @parent
-    <script>
+    <script> 
         function update_statuses(el,type){
             if(el.checked){
                 var status = 1;
@@ -114,7 +116,7 @@
             else{
                 var status = 0;
             }
-            $.post('{{ route('admin.banners.update_statuses') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status, type:type}, function(data){
+            $.post('{{ route('admin.currencies.update_statuses') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status, type:type}, function(data){
                 if(data == 1){
                     showAlert('success', 'Success', '');
                 }else{
@@ -124,11 +126,11 @@
         }
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-            @can('banner_delete')
+            @can('currency_delete')
                 let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
                 let deleteButton = {
                     text: deleteButtonTrans,
-                    url: "{{ route('admin.banners.massDestroy') }}",
+                    url: "{{ route('admin.currencies.massDestroy') }}",
                     className: 'btn-danger',
                     action: function(e, dt, node, config) {
                         var ids = $.map(dt.rows({
@@ -169,9 +171,9 @@
                 order: [
                     [1, 'desc']
                 ],
-                pageLength: 25,
+                pageLength: 100,
             });
-            let table = $('.datatable-Banner:not(.ajaxTable)').DataTable({
+            let table = $('.datatable-Currency:not(.ajaxTable)').DataTable({
                 buttons: dtButtons
             })
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {

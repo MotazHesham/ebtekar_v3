@@ -567,6 +567,16 @@
                             </ul>
                         </li>
                     @endcan
+                    @can('currency_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.currencies.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/currencies") || request()->is("admin/currencies/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-hand-holding-usd c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.currency.title') }}
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
             </li>
         @endcan
@@ -715,17 +725,7 @@
                     @endcan
                 </ul>
             </li>
-        @endcan
-        @can('admin_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.admins.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/admins") || request()->is("admin/admins/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-user-check c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.admin.title') }}
-                </a>
-            </li>
-        @endcan
+        @endcan 
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.systemCalendar") }}" class="c-sidebar-nav-link {{ request()->is("admin/system-calendar") || request()->is("admin/system-calendar/*") ? "c-active" : "" }}">
                 <i class="c-sidebar-nav-icon fa-fw fas fa-calendar">
@@ -741,7 +741,7 @@
 
                     </i>
                     {{ trans('cruds.conversation.title') }}
-                    <span class="badge bg-success-gradient text-dark ms-auto">3</span>
+                    {{-- <span class="badge bg-success-gradient text-dark ms-auto">3</span> --}}
                 </a>
             </li>
         @endcan

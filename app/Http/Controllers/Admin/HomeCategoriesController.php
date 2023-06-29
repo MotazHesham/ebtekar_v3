@@ -7,9 +7,9 @@ use App\Http\Requests\MassDestroyHomeCategoryRequest;
 use App\Http\Requests\StoreHomeCategoryRequest;
 use App\Http\Requests\UpdateHomeCategoryRequest;
 use App\Models\Category;
-use App\Models\HomeCategory;
-use Gate;
+use App\Models\HomeCategory; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeCategoriesController extends Controller
@@ -36,6 +36,7 @@ class HomeCategoriesController extends Controller
     {
         $homeCategory = HomeCategory::create($request->all());
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.home-categories.index');
     }
 
@@ -54,6 +55,7 @@ class HomeCategoriesController extends Controller
     {
         $homeCategory->update($request->all());
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.home-categories.index');
     }
 
@@ -72,7 +74,9 @@ class HomeCategoriesController extends Controller
 
         $homeCategory->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroyHomeCategoryRequest $request)

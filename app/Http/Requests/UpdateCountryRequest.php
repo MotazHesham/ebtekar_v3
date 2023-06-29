@@ -30,13 +30,7 @@ class UpdateCountryRequest extends FormRequest
             ],
             'type' => [
                 'required',
-            ],
-            'status' => [
-                'required',
-            ],
-            'website' => [
-                'required',
-            ],
+            ], 
         ];
     }
 }

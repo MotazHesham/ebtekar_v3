@@ -64,31 +64,7 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.country.fields.type_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <div class="form-check {{ $errors->has('status') ? 'is-invalid' : '' }}">
-                    <input class="form-check-input" type="checkbox" name="status" id="status" value="1" {{ $country->status || old('status', 0) === 1 ? 'checked' : '' }} required>
-                    <label class="required form-check-label" for="status">{{ trans('cruds.country.fields.status') }}</label>
-                </div>
-                @if($errors->has('status'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('status') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.country.fields.status_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <div class="form-check {{ $errors->has('website') ? 'is-invalid' : '' }}">
-                    <input class="form-check-input" type="checkbox" name="website" id="website" value="1" {{ $country->website || old('website', 0) === 1 ? 'checked' : '' }} required>
-                    <label class="required form-check-label" for="website">{{ trans('cruds.country.fields.website') }}</label>
-                </div>
-                @if($errors->has('website'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('website') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.country.fields.website_helper') }}</span>
-            </div>
+            </div> 
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}

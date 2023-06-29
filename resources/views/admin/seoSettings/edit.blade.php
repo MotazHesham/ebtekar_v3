@@ -12,7 +12,7 @@
             @csrf
             <div class="form-group">
                 <label class="required" for="keyword">{{ trans('cruds.seoSetting.fields.keyword') }}</label>
-                <textarea class="form-control {{ $errors->has('keyword') ? 'is-invalid' : '' }}" name="keyword" id="keyword" required>{{ old('keyword', $seoSetting->keyword) }}</textarea>
+                <input class="form-control {{ $errors->has('keyword') ? 'is-invalid' : '' }}" type="text" name="keyword[]" id="keyword" value="{{ $seoSetting->keyword }}"  placeholder="add tags ..." data-role="tagsinput" required>
                 @if($errors->has('keyword'))
                     <div class="invalid-feedback">
                         {{ $errors->first('keyword') }}

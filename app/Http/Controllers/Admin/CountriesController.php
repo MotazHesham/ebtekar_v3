@@ -6,14 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyCountryRequest;
 use App\Http\Requests\StoreCountryRequest;
 use App\Http\Requests\UpdateCountryRequest;
-use App\Models\Country;
-use Gate;
+use App\Models\Country; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class CountriesController extends Controller
 {
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $country = Country::findOrFail($request->id);
+        $country->$type = $request->status; 
+        $country->save();
+        return 1;
+    }
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('country_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -59,10 +67,18 @@ class CountriesController extends Controller
                 return $row->type ? Country::TYPE_SELECT[$row->type] : '';
             });
             $table->editColumn('status', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->status ? 'checked' : null) . '>';
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'status\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->status ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>';
             });
             $table->editColumn('website', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->website ? 'checked' : null) . '>';
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'website\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->website ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>';
             });
 
             $table->rawColumns(['actions', 'placeholder', 'status', 'website']);
@@ -84,6 +100,7 @@ class CountriesController extends Controller
     {
         $country = Country::create($request->all());
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.countries.index');
     }
 
@@ -98,6 +115,7 @@ class CountriesController extends Controller
     {
         $country->update($request->all());
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.countries.index');
     }
 
@@ -114,7 +132,9 @@ class CountriesController extends Controller
 
         $country->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroyCountryRequest $request)

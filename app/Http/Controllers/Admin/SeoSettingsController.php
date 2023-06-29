@@ -31,8 +31,11 @@ class SeoSettingsController extends Controller
 
     public function store(StoreSeoSettingRequest $request)
     {
-        $seoSetting = SeoSetting::create($request->all());
+        $validated_request = $request->all(); 
+        $validated_request['keyword'] = implode('|',$request->keyword);  
+        $seoSetting = SeoSetting::create($validated_request);
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.seo-settings.index');
     }
 
@@ -45,8 +48,11 @@ class SeoSettingsController extends Controller
 
     public function update(UpdateSeoSettingRequest $request, SeoSetting $seoSetting)
     {
-        $seoSetting->update($request->all());
+        $validated_request = $request->all(); 
+        $validated_request['keyword'] = implode('|',$request->keyword);  
+        $seoSetting->update($validated_request);
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.seo-settings.index');
     }
 
@@ -63,7 +69,9 @@ class SeoSettingsController extends Controller
 
         $seoSetting->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroySeoSettingRequest $request)

@@ -7,15 +7,23 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyBannerRequest;
 use App\Http\Requests\StoreBannerRequest;
 use App\Http\Requests\UpdateBannerRequest;
-use App\Models\Banner;
-use Gate;
+use App\Models\Banner; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 
 class BannersController extends Controller
 {
     use MediaUploadingTrait;
+
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $banner = Banner::findOrFail($request->id);
+        $banner->$type = $request->status; 
+        $banner->save();
+        return 1;
+    }
 
     public function index()
     {
@@ -45,6 +53,7 @@ class BannersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $banner->id]);
         }
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.banners.index');
     }
 
@@ -70,6 +79,7 @@ class BannersController extends Controller
             $banner->photo->delete();
         }
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.banners.index');
     }
 
@@ -86,7 +96,9 @@ class BannersController extends Controller
 
         $banner->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroyBannerRequest $request)

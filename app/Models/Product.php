@@ -32,6 +32,15 @@ class Product extends Model implements HasMedia
         'deleted_at',
     ];
 
+    public const WEIGHT_SELECT = [
+        'half_kg'     => '0.5 KG',
+        'one_kg'      => '1.0 KG',
+        'one_half_kg' => '1.5 KG',
+        'two_kg'      => '2.0 KG',
+        'two_half_kg' => '2.5 KG',
+        'three_kg'    => '3.0 KG',
+    ];
+
     public const DISCOUNT_TYPE_SELECT = [
         'flat'    => 'Flat',
         'percent' => 'Percent',
@@ -45,6 +54,7 @@ class Product extends Model implements HasMedia
 
     protected $fillable = [
         'name',
+        'weight',
         'added_by',
         'unit_price',
         'purchase_price',

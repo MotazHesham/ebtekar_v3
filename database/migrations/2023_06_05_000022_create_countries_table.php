@@ -15,8 +15,8 @@ class CreateCountriesTable extends Migration
             $table->string('code')->nullable();
             $table->decimal('code_cost', 15, 2)->nullable();
             $table->string('type');
-            $table->boolean('status')->default(0);
-            $table->boolean('website')->default(0);
+            $table->boolean('status')->default(1);
+            $table->boolean('website')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

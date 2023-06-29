@@ -12,6 +12,14 @@ class UserAlert extends Model
 
     public $table = 'user_alerts';
 
+    
+    public const TYPE_SELECT = [
+        'private'     => 'users notifiacations ',
+        'history'        => 'assign the transfer between stages in playlist to the user.... to be in his history list',
+        'playlist' => 'This is for tracking playlist by admin', 
+        'public' => 'when the admin need send notification to specfic users or all',
+    ];
+
     protected $dates = [
         'created_at',
         'updated_at',

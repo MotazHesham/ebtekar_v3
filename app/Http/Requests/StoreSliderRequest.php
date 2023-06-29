@@ -19,10 +19,7 @@ class StoreSliderRequest extends FormRequest
         return [
             'photo' => [
                 'required',
-            ],
-            'published' => [
-                'required',
-            ],
+            ], 
             'link' => [
                 'string',
                 'nullable',

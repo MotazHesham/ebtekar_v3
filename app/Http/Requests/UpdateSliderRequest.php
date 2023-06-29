@@ -19,10 +19,7 @@ class UpdateSliderRequest extends FormRequest
         return [
             'photo' => [
                 'required',
-            ],
-            'published' => [
-                'required',
-            ],
+            ], 
             'link' => [
                 'string',
                 'nullable',

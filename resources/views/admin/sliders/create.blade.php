@@ -19,19 +19,7 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.slider.fields.photo_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <div class="form-check {{ $errors->has('published') ? 'is-invalid' : '' }}">
-                    <input class="form-check-input" type="checkbox" name="published" id="published" value="1" required {{ old('published', 0) == 1 || old('published') === null ? 'checked' : '' }}>
-                    <label class="required form-check-label" for="published">{{ trans('cruds.slider.fields.published') }}</label>
-                </div>
-                @if($errors->has('published'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('published') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.slider.fields.published_helper') }}</span>
-            </div>
+            </div> 
             <div class="form-group">
                 <label for="link">{{ trans('cruds.slider.fields.link') }}</label>
                 <input class="form-control {{ $errors->has('link') ? 'is-invalid' : '' }}" type="text" name="link" id="link" value="{{ old('link', '') }}">

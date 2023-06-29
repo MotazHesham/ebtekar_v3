@@ -21,6 +21,9 @@ class UpdateProductRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'weight' => [
+                'required',
+            ],
             'unit_price' => [
                 'required',
             ],

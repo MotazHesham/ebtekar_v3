@@ -7,9 +7,9 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyQualityResponsibleRequest;
 use App\Http\Requests\StoreQualityResponsibleRequest;
 use App\Http\Requests\UpdateQualityResponsibleRequest;
-use App\Models\QualityResponsible;
-use Gate;
+use App\Models\QualityResponsible; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,6 +45,7 @@ class QualityResponsibleController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $qualityResponsible->id]);
         }
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.quality-responsibles.index');
     }
 
@@ -70,6 +71,7 @@ class QualityResponsibleController extends Controller
             $qualityResponsible->photo->delete();
         }
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.quality-responsibles.index');
     }
 
@@ -86,7 +88,9 @@ class QualityResponsibleController extends Controller
 
         $qualityResponsible->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroyQualityResponsibleRequest $request)

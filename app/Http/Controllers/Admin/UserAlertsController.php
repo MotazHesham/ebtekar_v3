@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyUserAlertRequest;
 use App\Http\Requests\StoreUserAlertRequest;
 use App\Models\User;
-use App\Models\UserAlert;
-use Gate;
+use App\Models\UserAlert; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -19,7 +19,7 @@ class UserAlertsController extends Controller
         abort_if(Gate::denies('user_alert_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = UserAlert::with(['users'])->select(sprintf('%s.*', (new UserAlert)->table));
+            $query = UserAlert::with(['users'])->where('type','public')->select(sprintf('%s.*', (new UserAlert)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');

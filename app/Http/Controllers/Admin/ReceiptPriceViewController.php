@@ -9,9 +9,9 @@ use App\Http\Requests\UpdateReceiptPriceViewRequest;
 use App\Models\GeneralSetting;
 use App\Models\ReceiptPriceView;
 use App\Models\ReceiptPriceViewProduct;
-use App\Models\User;
-use Gate;
+use App\Models\User; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 

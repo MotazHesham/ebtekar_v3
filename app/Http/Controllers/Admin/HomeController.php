@@ -50,7 +50,7 @@ class HomeController extends Controller
     public function index()
     {
         $settings1 = [
-            'chart_title'           => 'users',
+            'chart_title'           => trans('cruds.customer.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Customer',
@@ -88,7 +88,7 @@ class HomeController extends Controller
         }
 
         $settings2 = [
-            'chart_title'           => 'products',
+            'chart_title'           => trans('cruds.product.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Product',
@@ -126,7 +126,7 @@ class HomeController extends Controller
         }
 
         $settings3 = [
-            'chart_title'           => 'orders',
+            'chart_title'           => trans('cruds.order.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Order',
@@ -164,7 +164,7 @@ class HomeController extends Controller
         }
 
         $settings4 = [
-            'chart_title'           => 'receipt social',
+            'chart_title'           => trans('cruds.receiptSocial.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\ReceiptSocial',
@@ -202,33 +202,52 @@ class HomeController extends Controller
         }
 
         $settings5 = [
-            'chart_title'           => 'receipts',
-            'chart_type'            => 'line',
+            'chart_title'           => trans('cruds.receiptSocial.extra.chart_by_month'),
+            'chart_type'            => 'radar',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\ReceiptSocial',
-            'group_by_field'        => 'done_time',
-            'group_by_period'       => 'week',
-            'aggregate_function'    => 'count',
+            'group_by_field'        => 'created_at',
+            'group_by_period'       => 'month',
+            'aggregate_function'    => 'sum',
+            'aggregate_field'       => 'total_cost',
             'filter_field'          => 'created_at',
-            'group_by_field_format' => 'd/m/Y H:i:s',
-            'column_class'          => 'col-md-6',
+            'filter_period'         => 'year',
+            'group_by_field_format' => 'd/m/Y  h:i a',
+            'column_class'          => 'col-md-4',
             'entries_number'        => '5',
             'translation_key'       => 'receiptSocial',
         ];
 
         $chart5 = new LaravelChart($settings5);
 
-        $settings6 = [
-            'chart_title'           => 'orders',
-            'chart_type'            => 'pie',
+        $settings05 = [
+            'chart_title'           => trans('cruds.receiptCompany.extra.chart_by_month'),
+            'chart_type'            => 'radar',
             'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Order',
-            'group_by_field'        => 'done_time',
+            'model'                 => 'App\Models\ReceiptCompany',
+            'group_by_field'        => 'created_at',
             'group_by_period'       => 'month',
-            'aggregate_function'    => 'count',
+            'aggregate_function'    => 'sum',
+            'aggregate_field'       => 'total_cost',
             'filter_field'          => 'created_at',
-            'group_by_field_format' => 'd/m/Y H:i:s',
-            'column_class'          => 'col-md-6',
+            'filter_period'         => 'year',
+            'group_by_field_format' => 'd/m/Y  h:i a',
+            'column_class'          => 'col-md-4',
+            'entries_number'        => '5',
+            'translation_key'       => 'receiptCompany',
+        ];
+
+        $chart05 = new LaravelChart($settings05);
+
+        $settings6 = [
+            'chart_title'           => trans('cruds.order.extra.chart_by_order_type'),
+            'chart_type'            => 'doughnut',
+            'report_type'           => 'group_by_string',
+            'model'                 => 'App\Models\Order',
+            'group_by_field'        => 'order_type', 
+            'aggregate_function'    => 'count',
+            'filter_field'          => 'created_at', 
+            'column_class'          => 'col-md-4',
             'entries_number'        => '5',
             'translation_key'       => 'order',
         ];
@@ -236,7 +255,7 @@ class HomeController extends Controller
         $chart6 = new LaravelChart($settings6);
 
         $settings7 = [
-            'chart_title'           => 'published products',
+            'chart_title'           => trans('cruds.product.extra.published_products'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Product',
@@ -245,7 +264,7 @@ class HomeController extends Controller
             'aggregate_function'    => 'count',
             'filter_field'          => 'created_at',
             'group_by_field_format' => 'd/m/Y H:i:s',
-            'column_class'          => 'col-md-3',
+            'column_class'          => 'col-md-6',
             'entries_number'        => '5',
             'translation_key'       => 'product',
         ];
@@ -272,9 +291,47 @@ class HomeController extends Controller
             })
                 ->{$settings7['aggregate_function'] ?? 'count'}($settings7['aggregate_field'] ?? '*');
         }
+        
+        $settings07 = [
+            'chart_title'           => trans('cruds.category.title'),
+            'chart_type'            => 'number_block',
+            'report_type'           => 'group_by_date',
+            'model'                 => 'App\Models\Category',
+            'group_by_field'        => 'created_at',
+            'group_by_period'       => 'day',
+            'aggregate_function'    => 'count',
+            'filter_field'          => 'created_at',
+            'group_by_field_format' => 'd/m/Y H:i:s',
+            'column_class'          => 'col-md-6',
+            'entries_number'        => '5',
+            'translation_key'       => 'pategory',
+        ];
+
+        $settings07['total_number'] = 0;
+        if (class_exists($settings07['model'])) {
+            $settings07['total_number'] = $settings07['model']::when(isset($settings07['filter_field']), function ($query) use ($settings07) {
+                if (isset($settings07['filter_days'])) {
+                    return $query->where($settings07['filter_field'], '>=',
+                        now()->subDays($settings07['filter_days'])->format('Y-m-d'));
+                } elseif (isset($settings07['filter_period'])) {
+                    switch ($settings07['filter_period']) {
+                        case 'week': $start = date('Y-m-d', strtotime('last Monday'));
+                        break;
+                        case 'month': $start = date('Y-m') . '-01';
+                        break;
+                        case 'year': $start = date('Y') . '-01-01';
+                        break;
+                    }
+                    if (isset($start)) {
+                        return $query->where($settings07['filter_field'], '>=', $start);
+                    }
+                }
+            })
+                ->{$settings07['aggregate_function'] ?? 'count'}($settings07['aggregate_field'] ?? '*');
+        }
 
         $settings8 = [
-            'chart_title'           => 'sub categories',
+            'chart_title'           => trans('cruds.subCategory.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\SubCategory',
@@ -283,7 +340,7 @@ class HomeController extends Controller
             'aggregate_function'    => 'count',
             'filter_field'          => 'created_at',
             'group_by_field_format' => 'd/m/Y H:i:s',
-            'column_class'          => 'col-md-3',
+            'column_class'          => 'col-md-6',
             'entries_number'        => '5',
             'translation_key'       => 'subCategory',
         ];
@@ -312,7 +369,7 @@ class HomeController extends Controller
         }
 
         $settings9 = [
-            'chart_title'           => 'sub sub categories',
+            'chart_title'           => trans('cruds.subSubCategory.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\SubSubCategory',
@@ -321,7 +378,7 @@ class HomeController extends Controller
             'aggregate_function'    => 'count',
             'filter_field'          => 'created_at',
             'group_by_field_format' => 'd/m/Y H:i:s',
-            'column_class'          => 'col-md-3',
+            'column_class'          => 'col-md-6',
             'entries_number'        => '5',
             'translation_key'       => 'subSubCategory',
         ];
@@ -350,7 +407,7 @@ class HomeController extends Controller
         }
 
         $settings10 = [
-            'chart_title'           => 'latest orders',
+            'chart_title'           => trans('cruds.order.extra.latest_orders'),
             'chart_type'            => 'latest_entries',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Order',
@@ -381,6 +438,6 @@ class HomeController extends Controller
             $settings10['fields'] = [];
         }
 
-        return view('home', compact('chart5', 'chart6', 'settings1', 'settings10', 'settings2', 'settings3', 'settings4', 'settings7', 'settings8', 'settings9'));
+        return view('home', compact('chart5','chart05', 'chart6', 'settings1', 'settings10', 'settings2', 'settings3', 'settings4', 'settings7','settings07', 'settings8', 'settings9'));
     }
 }

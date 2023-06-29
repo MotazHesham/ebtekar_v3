@@ -87,11 +87,10 @@
                                 @endcan
 
                                 @can('quality_responsible_delete')
-                                    <form action="{{ route('admin.quality-responsibles.destroy', $qualityResponsible->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                    </form>
+                                <?php $route = route('admin.quality-responsibles.destroy', $qualityResponsible->id); ?>
+                                <a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('{{$route}}')">
+                                    {{ trans('global.delete') }}  
+                                </a> 
                                 @endcan
 
                             </td>

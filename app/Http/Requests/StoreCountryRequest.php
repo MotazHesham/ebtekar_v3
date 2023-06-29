@@ -30,13 +30,7 @@ class StoreCountryRequest extends FormRequest
             ],
             'type' => [
                 'required',
-            ],
-            'status' => [
-                'required',
-            ],
-            'website' => [
-                'required',
-            ],
+            ], 
         ];
     }
 }

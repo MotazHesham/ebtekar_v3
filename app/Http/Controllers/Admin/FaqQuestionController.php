@@ -36,6 +36,7 @@ class FaqQuestionController extends Controller
     {
         $faqQuestion = FaqQuestion::create($request->all());
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.faq-questions.index');
     }
 
@@ -54,6 +55,7 @@ class FaqQuestionController extends Controller
     {
         $faqQuestion->update($request->all());
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.faq-questions.index');
     }
 
@@ -72,7 +74,9 @@ class FaqQuestionController extends Controller
 
         $faqQuestion->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroyFaqQuestionRequest $request)

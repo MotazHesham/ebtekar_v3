@@ -23,6 +23,21 @@
                             <span class="help-block">{{ trans('cruds.product.fields.name_helper') }}</span>
                         </div>
                         <div class="form-group">
+                            <label class="required">{{ trans('cruds.product.fields.weight') }}</label>
+                            <select class="form-control {{ $errors->has('weight') ? 'is-invalid' : '' }}" name="weight" id="weight" required>
+                                <option value disabled {{ old('weight', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                                @foreach(App\Models\Product::WEIGHT_SELECT as $key => $label)
+                                    <option value="{{ $key }}" {{ old('weight', $product->weight) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('weight'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('weight') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.product.fields.weight_helper') }}</span>
+                        </div>
+                        <div class="form-group">
                             <label class="required" for="category_id">{{ trans('cruds.product.fields.category') }}</label>
                             <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category_id" id="category_id" required>
                                 @foreach ($categories as $id => $entry)

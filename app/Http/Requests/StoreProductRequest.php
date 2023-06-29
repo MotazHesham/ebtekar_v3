@@ -21,6 +21,9 @@ class StoreProductRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'weight' => [
+                'required',
+            ],
             'unit_price' => [
                 'required',
             ],

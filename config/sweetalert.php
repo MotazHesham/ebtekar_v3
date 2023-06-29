@@ -173,7 +173,7 @@ return [
     |
     */
 
-    'toast_position' => env('SWEET_ALERT_TOAST_POSITION', 'top-start'),
+    'toast_position' => env('SWEET_ALERT_TOAST_POSITION', 'bottom-start'),
 
     /*
     |--------------------------------------------------------------------------

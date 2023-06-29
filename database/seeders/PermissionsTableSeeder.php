@@ -394,27 +394,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'commission_request_access',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'admin_create',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'admin_edit',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'admin_show',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'admin_delete',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'admin_access',
-            ],
+            ], 
             [
                 'id'    => $i++,
                 'title' => 'borrow_create',
@@ -1106,6 +1086,26 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'deliver_man_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'currency_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'currency_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'currency_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'currency_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'currency_access',
             ],
             [
                 'id'    => $i++,

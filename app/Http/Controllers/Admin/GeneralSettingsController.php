@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\UpdateGeneralSettingRequest;
 use App\Models\GeneralSetting;
-use App\Models\User;
-use Gate;
+use App\Models\User; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -71,6 +71,7 @@ class GeneralSettingsController extends Controller
             }
         }
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.general-settings.index');
     }
 

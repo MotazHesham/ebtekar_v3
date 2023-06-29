@@ -26,10 +26,7 @@ class UpdateBannerRequest extends FormRequest
             ],
             'position' => [
                 'required',
-            ],
-            'published' => [
-                'required',
-            ],
+            ], 
         ];
     }
 }

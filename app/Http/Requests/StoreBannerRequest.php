@@ -26,10 +26,7 @@ class StoreBannerRequest extends FormRequest
             ],
             'position' => [
                 'required',
-            ],
-            'published' => [
-                'required',
-            ],
+            ], 
         ];
     }
 }

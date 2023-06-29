@@ -7,9 +7,9 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroySocialRequest;
 use App\Http\Requests\StoreSocialRequest;
 use App\Http\Requests\UpdateSocialRequest;
-use App\Models\Social;
-use Gate;
+use App\Models\Social; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,6 +45,7 @@ class SocialsController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $social->id]);
         }
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.socials.index');
     }
 
@@ -70,6 +71,7 @@ class SocialsController extends Controller
             $social->photo->delete();
         }
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.socials.index');
     }
 
@@ -86,7 +88,9 @@ class SocialsController extends Controller
 
         $social->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroySocialRequest $request)

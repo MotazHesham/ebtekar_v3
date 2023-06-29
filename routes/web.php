@@ -31,6 +31,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
+    Route::post('users/update_statuses', 'UsersController@update_statuses')->name('users.update_statuses');
     Route::post('users/media', 'UsersController@storeMedia')->name('users.storeMedia');
     Route::post('users/ckmedia', 'UsersController@storeCKEditorImages')->name('users.storeCKEditorImages');
     Route::resource('users', 'UsersController');
@@ -130,9 +131,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('commission-requests/destroy', 'CommissionRequestsController@massDestroy')->name('commission-requests.massDestroy');
     Route::resource('commission-requests', 'CommissionRequestsController');
 
-    // Admins
-    Route::delete('admins/destroy', 'AdminsController@massDestroy')->name('admins.massDestroy');
-    Route::resource('admins', 'AdminsController');
 
     // Borrows
     Route::delete('borrows/destroy', 'BorrowsController@massDestroy')->name('borrows.massDestroy');
@@ -148,6 +146,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Countries
     Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
+    Route::post('countries/update_statuses', 'CountriesController@update_statuses')->name('countries.update_statuses');
     Route::resource('countries', 'CountriesController');
 
     // Socials
@@ -168,12 +167,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Sliders
     Route::delete('sliders/destroy', 'SlidersController@massDestroy')->name('sliders.massDestroy');
+    Route::post('sliders/update_statuses', 'SlidersController@update_statuses')->name('sliders.update_statuses');
     Route::post('sliders/media', 'SlidersController@storeMedia')->name('sliders.storeMedia');
     Route::post('sliders/ckmedia', 'SlidersController@storeCKEditorImages')->name('sliders.storeCKEditorImages');
     Route::resource('sliders', 'SlidersController');
 
     // Banners
     Route::delete('banners/destroy', 'BannersController@massDestroy')->name('banners.massDestroy');
+    Route::post('banners/update_statuses', 'BannersController@update_statuses')->name('banners.update_statuses');
     Route::post('banners/media', 'BannersController@storeMedia')->name('banners.storeMedia');
     Route::post('banners/ckmedia', 'BannersController@storeCKEditorImages')->name('banners.storeCKEditorImages');
     Route::resource('banners', 'BannersController');
@@ -199,6 +200,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('seo-settings/destroy', 'SeoSettingsController@massDestroy')->name('seo-settings.massDestroy');
     Route::resource('seo-settings', 'SeoSettingsController');
 
+    // Currencies
+    Route::delete('currencies/destroy', 'CurrenciesController@massDestroy')->name('currencies.massDestroy');
+    Route::post('currencies/update_statuses', 'CurrenciesController@update_statuses')->name('currencies.update_statuses');
+    Route::resource('currencies', 'CurrenciesController');
+    
     // Conversations
     Route::delete('conversations/destroy', 'ConversationsController@massDestroy')->name('conversations.massDestroy');
     Route::resource('conversations', 'ConversationsController');

@@ -33,6 +33,7 @@ class FaqCategoryController extends Controller
     {
         $faqCategory = FaqCategory::create($request->all());
 
+        toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.faq-categories.index');
     }
 
@@ -47,6 +48,7 @@ class FaqCategoryController extends Controller
     {
         $faqCategory->update($request->all());
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.faq-categories.index');
     }
 
@@ -63,7 +65,9 @@ class FaqCategoryController extends Controller
 
         $faqCategory->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroyFaqCategoryRequest $request)

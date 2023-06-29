@@ -12,7 +12,7 @@ class CreateBannersTable extends Migration
             $table->bigIncrements('id');
             $table->string('url')->nullable();
             $table->string('position');
-            $table->boolean('published')->default(0);
+            $table->boolean('published')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

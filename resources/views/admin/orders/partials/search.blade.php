@@ -62,30 +62,36 @@
                         @endforeach
                     </select>
                     <div class="mb-3 @isset($country_id) isset @endisset">
-                        <select class="form-control select2" name="country_id" id="country_id" onchange="sort_orders()">
-                            <option value="">{{ trans('cruds.order.fields.shipping_country_id') }}</option>
-                            <optgroup label="{{ __('Districts') }}">
-                                @foreach ($countries['districts'] as $district)
-                                    <option value={{ $district->id }} @if ($district->id == $country_id) selected @endif>
-                                        {{ $district->name }} -  {{ dashboard_currency($district->cost) }}</option>
-                                @endforeach
-                            </optgroup>
-                            <optgroup label="{{ __('Countries') }}">
-                                @foreach ($countries['countries'] as $country)
-                                    <option value={{ $country->id }}
-                                        @if ($country->id == $country_id) selected @endif>
-                                        {{ $country->name }} -  {{ dashboard_currency($country->cost) }}</option>
-                                @endforeach
-                            </optgroup>
-                            <optgroup label="{{ __('Metro') }}">
-                                @foreach ($countries['metro'] as $raw)
-                                    <option value={{ $raw->id }}
-                                        @if ($raw->id == $country_id) selected @endif>
-                                        {{ $raw->name }} -  {{ dashboard_currency($raw->cost) }}</option>
-                                @endforeach
-                            </optgroup>
+                        <select class="form-control select2" name="country_id" id="country_id" onchange="sort_receipt_social()">
+                            <option value="">{{ trans('cruds.receiptSocial.fields.shipping_country_id') }}</option>
+                            @if(isset($countries['districts']))
+                                <optgroup label="{{ __('Districts') }}">
+                                    @foreach ($countries['districts'] as $district)
+                                        <option value={{ $district->id }} @if ($district->id == $country_id) selected @endif>
+                                            {{ $district->name }} -  {{ dashboard_currency($district->cost) }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                            @if(isset($countries['countries']))
+                                <optgroup label="{{ __('Countries') }}">
+                                    @foreach ($countries['countries'] as $country)
+                                        <option value={{ $country->id }}
+                                            @if ($country->id == $country_id) selected @endif>
+                                            {{ $country->name }} -  {{ dashboard_currency($country->cost) }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                            @if(isset($countries['metro']))
+                                <optgroup label="{{ __('Metro') }}">
+                                    @foreach ($countries['metro'] as $raw)
+                                        <option value={{ $raw->id }}
+                                            @if ($raw->id == $country_id) selected @endif>
+                                            {{ $raw->name }} -  {{ dashboard_currency($raw->cost) }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
                         </select>
-                    </div>  
+                    </div> 
                 </div> 
                 <div class="col-md-3">  
                     <div class="row">

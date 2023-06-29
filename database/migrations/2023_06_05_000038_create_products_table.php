@@ -11,6 +11,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('weight')->default('half_kg');
             $table->string('added_by')->nullable();
             $table->decimal('unit_price', 15, 2);
             $table->decimal('purchase_price', 15, 2);

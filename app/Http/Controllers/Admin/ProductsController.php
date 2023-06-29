@@ -134,6 +134,9 @@ class ProductsController extends Controller
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
             }); 
+            $table->editColumn('weight', function ($row) {
+                return $row->weight ? Product::WEIGHT_SELECT[$row->weight] : '';
+            }); 
             $table->editColumn('unit_price', function ($row) {
                 return $row->unit_price ? $row->unit_price : '';
             }); 

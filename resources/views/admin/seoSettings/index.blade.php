@@ -52,7 +52,11 @@
                                 {{ $seoSetting->id ?? '' }}
                             </td>
                             <td>
-                                {{ $seoSetting->keyword ?? '' }}
+                                @if($seoSetting->keyword)
+                                    @foreach(explode(',',$seoSetting->keyword) as $key)
+                                        <span class="badge badge-primary">{{ $key }}</span>
+                                    @endforeach
+                                @endif
                             </td>
                             <td>
                                 {{ $seoSetting->author ?? '' }}

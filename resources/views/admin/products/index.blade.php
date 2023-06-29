@@ -28,6 +28,9 @@
                             {{ trans('cruds.product.fields.name') }}
                         </th>
                         <th>
+                            {{ trans('cruds.product.fields.weight') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.product.fields.unit_price') }}
                         </th>
                         <th>
@@ -131,6 +134,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'weight',
+                        name: 'weight'
                     },
                     {
                         data: 'unit_price',

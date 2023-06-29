@@ -25,11 +25,13 @@ class StoreQualityResponsibleRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
             'wts_phone' => [
-                'string',
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
             'country_code' => [
