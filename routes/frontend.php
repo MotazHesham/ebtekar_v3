@@ -10,6 +10,7 @@ use App\Http\Controllers\Frontend\SubscriberController;
 use App\Http\Controllers\Frontend\WishlistController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,16 +67,22 @@ Route::get('fix_products',function(){
 
 
 Route::get('/', 'Frontend\HomeController@index')->name('home');
-Route::get('/about', 'Frontend\HomeController@about')->name('frontend.about');
-Route::get('/events', 'Frontend\HomeController@events')->name('frontend.events');
 
 // subscribers
-Route::post('/subscribe', 'SubscriberController@subscribe')->name('frontend.subscribe'); 
 
 Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
+
+    Route::get('about', 'HomeController@about')->name('about');
+    Route::get('events', 'HomeController@events')->name('events');
+    Route::get('policies/{policy}', 'HomeController@policies')->name('policies');
+    Route::get('contact', 'HomeController@contact')->name('contact');
+    Route::post('contact', 'HomeController@contact_store')->name('contact.store');
+    Route::post('subscribe', 'SubscriberController@subscribe')->name('subscribe'); 
+    Route::get('be-seller',function(){return view('frontend.beseller');})->name('beseller');
+
+    Route::get('product/{slug}', 'ProductController@product')->name('product'); 
     Route::post('product/quick_view', 'ProductController@quick_view')->name('product.quick_view');
     Route::post('product/variant_price', 'ProductController@variant_price')->name('product.variant_price');
-    Route::get('product/{slug}', 'ProductController@product')->name('product'); 
 
     // search
     Route::get('/search', 'ProductController@search')->name('search'); 

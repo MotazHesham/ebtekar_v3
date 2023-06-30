@@ -83,47 +83,38 @@
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right pt-0"
                 style="position: absolute; inset: 0px 0px auto auto; margin: 0px;@if (app()->getLocale() == 'ar') transform: translate(126px, 50px);  @else transform: translate(0px, 42px); @endif">
                 <div class="dropdown-header bg-light py-2">
-                    <div class="fw-semibold">Account</div>
-                </div>
-                <a class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
-                    </svg> Updates<span class="badge badge-sm bg-info-gradient ms-2">42</span></a><a
-                    class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use>
-                    </svg> Messages<span class="badge badge-sm badge-sm bg-success ms-2">42</span></a><a
-                    class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-task"></use>
-                    </svg> Tasks<span class="badge badge-sm bg-danger-gradient ms-2">42</span></a><a
-                    class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-comment-square"></use>
-                    </svg> Comments<span class="badge badge-sm bg-warning-gradient ms-2">42</span></a>
+                    <div class="fw-semibold">ShortCuts</div>
+                </div> 
+                    <a class="dropdown-item" href="{{ route('admin.customers.index') }}">
+                        Customers <span class="badge badge-danger">{{\App\Models\Customer::count()}}</span>
+                    </a>
+                    <a class="dropdown-item" href="{{ route('admin.subscribes.index') }}">
+                        Subscribers <span class="badge badge-info">{{\App\Models\Subscribe::count()}}</span>
+                    </a>
+                    <a class="dropdown-item" href="{{ route('admin.contactus.index') }}">
+                        ContactUs <span class="badge badge-warning">{{\App\Models\Contactu::count()}}</span>
+                    </a>
                 <div class="dropdown-header bg-light py-2 dark:bg-white dark:bg-opacity-10">
                     <div class="fw-semibold">Settings</div>
-                </div><a class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                    </svg> Profile</a><a class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-                    </svg> Settings</a><a class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-credit-card"></use>
-                    </svg> Payments<span class="badge badge-sm bg-secondary-gradient text-dark ms-2">42</span></a><a
-                    class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-file"></use>
-                    </svg> Projects<span class="badge badge-sm bg-primary-gradient ms-2">42</span></a>
-                <div class="dropdown-divider"></div><a class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                    </svg> Lock Account</a><a class="dropdown-item" href="#">
-                    <svg class="icon me-2">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
-                    </svg> Logout</a>
+                </div> 
+                @can('profile_password_edit')
+                    <a class="dropdown-item" href="{{ route('profile.password.edit') }}">
+                        Profile <i class="fas fa-user"></i>
+                    </a>
+                @endcan
+                    <a class="dropdown-item" href="{{ route("admin.countries.index") }}">
+                        Countries <i class="fas fa-globe-americas"> </i>
+                    </a> 
+                    <a class="dropdown-item" href="{{ route("admin.currencies.index") }}">
+                        Currencies <i class="fas fa-hand-holding-usd"> </i>
+                    </a> 
+                    <a class="dropdown-item" href="{{ route("admin.general-settings.index") }}">
+                        Settings <i class="fas fa-cog"></i>
+                    </a>
+                <div class="dropdown-divider"></div> 
+                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                        Logout <i class="fas fa-sign-out-alt"></i>
+                    </a> 
             </div>
         </li>
     </ul>
@@ -279,7 +270,8 @@
             </div>
             <hr>
             <h6>System Utilization</h6>
-            <div class="text-uppercase mb-1 mt-4"><small><b>CPU Usage</b></small></div>
+            <div>Comming Soon ....</div>
+            {{-- <div class="text-uppercase mb-1 mt-4"><small><b>CPU Usage</b></small></div>
             <div class="progress progress-thin">
                 <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25"
                     aria-valuemin="0" aria-valuemax="100"></div>
@@ -298,7 +290,7 @@
             <div class="progress progress-thin">
                 <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10"
                     aria-valuemin="0" aria-valuemax="100"></div>
-            </div><small class="text-medium-emphasis">25GB/256GB</small>
+            </div><small class="text-medium-emphasis">25GB/256GB</small> --}}
         </div>
     </div>
 </div>

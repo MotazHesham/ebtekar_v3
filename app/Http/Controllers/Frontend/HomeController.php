@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Category;
+use App\Models\Contactu;
 use App\Models\Customer;
 use App\Models\GeneralSetting;
 use App\Models\HomeCategory;
+use App\Models\Police;
 use App\Models\Product;
 use App\Models\ReceiptProduct;
 use App\Models\Slider;
@@ -57,6 +59,21 @@ class HomeController extends Controller
     public function about(){
         $general_settings = GeneralSetting::first();
         return view('frontend.about',compact('general_settings'));
+    }
+
+    public function policies($policy){ 
+        $policy = Police::where('name',$policy)->first();
+        return view('frontend.policy',compact('policy'));
+    }
+
+    public function contact(){
+        return view('frontend.contact');
+    }
+
+    public function contact_store(Request $request){
+        Contactu::create($request->all());
+        alert('Your message sent successfully','','success');
+        return redirect()->route('frontend.contact');
     }
 
     public function events(){

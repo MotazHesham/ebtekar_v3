@@ -17,7 +17,7 @@ class CartController extends Controller
     }
 
     public function add(Request $request){
-
+        
         $product = Product::findOrFail($request->id);
 
         if($product->variant_product == 1){
@@ -56,31 +56,19 @@ class CartController extends Controller
         }
 
         if($request->hasFile('pdf')){
-            $cart->pdf = $request->pdf->store('uploads/seller/products/pdf');
-        }
-
-        $photos = array();
-        $photos_note = array();
-
+            $cart->pdf = $request->pdf->store('uploads/orders/products/pdf');
+        } 
+        $photos = array();  
         if($request->hasFile('photos')){
             foreach ($request->photos as $key => $photo) {
-                $path = $photo->store('uploads/seller/products/photos');
-                array_push($photos, $path);
+                $photos[$key]['photo'] = $photo->store('uploads/orders/products/photos');
+                $photos[$key]['note'] = $request->photos_note[$key] ?? '';  
             }
-            $cart->photos = json_encode($photos);
-        }
-
-        if($request->has('photos_note')){
-            foreach ($request->photos_note as $key => $note) {
-                array_push($photos_note, $note);
-            }
-
-            $cart->photos_note = json_encode($photos_note);
-        }
-
+        } 
+        $cart->photos = json_encode($photos);
         $cart->save();
 
-        toast('Success Added To Cart','success');
+        toast('Success added to cart','success');
         return back();
     }
 

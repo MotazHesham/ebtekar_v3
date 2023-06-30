@@ -81,17 +81,23 @@ class ProductController extends Controller
 
     public function search(Request $request){
 
-        $category = $sub_category = $sub_sub_category = null;
+        $category = $sub_category = $sub_sub_category = $search = null;
 
         $title = 'أحدث المنتجات';
 
         $products = Product::where('published',1); 
 
+        if($request->search != null){ 
+            $search = $request->search;
+            $products = $products->where('name','like','%' . $search . '%');  
+        }
+
         if($request->category != null){
             $category = Category::where('slug', $request->category)->first();
             if($category){
                 $title = $category->name;
-                $products = $products->where('category_id',$category->id); 
+                $category = $category->id;
+                $products = $products->where('category_id',$category); 
             }
         }
         if($request->sub_category != null){
@@ -99,7 +105,8 @@ class ProductController extends Controller
             $sub_category = SubCategory::where('slug', $request->sub_category)->first();
             if($sub_category){
                 $title = $sub_category->name;
-                $products = $products->where('sub_category_id',$sub_category->id);
+                $sub_category = $sub_category->id;
+                $products = $products->where('sub_category_id',$sub_category);
             }
         }
 
@@ -107,12 +114,13 @@ class ProductController extends Controller
             $sub_sub_category = SubSubCategory::where('slug', $request->sub_sub_category)->first();
             if($sub_sub_category){
                 $title = $sub_sub_category->name;
-                $products = $products->where('sub_sub_category_id',$sub_sub_category->id);
+                $sub_sub_category = $sub_sub_category->id;
+                $products = $products->where('sub_sub_category_id',$sub_sub_category);
             }
         }
 
         $products = $products->orderBy('created_at','desc')->paginate(12);
 
-        return view('frontend.products',compact('products','title'));
+        return view('frontend.products',compact('products','title','category','sub_category','sub_sub_category','search'));
     } 
 }

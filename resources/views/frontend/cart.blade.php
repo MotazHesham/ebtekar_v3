@@ -60,17 +60,14 @@
                                             <div class="mobile-cart-content">
                                                 <div class="col-xs-3">
                                                     <div class="qty-box">
-                                                        <div class="input-group">
-                                                            <input type="text" name="quantity" class="form-control input-number"
-                                                                value="{{ $cartItem->quantity }}">
-                                                        </div>
+                                                        <b id="mob-cart-qty-{{$cartItem->id}}">{{ $cartItem->quantity }}x</b>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-3">
                                                     <h2 class="td-color">{{ front_currency($cartItem->price) }}</h2>
                                                 </div>
                                                 <div class="col-xs-3">
-                                                    <h2 class="td-color"><a href="javascript:void(0)" class="icon"><i
+                                                    <h2 class="td-color"><a href="javascript:void(0)"  onclick="deleteCartItem('{{$cartItem->id}}')" class="icon"><i
                                                                 class="ti-close"></i></a></h2>
                                                 </div>
                                             </div>
@@ -88,7 +85,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><a href="javascript:void(0)" class="icon"><i class="ti-close"></i></a></td>
+                                        <td><a href="javascript:void(0)"  onclick="deleteCartItem('{{$cartItem->id}}')" class="icon"><i class="ti-close"></i></a></td>
                                         <td>
                                             <h2 class="td-color" id="td-total-{{$cartItem->id}}">{{ front_currency($cartItem->total_cost) }}</h2>
                                         </td>
@@ -110,7 +107,7 @@
                 </div>
             </div>
             <div class="row cart-buttons">
-                <div class="col-12"><a href="{{ route('home') }}" class="btn btn-normal">استمر في التسوق</a> <a
+                <div class="col-12"><a href="{{ route('frontend.search') }}" class="btn btn-normal">استمر في التسوق</a> <a
                         href="{{ route('frontend.payment_select') }}" class="btn btn-normal ms-3">اتمام عملية الدفع</a></div>
             </div>
         </div>

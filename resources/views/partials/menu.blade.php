@@ -1,8 +1,8 @@
 <div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" style="background: linear-gradient(86deg,#000000 0%,#05073f 100%)">
 
     <div class="c-sidebar-brand d-md-down-none">
-        <a class="c-sidebar-brand-full h4" href="#">
-            {{ trans('panel.site_title') }}
+        <a class="c-sidebar-brand-full h4" >
+            <?php echo trans('panel.site_title'); ?> 
         </a>
     </div>
 
@@ -275,89 +275,6 @@
                 </ul>
             </li>
         @endcan
-        @can('seller_managment_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/sellers*") ? "c-show" : "" }} {{ request()->is("admin/commission-requests*") ? "c-show" : "" }}">
-                <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-users-cog c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.sellerManagment.title') }}
-                </a>
-                <ul class="c-sidebar-nav-dropdown-items">
-                    @can('seller_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.sellers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/sellers") || request()->is("admin/sellers/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-users c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.seller.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('commission_request_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.commission-requests.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/commission-requests") || request()->is("admin/commission-requests/*") ? "c-active" : "" }}">
-                                <i class="fa-fw far fa-credit-card c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.commissionRequest.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        @endcan
-        @can('customer_access')
-            @php 
-                $settings11 = [
-                    'chart_title'           => 'last 7days customers registered',
-                    'chart_type'            => 'number_block',
-                    'report_type'           => 'group_by_date',
-                    'model'                 => 'App\Models\Customer',
-                    'group_by_field'        => 'created_at',
-                    'group_by_period'       => 'day',
-                    'aggregate_function'    => 'count',
-                    'filter_field'          => 'created_at',
-                    'filter_days'           => '7',
-                    'group_by_field_format' => 'd/m/Y H:i:s',
-                    'column_class'          => 'col-md-12',
-                    'entries_number'        => '5',
-                    'translation_key'       => 'customer',
-                ];
-
-                $settings11['total_number'] = 0;
-                if (class_exists($settings11['model'])) {
-                    $settings11['total_number'] = $settings11['model']::when(isset($settings11['filter_field']), function ($query) use ($settings11) {
-                        if (isset($settings11['filter_days'])) {
-                            return $query->where($settings11['filter_field'], '>=',
-                                now()->subDays($settings11['filter_days'])->format('Y-m-d'));
-                        } elseif (isset($settings11['filter_period'])) {
-                            switch ($settings11['filter_period']) {
-                                case 'week': $start = date('Y-m-d', strtotime('last Monday'));
-                                break;
-                                case 'month': $start = date('Y-m') . '-01';
-                                break;
-                                case 'year': $start = date('Y') . '-01-01';
-                                break;
-                            }
-                            if (isset($start)) {
-                                return $query->where($settings11['filter_field'], '>=', $start);
-                            }
-                        }
-                    })
-                        ->{$settings11['aggregate_function'] ?? 'count'}($settings11['aggregate_field'] ?? '*');
-                }
-            @endphp
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.customers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/customers") || request()->is("admin/customers/*") ? "c-active" : "" }}">
-                    <i class="fa-fw far fa-user c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.customer.title') }}
-                    <span class="badge bg-success-gradient text-dark ms-auto">{{ number_format($settings11['total_number']) }} جديد</span>
-                </a>
-            </li>
-        @endcan
         
         @can('order_access')
             <li class="c-sidebar-nav-item">
@@ -465,6 +382,238 @@
             </li>
         @endcan
         
+        <li class="nav-title">المستخدمين</li>
+        @can('user_management_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/permissions*") ? "c-show" : "" }} {{ request()->is("admin/roles*") ? "c-show" : "" }} {{ request()->is("admin/users*") ? "c-show" : "" }} {{ request()->is("admin/audit-logs*") ? "c-show" : "" }} ">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-users c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.userManagement.title') }}
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('permission_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.permissions.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/permissions") || request()->is("admin/permissions/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-unlock-alt c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.permission.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('role_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.roles.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/roles") || request()->is("admin/roles/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.role.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('user_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.users.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/users") || request()->is("admin/users/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-user c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.user.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('borrows_and_subtraction_access')
+                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/employees*") ? "c-show" : "" }} {{ request()->is("admin/borrows*") ? "c-show" : "" }} {{ request()->is("admin/subtractions*") ? "c-show" : "" }}">
+                            <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                                <i class="fa-fw fas fa-file-invoice-dollar c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.borrowsAndSubtraction.title') }}
+                            </a>
+                            <ul class="c-sidebar-nav-dropdown-items">
+                                @can('employee_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.employees.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/employees") || request()->is("admin/employees/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-user-astronaut c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.employee.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('borrow_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.borrows.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/borrows") || request()->is("admin/borrows/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-minus-circle c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.borrow.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('subtraction_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.subtractions.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/subtractions") || request()->is("admin/subtractions/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fab fa-creative-commons-nc c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.subtraction.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+                    @can('audit_log_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.audit-logs.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/audit-logs") || request()->is("admin/audit-logs/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-file-alt c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.auditLog.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
+        @can('customer_access')
+            @php 
+                $settings11 = [
+                    'chart_title'           => 'last 7days customers registered',
+                    'chart_type'            => 'number_block',
+                    'report_type'           => 'group_by_date',
+                    'model'                 => 'App\Models\Customer',
+                    'group_by_field'        => 'created_at',
+                    'group_by_period'       => 'day',
+                    'aggregate_function'    => 'count',
+                    'filter_field'          => 'created_at',
+                    'filter_days'           => '7',
+                    'group_by_field_format' => 'd/m/Y H:i:s',
+                    'column_class'          => 'col-md-12',
+                    'entries_number'        => '5',
+                    'translation_key'       => 'customer',
+                ];
+
+                $settings11['total_number'] = 0;
+                if (class_exists($settings11['model'])) {
+                    $settings11['total_number'] = $settings11['model']::when(isset($settings11['filter_field']), function ($query) use ($settings11) {
+                        if (isset($settings11['filter_days'])) {
+                            return $query->where($settings11['filter_field'], '>=',
+                                now()->subDays($settings11['filter_days'])->format('Y-m-d'));
+                        } elseif (isset($settings11['filter_period'])) {
+                            switch ($settings11['filter_period']) {
+                                case 'week': $start = date('Y-m-d', strtotime('last Monday'));
+                                break;
+                                case 'month': $start = date('Y-m') . '-01';
+                                break;
+                                case 'year': $start = date('Y') . '-01-01';
+                                break;
+                            }
+                            if (isset($start)) {
+                                return $query->where($settings11['filter_field'], '>=', $start);
+                            }
+                        }
+                    })
+                        ->{$settings11['aggregate_function'] ?? 'count'}($settings11['aggregate_field'] ?? '*');
+                }
+            @endphp
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.customers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/customers") || request()->is("admin/customers/*") ? "c-active" : "" }}">
+                    <i class="fa-fw far fa-user c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.customer.title') }}
+                    <span class="badge bg-success-gradient text-dark ms-auto">{{ number_format($settings11['total_number']) }} جديد</span>
+                </a>
+            </li>
+        @endcan
+        @can('seller_managment_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/sellers*") ? "c-show" : "" }} {{ request()->is("admin/commission-requests*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-users-cog c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.sellerManagment.title') }}
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('seller_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.sellers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/sellers") || request()->is("admin/sellers/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-users c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.seller.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('commission_request_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.commission-requests.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/commission-requests") || request()->is("admin/commission-requests/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-credit-card c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.commissionRequest.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
+        @can('task_management_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/task-statuses*") ? "c-show" : "" }} {{ request()->is("admin/task-tags*") ? "c-show" : "" }} {{ request()->is("admin/tasks*") ? "c-show" : "" }} {{ request()->is("admin/tasks-calendars*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-list c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.taskManagement.title') }}
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('task_status_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.task-statuses.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/task-statuses") || request()->is("admin/task-statuses/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-server c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.taskStatus.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('task_tag_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.task-tags.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/task-tags") || request()->is("admin/task-tags/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-server c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.taskTag.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('task_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.tasks.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/tasks") || request()->is("admin/tasks/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.task.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('tasks_calendar_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.tasks-calendars.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/tasks-calendars") || request()->is("admin/tasks-calendars/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-calendar c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.tasksCalendar.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan 
+
+
         <li class="nav-title">عام</li>
         @can('setting_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/general-settings*") ? "c-show" : "" }} {{ request()->is("admin/user-alerts*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/socials*") ? "c-show" : "" }} {{ request()->is("admin/polices*") ? "c-show" : "" }} {{ request()->is("admin/seo-settings*") ? "c-show" : "" }} ">
@@ -577,155 +726,29 @@
                             </a>
                         </li>
                     @endcan
-                </ul>
-            </li>
-        @endcan
-        @can('user_management_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/permissions*") ? "c-show" : "" }} {{ request()->is("admin/roles*") ? "c-show" : "" }} {{ request()->is("admin/users*") ? "c-show" : "" }} {{ request()->is("admin/audit-logs*") ? "c-show" : "" }} ">
-                <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-users c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.userManagement.title') }}
-                </a>
-                <ul class="c-sidebar-nav-dropdown-items">
-                    @can('permission_access')
+                    @can('contactu_access')
                         <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.permissions.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/permissions") || request()->is("admin/permissions/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-unlock-alt c-sidebar-nav-icon">
-
+                            <a href="{{ route("admin.contactus.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/contactus") || request()->is("admin/contactus/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
+            
                                 </i>
-                                {{ trans('cruds.permission.title') }}
+                                {{ trans('cruds.contactu.title') }}
                             </a>
                         </li>
                     @endcan
-                    @can('role_access')
+                    @can('subscribe_access')
                         <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.roles.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/roles") || request()->is("admin/roles/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">
-
+                            <a href="{{ route("admin.subscribes.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/subscribes") || request()->is("admin/subscribes/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-envelope c-sidebar-nav-icon">
+            
                                 </i>
-                                {{ trans('cruds.role.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('user_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.users.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/users") || request()->is("admin/users/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-user c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.user.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('borrows_and_subtraction_access')
-                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/employees*") ? "c-show" : "" }} {{ request()->is("admin/borrows*") ? "c-show" : "" }} {{ request()->is("admin/subtractions*") ? "c-show" : "" }}">
-                            <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                                <i class="fa-fw fas fa-file-invoice-dollar c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.borrowsAndSubtraction.title') }}
-                            </a>
-                            <ul class="c-sidebar-nav-dropdown-items">
-                                @can('employee_access')
-                                    <li class="c-sidebar-nav-item">
-                                        <a href="{{ route("admin.employees.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/employees") || request()->is("admin/employees/*") ? "c-active" : "" }}">
-                                            <i class="fa-fw fas fa-user-astronaut c-sidebar-nav-icon">
-
-                                            </i>
-                                            {{ trans('cruds.employee.title') }}
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('borrow_access')
-                                    <li class="c-sidebar-nav-item">
-                                        <a href="{{ route("admin.borrows.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/borrows") || request()->is("admin/borrows/*") ? "c-active" : "" }}">
-                                            <i class="fa-fw fas fa-minus-circle c-sidebar-nav-icon">
-
-                                            </i>
-                                            {{ trans('cruds.borrow.title') }}
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('subtraction_access')
-                                    <li class="c-sidebar-nav-item">
-                                        <a href="{{ route("admin.subtractions.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/subtractions") || request()->is("admin/subtractions/*") ? "c-active" : "" }}">
-                                            <i class="fa-fw fab fa-creative-commons-nc c-sidebar-nav-icon">
-
-                                            </i>
-                                            {{ trans('cruds.subtraction.title') }}
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
-                    @can('audit_log_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.audit-logs.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/audit-logs") || request()->is("admin/audit-logs/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-file-alt c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.auditLog.title') }}
+                                {{ trans('cruds.subscribe.title') }}
                             </a>
                         </li>
                     @endcan
                 </ul>
             </li>
         @endcan
-        @can('task_management_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/task-statuses*") ? "c-show" : "" }} {{ request()->is("admin/task-tags*") ? "c-show" : "" }} {{ request()->is("admin/tasks*") ? "c-show" : "" }} {{ request()->is("admin/tasks-calendars*") ? "c-show" : "" }}">
-                <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-list c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.taskManagement.title') }}
-                </a>
-                <ul class="c-sidebar-nav-dropdown-items">
-                    @can('task_status_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.task-statuses.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/task-statuses") || request()->is("admin/task-statuses/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-server c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.taskStatus.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('task_tag_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.task-tags.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/task-tags") || request()->is("admin/task-tags/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-server c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.taskTag.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('task_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.tasks.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/tasks") || request()->is("admin/tasks/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.task.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('tasks_calendar_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.tasks-calendars.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/tasks-calendars") || request()->is("admin/tasks-calendars/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-calendar c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.tasksCalendar.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        @endcan 
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.systemCalendar") }}" class="c-sidebar-nav-link {{ request()->is("admin/system-calendar") || request()->is("admin/system-calendar/*") ? "c-active" : "" }}">
                 <i class="c-sidebar-nav-icon fa-fw fas fa-calendar">
@@ -744,18 +767,7 @@
                     {{-- <span class="badge bg-success-gradient text-dark ms-auto">3</span> --}}
                 </a>
             </li>
-        @endcan
-        @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
-            @can('profile_password_edit')
-                <li class="c-sidebar-nav-item">
-                    <a class="c-sidebar-nav-link {{ request()->is('profile/password') || request()->is('profile/password/*') ? 'c-active' : '' }}" href="{{ route('profile.password.edit') }}">
-                        <i class="fa-fw fas fa-key c-sidebar-nav-icon">
-                        </i>
-                        {{ trans('global.change_password') }}
-                    </a>
-                </li>
-            @endcan
-        @endif
+        @endcan 
         <li class="c-sidebar-nav-item">
             <a href="#" class="c-sidebar-nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                 <i class="c-sidebar-nav-icon fas fa-fw fa-sign-out-alt">

@@ -259,6 +259,6 @@ class Order extends Model
 	}
 
 	public function calc_total_for_client(){
-		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost  - $this->deposit_amount - $this->calc_discount();
+		return $this->calc_total() - $this->deposit_amount - $this->calc_discount();
 	}
 }

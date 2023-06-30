@@ -16,7 +16,7 @@ Route::get('/home', function () {
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
 Auth::routes();
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
     Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');
@@ -324,6 +324,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('deliver-men/destroy', 'DeliverManController@massDestroy')->name('deliver-men.massDestroy');
     Route::resource('deliver-men', 'DeliverManController');
 
+    // Contactus
+    Route::delete('contactus/destroy', 'ContactusController@massDestroy')->name('contactus.massDestroy');
+    Route::resource('contactus', 'ContactusController', ['except' => ['create', 'store', 'edit', 'update']]);
+
+    // Subscribe
+    Route::delete('subscribes/destroy', 'SubscribeController@massDestroy')->name('subscribes.massDestroy');
+    Route::resource('subscribes', 'SubscribeController', ['except' => ['create', 'store', 'edit', 'update', 'show']]);
+    
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
 });

@@ -38,9 +38,10 @@
                                 <ul>
                                     <li><a href="{{ route('home') }}">الرئيسية</a></li>
                                     <li><a href="{{ route('frontend.about') }}">عن إبتكار</a></li>
-                                    <li><a href="support.html">سياسة الدعم</a></li>
-                                    <li><a href="return.html">سياسة المرتجعات</a></li>
-                                    <li><a href="sellerpolicy.html">سياسة البائع</a></li>
+                                    <li><a href="{{ route('frontend.policies','support') }}">سياسة الدعم</a></li>
+                                    <li><a href="{{ route('frontend.policies','returned') }}">سياسة المرتجعات</a></li>
+                                    <li><a href="{{ route('frontend.policies','terms') }}">سياسة البنود</a></li>
+                                    <li><a href="{{ route('frontend.policies','seller') }}">سياسة البائع</a></li>
                                 </ul>
                             </div>
                         </div>

@@ -18,8 +18,14 @@ use Illuminate\Support\Facades\Auth;
 class CheckoutController extends Controller
 {
     public function payment_select(){
+        if(Auth::user()->carts()->count() == 0){
+            alert("قم بأضافة منتجات الي السلة أولا",'','warning');
+            return redirect()->route('home');
+        }
+
         $cart = Cart::with('product')->where('user_id',Auth::id())->orderBy('created_at','desc')->get();
-        return view('frontend.checkout',compact('cart'));
+        $countries = Country::where('status',1)->where('website',1)->get()->groupBy('type'); 
+        return view('frontend.checkout',compact('cart','countries'));
     }
 
     public function checkout(Request $request){
@@ -46,14 +52,13 @@ class CheckoutController extends Controller
 
 
                 $order = new Order;
-                $country = Country::findOrFail($request->shipping_country_id);
+                $country = Country::findOrFail($request->country_id);
 
                 $order->user_id  = $user->id;
-                $order->shipping_country_id  = $country->id;
-                $order->shipping_country_name  = $country->name;
+                $order->shipping_country_id  = $country->id; 
                 $order->shipping_country_cost  = $country->cost;
                 $order->phone_number  = $request->phone_number;
-                $order->phone_number2  = $request->phone_number2;
+                $order->phone_number_2  = $request->phone_number_2;
                 $order->shipping_address = $request->shipping_address;
                 $order->payment_type = $request->payment_option;
 
@@ -61,7 +66,7 @@ class CheckoutController extends Controller
                     $order->client_name = $request->client_name;
                     $order->date_of_receiving_order = strtotime($request->date_of_receiving_order);
                     $order->excepected_deliverd_date = strtotime($request->excepected_deliverd_date);
-                    $order->deposit = $request->deposit;
+                    $order->deposit_type = $request->deposit_type;
                     $order->deposit_amount = $request->deposit_amount;
                     $order->free_shipping = $request->free_shipping;
                     $order->shipping_cost_by_seller = $request->shipping_cost_by_seller;
@@ -73,19 +78,22 @@ class CheckoutController extends Controller
                     $order->order_type = 'customer';
                 }
 
-                $order->save();
-                if($user->user_type == 'customer' || $user->user_type == 'designer'){
-                    $order->order_num = 'customer#' . ($last_order_code + 1);
-                }elseif($user->user_type == 'seller'){
+                if($user->user_type == 'seller'){
                     $order->order_num = 'seller#' . ($last_order_code + 1);
+                }else{
+                    $order->order_num = 'customer#' . ($last_order_code + 1);
                 }
+                
+                $order->save();
 
                 $total_commission = 0;
                 $total_cost = 0;
                 $order_items = [];
 
                 foreach($user->carts as $cartItem){
-                    $product = Product::find($cartItem->product_id);
+
+                    // increse number of sales in product
+                    $product = Product::findOrFail($cartItem->product_id);
                     $product->num_of_sale += $cartItem->quantity;
                     $product->save();
 
@@ -93,10 +101,9 @@ class CheckoutController extends Controller
                         //remove requested quantity from stock
                         $product_stock = $product->stocks()->where('variant', $cartItem->variation)->first();
                         if($product_stock){
-                            $product_stock->quantity -= $cartItem->quantity;
+                            $product_stock->stock -= $cartItem->quantity;
                             $product_stock->save();
-                        }
-
+                        } 
                     }else {
                         //remove requested quantity from stock
                         $product->current_stock -= $cartItem->quantity;
@@ -117,8 +124,7 @@ class CheckoutController extends Controller
                         'quantity' => $cartItem->quantity,
                         'price' => $cartItem->price,
                         'total_cost' => $cartItem->total_cost,
-                        'photos' => $cartItem->photos,
-                        'photos_note' => $cartItem->photos_note,
+                        'photos' => $cartItem->photos, 
                         'pdf' => $cartItem->pdf,
                     ];
                 }
@@ -154,8 +160,9 @@ class CheckoutController extends Controller
                         return redirect()->route('frontend.orders.success',$order->id);
                     }
                 }elseif($request->payment_option == 'paymob'){
-                    $paymob = new PayMobController;
-                    return $paymob->checkingOut('1602333','242734',$order->id,$request->first_name,$request->last_name,$request->phone_number);
+                    return 'Not Available right now';
+                    // $paymob = new PayMobController;
+                    // return $paymob->checkingOut('1602333','242734',$order->id,$request->first_name,$request->last_name,$request->phone_number);
                 }
             }else {
                 toast("Try Again",'error');
@@ -178,7 +185,7 @@ class CheckoutController extends Controller
         $order->payment_status = $payment;
         $order->completed = 1;
         if($payment == 'paid'){
-            $order->deposit_amount = $order->required_to_pay + $order->extra_commission + $order->shipping_country_cost;
+            $order->deposit_amount = $order->calc_total() - $order->calc_discount();
         }
         $order->save();
 

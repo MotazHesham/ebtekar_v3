@@ -312,12 +312,12 @@
                                                                     </a>
                                                                     <h5>
                                                                         @if($product->discount > 0)
-                                                                            {{front_currency($product->calc_discount($product->unit_price))}}
+                                                                            {{front_currency($product->calc_discount($product->unit_price),$product->weight)}}
                                                                             <span>
-                                                                                {{ front_currency($product->unit_price) }}
+                                                                                {{ front_currency($product->unit_price,$product->weight) }}
                                                                             </span>
                                                                         @else
-                                                                            {{ front_currency($product->unit_price) }}
+                                                                            {{ front_currency($product->unit_price,$product->weight) }}
                                                                         @endif
                                                                     </h5>
                                                                 </div>

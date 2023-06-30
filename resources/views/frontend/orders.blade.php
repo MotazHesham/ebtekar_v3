@@ -44,13 +44,11 @@
                                     @php
                                         $image = '';
                                         $product = $orderDetail->product;
-                                        if(json_decode($product->photos) != null && json_decode($product->photos)[0]){
-                                            $image = json_decode($product->photos)[0] ?? '';
-                                        }
+                                        $image = $product->photos[0] ? $product->photos[0]->getUrl('preview2') : ''; 
                                     @endphp
                                     <tr>
                                         <td>
-                                            <a href="{{ route('frontend.product',$product->slug)}}"><img src="{{ image_asset($image) }}"
+                                            <a href="{{ route('frontend.product',$product->slug)}}"><img src="{{ $image }}"
                                                     alt="product" class="img-fluid  "></a>
                                         </td>
                                         <td>
@@ -61,17 +59,18 @@
                                             <b>{{ front_currency($orderDetail->total_cost) }}</b>
                                         </td>
                                         <td>
-                                            <span> {{ $orderDetail->variation }} </span>
-                                            <br>
                                             <span>العدد: {{ $orderDetail->quantity }}</span>
+                                            <br>
+                                            <span> {{ $orderDetail->variation }} </span>
                                         </td>
                                         <td>
                                             <div class="responsive-data">
                                                 <b>{{ front_currency($orderDetail->total_cost) }}</b>
                                                 <br>
-                                                <span> {{ $orderDetail->variation }} </span> | span>العدد: {{ $orderDetail->quantity }}</span>
+                                                <span> {{ $orderDetail->variation }} </span> | العدد: {{ $orderDetail->quantity }}</span>
                                             </div>
-                                            <span class="dark-data">تم التسليم</span> (مارس ، 2020)
+                                            <span class="dark-data">{{ $orderDetail->order->delivery_status ? trans('global.delivery_status.status.' . $orderDetail->order->delivery_status) : '' }}</span>
+                                                @if($orderDetail->order->delivery_status == 'delivered') ({{$orderDetail->order->done_time}}) @endif
                                         </td>
                                     </tr>
                                 @endif

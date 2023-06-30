@@ -39,7 +39,7 @@
                                         $name = explode(" ",auth()->user()->name);
                                     @endphp
                                     <div class="row check-out ">
-                                        @if(auth()->check() && auth()->user()->user_type != 'seller')
+                                        @if(auth()->check() && auth()->user()->user_type == 'seller')
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                                 <label>تاريخ استلام الطلب </label>
                                                 <input type="date" name="date_of_receiving_order"  placeholder="">
@@ -64,40 +64,45 @@
                                         @endif
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label class="field-label">التليفون</label>
-                                            <input type="text" name="phone_number" value="{{old('phone_number',auth()->user()->phone_number ?? '')}}" placeholder="">
+                                            <input type="text" name="phone_number" value="{{old('phone_number',auth()->user()->phone_number ?? '')}}" placeholder="" required>
                                         </div>
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label class="field-label">تليفون أخر</label>
-                                            <input type="text" name="phone_number2" value="{{old('phone_number2')}}" placeholder="">
+                                            <input type="text" name="phone_number_2" value="{{old('phone_number_2')}}" placeholder="">
                                         </div>
-                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                            @php
-                                                $countries = \App\Models\Country::where('type','countries')->where('status',1)->get();
-                                                $districts = \App\Models\Country::where('type','districts')->where('status',1)->get();
-                                                $metro = \App\Models\Country::where('type','metro')->where('status',1)->get();
-                                            @endphp
-                                            <label class="field-label">المدينة</label>
-                                            <select name="shipping_country_id">
-                                                <optgroup label="المناطق">
-                                                    @foreach($districts as $district)
-                                                        <option value={{$district->id}}>{{$district->name}} - {{  $district->cost }}</option>
-                                                    @endforeach
-                                                </optgroup>
-                                                <optgroup label="المحافظات">
-                                                    @foreach($countries as $country)
-                                                        <option value={{$country->id}}>{{$country->name}} - {{  $country->cost }}</option>
-                                                    @endforeach
-                                                </optgroup>
-                                                <optgroup label="المترو">
-                                                    @foreach($metro as $raw)
-                                                        <option value={{$raw->id}}>{{$raw->name}} - {{  $raw->cost }}</option>
-                                                    @endforeach
-                                                </optgroup>
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12"> 
+                                            <label class="field-label">المدينة</label> 
+                                            <select class="form-control select2" name="country_id" id="country_id" required>
+                                                <option value="">{{ trans('cruds.receiptSocial.fields.shipping_country_id') }}</option>
+                                                @if(isset($countries['districts']))
+                                                    <optgroup label="{{ __('Districts') }}">
+                                                        @foreach ($countries['districts'] as $district)
+                                                            <option value={{ $district->id }}>
+                                                                {{ $district->name }} -  {{ dashboard_currency($district->cost) }}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endif
+                                                @if(isset($countries['countries']))
+                                                    <optgroup label="{{ __('Countries') }}">
+                                                        @foreach ($countries['countries'] as $country)
+                                                            <option value={{ $country->id }}>
+                                                                {{ $country->name }} -  {{ dashboard_currency($country->cost) }}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endif
+                                                @if(isset($countries['metro']))
+                                                    <optgroup label="{{ __('Metro') }}">
+                                                        @foreach ($countries['metro'] as $raw)
+                                                            <option value={{ $raw->id }}>
+                                                                {{ $raw->name }} -  {{ dashboard_currency($raw->cost) }}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endif
                                             </select>
                                         </div>
                                         <div class="form-group col-md-12 col-sm-12 col-xs-12">
                                             <label class="field-label">العنوان</label>
-                                            <input type="text" name="shipping_address" value="{{old('shipping_address',auth()->user()->address ?? '')}}" >
+                                            <input type="text" name="shipping_address" value="{{old('shipping_address',auth()->user()->address ?? '')}}" required>
                                         </div>
                                         <div class="form-group col-md-12 col-sm-12 col-xs-12">
                                             <label class="field-label">كود الخصم</label>
@@ -136,15 +141,14 @@
                                         <div class="upper-box">
                                             <div class="payment-options">
 
-                                                @if(auth()->check() && auth()->user()->user_type != 'seller')
+                                                @if(auth()->check() && auth()->user()->user_type == 'seller')
                                                     <div class="row check-out mb-4">
                                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                                             <label class="field-label">العربون</label>
-                                                            <select name="deposit">
-                                                                <option value="Vodafone cash">Vodafone cash</option>
-                                                                <option value="Etisalat cash">Etisalat cash</option>
-                                                                <option value="Bank Account">Bank Account</option>
-                                                                <option value="Cash">Cash</option>
+                                                            <select name="deposit_type">
+                                                                @foreach(\App\Models\Order::DEPOSIT_TYPE_SELECT as $key => $value)
+                                                                    <option value="{{$key}}">{{$value}}</option> 
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">

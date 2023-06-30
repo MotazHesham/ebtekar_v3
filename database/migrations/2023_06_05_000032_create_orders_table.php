@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
             $table->string('order_num')->nullable();
             $table->string('client_name');
             $table->string('phone_number');
-            $table->string('phone_number_2');
+            $table->string('phone_number_2')->nullable();
             $table->longText('shipping_address');
             $table->decimal('shipping_country_cost', 15, 2);
             $table->decimal('shipping_cost_by_seller', 15, 2)->nullable();

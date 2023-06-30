@@ -132,7 +132,11 @@ class ProductsController extends Controller
                 return $row->id ? $row->id : '';
             });
             $table->editColumn('name', function ($row) {
-                return $row->name ? $row->name : '';
+                $name = $row->name ? $row->name : '';
+                if($row->special){
+                    $name .= ' <span class="badge badge-info badge-sm">مخصوص</span> ';
+                }
+                return $name;
             }); 
             $table->editColumn('weight', function ($row) {
                 return $row->weight ? Product::WEIGHT_SELECT[$row->weight] : '';
@@ -207,7 +211,7 @@ class ProductsController extends Controller
                 return $category . $sub_category . $sub_sub_category;
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'photos', 'statuses', 'categories']);
+            $table->rawColumns(['actions', 'placeholder', 'photos', 'statuses', 'categories','name']);
 
             return $table->make(true);
         }

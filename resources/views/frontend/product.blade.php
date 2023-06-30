@@ -1,7 +1,12 @@
 @extends('frontend.layout.app')
 
-@section('content')
+@section('meta_title'){{ $product->meta_title }}@stop
 
+@section('meta_description'){{ $product->meta_description }}@stop
+
+@section('meta_keywords'){{ $product->tags }}@stop
+
+@section('content') 
 
     <!-- breadcrumb start -->
     <div class="breadcrumb-main ">
@@ -56,10 +61,10 @@
                                 <h2>{{ $product->name }}</h2>
                                 <ul class="pro-price" id="">
                                     @if($product->discount > 0)
-                                        <li id="product-price-for-variant">{{ front_currency($product->unit_price)}}</li>
-                                        <li><span id="product-price-calc-discount">{{ front_currency($product->calc_discount($product->unit_price))}}</span></li>
+                                        <li id="product-price-for-variant">{{ front_currency($product->unit_price,$product->weight)}}</li>
+                                        <li><span id="product-price-calc-discount">{{ front_currency($product->calc_discount($product->unit_price),$product->weight)}}</span></li>
                                     @else
-                                        <li id="product-price-for-variant">{{ front_currency($product->unit_price)}}</li>
+                                        <li id="product-price-for-variant">{{ front_currency($product->unit_price,$product->weight)}}</li>
                                     @endif
                                 </ul>
                                 <div class="revieu-box">
@@ -78,12 +83,46 @@
                                 @csrf
                                 <input type="hidden" name="id" value="{{$product->id}}">
                                 <input type="hidden" name="variant" id="variant">
-                                <div id="selectSize"
-                                    class="pro-group addeffect-section product-description border-product mb-0">
+
+                                {{-- Custom the product --}}
+                                <div class="modal fade" id="requist" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">اطلب منتجك الخاص</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body"> 
+                                                <h5 class="mb-3">الصور المراد طباعتها علي المنتج</h5>
+                                                <div id="product-images">
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <input type="file" id="photos-1" name="photos[]" class="form-control"> 
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="ملحوظة علي الصورة" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">أضف المزيد</button>
+                                
+                                                <div class="col-12 mb-3">
+                                                    <label>وصف</label>
+                                                    <textarea class="form-control" name="description" placeholder="وصف" rows="3"></textarea>
+                                                </div>
+                                
+                                                <button type="submit" class="btn btn-rounded black-btn me-3">أضف الى السلة</button> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+
+                                <div id="selectSize" class="pro-group addeffect-section product-description border-product mb-0"> 
                                     @if ($product->attribute_options != null && count(json_decode($product->attribute_options)) > 0)
                                         @foreach (json_decode($product->attribute_options) as $key => $attr_optn)
                                             @php
-                                                $attribute = \App\Models\Attribute::find($attr_optn->attribute_id);
+                                                $attribute = \App\Models\Attribute::find($attr_optn->attribute_id); 
                                             @endphp
                                             <h6 class="product-title size-text"> {{ $attribute ? $attribute->name : ''}} <span>
                                                 </span></h6>
@@ -119,43 +158,6 @@
                                         </div>
                                     @endif
 
-                                    <div class="pro-group">
-                                        <a href="" data-bs-toggle="modal" data-bs-target="#requist">اطلب منتجك الخاص </a>
-                                        <div class="modal fade" id="requist" tabindex="-1" role="dialog"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">اطلب منتجك الخاص</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="col-12 mb-3">
-                                                            <label for="name">الصور المراد طباعتها علي المنتج </label>
-                                                            <input type="file" id="myfile" name="myfile"
-                                                                class="form-control">
-
-
-                                                        </div>
-                                                        <div class="col-12 mb-3">
-                                                            <label for="name">الجملة المراد كتابتها على الصورة</label>
-                                                            <input type="text" name="note" class="form-control" id="name"
-                                                                placeholder="الجملة المراد كتابتها على الصورة" >
-                                                        </div>
-                                                        <div class="col-12 mb-3">
-                                                            <label>وصف</label>
-                                                            <textarea class="form-control" name="desc" placeholder="وصف" rows="3"></textarea>
-                                                        </div>
-
-
-                                                        <a href="javascript:void(0)" class="btn btn-rounded black-btn me-3">ارسال
-                                                            الطلب</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     <h6 class="product-title">العدد</h6>
                                     <div class="qty-box">
@@ -166,14 +168,18 @@
                                         </div>
                                         &nbsp;&nbsp;
                                         <b>(متاح <span id="available-quantity-span">{{$product->current_stock}}</span>)</b>
-                                    </div>
+                                    </div> 
 
                                     <div class="product-buttons">
-                                        <button type="submit" id="cartEffect"
-                                            class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart">
-                                            <i class="fa fa-shopping-cart"></i>
-                                            أضف الى السلة
-                                        </button>
+                                        @if($product->special)
+                                            <a href="" class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">اطلب منتجك الخاص </a>
+                                        @else
+                                            <button type="submit" id="cartEffect"
+                                                class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart">
+                                                <i class="fa fa-shopping-cart"></i>
+                                                أضف الى السلة
+                                            </button>
+                                        @endif
                                         <a href="{{ route('frontend.wishlist.add',$product->slug) }}" class="btn btn-normal add-to-wish tooltip-top"
                                             data-tippy-content="Add to wishlist">
                                             <i class="fa fa-heart" aria-hidden="true"></i>
@@ -181,7 +187,8 @@
                                     </div>
 
                                 </div>
-                            </form>
+                            </form> 
+                            
                             <div class="pro-group">
                                 <h6 class="product-title">تفاصيل المنتج</h6>
                                 <p>
@@ -191,6 +198,8 @@
 
                             <div class="pro-group pb-0">
                                 <h6 class="product-title">مشاركة</h6>
+                                
+                                <div id="share"></div>
                                 {{-- <ul class="product-social">
                                     <li><a href="javascript:void(0)"><i class="fa fa-facebook"></i></a></li>
                                     <li><a href="javascript:void(0)"><i class="fa fa-google-plus"></i></a></li>
@@ -363,12 +372,12 @@
                                         </a>
                                         <h5>
                                             @if($related_product->discount > 0)
-                                                {{front_currency($related_product->calc_discount($product->unit_price))}}
+                                                {{front_currency($related_product->calc_discount($product->unit_price),$product->weight)}}
                                                 <span>
-                                                    {{ front_currency($related_product->unit_price) }}
+                                                    {{ front_currency($related_product->unit_price,$product->weight) }}
                                                 </span>
                                             @else
-                                                {{ front_currency($related_product->unit_price) }}
+                                                {{ front_currency($related_product->unit_price,$product->weight) }}
                                             @endif
                                         </h5>
                                     </div>
@@ -388,11 +397,17 @@
 @parent
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#share').jsSocials({
+                showLabel: false,
+                showCount: false,
+                shares: ["email","whatsapp", "twitter"]
+            });
+
             getVariantPrice();
 
-        $('#add-to-cart-form input').on('change', function(){
-            getVariantPrice();
-        });
+            $('#add-to-cart-form input').on('change', function(){
+                getVariantPrice();
+            });
         });
     </script>
 @endsection

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class WishlistController extends Controller
 {
     public function wishlist(){
-        $wishlists = Wishlist::where('user_id',Auth::id())->orderBy('created_at','desc')->paginate(10);
+        $wishlists = Wishlist::with('product')->where('user_id',Auth::id())->orderBy('created_at','desc')->paginate(10);
         return view('frontend.wishlist',compact('wishlists'));
     }
 

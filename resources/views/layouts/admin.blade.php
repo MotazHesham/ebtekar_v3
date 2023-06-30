@@ -9,7 +9,7 @@
 
 <link name="favicon" type="image/x-icon" href="{{ asset(\App\Models\GeneralSetting::first()->logo->getUrl()) }}" rel="shortcut icon" />
 
-<title>{{ trans('panel.site_title') }}</title>
+<title>{{\App\Models\GeneralSetting::first()->site_name}}</title>
 <link rel="stylesheet" href="{{ asset('dashboard_offline/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('dashboard_offline/css/font-awesome.css') }}">
 <link rel="stylesheet" href="{{ asset('dashboard_offline/css/all.css') }}">

@@ -14,9 +14,7 @@
                             <div class="row">
                                 <div class="col-12 p-0">
 
-                                    <div class="slide-contain">
-                                        <div>
-                                        </div>
+                                    <div class="slide-contain"> 
                                     </div>
                                     <div class="animat-block">
 
@@ -100,12 +98,12 @@
                                         </a>
                                         <h5>
                                             @if ($product->discount > 0)
-                                                {{ front_currency($product->calc_discount($product->unit_price)) }}
+                                                {{ front_currency($product->calc_discount($product->unit_price),$product->weight) }}
                                                 <span>
-                                                    {{ front_currency($product->unit_price) }}
+                                                    {{ front_currency($product->unit_price,$product->weight) }}
                                                 </span>
                                             @else
-                                                {{ front_currency($product->unit_price) }}
+                                                {{ front_currency($product->unit_price,$product->weight) }}
                                             @endif
                                         </h5>
                                     </div>
@@ -131,12 +129,12 @@
                             <div>
                                 <div class="category-contain">
                                     <div class="img-wrapper">
-                                        <a href="{{ route('frontend.search') }}">
+                                        <a href="{{ route('frontend.products.category',$home_category->category->slug) }}">
                                             <img src="{{ $home_category->category ? $home_category->category->banner->getUrl() : '' }}"
                                                 alt="category  " class="">
                                         </a>
                                     </div>
-                                    <a href="{{ route('frontend.search') }}" class="btn-rounded">
+                                    <a href="{{ route('frontend.products.category',$home_category->category->slug) }}" class="btn-rounded">
                                         {{ $home_category->category->name }}
                                     </a>
                                 </div>
@@ -213,12 +211,12 @@
                                                                                 </a>
                                                                                 <h6>
                                                                                     @if ($product->discount > 0)
-                                                                                        {{ front_currency($product->calc_discount($product->unit_price)) }}
+                                                                                        {{ front_currency($product->calc_discount($product->unit_price),$product->weight) }}
                                                                                         <span>
-                                                                                            {{ front_currency($product->unit_price) }}
+                                                                                            {{ front_currency($product->unit_price,$product->weight) }}
                                                                                         </span>
                                                                                     @else
-                                                                                        {{ front_currency($product->unit_price) }}
+                                                                                        {{ front_currency($product->unit_price,$product->weight) }}
                                                                                     @endif
                                                                                 </h6>
                                                                             </div>
@@ -337,12 +335,12 @@
                                         </a>
                                         <h5>
                                             @if ($product->discount > 0)
-                                                {{ front_currency($product->calc_discount($product->unit_price)) }}
+                                                {{ front_currency($product->calc_discount($product->unit_price),$product->weight) }}
                                                 <span>
-                                                    {{ front_currency($product->unit_price) }}
+                                                    {{ front_currency($product->unit_price,$product->weight) }}
                                                 </span>
                                             @else
-                                                {{ front_currency($product->unit_price) }}
+                                                {{ front_currency($product->unit_price,$product->weight) }}
                                             @endif
                                         </h5>
                                     </div>

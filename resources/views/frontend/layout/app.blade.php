@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>Ebtekar</title>
+<head> 
+    @php
+        $home_general_setting = \App\Models\GeneralSetting::first();
+        $home_seo_setting = \App\Models\SeoSetting::first();
+    @endphp 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="{{ asset('frontend/assets/images/favicon/favicon.png') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('frontend/assets/images/favicon/favicon.png') }}" type="image/x-icon">
+    <title>@yield('meta_title', $home_general_setting->site_name )</title>
+    <meta name="description" content="@yield('meta_description', $home_seo_setting->description)" />
+    <meta name="keywords" content="@yield('meta_keywords', $home_seo_setting->keyword)">
+    <meta name="author" content="{{ $home_seo_setting->author }}">
+    <meta name="sitemap_link" content="{{ $home_seo_setting->sitemap_link }}"> 
+
+    <!--icons-->
+    <link rel="icon" href="{{ $home_general_setting->logo->getUrl() }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ $home_general_setting->logo->getUrl() }}" type="image/x-icon">
 
     <!--Google font-->
     <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap" rel="stylesheet">
@@ -40,8 +47,20 @@
     <!-- Bootstrap css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/bootstrap.css') }}">
 
+    <!-- share to social plugin -->
+    <link type="text/css" href="{{ asset('css/jssocials.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ asset('css/jssocials-theme-flat.css') }}" rel="stylesheet">
+    
+    <script src="{{ asset('frontend/js/jssocials.min.js') }}"></script>
+
     <!-- Theme css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color3.css') }}" media="screen" id="color">
+    @if(config('app.name') == 'ErtgalStore')
+        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color1.css') }}" media="screen" id="color">
+    @elseif(config('app.name') == 'FiguresStore')
+        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color2.css') }}" media="screen" id="color">
+    @elseif(config('app.name') == 'EbtekarStore')
+        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color3.css') }}" media="screen" id="color"> 
+    @endif 
 
     <style>
         .invalid-feedback{
@@ -63,10 +82,6 @@
 </head>
 
 <body class="bg-light rtl">
-
-    @php
-        $home_general_setting = \App\Models\GeneralSetting::first();
-    @endphp
 
     <!-- loader start -->
     <div class="loader-wrapper">
@@ -297,7 +312,7 @@
             <div class="cart_media">
                 <ul class="cart_product">
                     @auth
-                        @foreach(auth()->user()->wishlists()->orderBy('created_at','desc')->get()->take(10) as $wishlist)
+                        @foreach(auth()->user()->wishlists()->with('product')->orderBy('created_at','desc')->get()->take(10) as $wishlist)
                             @php
                                 $image = '';
                                 if($wishlist->product && $wishlist->product->photos != null){
@@ -434,7 +449,31 @@
     <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/modal.js') }}"></script>
 
+    <!-- share to social plugin --> 
+    <script src="{{ asset('js/jssocials.min.js') }}"></script>
+
     <script>
+
+        var photo_id = 2;
+        function add_more_slider_image(){
+            var photoAdd =  '<div class="row">'; 
+            photoAdd += '<div class="col-md-1">';
+            photoAdd += '<button type="button" onclick="delete_this_row(this)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>';
+            photoAdd += '</div>';
+            photoAdd += '<div class="col-md-7 mb-3">';
+            photoAdd += '<input type="file" id="photos-'+photo_id+'" name="photos[]" class="form-control" multiple accept="image/*" />'; 
+            photoAdd += '</div>';
+            photoAdd += '<div class="col-md-4 mb-3">';
+            photoAdd += '<input type="text" name="photos_note[]" class="form-control" placeholder="ملحوظة علي الصورة" >';
+            photoAdd += '</div>';
+            photoAdd += '</div>'; 
+            $('#product-images').append(photoAdd);
+
+            photo_id++; 
+        } 
+        function delete_this_row(em){
+            $(em).closest('.row').remove();
+        }
 
         function quick_view(id){
             $('#quick-view .modal-body div').html(null);
@@ -446,6 +485,7 @@
         function updateCartItem(id,increment,elem){
             let quantity = parseInt($('#' + elem + id).val()) + increment;
             if(quantity > 0){
+                $('#mob-cart-qty-'+id).html(quantity + 'x');  
                 $.post('{{ route('frontend.cart.update') }}', {_token:'{{ csrf_token() }}',id:id,quantity:quantity}, function(data){
                     $('#cart_side .cart_total .total span').html(data.total_cost);
                     $('#td-total-'+id).html(data.cartIteam_total);

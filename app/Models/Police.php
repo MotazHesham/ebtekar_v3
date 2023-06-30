@@ -22,6 +22,14 @@ class Police extends Model implements HasMedia
         'deleted_at',
     ];
 
+    
+    public const NAME_SELECT = [
+        'support'     => 'سياسة الدعم',
+        'returned'   => 'سياسة المرتجعات',
+        'seller' => 'سياسة البائع', 
+        'terms' => 'سياسة البنود', 
+    ];
+
     protected $fillable = [
         'name',
         'content',

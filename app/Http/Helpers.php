@@ -2,10 +2,12 @@
 
 //returns combinations of customer choice options array
 
+use App\Models\Currency;
 use App\Models\Order;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
+use Stevebauman\Location\Facades\Location;
 
 if (!function_exists('dashboard_currency')) {
     function dashboard_currency($value)
@@ -15,12 +17,22 @@ if (!function_exists('dashboard_currency')) {
 }
 
 if (!function_exists('front_currency')) {
-    function front_currency($value)
+    function front_currency($value,$weight = 'half_kg')
     {
-        return 'EGP ' . $value;
+        $country_code = 0;
+        if($country_code){
+            $currency = Currency::where('code',$country_code)->first();
+            if($currency){
+                $price = ($value * $currency->exchange_rate) + $currency->$weight;
+                return $currency->symbol .' ' . $price;
+            }else{
+                return 'EGP ' . $value;
+            }
+        }else{
+            return 'EGP ' . $value;
+        }
     }
-} 
-
+}  
 if (!function_exists('combinations')) {
     function combinations($arrays)
     {

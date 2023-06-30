@@ -46,6 +46,11 @@ class Product extends Model implements HasMedia
         'percent' => 'Percent',
     ];
 
+    public const SPECIAL_SELECT = [
+        1 => 'Yes',
+        0 => 'No',
+    ];
+
     public const VIDEO_PROVIDER_SELECT = [
         'youtube'    => 'Youtube',
         'dailymotion' => 'Dailymotion',
@@ -74,6 +79,7 @@ class Product extends Model implements HasMedia
         'published',
         'featured',
         'todays_deal',
+        'special',
         'variant_product',
         'rating',
         'current_stock',

@@ -11,15 +11,20 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label class="required" for="name">{{ trans('cruds.police.fields.name') }}</label>
-                <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', $police->name) }}" required>
+                <label class="required">{{ trans('cruds.police.fields.name') }}</label>
+                <select class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" id="name" required>
+                    <option value disabled {{ old('name', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    @foreach(App\Models\Police::NAME_SELECT as $key => $label)
+                        <option value="{{ $key }}" {{ old('name', $police->name) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
                 @if($errors->has('name'))
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.police.fields.name_helper') }}</span>
-            </div>
+            </div> 
             <div class="form-group">
                 <label for="content">{{ trans('cruds.police.fields.content') }}</label>
                 <textarea class="form-control ckeditor {{ $errors->has('content') ? 'is-invalid' : '' }}" name="content" id="content">{!! old('content', $police->content) !!}</textarea>

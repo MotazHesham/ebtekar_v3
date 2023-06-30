@@ -1109,6 +1109,26 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'contactu_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'contactu_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'contactu_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'subscribe_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'subscribe_access',
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'profile_password_edit',
             ],
         ];

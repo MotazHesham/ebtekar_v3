@@ -28,7 +28,7 @@
                             {{ trans('cruds.police.fields.name') }}
                         </th>
                         <td>
-                            {{ $police->name }}
+                            {{ $police->name ? \App\Model\Police::NAME_SELECT[$police->name] : '' }}
                         </td>
                     </tr>
                     <tr>
