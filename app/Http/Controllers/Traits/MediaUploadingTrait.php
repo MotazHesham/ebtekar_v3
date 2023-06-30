@@ -36,13 +36,13 @@ trait MediaUploadingTrait
 
         $file = $request->file('file');
 
-        $name = uniqid() . '_' . trim($file->getClientOriginalName());
+        $name = uniqid() . '_' . trim(str_replace("'","-",$file->getClientOriginalName()));
 
         $file->move($path, $name);
 
         return response()->json([
             'name'          => $name,
-            'original_name' => $file->getClientOriginalName(),
+            'original_name' => str_replace("'","-",$file->getClientOriginalName()),
         ]);
     }
 }

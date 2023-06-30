@@ -7,9 +7,10 @@
             $authenticated = $item['manufacturer_id'];
         } elseif ($type == 'prepare') {
             $authenticated = $item['preparer_id'];
-        } elseif ($type == 'send_to_delivery') {
+        } elseif ($type == 'shipment') {
             $authenticated = $item['shipmenter_id'];
-        }
+        } 
+
     @endphp
 
     {{-- order card --}}

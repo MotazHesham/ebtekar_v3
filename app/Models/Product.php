@@ -96,7 +96,7 @@ class Product extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')->fit('crop', 50, 50);
         $this->addMediaConversion('preview')->fit('crop', 120, 120);
-        $this->addMediaConversion('preview2')->fit('crop', 700, 600);
+        $this->addMediaConversion('preview2')->fit('crop', 900, 1100);
     }
 
     public function getPhotosAttribute()
@@ -119,6 +119,11 @@ class Product extends Model implements HasMedia
     public function stocks()
     {
         return $this->hasMany(ProductStock::class, 'product_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'product_id');
     }
     
     public function user()
@@ -144,5 +149,18 @@ class Product extends Model implements HasMedia
     public function design()
     {
         return $this->belongsTo(Designe::class, 'design_id');
+    }
+    
+    //operations
+    public function calc_discount($unit_price)
+    {
+        if ($this->discount > 0) {
+            if ($this->discount_type == 'flat') {
+                return $unit_price - $this->discount;
+            } elseif ($this->discount_type == 'percent') {
+                $amount = ($unit_price / 100) * $this->discount;
+                return $unit_price - $amount;
+            }
+        }
     }
 }

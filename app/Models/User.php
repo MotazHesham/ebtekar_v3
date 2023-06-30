@@ -94,7 +94,7 @@ class User extends Authenticatable implements HasMedia
                 $user->verified    = 1;
                 $user->verified_at = Carbon::now()->format(config('panel.date_format') . ' ' . config('panel.time_format'));
                 $user->save();
-            } elseif (! $user->verification_token) {
+            } elseif (!$user->verification_token) {
                 $token     = Str::random(64);
                 $usedToken = self::where('verification_token', $token)->first();
 
@@ -107,7 +107,7 @@ class User extends Authenticatable implements HasMedia
                 $user->save();
 
                 $registrationRole = config('panel.registration_default_role');
-                if (! $user->roles()->get()->contains($registrationRole)) {
+                if (!$user->roles()->get()->contains($registrationRole)) {
                     $user->roles()->attach($registrationRole);
                 }
 
@@ -174,5 +174,60 @@ class User extends Authenticatable implements HasMedia
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function conversations()
+    {
+        return $this->hasMany(Conversation::class, 'sender_id');
+    }
+
+    public function conversations_2()
+    {
+        return $this->hasMany(Conversation::class, 'receiver_id');
+    }
+
+    public function staff()
+    {
+        return $this->hasOne(Staff::class);
+    }
+
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function social_orders()
+    {
+        return $this->hasMany(Order::class, 'social_user_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function calenders()
+    {
+        return $this->hasMany(Calender::class);
     }
 }

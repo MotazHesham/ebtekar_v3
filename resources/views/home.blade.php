@@ -48,7 +48,7 @@
                     <div class="{{ $chart5->options['column_class'] }}">
                         <div class="card">
                             <div class="card-body">
-                                <h3>{!! $chart5->options['chart_title'] !!}</h3>
+                                <h5>{!! $chart5->options['chart_title'] !!}</h5>
                                 {!! $chart5->renderHtml() !!}
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                     <div class="{{ $chart6->options['column_class'] }}">
                         <div class="card">
                             <div class="card-body">
-                                <h3>{!! $chart6->options['chart_title'] !!}</h3>
+                                <h5>{!! $chart6->options['chart_title'] !!}</h5>
                                 {!! $chart6->renderHtml() !!}
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                     <div class="{{ $chart05->options['column_class'] }}">
                         <div class="card">
                             <div class="card-body">
-                                <h3>{!! $chart05->options['chart_title'] !!}</h3>
+                                <h5>{!! $chart05->options['chart_title'] !!}</h5>
                                 {!! $chart05->renderHtml() !!} 
                             </div>
                         </div>
