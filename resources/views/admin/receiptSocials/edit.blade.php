@@ -76,7 +76,7 @@
 
                                 <div class="form-group">
                                     <label class="required"
-                                        for="shipping_country_id">{{ trans('cruds.receiptSocial.fields.shipping_country') }}</label>
+                                        for="shipping_country_id">{{ trans('cruds.receiptSocial.fields.shipping_country_id') }}</label>
                                     <select
                                         class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
                                         name="shipping_country_id" id="shipping_country_id" required>
@@ -92,7 +92,7 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.shipping_country_helper') }}</span>
+                                        class="help-block">{{ trans('cruds.receiptSocial.fields.shipping_country_id_helper') }}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
