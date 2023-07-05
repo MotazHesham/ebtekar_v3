@@ -59,10 +59,12 @@ if (!function_exists('front_calc_product_currency')) {
     {
         $currency = session('currency');
         if($currency){
-            $price = ($value / $currency->exchange_rate) + $currency->$weight;
+            $product_price = exchange_rate($value,$currency->exchange_rate);
+            $product_weight = exchange_rate($currency->$weight,$currency->exchange_rate);
+            $price = $product_price + $product_weight; 
             return [
-                'as_text' => $currency->symbol . ' ' . round($price),
-                'value' => round($price),
+                'as_text' => $currency->symbol . ' ' . $price,
+                'value' => $price,
                 'symbol' =>  ' ' . $currency->symbol,
             ];
         }else{
@@ -74,6 +76,15 @@ if (!function_exists('front_calc_product_currency')) {
         } 
     }
 }    
+
+if (!function_exists('exchange_rate')) {
+    function exchange_rate($value,$exchange_rate){
+        if($exchange_rate == 0){
+            $exchange_rate = 1;
+        }
+        return round($value / $exchange_rate,2); 
+    }
+}
 
 if (!function_exists('get_currency_info')) {
     function get_currency_info($value,$weight)

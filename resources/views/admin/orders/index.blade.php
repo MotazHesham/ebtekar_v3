@@ -170,18 +170,18 @@
                             </td>
                             <td>
                                 <div style="display:flex;justify-content:space-between">
-                                    @if($order->deposit_amount)
+                                    @if($order->deposit_amount > 0)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
                                             {{ trans('cruds.order.fields.deposit_amount') }}
                                             <br>
-                                            {{ dashboard_currency($order->deposit_amount) }}
+                                            {{ exchange_rate($order->deposit_amount,$order->exchange_rate) }} {{ $order->symbol }}
                                         </span>
                                     @endif
-                                    @if($order->extra_commission)
+                                    @if($order->extra_commission > 0)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
                                             {{ trans('cruds.order.fields.extra_commission') }}
                                             <br>
-                                            {{ dashboard_currency($order->extra_commission) }}
+                                            {{ exchange_rate($order->extra_commission,$order->exchange_rate) }} {{ $order->symbol }}
                                         </span>
                                     @endif
                                 </div>
@@ -189,25 +189,25 @@
                                     <span class="badge rounded-pill text-bg-light  mb-1">
                                         {{ trans('cruds.order.fields.shipping_country_cost') }}
                                         <br>
-                                        {{ dashboard_currency($order->shipping_country_cost) }}
+                                        {{ exchange_rate($order->shipping_country_cost,$order->exchange_rate) }} {{ $order->symbol }}
                                     </span>
                                     <span class="badge rounded-pill text-bg-light  mb-1">
                                         {{ trans('cruds.order.fields.total_cost') }}
                                         <br>
-                                        {{ dashboard_currency($order->total_cost) }}
+                                        {{ exchange_rate($order->total_cost,$order->exchange_rate) }} {{ $order->symbol }}
                                     </span>
                                 </div>
                                 
                                 <div style="display:flex;justify-content:center">
-                                    @if($order->discount)
+                                    @if($order->discount > 0)
                                         <span class="badge rounded-pill text-bg-info  mb-1">
                                             {{ trans('cruds.order.fields.discount') }}
                                             <br>
-                                            {{ dashboard_currency($order->discount) }}
+                                            {{ exchange_rate($order->discount,$order->exchange_rate) }} {{ $order->symbol }}
                                         </span>
                                     @endif
                                     <span class="badge rounded-pill text-bg-success text-white mb-1"> 
-                                        = {{ dashboard_currency($order->calc_total_for_client()) }}
+                                        = {{ exchange_rate($order->calc_total_for_client(),$order->exchange_rate)  }} {{ $order->symbol }}
                                     </span>
                                 </div> 
                             </td>

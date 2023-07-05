@@ -12,7 +12,8 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->string('paymob_orderid')->nullable();
             $table->string('order_type');
-            $table->string('symbol')->nullable(); 
+            $table->decimal('exchange_rate', 15, 2);
+            $table->string('symbol'); 
             $table->string('order_num')->nullable();
             $table->string('client_name');
             $table->string('phone_number');

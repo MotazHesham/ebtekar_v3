@@ -51,6 +51,9 @@
                     @endif
                     <span class="help-block">{{ trans('cruds.currency.fields.code_helper') }}</span>
                 </div>
+                <div class="form-group col-md-12"> 
+                    <h2 class="help-block">{{ trans('cruds.currency.fields.half_kg_helper') }}</h2>
+                </div>
                 <div class="form-group col-md-2">
                     <label class="required" for="half_kg">{{ trans('cruds.currency.fields.half_kg') }}</label>
                     <input class="form-control {{ $errors->has('half_kg') ? 'is-invalid' : '' }}" type="number" name="half_kg" id="half_kg" value="{{ old('half_kg', '') }}" step="0.01" required>
@@ -59,7 +62,6 @@
                             {{ $errors->first('half_kg') }}
                         </div>
                     @endif
-                    <span class="help-block">{{ trans('cruds.currency.fields.half_kg_helper') }}</span>
                 </div>
                 <div class="form-group col-md-2">
                     <label class="required" for="one_kg">{{ trans('cruds.currency.fields.one_kg') }}</label>
@@ -68,8 +70,7 @@
                         <div class="invalid-feedback">
                             {{ $errors->first('one_kg') }}
                         </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.currency.fields.one_kg_helper') }}</span>
+                    @endif 
                 </div>
                 <div class="form-group col-md-2">
                     <label class="required" for="one_half_kg">{{ trans('cruds.currency.fields.one_half_kg') }}</label>
@@ -78,8 +79,7 @@
                         <div class="invalid-feedback">
                             {{ $errors->first('one_half_kg') }}
                         </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.currency.fields.one_half_kg_helper') }}</span>
+                    @endif 
                 </div>
                 <div class="form-group col-md-2">
                     <label class="required" for="two_kg">{{ trans('cruds.currency.fields.two_kg') }}</label>
@@ -88,8 +88,7 @@
                         <div class="invalid-feedback">
                             {{ $errors->first('two_kg') }}
                         </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.currency.fields.two_kg_helper') }}</span>
+                    @endif 
                 </div>
                 <div class="form-group col-md-2">
                     <label class="required" for="two_half_kg">{{ trans('cruds.currency.fields.two_half_kg') }}</label>
@@ -98,8 +97,7 @@
                         <div class="invalid-feedback">
                             {{ $errors->first('two_half_kg') }}
                         </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.currency.fields.two_half_kg_helper') }}</span>
+                    @endif 
                 </div>
                 <div class="form-group col-md-2">
                     <label class="required" for="three_kg">{{ trans('cruds.currency.fields.three_kg') }}</label>
@@ -108,8 +106,7 @@
                         <div class="invalid-feedback">
                             {{ $errors->first('three_kg') }}
                         </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.currency.fields.three_kg_helper') }}</span>
+                    @endif 
                 </div>
             </div>
             <div class="form-group">

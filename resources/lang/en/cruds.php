@@ -377,8 +377,8 @@ return [
         ],
     ],
     'receiptCompany' => [
-        'title'          => trans('panel.receiptCompany.title'),
-        'title_singular' => trans('panel.receiptCompany.title_singular'),
+        'title'          => 'فواتير أخري',
+        'title_singular' => 'فاتورة أخري',
         'extra' => [
             'chart_by_month' => 'أحصائيات فواتير أبتكار هذه السنة'
         ],
@@ -910,7 +910,7 @@ return [
             'code'                 => 'الكود',
             'code_helper'          => ' ',
             'half_kg'              => '0.5 KG',
-            'half_kg_helper'       => ' ',
+            'half_kg_helper'       => 'بالجنيه المصري',
             'one_kg'               => '1.0 KG',
             'one_kg_helper'        => ' ',
             'one_half_kg'          => '1.5 KG',
@@ -1237,7 +1237,7 @@ return [
             'attribute_options_helper'   => ' ',
             'colors'                  => 'الألوان',
             'colors_helper'           => ' ',
-            'tags'                    => 'العلامات',
+            'tags'                    => 'الكلمات الدالة',
             'tags_helper'             => ' ',
             'video_provider'          => 'موفر الفيديو',
             'video_provider_helper'   => ' ',

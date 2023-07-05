@@ -91,6 +91,7 @@ class Order extends Model
     protected $fillable = [
         'paymob_orderid',
         'order_type',
+        'exchange_rate',
         'symbol',
         'order_num',
         'client_name',

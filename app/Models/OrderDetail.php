@@ -23,6 +23,7 @@ class OrderDetail extends Model
         'total_cost', 
         'quantity', 
         'price', 
+        'weight_price', 
         'photos',  
         'link', 
         'pdf', 
@@ -46,4 +47,12 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Product::class);
     } 
+
+    //calculation 
+    public function calc_price($exchange_rate){
+        return exchange_rate($this->price,$exchange_rate) + exchange_rate($this->weight_price,$exchange_rate);
+    }
+    public function total_cost($exchange_rate){
+        return exchange_rate($this->total_cost,$exchange_rate);
+    }
 }

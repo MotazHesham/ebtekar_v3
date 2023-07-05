@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('quantity');
             $table->decimal('price', 15, 2);
+            $table->decimal('weight_price', 15, 2);
             $table->decimal('total_cost', 15, 2);
             $table->decimal('commission', 15, 2);
             $table->text('photos')->nullable();

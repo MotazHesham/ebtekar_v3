@@ -86,16 +86,17 @@ class CheckoutController extends Controller
             if ($request->payment_option != null) {
 
                 if($user && $user->user_type == 'seller'){
-                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','seller')->where('website_setting_1',$site_settings->id)->latest()->first()->order_num ?? 0;
+                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','seller')->where('website_setting_id',$site_settings->id)->latest()->first()->order_num ?? 0;
                 }else{
-                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','customer')->where('website_setting_1',$site_settings->id)->latest()->first()->order_num ?? 0;
+                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','customer')->where('website_setting_id',$site_settings->id)->latest()->first()->order_num ?? 0;
                 }
                 $last_order_code = intval(str_replace('#','',strrchr($code_z,"#")));
 
 
                 $order = new Order;
                 $country = Country::findOrFail($request->country_id);
-
+                $currency = session('currency');
+                
                 $order->user_id  = $user->id ?? null;
                 $order->shipping_country_id  = $country->id; 
                 $order->website_setting_id  = $site_settings->id; 
@@ -104,6 +105,8 @@ class CheckoutController extends Controller
                 $order->phone_number_2  = $request->phone_number_2;
                 $order->shipping_address = $request->shipping_address;
                 $order->payment_type = $request->payment_option;
+                $order->symbol = $currency->symbol;
+                $order->exchange_rate = $currency->exchange_rate;
 
                 if($user && $user->user_type == 'seller'){
                     $order->client_name = $request->client_name;
@@ -147,6 +150,7 @@ class CheckoutController extends Controller
                     $product = Product::findOrFail($cartItem['product_id']);
                     $product->num_of_sale += $cartItem['quantity'];
                     $product->save();
+                    $weight = $product->weight;
 
                     if($product->variant_product == 1 && $cartItem['variation'] != null){
                         //remove requested quantity from stock
@@ -161,24 +165,26 @@ class CheckoutController extends Controller
                         $product->save();
                     }
 
-                    $prices = product_price_in_cart($cartItem['quantity'],$cartItem['variation'],$product);
-                    $total_cost += ($prices['price']['value'] * $cartItem['quantity'] );
+                    $price = $product->calc_price_for_cart($cartItem['variation']);
+                    $calc_total_for_product= ($price + $currency->$weight) * $cartItem['quantity']  ;
+                    $total_cost += $calc_total_for_product;
 
                     
 
                     //add commission to seller
-                    $total_commission += $prices['commission']; 
+                    $total_commission += 0; 
                     $order_items [] = [
                         'order_id' => $order->id,
                         'product_id' => $cartItem['product_id'],
                         'variation' => $cartItem['variation'],
                         'link' => $cartItem['link'],
                         'description' => $cartItem['description'],
-                        'commission' => $prices['commission'] ?? 0,
+                        'commission' => 0 ?? 0,
                         'email_sent' => $cartItem['email_sent'] ?? 0,
                         'quantity' => $cartItem['quantity'],
-                        'price' => $prices['price']['value'],
-                        'total_cost' => $total_cost,
+                        'price' => $price,
+                        'weight_price' =>  $currency->$weight,
+                        'total_cost' => $calc_total_for_product,
                         'photos' => $cartItem['photos'] ?? null, 
                         'pdf' => $cartItem['pdf'] ?? null,
                     ];
@@ -200,7 +206,6 @@ class CheckoutController extends Controller
                         throw ValidationException::withMessages(['discount_code' => 'Discount Code Faild']);
                     }
                 }
-                $order->symbol = $prices['price']['symbol'];
                 $order->commission = $total_commission;
                 $order->total_cost = $total_cost;
                 $order->save();

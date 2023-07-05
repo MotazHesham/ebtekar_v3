@@ -152,9 +152,9 @@
                                             <td>{{ $orderDetail->product ?  $orderDetail->product->name : ''}}</td>
                                             <td>
                                                 <span class="badge badge-dark">{{ trans('cruds.order.extra.quantity') }} {{ $orderDetail->quantity }}</span>
-                                                <span class="badge badge-dark">{{ trans('cruds.order.extra.price') }} {{ dashboard_currency($orderDetail->price) }}</span>
+                                                <span class="badge badge-dark">{{ trans('cruds.order.extra.price') }} {{ $orderDetail->calc_price($order->exchange_rate) }} {{ $order->symbol }}</span>
                                                 <br>
-                                                <span class="badge badge-success">{{ trans('cruds.order.extra.total_cost') }} {{ dashboard_currency($orderDetail->total_cost) }}</span>
+                                                <span class="badge badge-success">{{ trans('cruds.order.extra.total_cost') }} {{ $orderDetail->total_cost($order->exchange_rate) }} {{ $order->symbol }}</span>
         
                                             </td>
                                             <td>{{ dashboard_currency($orderDetail->commission) }}</td>
@@ -186,7 +186,7 @@
                                             <strong>{{ trans('cruds.order.extra.sub_total') }} :</strong>
                                         </td>
                                         <td>
-                                            + {{ dashboard_currency($order->total_cost) }}
+                                            + {{ exchange_rate($order->total_cost,$order->exchange_rate) }} {{ $order->symbol }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -194,7 +194,7 @@
                                             <strong>{{ trans('cruds.order.fields.extra_commission') }} :</strong>
                                         </td>
                                         <td>
-                                            + {{ dashboard_currency($order->extra_commission) }}
+                                            + {{ exchange_rate($order->extra_commission,$order->exchange_rate) }} {{ $order->symbol }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -202,7 +202,7 @@
                                             <strong>{{ trans('cruds.order.fields.deposit_amount') }} :</strong>
                                         </td>
                                         <td>
-                                            - {{ dashboard_currency($order->deposit_amount) }}
+                                            - {{ exchange_rate($order->deposit_amount,$order->exchange_rate) }} {{ $order->symbol }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -210,7 +210,7 @@
                                             <strong>{{ trans('cruds.order.extra.shipping_country_cost') }} :</strong>
                                         </td>
                                         <td>
-                                            + {{ dashboard_currency($order->shipping_country_cost) }}
+                                            + {{ exchange_rate($order->shipping_country_cost,$order->exchange_rate) }} {{ $order->symbol }}
                                         </td>
                                     </tr>
                                     <tr style="background: #34828285">
@@ -218,13 +218,13 @@
                                             <strong>{{ trans('cruds.order.fields.total_cost') }} :</strong>
                                         </td>
                                         <td class="text-bold h4">
-                                            = {{ dashboard_currency($order->calc_total_for_client()) }}
+                                            = {{ exchange_rate($order->calc_total_for_client(),$order->exchange_rate) }} {{ $order->symbol }}
                                             @if($order->discount_code != null)
                                                 <br>
                                                 <span class="badge badge-purple">
                                                     كود الخصم {{ $order->discount_code }}
                                                     /
-                                                    {{ dashboard_currency($order->calc_discount()) }}
+                                                    {{ exchange_rate($order->calc_discount(),$order->exchange_rate) }} {{ $order->symbol }}
                                                 </span>
                                             @endif
                                         </td>

@@ -910,7 +910,7 @@ return [
             'code'                 => 'الكود',
             'code_helper'          => ' ',
             'half_kg'              => '0.5 KG',
-            'half_kg_helper'       => ' ',
+            'half_kg_helper'       => 'هااام:جميع الأوزان تدخل بالجنيه المصري',
             'one_kg'               => '1.0 KG',
             'one_kg_helper'        => ' ',
             'one_half_kg'          => '1.5 KG',
