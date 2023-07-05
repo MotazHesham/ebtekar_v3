@@ -186,6 +186,14 @@
                 $(this).val(englishValue);
             });
         });
+        
+        //perevent submittig multiple times
+        $("body").on("submit", "form", function() {
+            $(this).submit(function() {
+                return false;
+            });
+            return true;
+        });
 
         function get_categories_by_website(call_others = null){
             var website_setting_id = $('#website_setting_id').val();

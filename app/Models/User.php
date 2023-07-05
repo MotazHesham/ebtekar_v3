@@ -71,6 +71,7 @@ class User extends Authenticatable implements HasMedia
         'device_token',
         'email_verified_at',
         'remember_token',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',

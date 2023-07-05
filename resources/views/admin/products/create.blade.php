@@ -42,7 +42,7 @@
                                 <select class="form-control {{ $errors->has('special') ? 'is-invalid' : '' }}" name="special" id="special" required>
                                     <option value disabled {{ old('special', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
                                     @foreach(App\Models\Product::SPECIAL_SELECT as $key => $label)
-                                        <option value="{{ $key }}" {{ old('special', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                                        <option value="{{ $key }}" {{ old('special', '') ==  $key ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
                                 </select>
                                 @if($errors->has('special'))

@@ -46,7 +46,7 @@
                         <div class="row mb-3">
                             @foreach($websites as $id => $entry)
                                 <div class="form-check form-check-inline col">
-                                    <input class="form-check-input" type="radio" name="website_setting_id" id="{{$id}}" value="{{$id}}" required @if($loop->first) checked @endif>
+                                    <input class="form-check-input" type="radio" name="website_setting_id" id="{{$id}}" value="{{$id}}" required @if($id == auth()->user()->website_setting_id) checked @endif>
                                     <label class="form-check-label" for="{{$id}}">{{$entry}}</label>
                                 </div>
                             @endforeach 

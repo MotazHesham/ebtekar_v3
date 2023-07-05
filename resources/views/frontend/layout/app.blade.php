@@ -379,6 +379,14 @@
 
     <script>
 
+        //perevent submittig multiple times
+        $("body").on("submit", "form", function() {
+            $(this).submit(function() {
+                return false;
+            });
+            return true;
+        });
+        
         var photo_id = 2;
         function add_more_slider_image(){
             var photoAdd =  '<div class="row">'; 
