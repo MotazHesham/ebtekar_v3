@@ -11,13 +11,20 @@ class ReceiptSocialObserver
     public function creating(ReceiptSocial $receiptSocial){
         
         // Getting next Order Num
-        $last_receipt_social = ReceiptSocial::latest()->first();
+        $last_receipt_social = ReceiptSocial::where('website_setting_id',$receiptSocial->website_setting_id)->latest()->first();
         if ($last_receipt_social) {
             $order_num = $last_receipt_social->order_num ? intval(str_replace('#', '', strrchr($last_receipt_social->order_num, "#"))) : 0;
         } else {
             $order_num = 0;
+        } 
+        if($receiptSocial->website_setting_id == 2){
+            $str = 'ertegal-';
+        }elseif($receiptSocial->website_setting_id == 3){
+            $str = 'figures-';
+        }else{ 
+            $str = 'ebtekar-';
         }
-        $receiptSocial->order_num = 'receipt-social#' . ($order_num + 1);
+        $receiptSocial->order_num = $str . 'social#' . ($order_num + 1);
 
         // Assign the Creator Of The Receipt
         $receiptSocial->staff_id = Auth::id(); 

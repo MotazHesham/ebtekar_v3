@@ -28,6 +28,9 @@
                             <th>
                                 {{ trans('cruds.homeCategory.fields.category') }}
                             </th>
+                        <th>
+                            {{ trans('global.extra.website_setting_id') }}
+                        </th>
                             <th>
                                 &nbsp;
                             </th>
@@ -44,7 +47,10 @@
                                 </td>
                                 <td>
                                     {{ $homeCategory->category->name ?? '' }}
-                                </td>
+                                </td> 
+                                <td>
+                                    {{ $homeCategory->website->site_name ?? '' }}
+                                </td> 
                                 <td>
                                     @can('home_category_show')
                                         <a class="btn btn-xs btn-primary"

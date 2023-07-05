@@ -40,6 +40,7 @@ class ReceiptPriceView extends Model
         'added_value',
         'printing_times',
         'staff_id',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -69,6 +70,9 @@ class ReceiptPriceView extends Model
         return $this->belongsTo(User::class, 'staff_id');
     }
 
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+    }
 	// operations
 	public function calc_added_value(){ 
 		return round( ( ($this->total_cost * 14) / 100 ) , 2);

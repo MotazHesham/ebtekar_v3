@@ -11,13 +11,20 @@ class ReceiptClientObserver
     public function creating(ReceiptClient $receiptClient){
         
         // Getting next Order Num
-        $last_receipt_client = ReceiptClient::latest()->first();
+        $last_receipt_client = ReceiptClient::where('website_setting_id',$receiptClient->website_setting_id)->latest()->first();
         if ($last_receipt_client) {
             $order_num = $last_receipt_client->order_num ? intval(str_replace('#', '', strrchr($last_receipt_client->order_num, "#"))) : 0;
         } else {
             $order_num = 0;
         }
-        $receiptClient->order_num = 'receipt-client#' . ($order_num + 1);
+        if($receiptClient->website_setting_id == 2){
+            $str = 'ertegal-';
+        }elseif($receiptClient->website_setting_id == 3){
+            $str = 'figures-';
+        }else{ 
+            $str = 'ebtekar-';
+        }
+        $receiptClient->order_num = $str . 'client#' . ($order_num + 1);
 
         // Assign the Creator Of The Receipt
         $receiptClient->staff_id = Auth::id();  

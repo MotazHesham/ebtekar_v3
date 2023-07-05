@@ -35,6 +35,7 @@ class Banner extends Model implements HasMedia
         'url',
         'position',
         'published',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -61,5 +62,9 @@ class Banner extends Model implements HasMedia
         }
 
         return $file;
+    }
+
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
 }

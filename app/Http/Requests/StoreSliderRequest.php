@@ -24,6 +24,10 @@ class StoreSliderRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'website_setting_id' => [
+                'required',
+                'integer',
+            ], 
         ];
     }
 }

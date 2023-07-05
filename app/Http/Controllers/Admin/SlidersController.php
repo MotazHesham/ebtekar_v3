@@ -7,7 +7,8 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroySliderRequest;
 use App\Http\Requests\StoreSliderRequest;
 use App\Http\Requests\UpdateSliderRequest;
-use App\Models\Slider; 
+use App\Models\Slider;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -32,7 +33,7 @@ class SlidersController extends Controller
         abort_if(Gate::denies('slider_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Slider::query()->select(sprintf('%s.*', (new Slider)->table));
+            $query = Slider::query()->select(sprintf('%s.*', (new Slider)->table))->with('website');
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -78,7 +79,10 @@ class SlidersController extends Controller
                 return $row->link ? $row->link : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'photo', 'published']);
+            $table->editColumn('website_site_name', function ($row) { 
+                return $row->website->site_name ?? '';
+            });
+            $table->rawColumns(['actions', 'placeholder', 'photo', 'published','website_site_name']);
 
             return $table->make(true);
         }
@@ -90,7 +94,9 @@ class SlidersController extends Controller
     {
         abort_if(Gate::denies('slider_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.sliders.create');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        
+        return view('admin.sliders.create',compact('websites'));
     }
 
     public function store(StoreSliderRequest $request)
@@ -113,7 +119,9 @@ class SlidersController extends Controller
     {
         abort_if(Gate::denies('slider_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.sliders.edit', compact('slider'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+
+        return view('admin.sliders.edit', compact('slider','websites'));
     }
 
     public function update(UpdateSliderRequest $request, Slider $slider)

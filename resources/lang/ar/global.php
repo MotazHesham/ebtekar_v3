@@ -366,6 +366,7 @@ return [
         'photo_note' => 'ملحوظة علي الصورة',
         'add_more' => 'أضف المزيد', 
         'delete_photo' => 'حذف الصورة', 
+        'website_setting_id' => 'الموقع', 
     ],
 
     'delivery_status' => [

@@ -12,6 +12,8 @@ class CreatePolicesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->longText('content');
+            $table->unsignedBigInteger('website_setting_id')->nullable();
+            $table->foreign('website_setting_id', 'website_setting_fk_8598748')->references('id')->on('website_settings');
             $table->timestamps();
             $table->softDeletes();
         });

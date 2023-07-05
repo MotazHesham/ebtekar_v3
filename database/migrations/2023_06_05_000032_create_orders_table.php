@@ -12,6 +12,7 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->string('paymob_orderid')->nullable();
             $table->string('order_type');
+            $table->string('symbol')->nullable(); 
             $table->string('order_num')->nullable();
             $table->string('client_name');
             $table->string('phone_number');
@@ -47,6 +48,8 @@ class CreateOrdersTable extends Migration
             $table->longText('note')->nullable();
             $table->longText('cancel_reason')->nullable();
             $table->longText('delay_reason')->nullable();
+            $table->unsignedBigInteger('website_setting_id')->nullable();
+            $table->foreign('website_setting_id', 'website_setting_fk_8595461')->references('id')->on('website_settings');
             $table->timestamps();
             $table->softDeletes();
         });

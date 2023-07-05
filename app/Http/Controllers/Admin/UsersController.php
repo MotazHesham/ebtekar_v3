@@ -8,7 +8,8 @@ use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
-use App\Models\User; 
+use App\Models\User;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -95,7 +96,9 @@ class UsersController extends Controller
 
         $roles = Role::pluck('title', 'id');
 
-        return view('admin.users.create', compact('roles'));
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+
+        return view('admin.users.create', compact('roles','websites'));
     }
 
     public function store(StoreUserRequest $request)
@@ -122,7 +125,9 @@ class UsersController extends Controller
 
         $user->load('roles');
 
-        return view('admin.users.edit', compact('roles', 'user'));
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+
+        return view('admin.users.edit', compact('roles', 'user','websites'));
     }
 
     public function update(UpdateUserRequest $request, User $user)

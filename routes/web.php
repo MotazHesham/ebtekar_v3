@@ -112,10 +112,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('receipt-companies/ckmedia', 'ReceiptCompanyController@storeCKEditorImages')->name('receipt-companies.storeCKEditorImages');
     Route::resource('receipt-companies', 'ReceiptCompanyController');
 
-    // General Settings
-    Route::post('general-settings/media', 'GeneralSettingsController@storeMedia')->name('general-settings.storeMedia');
-    Route::post('general-settings/ckmedia', 'GeneralSettingsController@storeCKEditorImages')->name('general-settings.storeCKEditorImages');
-    Route::resource('general-settings', 'GeneralSettingsController', ['except' => ['create', 'store', 'destroy']]);
+    // Website Settings
+    Route::post('website-settings/get_categories_by_website', 'WebsiteSettingsController@get_categories_by_website')->name('website-settings.get_categories_by_website');
+    Route::post('website-settings/get_sub_categories_by_website', 'WebsiteSettingsController@get_sub_categories_by_website')->name('website-settings.get_sub_categories_by_website');
+    Route::post('website-settings/media', 'WebsiteSettingsController@storeMedia')->name('website-settings.storeMedia');
+    Route::post('website-settings/ckmedia', 'WebsiteSettingsController@storeCKEditorImages')->name('website-settings.storeCKEditorImages');
+    Route::resource('website-settings', 'WebsiteSettingsController', ['except' => ['destroy']]);
 
     // Customers
     Route::delete('customers/destroy', 'CustomersController@massDestroy')->name('customers.massDestroy');
@@ -195,10 +197,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('quality-responsibles/media', 'QualityResponsibleController@storeMedia')->name('quality-responsibles.storeMedia');
     Route::post('quality-responsibles/ckmedia', 'QualityResponsibleController@storeCKEditorImages')->name('quality-responsibles.storeCKEditorImages');
     Route::resource('quality-responsibles', 'QualityResponsibleController');
-
-    // Seo Settings
-    Route::delete('seo-settings/destroy', 'SeoSettingsController@massDestroy')->name('seo-settings.massDestroy');
-    Route::resource('seo-settings', 'SeoSettingsController');
 
     // Currencies
     Route::delete('currencies/destroy', 'CurrenciesController@massDestroy')->name('currencies.massDestroy');

@@ -108,7 +108,7 @@
                     <a class="dropdown-item" href="{{ route("admin.currencies.index") }}">
                         Currencies <i class="fas fa-hand-holding-usd"> </i>
                     </a> 
-                    <a class="dropdown-item" href="{{ route("admin.general-settings.index") }}">
+                    <a class="dropdown-item" href="{{ route("admin.website-settings.index") }}">
                         Settings <i class="fas fa-cog"></i>
                     </a>
                 <div class="dropdown-divider"></div> 
@@ -293,4 +293,4 @@
             </div><small class="text-medium-emphasis">25GB/256GB</small> --}}
         </div>
     </div>
-</div>
+</div> 

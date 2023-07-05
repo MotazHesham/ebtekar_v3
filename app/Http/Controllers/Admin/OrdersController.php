@@ -33,13 +33,12 @@ class OrdersController extends Controller
     }
 
     public function print($id){
-        $orders = Order::with('orderDetails','user')->whereIn('id',[$id])->get();
-        $generalsetting = GeneralSetting::first();
+        $orders = Order::with('orderDetails','user')->whereIn('id',[$id])->get(); 
         foreach($orders as $order){
             $order->printing_times += 1;
             $order->save();
         }
-        return view('admin.orders.print',compact('orders','generalsetting'));
+        return view('admin.orders.print',compact('orders'));
     }
 
     public function update_delivery_man(Request $request){ 
@@ -261,12 +260,11 @@ class OrdersController extends Controller
 
         if ($request->has('print')) {
             $orders = $orders->with('orderDetails.product')->get();
-            $generalsetting = GeneralSetting::first();
             foreach($orders as $order){
                 $order->printing_times += 1;
                 $order->save();
             }
-            return view('admin.orders.print', compact('orders','generalsetting'));
+            return view('admin.orders.print', compact('orders'));
         }
 
         $statistics = [
@@ -334,15 +332,15 @@ class OrdersController extends Controller
 
         $order->load('user','orderDetails.product', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man');
 
-        $general_settings = GeneralSetting::first();
+        $site_settings = get_site_setting(); 
         
-        if($general_settings->delivery_system == 'wasla'){
+        if($site_settings->delivery_system == 'wasla'){
             $waslaController = new WaslaController;
             $response = $waslaController->countries();
         }else{
             $response = '';
         }
-        return view('admin.orders.show', compact('order','general_settings','response'));
+        return view('admin.orders.show', compact('order','site_settings','response'));
     }
 
     public function destroy(Order $order)

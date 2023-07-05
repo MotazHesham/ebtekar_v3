@@ -44,7 +44,7 @@
                                     @php
                                         $image = '';
                                         $product = $orderDetail->product;
-                                        $image = $product->photos[0] ? $product->photos[0]->getUrl('preview2') : ''; 
+                                        $image = isset($product->photos[0]) ? $product->photos[0]->getUrl('preview2') : ''; 
                                     @endphp
                                     <tr>
                                         <td>
@@ -56,7 +56,7 @@
                                                 <br>{{$product->name ?? ''}}</a>
                                         </td>
                                         <td>
-                                            <b>{{ front_currency($orderDetail->total_cost) }}</b>
+                                            <b>{{ $orderDetail->total_cost }} {{ $orderDetail->order->symbol }}</b>
                                         </td>
                                         <td>
                                             <span>العدد: {{ $orderDetail->quantity }}</span>
@@ -65,7 +65,7 @@
                                         </td>
                                         <td>
                                             <div class="responsive-data">
-                                                <b>{{ front_currency($orderDetail->total_cost) }}</b>
+                                                <b>{{ $orderDetail->total_cost }} {{ $orderDetail->order->symbol }}</b>
                                                 <br>
                                                 <span> {{ $orderDetail->variation }} </span> | العدد: {{ $orderDetail->quantity }}</span>
                                             </div>

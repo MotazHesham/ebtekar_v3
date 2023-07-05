@@ -7,7 +7,8 @@ use App\Http\Requests\MassDestroySubSubCategoryRequest;
 use App\Http\Requests\StoreSubSubCategoryRequest;
 use App\Http\Requests\UpdateSubSubCategoryRequest;
 use App\Models\SubCategory;
-use App\Models\SubSubCategory; 
+use App\Models\SubSubCategory;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class SubSubCategoryController extends Controller
         abort_if(Gate::denies('sub_sub_category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = SubSubCategory::with(['sub_category'])->select(sprintf('%s.*', (new SubSubCategory)->table));
+            $query = SubSubCategory::with(['sub_category'])->select(sprintf('%s.*', (new SubSubCategory)->table))->with('website');
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -58,7 +59,10 @@ class SubSubCategoryController extends Controller
                 return $row->sub_category ? $row->sub_category->name : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'sub_category']);
+            $table->editColumn('website_site_name', function ($row) { 
+                return $row->website->site_name ?? '';
+            });
+            $table->rawColumns(['actions', 'placeholder', 'sub_category','website_site_name']);
 
             return $table->make(true);
         }
@@ -68,11 +72,11 @@ class SubSubCategoryController extends Controller
 
     public function create()
     {
-        abort_if(Gate::denies('sub_sub_category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('sub_sub_category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
 
-        $sub_categories = SubCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        return view('admin.subSubCategories.create', compact('sub_categories'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        
+        return view('admin.subSubCategories.create', compact( 'websites'));
     }
 
     public function store(StoreSubSubCategoryRequest $request)
@@ -89,11 +93,13 @@ class SubSubCategoryController extends Controller
     {
         abort_if(Gate::denies('sub_sub_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $sub_categories = SubCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $sub_categories = SubCategory::where('website_setting_id',$subSubCategory->website_setting_id)->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $subSubCategory->load('sub_category');
 
-        return view('admin.subSubCategories.edit', compact('subSubCategory', 'sub_categories'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+
+        return view('admin.subSubCategories.edit', compact('subSubCategory', 'sub_categories','websites'));
     }
 
     public function update(UpdateSubSubCategoryRequest $request, SubSubCategory $subSubCategory)

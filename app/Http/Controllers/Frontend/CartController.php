@@ -11,52 +11,24 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    public function index(){
-        $cart = Cart::with('product')->where('user_id',Auth::id())->orderBy('created_at','desc')->paginate(10);
-        return view('frontend.cart',compact('cart'));
+    public function index(){ 
+        return view('frontend.cart');
     }
 
     public function add(Request $request){
         
-        $product = Product::findOrFail($request->id);
-
-        if($product->variant_product == 1){
-
-            $product_stock = ProductStock::where('variant', $request->variant)->first();
-
-            $commission = ($product_stock->unit_price  - $product_stock->purchase_price) * $request->quantity;
-
-            $price = $product->discount > 0 ? $product->calc_discount($product_stock->unit_price) : $product_stock->unit_price;
-
-        }else {
-
-            $commission = ($product->unit_price  - $product->purchase_price) * $request->quantity;
-
-            $price = $product->discount > 0 ? $product->calc_discount($product->unit_price) : $product->unit_price;
-
-        }
-
-        $cart = new Cart();
-        $cart->user_id  = Auth::id();
-        $cart->product_id = $product->id;
-        $cart->variation = $request->variant;
-        $cart->description = $request->description;
-        $cart->quantity = $request->quantity;
-        $cart->price = $price;
-        $cart->total_cost = $price * $request->quantity;
-
-        if(Auth::user()->user_type == 'seller'){
-            $cart->commission = $commission;
-            $cart->email_sent = $request->file_sent == 'on' ? 1 : 0;
-            $cart->link = $request->link;
-        }else{
-            $cart->commission = $commission;
-            $cart->email_sent = 0;
-            $cart->link = null;
-        }
+        $product = Product::findOrFail($request->id); 
+        $data = array(); 
+        $data['id'] = $product->id . '-' . $request->variant;
+        $data['product_id'] = $product->id;
+        $data['variation'] = $request->variant;
+        $data['description'] = $request->description;
+        $data['quantity'] = $request->quantity ?? 1;    
+        $data['email_sent'] = $request->file_sent == 'on' ? 1 : 0;
+        $data['link'] = $request->link ?? null;  
 
         if($request->hasFile('pdf')){
-            $cart->pdf = $request->pdf->store('uploads/orders/products/pdf');
+            $data['pdf'] = $request->pdf->store('uploads/orders/products/pdf');
         } 
         $photos = array();  
         if($request->hasFile('photos')){
@@ -65,27 +37,70 @@ class CartController extends Controller
                 $photos[$key]['note'] = $request->photos_note[$key] ?? '';  
             }
         } 
-        $cart->photos = json_encode($photos);
-        $cart->save();
+        $data['photos'] = json_encode($photos);
+        
+        if(session('cart')){
+            $foundInCart = false;
+            $cart = collect();
+
+            foreach (session('cart') as $cartItem){
+                if($cartItem['id'] == $product->id . '-' . $request->variant){ 
+                    $foundInCart = true;
+                    $cartItem['quantity'] += ($request['quantity'] ?? 1); 
+                }
+                $cart->push($cartItem);
+            }
+
+            if (!$foundInCart) {
+                $cart->push($data);
+            } 
+            session()->put('cart', $cart);
+        } else{
+            $cart = collect([$data]);
+            session()->put('cart', $cart);
+        }
 
         toast('Success added to cart','success');
         return back();
     }
 
-    public function update(Request $request){
-        $cart = Cart::findOrFail($request->id);
-        $cart->quantity = $request->quantity;
-        $cart->total_cost = $request->quantity * $cart->price;
-        $cart->save();
-        return [
-            'total_cost' => front_currency(Cart::where('user_id',$cart->user_id)->get()->sum('total_cost')),
-            'cartIteam_total' => front_currency($cart->total_cost)
+    public function update(Request $request){ 
+        $total = $cartIteam_total = 0;
+        
+        $cart = collect();
+        foreach(session('cart') as $cartItem){ 
+
+            $product_stock =  ProductStock::where('variant', $cartItem['variation'])->first();
+            $product = Product::find($cartItem['product_id']);
+            if($product_stock){ 
+                $price = front_calc_product_currency($product->calc_discount($product_stock->unit_price),$product->weight);
+            }else{ 
+                $price = front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight);
+            } 
+
+            if($cartItem['id'] == $request->id){
+                $cartItem['quantity'] = $request->quantity;
+                $cartIteam_total = ($price['value'] * $cartItem['quantity'] );
+            }
+            $cart->push($cartItem);
+            session()->put('cart', $cart);
+
+            $total += ($price['value'] * $cartItem['quantity'] );
+        }
+
+        return [ 
+            'total_cost' => $total . $price['symbol'],
+            'cartIteam_total' => $cartIteam_total . $price['symbol'],
         ];
     }
 
     public function delete(Request $request){
-        $cart = Cart::findOrFail($request->id);
-        $cart->delete();
-        return front_currency(Cart::where('user_id',$cart->user_id)->get()->sum('total_cost'));
+        if(session()->has('cart')){ 
+            $cart = session('cart');
+            $cart = $cart->where('id','!=',$request->id);
+            session()->put('cart',$cart); 
+        }
+        toast('Success Removed item to cart','success');
+        return back();
     }
 }

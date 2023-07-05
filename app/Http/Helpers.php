@@ -2,13 +2,21 @@
 
 //returns combinations of customer choice options array
 
-use App\Models\Currency;
+use App\Models\Currency; 
 use App\Models\Order;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
+use App\Models\WebsiteSetting;
+use Illuminate\Support\Facades\Session;
 use Stevebauman\Location\Facades\Location;
 
+if (!function_exists('get_site_setting')) {
+    function get_site_setting()
+    {
+        return WebsiteSetting::where('domains','like','%' . request()->getHost() . '%')->first() ?? WebsiteSetting::first(); 
+    }
+} 
 if (!function_exists('dashboard_currency')) {
     function dashboard_currency($value)
     {
@@ -16,23 +24,81 @@ if (!function_exists('dashboard_currency')) {
     }
 }
 
-if (!function_exists('front_currency')) {
-    function front_currency($value,$weight = 'half_kg')
+if (!function_exists('product_price_in_cart')) {
+    function product_price_in_cart($quantity,$variation,$product)
     {
-        $country_code = 0;
-        if($country_code){
-            $currency = Currency::where('code',$country_code)->first();
-            if($currency){
-                $price = ($value * $currency->exchange_rate) + $currency->$weight;
-                return $currency->symbol .' ' . $price;
-            }else{
-                return 'EGP ' . $value;
-            }
+        $product_stock = \App\Models\ProductStock::where('variant', $variation)->first();
+        if($product_stock){
+            $price_before_discount = front_calc_product_currency($product_stock->unit_price,$product->weight);
+            $price = front_calc_product_currency($product->calc_discount($product_stock->unit_price),$product->weight);
+            $commission = ($product_stock->unit_price  - $product_stock->purchase_price) * $quantity; 
         }else{
-            return 'EGP ' . $value;
-        }
+            $price_before_discount = front_calc_product_currency($product->unit_price,$product->weight);
+            $price = front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight); 
+            $commission = ($product->unit_price  - $product->purchase_price) * $quantity;
+        } 
+        $h2 = '';
+        
+        if($product->discount > 0){
+            $h2 .= $price['as_text'] ;
+            $h2 .= ' <span style="text-decoration:line-through">' . $price_before_discount['as_text'] . '</span>';
+        }else{
+            $h2 .= $price['as_text'];
+        } 
+        return [
+            'commission' => $commission,
+            'price' => $price,
+            'price_before_discount' => $price_before_discount,
+            'h2' => $h2,
+        ];
     }
-}  
+}
+
+if (!function_exists('front_calc_product_currency')) {
+    function front_calc_product_currency($value,$weight)
+    {
+        $currency = session('currency');
+        if($currency){
+            $price = ($value / $currency->exchange_rate) + $currency->$weight;
+            return [
+                'as_text' => $currency->symbol . ' ' . round($price),
+                'value' => round($price),
+                'symbol' =>  ' ' . $currency->symbol,
+            ];
+        }else{
+            return [
+                'as_text' => 'EGP ' . $value,
+                'value' => $value,
+                'symbol' => 'EGP '
+            ];
+        } 
+    }
+}    
+
+if (!function_exists('get_currency_info')) {
+    function get_currency_info($value,$weight)
+    {
+        $country_code = Session::get('country_code') ?? 'EG'; 
+        $currency = Currency::where('code',$country_code)->first();
+        if($currency){ 
+            $price = ($value / $currency->exchange_rate) + $currency->$weight;
+            return [ 
+                'price' => round($price),
+                'exchange_rate' => $currency->exchange_rate,
+                'weight_price' => $currency->$weight,
+                'symbol' => $currency->symbol,
+            ];
+        }else{ 
+            return [ 
+                'price' => round($value),
+                'weight_price' => 0,
+                'exchange_rate' => 1,
+                'symbol' => 'EGP',
+            ];
+        } 
+    }
+}   
+
 if (!function_exists('combinations')) {
     function combinations($arrays)
     {

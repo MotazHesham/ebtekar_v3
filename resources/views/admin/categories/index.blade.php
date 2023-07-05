@@ -34,6 +34,9 @@
                             {{ trans('cruds.category.fields.icon') }}
                         </th>
                         <th>
+                            {{ trans('global.extra.website_setting_id') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.category.fields.featured') }}
                         </th>
                         <th>
@@ -137,6 +140,10 @@
                         name: 'icon',
                         sortable: false,
                         searchable: false
+                    }, 
+                    {
+                        data: 'website_site_name',
+                        name: 'website.site_name'
                     }, 
                     {
                         data: 'featured',

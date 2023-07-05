@@ -3,21 +3,20 @@
 
 <head> 
     @php
-        $home_general_setting = \App\Models\GeneralSetting::first();
-        $home_seo_setting = \App\Models\SeoSetting::first();
+        $site_settings = get_site_setting();
     @endphp 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>@yield('meta_title', $home_general_setting->site_name )</title>
-    <meta name="description" content="@yield('meta_description', $home_seo_setting->description)" />
-    <meta name="keywords" content="@yield('meta_keywords', $home_seo_setting->keyword)">
-    <meta name="author" content="{{ $home_seo_setting->author }}">
-    <meta name="sitemap_link" content="{{ $home_seo_setting->sitemap_link }}"> 
+    <title>@yield('meta_title', $site_settings->site_name )</title>
+    <meta name="description" content="@yield('meta_description', $site_settings->description_seo)" />
+    <meta name="keywords" content="@yield('meta_keywords', $site_settings->keywords_seo)">
+    <meta name="author" content="{{ $site_settings->author_seo }}">
+    <meta name="sitemap_link" content="{{ $site_settings->sitemap_link_seo }}"> 
 
     <!--icons-->
-    <link rel="icon" href="{{ $home_general_setting->logo->getUrl() }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ $home_general_setting->logo->getUrl() }}" type="image/x-icon">
+    <link rel="icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon">
 
     <!--Google font-->
     <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap" rel="stylesheet">
@@ -53,14 +52,8 @@
     
     <script src="{{ asset('frontend/js/jssocials.min.js') }}"></script>
 
-    <!-- Theme css -->
-    @if(config('app.name') == 'ErtgalStore')
-        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color1.css') }}" media="screen" id="color">
-    @elseif(config('app.name') == 'FiguresStore')
-        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color2.css') }}" media="screen" id="color">
-    @elseif(config('app.name') == 'EbtekarStore')
-        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color3.css') }}" media="screen" id="color"> 
-    @endif 
+    <!-- Theme css --> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
 
     <style>
         .invalid-feedback{
@@ -86,7 +79,7 @@
     <!-- loader start -->
     <div class="loader-wrapper">
         <div>
-            <img src="{{  $home_general_setting->logo->getUrl() }}" alt="loader">
+            <img src="{{  $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" alt="loader">
         </div>
     </div>
     <!-- loader end -->
@@ -95,7 +88,6 @@
     <!-- header start-->
     @include('frontend.layout.header')
     <!-- header end-->
-
 
     @yield('content')
 
@@ -224,74 +216,7 @@
                 </div>
             </div>
             <div class="cart_media">
-                <ul class="cart_product">
-                    @auth
-                        @php
-                            $total = 0;
-                        @endphp
-                        @foreach(auth()->user()->carts()->with('product')->orderBy('created_at','desc')->get()->take(10) as $cartItem)
-                            @php
-                                $image = '';
-                                if($cartItem->product && $cartItem->product->photos != null){ 
-                                    $image = $cartItem->product->photos[0] ? $cartItem->product->photos[0]->getUrl('preview2') : '';
-                                }
-                                $total += $cartItem->total_cost;
-                            @endphp
-
-                            <li class="cart-{{ $cartItem->id }}">
-                                <div class="media">
-                                    <a {{ route('frontend.product',$cartItem->product->slug)}}>
-                                        <img alt="megastore1" class="me-3" src="{{ $image }}">
-                                    </a>
-                                    <div class="media-body">
-                                        <a {{ route('frontend.product',$cartItem->product->slug)}}>
-                                            <h4>{{ $cartItem->product->name }}</h4>
-                                        </a>
-                                        <h6>
-                                            {{ front_currency($cartItem->price) }}
-                                        </h6>
-                                        <div class="addit-box">
-                                            <div class="qty-box">
-                                                <div class="input-group">
-                                                    <button class="qty-minus" onclick="updateCartItem('{{$cartItem->id}}',-1,'cart-qty-')"></button>
-                                                    <input class="qty-adj form-control" onchange="updateCartItem('{{$cartItem->id}}',0,'cart-qty-')" type="number" id="cart-qty-{{$cartItem->id}}"  value="{{ $cartItem->quantity }}" min="1"/>
-                                                    <button class="qty-plus" onclick="updateCartItem('{{$cartItem->id}}',1,'cart-qty-')"></button>
-                                                </div>
-                                            </div>
-                                            <div class="pro-add">
-                                                {{-- <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-product">
-                                                    <i data-feather="edit"></i>
-                                                </a> --}}
-                                                <a href="javascript:void(0)" onclick="deleteCartItem('{{$cartItem->id}}')">
-                                                    <i data-feather="trash-2"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        @endforeach
-                    @endauth
-                </ul>
-                <ul class="cart_total">
-                    <li>
-                        <div class="total">
-                            الإجمالي
-                            @auth
-                                <span>
-                                    {{ front_currency($total) }}
-                                </span>
-                            @endauth
-                        </div>
-                    </li>
-                    <li>
-                        <div class="buttons">
-                            <a href="{{ route('frontend.cart') }}" class="btn btn-solid btn-sm">عرض السلة</a>
-                            <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm ">الدفع</a>
-                        </div>
-                    </li>
-                </ul>
+                @include('frontend.partials.cart_nav')
             </div>
         </div>
     </div>
@@ -330,12 +255,12 @@
                                             </a>
                                             <h6>
                                                 @if($wishlist->product->discount > 0)
-                                                    {{front_currency($wishlist->product->calc_discount($wishlist->product->unit_price))}}
+                                                    {{front_calc_product_currency($wishlist->product->calc_discount($wishlist->product->unit_price ), $wishlist->product->weight)['as_text']}}
                                                     <span>
-                                                        {{ front_currency($wishlist->product->unit_price) }}
+                                                        {{ front_calc_product_currency($wishlist->product->unit_price , $wishlist->product->weight)['as_text'] }}
                                                     </span>
                                                 @else
-                                                    {{ front_currency($wishlist->product->unit_price) }}
+                                                    {{ front_calc_product_currency($wishlist->product->unit_price , $wishlist->product->weight)['as_text'] }}
                                                 @endif
                                             </h6>
                                             <div class="addit-box">
@@ -492,17 +417,7 @@
                     $('#td-total-cost').html(data.total_cost);
                 });
             }
-        }
-
-        function deleteCartItem(id){
-
-            $.post('{{ route('frontend.cart.delete') }}', {_token:'{{ csrf_token() }}',id:id}, function(data){
-                $('#cart_side .cart-'+id).fadeOut(150, function(){ $(this).remove();});
-                $('#tr-cart-'+id).fadeOut(150, function(){ $(this).remove();});
-                $('#cart_side .cart_total .total span').html(data);
-                $('#td-total-cost').html(data);
-            });
-        }
+        } 
 
         function deleteWishlistItem(id){
 
@@ -528,8 +443,7 @@
                     $('#add-to-cart-form #available-quantity-input').prop('max', data.available_quantity);
                 }
             });
-        }
-
+        } 
     </script>
 
     @yield('scripts')

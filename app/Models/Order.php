@@ -91,6 +91,7 @@ class Order extends Model
     protected $fillable = [
         'paymob_orderid',
         'order_type',
+        'symbol',
         'order_num',
         'client_name',
         'phone_number',
@@ -133,6 +134,7 @@ class Order extends Model
         'manufacturer_id',
         'shipmenter_id',
         'delivery_man_id',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -238,6 +240,9 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
     
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+    }
 
 	// operations 
 

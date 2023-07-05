@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\PayMobController;
 use App\Models\Cart;
 use App\Models\Country;
+use App\Models\Customer;
 use App\Models\GeneralSetting;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -14,39 +15,80 @@ use App\Models\Seller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 class CheckoutController extends Controller
 {
     public function payment_select(){
-        if(Auth::user()->carts()->count() == 0){
+        if(!session('cart')){
             alert("قم بأضافة منتجات الي السلة أولا",'','warning');
             return redirect()->route('home');
         }
 
-        $cart = Cart::with('product')->where('user_id',Auth::id())->orderBy('created_at','desc')->get();
         $countries = Country::where('status',1)->where('website',1)->get()->groupBy('type'); 
-        return view('frontend.checkout',compact('cart','countries'));
+        return view('frontend.checkout',compact('countries'));
     }
 
     public function checkout(Request $request){
 
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'nullable|email|unique:users',
+            'phone_number' => 'required|regex:' . config('panel.phone_number_format') . '|size:' . config('panel.phone_number_size'),
+            'phone_number_2' => 'nullable|regex:' . config('panel.phone_number_format') . '|size:' . config('panel.phone_number_size'),
+            'shipping_address' => 'required',
+            'payment_option' => 'required|in:cash_on_delivery,paymob',
+        ]);
+
+
         try{
 
-            $user = Auth::user();
-
-            if($user->carts()->count() == 0){
-                toast("قم بأضافة منتجات الي السلة أولا",'warning');
-                return redirect()->route('home');
+            DB::beginTransaction();
+            $site_settings = get_site_setting();
+            
+            if(auth()->check()){
+                $user = Auth::user();
+            }else{
+                if($request->has('create_account')){ 
+                    $user = User::create([
+                        'name' => $request->first_name . ' ' . $request->last_name,
+                        'email' => $request->email,
+                        'phone_number' => $request->phone_number,
+                        'address' => $request->shipping_address,
+                        'password' => bcrypt($request->password),
+                        'user_type' => 'customer',
+                        'approved' => 1,
+                        'verified' => 1,
+                        'website_setting_id' => $site_settings->id,
+                    ]);
+                    Customer::create([
+                        'user_id' => $user->id,
+                    ]);
+                }else{
+                    $user = null;
+                }
             }
 
+            if(!session('cart')){
+                alert("قم بأضافة منتجات الي السلة أولا",'','warning');
+                return redirect()->route('home');
+            }
+            
+            if($request->discount_code != null){
+                $seller = Seller::where('discount_code',$request->discount_code)->first();
+                if(!$seller || $seller->discount < 0){ 
+                    alert("خطأ في كود الخصم",'','warning');
+                    return redirect()->route('frontend.payment_select');
+                }
+            }
+            
             if ($request->payment_option != null) {
 
-                if($user->user_type == 'customer' || $user->user_type == 'designer'){
-                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','customer')->latest()->first()->order_num ?? 0;
-                }elseif($user->user_type == 'seller'){
-                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','seller')->latest()->first()->order_num ?? 0;
+                if($user && $user->user_type == 'seller'){
+                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','seller')->where('website_setting_1',$site_settings->id)->latest()->first()->order_num ?? 0;
                 }else{
-                    $code_z = 0;
+                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','customer')->where('website_setting_1',$site_settings->id)->latest()->first()->order_num ?? 0;
                 }
                 $last_order_code = intval(str_replace('#','',strrchr($code_z,"#")));
 
@@ -54,15 +96,16 @@ class CheckoutController extends Controller
                 $order = new Order;
                 $country = Country::findOrFail($request->country_id);
 
-                $order->user_id  = $user->id;
+                $order->user_id  = $user->id ?? null;
                 $order->shipping_country_id  = $country->id; 
+                $order->website_setting_id  = $site_settings->id; 
                 $order->shipping_country_cost  = $country->cost;
                 $order->phone_number  = $request->phone_number;
                 $order->phone_number_2  = $request->phone_number_2;
                 $order->shipping_address = $request->shipping_address;
                 $order->payment_type = $request->payment_option;
 
-                if($user->user_type == 'seller'){
+                if($user && $user->user_type == 'seller'){
                     $order->client_name = $request->client_name;
                     $order->date_of_receiving_order = strtotime($request->date_of_receiving_order);
                     $order->excepected_deliverd_date = strtotime($request->excepected_deliverd_date);
@@ -78,10 +121,18 @@ class CheckoutController extends Controller
                     $order->order_type = 'customer';
                 }
 
-                if($user->user_type == 'seller'){
-                    $order->order_num = 'seller#' . ($last_order_code + 1);
+                if($site_settings->id == 2){
+                    $str = 'ertegal-';
+                }elseif($site_settings->id == 3){
+                    $str = 'figures-';
+                }else{ 
+                    $str = 'ebtekar-';
+                }
+
+                if($user && $user->user_type == 'seller'){
+                    $order->order_num = $str . 'seller#' . ($last_order_code + 1);
                 }else{
-                    $order->order_num = 'customer#' . ($last_order_code + 1);
+                    $order->order_num = $str . 'customer#' . ($last_order_code + 1);
                 }
                 
                 $order->save();
@@ -90,42 +141,46 @@ class CheckoutController extends Controller
                 $total_cost = 0;
                 $order_items = [];
 
-                foreach($user->carts as $cartItem){
+                foreach(session('cart') as $cartItem){
 
                     // increse number of sales in product
-                    $product = Product::findOrFail($cartItem->product_id);
-                    $product->num_of_sale += $cartItem->quantity;
+                    $product = Product::findOrFail($cartItem['product_id']);
+                    $product->num_of_sale += $cartItem['quantity'];
                     $product->save();
 
-                    if($product->variant_product == 1 && $cartItem->variation != null){
+                    if($product->variant_product == 1 && $cartItem['variation'] != null){
                         //remove requested quantity from stock
-                        $product_stock = $product->stocks()->where('variant', $cartItem->variation)->first();
+                        $product_stock = $product->stocks()->where('variant', $cartItem['variation'])->first();
                         if($product_stock){
-                            $product_stock->stock -= $cartItem->quantity;
+                            $product_stock->stock -= $cartItem['quantity'];
                             $product_stock->save();
                         } 
                     }else {
                         //remove requested quantity from stock
-                        $product->current_stock -= $cartItem->quantity;
+                        $product->current_stock -= $cartItem['quantity'];
                         $product->save();
                     }
 
+                    $prices = product_price_in_cart($cartItem['quantity'],$cartItem['variation'],$product);
+                    $total_cost += ($prices['price']['value'] * $cartItem['quantity'] );
+
+                    
+
                     //add commission to seller
-                    $total_commission += $cartItem->commission;
-                    $total_cost += $cartItem->total_cost;
+                    $total_commission += $prices['commission']; 
                     $order_items [] = [
                         'order_id' => $order->id,
-                        'product_id' => $cartItem->product_id,
-                        'variation' => $cartItem->variation,
-                        'link' => $cartItem->link,
-                        'description' => $cartItem->description,
-                        'commission' => $cartItem->commission,
-                        'email_sent' => $cartItem->email_sent,
-                        'quantity' => $cartItem->quantity,
-                        'price' => $cartItem->price,
-                        'total_cost' => $cartItem->total_cost,
-                        'photos' => $cartItem->photos, 
-                        'pdf' => $cartItem->pdf,
+                        'product_id' => $cartItem['product_id'],
+                        'variation' => $cartItem['variation'],
+                        'link' => $cartItem['link'],
+                        'description' => $cartItem['description'],
+                        'commission' => $prices['commission'] ?? 0,
+                        'email_sent' => $cartItem['email_sent'] ?? 0,
+                        'quantity' => $cartItem['quantity'],
+                        'price' => $prices['price']['value'],
+                        'total_cost' => $total_cost,
+                        'photos' => $cartItem['photos'] ?? null, 
+                        'pdf' => $cartItem['pdf'] ?? null,
                     ];
                 }
 
@@ -140,15 +195,18 @@ class CheckoutController extends Controller
                         $total_cost -= $discount_cost;
                         $order->discount = $discount_cost;
                         $order->discount_code = $request->discount_code;
-                        $order->social_user_id = $seller->user_id;
+                        $order->social_user_id = $seller->user_id; // it stands for the owner of the discount code
+                    }else{  
+                        throw ValidationException::withMessages(['discount_code' => 'Discount Code Faild']);
                     }
                 }
+                $order->symbol = $prices['price']['symbol'];
                 $order->commission = $total_commission;
                 $order->total_cost = $total_cost;
                 $order->save();
 
 
-                if($user->user_type == 'seller'){
+                if($user && $user->user_type == 'seller'){
                     $seller = Seller::where('user_id',$order->user_id)->first();
                     $seller->order_in_website += 1 ;
                     $seller->save();
@@ -157,6 +215,10 @@ class CheckoutController extends Controller
                 if($request->payment_option == 'cash_on_delivery'){
                     if($this->checkout_done($order->id,'unpaid')){
                         toast("Your order has been placed successfully",'success');
+                        if($request->has('create_account')){
+                            Auth::login($user);
+                        }
+                        DB::commit();
                         return redirect()->route('frontend.orders.success',$order->id);
                     }
                 }elseif($request->payment_option == 'paymob'){
@@ -169,6 +231,7 @@ class CheckoutController extends Controller
                 return redirect()->route('home');
             }
         }catch (\Exception $ex){
+            DB::rollBack();
             return $ex;
             toast("SomeThing Went Wrong!",'error');
             return redirect()->route('home');
@@ -178,9 +241,7 @@ class CheckoutController extends Controller
 
     //redirects to this method after a successfull checkout
     public function checkout_done($order_id, $payment)
-    {
-        $user = Auth::user();
-
+    { 
         $order = Order::withoutGlobalScope('completed')->find($order_id);
         $order->payment_status = $payment;
         $order->completed = 1;
@@ -189,7 +250,7 @@ class CheckoutController extends Controller
         }
         $order->save();
 
-        Cart::where('user_id',$user->id)->delete();
+        session()->put('cart',null);
 
         // $title = $order->order_num;
         // $body = 'طلب جديد';

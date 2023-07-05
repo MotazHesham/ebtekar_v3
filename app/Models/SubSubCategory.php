@@ -26,6 +26,7 @@ class SubSubCategory extends Model
         'meta_title',
         'meta_description',
         'sub_category_id',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -39,5 +40,8 @@ class SubSubCategory extends Model
     public function sub_category()
     {
         return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
 }

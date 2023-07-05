@@ -14,7 +14,8 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
-use App\Models\User;  
+use App\Models\User;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -107,7 +108,7 @@ class ProductsController extends Controller
         abort_if(Gate::denies('product_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Product::with(['user', 'category', 'sub_category', 'sub_sub_category', 'design'])->select(sprintf('%s.*', (new Product)->table));
+            $query = Product::with(['user', 'category', 'sub_category', 'sub_sub_category', 'design','website'])->select(sprintf('%s.*', (new Product)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -141,8 +142,12 @@ class ProductsController extends Controller
             $table->editColumn('weight', function ($row) {
                 return $row->weight ? Product::WEIGHT_SELECT[$row->weight] : '';
             }); 
-            $table->editColumn('unit_price', function ($row) {
-                return $row->unit_price ? $row->unit_price : '';
+            $table->editColumn('unit_price', function ($row) {   
+                if ($row->discount > 0){
+                    return $row->calc_discount($row->unit_price) . '<br>' . '<span style="text-decoration:line-through">'.$row->unit_price.'</span>';
+                }else{
+                    return $row->unit_price;
+                } 
             }); 
             $table->editColumn('video_provider', function ($row) {
                 return $row->video_provider ? $row->video_provider : '';
@@ -163,19 +168,19 @@ class ProductsController extends Controller
             });
             $table->editColumn('statuses', function ($row) { 
                 $flash_deal = '<label class="c-switch c-switch-pill c-switch-success">
-                                    <input onchange="update_statuses(this,\'flash_deal\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->flash_deal ? "checked" : null) .' }}>
+                                    <input onchange="update_statuses(this,\'flash_deal\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->flash_deal ? "checked" : null) .'>
                                     <span class="c-switch-slider"></span>
                                 </label>';
                 $published = '<label class="c-switch c-switch-pill c-switch-success">
-                                <input onchange="update_statuses(this,\'published\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->published ? "checked" : null) .' }}>
+                                <input onchange="update_statuses(this,\'published\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->published ? "checked" : null) .'>
                                 <span class="c-switch-slider"></span>
                             </label>';
                 $featured = '<label class="c-switch c-switch-pill c-switch-success">
-                                <input onchange="update_statuses(this,\'featured\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->featured ? "checked" : null) .' }}>
+                                <input onchange="update_statuses(this,\'featured\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->featured ? "checked" : null) .'>
                                 <span class="c-switch-slider"></span>
                             </label>';
                 $todays_deal = '<label class="c-switch c-switch-pill c-switch-success">
-                                    <input onchange="update_statuses(this,\'todays_deal\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->todays_deal ? "checked" : null) .' }}>
+                                    <input onchange="update_statuses(this,\'todays_deal\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->todays_deal ? "checked" : null) .'>
                                     <span class="c-switch-slider"></span>
                                 </label>';
                 
@@ -209,9 +214,13 @@ class ProductsController extends Controller
                 $sub_category = $row->sub_category ? '<span class="badge badge-warning">' . $row->sub_category->name . '</span>' : '';
                 $sub_sub_category = $row->sub_sub_category ? '<span class="badge badge-danger">' . $row->sub_sub_category->name . '</span>' : ''; 
                 return $category . $sub_category . $sub_sub_category;
+            }); 
+
+            $table->editColumn('website_site_name', function ($row) { 
+                return $row->website->site_name ?? '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'photos', 'statuses', 'categories','name']);
+            $table->rawColumns(['actions', 'placeholder', 'photos', 'statuses', 'categories','unit_price','name','website_site_name']);
 
             return $table->make(true);
         }
@@ -225,11 +234,11 @@ class ProductsController extends Controller
 
         $colors = Color::pluck('name', 'code');
 
-        $attributes = Attribute::pluck('name', 'id');
+        $attributes = Attribute::pluck('name', 'id'); 
 
-        $categories = Category::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.products.create', compact('colors','attributes' ,'categories'));
+        return view('admin.products.create', compact('colors','attributes' , 'websites'));
     }
 
     public function store(StoreProductRequest $request)
@@ -288,6 +297,7 @@ class ProductsController extends Controller
         $combinations = combinations($options);
         if(count($combinations[0]) > 0){
             $product->variant_product = 1;
+            $product->save();
             foreach ($combinations as $key => $combination){
                 $str = '';
                 foreach ($combination as $key => $item){
@@ -328,11 +338,13 @@ class ProductsController extends Controller
 
         $attributes = Attribute::pluck('name', 'id');
 
-        $categories = Category::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');  
+        $categories = Category::where('website_setting_id',$product->website_setting_id)->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');  
 
         $product->load('user', 'category', 'sub_category', 'sub_sub_category', 'design');
 
-        return view('admin.products.edit', compact('categories', 'product', 'colors', 'attributes'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+
+        return view('admin.products.edit', compact('categories', 'product', 'colors', 'attributes','websites'));
     }
 
     public function update(UpdateProductRequest $request)

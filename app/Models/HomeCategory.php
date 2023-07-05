@@ -4,26 +4,24 @@ namespace App\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model; 
 
 class HomeCategory extends Model
 {
-    use SoftDeletes, HasFactory;
+    use  HasFactory;
 
     public $table = 'home_categories';
 
     protected $dates = [
         'created_at',
-        'updated_at',
-        'deleted_at',
+        'updated_at', 
     ];
 
     protected $fillable = [
         'category_id',
+        'website_setting_id',
         'created_at',
-        'updated_at',
-        'deleted_at',
+        'updated_at', 
     ];
 
     protected function serializeDate(DateTimeInterface $date)
@@ -34,5 +32,8 @@ class HomeCategory extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
 }

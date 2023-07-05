@@ -15,6 +15,7 @@ class CreateContactusTable extends Migration
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
             $table->longText('message')->nullable();
+            $table->string('from_website')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

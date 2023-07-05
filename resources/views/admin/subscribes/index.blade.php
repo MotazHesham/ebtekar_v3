@@ -23,6 +23,9 @@
                         {{ trans('cruds.subscribe.fields.email') }}
                     </th>
                     <th>
+                        {{ trans('cruds.subscribe.fields.from_website') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>

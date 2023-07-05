@@ -39,6 +39,7 @@ class Category extends Model implements HasMedia
         'featured',
         'meta_title',
         'meta_description',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -87,5 +88,7 @@ class Category extends Model implements HasMedia
         return $this->hasMany(SubCategory::class,'category_id');
     }
 
-
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+    }
 }

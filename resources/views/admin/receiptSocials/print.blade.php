@@ -39,26 +39,28 @@
 </head>
 
 <body> 
-
     @foreach($receipts as $receipt)
+        @php
+            $site_settings = \App\Models\WebsiteSetting::find($receipt->website_setting_id);
+        @endphp
         <div style="page-break-after: always;">
             <div style="padding: 1.5rem;postition:relative">
                 <table style="position: absolute;top:80px;left:150px" class="text-center">
                     <tr>
-                        <td class="gry-color small">{{ $generalsetting->address }}</td>
+                        <td class="gry-color small">{{ $site_settings->address }}</td>
                         <td class="text-right"></td>
                     </tr>
                     <tr>
-                        <td class="gry-color small">Email: {{ $generalsetting->email }}</td>
+                        <td class="gry-color small">Email: {{ $site_settings->email }}</td>
                     </tr>
                     <tr>
-                        <td class="gry-color small" >Phone: {{ $generalsetting->phone_number }}</td>
+                        <td class="gry-color small" >Phone: {{ $site_settings->phone_number }}</td>
                     </tr>
                 </table>
                 <table>
                     <tr>
                         <td> 
-                            <img loading="lazy"  src="{{ asset($generalsetting->logo->getUrl()) }}" height="130" style="display:inline-block;">
+                            <img loading="lazy"  src="{{ asset($site_settings->logo->getUrl()) }}" height="130" style="display:inline-block;">
                         </td>
                     </tr>
                 </table>

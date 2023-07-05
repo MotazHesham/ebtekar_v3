@@ -44,11 +44,11 @@ class HomeController extends Controller
                                                                     })->count();
 
         $banned_phones = BannedPhone::where('phone',$phone)->first();
-        return view('admin.partials.search_phone',compact('receipt_social','receipt_company','receipt_client','customers_orders','sellers_orders','banned_phones'));
+        return view('partials.search_phone',compact('receipt_social','receipt_company','receipt_client','customers_orders','sellers_orders','banned_phones'));
     }
 
     public function index()
-    {
+    { 
         $settings1 = [
             'chart_title'           => trans('cruds.customer.title'),
             'chart_type'            => 'number_block',

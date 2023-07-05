@@ -20,13 +20,12 @@ use Yajra\DataTables\Facades\DataTables;
 class ReceiptOutgoingController extends Controller
 {
     public function print($id){
-        $receipts = ReceiptOutgoing::with('receiptOutgoingReceiptOutgoingProducts','staff')->whereIn('id',[$id])->get();
-        $generalsetting = GeneralSetting::first();
+        $receipts = ReceiptOutgoing::with('receiptOutgoingReceiptOutgoingProducts','staff')->whereIn('id',[$id])->get(); 
         foreach($receipts as $receipt){
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptOutgoings.print',compact('receipts','generalsetting'));
+        return view('admin.receiptOutgoings.print',compact('receipts'));
     }
 
     public function update_statuses(Request $request){ 
@@ -229,13 +228,12 @@ class ReceiptOutgoingController extends Controller
         }
 
         if ($request->has('print')) {
-            $receipts = $receipts->with('receiptOutgoingReceiptOutgoingProducts')->get();
-            $generalsetting = GeneralSetting::first();
+            $receipts = $receipts->with('receiptOutgoingReceiptOutgoingProducts')->get(); 
             foreach($receipts as $receipt){
                 $receipt->printing_times += 1;
                 $receipt->save();
             }
-            return view('admin.receiptOutgoings.print', compact('receipts','generalsetting'));
+            return view('admin.receiptOutgoings.print', compact('receipts'));
         }
         
         if($request->has('download')){

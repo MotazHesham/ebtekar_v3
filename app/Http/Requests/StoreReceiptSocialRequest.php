@@ -55,6 +55,10 @@ class StoreReceiptSocialRequest extends FormRequest
             'socials' => [
                 'array',
             ],
+            'website_setting_id' => [
+                'required',
+                'integer',
+            ], 
         ];
     }
 }

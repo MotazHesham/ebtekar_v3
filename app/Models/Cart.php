@@ -20,10 +20,7 @@ class Cart extends Model
     protected $fillable = [
         'variation',
         'description',
-        'quantity',
-        'price',
-        'total_cost',
-        'commission',
+        'quantity', 
         'photos',
         'pdf',
         'link',

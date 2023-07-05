@@ -21,6 +21,10 @@ class StoreHomeCategoryRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'website_setting_id' => [
+                'required',
+                'integer',
+            ], 
         ];
     }
 }

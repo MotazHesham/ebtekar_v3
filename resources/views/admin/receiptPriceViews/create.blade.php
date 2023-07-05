@@ -11,6 +11,19 @@
             @csrf
             <div class="row">
                 <div class="form-group col-md-4">
+                    <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                    <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
+                        @foreach($websites as $id => $entry)
+                            <option value="{{ $id }}" {{ old('website_setting_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                        @endforeach
+                    </select>
+                    @if($errors->has('website_setting_id'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('website_setting_id') }}
+                        </div>
+                    @endif 
+                </div>
+                <div class="form-group col-md-4">
                     <label for="date_of_receiving_order">{{ trans('cruds.receiptPriceView.fields.date_of_receiving_order') }}</label>
                     <input class="form-control date {{ $errors->has('date_of_receiving_order') ? 'is-invalid' : '' }}" type="text" name="date_of_receiving_order" id="date_of_receiving_order" value="{{ old('date_of_receiving_order') }}">
                     @if($errors->has('date_of_receiving_order'))

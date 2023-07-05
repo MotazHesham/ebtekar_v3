@@ -27,6 +27,10 @@ class StoreBannerRequest extends FormRequest
             'position' => [
                 'required',
             ], 
+            'website_setting_id' => [
+                'required',
+                'integer',
+            ], 
         ];
     }
 }

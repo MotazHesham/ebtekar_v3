@@ -7,7 +7,8 @@ use App\Http\Requests\MassDestroyCustomerRequest;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
-use App\Models\User; 
+use App\Models\User;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class CustomersController extends Controller
         abort_if(Gate::denies('customer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Customer::with(['user'])->select(sprintf('%s.*', (new Customer)->table));
+            $query = Customer::with(['user'])->select(sprintf('%s.*', (new Customer)->table))->with('website');
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -57,7 +58,10 @@ class CustomersController extends Controller
                 return $row->user ? $row->user->address : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'user']);
+            $table->editColumn('website_site_name', function ($row) { 
+                return $row->website->site_name ?? '';
+            });
+            $table->rawColumns(['actions', 'placeholder', 'user','website_site_name']);
 
             return $table->make(true);
         }
@@ -71,7 +75,8 @@ class CustomersController extends Controller
 
         $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.customers.create', compact('users'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        return view('admin.customers.create', compact('users' , 'websites'));
     }
 
     public function store(StoreCustomerRequest $request)
@@ -88,6 +93,7 @@ class CustomersController extends Controller
 
         $customer = Customer::create([
             'user_id' => $user->id,
+            'website_setting_id' => $request->website_setting_id,
         ]);
 
         toast(trans('flash.global.success_title'),'success'); 
@@ -101,8 +107,9 @@ class CustomersController extends Controller
         $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $customer->load('user');
-
-        return view('admin.customers.edit', compact('customer', 'users'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        
+        return view('admin.customers.edit', compact('customer', 'users','websites'));
     }
 
     public function update(UpdateCustomerRequest $request, Customer $customer)

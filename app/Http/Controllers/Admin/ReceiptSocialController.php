@@ -18,7 +18,8 @@ use App\Models\ReceiptSocial;
 use App\Models\ReceiptSocialProduct;
 use App\Models\ReceiptSocialProductPivot;
 use App\Models\Social;
-use App\Models\User; 
+use App\Models\User;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -94,19 +95,17 @@ class ReceiptSocialController extends Controller
     }
 
     public function receive_money($id){
-        $receipt = ReceiptSocial::find($id);
-        $generalsetting = GeneralSetting::first(); 
-        return view('partials.receive_money',compact('receipt','generalsetting'));
+        $receipt = ReceiptSocial::find($id); 
+        return view('partials.receive_money',compact('receipt'));
     }
 
     public function print($id){
-        $receipts = ReceiptSocial::with('receiptsReceiptSocialProducts','staff','designer','manufacturer','preparer','shipmenter')->whereIn('id',[$id])->get();
-        $generalsetting = GeneralSetting::first();
+        $receipts = ReceiptSocial::with('receiptsReceiptSocialProducts','staff','designer','manufacturer','preparer','shipmenter')->whereIn('id',[$id])->get(); 
         foreach($receipts as $receipt){
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptSocials.print',compact('receipts','generalsetting'));
+        return view('admin.receiptSocials.print',compact('receipts'));
     }
 
     public function update_statuses(Request $request){ 
@@ -336,6 +335,7 @@ class ReceiptSocialController extends Controller
         $delivery_mans = User::where('user_type', 'delivery_man')->get();
         $socials = Social::all();
         $countries = Country::where('status',1)->get()->groupBy('type'); 
+        $websites = WebsiteSetting::pluck('site_name', 'id');
         
         $phone = null;
         $client_name = null;
@@ -497,12 +497,11 @@ class ReceiptSocialController extends Controller
 
         if ($request->has('print')) {
             $receipts = $receipts->get();
-            $generalsetting = GeneralSetting::first();
             foreach($receipts as $receipt){
                 $receipt->printing_times += 1;
                 $receipt->save();
             }
-            return view('admin.receiptSocials.print', compact('receipts','generalsetting'));
+            return view('admin.receiptSocials.print', compact('receipts'));
         }
         
         $statistics = [
@@ -516,7 +515,7 @@ class ReceiptSocialController extends Controller
 
         return view('admin.receiptSocials.index', compact(
             'countries', 'statistics','receipts','done','client_type','exclude',
-            'delivery_status','payment_status','sent_to_delivery','social_id',
+            'delivery_status','payment_status','sent_to_delivery','social_id','websites',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted',
             'quickly','playlist_status','description', 'include','socials','delivery_mans',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  
@@ -590,7 +589,11 @@ class ReceiptSocialController extends Controller
 
         $previous_data = searchByPhone($request->phone_number);
 
-        return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data'));
+        $website_setting_id = $request->website_setting_id;
+
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+        
+        return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data' , 'websites','website_setting_id'));
     }
 
     public function store(StoreReceiptSocialRequest $request)
@@ -606,7 +609,7 @@ class ReceiptSocialController extends Controller
     {
         abort_if(Gate::denies('receipt_social_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $general_settings = GeneralSetting::first(); 
+        $site_settings = get_site_setting(); 
 
         $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
@@ -614,14 +617,14 @@ class ReceiptSocialController extends Controller
 
         $receiptSocial->load('delivery_man', 'shipping_country', 'socials');
 
-        if($general_settings->delivery_system == 'wasla'){
+        if($site_settings->delivery_system == 'wasla'){
             $waslaController = new WaslaController;
             $response = $waslaController->countries();
         }else{
             $response = '';
-        }
+        } 
 
-        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'general_settings', 'response'));
+        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response'));
     }
 
     public function update(UpdateReceiptSocialRequest $request, ReceiptSocial $receiptSocial)

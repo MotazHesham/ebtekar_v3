@@ -37,6 +37,9 @@
                             {{ trans('cruds.user.fields.phone_number') }}
                         </th>
                         <th>
+                            {{ trans('global.extra.website_setting_id') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -121,6 +124,10 @@
                         data: 'user_phone_number',
                         name: 'user.phone_number'
                     },
+                    {
+                        data: 'website_site_name',
+                        name: 'website.site_name'
+                    }, 
                     {
                         data: 'actions',
                         name: '{{ trans('global.actions') }}'

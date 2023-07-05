@@ -45,7 +45,7 @@ class UpdateReceiptPriceViewRequest extends FormRequest
             'payment' => [
                 'string',
                 'nullable',
-            ],
+            ], 
         ];
     }
 }

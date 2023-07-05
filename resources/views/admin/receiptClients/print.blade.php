@@ -79,32 +79,35 @@
     </style>
 </head>
 
-<body> 
+<body>  
     @foreach($receipts as $receipt)
+        @php
+            $site_settings = \App\Models\WebsiteSetting::find($receipt->website_setting_id);
+        @endphp
         <div style="page-break-after: always;">
             <div style="background: #eceff4;padding: 1.5rem;">
                 <table>
                     <tr>
                         <td>
-                            <img loading="lazy" src="{{ asset($generalsetting->logo->getUrl()) }}" height="40"
+                            <img loading="lazy" src="{{ asset($site_settings->logo->getUrl()) }}" height="40"
                                 style="display:inline-block;">
                         </td>
                     </tr>
                 </table>
                 <table>
                     <tr>
-                        <td style="font-size: 1.2rem;" class="strong">{{ $generalsetting->site_name }}</td>
+                        <td style="font-size: 1.2rem;" class="strong">{{ $site_settings->site_name }}</td>
                         <td class="text-right"></td>
                     </tr>
                     <tr>
-                        <td class="gry-color small">{{ $generalsetting->address }}</td>
+                        <td class="gry-color small">{{ $site_settings->address }}</td>
                         <td class="text-right"></td>
                     </tr>
                     <tr>
-                        <td class="gry-color small">Email: {{ $generalsetting->email }}</td>
+                        <td class="gry-color small">Email: {{ $site_settings->email }}</td>
                     </tr>
                     <tr>
-                        <td class="gry-color small">Phone: {{ $generalsetting->phone_number }}</td>
+                        <td class="gry-color small">Phone: {{ $site_settings->phone_number }}</td>
                         <td class="text-right small"><span class="gry-color small">Date:</span> <span
                                 class=" strong">{{ $receipt->created_at }}</span></td>
                     </tr>
@@ -127,7 +130,7 @@
 
                 <table class="padding text-left small border-bottom">
 
-                    <img src="{{ asset($generalsetting->logo->getUrl()) }}" alt=""
+                    <img src="{{ asset($site_settings->logo->getUrl()) }}" alt=""
                         style="position: absolute;opacity:0.15;top:180px;">
                     <thead>
                         <tr class="gry-color" style="background: #eceff4;">

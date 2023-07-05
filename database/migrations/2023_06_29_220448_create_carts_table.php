@@ -15,10 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->text('variation')->nullable();
             $table->text('description')->nullable();
-            $table->integer('quantity');
-            $table->decimal('price', 15, 2);
-            $table->decimal('total_cost', 15, 2);
-            $table->decimal('commission', 15, 2);
+            $table->integer('quantity'); 
             $table->text('photos')->nullable();
             $table->text('pdf')->nullable();
             $table->string('link')->nullable();

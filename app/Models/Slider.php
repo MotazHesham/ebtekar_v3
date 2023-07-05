@@ -29,6 +29,7 @@ class Slider extends Model implements HasMedia
     protected $fillable = [
         'published',
         'link',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -55,5 +56,8 @@ class Slider extends Model implements HasMedia
         }
 
         return $file;
+    }
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
 }

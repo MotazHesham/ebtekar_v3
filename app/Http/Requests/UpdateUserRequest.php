@@ -36,6 +36,9 @@ class UpdateUserRequest extends FormRequest
             'roles' => [
                 'array',
             ],
+            'website_setting_id' => [
+                'required',
+            ],
         ];
     }
 }

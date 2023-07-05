@@ -14,6 +14,7 @@ use App\Models\ReceiptSocial;
 use App\Models\User;
 use App\Models\UserAlert;
 use App\Models\ViewPlaylistData;
+use App\Models\WebsiteSetting;
 use App\Support\Collection;
 use Gate;
 use Illuminate\Http\Request;
@@ -35,8 +36,8 @@ class PlaylistController extends Controller
         $id = $request->id;
         $model_type = $request->model_type;
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->where('email', '!=', 'wezaa@gmail.com')->get();
-        $generalsetting = GeneralSetting::first();
-        return view('partials.playlist_users',compact('raw','staffs','generalsetting','id','model_type'));
+        $site_settings = get_site_setting();
+        return view('partials.playlist_users',compact('raw','staffs','site_settings','id','model_type'));
     }
 
     public function update_playlist_users(Request $request)

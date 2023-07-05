@@ -33,6 +33,10 @@ class StoreSubCategoryRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'website_setting_id' => [
+                'required',
+                'integer',
+            ], 
         ];
     }
 }

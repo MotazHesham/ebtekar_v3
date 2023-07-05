@@ -39,6 +39,8 @@ class CreateReceiptSocialsTable extends Migration
             $table->longText('note')->nullable();
             $table->string('payment_status')->default('unpaid');
             $table->string('playlist_status')->default('pending');
+            $table->unsignedBigInteger('website_setting_id')->nullable();
+            $table->foreign('website_setting_id', 'website_setting_fk_8698748')->references('id')->on('website_settings');
             $table->timestamps();
             $table->softDeletes();
         });

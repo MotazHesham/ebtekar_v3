@@ -46,6 +46,9 @@
                             {{ trans('cruds.product.fields.categories') }}
                         </th>
                         <th>
+                            {{ trans('global.extra.website_setting_id') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -163,6 +166,10 @@
                         data: 'categories',
                         name: 'categories'
                     },
+                    {
+                        data: 'website_site_name',
+                        name: 'website.site_name'
+                    }, 
                     {
                         data: 'actions',
                         name: '{{ trans('global.actions') }}'

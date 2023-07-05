@@ -6,10 +6,12 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <meta name="csrf-token" content="{{ csrf_token() }}"> 
+@php
+    $site_settings = get_site_setting();
+@endphp
+<link name="favicon" type="image/x-icon" href="{{ asset($site_settings->logo ? $site_settings->logo->getUrl() : '') }}" rel="shortcut icon" />
 
-<link name="favicon" type="image/x-icon" href="{{ asset(\App\Models\GeneralSetting::first()->logo->getUrl()) }}" rel="shortcut icon" />
-
-<title>{{\App\Models\GeneralSetting::first()->site_name}}</title>
+<title>{{$site_settings->site_name}}</title>
 <link rel="stylesheet" href="{{ asset('dashboard_offline/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('dashboard_offline/css/font-awesome.css') }}">
 <link rel="stylesheet" href="{{ asset('dashboard_offline/css/all.css') }}">
@@ -184,6 +186,37 @@
                 $(this).val(englishValue);
             });
         });
+
+        function get_categories_by_website(call_others = null){
+            var website_setting_id = $('#website_setting_id').val();
+            $.post('{{ route('admin.website-settings.get_categories_by_website') }}',{_token:'{{ csrf_token() }}', website_setting_id:website_setting_id}, function(data){
+                $('#category_id').html(null); 
+
+                for (var i = 0; i < data.length; i++) {
+                    $('#category_id').append($('<option>', {
+                        value: data[i].id,
+                        text: data[i].name
+                    })); 
+                }   
+                if(call_others){
+                    get_sub_categories_by_category();  
+                    get_sub_sub_categories_by_category(); 
+                }
+            });
+        } 
+        function get_sub_categories_by_website(){
+            var website_setting_id = $('#website_setting_id').val();
+            $.post('{{ route('admin.website-settings.get_sub_categories_by_website') }}',{_token:'{{ csrf_token() }}', website_setting_id:website_setting_id}, function(data){
+                $('#sub_category_id').html(null); 
+
+                for (var i = 0; i < data.length; i++) {
+                    $('#sub_category_id').append($('<option>', {
+                        value: data[i].id,
+                        text: data[i].name
+                    })); 
+                }  
+            });
+        }  
 
         function show_logs(model ,subject_id,crud_name){
             $.post('{{ route('admin.receipts_logs') }}', {_token:'{{ csrf_token() }}' ,model:model ,subject_id:subject_id, crud_name:crud_name}, function(data){

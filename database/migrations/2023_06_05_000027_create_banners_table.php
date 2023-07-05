@@ -13,6 +13,8 @@ class CreateBannersTable extends Migration
             $table->string('url')->nullable();
             $table->string('position');
             $table->boolean('published')->default(1);
+            $table->unsignedBigInteger('website_setting_id')->nullable();
+            $table->foreign('website_setting_id', 'website_setting_fk_8500648')->references('id')->on('website_settings');
             $table->timestamps();
             $table->softDeletes();
         });

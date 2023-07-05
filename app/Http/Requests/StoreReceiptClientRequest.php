@@ -30,6 +30,10 @@ class StoreReceiptClientRequest extends FormRequest
                 'size:' . config('panel.phone_number_size'), 
                 'required',
             ],
+            'website_setting_id' => [
+                'required',
+                'integer',
+            ], 
         ];
     }
 }

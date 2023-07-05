@@ -25,6 +25,7 @@ class Contactu extends Model
         'email',
         'phone_number',
         'message',
+        'from_website',
         'created_at',
         'updated_at',
         'deleted_at',

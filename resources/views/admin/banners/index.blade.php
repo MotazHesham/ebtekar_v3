@@ -35,6 +35,9 @@
                                 {{ trans('cruds.banner.fields.position') }}
                             </th>
                             <th>
+                                {{ trans('global.extra.website_setting_id') }}
+                            </th>
+                            <th>
                                 {{ trans('cruds.banner.fields.published') }}
                             </th>
                             <th>
@@ -61,6 +64,9 @@
                                 </td>
                                 <td>
                                     {{ $banner->url ?? '' }}
+                                </td>
+                                <td>
+                                    {{ $banner->website->site_name ?? '' }}
                                 </td>
                                 <td>
                                     {{ App\Models\Banner::POSITION_SELECT[$banner->position] ?? '' }}

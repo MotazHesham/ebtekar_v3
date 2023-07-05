@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
 
-        @if ($general_settings->delivery_system == 'ebtekar')
+        @if ($site_settings->delivery_system == 'ebtekar')
             <form action="{{ route($crudRoutePart.'update_delivery_man') }}"method="POST">
                 @csrf
 
@@ -25,7 +25,7 @@
                 </div>
                 <button type="submit" class="btn btn-info btn-rounded">{{ trans('global.update') }}</button>
             </form>
-        @elseif($general_settings->delivery_system == 'wasla')
+        @elseif($site_settings->delivery_system == 'wasla')
             @if ($response['data'] ?? null)
                 @if (!$row->send_to_wasla_date)
                     <form action="{{ route($crudRoutePart.'send_to_wasla') }}" method="POST">

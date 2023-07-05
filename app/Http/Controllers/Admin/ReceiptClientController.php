@@ -12,6 +12,7 @@ use App\Models\ReceiptClient;
 use App\Models\ReceiptClientProduct;
 use App\Models\ReceiptClientProductPivot;
 use App\Models\User;
+use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,19 +24,17 @@ class ReceiptClientController extends Controller
 {
     
     public function receive_money($id){
-        $receipt = ReceiptClient::find($id);
-        $generalsetting = GeneralSetting::first(); 
-        return view('partials.receive_money',compact('receipt','generalsetting'));
+        $receipt = ReceiptClient::find($id); 
+        return view('partials.receive_money',compact('receipt'));
     }
 
     public function print($id){
-        $receipts = ReceiptClient::with('receiptsReceiptClientProducts','staff')->whereIn('id',[$id])->get();
-        $generalsetting = GeneralSetting::first();
+        $receipts = ReceiptClient::with('receiptsReceiptClientProducts','staff')->whereIn('id',[$id])->get(); 
         foreach($receipts as $receipt){
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptClients.print',compact('receipts','generalsetting'));
+        return view('admin.receiptClients.print',compact('receipts'));
     }
 
     public function update_statuses(Request $request){ 
@@ -169,7 +168,8 @@ class ReceiptClientController extends Controller
     {
         abort_if(Gate::denies('receipt_client_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $staffs = User::whereIn('user_type', ['staff', 'admin'])->get();
+        $staffs = User::whereIn('user_type', ['staff', 'admin'])->get(); 
+        $websites = WebsiteSetting::pluck('site_name', 'id');
 
         $phone = null;
         $client_name = null;
@@ -256,12 +256,11 @@ class ReceiptClientController extends Controller
 
         if ($request->has('print')) {
             $receipts = $receipts->with('receiptsReceiptClientProducts')->get();
-            $generalsetting = GeneralSetting::first();
             foreach($receipts as $receipt){
                 $receipt->printing_times += 1;
                 $receipt->save();
             }
-            return view('admin.receiptClients.print', compact('receipts','generalsetting'));
+            return view('admin.receiptClients.print', compact('receipts'));
         }
         
         if($request->has('download')){
@@ -276,7 +275,7 @@ class ReceiptClientController extends Controller
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.receiptClients.index',compact(
-            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from',
+            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','websites',
             'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include', 'quickly',
             'done', 'description', 'receipts', 'statistics','deleted'));
     }
@@ -287,7 +286,11 @@ class ReceiptClientController extends Controller
 
         $previous_data = searchByPhone($request->phone_number);
 
-        return view('admin.receiptClients.create', compact('previous_data'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $website_setting_id = $request->website_setting_id;
+
+        return view('admin.receiptClients.create', compact('previous_data' , 'websites','website_setting_id'));
     }
 
     public function store(StoreReceiptClientRequest $request)
@@ -301,9 +304,12 @@ class ReceiptClientController extends Controller
     public function edit(ReceiptClient $receiptClient)
     {
         abort_if(Gate::denies('receipt_client_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $receiptClient->load('staff');
 
-        return view('admin.receiptClients.edit', compact('receiptClient'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+
+        return view('admin.receiptClients.edit', compact('receiptClient','websites'));
     }
 
     public function update(UpdateReceiptClientRequest $request, ReceiptClient $receiptClient)

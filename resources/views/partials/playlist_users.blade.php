@@ -22,7 +22,7 @@
                                                 selected 
                                             @endif
                                         @else 
-                                            @if($generalsetting->designer_id == $staff->id)
+                                            @if($site_settings->designer_id == $staff->id)
                                                 selected
                                             @endif
                                         @endif>
@@ -44,7 +44,7 @@
                                             selected 
                                         @endif
                                     @else 
-                                        @if($generalsetting->manufacturer_id == $staff->id)
+                                        @if($site_settings->manufacturer_id == $staff->id)
                                             selected
                                         @endif
                                     @endif>
@@ -66,7 +66,7 @@
                                             selected 
                                         @endif
                                     @else 
-                                        @if($generalsetting->preparer_id == $staff->id)
+                                        @if($site_settings->preparer_id == $staff->id)
                                             selected
                                         @endif
                                     @endif>
@@ -88,7 +88,7 @@
                                             selected 
                                         @endif
                                     @else 
-                                        @if($generalsetting->shipmenter_id == $staff->id)
+                                        @if($site_settings->shipmenter_id == $staff->id)
                                             selected
                                         @endif
                                     @endif>

@@ -27,6 +27,17 @@
         <div class="container">
             <div class="checkout-page contact-page">
                 <div class="checkout-form">
+
+
+                    @if ($errors->count() > 0)
+                        <div class="alert alert-danger" style="background-color: #f8d7da;">
+                            <ul class="list-unstyled">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('frontend.checkout') }}">
                         @csrf
                         <div class="row">
@@ -36,7 +47,7 @@
                                 </div>
                                 <div class="theme-form">
                                     @php
-                                        $name = explode(" ",auth()->user()->name);
+                                        $name = auth()->check() ? explode(" ",auth()->user()->name) : '';
                                     @endphp
                                     <div class="row check-out ">
                                         @if(auth()->check() && auth()->user()->user_type == 'seller')
@@ -55,12 +66,12 @@
                                         @else
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                                 <label>الاسم الاول</label>
-                                                <input type="text" name="first_name" required value="{{ $name[0] ?? ''}}" placeholder="">
+                                                <input type="text" name="first_name" required value="{{ isset($name[0]) ? $name[0] : old('first_name')}}" placeholder="">
                                             </div>
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                                 <label>الاسم الاخير</label>
-                                                <input type="text" name="last_name" required value="{{ $name[1] ?? ''}}" placeholder="">
-                                            </div>
+                                                <input type="text" name="last_name" required value="{{ isset($name[1]) ? $name[1] : old('last_name')}}" placeholder="">
+                                            </div> 
                                         @endif
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label class="field-label">التليفون</label>
@@ -77,7 +88,7 @@
                                                 @if(isset($countries['districts']))
                                                     <optgroup label="{{ __('Districts') }}">
                                                         @foreach ($countries['districts'] as $district)
-                                                            <option value={{ $district->id }}>
+                                                            <option value={{ $district->id }} @if($district->id == old('country_id')) selected @endif>
                                                                 {{ $district->name }} -  {{ dashboard_currency($district->cost) }}</option>
                                                         @endforeach
                                                     </optgroup>
@@ -85,7 +96,7 @@
                                                 @if(isset($countries['countries']))
                                                     <optgroup label="{{ __('Countries') }}">
                                                         @foreach ($countries['countries'] as $country)
-                                                            <option value={{ $country->id }}>
+                                                            <option value={{ $country->id }} @if($country->id == old('country_id')) selected @endif>
                                                                 {{ $country->name }} -  {{ dashboard_currency($country->cost) }}</option>
                                                         @endforeach
                                                     </optgroup>
@@ -93,7 +104,7 @@
                                                 @if(isset($countries['metro']))
                                                     <optgroup label="{{ __('Metro') }}">
                                                         @foreach ($countries['metro'] as $raw)
-                                                            <option value={{ $raw->id }}>
+                                                            <option value={{ $raw->id }} @if($raw->id == old('country_id')) selected @endif>
                                                                 {{ $raw->name }} -  {{ dashboard_currency($raw->cost) }}</option>
                                                         @endforeach
                                                     </optgroup>
@@ -109,11 +120,21 @@
                                             <input type="text" name="discount_code" value="{{old('discount_code')}}" placeholder="">
                                         </div>
 
-
-                                        {{-- <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="checkbox" name="shipping-option" id="account-option"> &ensp;
-                                            <label for="account-option">إنشاء حساب</label>
-                                        </div> --}}
+                                        
+                                        @guest
+                                            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <input type="checkbox" name="create_account" id="account-option" onchange="create_account_with_order(this)"> 
+                                                <label for="account-option">إنشاء حساب</label>
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-6 col-xs-12" id="email" style="display: none">
+                                                <label>البريد الألكتروني</label>
+                                                <input type="email" name="email">
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-12 col-xs-12" id="password" style="display: none">
+                                                <label class="field-label">كلمة المرور</label>
+                                                <input type="password" name="password">
+                                            </div>
+                                        @endguest
                                     </div>
                                 </div>
                             </div>
@@ -124,17 +145,30 @@
                                             <div>المنتجات <span>الإجمالي</span></div>
                                         </div>
                                         <ul class="qty">
-                                            @foreach($cart as $cartItem)
-                                                @php
-                                                    $product = $cartItem->product;
-                                                @endphp
-                                                @if($cartItem->product)
-                                                    <li>{{ $product->name}} (×{{ $cartItem->quantity }}) <span>{{ front_currency($cartItem->total_cost) }}</span></li>
-                                                @endif
-                                            @endforeach
+                                            @php
+                                                $total = 0;
+                                            @endphp
+                                            @if(session('cart'))
+                                                @foreach(session('cart') as $cartItem)
+                                                    @php
+                                                        $product = \App\Models\Product::find($cartItem['product_id']); 
+                                                        if($product){
+                                                            $prices = product_price_in_cart($cartItem['quantity'],$cartItem['variation'],$product);
+                                                            $total += ($prices['price']['value'] * $cartItem['quantity'] );
+                                                        }
+                                                    @endphp
+                                                    @if($product)
+                                                        <li>
+                                                            {{ $product->name}}
+                                                            (×{{ $cartItem['quantity'] }})
+                                                            <span>{{  ($prices['price']['value'] * $cartItem['quantity'])  }} {{ $prices['price']['symbol'] }}</span>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            @endif
                                         </ul>
                                         <ul class="total">
-                                            <li>الاجمالي <span class="count">{{ front_currency($cart->sum('total_cost')) }}</span></li>
+                                            <li>الاجمالي <span class="count">{{  $total  }} {{ $prices['price']['symbol'] }}</span></li>
                                         </ul>
                                     </div>
                                     <div class="payment-box">
@@ -205,4 +239,19 @@
         </div>
     </section>
     <!-- section end -->
+@endsection
+
+@section('scripts')
+    @parent 
+    <script>
+        function create_account_with_order(el){ 
+            if(el.checked){
+                $('#password').css('display','block');
+                $('#email').css('display','block');
+            }else{
+                $('#password').css('display','none');
+                $('#email').css('display','none');
+            }
+        }
+    </script>
 @endsection

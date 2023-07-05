@@ -83,12 +83,15 @@
 </head>
 
 <body>
+    @php
+        $site_settings = get_site_setting();
+    @endphp
     <div> 
         <div style="background: #eceff4;padding: 1.5rem;">
             <table>
                 <tr>
                     <td>
-                        <img loading="lazy" src="{{ asset($generalsetting->logo->getUrl()) }}" height="100"
+                        <img loading="lazy" src="{{ asset($site_settings->logo->getUrl()) }}" height="100"
                             style="display:inline-block;">
                     </td>
                 </tr>
@@ -96,7 +99,7 @@
             <h2 style="text-align: center;color:rgb(87, 22, 22)">إيصال إستلام نقدية / شيكات</h2>
         </div>
         <table style="padding: 1.5rem;float: right;position: relative;">
-            <img src="{{ asset($generalsetting->logo) }}" alt=""
+            <img src="{{ asset($site_settings->logo) }}" alt=""
                 style="position: absolute;opacity:0.1;top:100px;left:200px">
             <tr>
                 <td class="text-right small" style="font-size: 1.2rem;padding-bottom:18px"> </td>

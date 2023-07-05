@@ -8,7 +8,7 @@
     </div>
 
     @include('partials.delivery_man',[
-                                        'general_settings' => $general_settings,
+                                        'site_settings' => $site_settings,
                                         'row' => $receiptSocial, 
                                         'crudRoutePart' => 'admin.receipt-socials.',
                                         'response' => $response,

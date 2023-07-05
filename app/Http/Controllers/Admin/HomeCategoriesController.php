@@ -7,7 +7,8 @@ use App\Http\Requests\MassDestroyHomeCategoryRequest;
 use App\Http\Requests\StoreHomeCategoryRequest;
 use App\Http\Requests\UpdateHomeCategoryRequest;
 use App\Models\Category;
-use App\Models\HomeCategory; 
+use App\Models\HomeCategory;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,18 +19,18 @@ class HomeCategoriesController extends Controller
     {
         abort_if(Gate::denies('home_category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $homeCategories = HomeCategory::with(['category'])->get();
+        $homeCategories = HomeCategory::with(['category','website'])->get();
 
         return view('admin.homeCategories.index', compact('homeCategories'));
     }
 
     public function create()
     {
-        abort_if(Gate::denies('home_category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('home_category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
 
-        $categories = Category::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.homeCategories.create', compact('categories'));
+        return view('admin.homeCategories.create', compact('websites'));
     }
 
     public function store(StoreHomeCategoryRequest $request)
@@ -44,11 +45,13 @@ class HomeCategoriesController extends Controller
     {
         abort_if(Gate::denies('home_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = Category::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $categories = Category::where('website_setting_id',$homeCategory->website_setting_id)->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $homeCategory->load('category');
 
-        return view('admin.homeCategories.edit', compact('categories', 'homeCategory'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+
+        return view('admin.homeCategories.edit', compact('categories', 'homeCategory','websites'));
     }
 
     public function update(UpdateHomeCategoryRequest $request, HomeCategory $homeCategory)

@@ -32,7 +32,7 @@ class UpdateSubSubCategoryRequest extends FormRequest
             'sub_category_id' => [
                 'required',
                 'integer',
-            ],
+            ], 
         ];
     }
 }

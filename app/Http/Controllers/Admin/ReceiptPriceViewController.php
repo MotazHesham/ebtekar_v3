@@ -9,7 +9,8 @@ use App\Http\Requests\UpdateReceiptPriceViewRequest;
 use App\Models\GeneralSetting;
 use App\Models\ReceiptPriceView;
 use App\Models\ReceiptPriceViewProduct;
-use App\Models\User; 
+use App\Models\User;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,13 +19,12 @@ use Yajra\DataTables\Facades\DataTables;
 class ReceiptPriceViewController extends Controller
 {
     public function print($id){
-        $receipts = ReceiptPriceView::with('receiptPriceViewReceiptPriceViewProducts','staff')->whereIn('id',[$id])->get();
-        $generalsetting = GeneralSetting::first();
+        $receipts = ReceiptPriceView::with('receiptPriceViewReceiptPriceViewProducts','staff')->whereIn('id',[$id])->get(); 
         foreach($receipts as $receipt){
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptPriceViews.print',compact('receipts','generalsetting'));
+        return view('admin.receiptPriceViews.print',compact('receipts'));
     } 
 
     public function duplicate($id){
@@ -222,13 +222,12 @@ class ReceiptPriceViewController extends Controller
         }
 
         if ($request->has('print')) {
-            $receipts = $receipts->with('receiptPriceViewReceiptPriceViewProducts')->get();
-            $generalsetting = GeneralSetting::first();
+            $receipts = $receipts->with('receiptPriceViewReceiptPriceViewProducts')->get(); 
             foreach($receipts as $receipt){
                 $receipt->printing_times += 1;
                 $receipt->save();
             }
-            return view('admin.receiptPriceViews.print', compact('receipts','generalsetting'));
+            return view('admin.receiptPriceViews.print', compact('receipts'));
         }
         
         $statistics = [  
@@ -248,7 +247,9 @@ class ReceiptPriceViewController extends Controller
     {
         abort_if(Gate::denies('receipt_price_view_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.receiptPriceViews.create');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        
+        return view('admin.receiptPriceViews.create',compact('websites'));
     }
 
     public function store(StoreReceiptPriceViewRequest $request)
@@ -263,7 +264,9 @@ class ReceiptPriceViewController extends Controller
     {
         abort_if(Gate::denies('receipt_price_view_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.receiptPriceViews.edit', compact('receiptPriceView'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+
+        return view('admin.receiptPriceViews.edit', compact('receiptPriceView','websites'));
     }
 
     public function update(UpdateReceiptPriceViewRequest $request, ReceiptPriceView $receiptPriceView)

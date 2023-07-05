@@ -7,7 +7,8 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use App\Models\Category; 
+use App\Models\Category;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -31,7 +32,7 @@ class CategoriesController extends Controller
         abort_if(Gate::denies('category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Category::query()->select(sprintf('%s.*', (new Category)->table));
+            $query = Category::query()->select(sprintf('%s.*', (new Category)->table))->with('website');
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -80,6 +81,9 @@ class CategoriesController extends Controller
 
                 return '';
             });  
+            $table->editColumn('website_site_name', function ($row) { 
+                return $row->website->site_name ?? '';
+            });
             $table->editColumn('featured', function ($row) { 
                 return '
                 <label class="c-switch c-switch-pill c-switch-success">
@@ -87,7 +91,7 @@ class CategoriesController extends Controller
                     <span class="c-switch-slider"></span>
                 </label>';
             }); 
-            $table->rawColumns(['actions', 'placeholder', 'banner', 'icon', 'design', 'featured']);
+            $table->rawColumns(['actions', 'placeholder', 'banner', 'icon', 'design', 'featured','website_site_name']);
 
             return $table->make(true);
         }
@@ -99,7 +103,10 @@ class CategoriesController extends Controller
     {
         abort_if(Gate::denies('category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.categories.create');
+        
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.categories.create',compact('websites'));
     }
 
     public function store(StoreCategoryRequest $request)
@@ -128,7 +135,9 @@ class CategoriesController extends Controller
     {
         abort_if(Gate::denies('category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.categories.edit', compact('category'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        
+        return view('admin.categories.edit', compact('category','websites'));
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)

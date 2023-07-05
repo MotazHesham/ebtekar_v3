@@ -80,6 +80,14 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('admin.receipt-socials.create') }}">
+                        <div class="row mb-3">
+                            @foreach($websites as $id => $entry)
+                                <div class="form-check form-check-inline col">
+                                    <input class="form-check-input" type="radio" name="website_setting_id" id="{{$id}}" value="{{$id}}" required @if($loop->first) checked @endif>
+                                    <label class="form-check-label" for="{{$id}}">{{$entry}}</label>
+                                </div>
+                            @endforeach 
+                        </div>
                         <input type="text" name="phone_number" class="form-control" required
                             placeholder="{{ trans('cruds.receiptSocial.fields.phone_number') }}"
                             onkeyup="searchByPhone(this)">
@@ -216,7 +224,7 @@
                                         new
                                     </span>
                                 @endif
-                                <span class="badge rounded-pill text-bg-danger text-white mb-1" style="cursor: pointer" onclick="show_logs('App\\Models\\ReceiptSocial','{{ $receipt->id }}','receiptSocial')">
+                                <span class="badge rounded-pill @if($receipt->website_setting_id == 2) text-bg-dark @elseif($receipt->website_setting_id == 3) text-bg-warning @else text-bg-danger @endif text-white mb-1" style="cursor: pointer" onclick="show_logs('App\\Models\\ReceiptSocial','{{ $receipt->id }}','receiptSocial')">
                                     {{ $receipt->order_num ?? '' }}
                                 </span>
                                 <div style="display:flex;justify-content:space-between">

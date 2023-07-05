@@ -63,13 +63,16 @@
 	</style>
 </head>
 <body>
+    @php
+        $site_settings = get_site_setting();
+    @endphp
     @foreach($receipts as $receipt)
         <div style="page-break-after: always;">
             <div style="background: #eceff4;padding: 1.5rem;">
                 <table>
                     <tr>
                         <td>
-                            <img loading="lazy" src="{{ asset($generalsetting->logo->getUrl()) }}" height="40"
+                            <img loading="lazy" src="{{ asset($site_settings->logo->getUrl()) }}" height="40"
                                 style="display:inline-block;">
                         </td>
                         <td style="font-size: 2.5rem;" class="text-right strong">{!! QrCode::size(100)->generate($receipt->order_num) !!}</td>
@@ -77,24 +80,24 @@
                 </table>
                 <table>
                     <tr>
-                        <td style="font-size: 1.2rem;" class="strong">{{ $generalsetting->site_name }}</td>
+                        <td style="font-size: 1.2rem;" class="strong">{{ $site_settings->site_name }}</td>
                         <td class="text-right"></td>
                     </tr>
                     <tr>
-                        <td class="gry-color small">{{ $generalsetting->address }}</td>
+                        <td class="gry-color small">{{ $site_settings->address }}</td>
                         <td class="text-right"></td>
                     </tr>
                     <tr>
-                        <td class="gry-color small">Email: {{ $generalsetting->email }}</td>
+                        <td class="gry-color small">Email: {{ $site_settings->email }}</td>
                     </tr>
                     <tr>
-                        <td class="gry-color small" >Phone: {{ $generalsetting->phone }}</td>
+                        <td class="gry-color small" >Phone: {{ $site_settings->phone }}</td>
                     </tr>
                 </table>
 
             </div>
             <table style="padding: 1.5rem;float: right;position: relative;">
-                <img src="{{ asset($generalsetting->logo->getUrl()) }}" alt="" style="position: absolute;opacity:0.25">
+                <img src="{{ asset($site_settings->logo->getUrl()) }}" alt="" style="position: absolute;opacity:0.25">
                 <tr>
                     <td class="text-right small" style="font-size: 1.2rem;padding-bottom:18px" ><span >{{ $receipt->created_at }}</span> <span class="gry-color strong" style="float:right">: تحرير في </span></td>
                     <td class="text-right small" style="font-size: 1.2rem;padding-bottom:18px"><span >{{$receipt->staff ? $receipt->staff->name : ''}}</span> <span class="gry-color strong" style="float:right" >: الموظف</span></td>

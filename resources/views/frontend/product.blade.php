@@ -61,10 +61,10 @@
                                 <h2>{{ $product->name }}</h2>
                                 <ul class="pro-price" id="">
                                     @if($product->discount > 0)
-                                        <li id="product-price-for-variant">{{ front_currency($product->unit_price,$product->weight)}}</li>
-                                        <li><span id="product-price-calc-discount">{{ front_currency($product->calc_discount($product->unit_price),$product->weight)}}</span></li>
+                                        <li id="product-price-for-variant">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
+                                        <li><span id="product-price-calc-discount">{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}</span></li>
                                     @else
-                                        <li id="product-price-for-variant">{{ front_currency($product->unit_price,$product->weight)}}</li>
+                                        <li id="product-price-for-variant">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
                                     @endif
                                 </ul>
                                 <div class="revieu-box">
@@ -83,40 +83,41 @@
                                 @csrf
                                 <input type="hidden" name="id" value="{{$product->id}}">
                                 <input type="hidden" name="variant" id="variant">
-
-                                {{-- Custom the product --}}
-                                <div class="modal fade" id="requist" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">اطلب منتجك الخاص</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body"> 
-                                                <h5 class="mb-3">الصور المراد طباعتها علي المنتج</h5>
-                                                <div id="product-images">
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <input type="file" id="photos-1" name="photos[]" class="form-control"> 
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="ملحوظة علي الصورة" >
+                                @if($product->special)
+                                    {{-- Custom the product --}}
+                                    <div class="modal fade" id="requist" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">اطلب منتجك الخاص</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body"> 
+                                                    <h5 class="mb-3">الصور المراد طباعتها علي المنتج</h5>
+                                                    <div id="product-images">
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <input type="file" id="photos-1" name="photos[]" class="form-control" required> 
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="ملحوظة علي الصورة" >
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">أضف المزيد</button>
+                                    
+                                                    <div class="col-12 mb-3">
+                                                        <label>وصف</label>
+                                                        <textarea class="form-control" name="description" placeholder="وصف" rows="3" required></textarea>
+                                                    </div>
+                                    
+                                                    <button type="submit" class="btn btn-rounded black-btn me-3">أضف الى السلة</button> 
                                                 </div>
-                                                <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">أضف المزيد</button>
-                                
-                                                <div class="col-12 mb-3">
-                                                    <label>وصف</label>
-                                                    <textarea class="form-control" name="description" placeholder="وصف" rows="3"></textarea>
-                                                </div>
-                                
-                                                <button type="submit" class="btn btn-rounded black-btn me-3">أضف الى السلة</button> 
                                             </div>
                                         </div>
-                                    </div>
-                                </div> 
+                                    </div> 
+                                @endif
 
                                 <div id="selectSize" class="pro-group addeffect-section product-description border-product mb-0"> 
                                     @if ($product->attribute_options != null && count(json_decode($product->attribute_options)) > 0)
@@ -319,8 +320,8 @@
                         @foreach (\App\Models\Product::where('sub_category_id', $product->sub_category_id)->where('id', '!=', $product->id)->where('published', '1')->limit(10)->get() as $key => $related_product)
                             
                             @php
-                                $front_imag_2 = $related_product->photos[0] ? $related_product->photos[0]->getUrl('preview2') : '';
-                                $back_imag_2 = $related_product->photos[1] ? $related_product->photos[1]->getUrl('preview2') : $front_imag_2;
+                                $front_imag_2 = isset($related_product->photos[0]) ? $related_product->photos[0]->getUrl('preview2') : '';
+                                $back_imag_2 = isset($related_product->photos[1]) ? $related_product->photos[1]->getUrl('preview2') : $front_imag_2;
                             @endphp 
 
                             <div>
@@ -339,10 +340,21 @@
                                             </a>
                                         </div>
                                         <div class="product-icon icon-inline">
-                                            <button class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
-                                                <i data-feather="shopping-cart"></i>
-                                            </button>
-                                            <a href="javascript:void(0)" class="add-to-wish tooltip-top"
+                                            @if($product->variant_product || $product->special)
+                                                <a href="{{ route('frontend.product', $product->slug) }}" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
+                                                    <i data-feather="shopping-cart"></i>
+                                                </a>
+                                            @else  
+                                                <form id="add-to-cart-form" action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{$product->id}}">
+                                                    <input type="hidden" name="variant" id="variant">
+                                                    <button type="submit" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
+                                                        <i data-feather="shopping-cart"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            <a href="{{ route('frontend.wishlist.add',$product->slug) }}" class="add-to-wish tooltip-top"
                                                 data-tippy-content="Add to Wishlist">
                                                 <i data-feather="heart"></i>
                                             </a>
@@ -371,14 +383,7 @@
                                             <h3> {{ $related_product->name }} </h3>
                                         </a>
                                         <h5>
-                                            @if($related_product->discount > 0)
-                                                {{front_currency($related_product->calc_discount($product->unit_price),$product->weight)}}
-                                                <span>
-                                                    {{ front_currency($related_product->unit_price,$product->weight) }}
-                                                </span>
-                                            @else
-                                                {{ front_currency($related_product->unit_price,$product->weight) }}
-                                            @endif
+                                            <?php echo $product->calc_price_as_text(); ?>  
                                         </h5>
                                     </div>
                                 </div>

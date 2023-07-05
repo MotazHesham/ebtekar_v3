@@ -54,12 +54,22 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                            <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
+                                @foreach($websites as $id => $entry)
+                                    <option value="{{ $id }}" {{ old('website_setting_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('website_setting_id'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('website_setting_id') }}
+                                </div>
+                            @endif 
+                        </div>
+                        <div class="form-group">
                             <label class="required" for="category_id">{{ trans('cruds.product.fields.category') }}</label>
                             <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category_id" id="category_id" required>
-                                @foreach ($categories as $id => $entry)
-                                    <option value="{{ $id }}" {{ old('category_id') == $id ? 'selected' : '' }}>
-                                        {{ $entry }}</option>
-                                @endforeach
+                                {{-- ajax call --}}
                             </select>
                             @if ($errors->has('category'))
                                 <div class="invalid-feedback">
@@ -406,7 +416,19 @@
             });
         }
         
+        $('#website_setting_id').on('change', function() {
+            get_categories_by_website(true);
+        });
+
         $('#category_id').on('change', function() {
+            get_sub_categories_by_category();
+        });
+
+        $('#sub_category_id').on('change', function() {
+            get_sub_sub_categories_by_category();
+        }); 
+
+        function get_sub_categories_by_category(){ 
             var category_id = $('#category_id').val();
             $.post('{{ route('admin.products.get_sub_categories_by_category') }}',{_token:'{{ csrf_token() }}', category_id:category_id}, function(data){
                 $('#sub_category_id').html(null);
@@ -420,16 +442,12 @@
                 } 
                 get_sub_sub_categories_by_category();
             });
-        });
-
-        $('#sub_category_id').on('change', function() {
-            get_sub_sub_categories_by_category();
-        });
+        }
 
         function get_sub_sub_categories_by_category(){  
             var sub_category_id = $('#sub_category_id').val();
             $.post('{{ route('admin.products.get_sub_sub_categories_by_subcategory') }}',{_token:'{{ csrf_token() }}', sub_category_id:sub_category_id}, function(data){
-                $('#sub_sub_category_id').html(null);
+                $('#sub_sub_category_id').html(null);  
                 $('#sub_sub_category_id').append($('<option>', {
                     value: null,
                     text: null

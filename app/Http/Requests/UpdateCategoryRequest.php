@@ -34,7 +34,7 @@ class UpdateCategoryRequest extends FormRequest
             'meta_description' => [
                 'string',
                 'nullable',
-            ],
+            ], 
         ];
     }
 }

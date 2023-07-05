@@ -98,6 +98,7 @@ class ReceiptSocial extends Model
         'shipmenter_id',
         'delivery_man_id',
         'shipping_country_id',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -208,6 +209,9 @@ class ReceiptSocial extends Model
         return $this->belongsToMany(Social::class);
     }
     
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+    }
 	// operations 
 
 	public function calc_total_cost(){

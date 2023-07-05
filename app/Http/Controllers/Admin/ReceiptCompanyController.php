@@ -9,8 +9,7 @@ use App\Http\Controllers\WaslaController;
 use App\Http\Requests\MassDestroyReceiptCompanyRequest;
 use App\Http\Requests\StoreReceiptCompanyRequest;
 use App\Http\Requests\UpdateReceiptCompanyRequest;
-use App\Models\Country;
-use App\Models\GeneralSetting;
+use App\Models\Country; 
 use App\Models\ReceiptCompany;
 use App\Models\User;
 use Gate;
@@ -37,12 +36,11 @@ class ReceiptCompanyController extends Controller
 
     public function print($id){
         $receipts = ReceiptCompany::with('staff','designer','manufacturer','preparer','shipmenter')->whereIn('id',[$id])->get();
-        $generalsetting = GeneralSetting::first();
         foreach($receipts as $receipt){
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptCompanies.print',compact('receipts','generalsetting'));
+        return view('admin.receiptCompanies.print',compact('receipts'));
     }
 
     public function update_statuses(Request $request){ 
@@ -275,13 +273,12 @@ class ReceiptCompanyController extends Controller
             return Excel::download(new ReceiptCompanyExport($receipts->get()), 'company_receipts_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
         } 
         if ($request->has('print')) {
-            $receipts = $receipts->get();
-            $generalsetting = GeneralSetting::first();
+            $receipts = $receipts->get(); 
             foreach($receipts as $receipt){
                 $receipt->printing_times += 1;
                 $receipt->save();
             }
-            return view('admin.receiptCompanies.print', compact('receipts','generalsetting'));
+            return view('admin.receiptCompanies.print', compact('receipts'));
         }
         
         $statistics = [
@@ -336,15 +333,15 @@ class ReceiptCompanyController extends Controller
 
         $receiptCompany->load('staff', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man', 'shipping_country');
 
-        $general_settings = GeneralSetting::first(); 
+        $site_settings = get_site_setting(); 
 
-        if($general_settings->delivery_system == 'wasla'){
+        if($site_settings->delivery_system == 'wasla'){
             $waslaController = new WaslaController;
             $response = $waslaController->countries();
         }else{
             $response = '';
         }
-        return view('admin.receiptCompanies.edit', compact('receiptCompany', 'shipping_countries','response','general_settings'));
+        return view('admin.receiptCompanies.edit', compact('receiptCompany', 'shipping_countries','response','site_settings'));
     }
 
     public function update(UpdateReceiptCompanyRequest $request, ReceiptCompany $receiptCompany)

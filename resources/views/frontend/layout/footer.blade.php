@@ -11,22 +11,22 @@
                             <div class="footer-contant">
                                 <div class="footer-logo">
                                     <a href="{{ route('home') }}">
-                                        <img src="{{ $home_general_setting->logo->getUrl() }}" class="img-fluid"
+                                        <img src="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" class="img-fluid"
                                             alt="logo">
                                     </a>
                                 </div>
                                 <p>
-                                    {{ $home_general_setting->description }}
+                                    {{ $site_settings->description }}
                                 </p>
                                 <ul class="sosiyal">
-                                    <li><a href="{{ $home_general_setting->facebook }}"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="{{ $home_general_setting->instagram }}"><i class="fa fa-instagram"></i></a></li>
-                                    <li><a href="{{ $home_general_setting->youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                    <li><a href="{{ $site_settings->facebook }}"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="{{ $site_settings->instagram }}"><i class="fa fa-instagram"></i></a></li>
+                                    <li><a href="{{ $site_settings->youtube }}"><i class="fa fa-youtube"></i></a></li>
                                 </ul>
                                 <ul class="sosiyal">
-                                    <li><a href="{{ $home_general_setting->whatsapp }}"><i class="fa fa-whatsapp"></i></a></li>
-                                    <li><a href="{{ $home_general_setting->telegram }}"><i class="fa fa-telegram"></i></a></li>
-                                    <li><a href="{{ $home_general_setting->linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                    <li><a href="{{ $site_settings->whatsapp }}"><i class="fa fa-whatsapp"></i></a></li>
+                                    <li><a href="{{ $site_settings->telegram }}"><i class="fa fa-telegram"></i></a></li>
+                                    <li><a href="{{ $site_settings->linkedin }}"><i class="fa fa-linkedin"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -37,7 +37,17 @@
                             <div class="footer-contant">
                                 <ul>
                                     <li><a href="{{ route('home') }}">الرئيسية</a></li>
-                                    <li><a href="{{ route('frontend.about') }}">عن إبتكار</a></li>
+                                    <li>
+                                        <a href="{{ route('frontend.about') }}">   
+                                            @if($site_settings->id  == 2)
+                                                عن أرتجال
+                                            @elseif($site_settings->id  == 3)
+                                                عن فيجرز
+                                            @else
+                                                عن أبتكار 
+                                            @endif
+                                        </a>
+                                    </li>
                                     <li><a href="{{ route('frontend.policies','support') }}">سياسة الدعم</a></li>
                                     <li><a href="{{ route('frontend.policies','returned') }}">سياسة المرتجعات</a></li>
                                     <li><a href="{{ route('frontend.policies','terms') }}">سياسة البنود</a></li>
@@ -52,10 +62,10 @@
                             <div class="footer-contant">
                                 <ul class="contact-list">
                                     <li><i class="fa fa-map-marker"></i>
-                                        {{ $home_general_setting->address }}
+                                        {{ $site_settings->address }}
                                     </li>
-                                    <li><i class="fa fa-phone"></i>تليفون: <span>{{ $home_general_setting->phone_number}}</span></li>
-                                    <li><i class="fa fa-envelope-o"></i>بريد الكتروني: {{ $home_general_setting->email }}
+                                    <li><i class="fa fa-phone"></i>تليفون: <span>{{ $site_settings->phone_number}}</span></li>
+                                    <li><i class="fa fa-envelope-o"></i>بريد الكتروني: {{ $site_settings->email }}
                                     </li>
 
                                 </ul>
@@ -101,7 +111,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="footer-left">
-                        <p>© {{ date('Y') }} {{ $home_general_setting->site_name }}</p>
+                        <p>© {{ date('Y') }} {{ $site_settings->site_name }}</p>
                     </div>
                 </div>
 

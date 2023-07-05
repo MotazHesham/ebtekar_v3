@@ -41,6 +41,7 @@ class ReceiptClient extends Model
         'quickly',
         'printing_times',
         'staff_id',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -71,6 +72,9 @@ class ReceiptClient extends Model
         return $this->belongsTo(User::class, 'staff_id');
     }
 
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+    }
 	// operations
 	public function calc_discount(){
 		$total = $this->total_cost / 100;

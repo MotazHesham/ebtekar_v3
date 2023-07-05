@@ -55,7 +55,7 @@ class UpdateProductRequest extends FormRequest
             'category_id' => [
                 'required',
                 'integer',
-            ],
+            ], 
         ];
     }
 }

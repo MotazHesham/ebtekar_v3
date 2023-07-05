@@ -10,13 +10,20 @@ class ReceiptPriceViewObserver
     public function creating(ReceiptPriceView $receiptPriceView){
         
         // Getting next Order Num
-        $last_receipt_price_view = ReceiptPriceView::latest()->first();
+        $last_receipt_price_view = ReceiptPriceView::where('website_setting_id',$receiptPriceView->website_setting_id)->latest()->first();
         if ($last_receipt_price_view) {
             $order_num = $last_receipt_price_view->order_num ? intval(str_replace('#', '', strrchr($last_receipt_price_view->order_num, "#"))) : 0;
         } else {
             $order_num = 0;
         }
-        $receiptPriceView->order_num = 'receipt-price-view#' . ($order_num + 1);
+        if($receiptPriceView->website_setting_id == 2){
+            $str = 'ertegal-';
+        }elseif($receiptPriceView->website_setting_id == 3){
+            $str = 'figures-';
+        }else{ 
+            $str = 'ebtekar-';
+        }
+        $receiptPriceView->order_num = $str . 'price-view#' . ($order_num + 1);
 
         // Assign the Creator Of The Receipt
         $receiptPriceView->staff_id = Auth::id();  

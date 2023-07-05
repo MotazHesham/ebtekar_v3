@@ -266,8 +266,8 @@
                                             <div class="row">
                                                 @foreach($products as $product)
                                                     @php
-                                                        $front_image = $product->photos[0] ? $product->photos[0]->getUrl('preview2') : '';
-                                                        $back_image = $product->photos[1] ? $product->photos[1]->getUrl('preview2') : $front_image;
+                                                        $front_image = isset($product->photos[0]) ? $product->photos[0]->getUrl('preview2') : '';
+                                                        $back_image = isset($product->photos[1]) ? $product->photos[1]->getUrl('preview2') : $front_image;
                                                     @endphp 
                                                     <div class="col-xl-3 col-lg-3 col-md-4 col-6 col-grid-box">
                                                         <div>
@@ -286,9 +286,20 @@
                                                                         </a>
                                                                     </div>
                                                                     <div class="product-icon icon-inline">
-                                                                        {{-- <button class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
-                                                                            <i data-feather="shopping-cart"></i>
-                                                                        </button> --}}
+                                                                        @if($product->variant_product || $product->special)
+                                                                            <a href="{{ route('frontend.product', $product->slug) }}" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
+                                                                                <i data-feather="shopping-cart"></i>
+                                                                            </a>
+                                                                        @else  
+                                                                            <form id="add-to-cart-form" action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;">
+                                                                                @csrf
+                                                                                <input type="hidden" name="id" value="{{$product->id}}">
+                                                                                <input type="hidden" name="variant" id="variant">
+                                                                                <button type="submit" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
+                                                                                    <i data-feather="shopping-cart"></i>
+                                                                                </button>
+                                                                            </form>
+                                                                        @endif
                                                                         <a href="{{ route('frontend.wishlist.add',$product->slug) }}" class="add-to-wish tooltip-top"
                                                                             data-tippy-content="Add to Wishlist">
                                                                             <i data-feather="heart"></i>
@@ -311,14 +322,7 @@
                                                                         <h3> {{ $product->name }} </h3>
                                                                     </a>
                                                                     <h5>
-                                                                        @if($product->discount > 0)
-                                                                            {{front_currency($product->calc_discount($product->unit_price),$product->weight)}}
-                                                                            <span>
-                                                                                {{ front_currency($product->unit_price,$product->weight) }}
-                                                                            </span>
-                                                                        @else
-                                                                            {{ front_currency($product->unit_price,$product->weight) }}
-                                                                        @endif
+                                                                        <?php echo $product->calc_price_as_text(); ?>  
                                                                     </h5>
                                                                 </div>
                                                             </div>

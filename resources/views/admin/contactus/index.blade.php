@@ -32,6 +32,9 @@
                         {{ trans('cruds.contactu.fields.message') }}
                     </th>
                     <th>
+                        {{ trans('cruds.contactu.fields.from_website') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -93,6 +96,7 @@
 { data: 'email', name: 'email' },
 { data: 'phone_number', name: 'phone_number' },
 { data: 'message', name: 'message' },
+{ data: 'from_website', name: 'from_website' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

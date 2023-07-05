@@ -29,7 +29,7 @@ class UpdateReceiptClientRequest extends FormRequest
                 'regex:' . config('panel.phone_number_format'), 
                 'size:' . config('panel.phone_number_size'), 
                 'required',
-            ],
+            ], 
         ];
     }
 }

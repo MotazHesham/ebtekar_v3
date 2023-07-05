@@ -7,7 +7,7 @@
     </div>
 
     @include('partials.delivery_man',[
-                                        'general_settings' => $general_settings,
+                                        'site_settings' => $site_settings,
                                         'row' => $receiptCompany, 
                                         'crudRoutePart' => 'admin.receipt-companies.',
                                         'response' => $response,

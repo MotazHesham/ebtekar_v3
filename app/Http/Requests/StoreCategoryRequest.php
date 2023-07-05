@@ -35,6 +35,10 @@ class StoreCategoryRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'website_setting_id' => [
+                'required',
+                'integer',
+            ], 
         ];
     }
 }

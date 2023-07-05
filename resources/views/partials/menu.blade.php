@@ -127,7 +127,7 @@
 
                 </i>
                 {{ trans('cruds.playlist.title') }}
-                <span class="badge bg-light-gradient text-dark ms-auto">{{ $playlists_counter_sum }}</span>
+                @if($playlists_counter_sum) <span class="badge bg-light-gradient text-dark ms-auto">{{ $playlists_counter_sum   }}</span> @endif
             </a>
             <ul class="c-sidebar-nav-dropdown-items">
                 <li class="c-sidebar-nav-item">
@@ -136,7 +136,7 @@
 
                         </i>
                         {{ trans('cruds.playlist.menu.design') }} 
-                        <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>
+                        @if($playlists_counter['design']) <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>@endif
                     </a>
                 <li class="c-sidebar-nav-item">
                 </li>
@@ -145,7 +145,7 @@
 
                         </i>
                         {{ trans('cruds.playlist.menu.manufacturing') }}
-                        <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> 
+                        @if($playlists_counter['manufacturing']) <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> @endif
                     </a>
                 </li>
                 </li>
@@ -154,7 +154,7 @@
 
                         </i>
                         {{ trans('cruds.playlist.menu.prepare') }}
-                        <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> 
+                        @if($playlists_counter['prepare']) <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> @endif
                     </a>
                 </li>
                 </li>
@@ -163,7 +163,7 @@
 
                         </i>
                         {{ trans('cruds.playlist.menu.shipment') }}
-                        <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> 
+                        @if($playlists_counter['shipment']) <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> @endif
                     </a>
                 </li>
             </ul>
@@ -283,7 +283,7 @@
 
                     </i>
                     {{ trans('cruds.order.title') }}
-                    <span class="badge bg-primary-gradient ms-auto">{{\App\Models\Order::where('printing_times',1)->count()}}</span>
+                    <span class="badge bg-primary-gradient ms-auto">{{\App\Models\Order::where('playlist_status','pending')->count()}}</span>
                 </a>
             </li>
         @endcan
@@ -524,7 +524,7 @@
 
                     </i>
                     {{ trans('cruds.customer.title') }}
-                    <span class="badge bg-success-gradient text-dark ms-auto">{{ number_format($settings11['total_number']) }} جديد</span>
+                    @if(number_format($settings11['total_number'])) <span class="badge bg-success-gradient text-dark ms-auto">{{ number_format($settings11['total_number']) }} جديد</span> @endif
                 </a>
             </li>
         @endcan
@@ -616,7 +616,7 @@
 
         <li class="nav-title">عام</li>
         @can('setting_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/general-settings*") ? "c-show" : "" }} {{ request()->is("admin/user-alerts*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/socials*") ? "c-show" : "" }} {{ request()->is("admin/polices*") ? "c-show" : "" }} {{ request()->is("admin/seo-settings*") ? "c-show" : "" }} ">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/website-settings*") ? "c-show" : "" }} {{ request()->is("admin/user-alerts*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/socials*") ? "c-show" : "" }} {{ request()->is("admin/polices*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-cog c-sidebar-nav-icon">
 
@@ -624,13 +624,13 @@
                     {{ trans('cruds.setting.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
-                    @can('general_setting_access')
+                    @can('website_setting_access')
                         <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.general-settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/general-settings") || request()->is("admin/general-settings/*") ? "c-active" : "" }}">
+                            <a href="{{ route("admin.website-settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/website-settings") || request()->is("admin/website-settings/*") ? "c-active" : "" }}">
                                 <i class="fa-fw fas fa-wrench c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.generalSetting.title') }}
+                                {{ trans('cruds.websiteSetting.title') }}
                             </a>
                         </li>
                     @endcan
@@ -673,17 +673,7 @@
                                 {{ trans('cruds.police.title') }}
                             </a>
                         </li>
-                    @endcan
-                    @can('seo_setting_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.seo-settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/seo-settings") || request()->is("admin/seo-settings/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-search c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.seoSetting.title') }}
-                            </a>
-                        </li>
-                    @endcan
+                    @endcan 
                     @can('faq_management_access')
                         <li class="c-sidebar-nav-dropdown {{ request()->is("admin/faq-categories*") ? "c-show" : "" }} {{ request()->is("admin/faq-questions*") ? "c-show" : "" }}">
                             <a class="c-sidebar-nav-dropdown-toggle" href="#">

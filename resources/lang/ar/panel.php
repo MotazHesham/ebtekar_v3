@@ -1,28 +1,16 @@
 <?php
-
-if(config('app.name') == 'ErtgalStore'){ 
+$site_settings = get_site_setting();
+if($site_settings->id  == 2){ 
     return [
-        'site_title' => '<b style="color: #f5e30b">E</b>rtgal<b style="color: #f5e30b">S</b>tore', 
-        'receiptCompany' => [
-            'title'          => 'فواتير أرتجال',
-            'title_singular' => 'فاتورة أرتجال',
-        ],
+        'site_title' => '<b style="color: #f5e30b">E</b>rtgal<b style="color: #f5e30b">S</b>tore',  
     ];
-}elseif(config('app.name') == 'FiguresStore'){
+}elseif($site_settings->id  == 3){
 
     return [
-        'site_title' => '<b style="color: #f7941d">F</b>igures<b style="color: #f7941d">S</b>tore', 
-        'receiptCompany' => [
-            'title'          => 'فواتير فيجرز',
-            'title_singular' => 'فاتورة فيجرز',
-        ],
+        'site_title' => '<b style="color: #f7941d">F</b>igures<b style="color: #f7941d">S</b>tore',  
     ];
-}elseif(config('app.name') == 'EbtekarStore'){ 
+}else{ 
     return [
-        'site_title' => '<b style="color: #FBAC00">E</b>btekar<b style="color: #FBAC00">S</b>tore', 
-        'receiptCompany' => [
-            'title'          => 'فواتير أبتكار',
-            'title_singular' => 'فاتورة أبتكار',
-        ],
+        'site_title' => '<b style="color: #FBAC00">E</b>btekar<b style="color: #FBAC00">S</b>tore',  
     ];
 } 

@@ -10,11 +10,22 @@
         <form method="POST" action="{{ route("admin.home-categories.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
+                <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" onchange="get_categories_by_website()" name="website_setting_id" id="website_setting_id" required>
+                    @foreach($websites as $id => $entry)
+                        <option value="{{ $id }}" {{ old('website_setting_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('website_setting_id'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('website_setting_id') }}
+                    </div>
+                @endif 
+            </div>
+            <div class="form-group">
                 <label class="required" for="category_id">{{ trans('cruds.homeCategory.fields.category') }}</label>
                 <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category_id" id="category_id" required>
-                    @foreach($categories as $id => $entry)
-                        <option value="{{ $id }}" {{ old('category_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
+                    {{-- ajax call --}}
                 </select>
                 @if($errors->has('category'))
                     <div class="invalid-feedback">

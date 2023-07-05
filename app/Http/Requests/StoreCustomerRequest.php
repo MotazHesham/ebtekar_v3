@@ -33,6 +33,10 @@ class StoreCustomerRequest extends FormRequest
             'password' => [
                 'required',
             ],
+            'website_setting_id' => [
+                'required',
+                'integer',
+            ], 
         ];
     }
 }

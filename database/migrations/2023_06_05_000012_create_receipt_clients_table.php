@@ -21,6 +21,8 @@ class CreateReceiptClientsTable extends Migration
             $table->boolean('done')->default(0)->nullable();
             $table->boolean('quickly')->default(0)->nullable();
             $table->integer('printing_times')->nullable();
+            $table->unsignedBigInteger('website_setting_id')->nullable();
+            $table->foreign('website_setting_id', 'website_setting_fk_86542348')->references('id')->on('website_settings');
             $table->timestamps();
             $table->softDeletes();
         });

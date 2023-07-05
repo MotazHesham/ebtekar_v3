@@ -8,12 +8,14 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     public function product($slug){ 
-        $product  = Product::where('slug', $slug)->first();
+        $site_settings = get_site_setting();
+        $product  = Product::where('website_setting_id',$site_settings->id)->where('slug', $slug)->first();
         if(!$product){
             abort(404);
         }
@@ -63,16 +65,16 @@ class ProductController extends Controller
         if($product->discount_type == 'percent'){
             $before_discount = $price;
             $price -= ($price * $product->discount)/100;
-        }elseif($product->discount_type == 'amount'){
+        }elseif($product->discount_type == 'flat'){
             $before_discount = $price;
             $price -= $product->discount;
         }
 
         return array(
                         'discount' => $product->discount,
-                        'before_discount' => front_currency($before_discount),
-                        'price' => front_currency($price),
-                        'commission' => front_currency($comission),
+                        'before_discount' => front_calc_product_currency($before_discount,$product->weight)['as_text'],
+                        'price' => front_calc_product_currency($price,$product->weight)['as_text'],
+                        'commission' => $comission,
                         'variant' => $str,
                         'available_quantity' => $available_quantity,
                     );
@@ -85,7 +87,8 @@ class ProductController extends Controller
 
         $title = 'أحدث المنتجات';
 
-        $products = Product::where('published',1); 
+        $site_settings = get_site_setting();
+        $products = Product::where('website_setting_id',$site_settings->id)->where('published',1); 
 
         if($request->search != null){ 
             $search = $request->search;

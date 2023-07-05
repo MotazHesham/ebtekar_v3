@@ -88,6 +88,7 @@ class Product extends Model implements HasMedia
         'sub_category_id',
         'sub_sub_category_id',
         'design_id',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -157,6 +158,9 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(Designe::class, 'design_id');
     }
     
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+    }
     //operations
     public function calc_discount($unit_price)
     {
@@ -167,6 +171,41 @@ class Product extends Model implements HasMedia
                 $amount = ($unit_price / 100) * $this->discount;
                 return $unit_price - $amount;
             }
+        }else{
+            return $unit_price;
         }
+    }
+
+    
+    public function calc_price_as_text(){
+        $price = '';
+        if($this->discount > 0){
+            $price .= front_calc_product_currency($this->calc_discount($this->unit_price),$this->weight)['as_text'];
+            $price .= ' <span>' . front_calc_product_currency($this->unit_price,$this->weight)['as_text'] . '</span>';
+        }else{
+            $price .= front_calc_product_currency($this->unit_price,$this->weight)['as_text'];
+        } 
+        return $price;
+    }
+
+    public function calc_price_for_cart($variant){
+
+        $product_stock = ProductStock::where('variant', $variant)->first();
+
+        if($product_stock){
+
+            // $commission = ($product_stock->unit_price  - $product_stock->purchase_price) * $request->quantity;
+
+            $price = $this->discount > 0 ? $this->calc_discount($product_stock->unit_price) : $product_stock->unit_price;
+
+        }else {
+
+            // $commission = ($product->unit_price  - $product->purchase_price) * $request->quantity;
+
+            $price = $this->discount > 0 ? $this->calc_discount($this->unit_price) : $this->unit_price;
+
+        }
+
+        return $price;
     }
 }

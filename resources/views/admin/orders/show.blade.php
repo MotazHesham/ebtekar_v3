@@ -118,7 +118,7 @@
     </div>
     <div class="col-md-4"> 
         @include('partials.delivery_man',[
-                'general_settings' => $general_settings,
+                'site_settings' => $site_settings,
                 'row' => $order, 
                 'crudRoutePart' => 'admin.orders.',
                 'response' => $response,

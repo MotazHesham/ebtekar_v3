@@ -39,6 +39,9 @@ class StoreUserRequest extends FormRequest
             'roles' => [
                 'array',
             ],
+            'website_setting_id' => [
+                'required',
+            ],
         ];
     }
 }

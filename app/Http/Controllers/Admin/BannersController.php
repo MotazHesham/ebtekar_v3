@@ -7,7 +7,8 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyBannerRequest;
 use App\Http\Requests\StoreBannerRequest;
 use App\Http\Requests\UpdateBannerRequest;
-use App\Models\Banner; 
+use App\Models\Banner;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -29,7 +30,7 @@ class BannersController extends Controller
     {
         abort_if(Gate::denies('banner_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $banners = Banner::with(['media'])->get();
+        $banners = Banner::with(['media','website'])->get();
 
         return view('admin.banners.index', compact('banners'));
     }
@@ -38,7 +39,8 @@ class BannersController extends Controller
     {
         abort_if(Gate::denies('banner_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.banners.create');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        return view('admin.banners.create',compact('websites'));
     }
 
     public function store(StoreBannerRequest $request)
@@ -61,7 +63,8 @@ class BannersController extends Controller
     {
         abort_if(Gate::denies('banner_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.banners.edit', compact('banner'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        return view('admin.banners.edit', compact('banner','websites'));
     }
 
     public function update(UpdateBannerRequest $request, Banner $banner)

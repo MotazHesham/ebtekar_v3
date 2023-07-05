@@ -12,6 +12,7 @@ class CreateSubscribesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->string('email')->nullable();
+            $table->string('from_website')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

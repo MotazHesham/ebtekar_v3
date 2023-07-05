@@ -54,7 +54,7 @@ class UpdateReceiptSocialRequest extends FormRequest
             ],
             'socials' => [
                 'array',
-            ],
+            ], 
         ];
     }
 }

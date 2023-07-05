@@ -90,19 +90,22 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::get('/search?sub_category={subcategory_slug}', 'ProductController@search')->name('products.subcategory');
     Route::get('/search?sub_subcategory={subsubcategory_slug}', 'ProductController@search')->name('products.subsubcategory');
 
+    // cart
+    Route::get('cart', 'CartController@index')->name('cart');
+    Route::post('cart/add', 'CartController@add')->name('cart.add');
+    Route::post('cart/update', 'CartController@update')->name('cart.update');
+    Route::get('cart/delete/{id}', 'CartController@delete')->name('cart.delete');
+    
+    // checkout
+    Route::get('payment_select', 'CheckoutController@payment_select')->name('payment_select');
+    Route::post('checkout', 'CheckoutController@checkout')->name('checkout');
+
+    // orders track
+    Route::get('/orders/success/{id}', 'OrderController@success')->name('orders.success');
+    Route::get('/orders/track/{id}', 'OrderController@track')->name('orders.track');
+
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
-
-        // checkout
-        Route::get('payment_select', 'CheckoutController@payment_select')->name('payment_select');
-        Route::post('checkout', 'CheckoutController@checkout')->name('checkout');
-
-        // cart
-        Route::get('cart', 'CartController@index')->name('cart');
-        Route::post('cart/add', 'CartController@add')->name('cart.add');
-        Route::post('cart/update', 'CartController@update')->name('cart.update');
-        Route::post('cart/delete', 'CartController@delete')->name('cart.delete');
-
+        Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard'); 
 
         // wishlist
         Route::get('/wishlist', 'WishlistController@wishlist')->name('wishlist');
@@ -111,8 +114,6 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
 
         // orders
         Route::get('/orders', 'OrderController@orders')->name('orders');
-        Route::get('/orders/success/{id}', 'OrderController@success')->name('orders.success');
-        Route::get('/orders/track/{id}', 'OrderController@track')->name('orders.track');
 
         // profile
         Route::post('/update_profile', 'ProfileController@update_profile')->name('update_profile');

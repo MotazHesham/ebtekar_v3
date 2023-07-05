@@ -321,15 +321,23 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
-                'title' => 'general_setting_edit',
+                'title' => 'customer_create',
             ],
             [
                 'id'    => $i++,
-                'title' => 'general_setting_show',
+                'title' => 'website_setting_create',
             ],
             [
                 'id'    => $i++,
-                'title' => 'general_setting_access',
+                'title' => 'website_setting_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'website_setting_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'website_setting_access',
             ],
             [
                 'id'    => $i++,
@@ -642,27 +650,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'quality_responsible_access',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'seo_setting_create',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'seo_setting_edit',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'seo_setting_show',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'seo_setting_delete',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'seo_setting_access',
-            ],
+            ], 
             [
                 'id'    => $i++,
                 'title' => 'conversation_create',

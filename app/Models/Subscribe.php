@@ -22,6 +22,7 @@ class Subscribe extends Model
     protected $fillable = [
         'name',
         'email',
+        'from_website',
         'created_at',
         'updated_at',
         'deleted_at',

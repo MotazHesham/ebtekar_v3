@@ -22,6 +22,7 @@ class Customer extends Model
 
     protected $fillable = [
         'user_id',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -35,5 +36,8 @@ class Customer extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
 }
