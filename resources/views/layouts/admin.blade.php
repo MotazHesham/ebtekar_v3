@@ -153,6 +153,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
+    @if(!isset($enable_multiple_form_submit))
+        <script> 
+            //perevent submittig multiple times
+            $("body").on("submit", "form", function() {
+                $(this).submit(function() {
+                    return false;
+                });
+                return true;
+            });
+        </script>
+    @endif
 
     <script>
         $(document).ready(function() {
@@ -187,13 +198,6 @@
             });
         });
         
-        //perevent submittig multiple times
-        $("body").on("submit", "form", function() {
-            $(this).submit(function() {
-                return false;
-            });
-            return true;
-        });
 
         function get_categories_by_website(call_others = null){
             var website_setting_id = $('#website_setting_id').val();

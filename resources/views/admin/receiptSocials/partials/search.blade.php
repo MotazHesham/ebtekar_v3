@@ -1,8 +1,20 @@
 <div class="card">
-    <div class="card-body"> 
-        <b>{{ trans('global.search') }} {{ trans('cruds.receiptSocial.title') }}</b>
-        <hr>
+    <div class="card-body">  
         <form action="" method="GET" id="sort_receipt_social">
+            <div style="display: flex;justify-content: space-between;">
+                <div>
+                    <b>{{ trans('global.search') }} {{ trans('cruds.receiptSocial.title') }}</b>
+                </div>
+                <select class="form-control @isset($website_setting_id) isset @endisset" style="width: 200px" name="website_setting_id" id="website_setting_id" onchange="sort_receipt_social()">
+                    <option value="">أختر الموقع</option>
+                    @foreach ($websites as $id => $entry)
+                        <option value="{{ $id }}" @isset($website_setting_id) @if ($website_setting_id == $id) selected @endif @endisset>
+                            {{ $entry }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <hr>
             @isset($deleted)
                 <input type="hidden" name="deleted" value="1">
             @endisset

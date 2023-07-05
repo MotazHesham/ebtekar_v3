@@ -362,6 +362,9 @@ class ReceiptSocialController extends Controller
         $playlist_status = null;
         $description = null; 
         $deleted = null;
+        $website_setting_id = null;
+
+        $enable_multiple_form_submit = true;
 
         if(request('deleted')){
             $deleted = 1;
@@ -424,6 +427,11 @@ class ReceiptSocialController extends Controller
             $staff_id = $request->staff_id;
         }
 
+        if ($request->website_setting_id != null) {
+            $receipts = $receipts->where('website_setting_id', $request->website_setting_id);
+            $website_setting_id = $request->website_setting_id;
+        }
+
         if ($request->delivery_man_id != null) {
             $receipts = $receipts->where('delivery_man_id', $request->delivery_man_id);
             $delivery_man_id = $request->delivery_man_id;
@@ -473,30 +481,38 @@ class ReceiptSocialController extends Controller
             $receipts = $receipts->whereBetween($date_type, [$from_date, $to_date]);
         }
         if ($request->exclude != null) {
-            $exclude = $request->exclude;
+            $exclude = $request->exclude; 
             foreach(explode(',',$exclude) as $exc){
-                $exclude2[] = 'receipt-social#' . $exc;
+                $exclude2[] = $exc;
             }
-            $receipts = $receipts->whereNotIn('order_num', $exclude2);
+            $receipts = $receipts->where(function ($query) use($exclude2) {
+                for ($i = 0; $i < count($exclude2); $i++){
+                    $query->orwhere('order_num', 'not like',  '%' . $exclude2[$i] .'%');
+                }      
+            });
         }
         if ($request->include != null) {
-            $include = $request->include;
+            $include = $request->include; 
             foreach(explode(',',$include) as $inc){
-                $include2[] = 'receipt-social#' . $inc;
+                $include2[] = $inc;
             }
-            $receipts = $receipts->whereIn('order_num' ,$include2);
+            $receipts = $receipts->where(function ($query) use($include2) {
+                for ($i = 0; $i < count($include2); $i++){
+                    $query->orwhere('order_num', 'like',  '%' . $include2[$i] .'%');
+                }      
+            });
         }
 
         if ($request->has('download')) {
-            return Excel::download(new ReceiptSocialExport($receipts->get()), 'social_receipts_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
+            return Excel::download(new ReceiptSocialExport($receipts->with('receiptsReceiptSocialProducts')->get()), 'social_receipts_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
         }
 
         if ($request->has('download_delivery')) {
-            return Excel::download(new ReceiptSocialDeliveryExport($receipts->get()), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
+            return Excel::download(new ReceiptSocialDeliveryExport($receipts->with('receiptsReceiptSocialProducts')->get()), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
         }
 
         if ($request->has('print')) {
-            $receipts = $receipts->get();
+            $receipts = $receipts->with('receiptsReceiptSocialProducts','designer','manufacturer','preparer','shipmenter')->get();
             foreach($receipts as $receipt){
                 $receipt->printing_times += 1;
                 $receipt->save();
@@ -514,8 +530,8 @@ class ReceiptSocialController extends Controller
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.receiptSocials.index', compact(
-            'countries', 'statistics','receipts','done','client_type','exclude',
-            'delivery_status','payment_status','sent_to_delivery','social_id','websites',
+            'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
+            'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted',
             'quickly','playlist_status','description', 'include','socials','delivery_mans',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  

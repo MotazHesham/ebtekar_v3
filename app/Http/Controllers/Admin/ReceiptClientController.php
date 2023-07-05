@@ -186,6 +186,10 @@ class ReceiptClientController extends Controller
         $done = null;
         $description = null; 
         $deleted = null; 
+        $website_setting_id = null; 
+
+        
+        $enable_multiple_form_submit = true;
 
         if(request('deleted')){
             $deleted = 1; 
@@ -207,6 +211,11 @@ class ReceiptClientController extends Controller
         if ($request->staff_id != null) {
             $receipts = $receipts->where('staff_id', $request->staff_id);
             $staff_id = $request->staff_id;
+        }
+
+        if ($request->website_setting_id != null) {
+            $receipts = $receipts->where('website_setting_id', $request->website_setting_id);
+            $website_setting_id = $request->website_setting_id;
         }
 
         if ($request->description != null) {
@@ -240,18 +249,26 @@ class ReceiptClientController extends Controller
             $receipts = $receipts->whereBetween($date_type, [$from_date, $to_date]);
         }
         if ($request->exclude != null) {
-            $exclude = $request->exclude;
+            $exclude = $request->exclude; 
             foreach(explode(',',$exclude) as $exc){
-                $exclude2[] = 'receipt-client#' . $exc;
+                $exclude2[] = $exc;
             }
-            $receipts = $receipts->whereNotIn('order_num', $exclude2);
+            $receipts = $receipts->where(function ($query) use($exclude2) {
+                for ($i = 0; $i < count($exclude2); $i++){
+                    $query->orwhere('order_num', 'not like',  '%' . $exclude2[$i] .'%');
+                }      
+            });
         }
         if ($request->include != null) {
-            $include = $request->include;
+            $include = $request->include; 
             foreach(explode(',',$include) as $inc){
-                $include2[] = 'receipt-client#' . $inc;
+                $include2[] = $inc;
             }
-            $receipts = $receipts->whereIn('order_num' ,$include2);
+            $receipts = $receipts->where(function ($query) use($include2) {
+                for ($i = 0; $i < count($include2); $i++){
+                    $query->orwhere('order_num', 'like',  '%' . $include2[$i] .'%');
+                }      
+            });
         }
 
         if ($request->has('print')) {
@@ -276,8 +293,8 @@ class ReceiptClientController extends Controller
 
         return view('admin.receiptClients.index',compact(
             'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','websites',
-            'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include', 'quickly',
-            'done', 'description', 'receipts', 'statistics','deleted'));
+            'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include', 'quickly','enable_multiple_form_submit',
+            'done', 'description', 'receipts', 'statistics','deleted','website_setting_id'));
     }
 
     public function create(Request $request)

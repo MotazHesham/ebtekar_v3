@@ -136,6 +136,8 @@ class ReceiptPriceViewController extends Controller
         
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->get();
         
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+
         $phone = null;
         $client_name = null;
         $order_num = null;
@@ -151,6 +153,7 @@ class ReceiptPriceViewController extends Controller
         $description = null;  
         $place = null;
         $deleted = null;
+        $website_setting_id = null;
 
         if(request('deleted')){
             $deleted = 1; 
@@ -171,6 +174,11 @@ class ReceiptPriceViewController extends Controller
         if ($request->staff_id != null) {
             $receipts = $receipts->where('staff_id', $request->staff_id);
             $staff_id = $request->staff_id;
+        }
+
+        if ($request->website_setting_id != null) {
+            $receipts = $receipts->where('website_setting_id', $request->website_setting_id);
+            $website_setting_id = $request->website_setting_id;
         }
 
         if ($request->description != null) {
@@ -207,18 +215,26 @@ class ReceiptPriceViewController extends Controller
             $receipts = $receipts->whereBetween($date_type, [$from_date, $to_date]);
         }
         if ($request->exclude != null) {
-            $exclude = $request->exclude;
+            $exclude = $request->exclude; 
             foreach(explode(',',$exclude) as $exc){
-                $exclude2[] = 'receipt-price-view#' . $exc;
+                $exclude2[] = $exc;
             }
-            $receipts = $receipts->whereNotIn('order_num', $exclude2);
+            $receipts = $receipts->where(function ($query) use($exclude2) {
+                for ($i = 0; $i < count($exclude2); $i++){
+                    $query->orwhere('order_num', 'not like',  '%' . $exclude2[$i] .'%');
+                }      
+            });
         }
         if ($request->include != null) {
-            $include = $request->include;
+            $include = $request->include; 
             foreach(explode(',',$include) as $inc){
-                $include2[] = 'receipt-price-view#' . $inc;
+                $include2[] = $inc;
             }
-            $receipts = $receipts->whereIn('order_num' ,$include2);
+            $receipts = $receipts->where(function ($query) use($include2) {
+                for ($i = 0; $i < count($include2); $i++){
+                    $query->orwhere('order_num', 'like',  '%' . $include2[$i] .'%');
+                }      
+            });
         }
 
         if ($request->has('print')) {
@@ -237,8 +253,8 @@ class ReceiptPriceViewController extends Controller
         $receipts = $receipts->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.receiptPriceViews.index',compact(
-            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from',
-            'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include',
+            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','website_setting_id',
+            'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include','websites',
             'done', 'description', 'receipts', 'statistics','deleted','place'));
 
     }

@@ -15,7 +15,8 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\Seller;
-use App\Models\User; 
+use App\Models\User;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -112,8 +113,9 @@ class OrdersController extends Controller
 
         $users = User::whereIn('user_type',['customer','seller'])->get();
         $delivery_mans = User::where('user_type', 'delivery_man')->get();
-        $countries = Country::where('status',1)->get()->groupBy('type'); 
-
+        $countries = Country::where('status',1)->get()->groupBy('type');  
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+        
         $phone = null;
         $client_name = null;
         $order_num = null;
@@ -137,6 +139,7 @@ class OrdersController extends Controller
         $to_date = null;
         $date_type = null;
         $description = null;
+        $website_setting_id = null;
 
 
         $orders = Order::with(['orderDetails','shipping_country','user','delivery_man']);
@@ -174,6 +177,10 @@ class OrdersController extends Controller
         if ($request->payment_status != null) {
             $payment_status = $request->payment_status;
             $orders = $orders->where('payment_status',$payment_status);
+        }
+        if ($request->website_setting_id != null) {
+            $website_setting_id = $request->website_setting_id;
+            $orders = $orders->where('website_setting_id',$website_setting_id);
         }
         if ($request->playlist_status != null) {
             $playlist_status = $request->playlist_status;
@@ -239,19 +246,28 @@ class OrdersController extends Controller
             $date_type = $request->date_type;
             $orders = $orders->whereBetween($date_type, [$from_date, $to_date]);
         }
-        if ($request->exclude != null && $request->order_type) {
-            $exclude = $request->exclude;
+        
+        if ($request->exclude != null) {
+            $exclude = $request->exclude; 
             foreach(explode(',',$exclude) as $exc){
-                $exclude2[] = $request->order_type.'#' . $exc;
+                $exclude2[] = $exc;
             }
-            $orders = $orders->whereNotIn('order_num', $exclude2);
+            $orders = $orders->where(function ($query) use($exclude2) {
+                for ($i = 0; $i < count($exclude2); $i++){
+                    $query->orwhere('order_num', 'not like',  '%' . $exclude2[$i] .'%');
+                }      
+            });
         }
-        if ($request->include != null && $request->order_type) {
-            $include = $request->include;
+        if ($request->include != null) {
+            $include = $request->include; 
             foreach(explode(',',$include) as $inc){
-                $include2[] = $request->order_type.'#' . $inc;
+                $include2[] = $inc;
             }
-            $orders = $orders->whereIn('order_num' ,$include2);
+            $orders = $orders->where(function ($query) use($include2) {
+                for ($i = 0; $i < count($include2); $i++){
+                    $query->orwhere('order_num', 'like',  '%' . $include2[$i] .'%');
+                }      
+            });
         }
 
         if($request->has('download')){
@@ -274,7 +290,7 @@ class OrdersController extends Controller
             'total_commission' => $orders->sum('commission') + $orders->sum('extra_commission'),
         ];
         $orders = $orders->orderBy('created_at', 'desc')->paginate(15);
-        return view('admin.orders.index', compact('statistics','users','orders','country_id','quickly','delivery_man_id',
+        return view('admin.orders.index', compact('statistics','users','orders','country_id','quickly','delivery_man_id','website_setting_id','websites',
                                             'payment_status','delivery_status','calling', 'playlist_status','sent_to_delivery','date_type',
                                             'client_name','phone' ,'order_num', 'countries','delivery_mans','exclude', 'include', 'from_date',
                                             'user_id','from' , 'to','commission_status','sent_to_wasla','order_type','to_date','description'));

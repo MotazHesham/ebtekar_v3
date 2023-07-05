@@ -187,6 +187,8 @@ class CheckoutController extends Controller
                         'total_cost' => $calc_total_for_product,
                         'photos' => $cartItem['photos'] ?? null, 
                         'pdf' => $cartItem['pdf'] ?? null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
                     ];
                 }
 

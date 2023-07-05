@@ -162,6 +162,8 @@ class ReceiptOutgoingController extends Controller
         $description = null;  
         $deleted = null;
 
+        $enable_multiple_form_submit = true;
+        
         if(request('deleted')){
             $deleted = 1; 
             $receipts = ReceiptOutgoing::with(['staff:id,name'])->onlyTrashed(); 
@@ -247,7 +249,7 @@ class ReceiptOutgoingController extends Controller
         $receipts = $receipts->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.receiptOutgoings.index',compact(
-            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from',
+            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','enable_multiple_form_submit',
             'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include',
             'done', 'description', 'receipts', 'statistics','deleted'));
     }

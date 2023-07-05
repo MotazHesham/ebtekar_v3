@@ -153,6 +153,7 @@ class ReceiptCompanyController extends Controller
         $confirm = null; 
         $deleted = null;
 
+        $enable_multiple_form_submit = true;
         
         if(request('deleted')){
             $deleted = 1;
@@ -291,7 +292,7 @@ class ReceiptCompanyController extends Controller
 
         return view('admin.receiptCompanies.index', compact(
             'countries', 'statistics','receipts','done','client_type','exclude',
-            'delivery_status','payment_status','sent_to_delivery','calling',
+            'delivery_status','payment_status','sent_to_delivery','calling','enable_multiple_form_submit',
             'country_id','no_answer','date_type','phone','client_name','order_num', 'deleted',
             'quickly','playlist_status','description', 'include','delivery_mans',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs',  

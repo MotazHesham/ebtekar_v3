@@ -224,7 +224,7 @@
                                         new
                                     </span>
                                 @endif
-                                <span class="badge rounded-pill @if($receipt->website_setting_id == 2) text-bg-dark @elseif($receipt->website_setting_id == 3) text-bg-warning @else text-bg-danger @endif text-white mb-1" style="cursor: pointer" onclick="show_logs('App\\Models\\ReceiptSocial','{{ $receipt->id }}','receiptSocial')">
+                                <span class="badge rounded-pill @if($receipt->website_setting_id == 2) text-bg-dark @elseif($receipt->website_setting_id == 3) text-bg-info @else text-bg-danger @endif text-white mb-1" style="cursor: pointer" onclick="show_logs('App\\Models\\ReceiptSocial','{{ $receipt->id }}','receiptSocial')">
                                     {{ $receipt->order_num ?? '' }}
                                 </span>
                                 <div style="display:flex;justify-content:space-between">

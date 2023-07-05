@@ -121,7 +121,7 @@
                                         new
                                     </span>
                                 @endif
-                                <span class="badge rounded-pill @if($order->order_type == 'customer') text-bg-danger @else text-bg-info @endif text-white mb-1" style="cursor: pointer" onclick="show_logs('App\\Models\\Order','{{ $order->id }}','Order')">
+                                <span class="badge rounded-pill @if($order->website_setting_id == 2) text-bg-dark @elseif($order->website_setting_id == 3) text-bg-info @else text-bg-danger @endif text-white mb-1" style="cursor: pointer" onclick="show_logs('App\\Models\\Order','{{ $order->id }}','Order')">
                                     {{ $order->order_num ?? '' }}
                                 </span>
                                 <div style="display:flex;justify-content:space-between">
@@ -313,8 +313,7 @@
 @endsection
 @section('scripts')
     @parent
-    <script>
-        
+    <script> 
         function sort_orders(el) {
             $('#sort_orders').submit();
         }

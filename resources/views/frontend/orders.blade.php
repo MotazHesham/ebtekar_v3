@@ -56,7 +56,7 @@
                                                 <br>{{$product->name ?? ''}}</a>
                                         </td>
                                         <td>
-                                            <b>{{ $orderDetail->total_cost }} {{ $orderDetail->order->symbol }}</b>
+                                            <b>{{ $orderDetail->total_cost($orderDetail->order->exchange_rate) }} {{ $orderDetail->order->symbol }}</b>
                                         </td>
                                         <td>
                                             <span>العدد: {{ $orderDetail->quantity }}</span>
@@ -65,7 +65,7 @@
                                         </td>
                                         <td>
                                             <div class="responsive-data">
-                                                <b>{{ $orderDetail->total_cost }} {{ $orderDetail->order->symbol }}</b>
+                                                <b>{{ $orderDetail->total_cost($orderDetail->order->exchange_rate) }} {{ $orderDetail->order->symbol }}</b>
                                                 <br>
                                                 <span> {{ $orderDetail->variation }} </span> | العدد: {{ $orderDetail->quantity }}</span>
                                             </div>
