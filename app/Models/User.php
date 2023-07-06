@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Notifications\VerifyUserNotification;
 use App\Traits\Auditable;
 use Carbon\Carbon;
-use DateTimeInterface;
-use Illuminate\Auth\Notifications\ResetPassword;
+use DateTimeInterface; 
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -115,7 +115,7 @@ class User extends Authenticatable implements HasMedia
                 $user->notify(new VerifyUserNotification($user));
             }
         });
-    }
+    } 
 
     public function registerMediaConversions(Media $media = null): void
     {
@@ -147,7 +147,8 @@ class User extends Authenticatable implements HasMedia
 
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPassword($token));
+        $site_settings = get_site_setting();
+        $this->notify(new ResetPasswordNotification($token,$site_settings));
     }
 
     public function getPhotoAttribute()

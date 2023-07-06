@@ -17,15 +17,10 @@
                 </h2>
                 <ul class="pro-price">
                     @if($product->discount > 0)
-                        <li>{{front_currency($product->calc_discount($product->unit_price))}}</li>
-                        <li><span> {{ front_currency($product->unit_price) }}</span></li>
-                        @if($product->discount_type == 'percent')
-                            <li>{{$product->discount}}% خصم</li>
-                        @else
-                            <li>خصم {{front_currency($product->discount)}} </li>
-                        @endif
+                        <li>{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
+                        <li><span>{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}</span></li>
                     @else
-                        <li>{{ front_currency($product->unit_price) }}</li>
+                        <li>{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
                     @endif
                 </ul>
                 <div class="revieu-box">
@@ -36,7 +31,7 @@
                         <li><i class="fa fa-star"></i></li>
                         <li><i class="fa fa-star-o"></i></li>
                     </ul>
-                    <a href="review.html"><span>(0 تقييمات)</span></a>
+                    <a href="review.html"><span>({{$product->reviews()->count()}} تعليقات)</span></a>
                 </div>
 
             </div>
@@ -46,19 +41,9 @@
                     <?php echo $product->description; ?>
                 </p>
             </div>
-            <div class="pro-group pb-0">
-                @php
-                    $has_unit_attribute = false;
-                @endphp
-
+            <div class="pro-group pb-0"> 
                 @if ($product->choice_options != null && count(json_decode($product->choice_options)) > 0)
-                    @foreach (json_decode($product->choice_options) as $key => $choice)
-
-                        @php
-                            if($choice->attribute == 'unit'){
-                                $has_unit_attribute = true;
-                            }
-                        @endphp
+                    @foreach (json_decode($product->choice_options) as $key => $choice) 
                         <h6 class="product-title size-text"> {{ $choice->attribute }} <span>
                             </span></h6>
                         <div class="size-box" id="{{$key}}-{{$choice->attribute}}">

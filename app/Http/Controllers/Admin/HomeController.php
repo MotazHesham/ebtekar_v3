@@ -10,11 +10,90 @@ use App\Models\Order;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    
+    public function qr_scanner($type){
+        $delivery_mans = User::where('user_type','delivery_man')->get();
+        return view('admin.playlists.qr_code_scanner',compact('type','delivery_mans'));
+    }
+
+    public function qr_output(Request $request){
+
+        $order = ReceiptCompany::where('order_num',$request->code)->first(); 
+        $model_type = 'company';
+        if(!$order){
+            $order = Order::where('order_num',$request->code)->first(); 
+            $model_type = 'order';
+            if(!$order){
+                $order = ReceiptSocial::where('order_num',$request->code)->first(); 
+                $model_type = 'social';
+                if(!$order){
+                    return [
+                        'status' => 0,
+                        'message' => "<div class='alert alert-danger'>".$request->code." Order Not Found</div>"
+                    ];
+                }
+            }
+        } 
+
+        if ($request->type == 'design') { 
+            $authenticated = $order->designer_id;
+        } elseif ($request->type == 'manufacturing') {
+            $authenticated = $order->manufacturer_id;
+        } elseif ($request->type == 'prepare') {
+            $authenticated = $order->preparer_id;
+        } elseif ($request->type == 'shipment') {
+            $authenticated = $order->shipmenter_id;
+        }
+
+        if($order->playlist_status == $request->type){
+            if($authenticated == auth()->user()->id || auth()->user()->user_type == 'admin'){
+                if($order->playlist_status == 'design'){
+                    $next_type = 'manufacturing';
+                }elseif($order->playlist_status == 'manufacturing'){
+                    $next_type = 'prepare';
+                }elseif($order->playlist_status == 'prepare'){
+                    $next_type = 'shipment';
+                }elseif($order->playlist_status == 'shipment'){
+                    $next_type = 'finish';
+
+                    $order->delivery_man = $request->delivery_man_id;
+                    $order->send_to_delivery_date = date('Y-m-d H:i:s');
+                    $order->delivery_status = 'on_delivery';
+
+                    $order->save();
+                }else{
+                    return [
+                        'status' => 0,
+                        'message' => "<div class='alert alert-danger'>".$request->code." SomeThing Went Wrong</div>"
+                    ];
+                }
+            }else{
+                return [
+                    'status' => 0,
+                    'message' => "<div class='alert alert-danger'>".$request->code." Not Authenticated</div>"
+                ];
+            }
+        }else{
+            return [
+                'status' => 0,
+                'message' => "<div class='alert alert-danger'>".$request->code." الطلب في مرحلة مختلفة</div>"
+            ];
+        }
+
+
+        $playlistcontroller = new PlaylistController();
+        $array = ['model_type' => $model_type,'id' => $order->id , 'status' => $next_type , 'condition' => 'send'];
+        $array0 = new \Illuminate\Http\Request($array);
+        return [
+            'status' => $playlistcontroller->update_playlist_status($array0),
+            'message' => "<div class='alert alert-success'>".$request->code." تم الأرسال</div>"
+        ];
+    }
+
     public function receipts_logs(Request $request){
         $crud_name = $request->crud_name;
         $logs = AuditLog::where('subject_type',$request->model)->where('subject_id',$request->subject_id)->orderBy('created_at','asc')->get()->reverse();

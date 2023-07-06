@@ -70,10 +70,10 @@
                                                     <i data-feather="shopping-cart"></i>
                                                 </a>
                                             @else  
-                                                <form id="add-to-cart-form" action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;">
+                                                <form  action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{$product->id}}">
-                                                    <input type="hidden" name="variant" id="variant">
+                                                    <input type="hidden" name="variant" >
                                                     <button type="submit" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
                                                         <i data-feather="shopping-cart"></i>
                                                     </button>
@@ -187,7 +187,7 @@
                                                 <div class="media-banner b-g-white1 border-0">
                                                     @foreach ($chunk as $product)  
                                                         @php
-                                                            $product_image = isset($product->photos[0]) ? $product->photos[0]->getUrl() : ''; 
+                                                            $product_image = isset($product->photos[0]) ? $product->photos[0]->getUrl('preview2') : ''; 
                                                         @endphp 
                                                         <div class="media-banner-box">
                                                             <div class="media">
@@ -218,6 +218,20 @@
                                                                                 </h6>
                                                                             </div>
                                                                             <div class="cart-info">
+                                                                                @if($product->variant_product || $product->special)
+                                                                                    <a href="{{ route('frontend.product', $product->slug) }}" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
+                                                                                        <i data-feather="shopping-cart"></i>
+                                                                                    </a>
+                                                                                @else  
+                                                                                    <form action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;display:inline">
+                                                                                        @csrf
+                                                                                        <input type="hidden" name="id" value="{{$product->id}}">
+                                                                                        <input type="hidden" name="variant">
+                                                                                        <button type="submit" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
+                                                                                            <i data-feather="shopping-cart"></i>
+                                                                                        </button>
+                                                                                    </form>
+                                                                                @endif
                                                                                 <a href="{{ route('frontend.wishlist.add', $product->slug) }}"
                                                                                     class="add-to-wish tooltip-top"
                                                                                     data-tippy-content="Add to Wishlist"><i
@@ -311,10 +325,10 @@
                                                     <i data-feather="shopping-cart"></i>
                                                 </a>
                                             @else  
-                                                <form id="add-to-cart-form" action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;">
+                                                <form action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{$product->id}}">
-                                                    <input type="hidden" name="variant" id="variant">
+                                                    <input type="hidden" name="variant" >
                                                     <button type="submit" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
                                                         <i data-feather="shopping-cart"></i>
                                                     </button>

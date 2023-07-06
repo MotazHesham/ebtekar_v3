@@ -134,7 +134,6 @@
                     <table  class="table table-bordered table-striped table-hover datatable table-responsive-lg table-responsive-md table-responsive-sm">
                         <thead>
                             <th>{{ trans('cruds.order.extra.id') }}</th>
-                            <th>{{ trans('cruds.order.extra.photo') }}</th>
                             <th>{{ trans('cruds.order.extra.product') }}</th>
                             <th>{{ trans('cruds.order.extra.total_cost') }}</th>
                             <th>{{ trans('cruds.order.extra.commission') }}</th>
@@ -148,8 +147,11 @@
                                         <input type="hidden" name="id" value="{{$orderDetail->id}}">
                                         <tr>
                                             <td>{{ $orderDetail->id }}</td> 
-                                            <td>{{ $orderDetail->product ?  $orderDetail->product->photo : '' }}</td>
-                                            <td>{{ $orderDetail->product ?  $orderDetail->product->name : ''}}</td>
+                                            <td>
+                                                @foreach($orderDetail->product->photos as $media)
+                                                    <img src="{{ $media->getUrl('thumb')}}" alt="">
+                                                @endforeach
+                                            </td>
                                             <td>
                                                 <span class="badge badge-dark">{{ trans('cruds.order.extra.quantity') }} {{ $orderDetail->quantity }}</span>
                                                 <span class="badge badge-dark">{{ trans('cruds.order.extra.price') }} {{ $orderDetail->calc_price($order->exchange_rate) }} {{ $order->symbol }}</span>

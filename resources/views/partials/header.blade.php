@@ -48,7 +48,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     @if (count(
-                            $alerts = \Auth::user()->userUserAlerts()->whereIn('type', ['public', 'private'])->withPivot('read')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
+                            $alerts = \Auth::user()->userUserAlerts()->whereIn('type', ['public', 'private','orders'])->withPivot('read')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
                         @foreach ($alerts as $alert)
                             <div class="dropdown-item">
                                 <a href="{{ $alert->alert_link ? $alert->alert_link : '#' }}"

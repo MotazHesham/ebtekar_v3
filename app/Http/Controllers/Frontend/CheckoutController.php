@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PayMobController;
+use App\Http\Controllers\PushNotificationController;
+use App\Jobs\SendOrderConfirmationMail;
+use App\Jobs\SendPushNotification;
 use App\Models\Cart;
 use App\Models\Country;
 use App\Models\Customer;
@@ -13,6 +16,7 @@ use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
+use App\Models\UserAlert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -39,14 +43,26 @@ class CheckoutController extends Controller
             'phone_number_2' => 'nullable|regex:' . config('panel.phone_number_format') . '|size:' . config('panel.phone_number_size'),
             'shipping_address' => 'required',
             'payment_option' => 'required|in:cash_on_delivery,paymob',
-        ]);
-
+        ]); 
 
         try{
 
             DB::beginTransaction();
             $site_settings = get_site_setting();
             
+            if(!session('cart')){
+                alert("قم بأضافة منتجات الي السلة أولا",'','warning');
+                return redirect()->route('home');
+            }
+
+            if($request->discount_code != null){
+                $seller = Seller::where('discount_code',$request->discount_code)->first();
+                if(!$seller || $seller->discount < 0){ 
+                    alert("خطأ في كود الخصم",'','warning');
+                    return redirect()->route('frontend.payment_select');
+                }
+            }
+
             if(auth()->check()){
                 $user = Auth::user();
             }else{
@@ -68,20 +84,7 @@ class CheckoutController extends Controller
                 }else{
                     $user = null;
                 }
-            }
-
-            if(!session('cart')){
-                alert("قم بأضافة منتجات الي السلة أولا",'','warning');
-                return redirect()->route('home');
-            }
-            
-            if($request->discount_code != null){
-                $seller = Seller::where('discount_code',$request->discount_code)->first();
-                if(!$seller || $seller->discount < 0){ 
-                    alert("خطأ في كود الخصم",'','warning');
-                    return redirect()->route('frontend.payment_select');
-                }
-            }
+            } 
             
             if ($request->payment_option != null) {
 
@@ -108,6 +111,14 @@ class CheckoutController extends Controller
                 $order->symbol = $currency->symbol;
                 $order->exchange_rate = $currency->exchange_rate;
 
+                if($site_settings->id == 2){
+                    $str = 'ertegal-';
+                }elseif($site_settings->id == 3){
+                    $str = 'figures-';
+                }else{ 
+                    $str = 'ebtekar-';
+                } 
+
                 if($user && $user->user_type == 'seller'){
                     $order->client_name = $request->client_name;
                     $order->date_of_receiving_order = strtotime($request->date_of_receiving_order);
@@ -119,25 +130,14 @@ class CheckoutController extends Controller
                     $order->free_shipping_reason = $request->free_shipping_reason;
                     $order->total_cost_by_seller = $request->total_cost_by_seller;
                     $order->order_type = 'seller';
+                    $order->order_num = $str . 'seller#' . ($last_order_code + 1);
                 }else{
                     $order->client_name = $request->first_name . ' ' . $request->last_name;
                     $order->order_type = 'customer';
-                }
-
-                if($site_settings->id == 2){
-                    $str = 'ertegal-';
-                }elseif($site_settings->id == 3){
-                    $str = 'figures-';
-                }else{ 
-                    $str = 'ebtekar-';
-                }
-
-                if($user && $user->user_type == 'seller'){
-                    $order->order_num = $str . 'seller#' . ($last_order_code + 1);
-                }else{
                     $order->order_num = $str . 'customer#' . ($last_order_code + 1);
                 }
-                
+
+
                 $order->save();
 
                 $total_commission = 0;
@@ -225,7 +225,6 @@ class CheckoutController extends Controller
                         if($request->has('create_account')){
                             Auth::login($user);
                         }
-                        DB::commit();
                         return redirect()->route('frontend.orders.success',$order->id);
                     }
                 }elseif($request->payment_option == 'paymob'){
@@ -233,6 +232,7 @@ class CheckoutController extends Controller
                     // $paymob = new PayMobController;
                     // return $paymob->checkingOut('1602333','242734',$order->id,$request->first_name,$request->last_name,$request->phone_number);
                 }
+                DB::commit();
             }else {
                 toast("Try Again",'error');
                 return redirect()->route('home');
@@ -259,27 +259,32 @@ class CheckoutController extends Controller
 
         session()->put('cart',null);
 
-        // $title = $order->order_num;
-        // $body = 'طلب جديد';
-        // UserAlert::create([
-        //     'alert_text' => $title . ' ' . $body,
-        //     'alert_link' => route('admin.orders.show', encrypt($order->id)),
-        //     'type' => 'designs',
-        //     'user_id' => 0 ,
-        // ]);
+        //create the notification that will send to the admin
+        $title = $order->order_num;
+        $body = 'طلب جديد من الموقع';
+        $userAlert = UserAlert::create([
+            'alert_text' => $title . ' ' . $body,
+            'alert_link' => route('admin.orders.show', $order->id),
+            'type' => 'orders', 
+        ]); 
 
-        // $tokens = User::whereNotNull('device_token')->whereIn('user_type',['staff','admin'])->where(function ($query) {
-        //                                                 $query->where('notification_show',1)
-        //                                                         ->orWhere('user_type','admin');
-        //                                             })->pluck('device_token')->all();
-        // $push_controller = new PushNotificationController();
-        // $push_controller->sendNotification($title, $body, $tokens,route('admin.orders.show', encrypt($order->id)));
+        // only users has permission order_show can see the notification
+        $allowed_users_ids = User::where('user_type','staff')->whereHas('roles.permissions',function($query){
+            $query->where('permissions.title','order_show');
+        })->pluck('id')->all();
+        $userAlert->users()->sync($allowed_users_ids); 
 
-        //sending mail
-        // $generalsetting = GeneralSetting::first();
-        // $body = view('frontend.partials.send_confirmed_order_email', compact('order','generalsetting'))->render();
-        // $this->sendEmail( $body , $user->email,"New Order From EbtekarStore.net ".$order->order_num);
+        // send push notification to users has the permission and has a device_token to send via firebase
+        $tokens = User::whereNotNull('device_token')->whereHas('roles.permissions',function($query){
+            $query->where('permissions.title','order_show');
+        })->where('user_type','staff')->pluck('device_token')->all(); 
+        SendPushNotification::dispatch($title, $body, $tokens,route('admin.orders.show', $order->id));  // job for sending push notification
 
+        // send the order confirmation to the user
+        if($order->user){
+            $site_settings = get_site_setting();
+            SendOrderConfirmationMail::dispatch($order,$site_settings,$order->user->email); // job for sending confirmation mail
+        }
 
         return 1;
     }

@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
-use App\Models\GeneralSetting;
+use Illuminate\Support\Facades\Cookie; 
 
 
 class PushNotificationController extends Controller
@@ -52,14 +51,14 @@ class PushNotificationController extends Controller
     public function sendNotification($title, $body, $firebaseToken, $link)
     { 
 
-        $SERVER_API_KEY = config('app.server_api_key');
-
+        $SERVER_API_KEY = config('app.fcm_token_key');
+        $site_settings = get_site_setting();
         $data = [
             "registration_ids" => $firebaseToken,
             "notification" => [
                 "title" => $title,
                 "body" => $body,
-                "icon" => asset(GeneralSetting::first()->logo->getUrl('thumb')),
+                "icon" => asset($site_settings->logo->getUrl('thumb')),
                 "custom_data" => [
                     "click_action" => $link
                 ],

@@ -13,6 +13,7 @@ use App\Models\Police;
 use App\Models\Product;
 use App\Models\ReceiptProduct;
 use App\Models\Slider;
+use App\Models\User;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ use Stevebauman\Location\Facades\Location;
 class HomeController extends Controller
 {
     public function index()
-    {    
+    {     
         $site_settings = get_site_setting();
         $sliders = Slider::where('website_setting_id',$site_settings->id)->with('media')->where('published',1)->get();
         $new_products = Product::where('website_setting_id',$site_settings->id)->with('media')->where('published',1)->orderBy('created_at','desc')->get()->take(10);

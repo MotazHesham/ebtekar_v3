@@ -1,42 +1,60 @@
-@extends('layouts.app')
+
+@extends('frontend.layout.app')
+
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card mx-4">
-            <div class="card-body p-4">
-                <h1>{{ trans('panel.site_title') }}</h1>
-
-                <p class="text-muted">{{ trans('global.reset_password') }}</p>
-
-                @if(session('status'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
-                <form method="POST" action="{{ route('password.email') }}">
-                    @csrf
-
-                    <div class="form-group">
-                        <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" required autocomplete="email" autofocus placeholder="{{ trans('global.login_email') }}" value="{{ old('email') }}">
-
-                        @if($errors->has('email'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('email') }}
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-flat btn-block">
-                                {{ trans('global.send_password') }}
-                            </button>
+    <!-- breadcrumb start -->
+    <div class="breadcrumb-main ">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="breadcrumb-contain">
+                        <div>
+                            <h2> دخول المستخدمين</h2>
+                            <ul>
+                                <li><a href="index.html">الرئيسية</a></li>
+                                <li><i class="fa fa-angle-double-left"></i></li>
+                                <li><a href="javascript:void(0)">{{ trans('global.reset_password') }}</a></li>
+                            </ul>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- breadcrumb End -->
+
+    <!--section start-->
+
+    <!--section start-->
+    <section class="login-page section-big-py-space b-g-light">
+        <div class="custom-container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-6 col-md-8 offset-xl-4 offset-lg-3 offset-md-2">
+                    <div class="theme-card">
+                        @if(session('message'))
+                            <div class="alert alert-info" role="alert">
+                                {{ session('message') }}
+                            </div>
+                        @endif
+                        <form method="POST" action="{{ route('password.email') }}">
+                            @csrf
+                            <div class="form-group">
+                                <label>البريد الالكتروني</label>
+                                <input  id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" required autocomplete="email" autofocus placeholder="{{ trans('global.login_email') }}" value="{{ old('email') }}">
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert" >
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div> 
+                            <button type="submit" class="btn btn-normal">{{ trans('global.send_password') }}</button> 
+                        </form>
+
+                        <a href="{{ route('login') }}" class="txt-default pt-3 d-block">تسجيل الدخول </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Section ends-->
 @endsection

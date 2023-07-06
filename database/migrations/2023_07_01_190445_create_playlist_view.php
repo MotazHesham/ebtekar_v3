@@ -24,14 +24,14 @@ return new class extends Migration
     }
     private function createView(): string
     { 
-        return 'CREATE VIEW view_playlist_data AS
+        return 'IF EXISTS(CREATE VIEW view_playlist_data AS
         
                 SELECT  CONCAT("social") AS model_type,rs.id,rs.order_num,rs.client_name,rs.phone_number,rs.phone_number_2,rs.deposit,rs.total_cost,rs.shipping_address,rs.shipping_country_id,rs.
                 delivery_status,rs.payment_status,rs.playlist_status,rs.delay_reason,rs.cancel_reason,rs.designer_id,rs.preparer_id,rs.manufacturer_id,rs.staff_id as added_by,
                 rs.shipmenter_id,rs.delivery_man_id,rs.note,rs.send_to_playlist_date,rs.send_to_delivery_date,rs.quickly,rs.printing_times,rs.created_at,rs.updated_at,
                 GROUP_CONCAT(CONCAT(rsp.title, "(", rsp.quantity, ") <br>",rsp.description) SEPARATOR "<hr>") AS description
                 FROM receipt_socials rs
-                JOIN receipt_social_receipt_social_product rsp ON rs.id = rsp.receipt_social_id
+                JOIN receipt_social_receipt_social_product rsp ON rs.id = rsp.receipt_social_id && rs.playlist_status != "pending" && rs.playlist_status != "finish"
                 GROUP BY rs.id
                 
                 UNION ALL
@@ -40,6 +40,7 @@ return new class extends Migration
                 delivery_status,payment_status,playlist_status,delay_reason,cancel_reason,designer_id,preparer_id,manufacturer_id,staff_id As added_by,
                 shipmenter_id,delivery_man_id,note,send_to_playlist_date,send_to_delivery_date,quickly,printing_times,created_at,updated_at,description
                 FROM receipt_companies
+                WHERE playlist_status != "pending" && playlist_status != "finish"
 
                 UNION ALL
 
@@ -48,8 +49,8 @@ return new class extends Migration
                 ords.shipmenter_id,ords.delivery_man_id,ords.note,ords.send_to_playlist_date,ords.send_to_delivery_date,ords.quickly,ords.printing_times,ords.created_at,ords.updated_at,
                 GROUP_CONCAT(CONCAT(ords_detls.product_id, "(", ords_detls.quantity, ") <br>",ords_detls.description) SEPARATOR "<hr>") AS description
                 FROM orders ords
-                JOIN order_details ords_detls ON ords.id = ords_detls.order_id
-                GROUP BY ords.id 
+                JOIN order_details ords_detls ON ords.id = ords_detls.order_id && ords.playlist_status != "pending" && ords.playlist_status != "finish"
+                GROUP BY ords.id)DROP TABLE dbo.view_playlist_data
             ';
     }
 

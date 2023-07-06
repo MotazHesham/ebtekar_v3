@@ -14,6 +14,7 @@
     <meta name="author" content="{{ $site_settings->author_seo }}">
     <meta name="sitemap_link" content="{{ $site_settings->sitemap_link_seo }}"> 
 
+    @yield('meta')
     <!--icons-->
     <link rel="icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon">
@@ -47,10 +48,10 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/bootstrap.css') }}">
 
     <!-- share to social plugin -->
-    <link type="text/css" href="{{ asset('css/jssocials.css') }}" rel="stylesheet">
-    <link type="text/css" href="{{ asset('css/jssocials-theme-flat.css') }}" rel="stylesheet">
+    {{-- <link type="text/css" href="{{ asset('css/jssocials.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ asset('css/jssocials-theme-flat.css') }}" rel="stylesheet"> --}}
     
-    <script src="{{ asset('frontend/js/jssocials.min.js') }}"></script>
+    {{-- <script src="{{ asset('frontend/js/jssocials.min.js') }}"></script> --}}
 
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
@@ -75,6 +76,8 @@
 </head>
 
 <body class="bg-light rtl">
+
+    
 
     <!-- loader start -->
     <div class="loader-wrapper">
@@ -374,8 +377,6 @@
     <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/modal.js') }}"></script>
 
-    <!-- share to social plugin --> 
-    <script src="{{ asset('js/jssocials.min.js') }}"></script>
 
     <script>
 

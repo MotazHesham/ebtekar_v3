@@ -74,7 +74,7 @@
                         {{ trans('global.print') }}
                     </a>
                 @endif
-                @if (auth()->user()->user_type == 'admin' || $authenticated == auth()->user()->id)
+                @if (auth()->user()->is_admin || $authenticated == auth()->user()->id)
                     <a class="btn btn-danger btn-sm rounded-pill text-white" onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')" >
                         {{ $title_back }}
                     </a>

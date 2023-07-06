@@ -1,6 +1,9 @@
 <div class="card">
     <div class="card-header">
-        {{ trans('global.search') }} {{ trans('global.list') }} {{ trans('cruds.playlist.menu.'.$type) }}
+        <div style="display: flex;justify-content: space-between">
+            <div>{{ trans('global.search') }} {{ trans('global.list') }} {{ trans('cruds.playlist.menu.'.$type) }}</div>
+            <div><a class="btn btn-success btn-rounded" href="{{route('admin.qr_scanner',$type)}}">Qr Scanner</a></div>
+        </div> 
     </div>
     <div class="card-body">  
         <form action="" method="GET" id="sort_playlist">

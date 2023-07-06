@@ -6,15 +6,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Server Api Key
+    | FCM TOKEN KEY
     |--------------------------------------------------------------------------
     |
-    | This value is the key of your application on FireBase. This value is used when the
-    | framework needs to send notification to users registered on the App.
+    | This is key used to send notification to application by FireBase
     |
     */
 
-    'server_api_key' => env('SERVER_API_KEY', ''),
+    'fcm_token_key' => env('FCM_TOKEN_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------

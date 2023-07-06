@@ -12,6 +12,11 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
+// related to push notification via firebase
+Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token');
+Route::get('firebase-messaging-sw.js', function(){return response()->view('firebase-messaging-sw')
+	->header('Content-Type', 'application/javascript');});
+
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
 Auth::routes();
@@ -21,6 +26,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
     Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');
 
+
+    Route::get('qr_scanner/{type}','HomeController@qr_scanner')->name('qr_scanner');
+    Route::post('qr_output','HomeController@qr_output')->name('qr_output');
+    
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');

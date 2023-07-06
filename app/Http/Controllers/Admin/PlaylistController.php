@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\PushNotificationController;
-use App\Http\Requests\MassDestroyPlaylistRequest;
-use App\Http\Requests\StorePlaylistRequest;
-use App\Http\Requests\UpdatePlaylistRequest; 
-use App\Models\GeneralSetting;
+use App\Http\Controllers\PushNotificationController; 
+use App\Jobs\SendPushNotification; 
 use App\Models\Order;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
@@ -15,12 +12,12 @@ use App\Models\User;
 use App\Models\UserAlert;
 use App\Models\ViewPlaylistData;
 use App\Models\WebsiteSetting;
-use App\Support\Collection;
-use Gate;
+use App\Support\Collection; 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Illuminate\Support\Facades\Auth; 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class PlaylistController extends Controller
 {
@@ -78,9 +75,8 @@ class PlaylistController extends Controller
             $user = User::find($request->designer_id);
             if ($user->device_token != null) {
                 $tokens = array();
-                array_push($tokens, $user->device_token);
-                $push_controller = new PushNotificationController();
-                // $push_controller->sendNotification($raw->order_num, $body, $tokens, route('admin.playlists.index', 'design'));
+                array_push($tokens, $user->device_token); 
+                SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index', 'design'));  // job for sending push notification
             }
             alert('تم الأرسال','','success');
             return redirect()->route($route);
@@ -145,9 +141,8 @@ class PlaylistController extends Controller
             
             if($user->device_token != null){
                 $tokens = array();
-                array_push($tokens,$user->device_token);
-                $push_controller = new PushNotificationController();
-                // $push_controller->sendNotification($raw->order_num, $body, $tokens,route('admin.playlists.index',$raw->playlist_status));
+                array_push($tokens,$user->device_token); 
+                SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index',$raw->playlist_status));  // job for sending push notification
             }
         }
         // --------------------------------------------
@@ -163,9 +158,10 @@ class PlaylistController extends Controller
             'alert_link' => $route,
             'type' => 'playlist',
         ]);  
-        $tokens = User::whereNotNull('device_token')->whereIn('user_type',['staff','admin'])->pluck('device_token')->all(); // get the tokens to send via fcm firebase
-        $push_controller = new PushNotificationController();
-        // $push_controller->sendNotification($raw->order_num, $body_2, $tokens,$route);
+        $tokens = User::whereNotNull('device_token')->whereHas('roles.permissions',function($query){
+            $query->where('permissions.title','playlist_show');
+        })->where('user_type','staff')->pluck('device_token')->all(); // get the tokens to send via fcm firebase 
+        SendPushNotification::dispatch($raw->order_num, $body_2, $tokens,$route);  // job for sending push notification
         // ------------------------------------------
 
 
@@ -181,15 +177,17 @@ class PlaylistController extends Controller
 
     public function show_details(Request $request){
 
+        $playlist = ViewPlaylistData::where('model_type',$request->model_type)->where('id',$request->id)->first();
         if($request->model_type == 'social'){
             $raw = ReceiptSocial::find($request->id);
+            $raw->load('receiptsReceiptSocialProducts.products');
         }elseif($request->model_type == 'company'){
             $raw = ReceiptCompany::find($request->id);
         }elseif($request->model_type == 'order'){
             $raw = Order::find($request->id);
+            $raw->load('orderDetails.product');
         }
-        $model_type = $request->model_type;
-        return view('admin.playlist.photos',compact('resource'));
+        return view('admin.playlists.photos',compact('raw','playlist'));
     }
 
     public function print($order_num){
@@ -247,60 +245,5 @@ class PlaylistController extends Controller
         // return $dates;
         return view('admin.playlists.index',compact('dates','playlists','view','staffs','type', 'order_num','user_id','description','to_date'));
 
-    }
-
-    public function create()
-    {
-        abort_if(Gate::denies('playlist_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('admin.playlists.create');
-    }
-
-    public function store(StorePlaylistRequest $request)
-    {
-        $playlist = Playlist::create($request->all());
-
-        return redirect()->route('admin.playlists.index');
-    }
-
-    public function edit(Playlist $playlist)
-    {
-        abort_if(Gate::denies('playlist_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('admin.playlists.edit', compact('playlist'));
-    }
-
-    public function update(UpdatePlaylistRequest $request, Playlist $playlist)
-    {
-        $playlist->update($request->all());
-
-        return redirect()->route('admin.playlists.index');
-    }
-
-    public function show(Playlist $playlist)
-    {
-        abort_if(Gate::denies('playlist_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('admin.playlists.show', compact('playlist'));
-    }
-
-    public function destroy(Playlist $playlist)
-    {
-        abort_if(Gate::denies('playlist_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $playlist->delete();
-
-        return back();
-    }
-
-    public function massDestroy(MassDestroyPlaylistRequest $request)
-    {
-        $playlists = Playlist::find(request('ids'));
-
-        foreach ($playlists as $playlist) {
-            $playlist->delete();
-        }
-
-        return response(null, Response::HTTP_NO_CONTENT);
-    }
+    } 
 }

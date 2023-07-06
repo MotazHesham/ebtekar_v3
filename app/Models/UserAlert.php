@@ -18,6 +18,7 @@ class UserAlert extends Model
         'history'        => 'assign the transfer between stages in playlist to the user.... to be in his history list',
         'playlist' => 'This is for tracking playlist by admin', 
         'public' => 'when the admin need send notification to specfic users or all',
+        'orders' => 'for orders get from websites',
     ];
 
     protected $dates = [

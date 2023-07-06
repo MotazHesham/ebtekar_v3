@@ -6,7 +6,66 @@
 
 @section('meta_keywords'){{ $product->tags }}@stop
 
+@section('meta')
+
+    @php
+        $meta_image = isset($product->photos[0]) ? $product->photos[0]->getUrl('preview2') : '';
+        $site_settings = get_site_setting();
+    @endphp
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="{{ $product->meta_title }}">
+    <meta itemprop="description" content="{{ $product->meta_description }}">
+    <meta itemprop="image" content="{{ $meta_image }}">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="product">
+    <meta name="twitter:site" content="@publisher_handle">
+    <meta name="twitter:title" content="{{ $product->meta_title }}">
+    <meta name="twitter:description" content="{{ $product->meta_description }}">
+    <meta name="twitter:creator" content="@author_handle">
+    <meta name="twitter:image" content="{{ $meta_image }}">
+    <meta name="twitter:data1" content="{{ $product->calc_price_as_text() }}">
+    <meta name="twitter:label1" content="Price">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="{{ $product->meta_title }}" />
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content="{{ route('frontend.product', $product->slug) }}" />
+    <meta property="og:image" content="{{ $meta_image }}" />
+    <meta property="og:description" content="{{ $product->meta_description }}" />
+    <meta property="og:site_name" content="{{ $site_settings->site_name  }}" />
+    <meta property="og:price:amount" content="{{ $product->calc_price_as_text() }}" /> 
+@endsection
+
 @section('content') 
+
+    {{-- this is for share product in facebook --}}
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+    {{-- this is for share product in twitter --}}
+    <script>window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    
+        t._e = [];
+        t.ready = function(f) {
+        t._e.push(f);
+        };
+    
+        return t;
+    }(document, "script", "twitter-wjs"));</script>
 
     <!-- breadcrumb start -->
     <div class="breadcrumb-main ">
@@ -76,8 +135,7 @@
                                         <li><i class="fa fa-star-o"></i></li>
                                     </ul>
                                     <a href="review.html"><span>({{$product->reviews()->count()}} تعليقات)</span></a>
-                                </div>
-
+                                </div> 
                             </div>
                             <form id="add-to-cart-form" action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -199,15 +257,13 @@
 
                             <div class="pro-group pb-0">
                                 <h6 class="product-title">مشاركة</h6>
-                                
-                                <div id="share"></div>
-                                {{-- <ul class="product-social">
-                                    <li><a href="javascript:void(0)"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="fa fa-google-plus"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="fa fa-instagram"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="fa fa-rss"></i></a></li>
-                                </ul> --}}
+                                <div style="display: flex;justify-content: space-evenly;">
+                                    <div class="fb-share-button"  data-href="{{route('frontend.product',$product->slug)}}"  data-layout="button_count">
+                                    </div>
+                                    <div>
+                                        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" > Tweet</a> 
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -401,13 +457,7 @@
 @section('scripts')
 @parent
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#share').jsSocials({
-                showLabel: false,
-                showCount: false,
-                shares: ["email","whatsapp", "twitter"]
-            });
-
+        $(document).ready(function() { 
             getVariantPrice();
 
             $('#add-to-cart-form input').on('change', function(){

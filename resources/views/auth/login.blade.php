@@ -61,7 +61,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-normal">دخول</button>
-                            <a class="float-end txt-default mt-2" href="forget-pwd.html">نسيت كلمة المرور</a>
+                            <a class="float-end txt-default mt-2" href="{{ route('password.request') }}">نسيت كلمة المرور</a>
                         </form>
 
                         <a href="{{ route('register') }}" class="txt-default pt-3 d-block">تسجيل مستخدم جديد</a>
