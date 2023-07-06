@@ -21,6 +21,8 @@ class ReceiptSocialObserver
             $str = 'ertegal-';
         }elseif($receiptSocial->website_setting_id == 3){
             $str = 'figures-';
+        }elseif($receiptSocial->website_setting_id == 4){
+            $str = 'shirte-';
         }else{ 
             $str = 'ebtekar-';
         }

@@ -21,6 +21,8 @@ class ReceiptClientObserver
             $str = 'ertegal-';
         }elseif($receiptClient->website_setting_id == 3){
             $str = 'figures-';
+        }elseif($receiptClient->website_setting_id == 4){
+            $str = 'shirte-';
         }else{ 
             $str = 'ebtekar-';
         }

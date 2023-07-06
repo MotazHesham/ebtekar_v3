@@ -106,7 +106,7 @@ class WebsiteSettingTableSeeder extends Seeder
                 'shipment_id' => 1,
             ],
             [ 
-                'id' => 3,
+                'id' => 4,
                 'site_name' => 'ShirteStore',
                 'css_file_name' => 'color4.css',
                 'domains' => 'local.shirte',
@@ -121,7 +121,7 @@ class WebsiteSettingTableSeeder extends Seeder
                 'facebook' => 'https://www.facebook.com/shirte.stor',
                 'instagram' => 'https://www.instagram.com/shirtestore',
                 'twitter' => 'https://www.twitter.com',
-                'telegram' => 'https://telegram.me/Figuresstor',
+                'telegram' => 'https://telegram.me/shirtestore',
                 'linkedin' => 'https://linkedin.com',
                 'whatsapp' => 'https://wa.me/message/D2F523WA4QLXM1',
                 'youtube' => 'https://www.youtube.com/channel/UCdc3TF6fHfe95TUyE4xt-Pg',

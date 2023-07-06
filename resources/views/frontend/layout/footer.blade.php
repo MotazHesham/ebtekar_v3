@@ -43,6 +43,8 @@
                                                 عن أرتجال
                                             @elseif($site_settings->id  == 3)
                                                 عن فيجرز
+                                            @elseif($site_settings->id  == 4)
+                                                عن شيرتي  
                                             @else
                                                 عن أبتكار 
                                             @endif
