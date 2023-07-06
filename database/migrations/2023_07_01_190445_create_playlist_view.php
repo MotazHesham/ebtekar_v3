@@ -24,7 +24,7 @@ return new class extends Migration
     }
     private function createView(): string
     { 
-        return 'IF EXISTS(CREATE VIEW view_playlist_data AS
+        return 'CREATE VIEW view_playlist_data AS
         
                 SELECT  CONCAT("social") AS model_type,rs.id,rs.order_num,rs.client_name,rs.phone_number,rs.phone_number_2,rs.deposit,rs.total_cost,rs.shipping_address,rs.shipping_country_id,rs.
                 delivery_status,rs.payment_status,rs.playlist_status,rs.delay_reason,rs.cancel_reason,rs.designer_id,rs.preparer_id,rs.manufacturer_id,rs.staff_id as added_by,
@@ -50,7 +50,7 @@ return new class extends Migration
                 GROUP_CONCAT(CONCAT(ords_detls.product_id, "(", ords_detls.quantity, ") <br>",ords_detls.description) SEPARATOR "<hr>") AS description
                 FROM orders ords
                 JOIN order_details ords_detls ON ords.id = ords_detls.order_id && ords.playlist_status != "pending" && ords.playlist_status != "finish"
-                GROUP BY ords.id)DROP TABLE dbo.view_playlist_data
+                GROUP BY ords.id 
             ';
     }
 

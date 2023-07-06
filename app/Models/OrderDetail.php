@@ -29,8 +29,7 @@ class OrderDetail extends Model
         'pdf', 
         'email_sent', 
         'pdf', 
-        'description',
-        'updated_at',
+        'description', 
     ];
 
     protected function serializeDate(DateTimeInterface $date)

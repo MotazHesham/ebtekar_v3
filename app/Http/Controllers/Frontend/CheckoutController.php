@@ -224,15 +224,16 @@ class CheckoutController extends Controller
                         toast("Your order has been placed successfully",'success');
                         if($request->has('create_account')){
                             Auth::login($user);
-                        }
+                        } 
+                        DB::commit();
                         return redirect()->route('frontend.orders.success',$order->id);
                     }
-                }elseif($request->payment_option == 'paymob'){
+                }elseif($request->payment_option == 'paymob'){ 
+                    DB::commit();
                     return 'Not Available right now';
                     // $paymob = new PayMobController;
                     // return $paymob->checkingOut('1602333','242734',$order->id,$request->first_name,$request->last_name,$request->phone_number);
                 }
-                DB::commit();
             }else {
                 toast("Try Again",'error');
                 return redirect()->route('home');
