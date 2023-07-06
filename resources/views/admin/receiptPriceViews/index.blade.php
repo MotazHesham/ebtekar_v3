@@ -122,7 +122,7 @@
                                         new
                                     </span>
                                 @endif
-                                <span class="badge rounded-pill @if($receipt->website_setting_id == 2) text-bg-dark @elseif($receipt->website_setting_id == 3) text-bg-info @else text-bg-danger @endif text-white mb-1" style="cursor: pointer"
+                                <span class="badge rounded-pill @if($receipt->website_setting_id == 2) text-bg-dark @elseif($receipt->website_setting_id == 3) text-bg-info @elseif($receipt->website_setting_id == 4) text-bg-primary @else text-bg-danger @endif text-white mb-1" style="cursor: pointer"
                                     onclick="show_logs('App\\Models\\ReceiptPriceView','{{ $receipt->id }}','receiptPriceView')">
                                     {{ $receipt->order_num ?? '' }}
                                 </span>

@@ -33,6 +33,7 @@ class WebsiteSetting extends Model implements HasMedia
     // 2 - site_title in [ resources => lang => panel ]
     // 3 - footer about the site in [ frontend => partials => footer ]
     // 4 - in db add colors.css
+    // 5 - in index of  receipts   (order-num) different colors
 
     public const DELIVERY_SYSTEM_SELECT = [
         'ebtekar' => 'Ebtekar',

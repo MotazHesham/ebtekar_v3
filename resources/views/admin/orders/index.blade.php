@@ -121,7 +121,7 @@
                                         new
                                     </span>
                                 @endif
-                                <span class="badge rounded-pill @if($order->website_setting_id == 2) text-bg-dark @elseif($order->website_setting_id == 3) text-bg-info @else text-bg-danger @endif text-white mb-1" style="cursor: pointer" onclick="show_logs('App\\Models\\Order','{{ $order->id }}','Order')">
+                                <span class="badge rounded-pill @if($order->website_setting_id == 2) text-bg-dark @elseif($order->website_setting_id == 3) text-bg-info @elseif($order->website_setting_id == 4) text-bg-primary @else text-bg-danger @endif text-white mb-1" style="cursor: pointer" onclick="show_logs('App\\Models\\Order','{{ $order->id }}','Order')">
                                     {{ $order->order_num ?? '' }}
                                 </span>
                                 <div style="display:flex;justify-content:space-between">
