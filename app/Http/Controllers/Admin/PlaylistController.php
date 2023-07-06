@@ -76,7 +76,8 @@ class PlaylistController extends Controller
             if ($user->device_token != null) {
                 $tokens = array();
                 array_push($tokens, $user->device_token); 
-                SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index', 'design'));  // job for sending push notification
+                $site_settings = get_site_setting();
+                SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index', 'design'),$site_settings);  // job for sending push notification
             }
             alert('تم الأرسال','','success');
             return redirect()->route($route);
@@ -123,6 +124,7 @@ class PlaylistController extends Controller
             $to_playlist = 'الي الشركة';
         }
 
+        $site_settings = get_site_setting();
         // sending to the playlist users notification
         if($auth_id != 0){
             if($request->condition == 'send'){
@@ -142,7 +144,7 @@ class PlaylistController extends Controller
             if($user->device_token != null){
                 $tokens = array();
                 array_push($tokens,$user->device_token); 
-                SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index',$raw->playlist_status));  // job for sending push notification
+                SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index',$raw->playlist_status),$site_settings);  // job for sending push notification
             }
         }
         // --------------------------------------------
@@ -161,7 +163,7 @@ class PlaylistController extends Controller
         $tokens = User::whereNotNull('device_token')->whereHas('roles.permissions',function($query){
             $query->where('permissions.title','playlist_show');
         })->where('user_type','staff')->pluck('device_token')->all(); // get the tokens to send via fcm firebase 
-        SendPushNotification::dispatch($raw->order_num, $body_2, $tokens,$route);  // job for sending push notification
+        SendPushNotification::dispatch($raw->order_num, $body_2, $tokens,$route,$site_settings);  // job for sending push notification
         // ------------------------------------------
 
 

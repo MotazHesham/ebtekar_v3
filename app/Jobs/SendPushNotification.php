@@ -19,15 +19,17 @@ class SendPushNotification implements ShouldQueue
     private $title;
     private $body;
     private $link;
+    private $site_settings;
     /**
      * Create a new job instance.
      */
-    public function __construct($tokens,$title,$body,$link)
+    public function __construct($title,$body,$tokens,$link,$site_settings)
     {
         $this->tokens = $tokens;
         $this->title = $title;
         $this->body = $body;
         $this->link = $link;
+        $this->site_settings = $site_settings;
     }
 
     /**
@@ -36,6 +38,6 @@ class SendPushNotification implements ShouldQueue
     public function handle(): void
     { 
         $push_controller = new PushNotificationController();
-        $push_controller->sendNotification($this->title, $this->body, $this->tokens,$this->link);
+        $push_controller->sendNotification($this->title, $this->body, $this->tokens,$this->link,$this->site_settings);
     }
 }

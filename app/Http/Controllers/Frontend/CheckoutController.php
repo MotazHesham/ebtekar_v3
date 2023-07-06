@@ -260,11 +260,13 @@ class CheckoutController extends Controller
 
         session()->put('cart',null);
 
+        $site_settings = get_site_setting();
+
         //create the notification that will send to the admin
-        $title = $order->order_num;
-        $body = 'طلب جديد من الموقع';
+        $title = $order->client_name . ' - ' .  $order->phone_number;
+        $body = $order->order_num .' طلب جديد من الموقع';
         $userAlert = UserAlert::create([
-            'alert_text' => $title . ' ' . $body,
+            'alert_text' => $body,
             'alert_link' => route('admin.orders.show', $order->id),
             'type' => 'orders', 
         ]); 
@@ -278,12 +280,11 @@ class CheckoutController extends Controller
         // send push notification to users has the permission and has a device_token to send via firebase
         $tokens = User::whereNotNull('device_token')->whereHas('roles.permissions',function($query){
             $query->where('permissions.title','order_show');
-        })->where('user_type','staff')->pluck('device_token')->all(); 
-        SendPushNotification::dispatch($title, $body, $tokens,route('admin.orders.show', $order->id));  // job for sending push notification
+        })->where('user_type','staff')->pluck('device_token')->all();   
+        SendPushNotification::dispatch($title, $body, $tokens,route('admin.orders.show', $order->id),$site_settings);  // job for sending push notification
 
         // send the order confirmation to the user
         if($order->user){
-            $site_settings = get_site_setting();
             SendOrderConfirmationMail::dispatch($order,$site_settings,$order->user->email); // job for sending confirmation mail
         }
 

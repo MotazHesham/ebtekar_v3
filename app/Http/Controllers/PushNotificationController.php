@@ -48,17 +48,16 @@ class PushNotificationController extends Controller
      *
      * @return response()
      */
-    public function sendNotification($title, $body, $firebaseToken, $link)
+    public function sendNotification($title, $body, $userTokens, $link,$site_settings)
     { 
 
-        $SERVER_API_KEY = config('app.fcm_token_key');
-        $site_settings = get_site_setting();
+        $SERVER_API_KEY = config('app.fcm_token_key'); 
         $data = [
-            "registration_ids" => $firebaseToken,
+            "registration_ids" => $userTokens,
             "notification" => [
                 "title" => $title,
                 "body" => $body,
-                "icon" => asset($site_settings->logo->getUrl('thumb')),
+                "icon" => $site_settings->logo ? $site_settings->logo->getUrl('thumb') : '',
                 "custom_data" => [
                     "click_action" => $link
                 ],
