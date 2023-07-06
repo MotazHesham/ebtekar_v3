@@ -13,9 +13,7 @@ Route::get('/home', function () {
 });
 
 // related to push notification via firebase
-Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token');
-Route::get('firebase-messaging-sw.js', function(){return response()->view('firebase-messaging-sw')
-	->header('Content-Type', 'application/javascript');});
+Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token'); 
 
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
