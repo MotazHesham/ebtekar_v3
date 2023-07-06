@@ -16,13 +16,9 @@ class Staff
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->user_type == 'staff'){ 
-            return $next($request);
-        }elseif(Auth::user()->user_type == 'customer'){
-            return redirect()->route('home');
-        }else{
-            Auth::logout();
-            return redirect()->route('home');
-        }
+        if(Auth::user()->user_type != 'staff'){  
+            return redirect()->route('frontend.dashboard');
+        } 
+        return $next($request);
     }
 }

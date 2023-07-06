@@ -58,6 +58,9 @@
                             {{ trans('cruds.seller.fields.seller_code') }}
                         </th>
                         <th>
+                            {{ trans('cruds.user.fields.approved') }}
+                        </th> 
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -69,6 +72,21 @@
 @section('scripts')
     @parent
     <script>
+        function update_statuses(el,type){
+            if(el.checked){
+                var status = 1;
+            }
+            else{
+                var status = 0;
+            }
+            $.post('{{ route('admin.users.update_statuses') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status, type:type}, function(data){
+                if(data == 1){
+                    showAlert('success', 'Success', '');
+                }else{
+                    showAlert('danger', 'Something went wrong', '');
+                }
+            });
+        }
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('seller_delete')
@@ -170,6 +188,10 @@
                         data: 'seller_code',
                         name: 'seller_code'
                     },
+                    {
+                        data: 'approved',
+                        name: 'approved'
+                    }, 
                     {
                         data: 'actions',
                         name: '{{ trans('global.actions') }}'

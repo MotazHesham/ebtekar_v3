@@ -60,8 +60,4 @@ class HomeController extends Controller
         return view('frontend.calender');
     }
 
-    public function dashboard(){
-        $user = Auth::user();
-        return view('frontend.dashboard',compact('user'));
-    }
 }

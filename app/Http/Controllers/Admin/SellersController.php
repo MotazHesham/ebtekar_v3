@@ -64,6 +64,13 @@ class SellersController extends Controller
             $table->editColumn('seller_type', function ($row) {
                 return $row->seller_type ? Seller::SELLER_TYPE_SELECT[$row->seller_type] : '';
             });
+            $table->editColumn('approved', function ($row) {
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'approved\')" value="' . $row->user->id . '" type="checkbox" class="c-switch-input" '. ($row->user->approved ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>';
+            }); 
             $table->editColumn('discount', function ($row) {
                 return $row->discount ? $row->discount : '';
             });
@@ -83,7 +90,7 @@ class SellersController extends Controller
                 return $row->seller_code ? $row->seller_code : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'user']);
+            $table->rawColumns(['actions', 'placeholder', 'user','approved']);
 
             return $table->make(true);
         }
@@ -98,15 +105,6 @@ class SellersController extends Controller
         return view('admin.sellers.create');
     }
 
-    public function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ=#%$@&';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
 
     public function store(StoreSellerRequest $request)
     {
@@ -120,7 +118,11 @@ class SellersController extends Controller
             'approved' => 1,
         ]);
 
-        $random_string = $this->generateRandomString();
+        if ($request->input('photo', false)) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
+        } 
+
+        $random_string = generateRandomString();
         
         $seller = Seller::create([
             'user_id' => $user->id,
@@ -183,6 +185,17 @@ class SellersController extends Controller
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]);
 
+        if ($request->input('photo', false)) {
+            if (! $user->photo || $request->input('photo') !== $user->photo->file_name) {
+                if ($user->photo) {
+                    $user->photo->delete();
+                }
+                $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
+            }
+        } elseif ($user->photo) {
+            $user->photo->delete();
+        }
+        
         if ($request->input('identity_back', false)) {
             if (! $seller->identity_back || $request->input('identity_back') !== $seller->identity_back->file_name) {
                 if ($seller->identity_back) {

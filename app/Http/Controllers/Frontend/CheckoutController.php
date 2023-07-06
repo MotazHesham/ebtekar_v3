@@ -115,6 +115,8 @@ class CheckoutController extends Controller
                     $str = 'ertegal-';
                 }elseif($site_settings->id == 3){
                     $str = 'figures-';
+                }elseif($site_settings->id == 4){
+                    $str = 'shirti-';
                 }else{ 
                     $str = 'ebtekar-';
                 } 
@@ -230,9 +232,9 @@ class CheckoutController extends Controller
                     }
                 }elseif($request->payment_option == 'paymob'){ 
                     DB::commit();
-                    return 'Not Available right now';
-                    // $paymob = new PayMobController;
-                    // return $paymob->checkingOut('1602333','242734',$order->id,$request->first_name,$request->last_name,$request->phone_number);
+                    // return 'Not Available right now';
+                    $paymob = new PayMobController;
+                    return $paymob->checkingOut('1602333','242734',$order->id,$request->first_name,$request->last_name,$request->phone_number);
                 }
             }else {
                 toast("Try Again",'error');

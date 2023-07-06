@@ -116,7 +116,7 @@
                                     </a>
                                 </li>
                                 <li class="mobile-user " >
-                                    <a @auth href="{{ route('frontend.dashboard') }}" @else href="{{ route('login') }}" @endauth>
+                                    <a @auth href="{{ route('frontend.dashboard') }}" @else href="{{ route('login') }}" @endauth> 
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;"
@@ -135,7 +135,7 @@
                                                             M451.001,482H451H61v-71.363C96.031,360.683,152.952,331,214.167,331h83.667c61.215,0,118.135,29.683,153.167,79.637V482z" />
                                                 </g>
                                             </g>
-                                        </svg>
+                                        </svg> 
                                     </a>
                                 </li>
                                 <li class="mobile-setting">
@@ -341,7 +341,7 @@
                                     </a>
                                 </li>
                                 <li class="mobile-user onhover-dropdown">
-                                    <a  @auth href="{{ route('frontend.dashboard') }}" @else href="{{ route('login') }}" @endauth>
+                                    <a  @auth href="{{ route('frontend.dashboard') }}" @else href="{{ route('login') }}" @endauth> 
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;"
@@ -360,7 +360,7 @@
                                                         M451.001,482H451H61v-71.363C96.031,360.683,152.952,331,214.167,331h83.667c61.215,0,118.135,29.683,153.167,79.637V482z" />
                                                 </g>
                                             </g>
-                                        </svg>
+                                        </svg> 
                                     </a>
                                 </li>
 

@@ -2,15 +2,21 @@
 <html>
 
 <head>
-    <title>Bigdeal - Multi-purpopse E-commerce Html Template</title>
+    @php
+        $site_settings = get_site_setting();
+    @endphp 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="assets/images/favicon/favicon.png" type="image/x-icon">
-    <link rel="shortcut icon" href="assets/images/favicon/favicon.png" type="image/x-icon">
+    <title>@yield('meta_title', $site_settings->site_name )</title>
+    <meta name="description" content="@yield('meta_description', $site_settings->description_seo)" />
+    <meta name="keywords" content="@yield('meta_keywords', $site_settings->keywords_seo)">
+    <meta name="author" content="{{ $site_settings->author_seo }}">
+    <meta name="sitemap_link" content="{{ $site_settings->sitemap_link_seo }}"> 
+
+    <!--icons-->
+    <link rel="icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon">
 
     <!--Google font-->
     <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap" rel="stylesheet">
@@ -34,6 +40,11 @@
 
     <!-- seller css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/seller-style.css') }}" media="screen" id="color">
+    <style>
+        .is-invalid{
+            border: 1px solid #dc3545 !important; 
+        }
+    </style>
 </head>
 
 <body>
@@ -41,7 +52,7 @@
     <!-- loader start -->
     <div class="loader-wrapper">
         <div>
-            <img src="{{ asset('frontend/assets/images/loader.gif') }}" alt="loader">
+            <img src="{{  $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" alt="loader">
         </div>
     </div>
     <!-- loader end -->
@@ -53,14 +64,13 @@
                     <div class="row align-items-center">
                         <div class="col-2 col-lg-2">
                             <div class="logo">
-                                <a href="seller.html"><img src="{{ asset('frontend/assets/images/logo.png') }}" width="130"
-                                        alt="logo"></a>
+                                <a href="{{ route('home') }}"><img src="{{  $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" width="80" alt="logo"></a>
                             </div>
                         </div>
 
                         <div class="col-10 text-left d-xl-block" style="float: left ;  text-align: left;">
                             <div class="header-btn second-header-btn">
-                                <a href="register.html" class="btn">سجل الان</a>
+                                <a href="#" onclick="scrollToDivById('contact')" class="btn">سجل الان</a>
                             </div>
                         </div>
                     </div>
@@ -173,71 +183,23 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 pr-0">
-                        <div class="testimonial-slide3 no-arrow">
-                            <div>
-                                <div class="testimonial-box">
-                                    <div class="img-wrapper">
-                                        <img src="{{ asset('frontend/assets/images/testimonial/1.jpg') }}" alt="testimonial"
-                                            class="img-fluid">
+                        <div class="testimonial-slide3 no-arrow"> 
+                            @foreach($sellers as $seller)
+                                @php
+                                    $image = $seller->user->photo ? $seller->user->photo->getUrl('preview') : '';
+                                @endphp
+                                <div>
+                                    <div class="testimonial-box">
+                                        <div class="img-wrapper">
+                                            <img src="{{ $image }}" alt="testimonial" class="img-fluid">
+                                        </div>
+                                        <div class="testimonial-detail"> 
+                                            <h3>{{ $seller->user->name }}</h3>
+                                            <h6>{{ $seller->qualification }}</h6> 
+                                        </div>
                                     </div>
-                                    <div class="testimonial-detail">
-                                        <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من
-                                            مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى
-                                            إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
-                                        <h3>محمد احمد</h3>
-                                        <h6>مدير عام</h6>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="testimonial-box">
-                                    <div class="img-wrapper">
-                                        <img src="{{ asset('frontend/assets/images/testimonial/4.jpg') }}" alt="testimonial"
-                                            class="img-fluid">
-                                    </div>
-                                    <div class="testimonial-detail">
-                                        <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من
-                                            مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى
-                                            إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
-                                        <h3>محمد احمد</h3>
-                                        <h6>مدير عام</h6>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="testimonial-box">
-                                    <div class="img-wrapper">
-                                        <img src="{{ asset('frontend/assets/images/testimonial/3.jpg') }}" alt="testimonial"
-                                            class="img-fluid">
-                                    </div>
-                                    <div class="testimonial-detail">
-                                        <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من
-                                            مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى
-                                            إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
-                                        <h3>محمد احمد</h3>
-                                        <h6>مدير عام</h6>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="testimonial-box">
-                                    <div class="img-wrapper">
-                                        <img src="{{ asset('frontend/assets/images/testimonial/2.jpg') }}" alt="testimonial"
-                                            class="img-fluid">
-                                    </div>
-                                    <div class="testimonial-detail">
-                                        <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من
-                                            مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى
-                                            إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</p>
-                                        <h3>محمد احمد</h3>
-                                        <h6>مدير عام</h6>
-
-                                    </div>
-                                </div>
-                            </div>
+                                </div> 
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -257,37 +219,109 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="section-title mb-40">
-                            <h2>تواصل معنا</h2>
-                            <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص
-                                العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد
-                                الحروف التى يولدها التطبيق.</p>
+                            <h2>سجل الأن</h2> 
                         </div>
-                        <form action="#" class="contact-form">
+                        @if(session('message'))
+                            <div class="alert alert-warning" role="alert">
+                                {{ session('message') }}
+                            </div>
+                        @endif
+                        @if ($errors->count() > 0) 
+                            <div class="alert alert-danger" style="background-color: #f8d7da;">
+                                <ul class="list-unstyled">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <form action="{{ route('frontend.seller.register') }}" method="POST" class="contact-form">
+                            @csrf
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="contact-field p-relative c-name mb-20">
-                                        <input type="text" placeholder="الاسم">
+                                    <div class="contact-field p-relative c-name mb-20" style="margin-bottom: 30px;">
+                                        <input class="{{ $errors->has('name') ? ' is-invalid' : '' }}" type="text" placeholder="الاسم" name="name" value="{{old('name')}}" required>
+                                        @if($errors->has('name'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('name') }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="contact-field p-relative c-email mb-20">
-                                        <input type="text" placeholder="البريد الإلكتروني">
+                                    <div class="contact-field p-relative c-email mb-20" style="margin-bottom: 30px;">
+                                        <input class="{{ $errors->has('email') ? ' is-invalid' : '' }}" type="email" placeholder="البريد الإلكتروني" name="email" value="{{old('email')}}" required>
+                                        @if($errors->has('email'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('email') }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="contact-field p-relative c-subject mb-20">
-                                        <input type="text" placeholder="الهاتف">
+                                    <div class="contact-field p-relative c-subject mb-20" style="margin-bottom: 30px;">
+                                        <input style="margin: 0" class="{{ $errors->has('phone_number') ? ' is-invalid' : '' }}" type="text" placeholder="الهاتف" name="phone_number" value="{{old('phone_number')}}" required>
+                                        @if($errors->has('phone_number'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('phone_number') }}
+                                            </div>
+                                        @endif
                                     </div>
-                                </div>
-
+                                </div> 
+                                <div class="col-lg-6">
+                                    <div class="contact-field p-relative c-subject mb-20" style="margin-bottom: 30px;">
+                                        <input class="{{ $errors->has('password') ? ' is-invalid' : '' }}" type="password" placeholder="كلمة المرور" name="password" required>
+                                        @if($errors->has('password'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('password') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div> 
+                                <div class="col-lg-6">
+                                    <div class="contact-field p-relative c-subject mb-20" style="margin-bottom: 30px;">
+                                        <input class="{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}" type="password" placeholder="تأكيد كلمة المرور" name="password_confirmation" required>
+                                        @if($errors->has('password_confirmation'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('password_confirmation') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div> 
                                 <div class="col-lg-12">
-                                    <div class="contact-field p-relative c-message mb-45">
-                                        <textarea name="message" id="message" cols="10" rows="10" placeholder="اكتب تعليقك"></textarea>
+                                    <div class="contact-field p-relative c-subject mb-20" style="margin-bottom: 30px;">
+                                        <input class="{{ $errors->has('address') ? ' is-invalid' : '' }}" type="text" placeholder="العنوان" name="address" value="{{old('address')}}" required>
+                                        @if($errors->has('address'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('address') }}
+                                            </div>
+                                        @endif
                                     </div>
-                                    <button class="btn">إرسال </button>
-                                </div>
+                                </div> 
+                                <div class="col-lg-6">
+                                    <div class="contact-field p-relative c-subject mb-20" style="margin-bottom: 30px;">
+                                        <input class="{{ $errors->has('social_name') ? ' is-invalid' : '' }}" type="text" placeholder="أسم البيدج أو الجروب" name="social_name" value="{{old('social_name')}}" required>
+                                        @if($errors->has('social_name'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('social_name') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div> 
+                                <div class="col-lg-6">
+                                    <div class="contact-field p-relative c-subject mb-20" style="margin-bottom: 30px;">
+                                        <input class="{{ $errors->has('social_link') ? ' is-invalid' : '' }}" type="text" placeholder="لينك البيدج أو الجروب" name="social_link" value="{{old('social_link')}}" required>
+                                        @if($errors->has('social_link'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('social_link') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div> 
                             </div>
 
+                            <button type="submit" class="btn btn-solid btn-sm"> سجل الأن
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -299,109 +333,7 @@
 
 
         <!-- footer start -->
-        <footer>
-            <div class="footer1 ">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="footer-main">
-                                <div class="footer-box">
-                                    <div class="footer-title mobile-title">
-                                        <h5>عن ابتكار</h5>
-                                    </div>
-                                    <div class="footer-contant">
-                                        <div class="footer-logo">
-                                            <a href="index.html">
-                                                <img src="{{ asset('frontend/assets/images/logo_gray.png') }}" class="img-fluid"
-                                                    alt="logo">
-                                            </a>
-                                        </div>
-                                        <p>% ابتكار شركه شبابيه مصريه<br>
-                                            بنقدم خدمات طباعه بجميع انواعها<br>
-                                            انتظروا دايما كل جديد</p>
-                                        <ul class="sosiyal">
-                                            <li><a href="javascript:void(0)"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a href="javascript:void(0)"><i class="fa fa-instagram"></i></a></li>
-                                            <li><a href="javascript:void(0)"><i class="fa fa-youtube"></i></a></li>
-                                            <li><a href="javascript:void(0)"><i class="fa fa-whatsapp"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="footer-box">
-                                    <div class="footer-title">
-                                        <h5>حسابي</h5>
-                                    </div>
-                                    <div class="footer-contant">
-                                        <ul>
-                                            <li><a href="index.html">الرئيسية</a></li>
-                                            <li><a href="about.html">عن إبتكار</a></li>
-                                            <li><a href="support.html">سياسة الدعم</a></li>
-                                            <li><a href="return.html">سياسة المرتجعات</a></li>
-                                            <li><a href="sellerpolicy.html">سياسة البائع</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="footer-box">
-                                    <div class="footer-title">
-                                        <h5>تواصل معنا</h5>
-                                    </div>
-                                    <div class="footer-contant">
-                                        <ul class="contact-list">
-                                            <li><i class="fa fa-map-marker"></i>وسط البلد ، القاهرة ،
-                                                <br> جمهورية مصر العربية<span></span>
-                                            </li>
-                                            <li><i class="fa fa-phone"></i>تليفون: <span>01000586206</span></li>
-                                            <li><i class="fa fa-envelope-o"></i>بريد الكتروني: support@ebtekarstore.net
-                                            </li>
-
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="footer-box">
-                                    <div class="footer-title">
-                                        <h5>القائمة البريدية</h5>
-                                    </div>
-                                    <div class="footer-contant">
-                                        <div class="newsletter-second">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control"
-                                                        placeholder="الاسم بالكامل">
-                                                    <span class="input-group-text"><i class="ti-user"></i></span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control"
-                                                        placeholder="البريد الإلكتروني">
-                                                    <span class="input-group-text"><i class="ti-email"></i></span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <a href="javascript:void(0)" class="btn btn-solid btn-sm">اشترك الان
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="subfooter footer-border">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="footer-left">
-                                <p>© 2023 Ebtekar Store</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </footer>
+        @include('frontend.layout.footer')
         <!-- footer end -->
 
 
@@ -437,6 +369,21 @@
         <!-- Theme js-->
         <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
         <script src="{{ asset('frontend/assets/js/modal.js') }}"></script>
+        <script>
+            function scrollToDivById(divId) {
+                const targetElement = $('#' + divId);
+                
+                if (targetElement.length) {
+                    const scrollTopPosition = targetElement.offset().top;
+                    $('html, body').animate({ scrollTop: scrollTopPosition }, 'slow');
+                }
+            }
+        </script>
+        @if ($errors->count() > 0)
+            <script>
+                scrollToDivById('contact')
+            </script>
+        @endif
 </body>
 
 </html>

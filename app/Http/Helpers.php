@@ -24,6 +24,17 @@ if (!function_exists('dashboard_currency')) {
     }
 }
 
+if (!function_exists('generateRandomString')) {
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ=#%$@&';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+}
 if (!function_exists('product_price_in_cart')) {
     function product_price_in_cart($quantity,$variation,$product)
     {

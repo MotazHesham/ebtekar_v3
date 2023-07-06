@@ -31,7 +31,7 @@
                 <div class="col-xl-4 col-lg-6 col-md-8 offset-xl-4 offset-lg-3 offset-md-2">
                     <div class="theme-card">
                         @if(session('message'))
-                            <div class="alert alert-info" role="alert">
+                            <div class="alert alert-warning" role="alert">
                                 {{ session('message') }}
                             </div>
                         @endif

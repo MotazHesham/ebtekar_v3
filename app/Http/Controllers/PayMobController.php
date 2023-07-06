@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use BaklySystems\PayMob\Facades\PayMob;
+use App\Http\Controllers\Frontend\CheckoutController;
+use Illuminate\Http\Request; 
 use App\Models\Order;
-use App\Http\Controllers\CheckoutController;
-
+use BaklySystems\PayMob\Facades\PayMob;
 
 class PayMobController extends Controller
 {
@@ -20,55 +19,77 @@ class PayMobController extends Controller
     public function checkingOut($integration_id ,$iframe_id, $order_id,$fname,$lname,$phone)
     {
 
-        $auth        = PayMob::authPaymob(); // login PayMob servers
+        // Request body
+        $json = [
+            'api_key' => 'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRBME56RTVMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuLTR5b2s2UDZCbUxjdERnM2J0RjV2XzBMQ1dUa21ncEhjbElTSUFIV0p3WUtGTWpBY3R5cWVhVVN1bDc4T2RRZGZnU2xwZ2JPQjZ0dzFVRzdrYW02bEE=',
+        ];
 
-        if (property_exists($auth, 'detail')) { // login to PayMob attempt failed.
-            toast('SomeThing Went Wrong!','error');
-            return redirect()->route('frontend.checkout');
+        // Send curl
+        $auth = $this->cURL(
+            'https://accept.paymobsolutions.com/api/auth/tokens',
+            $json
+        );// login PayMob servers 
+        if (property_exists($auth, 'detail')) { // login to PayMob attempt failed. 
+            alert("SomeThing Went Wrong!","",'error');
+            return redirect()->route('frontend.payment_select');
         }
 
         $order = Order::withoutGlobalScope('completed')->find($order_id);
-        $totalCost = $order->required_to_pay + $order->extra_commission + $order->shipping_country_cost - $order->deposit_amount;
-        $paymobOrder = PayMob::makeOrderPaymob( // make order on PayMob
-            $auth->token,
-            $auth->profile->id,
-            $totalCost * 100,
-            $order->id
-        );
+        $totalCost = $order->calc_total_for_client();
+        // Request body
+        $json = [
+            'merchant_id'            => $auth->profile->id,
+            'amount_cents'           => 10, // $totalCost * 100
+            'merchant_order_id'      => $order->id,
+            'currency'               => 'EGP',
+            'notify_user_with_email' => true
+        ];
+
+        // Send curl
+        $paymobOrder = $this->cURL(
+            'https://accept.paymobsolutions.com/api/ecommerce/orders?token='.$auth->token,
+            $json
+        ); 
         // Duplicate order id
         // PayMob saves your order id as a unique id as well as their id as a primary key, thus your order id must not
         // duplicate in their database.
         if (isset($paymobOrder->message)) {
             if ($paymobOrder->message == 'duplicate') {
-                toast('SomeThing Went Wrong!','error');
-                return redirect()->route('frontend.checkout');
+                alert("SomeThing Went Wrong!","",'error');
+                return redirect()->route('frontend.payment_select');
             }
         }
 
-        $user = auth()->user();
-
-        if($user == null){
-            $email = 'NA';
-            $address = 'NA';
-        }else{
-            $email = $user->email;
-            $address = $user->address;
-        }
-        $order->update(['paymob_order_id' => $paymobOrder->id]); // save paymob order id for later usage.
-        $payment_key = PayMob::getPaymentKeyPaymob( // get payment key
-            $integration_id,
-            $auth->token,
-            $totalCost * 100,
-            $paymobOrder->id,
-            // For billing data
-            $email, // optional
-            $fname, // optional
-            $lname, // optional
-            $phone, // optional
-            $order->shipping_address, // optional
-            $order->shipping_country_name, // optional
-        );
-
+        $order->update(['paymob_order_id' => $paymobOrder->id]); // save paymob order id for later usage. 
+        
+        // Request body
+        $json = [
+            "auth_token" => $auth->token,
+            'amount_cents' => 10, // $totalCost * 100
+            'expiration'   => 36000,
+            'order_id'     => $order_id,
+            "billing_data" => [
+                "email"        => 'test@test.com',
+                "first_name"   => $fname,
+                "last_name"    => $lname,
+                "phone_number" => $phone,
+                "city"         => $order->shipping_address,
+                "country"      => $order->shipping_country->name ?? '',
+                'street'       => 'null',
+                'building'     => 'null',
+                'floor'        => 'null',
+                'apartment'    => 'null'
+            ],
+            'currency'            => 'EGP',
+            'integration_id' => $integration_id
+        ];
+        // Send curl
+        return $payment_key = $this->cURL(
+            'https://accept.paymobsolutions.com/api/acceptance/payment_keys',
+            $json
+        ); 
+        // return $auth->token;
+        // return $payment_key;
         $token = $payment_key->token ?? '';
 
         return redirect('https://accept.paymob.com/api/acceptance/iframes/'. $iframe_id .'?payment_token='. $token);
@@ -121,8 +142,8 @@ class PayMobController extends Controller
     {
         $CheckoutController = new CheckoutController;
         $CheckoutController->checkout_done($order->id,'paid');
-        flash("Your order has been placed successfully")->success();
-        return redirect()->route('order_confirmed',$order->id);
+        alert("Your order has been placed successfully","",'success');
+        return redirect()->route('frontend.orders.success',$order->id);
     }
 
     /**
@@ -132,9 +153,9 @@ class PayMobController extends Controller
      * @return void
      */
     protected function voided($order)
-    {
-        flash(__('SomeThing Went Wrong!!!'))->error();
-        return redirect()->route('checkout.shipping_info');
+    { 
+        alert("SomeThing Went Wrong!!!","",'error');
+        return redirect()->route('frontend.payment_select');
     }
 
     /**
@@ -145,8 +166,8 @@ class PayMobController extends Controller
      */
     protected function refunded($order)
     {
-        flash(__('SomeThing Went Wrong!!!!'))->error();
-        return redirect()->route('checkout.shipping_info');
+        alert("SomeThing Went Wrong!!!","",'error');
+        return redirect()->route('frontend.payment_select');
     }
 
     /**
@@ -157,8 +178,8 @@ class PayMobController extends Controller
      */
     protected function failed()
     {
-        flash(__('Faild To paid'))->error();
-        return redirect()->route('checkout.shipping_info');
+        alert("SomeThing Went Wrong!!!","",'error');
+        return redirect()->route('frontend.payment_select');
     }
 
     /**
@@ -240,4 +261,26 @@ class PayMobController extends Controller
         # code...
     }
 
+    protected function cURL($url, $json)
+    {
+        // Create curl resource
+        $ch = curl_init($url);
+
+        // Request headers
+        $headers = array();
+        $headers[] = 'Content-Type: application/json';
+
+        // Return the transfer as a string
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // $output contains the output string
+        $output = curl_exec($ch);
+
+        // Close curl resource to free up system resources
+        curl_close($ch);
+        return json_decode($output);
+    }
 }

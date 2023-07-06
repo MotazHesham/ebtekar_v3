@@ -78,7 +78,10 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::get('contact', 'HomeController@contact')->name('contact');
     Route::post('contact', 'HomeController@contact_store')->name('contact.store');
     Route::post('subscribe', 'SubscriberController@subscribe')->name('subscribe'); 
-    Route::get('be-seller',function(){return view('frontend.beseller');})->name('beseller');
+
+    // seller
+    Route::get('be-seller', 'SellerController@beseller')->name('beseller');
+    Route::post('be-seller', 'SellerController@register')->name('seller.register');
 
     Route::get('product/{slug}', 'ProductController@product')->name('product'); 
     Route::post('product/quick_view', 'ProductController@quick_view')->name('product.quick_view');
@@ -105,7 +108,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::get('/orders/track/{id}', 'OrderController@track')->name('orders.track');
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard'); 
+        Route::get('/dashboard', 'ProfileController@dashboard')->name('dashboard'); 
 
         // wishlist
         Route::get('/wishlist', 'WishlistController@wishlist')->name('wishlist');

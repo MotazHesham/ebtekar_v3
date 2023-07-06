@@ -21,7 +21,7 @@ class ReceiptPriceViewObserver
         }elseif($receiptPriceView->website_setting_id == 3){
             $str = 'figures-';
         }elseif($receiptPriceView->website_setting_id == 4){
-            $str = 'shirte-';
+            $str = 'shirti-';
         }else{ 
             $str = 'ebtekar-';
         }
