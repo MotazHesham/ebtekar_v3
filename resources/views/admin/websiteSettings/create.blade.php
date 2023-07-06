@@ -47,7 +47,7 @@
                     <div class="form-group col-md-4">
                         <label class="required" for="domains">{{ trans('cruds.websiteSetting.fields.domains') }}</label>
                         <input class="form-control {{ $errors->has('domains') ? 'is-invalid' : '' }}" type="text"
-                            name="domains[]" id="domains" value="{{ old('domains') }}"
+                            name="domains[]" id="domains" 
                             placeholder="add domains (example.com)..." data-role="tagsinput" required>
                         @if ($errors->has('domains'))
                             <div class="invalid-feedback">
