@@ -39,7 +39,7 @@ class PayMobController extends Controller
         // Request body
         $json = [
             'merchant_id'            => $auth->profile->id,
-            'amount_cents'           => 10, // $totalCost * 100
+            'amount_cents'           =>   $totalCost * 100,
             'merchant_order_id'      => $order->id,
             'currency'               => 'EGP',
             'notify_user_with_email' => true
@@ -63,13 +63,12 @@ class PayMobController extends Controller
         $order->update(['paymob_order_id' => $paymobOrder->id]); // save paymob order id for later usage. 
         
         // Request body
-        $json = [
-            "auth_token" => $auth->token,
-            'amount_cents' => 10, // $totalCost * 100
+        $json = [ 
+            'amount_cents' =>  $totalCost * 100,
             'expiration'   => 36000,
-            'order_id'     => $order_id,
+            'order_id'     => $paymobOrder->id,
             "billing_data" => [
-                "email"        => 'test@test.com',
+                "email"        => auth()->user()->email ?? '',
                 "first_name"   => $fname,
                 "last_name"    => $lname,
                 "phone_number" => $phone,
@@ -81,15 +80,14 @@ class PayMobController extends Controller
                 'apartment'    => 'null'
             ],
             'currency'            => 'EGP',
-            'integration_id' => $integration_id
+            'card_integration_id' => $integration_id
         ];
         // Send curl
-        return $payment_key = $this->cURL(
-            'https://accept.paymobsolutions.com/api/acceptance/payment_keys',
+        $payment_key = $this->cURL(
+            'https://accept.paymobsolutions.com/api/acceptance/payment_keys?token='.$auth->token,
             $json
         ); 
-        // return $auth->token;
-        // return $payment_key;
+        // return $auth->token; 
         $token = $payment_key->token ?? '';
 
         return redirect('https://accept.paymob.com/api/acceptance/iframes/'. $iframe_id .'?payment_token='. $token);

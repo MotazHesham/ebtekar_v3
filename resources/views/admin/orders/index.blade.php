@@ -177,11 +177,11 @@
                                             {{ exchange_rate($order->deposit_amount,$order->exchange_rate) }} {{ $order->symbol }}
                                         </span>
                                     @endif
-                                    @if($order->extra_commission > 0)
+                                    @if($order->commission > 0)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
-                                            {{ trans('cruds.order.fields.extra_commission') }}
+                                            {{ trans('cruds.order.fields.commission') }}
                                             <br>
-                                            {{ exchange_rate($order->extra_commission,$order->exchange_rate) }} {{ $order->symbol }}
+                                            {{ exchange_rate(($order->commission + $order->extra_commission),$order->exchange_rate) }} {{ $order->symbol }}
                                         </span>
                                     @endif
                                 </div>

@@ -45,13 +45,7 @@
     <!--Animate css-->
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/animate.css') }}">
     <!-- Bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/bootstrap.css') }}">
-
-    <!-- share to social plugin -->
-    {{-- <link type="text/css" href="{{ asset('css/jssocials.css') }}" rel="stylesheet">
-    <link type="text/css" href="{{ asset('css/jssocials-theme-flat.css') }}" rel="stylesheet"> --}}
-    
-    {{-- <script src="{{ asset('frontend/js/jssocials.min.js') }}"></script> --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/bootstrap.css') }}"> 
 
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
@@ -62,6 +56,7 @@
         }
     </style>
 
+    @yield('styles')
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-232371041-1"></script>
@@ -244,8 +239,10 @@
                             @php
                                 $image = '';
                                 if($wishlist->product && $wishlist->product->photos != null){
-                                    $image = $wishlist->product->photos[0] ? $wishlist->product->photos[0]->getUrl('preview2') : '';
+                                    $image = isset($wishlist->product->photos[0]) ? $wishlist->product->photos[0]->getUrl('preview2') : '';
                                 }
+                                $prices = product_price_in_cart(1,null,$wishlist->product);
+
                             @endphp
                                 <li class="cart-{{ $wishlist->id }}">
                                     <div class="media">
@@ -257,14 +254,7 @@
                                                 <h4>{{ $wishlist->product->name }}</h4>
                                             </a>
                                             <h6>
-                                                @if($wishlist->product->discount > 0)
-                                                    {{front_calc_product_currency($wishlist->product->calc_discount($wishlist->product->unit_price ), $wishlist->product->weight)['as_text']}}
-                                                    <span>
-                                                        {{ front_calc_product_currency($wishlist->product->unit_price , $wishlist->product->weight)['as_text'] }}
-                                                    </span>
-                                                @else
-                                                    {{ front_calc_product_currency($wishlist->product->unit_price , $wishlist->product->weight)['as_text'] }}
-                                                @endif
+                                                <?php echo $wishlist->product->calc_price_as_text(); ?>
                                             </h6>
                                             <div class="addit-box">
                                                 <div class="pro-add">
@@ -423,6 +413,7 @@
                 $.post('{{ route('frontend.cart.update') }}', {_token:'{{ csrf_token() }}',id:id,quantity:quantity}, function(data){
                     $('#cart_side .cart_total .total span').html(data.total_cost);
                     $('#td-total-'+id).html(data.cartIteam_total);
+                    $('#td-commission-'+id + ' b').html(data.cartIteam_commission);
                     $('#td-total-cost').html(data.total_cost);
                 });
             }
@@ -447,6 +438,7 @@
                     }
                     $('#product-commission').html(data.commission);
                     $('#product-price-for-variant').html(data.price);
+                    $('#product-commission-for-variant').html(data.commission);
                     $('#add-to-cart-form #variant').val(data.variant);
                     $('#add-to-cart-form #available-quantity-span').html(data.available_quantity);
                     $('#add-to-cart-form #available-quantity-input').prop('max', data.available_quantity);

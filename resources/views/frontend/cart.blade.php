@@ -77,7 +77,7 @@
                                                     <div class="col-xs-3">
                                                         <h2 class="td-color"> 
                                                             <?php echo $prices['h2']; ?>  
-                                                        </h2>
+                                                        </h2> 
                                                     </div>
                                                     <div class="col-xs-3">
                                                         <h2 class="td-color">
@@ -91,7 +91,7 @@
                                             <td>
                                                 <h2> 
                                                     <?php echo $prices['h2']; ?>  
-                                                </h2>
+                                                </h2> 
                                             </td>
                                             <td>
                                                 <div class="qty-box">
@@ -106,6 +106,7 @@
                                             <td><a href="{{ route('frontend.cart.delete',$cartItem['id']) }}" class="icon"><i class="ti-close"></i></a></td>
                                             <td>
                                                 <h2 class="td-color" id="td-total-{{$cartItem['id']}}">{{  ($prices['price']['value'] * $cartItem['quantity'])  }} {{ $prices['price']['symbol'] }}</h2>
+                                                <small id="td-commission-{{$cartItem['id']}}">نسبة الربح : <b>{{ $prices['commission'] }} {{ $prices['price']['symbol'] }}</b></small> 
                                             </td>
                                         </tr> 
                                     @endif

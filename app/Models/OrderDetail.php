@@ -54,4 +54,7 @@ class OrderDetail extends Model
     public function total_cost($exchange_rate){
         return exchange_rate($this->total_cost,$exchange_rate);
     }
+    public function calc_commission($exchange_rate){
+        return exchange_rate($this->commission + $this->extra_commission,$exchange_rate);
+    }
 }

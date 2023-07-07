@@ -17,7 +17,7 @@ class ReceiptPriceViewObserver
             $order_num = 0;
         }
         if($receiptPriceView->website_setting_id == 2){
-            $str = 'ertegal-';
+            $str = 'ertgal-';
         }elseif($receiptPriceView->website_setting_id == 3){
             $str = 'figures-';
         }elseif($receiptPriceView->website_setting_id == 4){

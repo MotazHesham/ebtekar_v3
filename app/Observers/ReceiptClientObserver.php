@@ -18,7 +18,7 @@ class ReceiptClientObserver
             $order_num = 0;
         }
         if($receiptClient->website_setting_id == 2){
-            $str = 'ertegal-';
+            $str = 'ertgal-';
         }elseif($receiptClient->website_setting_id == 3){
             $str = 'figures-';
         }elseif($receiptClient->website_setting_id == 4){

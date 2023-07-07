@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PayMobController;
 use App\Http\Controllers\PushNotificationController;
+use App\Http\Requests\Frontend\CheckoutOrder;
 use App\Jobs\SendOrderConfirmationMail;
 use App\Jobs\SendPushNotification;
 use App\Models\Cart;
@@ -33,18 +34,7 @@ class CheckoutController extends Controller
         return view('frontend.checkout',compact('countries'));
     }
 
-    public function checkout(Request $request){
-
-        $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'nullable|email|unique:users',
-            'phone_number' => 'required|regex:' . config('panel.phone_number_format') . '|size:' . config('panel.phone_number_size'),
-            'phone_number_2' => 'nullable|regex:' . config('panel.phone_number_format') . '|size:' . config('panel.phone_number_size'),
-            'shipping_address' => 'required',
-            'payment_option' => 'required|in:cash_on_delivery,paymob',
-        ]); 
-
+    public function checkout(CheckoutOrder $request){  
         try{
 
             DB::beginTransaction();
@@ -112,7 +102,7 @@ class CheckoutController extends Controller
                 $order->exchange_rate = $currency->exchange_rate;
 
                 if($site_settings->id == 2){
-                    $str = 'ertegal-';
+                    $str = 'ertgal-';
                 }elseif($site_settings->id == 3){
                     $str = 'figures-';
                 }elseif($site_settings->id == 4){
@@ -122,9 +112,9 @@ class CheckoutController extends Controller
                 } 
 
                 if($user && $user->user_type == 'seller'){
-                    $order->client_name = $request->client_name;
-                    $order->date_of_receiving_order = strtotime($request->date_of_receiving_order);
-                    $order->excepected_deliverd_date = strtotime($request->excepected_deliverd_date);
+                    $order->client_name = $request->first_name . ' ' . $request->last_name;
+                    $order->date_of_receiving_order = $request->date_of_receiving_order;
+                    $order->excepected_deliverd_date = $request->excepected_deliverd_date;
                     $order->deposit_type = $request->deposit_type;
                     $order->deposit_amount = $request->deposit_amount;
                     $order->free_shipping = $request->free_shipping;
@@ -167,24 +157,23 @@ class CheckoutController extends Controller
                         $product->save();
                     }
 
-                    $price = $product->calc_price_for_cart($cartItem['variation']);
-                    $calc_total_for_product= ($price + $currency->$weight) * $cartItem['quantity']  ;
+                    $prices = product_price_in_cart($cartItem['quantity'],$cartItem['variation'],$product);
+                    $calc_total_for_product= ($prices['price']['value'] + $currency->$weight) * $cartItem['quantity']  ;
                     $total_cost += $calc_total_for_product;
 
-                    
+                    //add commission to seller 
+                    $total_commission += $prices['commission'];  
 
-                    //add commission to seller
-                    $total_commission += 0; 
                     $order_items [] = [
                         'order_id' => $order->id,
                         'product_id' => $cartItem['product_id'],
                         'variation' => $cartItem['variation'],
                         'link' => $cartItem['link'],
                         'description' => $cartItem['description'],
-                        'commission' => 0 ?? 0,
+                        'commission' => $prices['commission'] ?? 0,
                         'email_sent' => $cartItem['email_sent'] ?? 0,
                         'quantity' => $cartItem['quantity'],
-                        'price' => $price,
+                        'price' => $prices['price']['value'],
                         'weight_price' =>  $currency->$weight,
                         'total_cost' => $calc_total_for_product,
                         'photos' => $cartItem['photos'] ?? null, 
@@ -223,16 +212,15 @@ class CheckoutController extends Controller
 
                 if($request->payment_option == 'cash_on_delivery'){
                     if($this->checkout_done($order->id,'unpaid')){
+                        DB::commit();
                         toast("Your order has been placed successfully",'success');
                         if($request->has('create_account')){
                             Auth::login($user);
                         } 
-                        DB::commit();
                         return redirect()->route('frontend.orders.success',$order->id);
                     }
                 }elseif($request->payment_option == 'paymob'){ 
-                    DB::commit();
-                    // return 'Not Available right now';
+                    DB::commit(); 
                     $paymob = new PayMobController;
                     return $paymob->checkingOut('1602333','242734',$order->id,$request->first_name,$request->last_name,$request->phone_number);
                 }

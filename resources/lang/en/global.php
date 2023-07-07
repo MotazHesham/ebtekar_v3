@@ -334,6 +334,7 @@ return [
     'print'                          => 'طباعة',
     'duplicate'                      => 'تكرار',
     'receive_money'                  => 'استلام نقدية',
+    'pay'                  => 'Pay',
     
     'extra'          => [
         'deleted_receipts' => 'الفواتير المحذوفة',

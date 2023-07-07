@@ -18,7 +18,7 @@ class ReceiptSocialObserver
             $order_num = 0;
         } 
         if($receiptSocial->website_setting_id == 2){
-            $str = 'ertegal-';
+            $str = 'ertgal-';
         }elseif($receiptSocial->website_setting_id == 3){
             $str = 'figures-';
         }elseif($receiptSocial->website_setting_id == 4){

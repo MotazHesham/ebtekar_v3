@@ -87,14 +87,12 @@
                                                 class="tooltip-top" data-tippy-content="Quick View">
                                                 <i data-feather="eye"></i>
                                             </a>
-                                        </div>
-
-                                        {{-- <div class="new-label1">
-                                            <div>new</div>
-                                        </div> --}}
-                                        {{-- <div class="on-sale1">
-                                            on sale
-                                        </div> --}}
+                                        </div> 
+                                        @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                            <div class="new-label1">
+                                                <div class="text-center"> <small> الربح  <br> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </small> </div>
+                                            </div> 
+                                        @endif
                                     </div>
                                     <div class="product-detail product-detail2 ">
                                         <ul>
@@ -215,6 +213,10 @@
                                                                                 </a>
                                                                                 <h6>
                                                                                     <?php echo $product->calc_price_as_text(); ?>  
+                                                                                    @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                                                                        <br>
+                                                                                        <button class="btn btn-outline-warning btn-sm"> الربح : {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </button> 
+                                                                                    @endif
                                                                                 </h6>
                                                                             </div>
                                                                             <div class="cart-info">
@@ -343,6 +345,11 @@
                                                 <i data-feather="eye"></i>
                                             </a>
                                         </div>
+                                        @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                            <div class="new-label1">
+                                                <div class="text-center"> <small> الربح  <br> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </small> </div>
+                                            </div> 
+                                        @endif
                                     </div>
                                     <div class="product-detail product-detail2 ">
                                         <ul>

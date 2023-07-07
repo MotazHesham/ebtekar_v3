@@ -125,6 +125,11 @@
                                     @else
                                         <li id="product-price-for-variant">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
                                     @endif
+                                    @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                        <li id="product-commission-for-variant">
+                                            <div class="text-center"> <small> الربح  :<b> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['as_text'] }} </b> </small> </div>
+                                        </li> 
+                                    @endif
                                 </ul>
                                 <div class="revieu-box">
                                     <ul>
@@ -420,12 +425,11 @@
                                             </a>
 
                                         </div>
-                                        {{-- <div class="new-label1">
-                                            <div>new</div>
-                                        </div> --}}
-                                        {{-- <div class="on-sale1">
-                                            on sale
-                                        </div> --}}
+                                        @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                            <div class="new-label1">
+                                                <div class="text-center"> <small> الربح  <br> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </small> </div>
+                                            </div> 
+                                        @endif
                                     </div>
                                     <div class="product-detail product-detail2 ">
                                         <ul>

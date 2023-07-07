@@ -186,26 +186,5 @@ class Product extends Model implements HasMedia
             $price .= front_calc_product_currency($this->unit_price,$this->weight)['as_text'];
         } 
         return $price;
-    }
-
-    public function calc_price_for_cart($variant){
-
-        $product_stock = ProductStock::where('variant', $variant)->first();
-
-        if($product_stock){
-
-            // $commission = ($product_stock->unit_price  - $product_stock->purchase_price) * $request->quantity;
-
-            $price = $this->discount > 0 ? $this->calc_discount($product_stock->unit_price) : $product_stock->unit_price;
-
-        }else {
-
-            // $commission = ($product->unit_price  - $product->purchase_price) * $request->quantity;
-
-            $price = $this->discount > 0 ? $this->calc_discount($this->unit_price) : $this->unit_price;
-
-        }
-
-        return $price;
-    }
+    } 
 }

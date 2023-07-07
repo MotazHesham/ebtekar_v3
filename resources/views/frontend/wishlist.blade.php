@@ -43,8 +43,9 @@
                                         $image = '';
                                         $product = $wishlist->product;
                                         if($product->photos != null){
-                                            $image = $product->photos[0] ? $product->photos[0]->getUrl('preview2') : '';
+                                            $image = isset($product->photos[0]) ? $product->photos[0]->getUrl('preview2') : '';
                                         }
+                                        $prices = product_price_in_cart(1,null,$product);
                                     @endphp
                                     <tr id="wishlist-tr-{{$wishlist->id}}">
                                         <td>
@@ -54,7 +55,7 @@
                                         <td><a href="{{ route('frontend.product', $product->slug) }}">{{$product->name ?? ''}}</a>
                                             <div class="mobile-cart-content">
                                                 <div class="col-xs-3">
-                                                    <h2 class="td-color">{{ $product->discount > 0 ? $product->calc_discount($product->unit_price) : $product->unit_price }}</h2>
+                                                    <h2 class="td-color"><?php echo $prices['h2'] ?></h2>
                                                 </div>
                                                 <div class="col-xs-3">
                                                     <h2 class="td-color"><a href="javascript:void(0)" class="icon me-1"><i
@@ -64,7 +65,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <h2>{{ $product->discount > 0 ? $product->calc_discount($product->unit_price) : $product->unit_price }}</h2>
+                                            <h2><?php echo $prices['h2'] ?></h2>
                                         </td>
                                         <td>
                                             <a href="javascript:void(0)" onclick="deleteWishlistItem('{{$wishlist->id}}')" class="icon me-3"><i class="ti-close"></i> </a>
@@ -111,8 +112,8 @@
                 </div>
             </div>
             <div class="row wishlist-buttons">
-                <div class="col-12"><a href="javascript:void(0)" class="btn btn-normal">الاستمرار في التسوق</a> <a
-                        href="javascript:void(0)" class="btn btn-normal"> عربة التسوق</a></div>
+                <div class="col-12"><a href="{{ route('frontend.search') }}" class="btn btn-normal">الاستمرار في التسوق</a> <a
+                        href="{{ route('frontend.cart') }}" class="btn btn-normal"> عربة التسوق</a></div>
             </div>
         </div>
     </section>

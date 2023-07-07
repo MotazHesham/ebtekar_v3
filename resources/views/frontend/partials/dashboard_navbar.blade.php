@@ -7,6 +7,7 @@
             <ul>
                 <li class="active"><a href="{{ route('frontend.dashboard') }}">بيانات الحساب</a></li>
                 <li><a href="{{ route('frontend.orders') }}">طلباتي</a></li>
+                <li><a href="{{ route('frontend.orders.commission_requests') }}">طلبات السحب</a></li>
                 <li><a href="{{ route('frontend.wishlist') }}">قائمة الامنيات</a></li>
                 <li><a href="{{ route('frontend.dashboard') }}">تغيير كلمة المرور</a></li>
                 <li class="last">

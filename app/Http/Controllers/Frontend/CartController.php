@@ -74,13 +74,16 @@ class CartController extends Controller
             $product = Product::find($cartItem['product_id']);
             if($product_stock){ 
                 $price = front_calc_product_currency($product->calc_discount($product_stock->unit_price),$product->weight);
+                $commission = front_calc_commission_currency($product_stock->unit_price,$product_stock->purchase_price);
             }else{ 
                 $price = front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight);
+                $commission = front_calc_commission_currency($product->unit_price,$product->purchase_price);
             } 
 
             if($cartItem['id'] == $request->id){
                 $cartItem['quantity'] = $request->quantity;
                 $cartIteam_total = ($price['value'] * $cartItem['quantity'] );
+                $cartIteam_commission = ($commission['value'] * $cartItem['quantity'] );
             }
             $cart->push($cartItem);
             session()->put('cart', $cart);
@@ -91,6 +94,7 @@ class CartController extends Controller
         return [ 
             'total_cost' => $total . $price['symbol'],
             'cartIteam_total' => $cartIteam_total . $price['symbol'],
+            'cartIteam_commission' => $cartIteam_commission . $price['symbol'],
         ];
     }
 

@@ -88,10 +88,10 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::post('product/variant_price', 'ProductController@variant_price')->name('product.variant_price');
 
     // search
-    Route::get('/search', 'ProductController@search')->name('search'); 
-    Route::get('/search?category={category_slug}', 'ProductController@search')->name('products.category');
-    Route::get('/search?sub_category={subcategory_slug}', 'ProductController@search')->name('products.subcategory');
-    Route::get('/search?sub_subcategory={subsubcategory_slug}', 'ProductController@search')->name('products.subsubcategory');
+    Route::get('search', 'ProductController@search')->name('search'); 
+    Route::get('search?category={category_slug}', 'ProductController@search')->name('products.category');
+    Route::get('search?sub_category={subcategory_slug}', 'ProductController@search')->name('products.subcategory');
+    Route::get('search?sub_subcategory={subsubcategory_slug}', 'ProductController@search')->name('products.subsubcategory');
 
     // cart
     Route::get('cart', 'CartController@index')->name('cart');
@@ -104,23 +104,25 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::post('checkout', 'CheckoutController@checkout')->name('checkout');
 
     // orders track
-    Route::get('/orders/success/{id}', 'OrderController@success')->name('orders.success');
-    Route::get('/orders/track/{id}', 'OrderController@track')->name('orders.track');
+    Route::get('orders/success/{id}', 'OrderController@success')->name('orders.success');
+    Route::get('orders/track/{id}', 'OrderController@track')->name('orders.track');
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/dashboard', 'ProfileController@dashboard')->name('dashboard'); 
+        Route::get('dashboard', 'ProfileController@dashboard')->name('dashboard'); 
 
         // wishlist
-        Route::get('/wishlist', 'WishlistController@wishlist')->name('wishlist');
-        Route::get('/wishlist/add/{slug}', 'WishlistController@add')->name('wishlist.add');
+        Route::get('wishlist', 'WishlistController@wishlist')->name('wishlist');
+        Route::get('wishlist/add/{slug}', 'WishlistController@add')->name('wishlist.add');
         Route::post('wishlist/delete', 'WishlistController@delete')->name('wishlist.delete');
 
         // orders
-        Route::get('/orders', 'OrderController@orders')->name('orders');
+        Route::get('orders', 'OrderController@orders')->name('orders');
+        Route::get('commission_requests', 'OrderController@commission_requests')->name('orders.commission_requests');
+        Route::post('request_commission', 'OrderController@request_commission')->name('orders.request_commission.store');
 
         // profile
-        Route::post('/update_profile', 'ProfileController@update_profile')->name('update_profile');
-        Route::post('/update_password', 'ProfileController@update_password')->name('update_password');
+        Route::post('update_profile', 'ProfileController@update_profile')->name('update_profile');
+        Route::post('update_password', 'ProfileController@update_password')->name('update_password');
     });
 });
 

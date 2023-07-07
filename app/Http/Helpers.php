@@ -35,6 +35,42 @@ if (!function_exists('generateRandomString')) {
         return $randomString;
     }
 }
+if (! function_exists('calculate_commission')) {
+    function calculate_commission($orders) {
+        $pending = 0 ;
+        $available = 0 ;
+        $requested = 0 ;
+        $delivered = 0 ;
+
+        foreach($orders as $order){
+            if($order->delivery_status != 'cancel'){
+
+                if($order->commission_status == 'pending'){
+                    if($order->delivery_status == 'delivered'){
+                        $available += $order->commission + $order->extra_commission;
+                    }else{
+                        $pending += $order->commission + $order->extra_commission;
+                    }
+                }else if($order->commission_status == 'requested'){
+                    $requested += $order->commission + $order->extra_commission;
+                }else if($order->commission_status == 'delivered'){
+                    $delivered += $order->commission + $order->extra_commission;
+                }
+
+            }
+        }
+
+        $data = [
+            'pending' => $pending . 'EGP',
+            'available' => $available . 'EGP',
+            'requested' => $requested . 'EGP',
+            'delivered' => $delivered . 'EGP',
+        ];
+
+        return $data;
+    }
+}
+
 if (!function_exists('product_price_in_cart')) {
     function product_price_in_cart($quantity,$variation,$product)
     {
@@ -42,11 +78,11 @@ if (!function_exists('product_price_in_cart')) {
         if($product_stock){
             $price_before_discount = front_calc_product_currency($product_stock->unit_price,$product->weight);
             $price = front_calc_product_currency($product->calc_discount($product_stock->unit_price),$product->weight);
-            $commission = ($product_stock->unit_price  - $product_stock->purchase_price) * $quantity; 
+            $commission = front_calc_commission_currency($product_stock->unit_price , $product_stock->purchase_price)['value'] * $quantity; 
         }else{
             $price_before_discount = front_calc_product_currency($product->unit_price,$product->weight);
             $price = front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight); 
-            $commission = ($product->unit_price  - $product->purchase_price) * $quantity;
+            $commission = front_calc_commission_currency($product->unit_price, $product->purchase_price)['value'] * $quantity;
         } 
         $h2 = '';
         
@@ -56,7 +92,8 @@ if (!function_exists('product_price_in_cart')) {
         }else{
             $h2 .= $price['as_text'];
         } 
-        return [
+        
+        return [ 
             'commission' => $commission,
             'price' => $price,
             'price_before_discount' => $price_before_discount,
@@ -65,6 +102,27 @@ if (!function_exists('product_price_in_cart')) {
     }
 }
 
+if (!function_exists('front_calc_commission_currency')) {
+    function front_calc_commission_currency($unit_price,$purchase_price){
+        $currency = session('currency');
+        if($currency){
+            $product_unit_price = exchange_rate($unit_price,$currency->exchange_rate); 
+            $product_purchase_price = exchange_rate($purchase_price,$currency->exchange_rate); 
+            $commission = $product_unit_price - $product_purchase_price; 
+            return [
+                'as_text' => $currency->symbol . ' ' . $commission,
+                'value' => $commission,
+                'symbol' =>  ' ' . $currency->symbol,
+            ];
+        }else{
+            return [
+                'as_text' => 'EGP ' . ($unit_price - $purchase_price),
+                'value' => ($unit_price - $purchase_price),
+                'symbol' => 'EGP '
+            ];
+        } 
+    }
+}
 if (!function_exists('front_calc_product_currency')) {
     function front_calc_product_currency($value,$weight)
     {

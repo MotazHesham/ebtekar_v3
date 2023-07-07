@@ -10,7 +10,7 @@ class CreateCommissionRequestsTable extends Migration
     {
         Schema::create('commission_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('status');
+            $table->string('status')->default('requested');
             $table->decimal('total_commission', 15, 2);
             $table->string('payment_method');
             $table->string('transfer_number')->nullable();

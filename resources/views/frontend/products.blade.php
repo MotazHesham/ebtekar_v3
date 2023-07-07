@@ -249,6 +249,11 @@
                                                                             <i data-feather="eye"></i>
                                                                         </a>
                                                                     </div>
+                                                                    @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                                                        <div class="new-label1">
+                                                                            <div class="text-center"> <small> الربح  <br> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </small> </div>
+                                                                        </div> 
+                                                                    @endif
                                                                 </div>
                                                                 <div class="product-detail product-detail2 ">
                                                                     <ul>

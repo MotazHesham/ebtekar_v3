@@ -23,15 +23,15 @@ class CommissionRequest extends Model
     ];
 
     public const STATUS_SELECT = [
-        'pending'   => 'Pending',
-        'requested' => 'Requested',
-        'delivered' => 'Delivered',
+        'pending'   => 'قيد الأنتظار',
+        'requested' => 'مطلوب',
+        'delivered' => 'تم التوريد',
     ];
 
     public const PAYMENT_METHOD_SELECT = [
-        'in_company'    => 'in Company',
-        'bank_account'  => 'bank Account',
-        'vodafon_cache' => 'vodafon Cache',
+        'in_company'    => 'في الشركة',
+        'bank_account'  => 'حساب بنكي',
+        'vodafon_cache' => 'فودافون كاش',
     ];
 
     protected $fillable = [
@@ -76,5 +76,9 @@ class CommissionRequest extends Model
     public function done_by_user()
     {
         return $this->belongsTo(User::class, 'done_by_user_id');
+    }
+
+    public function commission_request_orders(){
+        return $this->hasMany(CommissionRequestOrders::class,'commission_request_id');
     }
 }

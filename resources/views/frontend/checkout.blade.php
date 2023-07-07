@@ -1,5 +1,9 @@
 @extends('frontend.layout.app')
 
+@section('styles') 
+<link rel="stylesheet" href="{{ asset('dashboard_offline/css/bootstrap-datetimepicker.min.css') }}">
+@endsection
+
 @section('content')
     <!-- breadcrumb start -->
     <div class="breadcrumb-main ">
@@ -47,32 +51,27 @@
                                 </div>
                                 <div class="theme-form">
                                     @php
-                                        $name = auth()->check() ? explode(" ",auth()->user()->name) : '';
+                                        $name = auth()->check() && auth()->user()->user_type != 'seller' ? explode(" ",auth()->user()->name) : '';
                                     @endphp
                                     <div class="row check-out ">
                                         @if(auth()->check() && auth()->user()->user_type == 'seller')
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                                 <label>تاريخ استلام الطلب </label>
-                                                <input type="date" name="date_of_receiving_order"  placeholder="">
+                                                <input type="text" class="date" name="date_of_receiving_order" value="{{old('date_of_receiving_order')}}"  placeholder="">
                                             </div>
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                                 <label>ميعاد التوصيل المتوقع</label>
-                                                <input type="date" name="excepected_deliverd_date"  placeholder="">
-                                            </div>
-                                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                                <label>أسم العميل</label>
-                                                <input type="text" name="client_name" required value="{{ auth()->user()->name ?? ''}}" placeholder="">
-                                            </div>
-                                        @else
-                                            <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                                <label>الاسم الاول</label>
-                                                <input type="text" name="first_name" required value="{{ isset($name[0]) ? $name[0] : old('first_name')}}" placeholder="">
-                                            </div>
-                                            <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                                <label>الاسم الاخير</label>
-                                                <input type="text" name="last_name" required value="{{ isset($name[1]) ? $name[1] : old('last_name')}}" placeholder="">
-                                            </div> 
+                                                <input type="text" class="date" name="excepected_deliverd_date" value="{{old('excepected_deliverd_date')}}"  placeholder="">
+                                            </div>  
                                         @endif
+                                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                            <label>الاسم الاول @if(auth()->check() && auth()->user()->user_type == 'seller') <small>(للعميل)</small> @endif</label>
+                                            <input type="text" name="first_name" required value="{{ isset($name[0]) ? $name[0] : old('first_name')}}" placeholder="">
+                                        </div>
+                                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                            <label>الاسم الاخير @if(auth()->check() && auth()->user()->user_type == 'seller') <small>(للعميل)</small> @endif</label>
+                                            <input type="text" name="last_name" required value="{{ isset($name[1]) ? $name[1] : old('last_name')}}" placeholder="">
+                                        </div> 
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label class="field-label">التليفون</label>
                                             <input type="text" name="phone_number" value="{{old('phone_number',auth()->user()->phone_number ?? '')}}" placeholder="" required>
@@ -128,7 +127,7 @@
                                             </div>
                                             <div class="form-group col-md-12 col-sm-6 col-xs-12" id="email" style="display: none">
                                                 <label>البريد الألكتروني</label>
-                                                <input type="email" name="email">
+                                                <input type="email" name="email" value="{{old('email')}}">
                                             </div>
                                             <div class="form-group col-md-12 col-sm-12 col-xs-12" id="password" style="display: none">
                                                 <label class="field-label">كلمة المرور</label>
@@ -161,7 +160,15 @@
                                                         <li>
                                                             {{ $product->name}}
                                                             (×{{ $cartItem['quantity'] }})
-                                                            <span>{{  ($prices['price']['value'] * $cartItem['quantity'])  }} {{ $prices['price']['symbol'] }}</span>
+                                                            <span>
+                                                                {{  ($prices['price']['value'] * $cartItem['quantity'])  }} {{ $prices['price']['symbol'] }}
+                                                                <br>
+                                                                <small>
+                                                                    نسبة الربح :
+                                                                    <b> {{ $prices['commission'] }} {{ $prices['price']['symbol'] }}</b>
+                                                                </small>
+                                                            </span>
+                                                            
                                                         </li>
                                                     @endif
                                                 @endforeach
@@ -181,29 +188,34 @@
                                                             <label class="field-label">العربون</label>
                                                             <select name="deposit_type">
                                                                 @foreach(\App\Models\Order::DEPOSIT_TYPE_SELECT as $key => $value)
-                                                                    <option value="{{$key}}">{{$value}}</option> 
+                                                                    <option value="{{$key}}" @if(old('deposit_type') == $key) selected @endif>{{$value}}</option> 
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                                             <label>المبلغ المحول </label>
-                                                            <input type="number" name="deposit_amount" value="" placeholder="">
+                                                            <input type="number" name="deposit_amount" value="{{old('deposit_amount')}}" placeholder="">
                                                         </div>
                                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                                             <label class="field-label">الشحن مجانا </label>
-                                                            <select name="free_shipping">
-                                                                <option value="0">No</option>
-                                                                <option value="1">Yes</option>
+                                                            <select name="free_shipping" id="free_shipping">
+                                                                <option value="0" @if(old('free_shipping') == '0') selected @endif>No</option>
+                                                                <option value="1" @if(old('free_shipping') == '1') selected @endif>Yes</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="form-group col-md-6 col-sm-12 col-xs-12" style="display: none" id="free_shipping_reason">
+                                                            <label>سبب الشحن المجاني </label>
+                                                            <input type="text" name="free_shipping_reason" value="{{old('free_shipping_reason')}}" placeholder="">
+                                                        </div>
+                                                        <div class="form-group col-md-6 col-sm-6 col-xs-12" id="shipping_cost_by_seller">
                                                             <label class="field-label">تكلفة الشحن </label>
-                                                            <input type="number" value="" placeholder="" name="shipping_cost_by_seller">
+                                                            <input type="number" value="{{old('shipping_cost_by_seller')}}" placeholder="" name="shipping_cost_by_seller">
                                                         </div>
                                                         <div class="form-group col-md-12 col-sm-12 col-xs-12">
                                                             <label class="field-label">حساب اجمالي الأوردر</label>
-                                                            <input type="number" value="" placeholder="" name="free_shipping_reason">
-                                                        </div>
+                                                            <input type="number" value="{{old('total_cost_by_seller')}}" placeholder="" name="total_cost_by_seller">
+                                                        </div> 
+                                                        
                                                     </div>
                                                 @endif
                                                 <ul>
@@ -214,13 +226,14 @@
                                                             <label for="payment-1">دفع عند الاستلام</label>
                                                         </div>
                                                     </li>
-
-                                                    <li>
-                                                        <div class="radio-option">
-                                                            <input type="radio" name="payment_option" id="payment-2" value="paymob">
-                                                            <label for="payment-2">الدفع أونلاين</label>
-                                                        </div>
-                                                    </li>
+                                                    @if(session('country_code') == 'EG')
+                                                        <li>
+                                                            <div class="radio-option">
+                                                                <input type="radio" name="payment_option" id="payment-2" value="paymob"  @if(old('payment_option') == 'paymob') checked @endif>
+                                                                <label for="payment-2">الدفع أونلاين</label>
+                                                            </div>
+                                                        </li>
+                                                    @endif
 
                                                 </ul>
                                             </div>
@@ -243,7 +256,22 @@
 
 @section('scripts')
     @parent 
+    
+    <script src="{{ asset('dashboard_offline/js/moment.min.js') }}"></script>
+    <script src="{{ asset('dashboard_offline/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
     <script>
+        $('#free_shipping').on('change',function(){ 
+            var free_shipping = $('#free_shipping').val();
+            if(free_shipping == '1'){
+                $('#free_shipping_reason').css('display','block');
+                $('#shipping_cost_by_seller').css('display','none');
+            }else{
+                $('#free_shipping_reason').css('display','none');
+                $('#shipping_cost_by_seller').css('display','block');
+            }
+        })
+        
         function create_account_with_order(el){ 
             if(el.checked){
                 $('#password').css('display','block');

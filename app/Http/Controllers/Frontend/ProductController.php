@@ -52,11 +52,11 @@ class ProductController extends Controller
         if($str != null){
             $product_stock = $product->stocks->where('variant', $str)->first();
             $price = $product_stock->unit_price;
-            $comission = ( $product_stock->unit_price - $product_stock->purchase_price);
+            $comission = front_calc_product_currency($product_stock->unit_price,$product_stock->purchase_price)['as_text'];
             $available_quantity = $product_stock->quantity;
         }else{
             $price = $product->unit_price;
-            $comission = ( $product->unit_price -$product->purchase_price );
+            $comission = front_calc_product_currency($product->unit_price,$product->purchase_price)['as_text'];
             $available_quantity = $product->current_stock;
         }
 

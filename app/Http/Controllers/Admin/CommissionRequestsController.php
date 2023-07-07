@@ -7,9 +7,12 @@ use App\Http\Requests\MassDestroyCommissionRequestRequest;
 use App\Http\Requests\StoreCommissionRequestRequest;
 use App\Http\Requests\UpdateCommissionRequestRequest;
 use App\Models\CommissionRequest;
-use App\Models\User;
-use Gate;
+use App\Models\CommissionRequestOrders;
+use App\Models\Order;
+use App\Models\User; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -20,25 +23,36 @@ class CommissionRequestsController extends Controller
         abort_if(Gate::denies('commission_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = CommissionRequest::with(['user', 'created_by', 'done_by_user'])->select(sprintf('%s.*', (new CommissionRequest)->table));
+            $query = CommissionRequest::with(['user', 'created_by', 'done_by_user','commission_request_orders.order'])->select(sprintf('%s.*', (new CommissionRequest)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
 
-            $table->editColumn('actions', function ($row) {
-                $viewGate      = 'commission_request_show';
-                $editGate      = 'commission_request_edit';
-                $deleteGate    = 'commission_request_delete';
-                $crudRoutePart = 'commission-requests';
-
-                return view('partials.datatablesActions', compact(
-                    'viewGate',
-                    'editGate',
-                    'deleteGate',
-                    'crudRoutePart',
-                    'row'
-                ));
+            $table->editColumn('actions', function ($row) {  
+                $view      = '';
+                $edit      = '';
+                $delete    = '';
+                if(Gate::allows('commission_request_show')){ 
+                    $view = '<a class="btn btn-xs btn-primary" href="'.route('admin.commission-requests.show', $row->id).'">
+                                '. trans("global.view").'
+                            </a>';
+                } 
+                if($row->status == 'requested'){
+                    if(Gate::allows('commission_request_edit')){
+                        $edit  = '<a class="btn btn-xs btn-info" href="'.route('admin.commission-requests.edit', $row->id).'">
+                                    '. trans("global.pay").'
+                                </a>';
+                    }
+                    if(Gate::allows('commission_request_delete')){ 
+                        $route = route('admin.commission-requests.destroy', $row->id);
+                        $delete = '<a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('.$route.')">
+                                    '. trans("global.delete").'
+                                </a>';
+                    } 
+    
+                }
+                return $view . $edit . $delete;
             });
 
             $table->editColumn('id', function ($row) {
@@ -46,10 +60,7 @@ class CommissionRequestsController extends Controller
             });
             $table->editColumn('status', function ($row) {
                 return $row->status ? CommissionRequest::STATUS_SELECT[$row->status] : '';
-            });
-            $table->editColumn('total_commission', function ($row) {
-                return $row->total_commission ? $row->total_commission : '';
-            });
+            }); 
             $table->editColumn('payment_method', function ($row) {
                 return $row->payment_method ? CommissionRequest::PAYMENT_METHOD_SELECT[$row->payment_method] : '';
             });
@@ -59,17 +70,23 @@ class CommissionRequestsController extends Controller
 
             $table->addColumn('user_name', function ($row) {
                 return $row->user ? $row->user->name : '';
+            }); 
+            $table->addColumn('orders', function ($row) {
+                $str = '';
+                foreach($row->commission_request_orders as $request_order){ 
+                    $str .= '<span class="badge badge-dark">'. $request_order->order->order_num .'</span>';
+                    $str .= '<span class="badge badge-warning">' .$request_order->commission .'</span><br>'; 
+                }
+                $str .= '<span class="badge badge-success">المجموع :'. $row->total_commission .'</span>';
+                return $str;
+            }); 
+
+            $table->addColumn('done', function ($row) { 
+                $done_by_user = $row->done_by_user ? '<span class="badge badge-danger">بواسطة :'.$row->done_by_user->name.'<span><br>' . $row->done_time : '';
+                return $done_by_user;
             });
 
-            $table->addColumn('created_by_name', function ($row) {
-                return $row->created_by ? $row->created_by->name : '';
-            });
-
-            $table->addColumn('done_by_user_name', function ($row) {
-                return $row->done_by_user ? $row->done_by_user->name : '';
-            });
-
-            $table->rawColumns(['actions', 'placeholder', 'user', 'created_by', 'done_by_user']);
+            $table->rawColumns(['actions', 'placeholder', 'user' , 'done','orders']);
 
             return $table->make(true);
         }
@@ -100,16 +117,20 @@ class CommissionRequestsController extends Controller
     public function edit(CommissionRequest $commissionRequest)
     {
         abort_if(Gate::denies('commission_request_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $created_bies = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $done_by_users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $commissionRequest->load('user', 'created_by', 'done_by_user');
-
-        return view('admin.commissionRequests.edit', compact('commissionRequest', 'created_bies', 'done_by_users', 'users'));
+        
+        $commission_request_orders = CommissionRequestOrders::where('commission_request_id', $commissionRequest->id)->get();
+        foreach($commission_request_orders as $raw){
+            $order = Order::find($raw->order_id);
+            $order->commission_status = 'delivered';
+            $order->save();
+            
+        }
+        $commissionRequest->status = 'delivered';
+        $commissionRequest->done_by_user_id = Auth::user()->id;
+        $commissionRequest->done_time = date(config('panel.date_format') . ' ' . config('panel.time_format'));
+        $commissionRequest->save();  
+        alert('Paid successfully','','success');
+        return redirect()->route('admin.commission-requests.index');
     }
 
     public function update(UpdateCommissionRequestRequest $request, CommissionRequest $commissionRequest)

@@ -37,7 +37,7 @@ class CreateOrdersTable extends Migration
             $table->string('payment_status')->default('unpaid');
             $table->string('playlist_status')->default('pending');
             $table->string('payment_type')->default('cash_on_delivery');
-            $table->string('commission_status')->nullable();
+            $table->string('commission_status')->default('pending');
             $table->string('deposit_type')->nullable();
             $table->decimal('deposit_amount', 15, 2)->nullable();
             $table->decimal('total_cost_by_seller', 15, 2)->nullable();
