@@ -4,7 +4,8 @@
 /public/hot
 /public/storage
 /public/uploads
-/storage/*.key
+/storage/*.key 
+/storage/tmp
 /vendor
 .env
 .htaccess

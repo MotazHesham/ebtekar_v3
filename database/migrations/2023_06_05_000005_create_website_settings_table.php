@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('website_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('css_file_name')->nullable();
             $table->string('site_name');
             $table->string('domains');
             $table->longText('keywords_seo');

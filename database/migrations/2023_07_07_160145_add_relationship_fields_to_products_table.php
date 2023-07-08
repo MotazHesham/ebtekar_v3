@@ -18,7 +18,7 @@ class AddRelationshipFieldsToProductsTable extends Migration
             $table->unsignedBigInteger('sub_sub_category_id')->nullable();
             $table->foreign('sub_sub_category_id', 'sub_sub_category_fk_8583132')->references('id')->on('sub_sub_categories');
             $table->unsignedBigInteger('design_id')->nullable();
-            $table->foreign('design_id', 'design_fk_8583419')->references('id')->on('designes');
+            $table->foreign('design_id', 'design_fk_8583419')->references('id')->on('designs');
         });
     }
 }

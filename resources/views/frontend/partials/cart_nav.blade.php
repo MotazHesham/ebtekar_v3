@@ -54,12 +54,10 @@
 <ul class="cart_total">
     <li>
         <div class="total">
-            الإجمالي 
-            @if(session('cart') && $prices != null)
-                <span>
-                    {{  $total  }} {{ $prices['price']['symbol'] }}
-                </span> 
-            @endif
+            الإجمالي  
+            <span>
+                {{  $total ?? ''  }} {{ $prices['price']['symbol'] ?? '' }}
+            </span>  
         </div>
     </li>
     <li>

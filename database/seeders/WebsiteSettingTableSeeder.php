@@ -43,7 +43,7 @@ class WebsiteSettingTableSeeder extends Seeder
                 'designer_id' => 1,
                 'preparer_id' => 1,
                 'manufacturer_id' => 1,
-                'shipment_id' => 1,
+                'shipmenter_id' => 1,
             ],
             [ 
                 'id' => 2,
@@ -73,7 +73,7 @@ class WebsiteSettingTableSeeder extends Seeder
                 'designer_id' => 1,
                 'preparer_id' => 1,
                 'manufacturer_id' => 1,
-                'shipment_id' => 1,
+                'shipmenter_id' => 1,
             ],
             [ 
                 'id' => 3,
@@ -103,7 +103,7 @@ class WebsiteSettingTableSeeder extends Seeder
                 'designer_id' => 1,
                 'preparer_id' => 1,
                 'manufacturer_id' => 1,
-                'shipment_id' => 1,
+                'shipmenter_id' => 1,
             ],
             [ 
                 'id' => 4,
@@ -133,7 +133,7 @@ class WebsiteSettingTableSeeder extends Seeder
                 'designer_id' => 1,
                 'preparer_id' => 1,
                 'manufacturer_id' => 1,
-                'shipment_id' => 1,
+                'shipmenter_id' => 1,
             ],
         ];
 
