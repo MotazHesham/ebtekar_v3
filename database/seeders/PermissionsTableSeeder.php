@@ -1013,23 +1013,23 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
-                'title' => 'designe_create',
+                'title' => 'design_create',
             ],
             [
                 'id'    => $i++,
-                'title' => 'designe_edit',
+                'title' => 'design_edit',
             ],
             [
                 'id'    => $i++,
-                'title' => 'designe_show',
+                'title' => 'design_show',
             ],
             [
                 'id'    => $i++,
-                'title' => 'designe_delete',
+                'title' => 'design_delete',
             ],
             [
                 'id'    => $i++,
-                'title' => 'designe_access',
+                'title' => 'design_access',
             ],
             [
                 'id'    => $i++,

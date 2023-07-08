@@ -474,6 +474,11 @@
                         text: data[i].name
                     })); 
                 } 
+                $("#sub_sub_category_id > option").each(function() {
+                    if(this.value == '{{$product->sub_sub_category_id}}'){
+                        $("#sub_sub_category_id").val(this.value).change();
+                    }
+                }); 
             });
         }
 

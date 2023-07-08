@@ -83,6 +83,10 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::get('be-seller', 'SellerController@beseller')->name('beseller');
     Route::post('be-seller', 'SellerController@register')->name('seller.register');
 
+    // designer
+    Route::get('be-designer', 'DesignerController@bedesigner')->name('bedesigner');
+    Route::post('be-designer', 'DesignerController@register')->name('designer.register');
+
     Route::get('product/{slug}', 'ProductController@product')->name('product'); 
     Route::post('product/quick_view', 'ProductController@quick_view')->name('product.quick_view');
     Route::post('product/variant_price', 'ProductController@variant_price')->name('product.variant_price');
@@ -109,6 +113,19 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('dashboard', 'ProfileController@dashboard')->name('dashboard'); 
+
+        //designer images 
+        Route::get('designer-images/delete/{id}', 'DesignerImageController@delete')->name('designer-images.delete');
+        Route::resource('designer-images','DesignerImageController');
+
+        //design 
+        Route::get('designs/start/{id}', 'DesignController@start')->name('designs.start');
+        Route::get('designs/destroy/{id}', 'DesignController@destroy')->name('designs.destroy');
+        Route::resource('designs','DesignController');
+
+        //mockups
+        Route::get('mockups/categories','mockupController@categories')->name('mockups.categories');
+        Route::get('mockups/categories/{category_id}','mockupController@mockups')->name('mockups');  
 
         // wishlist
         Route::get('wishlist', 'WishlistController@wishlist')->name('wishlist');

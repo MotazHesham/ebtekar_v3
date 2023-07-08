@@ -335,6 +335,8 @@ return [
     'duplicate'                      => 'تكرار',
     'receive_money'                  => 'استلام نقدية',
     'pay'                  => 'دفع',
+    'refused'                  => 'رفض',
+    'accept'                  => 'قبول',
     
     'extra'          => [
         'deleted_receipts' => 'الفواتير المحذوفة',

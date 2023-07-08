@@ -82,7 +82,7 @@
                                         </div>
                                         <div class="form-group col-md-12 col-sm-12 col-xs-12"> 
                                             <label class="field-label">المدينة</label> 
-                                            <select class="form-control select2" name="country_id" id="country_id" required>
+                                            <select class="form-control" name="country_id" id="country_id" required>
                                                 <option value="">{{ trans('cruds.receiptSocial.fields.shipping_country_id') }}</option>
                                                 @if(isset($countries['districts']))
                                                     <optgroup label="{{ __('Districts') }}">
@@ -162,11 +162,13 @@
                                                             (×{{ $cartItem['quantity'] }})
                                                             <span>
                                                                 {{  ($prices['price']['value'] * $cartItem['quantity'])  }} {{ $prices['price']['symbol'] }}
-                                                                <br>
-                                                                <small>
-                                                                    نسبة الربح :
-                                                                    <b> {{ $prices['commission'] }} {{ $prices['price']['symbol'] }}</b>
-                                                                </small>
+                                                                @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                                                    <br>
+                                                                    <small>
+                                                                        نسبة الربح :
+                                                                        <b> {{ $prices['commission'] }} {{ $prices['price']['symbol'] }}</b>
+                                                                    </small>
+                                                                @endif
                                                             </span>
                                                             
                                                         </li>

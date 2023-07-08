@@ -4,6 +4,8 @@
 
 use App\Models\Currency; 
 use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Product;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
@@ -65,6 +67,59 @@ if (! function_exists('calculate_commission')) {
             'available' => $available . 'EGP',
             'requested' => $requested . 'EGP',
             'delivered' => $delivered . 'EGP',
+        ];
+
+        return $data;
+    }
+}
+if (! function_exists('designs_calculations')) {
+    function designs_calculations($designs) {
+        $pending = 0 ;
+        $available = 0 ; 
+
+
+        foreach($designs as $design){ 
+            $single_desing_calculations = single_design_calcualtions($design);
+            $pending += $single_desing_calculations['pending'];
+            $available += $single_desing_calculations['available'];
+        }
+
+        $data = [
+            'pending' => $pending,
+            'available' => $available, 
+        ];
+
+        return $data;
+    }
+}
+if (! function_exists('single_design_calcualtions')) {
+    function single_design_calcualtions($design) { 
+        $pending = 0;
+        $pending_quantity = 0;
+        $available = 0; 
+        $available_quantity = 0; 
+
+        $product = Product::where('design_id',$design->id)->first();
+        if($product){
+            $order_details = OrderDetail::with('order')->where('product_id',$product->id)->get();
+
+            foreach($order_details as $raw){
+                if($raw->order->delivery_status != 'cancel'){
+                    if($raw->order->delivery_status == 'delivered'){
+                        $available += $raw->quantity * $design->profit;  
+                        $available_quantity += $raw->quantity;  
+                    }else{
+                        $pending += $raw->quantity * $design->profit;  
+                        $pending_quantity += $raw->quantity;  
+                    }
+                }
+            }
+        } 
+        $data = [
+            'pending' => $pending,
+            'available' => $available, 
+            'pending_quantity' => $pending_quantity, 
+            'available_quantity' => $available_quantity, 
         ];
 
         return $data;

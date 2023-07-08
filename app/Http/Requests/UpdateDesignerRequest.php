@@ -16,15 +16,24 @@ class UpdateDesignerRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'user' => [
-                'string',
-                'required',
-            ],
+        return [ 
             'store_name' => [
                 'string',
                 'required',
                 'unique:designers,store_name,' . request()->route('designer')->id,
+            ],
+            'name' => [
+                'string',
+                'required',
+            ],
+            'email' => [
+                'required',
+                'unique:users,email,' . request()->user_id,
+            ],
+            'phone_number' => [
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
+                'required',
             ],
         ];
     }

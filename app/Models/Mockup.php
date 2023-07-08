@@ -7,21 +7,12 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Mockup extends Model implements HasMedia
+class Mockup extends Model
 {
-    use SoftDeletes, InteractsWithMedia, Auditable, HasFactory;
+    use SoftDeletes, Auditable, HasFactory;
 
-    public $table = 'mockups';
-
-    protected $appends = [
-        'preview_1',
-        'preview_2',
-        'preview_3',
-    ];
+    public $table = 'mockups'; 
 
     protected $dates = [
         'created_at',
@@ -31,12 +22,15 @@ class Mockup extends Model implements HasMedia
 
     protected $fillable = [
         'name',
+        'preview_1',
+        'preview_2',
+        'preview_3',
         'description',
         'video_provider',
         'video_link',
         'purchase_price',
         'attributes',
-        'choice_options',
+        'attribute_options',
         'colors',
         'category_id',
         'sub_category_id',
@@ -51,46 +45,9 @@ class Mockup extends Model implements HasMedia
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function stocks()
     {
-        $this->addMediaConversion('thumb')->fit('crop', 50, 50);
-        $this->addMediaConversion('preview')->fit('crop', 120, 120);
-    }
-
-    public function getPreview1Attribute()
-    {
-        $file = $this->getMedia('preview_1')->last();
-        if ($file) {
-            $file->url       = $file->getUrl();
-            $file->thumbnail = $file->getUrl('thumb');
-            $file->preview   = $file->getUrl('preview');
-        }
-
-        return $file;
-    }
-
-    public function getPreview2Attribute()
-    {
-        $file = $this->getMedia('preview_2')->last();
-        if ($file) {
-            $file->url       = $file->getUrl();
-            $file->thumbnail = $file->getUrl('thumb');
-            $file->preview   = $file->getUrl('preview');
-        }
-
-        return $file;
-    }
-
-    public function getPreview3Attribute()
-    {
-        $file = $this->getMedia('preview_3')->last();
-        if ($file) {
-            $file->url       = $file->getUrl();
-            $file->thumbnail = $file->getUrl('thumb');
-            $file->preview   = $file->getUrl('preview');
-        }
-
-        return $file;
+        return $this->hasMany(MockupStock::class, 'mockup_id');
     }
 
     public function category()

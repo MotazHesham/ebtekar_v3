@@ -155,7 +155,7 @@ class Product extends Model implements HasMedia
 
     public function design()
     {
-        return $this->belongsTo(Designe::class, 'design_id');
+        return $this->belongsTo(Design::class, 'design_id');
     }
     
     public function website(){

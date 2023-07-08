@@ -20,10 +20,7 @@ class UpdateMockupRequest extends FormRequest
             'name' => [
                 'string',
                 'required',
-            ],
-            'preview_1' => [
-                'required',
-            ],
+            ], 
             'video_provider' => [
                 'string',
                 'nullable',

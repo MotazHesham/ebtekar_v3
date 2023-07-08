@@ -1495,7 +1495,7 @@ return [
             'deleted_at_helper' => ' ',
         ],
     ],
-    'designe' => [
+    'design' => [
         'title'          => 'التصميمات',
         'title_singular' => 'تصميم',
         'fields'         => [

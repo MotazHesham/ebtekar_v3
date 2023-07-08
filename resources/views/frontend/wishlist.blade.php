@@ -10,7 +10,7 @@
                         <div>
                             <h2>قائمة الامنيات</h2>
                             <ul>
-                                <li><a href="{{ route('home') }}">الرئيسية</a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">لوحة التحكم</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
                                 <li><a href="{{ route('frontend.wishlist') }}">قائمة الامنيات</a></li>
                             </ul>

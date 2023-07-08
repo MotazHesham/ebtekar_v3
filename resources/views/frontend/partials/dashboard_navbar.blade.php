@@ -5,9 +5,15 @@
                     aria-hidden="true"></i> العودة</span></div>
         <div class="block-content ">
             <ul>
-                <li class="active"><a href="{{ route('frontend.dashboard') }}">بيانات الحساب</a></li>
+                <li ><a href="{{ route('frontend.dashboard') }}">بيانات الحساب</a></li>
                 <li><a href="{{ route('frontend.orders') }}">طلباتي</a></li>
-                <li><a href="{{ route('frontend.orders.commission_requests') }}">طلبات السحب</a></li>
+                @if(auth()->check() && auth()->user()->user_type == 'seller')
+                    <li><a href="{{ route('frontend.orders.commission_requests') }}">طلبات السحب</a></li>
+                @endif
+                @if(auth()->check() && auth()->user()->user_type == 'designer')
+                    <li><a href="{{ route('frontend.mockups.categories') }}">أبدأ التصميم</a></li>
+                    <li><a href="{{ route('frontend.designs.index') }}">تصميماتي</a></li>
+                @endif
                 <li><a href="{{ route('frontend.wishlist') }}">قائمة الامنيات</a></li>
                 <li><a href="{{ route('frontend.dashboard') }}">تغيير كلمة المرور</a></li>
                 <li class="last">

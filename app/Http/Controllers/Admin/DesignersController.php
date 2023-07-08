@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyDesignerRequest;
 use App\Http\Requests\StoreDesignerRequest;
 use App\Http\Requests\UpdateDesignerRequest;
+use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Models\Designer;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,12 +16,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class DesignersController extends Controller
 {
+    use MediaUploadingTrait;
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('designer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Designer::query()->select(sprintf('%s.*', (new Designer)->table));
+            $query = Designer::query()->with('user')->select(sprintf('%s.*', (new Designer)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -49,8 +53,27 @@ class DesignersController extends Controller
             $table->editColumn('store_name', function ($row) {
                 return $row->store_name ? $row->store_name : '';
             });
+            $table->addColumn('user_name', function ($row) {
+                return $row->user ? $row->user->name : '';
+            });
+            $table->addColumn('user_email', function ($row) {
+                return $row->user ? $row->user->email : '';
+            });
+            $table->addColumn('user_address', function ($row) {
+                return $row->user ? $row->user->address : '';
+            });
+            $table->addColumn('user_phone_number', function ($row) {
+                return $row->user ? $row->user->phone_number : '';
+            });
+            $table->editColumn('user_approved', function ($row) {
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'approved\')" value="' . $row->user->id . '" type="checkbox" class="c-switch-input" '. ($row->user->approved ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>';
+            }); 
 
-            $table->rawColumns(['actions', 'placeholder']);
+            $table->rawColumns(['actions', 'placeholder', 'user','user_approved']);
 
             return $table->make(true);
         }
@@ -67,8 +90,24 @@ class DesignersController extends Controller
 
     public function store(StoreDesignerRequest $request)
     {
-        $designer = Designer::create($request->all());
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            'password' => bcrypt($request->password),
+            'user_type' => 'designer',
+            'approved' => 1,
+        ]); 
+        if ($request->input('photo', false)) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
+        } 
+        Designer::create([
+            'user_id' => $user->id,
+            'store_name' => $request->store_name, 
+        ]);
 
+        toast(trans('flash.global.success_title'),'success'); 
         return redirect()->route('admin.designers.index');
     }
 
@@ -81,8 +120,32 @@ class DesignersController extends Controller
 
     public function update(UpdateDesignerRequest $request, Designer $designer)
     {
-        $designer->update($request->all());
+        $designer->update([ 
+            'store_name' => $request->store_name, 
+        ]);
 
+
+        $user = User::find($designer->user_id);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'address' => $request->address,
+            'phone_number' => $request->phone_number,
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
+        ]);
+
+        if ($request->input('photo', false)) {
+            if (! $user->photo || $request->input('photo') !== $user->photo->file_name) {
+                if ($user->photo) {
+                    $user->photo->delete();
+                }
+                $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
+            }
+        } elseif ($user->photo) {
+            $user->photo->delete();
+        }
+        toast(trans('flash.global.update_title'),'success'); 
         return redirect()->route('admin.designers.index');
     }
 
@@ -99,7 +162,8 @@ class DesignersController extends Controller
 
         $designer->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+        return 1;
     }
 
     public function massDestroy(MassDestroyDesignerRequest $request)
@@ -111,5 +175,16 @@ class DesignersController extends Controller
         }
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+    public function storeCKEditorImages(Request $request)
+    {
+        abort_if(Gate::denies('seller_create') && Gate::denies('seller_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $model         = new Designer();
+        $model->id     = $request->input('crud_id', 0);
+        $model->exists = true;
+        $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
+
+        return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
     }
 }

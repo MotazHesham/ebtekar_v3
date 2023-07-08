@@ -12,7 +12,7 @@ class SellerController extends Controller
 {
     public function beseller(){ 
         $sellers = Seller::with('user')->get()->take(9);
-        return view('frontend.beseller',compact('sellers'));
+        return view('frontend.be-seller',compact('sellers'));
     }
 
     public function register(Request $request){

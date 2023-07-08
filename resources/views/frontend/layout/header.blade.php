@@ -307,6 +307,9 @@
                                         <a class="dark-menu-item" href="{{ route('frontend.beseller') }}">أصبح تاجرا</a>
                                     </li>
                                     <li>
+                                        <a class="dark-menu-item" href="{{ route('frontend.bedesigner') }}">أصبح ديزانير</a>
+                                    </li>
+                                    <li>
 
                                     <li>
                                         <a class="dark-menu-item" href="{{ route('frontend.contact') }}"> تواصل معنا</a>

@@ -1,7 +1,7 @@
 @extends('frontend.layout.app')
 
 @section('content')
-    {{-- <div id="app">
+    <div id="app">
         <b-container fluid>
             <div class="b-calendar">
                 <b-row>
@@ -9,10 +9,10 @@
                         <div class="b-calendar__information">
                             <div class="selected-date">
                                 <div>
-                                    <span class="weekday">{{ selectedWeekDay | capitalize }}</span>
+                                    <span class="weekday" v-text="selectedWeekDay | capitalize"> </span>
                                 </div>
-                                <span class="day">{{ selectedDayAndMonth . day }}</span>
-                                <span class="month">{{ (selectedDayAndMonth . month) | capitalize }}</span>
+                                <span class="day" v-text="selectedDayAndMonth . day"></span>
+                                <span class="month" v-text="(selectedDayAndMonth . month) | capitalize"></span>
                             </div>
                             <div class="b-event-container" v-if="windowWidth > 480">
                                 <h4>Events:</h4>
@@ -33,7 +33,7 @@
                                     v-if="filteredEventListForSelectedDate.length > 0">
                                     <li class="event" :class="{ 'completed': event.completed }"
                                         v-for="event in filteredEventListForSelectedDate" :key="event.id">
-                                        <span class="title">{{ event . title }}</span>
+                                        <span class="title" v-text="event . title"></span>
                                         <div class="buttons">
                                             <b-button class="completed-event-btn" :class="{ 'completed': event.completed }"
                                                 @click="changeCompletedEvent(event)">
@@ -62,7 +62,7 @@
                             <div class="b-calendar__header">
                                 <b-row>
                                     <b-col class="year text-right" align-h="end">
-                                        <span>{{ year }}</span>
+                                        <span v-text="year"></span>
                                     </b-col>
                                 </b-row>
                                 <b-row align-v="center">
@@ -87,23 +87,23 @@
                                             @click="addMonth">
                                             <i class="fa fa-fw fa-chevron-left"></i>
                                         </b-button>
-                                        <b-tooltip target="addMonthBtn">
-                                            {{ nextMonthAsString | capitalize }}
+                                        <b-tooltip target="addMonthBtn" v-text="nextMonthAsString | capitalize">
+                                            
                                         </b-tooltip>
-                                        <div class="month text-center">{{ month }}</div>
+                                        <div class="month text-center" v-text="month"></div>
                                         <b-button id="subtractMonthBtn" class="arrow arrow-left" variant="light"
                                             @click="subtractMonth">
                                             <i class="fa fa-fw fa-chevron-right"></i>
                                         </b-button>
-                                        <b-tooltip target="subtractMonthBtn">
-                                            {{ previousMonthAsString | capitalize }}
+                                        <b-tooltip target="subtractMonthBtn" v-text="previousMonthAsString | capitalize">
+                                            
                                         </b-tooltip>
                                     </b-col>
                                 </b-row>
                             </div>
                             <div class="b-calendar__weekdays">
                                 <div class="weekday" v-for="(day, index) in days" :key="index">
-                                    <strong>{{ day }}</strong>
+                                    <strong v-text="day"></strong>
                                 </div>
                             </div>
                             <div class="b-calendar__dates">
@@ -116,13 +116,13 @@
                                     }"
                                     v-for="date in dateList" :key="date.key" :data-date="date.date">
                                     <a class="link" @click="setSelectedDate(date.moment)"></a>
-                                    <span class="day">{{ date . dayNumber }}</span>
-                                    <span class="weekday">{{ date . weekDay }}</span>
+                                    <span class="day" v-text="date . dayNumber"></span>
+                                    <span class="weekday" v-text="date . weekDay"></span>
                                     <div class="additional" v-show="date.additional">
                                         <span class="year"
-                                            v-show="date.additional.year">{{ date . additional . year }}</span>
+                                            v-show="date.additional.year" v-text="date . additional . year"></span>
                                         <span class="month"
-                                            v-show="date.additional.month">{{ date . additional . month }}</span>
+                                            v-show="date.additional.month" v-text="date . additional . month"></span>
                                     </div>
                                     <b-collapse :id="'collapseEvent' + date.key"
                                         class="b-event-container event-mobile-container"
@@ -147,7 +147,7 @@
                                             v-if="filteredEventListForSelectedDate.length > 0">
                                             <li class="event" :class="{ 'completed': event.completed }"
                                                 v-for="event in filteredEventListForSelectedDate" :key="event.id">
-                                                <span class="title">{{ event . title }}</span>
+                                                <span class="title" v-text="event . title"></span>
                                                 <div class="buttons">
                                                     <b-button class="completed-event-btn"
                                                         :class="{ 'completed': event.completed }"
@@ -173,7 +173,7 @@
                 </b-row>
             </div>
         </b-container>
-    </div> --}}
+    </div> 
 @endsection
 
 @section('scripts')
@@ -183,7 +183,7 @@
         src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js">
     </script>
 
-    <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+    <script src='{{ asset('js/vue.js') }}'></script>
     <script src='https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js'></script>
     <script src='https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js'></script>

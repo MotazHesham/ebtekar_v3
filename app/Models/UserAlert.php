@@ -19,6 +19,8 @@ class UserAlert extends Model
         'playlist' => 'This is for tracking playlist by admin', 
         'public' => 'when the admin need send notification to specfic users or all',
         'orders' => 'for orders get from websites',
+        'request_commission' => 'for request_commissions',
+        'design' => 'for added new design from designer',
     ];
 
     protected $dates = [

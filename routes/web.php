@@ -309,17 +309,22 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Mockups
     Route::delete('mockups/destroy', 'MockupsController@massDestroy')->name('mockups.massDestroy');
-    Route::post('mockups/media', 'MockupsController@storeMedia')->name('mockups.storeMedia');
-    Route::post('mockups/ckmedia', 'MockupsController@storeCKEditorImages')->name('mockups.storeCKEditorImages');
+    Route::post('mockups/update_mockup', 'MockupsController@update_mockup')->name('mockups.update_mockup');
+    Route::post('mockups/sku_combination', 'MockupsController@sku_combination')->name('mockups.sku_combination');
+    Route::post('mockups/sku_combination_edit', 'MockupsController@sku_combination_edit')->name('mockups.sku_combination_edit');
     Route::resource('mockups', 'MockupsController');
 
     // Designers
     Route::delete('designers/destroy', 'DesignersController@massDestroy')->name('designers.massDestroy');
+    Route::post('designers/media', 'DesignersController@storeMedia')->name('designers.storeMedia');
+    Route::post('designers/ckmedia', 'DesignersController@storeCKEditorImages')->name('designers.storeCKEditorImages');
     Route::resource('designers', 'DesignersController');
 
-    // Designes
-    Route::delete('designes/destroy', 'DesignesController@massDestroy')->name('designes.massDestroy');
-    Route::resource('designes', 'DesignesController');
+    // Designs
+    Route::post('designs/design_images','DesignsController@design_images')->name('desgins.design_images');
+    Route::get('designs/change_status/{id}/{status}','DesignsController@change_status')->name('designs.change_status');
+    Route::delete('designs/destroy', 'DesignsController@massDestroy')->name('designs.massDestroy');
+    Route::resource('designs', 'DesignsController');
 
     // Delivery Orders
     Route::delete('delivery-orders/destroy', 'DeliveryOrdersController@massDestroy')->name('delivery-orders.massDestroy');

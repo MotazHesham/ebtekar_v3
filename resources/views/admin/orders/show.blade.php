@@ -161,8 +161,7 @@
                                             </td>
                                             <td>{{ dashboard_currency($orderDetail->commission) }}</td>
                                             <td><input style="min-width: 70px" type="number" class="form-control" name="extra_commission" value="{{ $orderDetail->extra_commission }}" required></td>
-                                            <td>
-                                                
+                                            <td> 
                                                 <a class="btn btn-primary" href="#" onclick="show_details('{{$orderDetail->id}}')">
                                                     {{ trans('global.view') }} 
                                                 </a>

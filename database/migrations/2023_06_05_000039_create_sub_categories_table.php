@@ -12,6 +12,7 @@ class CreateSubCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('slug');
+            $table->boolean('design')->default(0);
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->unsignedBigInteger('website_setting_id')->nullable();

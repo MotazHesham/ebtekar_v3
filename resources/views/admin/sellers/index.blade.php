@@ -189,8 +189,8 @@
                         name: 'seller_code'
                     },
                     {
-                        data: 'approved',
-                        name: 'approved'
+                        data: 'user_approved',
+                        name: 'user.approved'
                     }, 
                     {
                         data: 'actions',

@@ -48,7 +48,7 @@ class HomeController extends Controller
 
     public function contact(){
         return view('frontend.contact');
-    }
+    } 
 
     public function contact_store(Request $request){
         Contactu::create($request->all());

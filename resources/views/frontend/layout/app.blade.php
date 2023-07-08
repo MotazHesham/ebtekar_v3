@@ -50,12 +50,25 @@
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
 
+    <link rel="stylesheet" href="{{ asset('dashboard_offline/css/select2.min.css') }}">
     <style>
+        .select2 {
+            max-width: 100%;
+            width: 100% !important;
+        }
+        
+        .select2-selection__rendered {
+            padding-bottom: 5px !important;
+        }
+        
+        .select2-results__option {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
         .invalid-feedback{
             display: block;
         }
     </style>
-
     @yield('styles')
 
     <!-- Google tag (gtag.js) -->
@@ -368,6 +381,37 @@
     <script src="{{ asset('frontend/assets/js/modal.js') }}"></script>
 
 
+    
+    <script src="{{ asset('dashboard_offline/js/select2.full.min.js') }}"></script>
+    
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+
+    <script>
+        
+        function showAlert(type, title, message) {
+            swal({
+                title: title,
+                text: message,
+                type: type,
+                showConfirmButton: 'Okay',
+                timer: 3000
+            });
+        } 
+        
+        $('.select2').select2()
+        $('.select-all').click(function () {
+            let $select2 = $(this).parent().siblings('.select2')
+            $select2.find('option').prop('selected', 'selected')
+            $select2.trigger('change')
+        })
+        $('.deselect-all').click(function () {
+            let $select2 = $(this).parent().siblings('.select2')
+            $select2.find('option').prop('selected', '')
+            $select2.trigger('change')
+        })
+    </script>
     <script>
 
         //perevent submittig multiple times

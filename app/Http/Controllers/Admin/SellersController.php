@@ -64,7 +64,7 @@ class SellersController extends Controller
             $table->editColumn('seller_type', function ($row) {
                 return $row->seller_type ? Seller::SELLER_TYPE_SELECT[$row->seller_type] : '';
             });
-            $table->editColumn('approved', function ($row) {
+            $table->editColumn('user_approved', function ($row) {
                 return '
                 <label class="c-switch c-switch-pill c-switch-success">
                     <input onchange="update_statuses(this,\'approved\')" value="' . $row->user->id . '" type="checkbox" class="c-switch-input" '. ($row->user->approved ? "checked" : null) .' }}>
@@ -90,7 +90,7 @@ class SellersController extends Controller
                 return $row->seller_code ? $row->seller_code : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'user','approved']);
+            $table->rawColumns(['actions', 'placeholder', 'user','user_approved']);
 
             return $table->make(true);
         }

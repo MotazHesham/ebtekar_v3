@@ -16,15 +16,27 @@ class StoreDesignerRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'user' => [
-                'string',
-                'required',
-            ],
+        return [ 
             'store_name' => [
                 'string',
                 'required',
                 'unique:designers',
+            ],
+            'name' => [
+                'string',
+                'required',
+            ],
+            'email' => [
+                'required',
+                'unique:users',
+            ],
+            'phone_number' => [
+                'regex:' . config('panel.phone_number_format'), 
+                'size:' . config('panel.phone_number_size'), 
+                'required',
+            ],
+            'password' => [
+                'required',
             ],
         ];
     }

@@ -288,7 +288,7 @@
             </li>
         @endcan
         @can('mockups_managment_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/designers*") ? "c-show" : "" }} {{ request()->is("admin/mockups*") ? "c-show" : "" }} {{ request()->is("admin/designes*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/designers*") ? "c-show" : "" }} {{ request()->is("admin/mockups*") ? "c-show" : "" }} {{ request()->is("admin/designs*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-pen-nib c-sidebar-nav-icon">
 
@@ -316,13 +316,13 @@
                             </a>
                         </li>
                     @endcan
-                    @can('designe_access')
+                    @can('design_access')
                         <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.designes.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/designes") || request()->is("admin/designes/*") ? "c-active" : "" }}">
+                            <a href="{{ route("admin.designs.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/designs") || request()->is("admin/designs/*") ? "c-active" : "" }}">
                                 <i class="fa-fw fas fa-palette c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.designe.title') }}
+                                {{ trans('cruds.design.title') }}
                             </a>
                         </li>
                     @endcan

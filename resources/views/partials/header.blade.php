@@ -39,7 +39,7 @@
             <li class="c-header-nav-item dropdown notifications-menu">
                 <a href="#" class="c-header-nav-link" data-toggle="dropdown">
                     <i class="far fa-bell" style="font-size:20px"></i>
-                    @php($alertsCount = \Auth::user()->userUserAlerts()->where('read', false)->count())
+                    @php($alertsCount = \Auth::user()->userUserAlerts()->where('type','!=','history')->where('read', false)->count())
                     @if ($alertsCount > 0)
                         <span class="badge badge-warning navbar-badge">
                             {{ $alertsCount }}
@@ -47,8 +47,7 @@
                     @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    @if (count(
-                            $alerts = \Auth::user()->userUserAlerts()->whereIn('type', ['public', 'private','orders'])->withPivot('read')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
+                    @if (count( $alerts = \Auth::user()->userUserAlerts()->where('type','!=','history')->withPivot('read')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
                         @foreach ($alerts as $alert)
                             <div class="dropdown-item">
                                 <a href="{{ $alert->alert_link ? $alert->alert_link : '#' }}"

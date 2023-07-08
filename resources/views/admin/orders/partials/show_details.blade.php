@@ -15,17 +15,17 @@
                     <div>
                         @foreach (json_decode($orderDetail->photos) as $key => $photo)
                             <div style="display: inline;position: relative;">
-                                <img style="padding:3px" src="{{ asset($photo) }}" alt="" height="140" width="140"
-                                    title="{{ json_decode($orderDetail->photos_note)[$key] ?? '' }}">
+                                <img style="padding:3px" src="{{ asset($photo->photo) }}" alt="" height="140" width="140"
+                                    title="{{$photo->note}}">
                                 <div style=" display: inline; position: absolute; left: 11px; top: -22px;">
                                     <div
                                         style=" background-color: #00000069; text-align: center; color: white; width: 120px;">
-                                        {{ json_decode($orderDetail->photos_note)[$key] ?? '' }}
+                                        {{$photo->note}}
                                     </div>
                                 </div>
                                 <div class="text-center" style="display: inline;position: absolute; left: 3px; top: -58px;">
-                                    <a href="{{ asset($photo) }}"
-                                        download="{{ $order_code }}_{{ $key }}_{{ json_decode($orderDetail->photos_note)[$key] ?? '' }}"
+                                    <a href="{{ asset($photo->photo) }}"
+                                        download="{{ $order_code }}_{{ $key }}_{{$photo->note}}"
                                         class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
                                 </div>
                             </div>
@@ -57,14 +57,15 @@
 
                     <div>
                         <span class="badge badge-dark">{{ trans('cruds.order.extra.price')}}</span> : <b
-                            style="color: #2980B9;font-size: 23px;">{{ dashboard_currency($orderDetail->price) }}</b>
-                    </div>
-
-
-
+                            style="color: #2980B9;font-size: 23px;">{{ $orderDetail->calc_price($orderDetail->order->exchange_rate) }} {{ $orderDetail->order->symbol }}</b>
+                    </div> 
                     <div>
                         <span class="badge badge-dark">{{ trans('cruds.order.extra.quantity')}}</span> : <b
                             style="color: #2980B9;font-size: 23px;">{{ $orderDetail->quantity }}</b>
+                    </div>
+                    <div>
+                        <span class="badge badge-dark">{{ trans('cruds.order.extra.total_cost')}}</span> : <b
+                            style="color: #2980B9;font-size: 23px;">{{ $orderDetail->total_cost($orderDetail->order->exchange_rate) }} {{ $orderDetail->order->symbol }}</b>
                     </div>
                     <hr>
 

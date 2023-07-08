@@ -233,7 +233,7 @@ class ProductController extends Controller
         if($request->pagination != null){
             $pagination = $request->pagination;
         }else{
-            $pagination = 2;
+            $pagination = 12;
         }
         $products = $products->orderBy('created_at','desc')->paginate($pagination);
 

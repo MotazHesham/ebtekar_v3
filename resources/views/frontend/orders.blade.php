@@ -1,22 +1,4 @@
-@extends('frontend.layout.app')
-@section('styles')
-<link rel="stylesheet" href="{{ asset('dashboard_offline/css/select2.min.css') }}">
-<style>
-    .select2 {
-        max-width: 100%;
-        width: 100% !important;
-    }
-    
-    .select2-selection__rendered {
-        padding-bottom: 5px !important;
-    }
-    
-    .select2-results__option {
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-</style>
-@endsection
+@extends('frontend.layout.app') 
 
 @section('content')
     <!-- breadcrumb start -->
@@ -26,9 +8,9 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2> طلباتي السابقة</h2>
+                            <h2>حسابي</h2>
                             <ul>
-                                <li><a href="index.html">الرئيسية</a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">لوحة التحكم</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
                                 <li><a href="javascript:void(0)"> طلباتي السابقة </a></li>
                             </ul>
@@ -246,24 +228,4 @@
         </div>
     </section>
     <!--section end-->
-@endsection
-
-@section('scripts')
-    @parent 
-    
-    <script src="{{ asset('dashboard_offline/js/select2.full.min.js') }}"></script>
-    <script>
-        $('.select2').select2()
-        $('.select-all').click(function () {
-            let $select2 = $(this).parent().siblings('.select2')
-            $select2.find('option').prop('selected', 'selected')
-            $select2.trigger('change')
-        })
-        $('.deselect-all').click(function () {
-            let $select2 = $(this).parent().siblings('.select2')
-            $select2.find('option').prop('selected', '')
-            $select2.trigger('change')
-        })
-    </script>
-
-@endsection
+@endsection 

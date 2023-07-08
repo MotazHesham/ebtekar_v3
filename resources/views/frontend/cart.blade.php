@@ -10,7 +10,7 @@
                         <div>
                             <h2>سلة التسوق</h2>
                             <ul>
-                                <li><a href="{{ route('home') }}">الرئيسية</a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">لوحة التحكم</a></li>
                                 <li><i class="fa fa-angle-double-right"></i></li>
                                 <li><a href="{{ route('frontend.cart') }}">سلة التسوق</a></li>
                             </ul>
@@ -106,7 +106,9 @@
                                             <td><a href="{{ route('frontend.cart.delete',$cartItem['id']) }}" class="icon"><i class="ti-close"></i></a></td>
                                             <td>
                                                 <h2 class="td-color" id="td-total-{{$cartItem['id']}}">{{  ($prices['price']['value'] * $cartItem['quantity'])  }} {{ $prices['price']['symbol'] }}</h2>
-                                                <small id="td-commission-{{$cartItem['id']}}">نسبة الربح : <b>{{ $prices['commission'] }} {{ $prices['price']['symbol'] }}</b></small> 
+                                                @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                                    <small id="td-commission-{{$cartItem['id']}}">نسبة الربح : <b>{{ $prices['commission'] }} {{ $prices['price']['symbol'] }}</b></small> 
+                                                @endif
                                             </td>
                                         </tr> 
                                     @endif
@@ -119,7 +121,7 @@
                             <tr>
                                 <td>إجمالي السعر :</td>
                                 <td>
-                                    <h2 id="td-total-cost">  {{  $total  }} {{ $prices['price']['symbol'] }} </h2>
+                                    <h2 id="td-total-cost">  {{  $total ?? ''  }} {{ $prices['price']['symbol'] ?? '' }} </h2>
                                 </td>
                             </tr>
                         </tfoot>

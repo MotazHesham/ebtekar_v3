@@ -11,15 +11,20 @@ class StoreSubscribeRequest extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('subscribe_create');
+        return true;
     }
 
     public function rules()
     {
         return [
             'name' => [
-                'string',
-                'nullable',
+                'string', 
+                'max:255',
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
             ],
         ];
     }
