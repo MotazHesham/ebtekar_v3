@@ -9,10 +9,10 @@
                         <div class="b-calendar__information">
                             <div class="selected-date">
                                 <div>
-                                    <span class="weekday" v-text="selectedWeekDay | capitalize"> </span>
+                                    <span class="weekday" v-text="selectedWeekDay"> </span>
                                 </div>
                                 <span class="day" v-text="selectedDayAndMonth . day"></span>
-                                <span class="month" v-text="(selectedDayAndMonth . month) | capitalize"></span>
+                                <span class="month" v-text="selectedDayAndMonth . month"></span>
                             </div>
                             <div class="b-event-container" v-if="windowWidth > 480">
                                 <h4>Events:</h4>
@@ -87,7 +87,7 @@
                                             @click="addMonth">
                                             <i class="fa fa-fw fa-chevron-left"></i>
                                         </b-button>
-                                        <b-tooltip target="addMonthBtn" v-text="nextMonthAsString | capitalize">
+                                        <b-tooltip target="addMonthBtn" v-text="nextMonthAsString">
                                             
                                         </b-tooltip>
                                         <div class="month text-center" v-text="month"></div>
@@ -95,7 +95,7 @@
                                             @click="subtractMonth">
                                             <i class="fa fa-fw fa-chevron-right"></i>
                                         </b-button>
-                                        <b-tooltip target="subtractMonthBtn" v-text="previousMonthAsString | capitalize">
+                                        <b-tooltip target="subtractMonthBtn" v-text="previousMonthAsString">
                                             
                                         </b-tooltip>
                                     </b-col>
