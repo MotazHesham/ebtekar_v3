@@ -117,7 +117,7 @@
                                                                                                         onchange="filter()">
                                                                                                     <label style="background: {{ $color }};"
                                                                                                         for="color-{{ $key }}" ></label>
-                                                                                                        <span>{{ \App\Models\Color::where('code', $color)->first()->name }}</span>
+                                                                                                        <span>{{ \App\Models\Color::where('code', $color)->first()->name ?? '' }}</span>
                                                                                                 </li>
                                                                                             @endforeach
                                                                                         </ul>

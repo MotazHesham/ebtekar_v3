@@ -50,7 +50,7 @@
                             </td>
                             <td>
                                 @foreach($role->permissions as $key => $item)
-                                    <span class="badge badge-info">{{ $item->title }}</span>
+                                    <span class="badge badge-info">{{ trans('permissions.'.$item->title) }}</span>
                                 @endforeach
                             </td>
                             <td>

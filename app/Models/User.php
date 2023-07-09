@@ -233,9 +233,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Cart::class);
     }
-
-    public function calenders()
+    
+    public function website()
     {
-        return $this->hasMany(Calender::class);
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
 }

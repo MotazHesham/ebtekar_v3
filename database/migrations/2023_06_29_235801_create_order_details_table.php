@@ -20,11 +20,12 @@ return new class extends Migration
             $table->decimal('weight_price', 15, 2);
             $table->decimal('total_cost', 15, 2);
             $table->decimal('commission', 15, 2);
+            $table->decimal('extra_commission', 15, 2)->nullable();
             $table->text('photos')->nullable();
             $table->text('pdf')->nullable();
             $table->string('link')->nullable();
             $table->tinyInteger('email_sent')->default(0);
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id', 'product_fk_8563215')->references('id')->on('products');
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id', 'order_fk_8566983')->references('id')->on('orders');

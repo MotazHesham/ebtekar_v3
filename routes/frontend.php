@@ -1,16 +1,7 @@
 <?php
 
-use App\Http\Controllers\Frontend\CartController;
-use App\Http\Controllers\Frontend\CheckoutController;
-use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\OrderController;
-use App\Http\Controllers\Frontend\ProductController;
-use App\Http\Controllers\Frontend\ProfileController;
-use App\Http\Controllers\Frontend\SubscriberController;
-use App\Http\Controllers\Frontend\WishlistController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Route; 
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +16,38 @@ use Illuminate\Support\Facades\View;
 /*
     fixing old db to newer
 */
+
+// disable the observers first
+Route::get('mixed','TransferDatabaseController@mixed');
+// transfer the attributes manualy 
+// transfer the social manualy  and the social_receipt_social
+Route::get('transfer_users','TransferDatabaseController@transfer_users');
+Route::get('transfer_categories','TransferDatabaseController@transfer_categories');
+Route::get('transfer_sub_categories','TransferDatabaseController@transfer_sub_categories');
+Route::get('transfer_sub_sub_categories','TransferDatabaseController@transfer_sub_sub_categories');
+Route::get('transfer_products','TransferDatabaseController@transfer_products');
+Route::get('transfer_products_stock','TransferDatabaseController@transfer_products_stock');
+Route::get('transfer_orders','TransferDatabaseController@transfer_orders');
+Route::get('transfer_orders_details','TransferDatabaseController@transfer_orders_details');
+Route::get('transfer_commission_request','TransferDatabaseController@transfer_commission_request');
+Route::get('receipt_products','TransferDatabaseController@receipt_products');
+Route::get('receipt_clients','TransferDatabaseController@receipt_clients');
+Route::get('receipt_client_products','TransferDatabaseController@receipt_client_products');
+Route::get('receipt_socials','TransferDatabaseController@receipt_socials');
+Route::get('receipt_socials_socials','TransferDatabaseController@receipt_socials_socials');
+Route::get('receipt_social_products','TransferDatabaseController@receipt_social_products');
+Route::get('receipt_outgoings','TransferDatabaseController@receipt_outgoings'); 
+Route::get('receipt_price_view','TransferDatabaseController@receipt_price_view'); 
+Route::get('receipt_companies','TransferDatabaseController@receipt_companies'); 
+// return the observers on
+
+
+
+
+
+
+
+
 Route::get('fix_receipt_client_product',function(){
     // add receipt_product_id column
     $data = \App\Models\ReceiptClientProduct::all();

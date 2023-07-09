@@ -11,6 +11,7 @@ class CreateMockupsTable extends Migration
         Schema::create('mockups', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->longText('description');
             $table->text('preview_1');
             $table->text('preview_2')->nullable();
             $table->text('preview_3')->nullable();

@@ -16,9 +16,9 @@ class DesignerImageController extends Controller
 
     public function store(Request $request){
         $user = Auth::user();
-
+        $store_name = $user->designer ? $user->designer->store_name : 'none';
         $designer_image = new DesignerImage;
-        $designer_image->image = $request->design->store('uploads/designers/'.$user->store_name.'/my-designes');
+        $designer_image->image = $request->design->store('uploads/designers/'.$store_name.'/my-designes');
         $designer_image->user_id = $user->id;
         $designer_image->save();
         

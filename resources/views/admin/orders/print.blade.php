@@ -137,7 +137,7 @@
                         class="text-main"><span>{{ $order->phone_number }} ,
                             {{ $order->phone_number_2 }}</span></strong><br>
                     <span style="float: left">{{ __('Address') }}</span>:<strong
-                        class="text-main">{{ $order->shipping_country_name }} ,
+                        class="text-main">{{ $order->shipping_country->name ?? '' }} ,
                         {{ $order->shipping_address }}</strong><br>
                     <span style="float: left">الدفع</span>:<strong
                         class="text-main">{{ $order->payment_type ? \App\Models\Order::PAYMENT_TYPE_SELECT[$order->payment_type] : '' }}</strong><br>

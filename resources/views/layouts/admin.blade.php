@@ -156,61 +156,63 @@
     
     <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
     <script>
-        @if(!Cookie::has('device_token'))
-            $(document).ready(function(){
-                initFirebaseMessagingRegistration();
+        @if(!app()->isLocal())
+            @if(!Cookie::has('device_token'))
+                $(document).ready(function(){
+                    initFirebaseMessagingRegistration();
+                });
+            @endif
+
+            var firebaseConfig = {
+                apiKey: "AIzaSyAk6X115oPiXKLSsqQKOY_laEJdL88T_ms",
+                authDomain: "ebtekarstore.firebaseapp.com",
+                projectId: "ebtekarstore",
+                storageBucket: "ebtekarstore.appspot.com",
+                messagingSenderId: "211443767149",
+                appId: "1:211443767149:web:88eb69397da12e7e2b2c64"
+            };
+            firebase.initializeApp(firebaseConfig);
+            const messaging = firebase.messaging();
+            function initFirebaseMessagingRegistration() {
+                    messaging
+                    .requestPermission()
+                    .then(function () {
+                        return messaging.getToken()
+                    })
+                    .then(function(token) {
+                        console.log(token);
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                        $.ajax({
+                            url: '{{ route("save-token") }}',
+                            type: 'POST',
+                            data: {
+                                token: token
+                            },
+                            dataType: 'JSON',
+                            success: function (response) {
+                                console.log('Token saved successfully.');
+                            },
+                            error: function (err) {
+                                console.log('User Chat Token Error'+ err);
+                            },
+                        });
+                    }).catch(function (err) {
+                        console.log('User Chat Token Error'+ err);
+                    });
+            }
+            messaging.onMessage(function(payload) {
+                const noteTitle = payload.notification.title;
+                const noteOptions = {
+                    body: payload.notification.body,
+                    icon: payload.notification.icon,
+                };
+                new Notification(noteTitle, noteOptions);
             });
         @endif
-
-        var firebaseConfig = {
-            apiKey: "AIzaSyAk6X115oPiXKLSsqQKOY_laEJdL88T_ms",
-            authDomain: "ebtekarstore.firebaseapp.com",
-            projectId: "ebtekarstore",
-            storageBucket: "ebtekarstore.appspot.com",
-            messagingSenderId: "211443767149",
-            appId: "1:211443767149:web:88eb69397da12e7e2b2c64"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const messaging = firebase.messaging();
-        function initFirebaseMessagingRegistration() {
-                messaging
-                .requestPermission()
-                .then(function () {
-                    return messaging.getToken()
-                })
-                .then(function(token) {
-                    console.log(token);
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        url: '{{ route("save-token") }}',
-                        type: 'POST',
-                        data: {
-                            token: token
-                        },
-                        dataType: 'JSON',
-                        success: function (response) {
-                            console.log('Token saved successfully.');
-                        },
-                        error: function (err) {
-                            console.log('User Chat Token Error'+ err);
-                        },
-                    });
-                }).catch(function (err) {
-                    console.log('User Chat Token Error'+ err);
-                });
-        }
-        messaging.onMessage(function(payload) {
-            const noteTitle = payload.notification.title;
-            const noteOptions = {
-                body: payload.notification.body,
-                icon: payload.notification.icon,
-            };
-            new Notification(noteTitle, noteOptions);
-        });
     </script>
     
     @if(!isset($enable_multiple_form_submit))

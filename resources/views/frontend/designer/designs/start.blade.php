@@ -443,7 +443,7 @@
                         });
                 }
             @else
-                return $images;
+                return images;
             @endif
 
         }
@@ -473,7 +473,7 @@
                 }
                 $('#mockup-div2').removeClass('show');
             @else
-                return $images;
+                ajax_capture(images);
             @endif
         }
 
@@ -527,7 +527,7 @@
                 success: function(data) {
                     console.log(data);
                     $.LoadingOverlay("hide");
-                    showAlert('success', 'Success!!','');
+                    showAlert('success', 'تم أرسال الديزاين للأدارة وسيتم مراجعته','');
                     $('#capture').prop("disabled", false);
                     $('#capture').html(
                         `capture`

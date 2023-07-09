@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\Search;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
 use App\Models\WebsiteSetting;
@@ -85,6 +86,8 @@ class ProductController extends Controller
 
         $category = $sub_category = $sub_sub_category = $sort_by = $search = null;
 
+        
+
         $title = 'أحدث المنتجات';
 
         $site_settings = get_site_setting(); 
@@ -96,6 +99,18 @@ class ProductController extends Controller
         if($request->search != null){ 
             $search = $request->search;
             $products = $products->where('name','like','%' . $search . '%');  
+
+            // store the search from the user
+            $store_search = Search::where('search', $search)->first();
+            if($store_search != null){
+                $store_search->count += 1;
+                $store_search->save();
+            }else{
+                $store_search = new Search;
+                $store_search->search = $search;
+                $store_search->count = 1;
+                $store_search->save();
+            }
         }
 
         if($request->category != null){

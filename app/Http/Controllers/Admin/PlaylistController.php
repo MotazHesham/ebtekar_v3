@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\PushNotificationController; 
 use App\Jobs\SendPushNotification; 
 use App\Models\Order;
+use App\Models\Printable;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
 use App\Models\User;
@@ -192,18 +193,44 @@ class PlaylistController extends Controller
         return view('admin.playlists.photos',compact('raw','playlist'));
     }
 
-    public function print($order_num){
-        return $order_num;
+    public function print($id,$model_type){
+        
+        if($model_type == 'social'){
+            $raw = ReceiptSocial::find($id); 
+            $printable_model = 'App\Models\ReceiptSocial';
+            $print_route = 'admin.receipt-socials.print';
+        }elseif($model_type == 'company'){
+            $raw = ReceiptCompany::find($id);
+            $printable_model = 'App\Models\ReceiptCompany'; 
+            $print_route = 'admin.receipt-companies.print';
+        }elseif($model_type == 'order'){
+            $raw = Order::find($id); 
+            $printable_model = 'App\Models\Order'; 
+            $print_route = 'admin.orders.print';
+        }
+        $printed = Printable::where('user_id',Auth::id())->where('printable_id',$id)->where('printable_model',$printable_model)->first();
+        if($printed){ 
+            alert('تم الطباعة من قبل','','error');
+            return redirect()->back();
+        }else{
+            if(!auth()->user()->is_admin){
+                Printable::create([
+                    'user_id' => Auth::id(),
+                    'printable_id' => $raw->id,
+                    'printable_model' => $printable_model
+                ]);
+            }
+            return redirect()->route($print_route,$id);
+        } 
     }
     
     public function index(Request $request)
     {
-        abort_if(Gate::denies('playlist_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');  
+        abort_if(Gate::denies('playlist_'.$request->type), Response::HTTP_FORBIDDEN, '403 Forbidden');  
 
         $staffs = User::whereIn('user_type',['staff','seller'])->get();
         
-        $type = $request->type; 
-        
+        $type = $request->type;  
         $playlists = ViewPlaylistData::orderBy('send_to_playlist_date','desc')->where('playlist_status',$type); 
         
 

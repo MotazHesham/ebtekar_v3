@@ -130,7 +130,7 @@
                             <td>رقم التليفون</td>
                         </tr>
                         <tr>
-                            <td>{{$receipt->shipping_country_name}} </td>
+                            <td>{{$receipt->shipping_country->name ?? ''}} </td>
                             <td>المنطقة</td>
                         </tr>
                         <tr>

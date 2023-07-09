@@ -9,8 +9,9 @@ class CreateDeliverMenTable extends Migration
     public function up()
     {
         Schema::create('deliver_men', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('user');
+            $table->bigIncrements('id'); 
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id', 'user_fk_893178073')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });

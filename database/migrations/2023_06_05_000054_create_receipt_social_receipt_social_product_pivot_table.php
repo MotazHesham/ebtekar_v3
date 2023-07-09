@@ -11,7 +11,7 @@ class CreateReceiptSocialReceiptSocialProductPivotTable extends Migration
         Schema::create('receipt_social_receipt_social_product', function (Blueprint $table) {
             $table->bigIncrements('id'); 
             $table->string('title'); 
-            $table->text('description'); 
+            $table->text('description')->nullable(); 
             $table->integer('quantity'); 
             $table->decimal('price', 15, 2); 
             $table->decimal('total_cost', 15, 2); 

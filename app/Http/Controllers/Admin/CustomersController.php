@@ -21,7 +21,7 @@ class CustomersController extends Controller
         abort_if(Gate::denies('customer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Customer::with(['user'])->select(sprintf('%s.*', (new Customer)->table))->with('website');
+            $query = Customer::with(['user.website'])->select(sprintf('%s.*', (new Customer)->table))->with('website');
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -57,11 +57,10 @@ class CustomersController extends Controller
             $table->addColumn('user_address', function ($row) {
                 return $row->user ? $row->user->address : '';
             });
-
-            $table->editColumn('website_site_name', function ($row) { 
-                return $row->website->site_name ?? '';
-            });
-            $table->rawColumns(['actions', 'placeholder', 'user','website_site_name']);
+            $table->addColumn('user_website_site_name', function ($row) {
+                return $row->user ? $row->user->website->site_name : '';
+            }); 
+            $table->rawColumns(['actions', 'placeholder', 'user']);
 
             return $table->make(true);
         }
@@ -89,11 +88,11 @@ class CustomersController extends Controller
             'password' => bcrypt($request->password),
             'user_type' => 'customer',
             'approved' => 1,
+            'website_setting_id' => $request->website_setting_id,
         ]);
 
         $customer = Customer::create([
             'user_id' => $user->id,
-            'website_setting_id' => $request->website_setting_id,
         ]);
 
         toast(trans('flash.global.success_title'),'success'); 
@@ -123,6 +122,7 @@ class CustomersController extends Controller
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]); 
 
+        toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.customers.index');
     }
 
@@ -141,7 +141,9 @@ class CustomersController extends Controller
 
         $customer->delete();
 
-        return back();
+        alert(trans('flash.deleted'),'','success');
+
+        return 1;
     }
 
     public function massDestroy(MassDestroyCustomerRequest $request)

@@ -172,7 +172,7 @@
                             {{ trans('cruds.websiteSetting.fields.delivery_system') }}
                         </th>
                         <td>
-                            {{ App\Models\GeneralSetting::DELIVERY_SYSTEM_SELECT[$websiteSetting->delivery_system] ?? '' }}
+                            {{ App\Models\WebsiteSetting::DELIVERY_SYSTEM_SELECT[$websiteSetting->delivery_system] ?? '' }}
                         </td>
                     </tr>
                     <tr>

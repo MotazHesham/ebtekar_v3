@@ -43,7 +43,7 @@
                                 {{ $police->id ?? '' }}
                             </td>
                             <td>
-                                {{ $police->name ? \App\Model\Police::NAME_SELECT[$police->name] : '' }}
+                                {{ $police->name ? \App\Models\Police::NAME_SELECT[$police->name] : '' }}
                             </td>
                             <td>
                                 @can('police_show')

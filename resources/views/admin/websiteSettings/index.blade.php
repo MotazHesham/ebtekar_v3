@@ -59,9 +59,9 @@
                             </td>
                             <td>
                                 @can('website_setting_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.website-settings.show', $websiteSetting->id) }}">
+                                    {{-- <a class="btn btn-xs btn-primary" href="{{ route('admin.website-settings.show', $websiteSetting->id) }}">
                                         {{ trans('global.view') }}
-                                    </a>
+                                    </a> --}}
                                 @endcan
 
                                 @can('website_setting_edit')

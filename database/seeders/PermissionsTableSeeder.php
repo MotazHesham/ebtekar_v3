@@ -14,27 +14,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'user_management_access',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'permission_create',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'permission_edit',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'permission_show',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'permission_delete',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'permission_access',
-            ],
+            ], 
             [
                 'id'    => $i++,
                 'title' => 'role_create',
@@ -318,11 +298,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'setting_access',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'customer_create',
-            ],
+            ], 
             [
                 'id'    => $i++,
                 'title' => 'website_setting_create',
@@ -330,11 +306,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'website_setting_edit',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'website_setting_show',
-            ],
+            ], 
             [
                 'id'    => $i++,
                 'title' => 'website_setting_access',
@@ -901,19 +873,19 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
-                'title' => 'playlist_create',
+                'title' => 'playlist_design',
             ],
             [
                 'id'    => $i++,
-                'title' => 'playlist_edit',
+                'title' => 'playlist_manufacturing',
             ],
             [
                 'id'    => $i++,
-                'title' => 'playlist_show',
+                'title' => 'playlist_prepare',
             ],
             [
                 'id'    => $i++,
-                'title' => 'playlist_delete',
+                'title' => 'playlist_shipment',
             ],
             [
                 'id'    => $i++,

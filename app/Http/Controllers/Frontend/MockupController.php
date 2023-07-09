@@ -18,7 +18,8 @@ class MockupController extends Controller
     }
 
     public function mockups($id){
-        $path = 'public/uploads/designers/' . Auth::user()->store_name;
+        $store_name = auth()->user()->designer ? auth()->user()->designer->store_name : 'no-name-store'; 
+        $path = 'public/uploads/designers/' . $store_name;
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
             mkdir($path.'/my-designes', 0777, true);

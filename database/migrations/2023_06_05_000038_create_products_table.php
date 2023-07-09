@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->longText('tags')->nullable();
             $table->string('video_provider')->nullable();
             $table->string('video_link')->nullable();
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('discount_type')->nullable();
             $table->decimal('discount', 15, 2)->nullable();
             $table->string('meta_title')->nullable();

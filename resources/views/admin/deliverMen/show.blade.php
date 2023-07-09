@@ -22,13 +22,13 @@
                         <td>
                             {{ $deliverMan->id }}
                         </td>
-                    </tr>
+                    </tr> 
                     <tr>
                         <th>
                             {{ trans('cruds.deliverMan.fields.user') }}
                         </th>
                         <td>
-                            {{ $deliverMan->user }}
+                            {{ $deliverMan->user->name ?? '' }}
                         </td>
                     </tr>
                 </tbody>

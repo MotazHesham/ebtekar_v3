@@ -21,8 +21,7 @@ class Customer extends Model
     ];
 
     protected $fillable = [
-        'user_id',
-        'website_setting_id',
+        'user_id', 
         'created_at',
         'updated_at',
         'deleted_at',

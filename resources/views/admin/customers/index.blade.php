@@ -125,8 +125,8 @@
                         name: 'user.phone_number'
                     },
                     {
-                        data: 'website_site_name',
-                        name: 'website.site_name'
+                        data: 'user_website_site_name',
+                        name: 'user.website.site_name'
                     }, 
                     {
                         data: 'actions',

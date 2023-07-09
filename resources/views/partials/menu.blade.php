@@ -129,43 +129,51 @@
                 {{ trans('cruds.playlist.title') }}
                 @if($playlists_counter_sum) <span class="badge bg-light-gradient text-dark ms-auto">{{ $playlists_counter_sum   }}</span> @endif
             </a>
-            <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item">
-                    <a href="{{ route("admin.playlists.index",'design') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/design") ? "c-active" : "" }}">
-                        <i class="fa-fw fas fa-pen-nib c-sidebar-nav-icon">
+            <ul class="c-sidebar-nav-dropdown-items"> 
+                @can('playlist_design')
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.playlists.index",'design') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/design") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-pen-nib c-sidebar-nav-icon">
 
-                        </i>
-                        {{ trans('cruds.playlist.menu.design') }} 
-                        @if($playlists_counter['design']) <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>@endif
-                    </a>
-                <li class="c-sidebar-nav-item">
-                </li>
-                    <a href="{{ route("admin.playlists.index",'manufacturing') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/manufacturing") ? "c-active" : "" }}">
-                        <i class="fa-fw fas fa-building c-sidebar-nav-icon"> 
+                            </i>
+                            {{ trans('cruds.playlist.menu.design') }} 
+                            @if($playlists_counter['design']) <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>@endif
+                        </a>
+                    </li>
+                @endcan
+                @can('playlist_manufacturing')
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.playlists.index",'manufacturing') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/manufacturing") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-building c-sidebar-nav-icon"> 
 
-                        </i>
-                        {{ trans('cruds.playlist.menu.manufacturing') }}
-                        @if($playlists_counter['manufacturing']) <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> @endif
-                    </a>
-                </li>
-                </li>
-                    <a href="{{ route("admin.playlists.index",'prepare') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/prepare") ? "c-active" : "" }}">
-                        <i class="fa-fw fab fa-envira c-sidebar-nav-icon">
+                            </i>
+                            {{ trans('cruds.playlist.menu.manufacturing') }}
+                            @if($playlists_counter['manufacturing']) <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> @endif
+                        </a>
+                    </li>
+                @endcan
+                @can('playlist_prepare')
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.playlists.index",'prepare') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/prepare") ? "c-active" : "" }}">
+                            <i class="fa-fw fab fa-envira c-sidebar-nav-icon">
 
-                        </i>
-                        {{ trans('cruds.playlist.menu.prepare') }}
-                        @if($playlists_counter['prepare']) <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> @endif
-                    </a>
-                </li>
-                </li>
-                    <a href="{{ route("admin.playlists.index",'shipment') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/shipment") ? "c-active" : "" }}">
-                        <i class="fa-fw fas fa-truck c-sidebar-nav-icon">
+                            </i>
+                            {{ trans('cruds.playlist.menu.prepare') }}
+                            @if($playlists_counter['prepare']) <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> @endif
+                        </a>
+                    </li>
+                @endcan
+                @can('playlist_shipment')
+                    <li class="c-sidebar-nav-item"> 
+                        <a href="{{ route("admin.playlists.index",'shipment') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/shipment") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-truck c-sidebar-nav-icon">
 
-                        </i>
-                        {{ trans('cruds.playlist.menu.shipment') }}
-                        @if($playlists_counter['shipment']) <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> @endif
-                    </a>
-                </li>
+                            </i>
+                            {{ trans('cruds.playlist.menu.shipment') }}
+                            @if($playlists_counter['shipment']) <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> @endif
+                        </a>
+                    </li>
+                @endcan
             </ul>
         </li>
         @endcan
@@ -391,17 +399,7 @@
                     </i>
                     {{ trans('cruds.userManagement.title') }}
                 </a>
-                <ul class="c-sidebar-nav-dropdown-items">
-                    @can('permission_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.permissions.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/permissions") || request()->is("admin/permissions/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-unlock-alt c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.permission.title') }}
-                            </a>
-                        </li>
-                    @endcan
+                <ul class="c-sidebar-nav-dropdown-items"> 
                     @can('role_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.roles.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/roles") || request()->is("admin/roles/*") ? "c-active" : "" }}">
@@ -419,6 +417,16 @@
 
                                 </i>
                                 {{ trans('cruds.user.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('user_alert_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.user-alerts.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/user-alerts") || request()->is("admin/user-alerts/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-bell c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.userAlert.title') }}
                             </a>
                         </li>
                     @endcan
@@ -631,16 +639,6 @@
 
                                 </i>
                                 {{ trans('cruds.websiteSetting.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('user_alert_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.user-alerts.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/user-alerts") || request()->is("admin/user-alerts/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-bell c-sidebar-nav-icon">
-
-                                </i>
-                                {{ trans('cruds.userAlert.title') }}
                             </a>
                         </li>
                     @endcan

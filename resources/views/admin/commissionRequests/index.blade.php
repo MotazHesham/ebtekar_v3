@@ -1,14 +1,5 @@
 @extends('layouts.admin')
-@section('content')
-    @can('commission_request_create')
-        <div style="margin-bottom: 10px;" class="row">
-            <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.commission-requests.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.commissionRequest.title_singular') }}
-                </a>
-            </div>
-        </div>
-    @endcan
+@section('content') 
     <div class="card">
         <div class="card-header">
             {{ trans('cruds.commissionRequest.title_singular') }} {{ trans('global.list') }}

@@ -130,7 +130,7 @@
                         @foreach ($home_categories as $home_category) 
                             <div>
                                 <div class="category-contain">
-                                    <div class="img-wrapper">
+                                    <div class="img-wrapper" style="border: 0; background-color: #ff000000;">
                                         <a href="{{ route('frontend.products.category',$home_category->category->slug) }}">
                                             <img src="{{ $home_category->category ? $home_category->category->banner->getUrl() : '' }}"
                                                 alt="category  " class="">
@@ -156,10 +156,11 @@
             <div class="tab-prodcut-contain">
                 <ul class="tabs tab-title">
                     @foreach ($freatured_categories as $key => $freatured_category) 
-                        <li @if ($loop->first) class="current" @endif>
+                        <li @if ($key == 1) class="current" @endif>
                             <a href="tab-{{ $key }}">
-                                <img src="{{ $freatured_category->banner ? $freatured_category->banner->getUrl() : '' }}" alt="category"
+                                <img src="{{ $freatured_category->icon ? $freatured_category->icon->getUrl('preview') : '' }}" alt="category"
                                     class="" heigh="30" width="30">
+                                    &nbsp;
                                 {{ $freatured_category->name }}
                             </a>
                         </li> 
@@ -178,7 +179,7 @@
                     <div class="theme-tab">
                         <div class="tab-content-cls">
                             @foreach ($freatured_categories as $key => $featured_category) 
-                                <div id="tab-{{ $key }}" class="tab-content @if ($loop->first) active default @endif">
+                                <div id="tab-{{ $key }}" class="tab-content @if ($key == 1) active default @endif">
                                     <div class="media-slide-5 no-arrow">
                                         @foreach ($featured_category->products->chunk(3) as $chunk)
                                             <div>
@@ -189,11 +190,8 @@
                                                         @endphp 
                                                         <div class="media-banner-box">
                                                             <div class="media">
-                                                                <a
-                                                                    href="{{ route('frontend.product', $product->slug) }}">
-                                                                    <img src="{{ $product_image }}"
-                                                                        class="img-fluid  "
-                                                                        style="width: 86px;height:110px" alt="banner">
+                                                                <a href="{{ route('frontend.product', $product->slug) }}">
+                                                                    <img src="{{ $product_image }}" class="img-fluid  " style="width: 86px;height:110px" alt="banner">
                                                                 </a>
                                                                 <div class="media-body">
                                                                     <div class="media-contant">

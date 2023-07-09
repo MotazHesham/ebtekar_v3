@@ -216,8 +216,7 @@ class ReceiptSocialController extends Controller
             $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
 
             if ($request->hasFile('pdf')) {
-                $path = $request->pdf->store('public/uploads/receipt_social/pdf');
-                $receipt_product_pivot->pdf = str_replace("public/uploads","storage/uploads",$path);
+                $receipt_product_pivot->pdf= $request->pdf->store('uploads/receipt_social/pdf');
             }
 
             if ($request->has('previous_photos')) {
@@ -229,8 +228,7 @@ class ReceiptSocialController extends Controller
             if ($request->has('photos')) { 
                 foreach ($request->photos as $key => $photo) {
                     if(isset($photo['photo'])){
-                        $path = $photo['photo']->store('public/uploads/receipt_social/photos');
-                        $new['photo'] = str_replace("public/uploads","storage/uploads",$path);
+                        $new['photo'] = $photo['photo']->store('uploads/receipt_social/photos');
                         $new['note'] = $photo['note'];
                         array_push($photos,$new);
                     }
@@ -290,8 +288,7 @@ class ReceiptSocialController extends Controller
             $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
 
             if ($request->hasFile('pdf')) {
-                $path = $request->pdf->store('public/uploads/receipt_social/pdf');
-                $receipt_product_pivot->pdf = str_replace("public/uploads","storage/uploads",$path);
+                $receipt_product_pivot->pdf = $request->pdf->store('uploads/receipt_social/pdf'); 
             }
 
             $photos = array();
@@ -299,8 +296,7 @@ class ReceiptSocialController extends Controller
             if ($request->has('photos')) {
                 foreach ($request->photos as $key => $photo) {
                     if(isset($photo['photo'])){
-                        $path = $photo['photo']->store('public/uploads/receipt_social/photos');
-                        $photos[$key]['photo'] = str_replace("public/uploads","storage/uploads",$path);
+                        $photos[$key]['photo'] = $photo['photo']->store('uploads/receipt_social/photos'); 
                         $photos[$key]['note'] = $photo['note'];
                     }
                 }

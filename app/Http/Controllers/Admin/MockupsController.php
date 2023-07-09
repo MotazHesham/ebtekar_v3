@@ -268,8 +268,7 @@ class MockupsController extends Controller
             array_push($options, $request->colors);
         }else {
             $colors = array();
-            $mockup->colors = json_encode($colors);
-            array_push($options, $request->colors);
+            $mockup->colors = json_encode($colors); 
         }
 
 
@@ -303,8 +302,12 @@ class MockupsController extends Controller
                     if($key > 0 ){
                         $str .= '-'.str_replace(' ', '', $item);
                     }else{
-                        $color_name = Color::where('code', $item)->first()->name;
-                        $str .= $color_name;
+                        if($request->has('colors')){
+                            $color_name = Color::where('code', $item)->first()->name;
+                            $str .= $color_name;
+                        }else{
+                            $str .= str_replace(' ', '', $item);
+                        }
                     }
                 }
                 

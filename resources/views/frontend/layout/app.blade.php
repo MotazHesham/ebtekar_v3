@@ -68,6 +68,9 @@
         .invalid-feedback{
             display: block;
         }
+        .product-notification span{
+            text-decoration: line-through;
+        }
     </style>
     @yield('styles')
 
@@ -333,18 +336,26 @@
     </div>
     <!-- Add to account bar end-->
 
-    <!-- notification product -->
-    {{-- <div class="product-notification" id="dismiss">
-        <span onclick="dismiss();" class="btn-close" aria-hidden="true"></span>
-        <div class="media">
-            <img class="me-2" src="{{ asset('frontend/assets/images/product/2.jpg') }}" alt="">
-            <div class="media-body">
-                <h5 class="mt-0 mb-1">Flash deal</h5>
-                هذا النص هو مثال ، لقد تم توليد هذا النص من مولد النص العربى
+    <!-- flash Deal product -->
+    @php
+        $flash_deal_product = \App\Models\Product::where('flash_deal',1)->where('published',1)->inRandomOrder()->first();
+    @endphp
+    @if($flash_deal_product) 
+        @php
+            $flash_deal_img =  isset($flash_deal_product->photos[0]) ? $flash_deal_product->photos[0]->getUrl('preview') : '';
+        @endphp
+        <div class="product-notification" id="dismiss">
+            <span onclick="dismiss();" class="btn-close" aria-hidden="true"></span>
+            <div class="media">
+                <img class="me-2" src="{{ $flash_deal_img }}" alt="">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">{{ $flash_deal_product->name }}</h5> 
+                    <?php echo $flash_deal_product->calc_price_as_text(); ?>  
+                </div>
             </div>
-        </div>
-    </div> --}}
-    <!-- notification product -->
+        </div>  
+    @endif
+    <!-- flash Deal product -->
 
     @include('sweetalert::alert')
 

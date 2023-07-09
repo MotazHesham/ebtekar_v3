@@ -53,7 +53,7 @@ class DesignController extends Controller
         $design->colors = $mockup->colors ;
         $design->save();
 
-        $store_name = auth()->user()->designer ? auth()->user()->designer()->store_name : 'no-name-store'; 
+        $store_name = auth()->user()->designer ? auth()->user()->designer->store_name : 'no-name-store'; 
         $incrementer = 1;
         foreach($request->images as $key => $image){
             $image = explode(";",$image)[1];
@@ -121,13 +121,14 @@ class DesignController extends Controller
             $raw->delete();
         }
 
+        $store_name = auth()->user()->designer ? auth()->user()->designer->store_name : 'no-name-store'; 
         foreach($request->images as $key => $image){
             $image = explode(";",$image)[1];
             $image = explode(",",$image)[1];
             $image = str_replace(" ","+",$image);
             $image = base64_decode($image);
             $path = 'uploads/designers/'
-                                .auth()->user()->store_name
+                                .$store_name
                                 .'/collections/'
                                 .strtotime(date('Y-m-d H:i:s'))
                                 .'-'

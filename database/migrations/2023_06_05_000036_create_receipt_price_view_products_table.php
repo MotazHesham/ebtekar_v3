@@ -10,7 +10,7 @@ class CreateReceiptPriceViewProductsTable extends Migration
     {
         Schema::create('receipt_price_view_products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->decimal('price', 15, 2);
             $table->integer('quantity');
             $table->decimal('total_cost', 15, 2);
