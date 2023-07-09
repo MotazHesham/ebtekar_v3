@@ -58,7 +58,7 @@
 
 @endsection
 
-@section('script')
+@section('scripts')
 <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest/umd/index.min.js"></script>
 <script type="text/javascript">
     load_cam();
