@@ -49,6 +49,8 @@ class ReceiptCompanyController extends Controller
         $receipt->$type = $request->status;
         if ($type == 'done' && $request->status == 1) {
             $receipt->quickly = 0;
+            $receipt->delivery_status = $type == 'done' ? 'delivered' : 'cancel';
+            $receipt->payment_status = $type == 'done' ? 'paid' : 'unpaid';
         }
         $receipt->save();
         return 1;
@@ -303,7 +305,7 @@ class ReceiptCompanyController extends Controller
     {
         abort_if(Gate::denies('receipt_company_create'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
 
-        $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $shipping_countries = Country::select('cost','name', 'id')->get();
 
         $previous_data = searchByPhone($request->phone_number);
 
@@ -330,7 +332,7 @@ class ReceiptCompanyController extends Controller
     {
         abort_if(Gate::denies('receipt_company_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $shipping_countries = Country::select('cost','name', 'id')->get();
 
         $receiptCompany->load('staff', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man', 'shipping_country');
 

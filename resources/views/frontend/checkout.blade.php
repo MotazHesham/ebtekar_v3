@@ -81,32 +81,46 @@
                                             <input type="text" name="phone_number_2" value="{{old('phone_number_2')}}" placeholder="">
                                         </div>
                                         <div class="form-group col-md-12 col-sm-12 col-xs-12"> 
+                                            @php
+                                                $city_exist = false;
+                                                foreach ($countries['cities'] as $city){
+                                                    if(session('country_code') != 'EG' && $city->code == session('country_code')){
+                                                        $city_exist = true;
+                                                        $city_id = $city->id;
+                                                        $city_name = $city->name;
+                                                    }
+                                                } 
+                                            @endphp
                                             <label class="field-label">{{ trans('frontend.checkout.country_id') }}</label> 
                                             <select class="form-control" name="country_id" id="country_id" required>
-                                                <option value="">{{ trans('cruds.receiptSocial.fields.shipping_country_id') }}</option>
-                                                @if(isset($countries['districts']))
-                                                    <optgroup label="{{ __('Districts') }}">
-                                                        @foreach ($countries['districts'] as $district)
-                                                            <option value={{ $district->id }} @if($district->id == old('country_id')) selected @endif>
-                                                                {{ $district->name }} -  {{ dashboard_currency($district->cost) }}</option>
-                                                        @endforeach
-                                                    </optgroup>
-                                                @endif
-                                                @if(isset($countries['countries']))
-                                                    <optgroup label="{{ __('Countries') }}">
-                                                        @foreach ($countries['countries'] as $country)
-                                                            <option value={{ $country->id }} @if($country->id == old('country_id')) selected @endif>
-                                                                {{ $country->name }} -  {{ dashboard_currency($country->cost) }}</option>
-                                                        @endforeach
-                                                    </optgroup>
-                                                @endif
-                                                @if(isset($countries['metro']))
-                                                    <optgroup label="{{ __('Metro') }}">
-                                                        @foreach ($countries['metro'] as $raw)
-                                                            <option value={{ $raw->id }} @if($raw->id == old('country_id')) selected @endif>
-                                                                {{ $raw->name }} -  {{ dashboard_currency($raw->cost) }}</option>
-                                                        @endforeach
-                                                    </optgroup>
+                                                <option value="">{{ trans('cruds.receiptSocial.fields.shipping_country_id') }}</option> 
+                                                @if($city_exist)
+                                                    <option value={{ $city_id }} selected> {{ $city_name}}</option>
+                                                @else 
+                                                    @if(isset($countries['districts']))
+                                                        <optgroup label="{{ __('Districts') }}">
+                                                            @foreach ($countries['districts'] as $district)
+                                                                <option value={{ $district->id }} @if($district->id == old('country_id')) selected @endif>
+                                                                    {{ $district->name }} -  {{ dashboard_currency($district->cost) }}</option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endif
+                                                    @if(isset($countries['countries']))
+                                                        <optgroup label="{{ __('Countries') }}">
+                                                            @foreach ($countries['countries'] as $country)
+                                                                <option value={{ $country->id }} @if($country->id == old('country_id')) selected @endif>
+                                                                    {{ $country->name }} -  {{ dashboard_currency($country->cost) }}</option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endif
+                                                    @if(isset($countries['metro']))
+                                                        <optgroup label="{{ __('Metro') }}">
+                                                            @foreach ($countries['metro'] as $raw)
+                                                                <option value={{ $raw->id }} @if($raw->id == old('country_id')) selected @endif>
+                                                                    {{ $raw->name }} -  {{ dashboard_currency($raw->cost) }}</option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endif
                                                 @endif
                                             </select>
                                         </div>
@@ -123,7 +137,7 @@
                                         @guest
                                             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <input type="checkbox" name="create_account" id="account-option" onchange="create_account_with_order(this)"> 
-                                                <label for="account-option">   {{ trans('frontend.checkout.') }}</label>
+                                                <label for="account-option">   {{ trans('frontend.checkout.create_account') }}</label>
                                             </div>
                                             <div class="form-group col-md-12 col-sm-6 col-xs-12" id="email" style="display: none">
                                                 <label>   {{ trans('frontend.checkout.email') }}</label>

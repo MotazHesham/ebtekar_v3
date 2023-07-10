@@ -15,7 +15,7 @@
                             <option value="">أختر المنتج</option>
                             @foreach ($products as $product)
                                 <option value="{{ $product->id }}" @if($receipt_social_product_pivot->receipt_social_product_id == $product->id) selected @endif>
-                                    {{ $product->name }}
+                                    {{ $product->name }} - {{ $product->price }}
                                 </option>
                             @endforeach
                         </select>
@@ -27,12 +27,15 @@
                         <input class="form-control" type="number" name="quantity" value="{{ $receipt_social_product_pivot->quantity }}" step="1" min="1" placeholder="{{ trans('global.extra.quantity') }}"  title="{{ trans('global.extra.quantity') }}" required>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="">{{ trans('cruds.receiptSocial.fields.extra_commission') }}</label>
-                        <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ trans('cruds.receiptSocial.fields.extra_commission') }}" title="{{ trans('cruds.receiptSocial.fields.extra_commission') }}" >
+                
+                @if(auth()->user()->is_admin)
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">{{ trans('cruds.receiptSocial.fields.extra_commission') }}</label>
+                            <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ trans('cruds.receiptSocial.fields.extra_commission') }}" title="{{ trans('cruds.receiptSocial.fields.extra_commission') }}" >
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
             <div class="form-group">
                 <textarea class="form-control ckeditor" name="description" placeholder="{{ trans('global.extra.description') }}"  cols="30" rows="6">{{ $receipt_social_product_pivot->description }}</textarea>

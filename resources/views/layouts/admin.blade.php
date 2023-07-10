@@ -43,6 +43,29 @@
     </style>
 @endif
 <style>
+    .order_num_ertgal{
+        background: #5DADE2
+    }
+    .order_num_figures{
+        background: #b96e14
+    }
+    .order_num_shirti{
+        background: #F1948A
+    }
+    .order_num_ebtekar{
+        background: #FBAC00
+    }
+    .playlist_status {
+        cursor: pointer;
+        font-size:16px
+    }
+    .order_num {
+        cursor: pointer;
+        font-size:16px
+    }
+    .total_cost { 
+        font-size:18px
+    }
     .isset {
         box-shadow: 1px 2px 3px deepskyblue
     }
@@ -51,13 +74,13 @@
         color: grey;
     }
     .quickly{
-        background: linear-gradient(283deg,#ef8181 0%,#ffffff 18%);border: 1px red double;
+        background: linear-gradient(283deg,#ef8181 -1%,#ffffff 50%);border: 1px red double;
     }
     .returned{
         background: linear-gradient(283deg,#ecf38d 0%,#ffffff 57%);border: 1px #b2b98d double;
     }
     .done{
-        background: linear-gradient(195deg,#000000bd 0%,#ffffff 33%);border: 1px black double;
+        background: linear-gradient(276deg,#091e0461 0%,#ffffff 62%);;border: 1px black double;
     }
     .no_answer{
         background: linear-gradient(283deg,#ecf38d 0%,#ffffff 57%);border: 1px #b2b98d double;

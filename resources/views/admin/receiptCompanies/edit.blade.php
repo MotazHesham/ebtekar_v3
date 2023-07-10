@@ -101,8 +101,12 @@
                             <div class="form-group col-md-6">
                                 <label class="required" for="shipping_country_id">{{ trans('cruds.receiptCompany.fields.shipping_country_id') }}</label>
                                 <select class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}" name="shipping_country_id" id="shipping_country_id" required>
-                                    @foreach($shipping_countries as $id => $entry)
-                                        <option value="{{ $id }}" {{ old('shipping_country_id', $receiptCompany->shipping_country_id) == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                    <option  value="">{{ trans('global.pleaseSelect') }}</option>
+                                    @foreach ($shipping_countries as  $country)
+                                        <option value="{{ $country->id }}"
+                                            {{ (old('shipping_country_id') ? old('shipping_country_id') : $receiptCompany->shipping_country->id ?? '') == $country->id ? 'selected' : '' }}>
+                                            {{ $country->name }} - {{ $country->cost }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @if($errors->has('shipping_country'))
@@ -134,7 +138,7 @@
                             </div> 
                             <div class="form-group col-md-6">
                                 <label for="deposit">{{ trans('cruds.receiptCompany.fields.deposit') }}</label>
-                                <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}" type="number" name="deposit" id="deposit" value="{{ old('deposit', $receiptCompany->deposit) }}" step="0.01">
+                                <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}" type="number" name="deposit" id="deposit" value="{{ old('deposit', $receiptCompany->deposit) }}" step="0.01" required>
                                 @if($errors->has('deposit'))
                                     <div class="invalid-feedback">
                                         {{ $errors->first('deposit') }}

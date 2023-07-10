@@ -40,7 +40,7 @@ class SubSubCategory extends Model
 
     public function sub_category()
     {
-        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+        return $this->belongsTo(SubCategory::class, 'sub_category_id')->withTrashed();
     }
     public function website(){
         return $this->belongsTo(WebsiteSetting::class,'website_setting_id');

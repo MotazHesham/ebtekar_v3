@@ -79,6 +79,6 @@ class ReceiptPriceView extends Model
 	}
 
 	public function calc_total_cost(){
-		return $this->total_cost + $this->calc_added_value();
+		return $this->added_value ?  $this->total_cost + $this->calc_added_value() : $this->total_cost;
 	} 
 }

@@ -276,7 +276,9 @@
         </div>
     @endforeach
 	<script>
-        window.print()
+        $(document).ready(function() {
+            window.print()
+        });
         
         @foreach ($receipts as $key => $receipt)
             var price_and_client_info = $('#price-{{$receipt->id}}').height() + $('#client_info-{{$receipt->id}}').height() + 50;

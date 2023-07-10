@@ -79,11 +79,13 @@
                                         for="shipping_country_id">{{ trans('cruds.receiptSocial.fields.shipping_country_id') }}</label>
                                     <select
                                         class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
-                                        name="shipping_country_id" id="shipping_country_id" required>
-                                        @foreach ($shipping_countries as $id => $entry)
-                                            <option value="{{ $id }}"
-                                                {{ (old('shipping_country_id') ? old('shipping_country_id') : $receiptSocial->shipping_country->id ?? '') == $id ? 'selected' : '' }}>
-                                                {{ $entry }}</option>
+                                        name="shipping_country_id" id="shipping_country_id" required> 
+                                        <option  value="">{{ trans('global.pleaseSelect') }}</option>
+                                        @foreach ($shipping_countries as  $country)
+                                            <option value="{{ $country->id }}"
+                                                {{ (old('shipping_country_id') ? old('shipping_country_id') : $receiptSocial->shipping_country->id ?? '') == $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }} - {{ $country->cost }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('shipping_country'))
@@ -149,7 +151,7 @@
                                     <label for="deposit">{{ trans('cruds.receiptSocial.fields.deposit') }}</label>
                                     <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}"
                                         type="number" name="deposit" id="deposit"
-                                        value="{{ old('deposit', $receiptSocial->deposit) }}" step="0.01">
+                                        value="{{ old('deposit', $receiptSocial->deposit) }}" step="0.01" required>
                                     @if ($errors->has('deposit'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('deposit') }}

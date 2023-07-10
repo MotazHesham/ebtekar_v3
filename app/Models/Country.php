@@ -21,6 +21,7 @@ class Country extends Model
     ];
 
     public const TYPE_SELECT = [
+        'cities' => 'Cities',
         'countries' => 'Countries',
         'districts' => 'Districts',
         'metro'     => 'Metro',

@@ -27,7 +27,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="text-center" style="display: inline;position: absolute; left: 3px; top: -58px;">
-                                                    <a href="{{ asset($photo->photo) }}" download="{{$order->code}}_{{$key}}_{{ $photo->note }}" class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
+                                                    <a href="{{ asset($photo->photo) }}" download="{{$raw->code}}_{{$key}}_{{ $photo->note }}" class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
                                                 </div>
                                             </div>
                                         @endforeach

@@ -44,6 +44,6 @@ class ReceiptClientProductPivot extends Model
 
     public function products()
     {
-        return $this->belongsTo(ReceiptClientProduct::class,'receipt_client_product_id');
+        return $this->belongsTo(ReceiptClientProduct::class,'receipt_client_product_id')->withTrashed();
     }
 }

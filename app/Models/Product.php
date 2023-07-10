@@ -135,22 +135,22 @@ class Product extends Model implements HasMedia
     
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class, 'category_id')->withTrashed();
     }
 
     public function sub_category()
     {
-        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+        return $this->belongsTo(SubCategory::class, 'sub_category_id')->withTrashed();
     }
 
     public function sub_sub_category()
     {
-        return $this->belongsTo(SubSubCategory::class, 'sub_sub_category_id');
+        return $this->belongsTo(SubSubCategory::class, 'sub_sub_category_id')->withTrashed();
     }
 
     public function design()

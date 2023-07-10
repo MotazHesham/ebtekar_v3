@@ -14,7 +14,7 @@
                         <option value="">أختر المنتج</option>
                         @foreach ($products as $product)
                             <option value="{{ $product->id }}">
-                                {{ $product->name }}
+                                {{ $product->name }} - {{ $product->price }}
                             </option>
                         @endforeach
                     </select>

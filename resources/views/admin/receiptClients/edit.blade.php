@@ -49,7 +49,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="deposit">{{ trans('cruds.receiptClient.fields.deposit') }}</label>
-                    <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}" type="number" name="deposit" id="deposit" value="{{ old('deposit', $receiptClient->deposit) }}" step="0.01">
+                    <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}" type="number" name="deposit" id="deposit" value="{{ old('deposit', $receiptClient->deposit) }}" step="0.01" required>
                     @if($errors->has('deposit'))
                         <div class="invalid-feedback">
                             {{ $errors->first('deposit') }}

@@ -50,6 +50,6 @@ class ReceiptSocialProductPivot extends Model
 
     public function products()
     {
-        return $this->belongsTo(ReceiptSocialProduct::class,'receipt_social_product_id');
+        return $this->belongsTo(ReceiptSocialProduct::class,'receipt_social_product_id')->withTrashed();
     }
 }

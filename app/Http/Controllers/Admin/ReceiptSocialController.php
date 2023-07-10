@@ -112,8 +112,10 @@ class ReceiptSocialController extends Controller
         $type = $request->type;
         $receipt = ReceiptSocial::findOrFail($request->id);
         $receipt->$type = $request->status;
-        if (($type == 'done' || $type == 'returned') && $request->status == 1) {
+        if (in_array($request->type,['done','returned']) && $request->status == 1) {
             $receipt->quickly = 0;
+            $receipt->delivery_status = $type == 'done' ? 'delivered' : 'cancel';
+            $receipt->payment_status = $type == 'done' ? 'paid' : 'unpaid';
         }
         $receipt->save();
         return 1;
@@ -161,7 +163,7 @@ class ReceiptSocialController extends Controller
     public function destroy_product($id){
         $receipt_social_product_pivot = ReceiptSocialProductPivot::find($id);
         $receipt = ReceiptSocial::find($receipt_social_product_pivot->receipt_social_id);
-        if (Auth::user()->user_type != 'admin') {
+        if (!auth()->user()->is_admin) {
             if (!$receipt->playlist_status == 'pending') {
                 alert('لايمكن حذف منتج من هذه الفاتورة','','error');
                 return 1;
@@ -198,7 +200,7 @@ class ReceiptSocialController extends Controller
             $receipt_product_pivot = ReceiptSocialProductPivot::find($request->receipt_product_pivot_id);
             $receipt = ReceiptSocial::find($receipt_product_pivot->receipt_social_id);
 
-            if (Auth::user()->user_type != 'admin') {
+            if (!auth()->user()->is_admin) {
                 if (!$receipt->playlist_status == 'pending') {
                     alert('لايمكن تعديل منتج في هذه الفاتورة','','error');
                     return redirect()->route('receipt.receipt-socials.index');
@@ -211,7 +213,9 @@ class ReceiptSocialController extends Controller
             $receipt_product_pivot->description = $request->description;
             $receipt_product_pivot->price = $product->price;
             $receipt_product_pivot->quantity = $request->quantity;
-            $receipt_product_pivot->extra_commission = $request->extra_commission;
+            if($request->extra_commission){ 
+                $receipt_product_pivot->extra_commission = $request->extra_commission;
+            }
             $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
             $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
 
@@ -268,7 +272,7 @@ class ReceiptSocialController extends Controller
         }else{ 
             $receipt = ReceiptSocial::find($request->receipt_id);
             
-            if (Auth::user()->user_type != 'admin') {
+            if (!auth()->user()->is_admin) {
                 if (!$receipt->playlist_status == 'pending'){
                     alert('لايمكن أضافة منتج في هذه الفاتورة','','error');
                     return redirect()->route('admin.receipt-socials.index');
@@ -323,8 +327,7 @@ class ReceiptSocialController extends Controller
         }
     }
 
-    public function index(Request $request){
-        
+    public function index(Request $request){ 
         abort_if(Gate::denies('receipt_social_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->get();
@@ -364,9 +367,9 @@ class ReceiptSocialController extends Controller
 
         if(request('deleted')){
             $deleted = 1;
-            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country'])->onlyTrashed(); 
+            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country'])->withCount('receiptsReceiptSocialProducts')->onlyTrashed(); 
         }else{
-            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country']); 
+            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country'])->withCount('receiptsReceiptSocialProducts'); 
         }
 
         if ($request->client_type != null) {
@@ -592,10 +595,10 @@ class ReceiptSocialController extends Controller
     }
 
     public function create(Request $request)
-    { 
+    {   
         abort_if(Gate::denies('receipt_social_create'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
 
-        $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $shipping_countries = Country::select('cost','name', 'id')->get();
 
         $socials = Social::pluck('name', 'id');
 
@@ -623,7 +626,7 @@ class ReceiptSocialController extends Controller
 
         $site_settings = get_site_setting(); 
 
-        $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $shipping_countries = Country::select('cost','name', 'id')->get();
 
         $socials = Social::pluck('name', 'id'); 
 

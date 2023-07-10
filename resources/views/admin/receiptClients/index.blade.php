@@ -66,62 +66,64 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-3 col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <b>{{ trans('global.statistics') }} {{ trans('cruds.receiptClient.title') }}</b>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <div class="card">
-                                <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
-                                    <div class="bg-dark text-white p-3 me-3">
-                                        <i class="fas fa-list-ol"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fs-6 fw-semibold text-dark">{{ $receipts->total() }}</div>
-                                        <div class="text-medium-emphasis text-uppercase fw-semibold small">عدد الفواتير
+        @if(auth()->user()->is_admin)
+            <div class="col-xl-3 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <b>{{ trans('global.statistics') }} {{ trans('cruds.receiptClient.title') }}</b>
+                        <hr> 
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
+                                        <div class="bg-dark text-white p-3 me-3">
+                                            <i class="fas fa-list-ol"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fs-6 fw-semibold text-dark">{{ $receipts->total() }}</div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">عدد الفواتير
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /.col-->
-                        <div class="col-md-6 col-sm-12">
-                            <div class="card">
-                                <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
-                                    <div class="bg-primary text-white p-3 me-3">
-                                        <i class="fab fa-deploydog"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fs-6 fw-semibold text-primary">{{ dashboard_currency($statistics['total_deposit']) }}</div>
-                                        <div class="text-medium-emphasis text-uppercase fw-semibold small">العربون
+                            <!-- /.col-->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
+                                        <div class="bg-primary text-white p-3 me-3">
+                                            <i class="fab fa-deploydog"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fs-6 fw-semibold text-primary">{{ dashboard_currency($statistics['total_deposit']) }}</div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">العربون
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /.col-->
-                        <div class="col-md-12 col-sm-12">
-                            <div class="card">
-                                <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
-                                    <div class="bg-info text-white p-3 me-3">
-                                        <i class="far fa-money-bill-alt"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fs-6 fw-semibold text-info">{{ dashboard_currency($statistics['total_total_cost']) }}</div>
-                                        <div class="text-medium-emphasis text-uppercase fw-semibold small">مجموع
+                            <!-- /.col-->
+                            <div class="col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
+                                        <div class="bg-info text-white p-3 me-3">
+                                            <i class="far fa-money-bill-alt"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fs-6 fw-semibold text-info">{{ dashboard_currency($statistics['total_total_cost']) }}</div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">مجموع
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /.col--> 
+                            <!-- /.col--> 
+                        </div> 
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-xl-9 col-md-12">
+        @endif
+        <div class="@if(auth()->user()->is_admin) col-xl-9 @else col-xl-12 @endif col-md-12">
             @include('admin.receiptClients.partials.search')
         </div>
     </div>
@@ -135,9 +137,11 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-bordered table-striped table-hover datatable table-responsive-lg table-responsive-md table-responsive-sm">
+            <table class="table table-bordered datatable table-responsive-lg table-responsive-md table-responsive-sm">
                 <thead>
                     <tr>
+
+                        <th>#</th>
                         <th>
                             {{ trans('global.extra.client') }}
                         </th>
@@ -163,24 +167,35 @@
                 </thead>
                 <tbody>
 
-                    @forelse ($receipts as $receipt)
+                    @forelse ($receipts as $key => $receipt)
                         <tr data-entry-id="{{ $receipt->id }}" class=" @if($receipt->quickly) quickly @elseif($receipt->done) done @endif">
                             <td>
-                                @if ($receipt->printing_times == 0)
-                                    <span class="badge rounded-pill text-bg-primary text-white">
-                                        new
-                                    </span>
-                                @endif
-                                <span class="badge rounded-pill @if($receipt->website_setting_id == 2) text-bg-dark @elseif($receipt->website_setting_id == 3) text-bg-info @elseif($receipt->website_setting_id == 4) text-bg-primary @else text-bg-danger @endif text-white mb-1" style="cursor: pointer"
+                                <br>{{ ($key+1) + ($receipts->currentPage() - 1)*$receipts->perPage() }}
+                            </td>
+                            <td> 
+                                <span class="order_num badge rounded-pill
+                                    @if($receipt->website_setting_id == 2) order_num_ertgal 
+                                    @elseif($receipt->website_setting_id == 3) order_num_figures 
+                                    @elseif($receipt->website_setting_id == 4) order_num_shirti 
+                                    @else order_num_ebtekar @endif text-white mb-1" 
                                     onclick="show_logs('App\\Models\\ReceiptClient','{{ $receipt->id }}','receiptClient')">
+                                    @if($receipt->printing_times == 0) 
+                                        <span class="badge rounded-pill text-bg-primary text-white">
+                                            new
+                                        </span>
+                                    @else
+                                        <span class="badge rounded-pill text-bg-primary text-white">
+                                            {{ $receipt->printing_times }}
+                                        </span>
+                                    @endif
                                     {{ $receipt->order_num ?? '' }}
                                 </span>
                                 <div style="display:flex;justify-content:space-between">
                                     <div>
-                                        {{ $receipt->client_name ?? '' }} 
+                                        <b>{{ $receipt->client_name ?? '' }} </b>
                                     </div>
                                     <div>
-                                        {{ $receipt->phone_number ?? '' }}
+                                        <b>{{ $receipt->phone_number ?? '' }}</b>
                                     </div>
                                 </div>
                             </td>
@@ -221,7 +236,7 @@
                                         <br>
                                         {{ dashboard_currency($receipt->total_cost) }}
                                     </span>
-                                    <span class="badge rounded-pill text-bg-success text-white mb-1">
+                                    <span class="badge rounded-pill text-bg-success text-white mb-1 total_cost">
                                         = {{ dashboard_currency($receipt->calc_total_for_client()) }}
                                     </span>
                                 </div>

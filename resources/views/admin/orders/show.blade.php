@@ -151,6 +151,8 @@
                                                 @foreach($orderDetail->product->photos as $media)
                                                     <img src="{{ $media->getUrl('thumb')}}" alt="">
                                                 @endforeach
+                                                <br>
+                                                <a style="color: black" target="_blanc" href="{{ route('admin.products.show',$orderDetail->product->id ?? 1) }}"> {{ $orderDetail->product->name ?? 'Deleted' }}</a>
                                             </td>
                                             <td>
                                                 <span class="badge badge-dark">{{ trans('cruds.order.extra.quantity') }} {{ $orderDetail->quantity }}</span>

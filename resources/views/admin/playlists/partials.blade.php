@@ -69,19 +69,19 @@
 
             {{-- action Buttons --}}
             <div class="order-card-actions" id="order-card-actions-{{ $key }}"> 
+                @if (auth()->user()->is_admin || $authenticated == auth()->user()->id)
+                    <a class="btn btn-danger btn-sm rounded-pill text-white" onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')" >
+                        {{ $title_back }}
+                    </a>
+                    <a class="btn btn-warning btn-sm rounded-pill text-white" @if($item['printing_times'] == 0) onclick="alert('قم بالطباعة أولا')"  @else onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send') @endif" >
+                        {{ $title_send }}
+                    </a>
+                @endif 
                 @if ($type == 'design')
                     <a target="_blanc" class="btn btn-light  btn-sm rounded-pill " href="{{ route('admin.playlists.print', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
                         {{ trans('global.print') }}
                     </a>
                 @endif
-                @if (auth()->user()->is_admin || $authenticated == auth()->user()->id)
-                    <a class="btn btn-danger btn-sm rounded-pill text-white" onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')" >
-                        {{ $title_back }}
-                    </a>
-                    <a class="btn btn-warning btn-sm rounded-pill text-white" onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send')" >
-                        {{ $title_send }}
-                    </a>
-                @endif 
                 <a class="btn btn-success btn-sm rounded-pill text-white" onclick="show_details('{{ $item['id'] }}','{{ $item['model_type'] }}')" title="{{ __('Order Details') }}">
                     أظهارالصور
                 </a>

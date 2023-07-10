@@ -107,7 +107,7 @@ class PlaylistController extends Controller
 
         $auth_id = 0;
         $to_playlist = '';  
-        if($raw->playlist_status == 'design'){
+        if($raw->playlist_status == 'design'){ 
             $auth_id = $request->designer_id;
             $to_playlist = 'الي الديزاينر';
         }elseif($raw->playlist_status == 'manufacturing'){
