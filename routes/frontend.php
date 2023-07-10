@@ -40,6 +40,7 @@ Route::get('receipt_outgoings','TransferDatabaseController@receipt_outgoings');
 Route::get('receipt_price_view','TransferDatabaseController@receipt_price_view'); 
 Route::get('receipt_companies','TransferDatabaseController@receipt_companies'); 
 // return the observers on
+// empty autdit logs
 
 
 
@@ -113,6 +114,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::get('product/{slug}', 'ProductController@product')->name('product'); 
     Route::post('product/quick_view', 'ProductController@quick_view')->name('product.quick_view');
     Route::post('product/variant_price', 'ProductController@variant_price')->name('product.variant_price');
+    Route::post('product/rate_product', 'ProductController@rate_product')->name('product.rate');
 
     // search
     Route::get('search', 'ProductController@search')->name('search'); 

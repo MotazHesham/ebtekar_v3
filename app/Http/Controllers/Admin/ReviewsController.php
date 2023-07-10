@@ -11,6 +11,15 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ReviewsController extends Controller
 {
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $review = Review::findOrFail($request->id);
+        $review->$type = $request->status; 
+        $review->save();
+        return 1;
+    }
+
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('review_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -54,8 +63,12 @@ class ReviewsController extends Controller
             $table->editColumn('comment', function ($row) {
                 return $row->comment ? $row->comment : '';
             });
-            $table->editColumn('published', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->published ? 'checked' : null) . '>';
+            $table->editColumn('published', function ($row) { 
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'published\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->published ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>'; 
             });
 
             $table->rawColumns(['actions', 'placeholder', 'product', 'user', 'published']);

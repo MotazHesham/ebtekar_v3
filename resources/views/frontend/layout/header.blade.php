@@ -7,6 +7,13 @@
             <div class="row">
                 <div class="col-xl-5 col-md-7 col-sm-6">
                     <div class="top-header-left">
+                        @if($site_settings->id != 4)
+                            <div class="Figures-store" style="background: #F1948A">
+                                <a href="https://shirtistore.com" target="_blanc">
+                                    <h6> Shirti Store  </h6>
+                                </a>
+                            </div>
+                        @endif
                         @if($site_settings->id != 3)
                             <div class="Figures-store">
                                 <a href="https://figures-store.com" target="_blanc">
@@ -24,7 +31,7 @@
                             </div>
                         @endif
                         @if($site_settings->id != 1)
-                            <div class="Ebtekar-link">
+                            <div class="Ertgal-link" style="background: #d19002">
                                 <a href="https://ebtekarstore.com" target="_blanc">  
                                     <h6>
                                         EBTEKAR store
@@ -78,9 +85,9 @@
                             <form class="big-deal-form" action="{{route('frontend.search')}}">
                                 <div class="input-group ">
                                     <span class="search"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control" name="search" value="@if(isset($search)) {{$search}} @endif" placeholder="بحث عن منتج">
+                                    <input type="text" class="form-control" name="search" value="@if(isset($search)) {{$search}} @endif" placeholder="{{ trans('frontend.header.search_product') }}">
                                     <select name="category">
-                                        <option value="">جميع المنتجات</option>
+                                        <option value=""> {{ trans('frontend.header.all_products') }}</option>
                                         @foreach (\App\Models\HomeCategory::where('website_setting_id',$site_settings->id)->with('category')->get() as $homecategory)
                                             <option value="{{$homecategory->category->slug ?? ''}}" @if(isset($category) && $category == $homecategory->category->id) selected @endif>
                                                 {{ $homecategory->category->name ?? '' }}
@@ -168,8 +175,8 @@
                                                 </svg>
                                             </div>
                                             <div class="cart-item">
-                                                <h5>سلة </h5>
-                                                <h5>التسوق</h5>
+                                                <h5>{{ trans('frontend.header.cart') }} </h5>
+                                                <h5>{{ trans('frontend.header.shoping') }}</h5>
                                             </div>
                                         </div>
                                     </a> 
@@ -237,7 +244,7 @@
                                     <button class="navbar-toggler" type="button">
                                         <span class="navbar-icon"><i class="fa fa-arrow-down"></i></span>
                                     </button>
-                                    <h5 class="mb-0  text-white title-font">تسوق حسب التصنيفات</h5>
+                                    <h5 class="mb-0  text-white title-font"> {{ trans('frontend.header.shoping_by_category') }} </h5>
                                 </nav>
                                 <div class="collapse  nav-desk" id="navbarToggleExternalContent">
                                     <ul class="nav-cat title-font">
@@ -260,24 +267,24 @@
                                 <div class="toggle-nav"><i class="fa fa-bars sidebar-bar"></i></div>
                                 <ul id="main-menu" class="sm pixelstrap sm-horizontal">
                                     <li>
-                                        <div class="mobile-back text-right">العودة<i class="fa fa-angle-left ps-2"
+                                        <div class="mobile-back text-right"><i class="fa fa-angle-left ps-2"
                                                 aria-hidden="true"></i></div>
                                     </li>
                                     <!--HOME-->
 
                                     <!--SHOP-->
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('home') }}">الرئيسية</a>
+                                        <a class="dark-menu-item" href="{{ route('home') }}"> {{ trans('frontend.header.home') }}</a>
                                     </li>
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('frontend.search') }}">أحدث المنتجات</a>
+                                        <a class="dark-menu-item" href="{{ route('frontend.search') }}">{{ trans('frontend.header.new_products') }} </a>
                                     </li>
 
 
 
                                     <!--pages meu start-->
                                     <li>
-                                        <a class="dark-menu-item" href="javascript:void(0)">منتجاتنا</a>
+                                        <a class="dark-menu-item" href="javascript:void(0)"> {{ trans('frontend.header.products') }}</a>
                                         <ul>
                                             @foreach (\App\Models\Category::where('website_setting_id',$site_settings->id)->with('sub_categories.sub_sub_categories')->get() as $category)
                                                 <li>
@@ -304,15 +311,15 @@
                                     <!--product-end end-->
 
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('frontend.beseller') }}">أصبح تاجرا</a>
+                                        <a class="dark-menu-item" href="{{ route('frontend.beseller') }}"> {{ trans('frontend.header.be_seller') }}</a>
                                     </li>
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('frontend.bedesigner') }}">أصبح ديزانير</a>
+                                        <a class="dark-menu-item" href="{{ route('frontend.bedesigner') }}">{{ trans('frontend.header.be_designer') }} </a>
                                     </li>
                                     <li>
 
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('frontend.contact') }}"> تواصل معنا</a>
+                                        <a class="dark-menu-item" href="{{ route('frontend.contact') }}"> {{ trans('frontend.header.contact_us') }} </a>
                                     </li>
                                     <li>
                                 </ul>
@@ -394,8 +401,8 @@
                                             </g>
                                         </svg> 
                                         <div class="cart-item">
-                                            <h5>سلة </h5>
-                                            <h5>التسوق</h5>
+                                            <h5>{{ trans('frontend.header.cart') }} </h5>
+                                            <h5>{{ trans('frontend.header.shoping') }}</h5>
                                         </div>  
                                         <div class="item-count-contain">
                                             {{ session('cart') ? session('cart')->count() : 0 }}

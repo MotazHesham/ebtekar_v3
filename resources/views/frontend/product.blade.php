@@ -35,8 +35,7 @@
     <meta property="og:description" content="{{ $product->meta_description }}" />
     <meta property="og:site_name" content="{{ $site_settings->site_name  }}" />
     <meta property="og:price:amount" content="{{ $product->calc_price_as_text() }}" /> 
-@endsection
-
+@endsection 
 @section('content') 
 
     {{-- this is for share product in facebook --}}
@@ -74,11 +73,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>المنتجات</h2>
+                            <h2>{{ trans('frontend.product.products') }}</h2>
                             <ul>
-                                <li><a href="{{ route('home') }}">الرئيسية</a></li>
+                                <li><a href="{{ route('home') }}">{{ trans('frontend.about.home') }}</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="javascript:void(0)">المنتجات</a></li>
+                                <li><a href="javascript:void(0)">{{ trans('frontend.product.products') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -127,19 +126,18 @@
                                     @endif
                                     @if(auth()->check() && auth()->user()->user_type == 'seller')
                                         <li id="product-commission-for-variant">
-                                            <div class="text-center"> <small> الربح  :<b> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['as_text'] }} </b> </small> </div>
+                                            <div class="text-center"> <small> {{trans('frontend.product.commission')}}:<b> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['as_text'] }} </b> </small> </div>
                                         </li> 
                                     @endif
                                 </ul>
                                 <div class="revieu-box">
                                     <ul>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star-o"></i></li>
+                                        @include('frontend.partials.rate',['rate' => $product->rating])
                                     </ul>
-                                    <a href="review.html"><span>({{$product->reviews()->count()}} تعليقات)</span></a>
+                                    @php
+                                        $count_reviews = $product->reviews()->count()
+                                    @endphp
+                                    <a href="#"><span> @if($count_reviews > 0) ({{$count_reviews}} {{ trans('frontend.product.reviews') }}) @endif</span></a>
                                 </div> 
                             </div>
                             <form id="add-to-cart-form" action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data">
@@ -152,30 +150,30 @@
                                         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">اطلب منتجك الخاص</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">{{ trans('frontend.product.custom_product') }}</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body"> 
-                                                    <h5 class="mb-3">الصور المراد طباعتها علي المنتج</h5>
+                                                    <h5 class="mb-3">{{ trans('frontend.product.printed_photos') }}</h5>
                                                     <div id="product-images">
                                                         <div class="row">
                                                             <div class="col-md-6 mb-3">
                                                                 <input type="file" id="photos-1" name="photos[]" class="form-control" required> 
                                                             </div>
                                                             <div class="col-md-6 mb-3">
-                                                                <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="ملحوظة علي الصورة" >
+                                                                <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="{{ trans('frontend.product.photo_note') }}" >
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">أضف المزيد</button>
+                                                    <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">{{ trans('frontend.product.add_more') }}</button>
                                     
                                                     <div class="col-12 mb-3">
-                                                        <label>وصف</label>
-                                                        <textarea class="form-control" name="description" placeholder="وصف" rows="3" required></textarea>
+                                                        <label>{{ trans('frontend.product.description') }}</label>
+                                                        <textarea class="form-control" name="description" placeholder="{{ trans('frontend.product.description') }}" rows="3" required></textarea>
                                                     </div>
                                     
-                                                    <button type="submit" class="btn btn-rounded black-btn me-3">أضف الى السلة</button> 
+                                                    <button type="submit" class="btn btn-rounded black-btn me-3">{{ trans('frontend.product.add_to_cart') }}</button> 
                                                 </div>
                                             </div>
                                         </div>
@@ -205,7 +203,7 @@
 
                                     @if ($product->colors != null && !empty(json_decode($product->colors)))
 
-                                        <h6 class="product-title">اللون</h6>
+                                        <h6 class="product-title">{{ trans('frontend.product.color') }}</h6>
                                         <div class="color-selector inline">
                                             <ul>
                                                 @if (count(json_decode($product->colors)) > 0)
@@ -223,7 +221,7 @@
                                     @endif
 
 
-                                    <h6 class="product-title">العدد</h6>
+                                    <h6 class="product-title">{{ trans('frontend.product.quantity') }}</h6>
                                     <div class="qty-box">
                                         <div class="input-group">
                                             <button class="qty-minus" type="button"></button>
@@ -231,17 +229,17 @@
                                             <button class="qty-plus" type="button"></button>
                                         </div>
                                         &nbsp;&nbsp;
-                                        <b>(متاح <span id="available-quantity-span">{{$product->current_stock}}</span>)</b>
+                                        <b>({{ trans('frontend.product.available') }} <span id="available-quantity-span">{{$product->current_stock}}</span>)</b>
                                     </div> 
 
                                     <div class="product-buttons">
                                         @if($product->special)
-                                            <a href="" class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">اطلب منتجك الخاص </a>
+                                            <a href="" class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ trans('frontend.product.custom_product') }}</a>
                                         @else
                                             <button type="submit" id="cartEffect"
                                                 class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart">
                                                 <i class="fa fa-shopping-cart"></i>
-                                                أضف الى السلة
+                                                {{ trans('frontend.product.add_to_cart') }}
                                             </button>
                                         @endif
                                         <a href="{{ route('frontend.wishlist.add',$product->slug) }}" class="btn btn-normal add-to-wish tooltip-top"
@@ -254,14 +252,14 @@
                             </form> 
                             
                             <div class="pro-group">
-                                <h6 class="product-title">تفاصيل المنتج</h6>
+                                <h6 class="product-title">{{ trans('frontend.product.product_description') }}</h6>
                                 <p>
                                     <?php echo $product->description; ?>
                                 </p>
                             </div>
 
                             <div class="pro-group pb-0">
-                                <h6 class="product-title">مشاركة</h6>
+                                <h6 class="product-title">{{ trans('frontend.product.share') }}</h6>
                                 <div style="display: flex;justify-content: space-evenly;">
                                     <div class="fb-share-button"  data-href="{{route('frontend.product',$product->slug)}}"  data-layout="button_count">
                                     </div>
@@ -287,15 +285,15 @@
                     <div class=" creative-card creative-inner">
                         <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
                             <li class="nav-item"><a class="nav-link active" id="top-home-tab" data-bs-toggle="tab"
-                                    href="#top-home" role="tab" aria-selected="true">التفاصيل</a>
+                                    href="#top-home" role="tab" aria-selected="true">{{ trans('frontend.product.product_description') }}</a>
                                 <div class="material-border"></div>
                             </li>
                             <li class="nav-item"><a class="nav-link" id="contact-top-tab" data-bs-toggle="tab"
-                                    href="#top-contact" role="tab" aria-selected="false">فيديو</a>
+                                    href="#top-contact" role="tab" aria-selected="false">{{ trans('frontend.product.video') }}</a>
                                 <div class="material-border"></div>
                             </li>
                             <li class="nav-item"><a class="nav-link" id="review-top-tab" data-bs-toggle="tab"
-                                    href="#top-review" role="tab" aria-selected="false">التعليقات</a>
+                                    href="#top-review" role="tab" aria-selected="false">{{ trans('frontend.product.reviews') }}</a>
                                 <div class="material-border"></div>
                             </li>
                         </ul>
@@ -322,42 +320,62 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="top-review" role="tabpanel" aria-labelledby="review-top-tab">
-                                <form class="theme-form">
-                                    <div class="row g-3">
-                                        <div class="col-md-12">
-                                            <div class="media">
-                                                <label>التقييم</label>
-                                                <div class="media-body ms-3">
-                                                    <div class="rating three-star"><i class="fa fa-star"></i> <i
-                                                            class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                            class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+                                @auth
+                                    @if(!\App\Models\Review::where('user_id',Auth::id())->where('product_id',$product->id)->first())
+                                        <form class="theme-form" method="POST" action="{{ route('frontend.product.rate') }}">
+                                            @csrf
+                                            <input type="hidden" name="rating" id="user_rate" value="4">
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <div class="row g-3">
+                                                <div class="col-md-12">
+                                                    <div class="media">
+                                                        <label>{{ trans('frontend.product.rate') }}</label>
+                                                        <div class="media-body ms-3">
+                                                            <div class="product">
+                                                                <div class="product-box">
+                                                                    <div class="product-detail product-detail2 ">
+                                                                        <ul id="user-rating-choice" style="font-size: 30px; ">
+                                                                            <li><i class="fa fa-star" onclick="change_rating(1)"></i></li>
+                                                                            <li><i class="fa fa-star" onclick="change_rating(2)"></i></li>
+                                                                            <li><i class="fa fa-star" onclick="change_rating(3)"></i></li>
+                                                                            <li><i class="fa fa-star" onclick="change_rating(4)"></i></li>
+                                                                            <li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="col-md-12">
+                                                    <label>{{ trans('frontend.product.comment') }}</label>
+                                                    <textarea class="form-control" placeholder="{{ trans('frontend.product.write_comment') }}" name="comment" rows="6" required></textarea>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button class="btn btn-normal" type="submit">{{ trans('frontend.product.send') }}</button>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="name">الاسم</label>
-                                            <input type="text" class="form-control" id="name"
-                                                placeholder="ادخل اسمك" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>البريد الإلكتروني</label>
-                                            <input type="text" class="form-control"
-                                                placeholder="ادخل بريدك الإلكتروني" required>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label>عنوان التقييم</label>
-                                            <input type="text" class="form-control" placeholder="عنوان التقييم"
-                                                required>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label>التقييم</label>
-                                            <textarea class="form-control" placeholder="اكتب تقييمك هنا" rows="6"></textarea>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button class="btn btn-normal" type="submit">إرسال</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                        </form>
+                                    @endif
+                                @endauth
+                                <div style="max-height: 400px; overflow-x: hidden; overflow-y: scroll; padding: 25px;">
+                                    @foreach($reviews as $review)
+                                        <div class="card mb-4">
+                                            <div class="card-header" style="display: flex"> 
+                                                <div>
+                                                    {{ $review->user->name ?? '' }}
+                                                </div>
+                                                <div>&nbsp;</div>
+                                                <ul>
+                                                    @include('frontend.partials.rate',['rate' => $review->rating])
+                                                </ul> 
+                                            </div>
+                                            <div class="card-body">
+                                                <?php echo $review->comment; ?>
+                                            </div>
+                                        </div> 
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -372,7 +390,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 product-related">
-                    <h2>منتجات مشابه</h2>
+                    <h2> {{ trans('frontend.product.related_products') }}</h2>
                 </div>
             </div>
             <div class="row">
@@ -427,17 +445,13 @@
                                         </div>
                                         @if(auth()->check() && auth()->user()->user_type == 'seller')
                                             <div class="new-label1">
-                                                <div class="text-center"> <small> الربح  <br> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </small> </div>
+                                                <div class="text-center"> <small> {{ trans('frontend.product.commission') }}  <br> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </small> </div>
                                             </div> 
                                         @endif
                                     </div>
                                     <div class="product-detail product-detail2 ">
                                         <ul>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
+                                            @include('frontend.partials.rate',['rate' => $product->rating])
                                         </ul>
                                         <a href="{{ route('frontend.product',$related_product->slug) }}">
                                             <h3> {{ $related_product->name }} </h3>
@@ -468,5 +482,42 @@
                 getVariantPrice();
             });
         });
+
+        function change_rating(rate){
+            if(rate == 1){
+                var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(2)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(3)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(4)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>';
+            }else if(rate == 2){
+                var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(2)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(3)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(4)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>';
+            }else if(rate == 3){
+                var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(2)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(3)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(4)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>';
+            }else if(rate == 4){
+                var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(2)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(3)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(4)"></i></li>';
+                str += '<li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>';
+            }else if(rate == 5){
+                var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(2)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(3)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(4)"></i></li>';
+                str += '<li><i class="fa fa-star" onclick="change_rating(5)"></i></li>';
+            }
+
+            $('#user-rating-choice').html(str);
+            $('#user_rate').val(rate);
+        }
     </script>
 @endsection

@@ -25,18 +25,17 @@
                 </ul>
                 <div class="revieu-box">
                     <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star-o"></i></li>
+                        @include('frontend.partials.rate',['rate' => $product->rating])
                     </ul>
-                    <a href="review.html"><span>({{$product->reviews()->count()}} تعليقات)</span></a>
+                    @php
+                        $count_reviews = $product->reviews()->count()
+                    @endphp
+                    <a href="#"><span> @if($count_reviews > 0) ({{$count_reviews}} {{ trans('frontend.product.reviews') }}) @endif</span></a>
                 </div>
 
             </div>
             <div class="pro-group">
-                <h6 class="product-title">تفاصيل المنتج</h6>
+                <h6 class="product-title">  {{ trans('frontend.product.product_description') }}</h6>
                 <p>
                     <?php echo $product->description; ?>
                 </p>
@@ -61,7 +60,7 @@
 
                 @if ($product->colors != null && !empty(json_decode($product->colors)))
 
-                    <h6 class="product-title">اللون</h6>
+                    <h6 class="product-title">{{ trans('frontend.product.color') }}</h6>
                     <div class="color-selector inline">
                         <ul>
                             @if (count(json_decode($product->colors)) > 0)
@@ -81,7 +80,7 @@
                 <div class="product-buttons">
                     <a href="{{ route('frontend.product',$product->slug) }}" class="btn btn-normal tooltip-top"
                         data-tippy-content="view detail">
-                        عرض التفاصيل
+                        {{ trans('frontend.product.show_details') }}
                     </a>
                 </div>
             </div>

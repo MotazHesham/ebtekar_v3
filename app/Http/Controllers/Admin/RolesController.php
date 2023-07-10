@@ -48,11 +48,19 @@ class RolesController extends Controller
 
         $role->load('permissions');
 
+        if($role->id == 1){
+            alert("Cant Edit This Role",'','error');
+            return redirect()->back();
+        }
         return view('admin.roles.edit', compact('permissions', 'role'));
     }
 
     public function update(UpdateRoleRequest $request, Role $role)
     {
+        if($role->id == 1){
+            alert("Cant Update This Role",'','error');
+            return redirect()->back();
+        }
         $role->update($request->all());
         $role->permissions()->sync($request->input('permissions', []));
 
@@ -72,6 +80,10 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        if($role->id == 1){
+            alert("Cant Delete This Role",'','error');
+            return redirect()->back();
+        }
         $role->delete();
 
         return back();

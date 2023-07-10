@@ -9,25 +9,29 @@
         <form action="" method="GET" id="sort_playlist">
 
             <div class="row"> 
-                <div class="col-md-6">  
+                <div class="col-md-3">  
                     <input type="text" class="form-control mb-2 @isset($order_num) isset @endisset" id="order_num" name="order_num" 
                         @isset($order_num) value="{{ $order_num }}" @endisset placeholder="{{ trans('cruds.playlist.fields.order_num') }}">  
                             
-                    <select class="form-control mb-2 @isset($staff_id) isset @endisset" name="staff_id" id="staff_id" onchange="sort_playlist()">
+                </div> 
+                <div class="col-md-3">
+                    <select class="form-control mb-2 @isset($staff_id) isset @endisset select2" name="staff_id" id="staff_id" onchange="sort_playlist()">
                         <option value="">أختر الموظف</option>
                         @foreach ($staffs as $staff)
                             <option value="{{ $staff->id }}" @isset($staff_id) @if ($staff_id == $staff->id) selected @endif @endisset>
-                                {{ $staff->email }}
+                                {{ $staff->name }}
                             </option>
                         @endforeach
                     </select>
                 </div> 
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <select class="form-control mb-2 @isset($view) isset @endisset" name="view" id="view" onchange="sort_playlist()"> 
                         <option value="all" @if($view == 'all') selected @endif>all</option>
                         <option value="by_date" @if($view == 'by_date') selected @endif>By Date</option>
                     </select>
 
+                </div> 
+                <div class="col-md-3">
                     <input type="text" class="form-control mb-2 @isset($description) isset @endisset" id="description" name="description" 
                         @isset($description) value="{{ $description }}" @endisset placeholder="{{ trans('global.extra.description') }}"> 
                 </div>   

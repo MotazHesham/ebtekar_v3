@@ -8,12 +8,67 @@ use App\Http\Requests\StoreUserAlertRequest;
 use App\Models\User;
 use App\Models\UserAlert; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserAlertsController extends Controller
 {
+    public function playlist(Request $request)
+    { 
+
+        if ($request->ajax()) {
+            $query = UserAlert::with(['users'])->where('type','playlist')->select(sprintf('%s.*', (new UserAlert)->table));
+            $table = Datatables::of($query);
+
+            $table->addColumn('placeholder', '&nbsp;'); 
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : '';
+            });
+            $table->editColumn('alert_text', function ($row) {
+                return $row->alert_text ? $row->alert_text : '';
+            });
+            $table->editColumn('alert_link', function ($row) {
+                return $row->alert_link ? $row->alert_link : '';
+            });  
+            $table->rawColumns(['placeholder' ]);
+
+            return $table->make(true);
+        }
+
+        return view('admin.userAlerts.playlist');
+    }
+    public function history(Request $request)
+    { 
+
+        if ($request->ajax()) {
+            $query = UserAlert::with(['users'])->where('type','history')->whereHas('users',function($q){
+                $q->where('user_id',Auth::id());
+            })->select(sprintf('%s.*', (new UserAlert)->table));
+            $table = Datatables::of($query);
+
+            $table->addColumn('placeholder', '&nbsp;'); 
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : '';
+            });
+            $table->editColumn('alert_text', function ($row) {
+                return $row->alert_text ? $row->alert_text : '';
+            });
+            $table->editColumn('alert_link', function ($row) {
+                return $row->alert_link ? $row->alert_link : '';
+            }); 
+
+            $table->rawColumns(['placeholder']);
+
+            return $table->make(true);
+        }
+
+        return view('admin.userAlerts.history');
+    }
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('user_alert_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');

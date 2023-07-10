@@ -1,0 +1,31 @@
+@if (ceil($rate) == 1)
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+@elseif(ceil($rate) == 2)
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+@elseif(ceil($rate) == 3)
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+@elseif(ceil($rate) == 4)
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star-o"></i></li>
+@elseif(ceil($rate) == 5)
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+    <li><i class="fa fa-star"></i></li>
+@endif

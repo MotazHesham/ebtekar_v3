@@ -40,13 +40,13 @@ class WebsiteSettingsController extends Controller
     {
         abort_if(Gate::denies('website_setting_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $designers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $designers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $preparers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $preparers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $manufacturers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $manufacturers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $shipments = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $shipments = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
 
         return view('admin.websiteSettings.create', compact('designers', 'manufacturers', 'preparers', 'shipments'));
     }
@@ -93,13 +93,13 @@ class WebsiteSettingsController extends Controller
     {
         abort_if(Gate::denies('website_setting_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $designers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $designers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $preparers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $preparers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $manufacturers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $manufacturers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $shipments = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $shipments = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $websiteSetting->load('designer', 'preparer', 'manufacturer', 'shipment');
 

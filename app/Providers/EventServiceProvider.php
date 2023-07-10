@@ -35,11 +35,11 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // ReceiptSocial::observe(ReceiptSocialObserver::class);
-        // ReceiptClient::observe(ReceiptClientObserver::class);
-        // ReceiptOutgoing::observe(ReceiptOutgoingObserver::class);
-        // ReceiptCompany::observe(ReceiptCompanyObserver::class);
-        // ReceiptPriceView::observe(ReceiptPriceViewObserver::class);
+        ReceiptSocial::observe(ReceiptSocialObserver::class);
+        ReceiptClient::observe(ReceiptClientObserver::class);
+        ReceiptOutgoing::observe(ReceiptOutgoingObserver::class);
+        ReceiptCompany::observe(ReceiptCompanyObserver::class);
+        ReceiptPriceView::observe(ReceiptPriceViewObserver::class);
     }
 
     /**

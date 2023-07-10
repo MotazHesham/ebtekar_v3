@@ -6,21 +6,51 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\Search;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    public function rate_product(Request $request){
+        $review = Review::where('user_id',Auth::id())->where('product_id',$request->product_id)->first();
+        if(!$review){
+            $review = Review::create([
+                'rating' => $request->rating ?? 1,
+                'comment' => $request->comment ?? 'none',
+                'user_id' => Auth::id(),
+                'product_id' => $request->product_id,
+                'published' => 1,
+            ]);
+            
+            if($review){
+                $product = Product::findOrFail($request->product_id);
+                $reviews_count = count(Review::where('product_id', $product->id)->where('published', 1)->get());
+                if($reviews_count > 0){
+                    $product->rating = Review::where('product_id', $product->id)->where('published', 1)->sum('rating') / $reviews_count;
+                }else {
+                    $product->rating = 0;
+                }
+                $product->save(); 
+            }
+            alert('Review Added Successfully','','success');
+        }else{
+            alert('You added review to this product before','','warning');
+        }
+        return redirect()->back();
+    }
     public function product($slug){ 
         $site_settings = get_site_setting();
         $product  = Product::where('website_setting_id',$site_settings->id)->where('slug', $slug)->first();
         if(!$product){
             abort(404);
         }
-        return view('frontend.product',compact('product'));
+        $reviews = Review::with('user')->where('product_id',$product->id)->where('published',1)->get();
+        return view('frontend.product',compact('product','reviews'));
     }
 
     public function quick_view(Request $request){

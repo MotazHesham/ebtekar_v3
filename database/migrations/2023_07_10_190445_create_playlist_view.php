@@ -31,7 +31,10 @@ return new class extends Migration
                 rs.shipmenter_id,rs.delivery_man_id,rs.note,rs.send_to_playlist_date,rs.send_to_delivery_date,rs.quickly,rs.printing_times,rs.created_at,rs.updated_at,
                 GROUP_CONCAT(CONCAT(rsp.title, "(", rsp.quantity, ") <br>",rsp.description) SEPARATOR "<hr>") AS description
                 FROM receipt_socials rs
-                JOIN receipt_social_receipt_social_product rsp ON rs.id = rsp.receipt_social_id && rs.playlist_status != "pending" && rs.playlist_status != "finish"
+                JOIN receipt_social_receipt_social_product rsp ON rs.id = rsp.receipt_social_id
+                Where  
+                    rs.playlist_status != "pending" 
+                    AND rs.playlist_status != "finish"
                 GROUP BY rs.id
                 
                 UNION ALL
@@ -40,16 +43,22 @@ return new class extends Migration
                 delivery_status,payment_status,playlist_status,delay_reason,cancel_reason,designer_id,preparer_id,manufacturer_id,staff_id As added_by,
                 shipmenter_id,delivery_man_id,note,send_to_playlist_date,send_to_delivery_date,quickly,printing_times,created_at,updated_at,description
                 FROM receipt_companies
-                WHERE playlist_status != "pending" && playlist_status != "finish"
+                WHERE 
+                    playlist_status != "pending" 
+                    AND playlist_status != "finish"
 
                 UNION ALL
 
                 SELECT CONCAT("order") AS model_type,ords.id,ords.order_num,ords.client_name,ords.phone_number,ords.phone_number_2,ords.deposit_amount as deposit,ords.total_cost,ords.shipping_address,ords.shipping_country_id,
                 ords.delivery_status,ords.payment_status,ords.playlist_status,ords.delay_reason,ords.cancel_reason,ords.designer_id,ords.preparer_id,ords.manufacturer_id,ords.user_id As added_by,
                 ords.shipmenter_id,ords.delivery_man_id,ords.note,ords.send_to_playlist_date,ords.send_to_delivery_date,ords.quickly,ords.printing_times,ords.created_at,ords.updated_at,
-                GROUP_CONCAT(CONCAT(ords_detls.product_id, "(", ords_detls.quantity, ") <br>",ords_detls.description) SEPARATOR "<hr>") AS description
+                GROUP_CONCAT(CONCAT(p.name, "(", ords_detls.quantity, ") <br>",ords_detls.description) SEPARATOR "<hr>") AS description
                 FROM orders ords
-                JOIN order_details ords_detls ON ords.id = ords_detls.order_id && ords.playlist_status != "pending" && ords.playlist_status != "finish"
+                JOIN order_details ords_detls ON ords.id = ords_detls.order_id 
+                JOIN products p ON p.id = ords_detls.product_id
+                WHERE
+                    ords.playlist_status != "pending"
+                    AND ords.playlist_status != "finish"
                 GROUP BY ords.id 
             ';
     }

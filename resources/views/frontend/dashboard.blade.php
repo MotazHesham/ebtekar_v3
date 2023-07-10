@@ -8,11 +8,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2> حسابي</h2>
+                            <h2>{{ trans('frontend.dashboard.profile') }}</h2>
                             <ul>
-                                <li><a href="{{ route('home') }}">الرئيسية</a></li>
+                                <li><a href="{{ route('home') }}">{{ trans('frontend.about.home') }}</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="{{ route('frontend.dashboard') }}"> لوحة التحكم الخاصة بي </a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">{{ trans('frontend.about.dashboard') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -36,14 +36,14 @@
                     <div class="dashboard-right">
                         <div class="dashboard">
                             <div class="page-title">
-                                <h2>حسابي</h2>
+                                <h2>{{ trans('frontend.dashboard.profile') }}</h2>
                             </div>
                             <div class="box-account box-info">
                                 <form class="theme-form" action="{{ route('frontend.update_profile') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
-                                        <label>البريد الالكتروني</label>
-                                        <input type="email" class="form-control" placeholder="البريد الالكتروني" value="{{ $user->email }}"  required="" name="email" disabled>
+                                        <label>{{ trans('frontend.dashboard.email') }}</label>
+                                        <input type="email" class="form-control" placeholder="{{ trans('frontend.dashboard.email') }}" value="{{ $user->email }}"  required="" name="email" disabled>
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -51,8 +51,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label>الأسم</label>
-                                        <input type="text" class="form-control" placeholder="الأسم" value="{{ $user->name }}"  required="" name="name">
+                                        <label>{{ trans('frontend.dashboard.name') }}</label>
+                                        <input type="text" class="form-control" placeholder="{{ trans('frontend.dashboard.name') }}" value="{{ $user->name }}"  required="" name="name">
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -60,8 +60,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label>رقم التليفون</label>
-                                        <input type="text" class="form-control" placeholder="رقم التليفون" value="{{ $user->phone_number }}"  required="" name="phone_number">
+                                        <label>{{ trans('frontend.dashboard.phone_number') }}</label>
+                                        <input type="text" class="form-control" placeholder="{{ trans('frontend.dashboard.phne_number') }}" value="{{ $user->phone_number }}"  required="" name="phone_number">
                                         @error('phone_number')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -69,8 +69,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label>عنوان</label>
-                                        <input type="text" class="form-control" placeholder="عنوان" value="{{ $user->address }}"  required="" name="address">
+                                        <label>{{ trans('frontend.dashboard.address') }}</label>
+                                        <input type="text" class="form-control" placeholder="{{ trans('frontend.dashboard.address') }}" value="{{ $user->address }}"  required="" name="address">
                                         @error('address')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -78,7 +78,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label>صورة البروفايل</label>
+                                        <label> {{ trans('frontend.dashboard.photo') }}</label>
                                         <div class="row">
                                             <div class="col-md-9">
                                                 <input type="file" class="form-control"  name="photo">
@@ -95,8 +95,8 @@
                                     </div>
                                     @if(auth()->user()->user_type == 'seller') 
                                         <div class="form-group">
-                                            <label>المؤهل</label>
-                                            <input type="text" class="form-control" placeholder="المؤهل" value="{{ $user->seller->qualification }}"  required="" name="qualification">
+                                            <label>{{ trans('frontend.dashboard.qualification') }}</label>
+                                            <input type="text" class="form-control" placeholder="{{ trans('frontend.dashboard.qualification') }}" value="{{ $user->seller->qualification }}"  required="" name="qualification">
                                             @error('qualification')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -104,8 +104,8 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label>أسم البيدج أو الجروب</label>
-                                            <input type="text" class="form-control" placeholder="رقم التليفون" value="{{ $user->seller->social_name }}"  required="" name="social_name">
+                                            <label>{{ trans('frontend.dashboard.social_name') }} </label>
+                                            <input type="text" class="form-control" placeholder=" {{ trans('frontend.dashboard.social_name') }}" value="{{ $user->seller->social_name }}"  required="" name="social_name">
                                             @error('social_name')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -113,8 +113,8 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label>لينك البيدج أو الجروب</label>
-                                            <input type="text" class="form-control" placeholder="رقم التليفون" value="{{ $user->seller->social_link }}"  required="" name="social_link">
+                                            <label> {{ trans('frontend.dashboard.social_link') }} </label>
+                                            <input type="text" class="form-control" placeholder="  {{ trans('frontend.dashboard.social_link') }} " value="{{ $user->seller->social_link }}"  required="" name="social_link">
                                             @error('social_link')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -122,7 +122,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label>صورة البطاقة من الخلف</label>
+                                            <label> {{ trans('frontend.dashboard.identity_back') }} </label>
                                             <div class="row">
                                                 <div class="col-md-9">
                                                     <input type="file" class="form-control"  name="identity_back">
@@ -138,7 +138,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label>صورة البطاقة من الأمام</label>
+                                            <label> {{ trans('frontend.dashboard.identity_front') }} </label>
                                             <div class="row">
                                                 <div class="col-md-9">
                                                     <input type="file" class="form-control"  name="identity_front">
@@ -154,7 +154,7 @@
                                             @enderror
                                         </div>
                                     @endif
-                                    <button type="submit" class="btn btn-normal">تحديث</button>
+                                    <button type="submit" class="btn btn-normal"> {{ trans('frontend.dashboard.submit') }}</button>
                                 </form>
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                     <div class="dashboard-right">
                         <div class="dashboard">
                             <div class="page-title">
-                                <h2>تحديث كلمة المرور </h2>
+                                <h2>   {{ trans('frontend.dashboard.new_password') }}   </h2>
                             </div>
                             <div class="box-account box-info">
 
@@ -172,7 +172,7 @@
                                     @csrf
                                     @if($user->password != null)
                                         <div class="form-group">
-                                            <label>كلمة المرور الحالية </label>
+                                            <label>     {{ trans('frontend.dashboard.old_password') }} </label>
                                             <input type="password" class="form-control" required="" name="old_password">
                                             @error('old_password')
                                                 <span class="invalid-feedback" role="alert">
@@ -182,7 +182,7 @@
                                         </div>
                                     @endif
                                     <div class="form-group">
-                                        <label>كلمة مرور جديدة </label>
+                                        <label>    {{ trans('frontend.dashboard.password') }}  </label>
                                         <input type="password" class="form-control" required="" name="password">
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
@@ -191,7 +191,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label>   تأكيد كلمة المرور</label>
+                                        <label>        {{ trans('frontend.dashboard.password_confirmation') }}</label>
                                         <input type="password" class="form-control" required="" name="password_confirmation">
                                         @error('password_confirmation')
                                             <span class="invalid-feedback" role="alert">
@@ -199,7 +199,7 @@
                                             </span>
                                         @enderror
                                     </div>
-                                    <button type="submit" class="btn btn-normal">تحديث</button>
+                                    <button type="submit" class="btn btn-normal">{{ trans('frontend.dashboard.submit') }}</button>
                                 </form>
                             </div>
                         </div>

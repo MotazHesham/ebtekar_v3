@@ -157,7 +157,7 @@ class PlaylistController extends Controller
             $body_2 = 'تم أرجاع الفاتورة '. $to_playlist;
         }
         UserAlert::create([
-            'alert_text' => $raw->order_num . ' ' . $body_2,
+            'alert_text' => $raw->order_num . ' ' . $body_2 . ' عن طريق ' . auth()->user()->name ,
             'alert_link' => $route,
             'type' => 'playlist',
         ]);  

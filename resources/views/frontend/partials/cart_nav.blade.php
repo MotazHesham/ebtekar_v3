@@ -57,7 +57,7 @@
 <ul class="cart_total">
 <li>
     <div class="total">
-        الإجمالي
+        {{ trans('frontend.cart.total') }}
         <span>
             {{ $total ?? '' }} {{ $prices['price']['symbol'] ?? '' }}
         </span>
@@ -65,8 +65,8 @@
 </li>
 <li>
     <div class="buttons">
-        <a href="{{ route('frontend.cart') }}" class="btn btn-solid btn-sm">عرض السلة</a>
-        <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm ">الدفع</a>
+        <a href="{{ route('frontend.cart') }}" class="btn btn-solid btn-sm">{{ trans('frontend.cart.show_cart') }}</a>
+        <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm ">{{ trans('frontend.cart.payment_direct') }}</a>
     </div>
 </li>
 </ul>

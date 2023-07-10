@@ -8,11 +8,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>سلة التسوق</h2>
+                            <h2>{{ trans('frontend.cart.shoping_cart') }}</h2>
                             <ul>
-                                <li><a href="{{ route('frontend.dashboard') }}">لوحة التحكم</a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">{{ trans('frontend.about.dashboard') }}</a></li>
                                 <li><i class="fa fa-angle-double-right"></i></li>
-                                <li><a href="{{ route('frontend.cart') }}">سلة التسوق</a></li>
+                                <li><a href="{{ route('frontend.cart') }}">{{ trans('frontend.cart.shoping_cart') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -31,12 +31,12 @@
                     <table class="table cart-table table-responsive-xs">
                         <thead>
                             <tr class="table-head">
-                                <th scope="col">صورة المنتج</th>
-                                <th scope="col">اسم المنتج</th>
-                                <th scope="col">السعر</th>
-                                <th scope="col">العدد</th>
+                                <th scope="col">   {{ trans('frontend.cart.product_photos') }}</th>
+                                <th scope="col">   {{ trans('frontend.cart.product_name') }}</th>
+                                <th scope="col">{{ trans('frontend.cart.price') }}</th>
+                                <th scope="col">{{ trans('frontend.cart.quantity') }}</th>
                                 <th scope="col"></th>
-                                <th scope="col">الإجمالي</th>
+                                <th scope="col">{{ trans('frontend.cart.total') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,7 +119,7 @@
                     <table class="table cart-table table-responsive-md">
                         <tfoot>
                             <tr>
-                                <td>إجمالي السعر :</td>
+                                <td> {{ trans('frontend.cart.total_cost') }}:</td>
                                 <td>
                                     <h2 id="td-total-cost">  {{  $total ?? ''  }} {{ $prices['price']['symbol'] ?? '' }} </h2>
                                 </td>
@@ -129,8 +129,8 @@
                 </div>
             </div>
             <div class="row cart-buttons">
-                <div class="col-12"><a href="{{ route('frontend.search') }}" class="btn btn-normal">استمر في التسوق</a> <a
-                        href="{{ route('frontend.payment_select') }}" class="btn btn-normal ms-3">اتمام عملية الدفع</a></div>
+                <div class="col-12"><a href="{{ route('frontend.search') }}" class="btn btn-normal">  {{ trans('frontend.cart.shoping') }} </a> <a
+                        href="{{ route('frontend.payment_select') }}" class="btn btn-normal ms-3">  {{ trans('frontend.cart.payment') }}  </a></div>
             </div>
         </div>
     </section>

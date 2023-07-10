@@ -8,11 +8,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>حسابي</h2>
+                            <h2>{{ trans('frontend.dashboard.profile') }}</h2>
                             <ul>
-                                <li><a href="{{ route('frontend.dashboard') }}">لوحة التحكم</a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">  {{ trans('frontend.about.dashboard') }} </a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="javascript:void(0)"> طلباتي السابقة </a></li>
+                                <li><a href="javascript:void(0)"> {{ trans('frontend.orders.orders') }}  </a></li>
                             </ul>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                         <div class="card text-white bg-success">
                             <div class="card-body pb-0">
                                 <div class="text-value">{{ $calculate_commission['delivered'] }}</div>
-                                <div>الرصيد تم تسليمه
+                                <div>  {{ trans('frontend.orders.delivered') }}
                                 </div>
                                 <br />
                             </div>
@@ -46,7 +46,7 @@
                         <div class="card text-white bg-danger">
                             <div class="card-body pb-0">
                                 <div class="text-value">{{ $calculate_commission['requested'] }}</div>
-                                <div>الرصيد المطلوب
+                                <div> {{ trans('frontend.orders.requested') }}
                                 </div>
                                 <br />
                             </div>
@@ -56,7 +56,7 @@
                         <div class="card text-white bg-info">
                             <div class="card-body pb-0">
                                 <div class="text-value">{{ $calculate_commission['available'] }}</div>
-                                <div>   الرصيد المتاح 
+                                <div>     {{ trans('frontend.orders.available') }}
                                 </div>
                                 <br />
                             </div>
@@ -66,7 +66,7 @@
                         <div class="card text-white bg-warning">
                             <div class="card-body pb-0">
                                 <div class="text-value">{{ $calculate_commission['pending'] }}</div>
-                                <div>الرصيد المعلق
+                                <div> {{ trans('frontend.orders.pending') }}
                                 </div>
                                 <br />
                             </div>
@@ -80,21 +80,23 @@
                         <div class="card-header"> 
                             <div style="display: flex;justify-content: space-between">
                                 <div>الطلبات</div> 
-                                <button type="button" class="btn btn-normal" data-bs-toggle="modal" data-bs-target="#request_commission">طلب سحب</button>
+                                @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                    <button type="button" class="btn btn-normal" data-bs-toggle="modal" data-bs-target="#request_commission">طلب سحب</button>
+                                @endif
                                 <!-- Modal -->
                                 <div class="modal fade" id="request_commission" tabindex="-1" aria-labelledby="request_commissionLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="request_commissionLabel">طلب سحب</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <h5 class="modal-title" id="request_commissionLabel">{{ trans('frontend.orders.request_commission') }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
                                             </div>
                                             <div class="modal-body">
                                                 <form action="{{ route('frontend.orders.request_commission.store') }}" method="POST">
                                                     @csrf
                                                     
                                                     <div class="form-group">
-                                                        <label class=" control-label" for="payment_method">طريقة الدفع او السداد
+                                                        <label class=" control-label" for="payment_method">{{ trans('frontend.orders.payment_method') }}
                                                         </label> 
                                                         <select class="form-control demo-select2" name="payment_method" required> 
                                                             @foreach(\App\Models\CommissionRequest::PAYMENT_METHOD_SELECT as $key => $entry)
@@ -103,12 +105,12 @@
                                                         </select>  
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class=" control-label" for="payment_method">رقم التحويل
+                                                        <label class=" control-label" for="transfer_number"> {{ trans('frontend.orders.transfer_number') }}
                                                         </label> 
                                                         <input type="text" class="form-control" name="transfer_number" required>  
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class=" control-label" for="payment_method">الطلبات المسلمة  
+                                                        <label class=" control-label" for="payment_method">  {{ trans('frontend.orders.deliver_orders') }} 
                                                         </label> 
                                                         <div style="padding-bottom: 4px">
                                                             <span class="btn btn-normal btn-sm select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
@@ -121,7 +123,7 @@
                                                         </select>  
                                                     </div>
                                                     <hr>
-                                                    <button type="submit" class="btn btn-normal" >أرسال الطلب</button> 
+                                                    <button type="submit" class="btn btn-normal" >{{trans('frontend.orders.send_request')}}</button> 
                                                 </form>
                                             </div> 
                                         </div>
@@ -133,14 +135,14 @@
                             <table class="table cart-table table-responsive-xs">
                                 <thead>
                                     <tr class="table-head">
-                                        <th scope="col">المنتج</th>
-                                        <th scope="col">الوصف</th>
-                                        <th scope="col">السعر</th>
+                                        <th scope="col">{{ trans('frontend.orders.product') }}</th>
+                                        <th scope="col">{{ trans('frontend.orders.description') }}</th>
+                                        <th scope="col">{{ trans('frontend.orders.price') }}</th>
                                         @if(auth()->check() && auth()->user()->user_type == 'seller')
-                                            <th scope="col">نسبة الربح</th>
+                                            <th scope="col">   {{ trans('frontend.orders.commission') }}</th>
                                         @endif
-                                        <th scope="col">التفاصيل</th>
-                                        <th scope="col">الحالة</th>
+                                        <th scope="col">{{ trans('frontend.orders.details') }}</th>
+                                        <th scope="col">{{ trans('frontend.orders.status') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -157,7 +159,7 @@
                                                             alt="product" class="img-fluid  "></a>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('frontend.product',$product->slug)}}">رقم الطلب <span class="dark-data">{{$orderDetail->order->order_num ?? ''}}</span>
+                                                    <a href="{{ route('frontend.product',$product->slug)}}"> {{ trans('frontend.orders.order_num') }} <span class="dark-data">{{$orderDetail->order->order_num ?? ''}}</span>
                                                         <br>{{$product->name ?? ''}}</a>
                                                 </td>
                                                 <td>
@@ -169,7 +171,7 @@
                                                     </td>
                                                 @endif
                                                 <td>
-                                                    <span>العدد: {{ $orderDetail->quantity }}</span>
+                                                    <span>{{ trans('frontend.orders.quantity')}}: {{ $orderDetail->quantity }}</span>
                                                     <br>
                                                     <span> {{ $orderDetail->variation }} </span>
                                                 </td>
@@ -177,7 +179,7 @@
                                                     <div class="responsive-data">
                                                         <b>{{ $orderDetail->total_cost($orderDetail->order->exchange_rate) }} {{ $orderDetail->order->symbol }}</b>
                                                         <br>
-                                                        <span> {{ $orderDetail->variation }} </span> | العدد: {{ $orderDetail->quantity }}</span>
+                                                        <span> {{ $orderDetail->variation }} </span> | {{ trans('frontend.orders.quantity')}}: {{ $orderDetail->quantity }}</span>
                                                     </div>
                                                     <span class="dark-data">{{ $orderDetail->order->delivery_status ? trans('global.delivery_status.status.' . $orderDetail->order->delivery_status) : '' }}</span>
                                                         @if($orderDetail->order->delivery_status == 'delivered') ({{$orderDetail->order->done_time}}) @endif

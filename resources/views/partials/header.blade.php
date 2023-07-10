@@ -165,7 +165,7 @@
             <div class="list-group list-group-flush">
                 <div
                     class="list-group-item border-start-4 border-start-secondary bg-light text-center fw-bold text-medium-emphasis text-uppercase small dark:bg-white dark:bg-opacity-10 dark:text-medium-emphasis">
-                    مراحل التشغيل <a href="#">عرض الكل</a>
+                    مراحل التشغيل <a href="{{ route('admin.user-alerts.playlist') }}">عرض الكل</a>
                 </div>
 
                 @if (count(
@@ -189,7 +189,7 @@
             <div class="list-group list-group-flush">
                 <div
                     class="list-group-item border-start-4 border-start-secondary bg-light text-center fw-bold text-medium-emphasis text-uppercase small dark:bg-white dark:bg-opacity-10 dark:text-medium-emphasis">
-                    الفواتير اللتي أرسلتها <a href="#">عرض الكل</a>
+                    الفواتير اللتي أرسلتها <a href="{{ route('admin.user-alerts.history') }}">عرض الكل</a>
                 </div>
 
                 @if (count($history = \Auth::user()->userUserAlerts()->where('type', 'history')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)

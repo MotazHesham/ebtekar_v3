@@ -8,11 +8,31 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>عن ابتكار</h2>
+                            <h2>
+                                @if($site_settings->id  == 2)
+                                    {{ trans('frontend.about.ertgal') }}
+                                @elseif($site_settings->id  == 3)
+                                    {{ trans('frontend.about.figures') }}
+                                @elseif($site_settings->id  == 4)
+                                    {{ trans('frontend.about.shirti') }}
+                                @else
+                                    {{ trans('frontend.about.ebtekar') }}
+                                @endif
+                            </h2>
                             <ul>
-                                <li><a href="{{route('home')}}">الرئيسية</a></li>
+                                <li><a href="{{route('home')}}">{{ trans('frontend.about.home') }}</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="javascript:void(0)">عن ابتكار</a></li>
+                                <li><a href="javascript:void(0)">
+                                    @if($site_settings->id  == 2)
+                                        {{ trans('frontend.about.ertgal') }}
+                                    @elseif($site_settings->id  == 3)
+                                        {{ trans('frontend.about.figures') }}
+                                    @elseif($site_settings->id  == 4)
+                                        {{ trans('frontend.about.shirti') }}
+                                    @else
+                                        {{ trans('frontend.about.ebtekar') }}
+                                    @endif
+                                </a></li>
                             </ul>
                         </div>
                     </div>
@@ -31,7 +51,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <p class="mb-2">{{ $general_settings->description }}</p>
+                    <p class="mb-2">{{ $site_settings->description }}</p>
                 </div>
             </div>
         </div>
@@ -44,7 +64,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="slide-1 no-arrow">
-                        @foreach($general_settings->photos as $key => $media)
+                        @foreach($site_settings->photos as $key => $media)
                             <div>
                                 <div class="testimonial-contain">
                                     <div class="media">

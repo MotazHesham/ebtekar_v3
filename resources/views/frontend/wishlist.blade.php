@@ -8,11 +8,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>قائمة الامنيات</h2>
+                            <h2> {{ trans('frontend.wishlists.list') }} </h2>
                             <ul>
-                                <li><a href="{{ route('frontend.dashboard') }}">لوحة التحكم</a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">  {{ trans('frontend.about.dashboard') }} </a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="{{ route('frontend.wishlist') }}">قائمة الامنيات</a></li>
+                                <li><a href="{{ route('frontend.wishlist') }}">  {{ trans('frontend.wishlists.list') }} </a></li>
                             </ul>
                         </div>
                     </div>
@@ -30,9 +30,9 @@
                     <table class="table cart-table table-responsive-xs">
                         <thead>
                             <tr class="table-head">
-                                <th scope="col">الصورة</th>
-                                <th scope="col">اسم المنتج</th>
-                                <th scope="col">السعر</th>
+                                <th scope="col">{{ trans('frontend.wishlists.photo') }} </th>
+                                <th scope="col">{{ trans('frontend.wishlists.product_name') }} </th>
+                                <th scope="col">{{ trans('frontend.wishlists.price') }} </th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -112,8 +112,8 @@
                 </div>
             </div>
             <div class="row wishlist-buttons">
-                <div class="col-12"><a href="{{ route('frontend.search') }}" class="btn btn-normal">الاستمرار في التسوق</a> <a
-                        href="{{ route('frontend.cart') }}" class="btn btn-normal"> عربة التسوق</a></div>
+                <div class="col-12"><a href="{{ route('frontend.search') }}" class="btn btn-normal"> {{ trans('frontend.wishlists.shoping') }}  </a> <a
+                        href="{{ route('frontend.cart') }}" class="btn btn-normal">    {{ trans('frontend.wishlists.cart') }} </a></div>
             </div>
         </div>
     </section>

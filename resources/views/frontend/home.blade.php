@@ -36,7 +36,7 @@
 
     <!--title start-->
     <div class="title8 section-big-pt-space">
-        <h4>جديد <span>المنتجات</span> </h4>
+        <h4>{{ trans('frontend.home.new_products') }}</h4>
     </div>
     <!--title end-->
 
@@ -96,11 +96,7 @@
                                     </div>
                                     <div class="product-detail product-detail2 ">
                                         <ul>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
+                                            @include('frontend.partials.rate',['rate' => $product->rating])
                                         </ul>
                                         <a href="{{ route('frontend.product', $product->slug) }}">
                                             <h3> {{ $product->name }} </h3>
@@ -198,12 +194,7 @@
                                                                         <div>
                                                                             <div class="product-detail">
                                                                                 <ul class="rating">
-                                                                                    <li><i class="fa fa-star"></i></li>
-                                                                                    <li><i class="fa fa-star"></i></li>
-                                                                                    <li><i class="fa fa-star"></i></li>
-                                                                                    <li><i class="fa fa-star"></i></li>
-                                                                                    <li><i class="fa fa-star-o"></i>
-                                                                                    </li>
+                                                                                    @include('frontend.partials.rate',['rate' => $product->rating])
                                                                                 </ul>
                                                                                 <a
                                                                                     href="{{ route('frontend.product', $product->slug) }}">
@@ -288,7 +279,7 @@
 
     <!--title start-->
     <div class="title8 section-big-pt-space">
-        <h4>الاكثر <span>مبيعا</span></h4>
+        <h4>{{ trans('frontend.home.most_selling') }}</h4>
     </div>
     <!--title end-->
 
@@ -351,11 +342,7 @@
                                     </div>
                                     <div class="product-detail product-detail2 ">
                                         <ul>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
+                                            @include('frontend.partials.rate',['rate' => $product->rating])
                                         </ul>
                                         <a href="{{ route('frontend.product', $product->slug) }}">
                                             <h3> {{ $product->name }} </h3>

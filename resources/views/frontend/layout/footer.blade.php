@@ -32,42 +32,42 @@
                         </div>
                         <div class="footer-box">
                             <div class="footer-title">
-                                <h5>حسابي</h5>
+                                <h5>{{ trans('frontend.footer.profile') }}</h5>
                             </div>
                             <div class="footer-contant">
                                 <ul>
-                                    <li><a href="{{ route('home') }}">الرئيسية</a></li>
+                                    <li><a href="{{ route('home') }}">{{ trans('frontend.footer.home') }}</a></li>
                                     <li>
                                         <a href="{{ route('frontend.about') }}">   
                                             @if($site_settings->id  == 2)
-                                                عن أرتجال
+                                                {{ trans('frontend.about.ertgal') }}
                                             @elseif($site_settings->id  == 3)
-                                                عن فيجرز
+                                                {{ trans('frontend.about.figures') }}
                                             @elseif($site_settings->id  == 4)
-                                                عن شيرتي  
+                                                {{ trans('frontend.about.shirti') }}
                                             @else
-                                                عن أبتكار 
+                                                {{ trans('frontend.about.ebtekar') }}
                                             @endif
                                         </a>
                                     </li>
-                                    <li><a href="{{ route('frontend.policies','support') }}">سياسة الدعم</a></li>
-                                    <li><a href="{{ route('frontend.policies','returned') }}">سياسة المرتجعات</a></li>
-                                    <li><a href="{{ route('frontend.policies','terms') }}">سياسة البنود</a></li>
-                                    <li><a href="{{ route('frontend.policies','seller') }}">سياسة البائع</a></li>
+                                    <li><a href="{{ route('frontend.policies','support') }}">{{ trans('frontend.footer.support') }} </a></li>
+                                    <li><a href="{{ route('frontend.policies','returned') }}">{{ trans('frontend.footer.returned') }} </a></li>
+                                    <li><a href="{{ route('frontend.policies','terms') }}">{{ trans('frontend.footer.terms') }} </a></li>
+                                    <li><a href="{{ route('frontend.policies','seller') }}">{{ trans('frontend.footer.seller') }} </a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="footer-box">
                             <div class="footer-title">
-                                <h5>تواصل معنا</h5>
+                                <h5> {{ trans('frontend.footer.contact_us') }}  </h5>
                             </div>
                             <div class="footer-contant">
                                 <ul class="contact-list">
                                     <li><i class="fa fa-map-marker"></i>
                                         {{ $site_settings->address }}
                                     </li>
-                                    <li><i class="fa fa-phone"></i>تليفون: <span>{{ $site_settings->phone_number}}</span></li>
-                                    <li><i class="fa fa-envelope-o"></i>بريد الكتروني: {{ $site_settings->email }}
+                                    <li><i class="fa fa-phone"></i>{{ trans('frontend.footer.phone') }}: <span>{{ $site_settings->phone_number}}</span></li>
+                                    <li><i class="fa fa-envelope-o"></i> {{ trans('frontend.footer.email') }}: {{ $site_settings->email }}
                                     </li>
 
                                 </ul>
@@ -75,7 +75,7 @@
                         </div>
                         <div class="footer-box">
                             <div class="footer-title">
-                                <h5>القائمة البريدية</h5>
+                                <h5>{{ trans('frontend.footer.subscribe') }} </h5>
                             </div>
                             <div class="footer-contant">
                                 <div class="newsletter-second">
@@ -84,19 +84,20 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <input type="text" name="name" class="form-control"
-                                                    placeholder="الاسم بالكامل">
+                                                    placeholder="{{ trans('frontend.footer.name') }}">
                                                 <span class="input-group-text"><i class="ti-user"></i></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <input type="email" name="email" class="form-control"
-                                                    placeholder="البريد الإلكتروني">
+                                                    placeholder="{{ trans('frontend.footer.email') }}">
                                                 <span class="input-group-text"><i class="ti-email"></i></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-solid btn-sm">اشترك الان
+                                            <button type="submit" class="btn btn-solid btn-sm"> 
+                                                {{ trans('frontend.footer.subscribe_now') }}
                                             </button>
                                         </div>
                                     </form>

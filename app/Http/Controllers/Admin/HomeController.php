@@ -50,7 +50,7 @@ class HomeController extends Controller
         }
 
         if($order->playlist_status == $request->type){
-            if($authenticated == auth()->user()->id || auth()->user()->user_type == 'admin'){
+            if($authenticated == auth()->user()->id || auth()->user()->is_admin){
                 if($order->playlist_status == 'design'){
                     $next_type = 'manufacturing';
                 }elseif($order->playlist_status == 'manufacturing'){
@@ -60,8 +60,8 @@ class HomeController extends Controller
                 }elseif($order->playlist_status == 'shipment'){
                     $next_type = 'finish';
 
-                    $order->delivery_man = $request->delivery_man_id;
-                    $order->send_to_delivery_date = date('Y-m-d H:i:s');
+                    $order->delivery_man_id = $request->delivery_man_id;
+                    $order->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
                     $order->delivery_status = 'on_delivery';
 
                     $order->save();

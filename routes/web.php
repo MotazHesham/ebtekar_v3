@@ -65,6 +65,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // User Alerts
     Route::delete('user-alerts/destroy', 'UserAlertsController@massDestroy')->name('user-alerts.massDestroy');
+    Route::get('user-alerts/history', 'UserAlertsController@history')->name('user-alerts.history');
+    Route::get('user-alerts/playlist', 'UserAlertsController@playlist')->name('user-alerts.playlist');
     Route::get('user-alerts/read', 'UserAlertsController@read');
     Route::resource('user-alerts', 'UserAlertsController', ['except' => ['edit', 'update']]);
 
@@ -288,6 +290,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('attributes', 'AttributesController');
 
     // Reviews
+    Route::post('reviews/update_statuses', 'ReviewsController@update_statuses')->name('reviews.update_statuses');
     Route::resource('reviews', 'ReviewsController', ['except' => ['create', 'store', 'edit', 'update', 'show', 'destroy']]);
 
     // Playlist

@@ -222,7 +222,7 @@
         <a href="javascript:void(0)" class="overlay" onclick="closeCart()"></a>
         <div class="cart-inner">
             <div class="cart_top">
-                <h3>سلة التسوق</h3>
+                <h3>{{ trans('frontend.cart.shoping_cart') }}</h3>
                 <div class="close-cart">
                     <a href="javascript:void(0)" onclick="closeCart()">
                         <i class="fa fa-times" aria-hidden="true"></i>
@@ -241,7 +241,7 @@
         <a href="javascript:void(0)" class="overlay" onclick="closeWishlist()"></a>
         <div class="cart-inner">
             <div class="cart_top">
-                <h3>المفضلة</h3>
+                <h3>{{ trans('frontend.app.favorites') }}</h3>
                 <div class="close-cart">
                     <a href="javascript:void(0)" onclick="closeWishlist()">
                         <i class="fa fa-times" aria-hidden="true"></i>
@@ -288,7 +288,7 @@
                 <ul class="cart_total">
                     <li>
                         <div class="buttons">
-                            <a href="{{ route('frontend.wishlist')}}" class="btn btn-solid btn-block btn-md">عرض قائمتي المفضلة</a>
+                            <a href="{{ route('frontend.wishlist')}}" class="btn btn-solid btn-block btn-md">{{ trans('frontend.app.show_favorites') }}</a>
                         </div>
                     </li>
                 </ul>
@@ -346,13 +346,15 @@
         @endphp
         <div class="product-notification" id="dismiss">
             <span onclick="dismiss();" class="btn-close" aria-hidden="true"></span>
-            <div class="media">
-                <img class="me-2" src="{{ $flash_deal_img }}" alt="">
-                <div class="media-body">
-                    <h5 class="mt-0 mb-1">{{ $flash_deal_product->name }}</h5> 
-                    <?php echo $flash_deal_product->calc_price_as_text(); ?>  
+            <a href="{{ route('frontend.product',$flash_deal_product->slug) }}">
+                <div class="media">
+                    <img class="me-2" src="{{ $flash_deal_img }}" alt="">
+                    <div class="media-body" style="color:black">
+                        <h5 class="mt-0 mb-1">{{ $flash_deal_product->name }}</h5> 
+                        <?php echo $flash_deal_product->calc_price_as_text(); ?>  
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>  
     @endif
     <!-- flash Deal product -->
