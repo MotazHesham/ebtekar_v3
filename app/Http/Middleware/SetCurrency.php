@@ -18,6 +18,27 @@ class SetCurrency
      */
     public function handle(Request $request, Closure $next): Response
     { 
+        
+        if(\Request::route()->getName() == 'updating_website'){
+            return $next($request);
+        }
+
+        if(request('password')){
+            session()->put('password',request('password')); 
+            if(request('password') != '1219'){ 
+                return redirect()->route('updating_website');
+            }
+        }elseif(session('password')){
+            if(session('password') != '1219'){ 
+                return redirect()->route('updating_website');
+            }
+        }else{
+            if(\Request::route()->getName() == 'updating_website'){
+                return $next($request);
+            }else{
+                return redirect()->route('updating_website');
+            }
+        }
 
         $current_user_ip = request()->ip();
         // $current_user_ip =  '102.177.185.0'; //emarats

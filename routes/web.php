@@ -15,6 +15,10 @@ Route::get('/home', function () {
 // related to push notification via firebase
 Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token'); 
 
+Route::get('updating_website', function(){
+    return view('update_website');
+})->name('updating_website'); 
+
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
 Auth::routes();
