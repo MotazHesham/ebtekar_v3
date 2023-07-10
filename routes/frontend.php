@@ -11,83 +11,8 @@ use Illuminate\Support\Facades\DB;
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
-|
-
-/*
-    fixing old db to newer
+| 
 */
-
-// disable the observers first
-Route::get('mixed','TransferDatabaseController@mixed');
-// transfer the attributes manualy 
-// transfer the social manualy  and the social_receipt_social
-Route::get('transfer_users','TransferDatabaseController@transfer_users');
-Route::get('transfer_categories','TransferDatabaseController@transfer_categories');
-Route::get('transfer_sub_categories','TransferDatabaseController@transfer_sub_categories');
-Route::get('transfer_sub_sub_categories','TransferDatabaseController@transfer_sub_sub_categories');
-Route::get('transfer_products','TransferDatabaseController@transfer_products');
-Route::get('transfer_products_stock','TransferDatabaseController@transfer_products_stock');
-Route::get('transfer_orders','TransferDatabaseController@transfer_orders');
-Route::get('transfer_orders_details','TransferDatabaseController@transfer_orders_details');
-Route::get('transfer_commission_request','TransferDatabaseController@transfer_commission_request');
-Route::get('receipt_products','TransferDatabaseController@receipt_products');
-Route::get('receipt_clients','TransferDatabaseController@receipt_clients');
-Route::get('receipt_client_products','TransferDatabaseController@receipt_client_products');
-Route::get('receipt_socials','TransferDatabaseController@receipt_socials');
-Route::get('receipt_socials_socials','TransferDatabaseController@receipt_socials_socials');
-Route::get('receipt_social_products','TransferDatabaseController@receipt_social_products');
-Route::get('receipt_outgoings','TransferDatabaseController@receipt_outgoings'); 
-Route::get('receipt_price_view','TransferDatabaseController@receipt_price_view'); 
-Route::get('receipt_companies','TransferDatabaseController@receipt_companies'); 
-// return the observers on
-// empty autdit logs
-
-
-
-
-
-
-
-
-Route::get('fix_receipt_client_product',function(){
-    // add receipt_product_id column
-    $data = \App\Models\ReceiptClientProduct::all();
-    foreach($data as $row){
-        $receipt_product = \App\Models\ReceiptSocialProduct::where('name',$row->description)->first();
-        if($receipt_product){
-            $row->receipt_product_id = $receipt_product->id;
-            $row->save();
-        }
-    }
-    return 1;
-});
-Route::get('fix_products',function(){
-    $products = \App\Models\Product::get();
-
-    foreach($products as $product){
-
-        // change from attribute_id to attribute
-            // if($product->choice_options != null){
-                // $product->choice_options = str_replace('attribute_id','attribute',$product->choice_options);
-                // $choice_options = json_decode($product->choice_options) ;
-                // foreach ($choice_options as $key => $choice){
-                //     if(\App\Models\Attribute::find($choice->attribute)){
-                //         $choice_options[$key]->attribute = \App\Models\Attribute::find($choice->attribute)->name;
-                //     }
-                //     $product->choice_options = json_encode($choice_options);
-                // }
-            // }
-        // ---------
-
-        // change from amount to flat
-            if($product->discount_type == 'amount'){
-                $product->discount_type = 'flat';
-            }
-        // ---------
-        $product->save();
-    }
-    return 1;
-});
 
 
 Route::get('/', 'Frontend\HomeController@index')->name('home');

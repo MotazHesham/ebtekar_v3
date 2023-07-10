@@ -16,8 +16,8 @@ class CreateSellersTable extends Migration
             $table->integer('order_out_website')->nullable();
             $table->integer('order_in_website')->nullable();
             $table->string('qualification')->nullable();
-            $table->string('social_name');
-            $table->string('social_link');
+            $table->string('social_name')->nullable();
+            $table->string('social_link')->nullable();
             $table->string('seller_code')->nullable();
             $table->timestamps();
             $table->softDeletes();
