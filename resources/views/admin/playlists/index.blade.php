@@ -34,15 +34,17 @@
             visibility: hidden;
             transition: all 0.3s;
             -webkit-transition: all 0.3s;
-        }   
+        }
+
         .container-scrollable {
-            font-weight:bolder;
-            background:white;
+            font-weight: bolder;
+            background: white;
             height: 100px;
             overflow-y: scroll;
             box-shadow: 0px 4px 5px #bd808063;
             border-radius: 7px;
         }
+
         .container-scrollable::-webkit-scrollbar {
             width: 5px;
         }
@@ -80,19 +82,6 @@
             background-color: #9b4c4c !important;
             color: white !important;
         }
-        .skewed {
-            position: absolute;
-            top: 83px;
-            bottom: 0;
-            right: 0;
-            left: 0px;
-            width: 109%;
-            height: 8%;
-            background: #dfd55b;
-            z-index: 0;
-            transform: skewY(225deg);
-            transform-origin: top right;
-        }
     </style>
 @endsection
 @section('content')
@@ -102,7 +91,7 @@
         $title = '';
         $title_send = '';
         $back_type = '';
-        $next_type = '';   
+        $next_type = '';
         if ($type == 'design') {
             $title = 'الديزانر';
             $title_send = 'أرسال لقائمة التصنيع';
@@ -129,25 +118,27 @@
             $back_type = 'prepare';
         }
         
-    @endphp 
-            
-    @include('admin.playlists.search') 
+    @endphp
+
+    @include('admin.playlists.search')
 
     <div class="card">
         <div class="card-header">
-            {{ trans('global.list') }} {{ trans('cruds.playlist.menu.'.$type) }}
+            {{ trans('global.list') }} {{ trans('cruds.playlist.menu.' . $type) }}
         </div>
 
         <div class="card-body">
 
-            @if($view == 'by_date')
+            @if ($view == 'by_date')
                 <div class="row">
                     @foreach ($dates as $key0 => $playlists)
                         <div class="col-md-2">
-                            <div class="card-header" id="heading{{$key0}}">
+                            <div class="card-header" id="heading{{ $key0 }}">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-dark playlist-dates" type="button" data-toggle="collapse" data-target="#collapse{{$key0}}" aria-expanded="false" aria-controls="collapse{{$key0}}">
-                                        {{$key0}}  - [ {{count($playlists)}}  order]
+                                    <button class="btn btn-dark playlist-dates" type="button" data-toggle="collapse"
+                                        data-target="#collapse{{ $key0 }}" aria-expanded="false"
+                                        aria-controls="collapse{{ $key0 }}">
+                                        {{ $key0 }} - [ {{ count($playlists) }} order]
                                     </button>
                                 </h2>
                             </div>
@@ -156,41 +147,44 @@
                 </div>
 
 
-                <div> 
-                    {{ $dates->appends(request()->input())->links() }} 
+                <div>
+                    {{ $dates->appends(request()->input())->links() }}
                 </div>
             @endif
 
             @if ($view != 'by_date')
-                <div> 
-                    {{ $playlists->appends(request()->input())->links() }} 
+                <div>
+                    {{ $playlists->appends(request()->input())->links() }}
                 </div>
-            @endif 
+            @endif
             <div class="row">
                 @if ($view == 'by_date')
                     @foreach ($dates as $key0 => $playlists)
                         <div class="card">
-                            <div id="collapse{{ $key0 }}" class="collapse" aria-labelledby="heading{{ $key0 }}">
+                            <div id="collapse{{ $key0 }}" class="collapse"
+                                aria-labelledby="heading{{ $key0 }}">
                                 <div class="card-body">
-                                    <div class="row"> 
-                                        <h5>{{$key0}}</h5>
+                                    <div class="row">
+                                        <h5>{{ $key0 }}</h5>
                                         <hr>
                                         @include('admin.playlists.partials')
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 @else
                     @include('admin.playlists.partials')
-                @endif 
+                @endif
             </div>
             @if ($view != 'by_date')
-                <div> 
-                        {{ $playlists->appends(request()->input())->links() }} 
+                <div>
+                    {{ $playlists->appends(request()->input())->links() }}
                 </div>
-            @endif 
+            @endif
 
+        </div>
+    </div>
 
 @endsection
 @section('scripts')
@@ -198,13 +192,13 @@
         $(document).ready(function() {
             $('.order-card').hover(function() {
                 var id = $(this).data('id');
-                $(this).css('background','#00000032');
+                $(this).css('background', '#00000032');
                 $('#order-card-actions-' + id).css('top', '10px');
                 $('#order-card-actions-' + id).css('visibility', 'visible');
             });
             $('.order-card').mouseleave(function() {
                 var id = $(this).data('id');
-                $(this).css('background','#fff');
+                $(this).css('background', '#fff');
                 $('#order-card-actions-' + id).css('top', '-30px');
                 $('#order-card-actions-' + id).css('visibility', 'hidden');
             });
@@ -215,17 +209,27 @@
         }
 
 
-        function change_status(id,model_type,type,condition){
-            $.post('{{ route('admin.playlists.update_playlist_status') }}', {_token:'{{ csrf_token() }}', id:id, model_type:model_type, status:type, condition:condition}, function(data){
-                if(data == 1){
-                    location.reload(); 
+        function change_status(id, model_type, type, condition) {
+            $.post('{{ route('admin.playlists.update_playlist_status') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                model_type: model_type,
+                status: type,
+                condition: condition
+            }, function(data) {
+                if (data == 1) {
+                    location.reload();
                     showAlert('success', 'تم الأرسال');
                 }
             });
         }
 
-        function show_details(id, model_type){
-            $.post('{{ route('admin.playlists.show_details') }}', {_token:'{{ csrf_token() }}', id:id, model_type:model_type}, function(data){
+        function show_details(id, model_type) {
+            $.post('{{ route('admin.playlists.show_details') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                model_type: model_type
+            }, function(data) {
                 $('#AjaxModal .modal-dialog').html(null);
                 $('#AjaxModal').modal('show');
                 $('#AjaxModal .modal-dialog').html(data);

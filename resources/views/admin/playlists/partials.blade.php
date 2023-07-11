@@ -1,4 +1,3 @@
-
 @foreach ($playlists as $key => $item)
     @php
         if ($type == 'design') {
@@ -9,17 +8,14 @@
             $authenticated = $item['preparer_id'];
         } elseif ($type == 'shipment') {
             $authenticated = $item['shipmenter_id'];
-        } 
-
+        }
+        
     @endphp
 
     {{-- order card --}}
     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
         <div class="card order-card" data-id="{{ $key }}" id="order-card-{{ $key }}"
-            style="margin-bottom:30px">
-            {{-- <section>
-                <div class="skewed"></div>
-            </section> --}}
+            style="margin-bottom:30px"> 
             {{-- code --}}
             <div class=" order-card-left-side text-center mb-3"
                 style="color: white;margin-bottom:20px;
@@ -50,42 +46,46 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <span class="badge badge-light text-dark mb-1">{{ __('Note') }}</span> 
-                            <div class="container-scrollable" 
-                                ><?php echo $item['note']; ?></div>
+                            <span class="badge badge-light text-dark mb-1">{{ __('Note') }}</span>
+                            <div class="container-scrollable"><?php echo $item['note']; ?></div>
                         </div>
-                        <div class="col-md-8"> 
-                            <span class="badge badge-light text-dark mb-1">{{ __('Description') }}</span> 
-                            <div class="container-scrollable" >
+                        <div class="col-md-8">
+                            <span class="badge badge-light text-dark mb-1">{{ __('Description') }}</span>
+                            <div class="container-scrollable">
                                 <?php echo $item['description']; ?>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
 
             {{-- action Buttons --}}
-            <div class="order-card-actions" id="order-card-actions-{{ $key }}"> 
+            <div class="order-card-actions" id="order-card-actions-{{ $key }}">
                 @if (auth()->user()->is_admin || $authenticated == auth()->user()->id)
-                    <a class="btn btn-danger btn-sm rounded-pill text-white" onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')" >
+                    <a class="btn btn-danger btn-sm rounded-pill text-white"
+                        onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">
                         {{ $title_back }}
                     </a>
-                    <a class="btn btn-warning btn-sm rounded-pill text-white" @if($item['printing_times'] == 0) onclick="alert('قم بالطباعة أولا')"  @else onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send') @endif" >
+                    <a class="btn btn-warning btn-sm rounded-pill text-white"
+                        @if ($item['printing_times'] == 0) onclick="alert('قم بالطباعة أولا')"  @else onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send')" @endif>
                         {{ $title_send }}
                     </a>
-                @endif 
+                @endif
                 @if ($type == 'design')
-                    <a target="_blanc" class="btn btn-light  btn-sm rounded-pill " href="{{ route('admin.playlists.print', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
+                    <a target="_blanc" class="btn btn-light  btn-sm rounded-pill "
+                        href="{{ route('admin.playlists.print', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
                         {{ trans('global.print') }}
                     </a>
                 @endif
-                <a class="btn btn-success btn-sm rounded-pill text-white" onclick="show_details('{{ $item['id'] }}','{{ $item['model_type'] }}')" title="{{ __('Order Details') }}">
+                <a class="btn btn-success btn-sm rounded-pill text-white"
+                    onclick="show_details('{{ $item['id'] }}','{{ $item['model_type'] }}')"
+                    title="{{ __('Order Details') }}">
                     أظهارالصور
                 </a>
-            </div> 
+            </div>
         </div>
     </div>
 @endforeach

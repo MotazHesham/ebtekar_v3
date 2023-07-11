@@ -17,7 +17,7 @@ class SetCurrency
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {  
+    {
 
         // $current_user_ip =  '102.177.185.0'; //emarats
         // $current_user_ip =  '78.154.192.0'; //Kuwit
