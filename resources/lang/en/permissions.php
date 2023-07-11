@@ -75,6 +75,7 @@ return [
     'setting_access' => 'قائمة الأعدادات', 
     'website_setting_create' => 'أضافة موقع',
     'website_setting_edit' => 'تعديل موقع', 
+    'website_setting_show' => 'عرض موقع', 
     'website_setting_access' => 'قائمة المواقع',
     'customer_create' => 'أضافة عميل',
     'customer_edit' => 'تعديل عميل',
