@@ -84,7 +84,8 @@ class ReceiptClientProductController extends Controller
 
         $receiptClientProduct->load('receipts');
 
-        return view('admin.receiptClientProducts.edit', compact('receiptClientProduct'));
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+        return view('admin.receiptClientProducts.edit', compact('receiptClientProduct','websites'));
     }
 
     public function update(UpdateReceiptClientProductRequest $request, ReceiptClientProduct $receiptClientProduct)

@@ -110,7 +110,8 @@ class ReceiptSocialProductController extends Controller
 
         $receiptSocialProduct->load('receipts');
 
-        return view('admin.receiptSocialProducts.edit', compact('receiptSocialProduct'));
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+        return view('admin.receiptSocialProducts.edit', compact('receiptSocialProduct','websites'));
     }
 
     public function update(UpdateReceiptSocialProductRequest $request, ReceiptSocialProduct $receiptSocialProduct)
