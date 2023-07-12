@@ -60,8 +60,17 @@
                                     <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> تذكرني
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-normal">دخول</button>
+                            <button type="submit" class="btn btn-normal">دخول</button> 
                             <a class="float-end txt-default mt-2" href="{{ route('password.request') }}">نسيت كلمة المرور</a>
+                            <div class="row mt-4
+                            ">
+                                <div class="col-md-6">
+                                    <a href="{{ route('social.login', ['provider' => 'facebook']) }}" class="btn btn-info btn-block" style="background: #0A82ED"><i class="fa fa-facebook" style="color:white"></i></a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ route('social.login', ['provider' => 'google']) }}" class="btn btn-danger btn-block"><i class="fa fa-google"></i></a> 
+                                </div>
+                            </div>
                         </form>
 
                         <a href="{{ route('register') }}" class="txt-default pt-3 d-block">تسجيل مستخدم جديد</a>

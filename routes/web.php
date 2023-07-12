@@ -16,7 +16,12 @@ Route::get('/home', function () {
 Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token');  
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
+
 Auth::routes();
+
+//social - login
+Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
+Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () {
     Route::get('/', 'HomeController@index')->name('home');

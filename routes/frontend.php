@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('/', 'Frontend\HomeController@index')->name('home');
 
+
 // subscribers
 
 Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
