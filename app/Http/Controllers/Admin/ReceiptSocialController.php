@@ -80,7 +80,7 @@ class ReceiptSocialController extends Controller
         Excel::store(new ReceiptSocialResultsExport($rows), $path);  
         $excelFile->addMedia(storage_path('app/' . $path))->toMediaCollection('result_file'); 
         $excelFile->save();
-        return $excelFile;
+        return redirect()->route('admin.excel-files.index');
 
     }
 
@@ -186,7 +186,11 @@ class ReceiptSocialController extends Controller
         $receipt->extra_commission = $sum3;
         $receipt->save();
 
-        alert(trans('flash.deleted'),'','success'); 
+            
+        // store the receipt social id in session so when redirect to the table open the popup to view products after delete
+        session()->put('update_receipt_id',$receipt->id);
+
+        toast(trans('flash.deleted'),'success'); 
         return 1;
     }
 
@@ -260,7 +264,11 @@ class ReceiptSocialController extends Controller
             $receipt->commission = $sum2;
             $receipt->extra_commission = $sum3;
             $receipt->save(); 
-            alert('Product has been Updated successfully','','success'); 
+            
+            // store the receipt social id in session so when redirect to the table open the popup to view products after edit
+            session()->put('update_receipt_id',$receipt->id);
+
+            toast(trans('flash.global.update_title'),'success');
             return redirect()->route('admin.receipt-socials.index');
         }
     }
@@ -270,8 +278,9 @@ class ReceiptSocialController extends Controller
             $receipt = ReceiptSocial::find($request->id);
             $products = ReceiptSocialProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
             $receipt_id = $request->id;
-            return view('admin.receiptSocials.partials.add_product',compact('products','receipt_id'));
-        }else{ 
+            $order_num = $receipt->order_num;
+            return view('admin.receiptSocials.partials.add_product',compact('products','receipt_id','order_num'));
+        }else{  
             $receipt = ReceiptSocial::find($request->receipt_id);
             
             if (!auth()->user()->is_admin) {
@@ -323,8 +332,15 @@ class ReceiptSocialController extends Controller
             $receipt->commission = $sum2;
             $receipt->extra_commission = $sum3;
             $receipt->save();
-
-            alert(trans('flash.global.success_title'),trans('flash.global.success_body'),'success');
+            if($request->has('add_more')){
+                session()->put('store_receipt_id',$receipt->id);
+                session()->put('update_receipt_id',null);
+            }
+            if($request->has('save_close')){
+                session()->put('store_receipt_id',null);
+                session()->put('update_receipt_id',$receipt->id);
+            }
+            toast(trans('flash.global.success_title'),'success');
             return redirect()->route('admin.receipt-socials.index');
         }
     }
@@ -338,6 +354,11 @@ class ReceiptSocialController extends Controller
         $countries = Country::where('status',1)->get()->groupBy('type'); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
         
+        if($request->has('cancel_popup')){
+            session()->put('store_receipt_id',null);
+            session()->put('update_receipt_id',null);
+        }
+
         $phone = null;
         $client_name = null;
         $order_num = null;
@@ -617,6 +638,9 @@ class ReceiptSocialController extends Controller
     { 
         $receiptSocial = ReceiptSocial::create($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
+
+        // store the receipt social id in session so when redirect to the table open the popup to add products
+        session()->put('store_receipt_id',$receiptSocial->id);
 
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-socials.index');

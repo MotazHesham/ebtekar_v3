@@ -95,7 +95,10 @@ class ReceiptClientController extends Controller
         $receipt->total_cost = $sum; 
         $receipt->save();
 
-        alert(trans('flash.deleted'),'','success'); 
+        // store the receipt social id in session so when redirect to the table open the popup to view products after delete
+        session()->put('update_receipt_id',$receipt->id);
+
+        toast(trans('flash.deleted'),'success'); 
         return 1;
     }
     public function edit_product(Request $request){
@@ -128,7 +131,10 @@ class ReceiptClientController extends Controller
             // update the main receipt with new costing after calculation of its products
             $receipt->total_cost = $sum;
             $receipt->save(); 
-            alert('Product has been Updated successfully','','success'); 
+            // store the receipt social id in session so when redirect to the table open the popup to view products after edit
+            session()->put('update_receipt_id',$receipt->id);
+
+            toast(trans('flash.global.update_title'),'success'); 
             return redirect()->route('admin.receipt-clients.index');
         }
     }
@@ -138,7 +144,8 @@ class ReceiptClientController extends Controller
             $receipt = ReceiptClient::find($request->id);
             $products = ReceiptClientProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
             $receipt_id = $request->id;
-            return view('admin.receiptClients.partials.add_product',compact('products','receipt_id'));
+            $order_num = $receipt->order_num;
+            return view('admin.receiptClients.partials.add_product',compact('products','receipt_id','order_num'));
         }else{
             $receipt = ReceiptClient::find($request->receipt_id);  
 
@@ -161,7 +168,16 @@ class ReceiptClientController extends Controller
             $receipt->total_cost = $sum;
             $receipt->save();
 
-            alert(trans('flash.global.success_title'),trans('flash.global.success_body'),'success');
+            if($request->has('add_more')){
+                session()->put('store_receipt_id',$receipt->id);
+                session()->put('update_receipt_id',null);
+            }
+            if($request->has('save_close')){
+                session()->put('store_receipt_id',null);
+                session()->put('update_receipt_id',$receipt->id);
+            }
+
+            toast(trans('flash.global.success_title'),'success');
             return redirect()->route('admin.receipt-clients.index');
         }
     }
@@ -172,6 +188,11 @@ class ReceiptClientController extends Controller
 
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->get(); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
+
+        if($request->has('cancel_popup')){
+            session()->put('store_receipt_id',null);
+            session()->put('update_receipt_id',null);
+        }
 
         $phone = null;
         $client_name = null;
@@ -315,6 +336,9 @@ class ReceiptClientController extends Controller
     public function store(StoreReceiptClientRequest $request)
     {
         $receiptClient = ReceiptClient::create($request->all());
+
+        // store the receipt social id in session so when redirect to the table open the popup to add products
+        session()->put('store_receipt_id',$receiptClient->id);
 
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-clients.index');

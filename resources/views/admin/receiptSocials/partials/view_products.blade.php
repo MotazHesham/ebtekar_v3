@@ -1,6 +1,8 @@
 <div class="modal-content">
     <div class="modal-header">
         <h5 class="modal-title">{{ trans('global.extra.view_products') }} <b>{{ $receipt->order_num }}</b> </h5>
+        &nbsp;&nbsp;&nbsp;
+        <a href="{{ route('admin.receipt-socials.index',['cancel_popup' => 1 ]) }}" class="btn btn-danger btn-lg mb-1">أغلاق القائمة</a>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -98,6 +100,6 @@
                     </tr>
                 @endforelse
             </tbody>
-        </table>
+        </table> 
     </div>
 </div>

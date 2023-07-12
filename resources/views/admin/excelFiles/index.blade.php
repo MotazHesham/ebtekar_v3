@@ -28,6 +28,9 @@
                             {{ trans('cruds.excelFile.fields.results') }}
                         </th>
                         <th>
+                            {{ trans('cruds.excelFile.fields.created_at') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -76,6 +79,10 @@
                     {
                         data: 'results',
                         name: 'results'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'actions',

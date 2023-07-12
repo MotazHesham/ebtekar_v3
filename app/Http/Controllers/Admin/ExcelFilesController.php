@@ -65,6 +65,9 @@ class ExcelFilesController extends Controller
                 return $span;
             });
 
+            $table->editColumn('created_at', function ($row) {
+                return $row->created_at ? $row->created_at : '';
+            });
             $table->rawColumns(['actions', 'placeholder', 'uploaded_file', 'result_file','results']);
 
             return $table->make(true);

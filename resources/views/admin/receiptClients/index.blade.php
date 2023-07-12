@@ -375,6 +375,16 @@
 @endsection
 @section('scripts')
     <script>
+
+        $(document).ready(function() {
+            @if(session('store_receipt_id') && session('store_receipt_id') != null)
+                add_product('{{session("store_receipt_id")}}') 
+            @endif
+            @if(session('update_receipt_id') && session('update_receipt_id') != null)
+                view_products('{{session("update_receipt_id")}}') 
+            @endif
+        });
+        
         function sort_receipt_client(el) {
             $('#sort_receipt_client').submit();
         }

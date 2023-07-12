@@ -1,7 +1,7 @@
 
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title" id="AjaxModalLabel">{{ trans('global.extra.add_product') }}</h5>
+        <h5 class="modal-title" id="AjaxModalLabel">{{ trans('global.extra.add_product') }}  {{ $order_num }}</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -28,7 +28,17 @@
             <hr>
             
             <div class="form-group"> 
-                <button type="submit" class="btn btn-dark btn-block">{{ trans('global.save') }}</button>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button type="submit" name="add_more" class="btn btn-success btn-block">حفظ وأضافة أخري</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" name="save_close" class="btn btn-dark btn-block">حفظ وألغاء</button>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ route('admin.receipt-clients.index',['cancel_popup' => 1 ]) }}" class="btn btn-danger btn-block">ألغاء</a>
+                    </div>
+                </div>
             </div>
         </form>
     </div> 
