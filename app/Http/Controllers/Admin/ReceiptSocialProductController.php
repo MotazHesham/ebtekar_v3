@@ -8,6 +8,7 @@ use App\Http\Requests\MassDestroyReceiptSocialProductRequest;
 use App\Http\Requests\StoreReceiptSocialProductRequest;
 use App\Http\Requests\UpdateReceiptSocialProductRequest;
 use App\Models\ReceiptSocialProduct;
+use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -23,7 +24,7 @@ class ReceiptSocialProductController extends Controller
         abort_if(Gate::denies('receipt_social_product_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = ReceiptSocialProduct::select(sprintf('%s.*', (new ReceiptSocialProduct)->table));
+            $query = ReceiptSocialProduct::with('website')->select(sprintf('%s.*', (new ReceiptSocialProduct)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -68,7 +69,11 @@ class ReceiptSocialProductController extends Controller
                 return implode(' ', $links);
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'photos']);
+            $table->editColumn('website_site_name', function ($row) { 
+                return $row->website->site_name ?? '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'photos','website_site_name']);
 
             return $table->make(true);
         }
@@ -80,7 +85,8 @@ class ReceiptSocialProductController extends Controller
     {
         abort_if(Gate::denies('receipt_social_product_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.receiptSocialProducts.create');
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+        return view('admin.receiptSocialProducts.create',compact('websites'));
     }
 
     public function store(StoreReceiptSocialProductRequest $request)

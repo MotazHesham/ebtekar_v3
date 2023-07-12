@@ -117,7 +117,9 @@
                 ];
                 $playlists_counter_sum = 0;
                 foreach($playlists_to_count as $play_raw_group){
-                    $playlists_counter_sum += $play_raw_group->total;
+                    if(Gate::allows('playlist_'.$play_raw_group->playlist_status)){
+                        $playlists_counter_sum += $play_raw_group->total;
+                    }
                     $playlists_counter[$play_raw_group->playlist_status] = $play_raw_group->total;
                 }
             @endphp

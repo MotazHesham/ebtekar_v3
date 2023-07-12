@@ -193,7 +193,8 @@ class ReceiptSocialController extends Controller
     public function edit_product(Request $request){
         if($request->ajax()){
             $receipt_social_product_pivot = ReceiptSocialProductPivot::find($request->id); 
-            $products = ReceiptSocialProduct::latest()->get();
+            $receipt = ReceiptSocial::find($receipt_social_product_pivot->receipt_social_id);
+            $products = ReceiptSocialProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get(); 
             return view('admin.receiptSocials.partials.edit_product',compact('receipt_social_product_pivot','products'));
         }else{ 
 
@@ -266,7 +267,8 @@ class ReceiptSocialController extends Controller
 
     public function add_product(Request $request){
         if($request->ajax()){
-            $products = ReceiptSocialProduct::latest()->get();
+            $receipt = ReceiptSocial::find($request->id);
+            $products = ReceiptSocialProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
             $receipt_id = $request->id;
             return view('admin.receiptSocials.partials.add_product',compact('products','receipt_id'));
         }else{ 

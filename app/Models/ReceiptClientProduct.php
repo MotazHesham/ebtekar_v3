@@ -27,6 +27,7 @@ class ReceiptClientProduct extends Model
     protected $fillable = [
         'name',
         'price',
+        'website_setting_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -40,5 +41,8 @@ class ReceiptClientProduct extends Model
     public function receipts()
     {
         return $this->hasMany(ReceiptClientProductPivot::class, 'receipt_client_product_id');
+    }
+    public function website(){
+        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
 }

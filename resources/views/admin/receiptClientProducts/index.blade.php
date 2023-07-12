@@ -37,6 +37,9 @@
                             {{ trans('cruds.receiptClientProduct.fields.price') }}
                         </th>
                         <th>
+                            {{ trans('global.extra.website_setting_id') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -113,6 +116,10 @@
                         data: 'price',
                         name: 'price'
                     },
+                    {
+                        data: 'website_site_name',
+                        name: 'website.site_name'
+                    }, 
                     {
                         data: 'actions',
                         name: '{{ trans('global.actions') }}'

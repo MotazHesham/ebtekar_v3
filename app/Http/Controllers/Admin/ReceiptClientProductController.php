@@ -7,6 +7,7 @@ use App\Http\Requests\MassDestroyReceiptClientProductRequest;
 use App\Http\Requests\StoreReceiptClientProductRequest;
 use App\Http\Requests\UpdateReceiptClientProductRequest;
 use App\Models\ReceiptClientProduct;
+use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,7 @@ class ReceiptClientProductController extends Controller
         abort_if(Gate::denies('receipt_client_product_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = ReceiptClientProduct::with(['receipts'])->select(sprintf('%s.*', (new ReceiptClientProduct)->table));
+            $query = ReceiptClientProduct::with(['receipts','website'])->select(sprintf('%s.*', (new ReceiptClientProduct)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -50,7 +51,11 @@ class ReceiptClientProductController extends Controller
                 return $row->price ? $row->price : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder']);
+            $table->editColumn('website_site_name', function ($row) { 
+                return $row->website->site_name ?? '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder','website_site_name']);
 
             return $table->make(true);
         }
@@ -62,7 +67,8 @@ class ReceiptClientProductController extends Controller
     {
         abort_if(Gate::denies('receipt_client_product_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.receiptClientProducts.create');
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+        return view('admin.receiptClientProducts.create',compact('websites'));
     }
 
     public function store(StoreReceiptClientProductRequest $request)

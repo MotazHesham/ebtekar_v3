@@ -101,7 +101,8 @@ class ReceiptClientController extends Controller
     public function edit_product(Request $request){
         if($request->ajax()){
             $receipt_client_product_pivot = ReceiptClientProductPivot::find($request->id); 
-            $products = ReceiptClientProduct::latest()->get();
+            $receipt = ReceiptClient::find($receipt_client_product_pivot->receipt_client_id);
+            $products = ReceiptClientProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
             return view('admin.receiptClients.partials.edit_product',compact('receipt_client_product_pivot','products'));
         }else{ 
 
@@ -134,7 +135,8 @@ class ReceiptClientController extends Controller
 
     public function add_product(Request $request){
         if($request->ajax()){
-            $products = ReceiptClientProduct::latest()->get();
+            $receipt = ReceiptClient::find($request->id);
+            $products = ReceiptClientProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
             $receipt_id = $request->id;
             return view('admin.receiptClients.partials.add_product',compact('products','receipt_id'));
         }else{

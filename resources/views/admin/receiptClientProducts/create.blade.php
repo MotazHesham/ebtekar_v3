@@ -10,6 +10,19 @@
         <form method="POST" action="{{ route("admin.receipt-client-products.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
+                <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
+                    @foreach($websites as $id => $entry)
+                        <option value="{{ $id }}" {{ old('website_setting_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('website_setting_id'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('website_setting_id') }}
+                    </div>
+                @endif 
+            </div>
+            <div class="form-group">
                 <label class="required" for="name">{{ trans('cruds.receiptClientProduct.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', '') }}" required>
                 @if($errors->has('name'))
