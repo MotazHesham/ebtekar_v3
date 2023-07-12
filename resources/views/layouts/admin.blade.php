@@ -150,14 +150,14 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="AjaxModal" tabindex="-1" aria-labelledby="AjaxModalLabel" aria-hidden="true">
+    <div class="modal fade" id="AjaxModal" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="AjaxModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             {{-- ajax call --}}
         </div>
     </div>
 
     <!-- Modal2 -->
-    <div class="modal fade" id="AjaxModal2" tabindex="-1" aria-labelledby="AjaxModal2Label" aria-hidden="true">
+    <div class="modal fade" id="AjaxModal2" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="AjaxModal2Label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             {{-- ajax call --}}
         </div>
