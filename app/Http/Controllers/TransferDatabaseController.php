@@ -501,15 +501,7 @@ class TransferDatabaseController extends Controller
     public function receipt_products(){
         $receipt_products = DB::connection('mysql_second')->table('receipt_products')->get(); 
         foreach($receipt_products as $raw){
-            if($raw->type == 'client'){
-                $receipt_client_product = new ReceiptClientProduct();   
-                $receipt_client_product->id = $raw->id;
-                $receipt_client_product->name = $raw->name;  
-                $receipt_client_product->price = $raw->price;   
-                $receipt_client_product->created_at = $raw->created_at;
-                $receipt_client_product->updated_at = $raw->updated_at; 
-                $receipt_client_product->save();  
-            }elseif($raw->type == 'social'){
+            if($raw->type == 'figures'){
                 $receipt_social_product = new ReceiptSocialProduct();   
                 $receipt_social_product->id = $raw->id;
                 $receipt_social_product->name = $raw->name;  

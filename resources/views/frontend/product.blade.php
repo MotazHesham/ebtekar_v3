@@ -159,7 +159,7 @@
                                                     <div id="product-images">
                                                         <div class="row">
                                                             <div class="col-md-6 mb-3">
-                                                                <input type="file" id="photos-1" name="photos[]" class="form-control" required> 
+                                                                <input type="file" id="photos-1" name="photos[]" class="form-control"> 
                                                             </div>
                                                             <div class="col-md-6 mb-3">
                                                                 <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="{{ trans('frontend.product.photo_note') }}" >
@@ -440,8 +440,7 @@
                                             <a href="javascript:void(0)" onclick="quick_view('{{$product->id}}')" data-bs-toggle="modal" data-bs-target="#quick-view"
                                                 class="tooltip-top" data-tippy-content="Quick View">
                                                 <i data-feather="eye"></i>
-                                            </a>
-
+                                            </a> 
                                         </div>
                                         @if(auth()->check() && auth()->user()->user_type == 'seller')
                                             <div class="new-label1">

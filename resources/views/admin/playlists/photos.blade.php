@@ -42,8 +42,8 @@
                 @elseif($playlist->model_type == 'social') 
                     @foreach($raw->receiptsReceiptSocialProducts as $receipt_product) 
                         @if ($receipt_product->products != null)
-                            <h3>{{$receipt_product->products->name}}</h3>
-                            <div><?php echo $receipt_product->description; ?></div>
+                            <h3 style="color: #8b304f;text-align: center;">{{$receipt_product->products->name}} ({{$receipt_product->quantity}})</h3>
+                            <div style="font-size:20px"><?php echo $receipt_product->description; ?></div>
                             <div> 
                                 @foreach ($receipt_product->products->photos as $key => $media)
                                     <a href="{{ $media->getUrl() }}" target="_blank"><img width="150" height="150" src={{ $media->getUrl()  }}/></a>
@@ -89,12 +89,14 @@
             </div>
             <div class="@if($playlist->model_type == 'company') col-md-4 @else col-md-12 @endif">
                 <div class="row">
+                    @if($playlist->model_type != 'social')
                     <div class="col-md-8">
                         <span class="badge badge-dark">{{ trans('cruds.playlist.fields.description') }}</span> 
                         <div>
                             <?php echo $playlist->description; ?>
                         </div>
                     </div>
+                    @endif
                     <div class="col-md-4">
                         <span class="badge badge-dark">{{ trans('cruds.playlist.fields.note') }}</span> 
                         <div>

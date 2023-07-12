@@ -613,7 +613,7 @@ class ReceiptSocialController extends Controller
 
     public function store(StoreReceiptSocialRequest $request)
     { 
-        $receiptSocial = ReceiptSocial::create($request->validated());
+        $receiptSocial = ReceiptSocial::create($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
 
         toast(trans('flash.global.success_title'),'success');

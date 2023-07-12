@@ -50,8 +50,9 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="text-center" id="order_scanned">
+        <div class="text-center">
             <h3>Scann Results</h3>
+            <div  id="order_scanned"></div>
         </div>
     </div>
 </div>
@@ -82,12 +83,12 @@
                 }, function(data) {
                     console.log(data);
 
-                    $('#order_scanned').append(data.message);
+                    $('#order_scanned').prepend(data.message);
                     const myTimeout = setTimeout(load_cam, 5000);
                     if (data.status == 1) {
-                        showFrontendAlert('success','تم الأرسال');
+                        showAlert('success','تم الأرسال');
                     } else {
-                        showFrontendAlert('error','لم يتم الأرسال');
+                        showAlert('error','لم يتم الأرسال');
                     }
                 });
         }).catch((err) => {
