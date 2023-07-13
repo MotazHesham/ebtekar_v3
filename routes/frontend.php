@@ -75,8 +75,8 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
         Route::resource('designs','DesignController');
 
         //mockups
-        Route::get('mockups/categories','mockupController@categories')->name('mockups.categories');
-        Route::get('mockups/categories/{category_id}','mockupController@mockups')->name('mockups');  
+        Route::get('mockups/categories','MockupController@categories')->name('mockups.categories');
+        Route::get('mockups/categories/{category_id}','MockupController@mockups')->name('mockups');  
 
         // wishlist
         Route::get('wishlist', 'WishlistController@wishlist')->name('wishlist');
