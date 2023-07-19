@@ -48,7 +48,7 @@ class CheckoutOrder extends FormRequest
             ],
             'payment_option' => [
                 'required',
-                'in:cash_on_delivery,paymob',
+                'in:cash_on_delivery,paymob,wallet',
             ], 
             'date_of_receiving_order' => [
                 'date_format:' . config('panel.date_format'),

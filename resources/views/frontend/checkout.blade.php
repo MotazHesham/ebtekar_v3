@@ -249,6 +249,12 @@
                                                                 <label for="payment-2">   {{ trans('frontend.checkout.paymob') }}</label>
                                                             </div>
                                                         </li>
+                                                        <li>
+                                                            <div class="radio-option">
+                                                                <input type="radio" name="payment_option" id="payment-3" value="wallet"  @if(old('payment_option') == 'wallet') checked @endif>
+                                                                <label for="payment-3">   {{ trans('frontend.checkout.wallet') }}</label>
+                                                            </div>
+                                                        </li>
                                                     @endif
 
                                                 </ul>

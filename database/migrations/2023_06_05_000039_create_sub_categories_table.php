@@ -14,7 +14,7 @@ class CreateSubCategoriesTable extends Migration
             $table->string('slug');
             $table->boolean('design')->default(0);
             $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
+            $table->text('meta_description')->nullable();
             $table->unsignedBigInteger('website_setting_id')->nullable();
             $table->foreign('website_setting_id', 'website_setting_fk_892138')->references('id')->on('website_settings');
             $table->timestamps();

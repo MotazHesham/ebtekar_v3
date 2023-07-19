@@ -218,7 +218,7 @@ class ReceiptSocialController extends Controller
             $receipt_product_pivot->description = $request->description;
             $receipt_product_pivot->price = $product->price;
             $receipt_product_pivot->quantity = $request->quantity;
-            if($request->extra_commission){ 
+            if($request->extra_commission != null){ 
                 $receipt_product_pivot->extra_commission = $request->extra_commission;
             }
             $receipt_product_pivot->commission = ($request->quantity *  $product->commission);

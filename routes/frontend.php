@@ -17,8 +17,11 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('/', 'Frontend\HomeController@index')->name('home');
 
+// nafzly callback payment
+// Route::get('/payments/verify/{payment?}',[FrontController::class,'payment_verify'])->name('payment-verify');
 
-// subscribers
+Route::get('paymob/callback','PayMobController@processedCallback'); // my own callback for payment
+
 
 Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
 

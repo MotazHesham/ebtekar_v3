@@ -22,6 +22,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Nafezly\Payments\Classes\PaymobWalletPayment;
+use Nafezly\Payments\Classes\PaymobPayment;
 class CheckoutController extends Controller
 {
     public function payment_select(){
@@ -32,7 +34,7 @@ class CheckoutController extends Controller
 
         $countries = Country::where('status',1)->where('website',1)->get()->groupBy('type'); 
         return view('frontend.checkout',compact('countries'));
-    }
+    } 
 
     public function checkout(CheckoutOrder $request){  
         try{
@@ -221,8 +223,32 @@ class CheckoutController extends Controller
                     }
                 }elseif($request->payment_option == 'paymob'){ 
                     DB::commit(); 
-                    $paymob = new PayMobController;
-                    return $paymob->checkingOut('1602333','242734',$order->id,$request->first_name,$request->last_name,$request->phone_number);
+                    $paymobPayment = new PaymobPayment();
+                    //pay function
+                    $response = $paymobPayment->pay(
+                        1, 
+                        $user_id = $user->id ?? null, 
+                        $user_first_name = $request->first_name, 
+                        $user_last_name = $request->last_name, 
+                        $user_email = $user->email ?? null, 
+                        $user_phone = $request->phone_number, 
+                        $source = null
+                    ); 
+                    return redirect($response['redirect_url']);
+                }elseif($request->payment_option == 'wallet'){
+                    DB::commit(); 
+                    $paymobwalletpayment = new PaymobWalletPayment();
+                    //pay function
+                    $response = $paymobwalletpayment->pay(
+                        1, 
+                        $user_id = $user->id ?? null, 
+                        $user_first_name = $request->first_name, 
+                        $user_last_name = $request->last_name, 
+                        $user_email = $user->email ?? null, 
+                        $user_phone = $request->phone_number, 
+                        $source = null
+                    ); 
+                    return redirect($response['redirect_url']);
                 }
             }else {
                 toast("Try Again",'error');

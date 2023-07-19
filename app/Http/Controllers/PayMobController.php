@@ -224,7 +224,7 @@ class PayMobController extends Controller
                 $connectedString .= $element;
             }
         }
-        $secret = 'DB38E9ADC9038BAF35B42DEBBBE1FEAD';
+        $secret = config('nafezly-payments.PAYMOB_HMAC');
         $hashed = hash_hmac('sha512',$connectedString,$secret);
         if($hashed == $hmac){
 

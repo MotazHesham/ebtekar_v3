@@ -85,7 +85,8 @@ return [
         'shipping_cost_by_seller' => 'Shipping Cost',
         'total_cost_by_seller' => 'Total Cost',
         'cash_on_delivery' => 'Cash On Delivery',
-        'paymob' => 'Payment Online',
+        'paymob' => 'Credit Card',
+        'wallet' => 'By Wallet',
         'pay' => 'Order',
     ],
     'commission_requests' => [

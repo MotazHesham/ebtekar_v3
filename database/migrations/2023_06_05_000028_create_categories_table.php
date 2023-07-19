@@ -15,7 +15,7 @@ class CreateCategoriesTable extends Migration
             $table->boolean('design')->default(0);
             $table->boolean('featured')->default(0);
             $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
+            $table->text('meta_description')->nullable();
             $table->unsignedBigInteger('website_setting_id')->nullable();
             $table->foreign('website_setting_id', 'website_setting_fk_8598138')->references('id')->on('website_settings');
             $table->timestamps();

@@ -53,7 +53,7 @@
                                         for="phone_number">{{ trans('cruds.receiptSocial.fields.phone_number') }}</label>
                                     <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}"
                                         type="text" name="phone_number" id="phone_number"
-                                        value="{{ old('phone_number', $previous_data['phone_number']) }}" required>
+                                        value="{{ old('phone_number', $previous_data['phone_number'] ?? request('phone_number')) }}" required>
                                     @if ($errors->has('phone_number'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('phone_number') }}

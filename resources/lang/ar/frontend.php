@@ -85,7 +85,8 @@ return [
         'shipping_cost_by_seller' => 'تكلفة الشحن',
         'total_cost_by_seller' => 'حساب اجمالي الأوردر',
         'cash_on_delivery' => 'دفع عند الاستلام',
-        'paymob' => 'الدفع أونلاين',
+        'paymob' => 'بطاقة إئتمان',
+        'wallet' => 'محفظة ألكترونية',
         'pay' => 'أتمام عملية الشراء',
     ],
     'commission_requests' => [
