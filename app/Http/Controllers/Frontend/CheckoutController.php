@@ -226,29 +226,41 @@ class CheckoutController extends Controller
                     $paymobPayment = new PaymobPayment();
                     //pay function
                     $response = $paymobPayment->pay(
-                        1, 
+                        $order->calc_total_for_client(), 
                         $user_id = $user->id ?? null, 
                         $user_first_name = $request->first_name, 
                         $user_last_name = $request->last_name, 
-                        $user_email = $user->email ?? null, 
+                        $user_email = $user->email ?? $request->first_name . '@temp.test', 
                         $user_phone = $request->phone_number, 
                         $source = null
                     ); 
-                    return redirect($response['redirect_url']);
+                    $order->update(['paymob_orderid' => $response['payment_id']]); // save paymob order id for later usage. 
+                    if($response['redirect_url']){
+                        return redirect($response['redirect_url']);
+                    }else{ 
+                        alert('لم تتم العملية','حدث خطأ حاول لاحقا','warning');
+                        return redirect()->route('home');
+                    }
                 }elseif($request->payment_option == 'wallet'){
                     DB::commit(); 
                     $paymobwalletpayment = new PaymobWalletPayment();
                     //pay function
                     $response = $paymobwalletpayment->pay(
-                        1, 
+                        $order->calc_total_for_client(), 
                         $user_id = $user->id ?? null, 
                         $user_first_name = $request->first_name, 
                         $user_last_name = $request->last_name, 
-                        $user_email = $user->email ?? null, 
+                        $user_email = $user->email ?? $request->first_name . '@temp.test', 
                         $user_phone = $request->phone_number, 
                         $source = null
                     ); 
-                    return redirect($response['redirect_url']);
+                    $order->update(['paymob_orderid' => $response['payment_id']]); // save paymob order id for later usage. 
+                    if($response['redirect_url']){
+                        return redirect($response['redirect_url']);
+                    }else{ 
+                        alert("لم تتم العملية",'ربما رقم المحفظة الذى ادخلته غير صحيح برجاء ادخال رقم صحيح واعاده طلب الاوردر','warning');
+                        return redirect()->route('home');
+                    }
                 }
             }else {
                 toast("Try Again",'error');

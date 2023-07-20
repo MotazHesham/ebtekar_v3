@@ -249,6 +249,11 @@
                             </td>
                             <td>
                                 <span
+                                    class="badge text-bg-{{ trans('global.payment_type.colors.' . $order->payment_type) }} mb-1">
+                                    {{ $order->payment_type ? trans('global.payment_type.status.' . $order->payment_type) : '' }}
+                                </span>
+                                <br>
+                                <span
                                     class="badge text-bg-{{ trans('global.delivery_status.colors.' . $order->delivery_status) }} mb-1">
                                     {{ $order->delivery_status ? trans('global.delivery_status.status.' . $order->delivery_status) : '' }}
                                 </span>

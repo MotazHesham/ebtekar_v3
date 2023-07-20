@@ -1,0 +1,13 @@
+[16-Jul-2023 22:13:56 Africa/Cairo] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 10485760 bytes) in /home/ebtekars/public_html/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Cells.php on line 395
+[16-Jul-2023 22:14:03 Africa/Cairo] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 10485760 bytes) in /home/ebtekars/public_html/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Cells.php on line 395
+[17-Jul-2023 14:38:26 Africa/Cairo] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 2097160 bytes) in /home/ebtekars/public_html/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/StringTable.php on line 49
+[20-Jul-2023 00:34:53 Europe/Berlin] PHP Warning:  include(/home/ebtekars/public_html/vendor/phpunit/phpunit/src/Runner/Version.php): Failed to open stream: No such file or directory in /home/ebtekars/public_html/vendor/composer/ClassLoader.php on line 582
+[20-Jul-2023 00:34:53 Europe/Berlin] PHP Warning:  include(): Failed opening '/home/ebtekars/public_html/vendor/composer/../phpunit/phpunit/src/Runner/Version.php' for inclusion (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/ebtekars/public_html/vendor/composer/ClassLoader.php on line 582
+[20-Jul-2023 00:34:53 Europe/Berlin] PHP Warning:  require(/home/ebtekars/public_html/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php): Failed to open stream: No such file or directory in /home/ebtekars/public_html/vendor/composer/autoload_real.php on line 41
+[20-Jul-2023 00:34:53 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required '/home/ebtekars/public_html/vendor/composer/../phpunit/phpunit/src/Framework/Assert/Functions.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/ebtekars/public_html/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/ebtekars/public_html/vendor/composer/autoload_real.php(45): {closure}()
+#1 /home/ebtekars/public_html/vendor/autoload.php(25): ComposerAutoloaderInit688aebed98e647d45e028c16b865cd64::getLoader()
+#2 /home/ebtekars/public_html/index.php(34): require('/home/ebtekars/...')
+#3 {main}
+  thrown in /home/ebtekars/public_html/vendor/composer/autoload_real.php on line 41

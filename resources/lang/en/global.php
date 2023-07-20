@@ -425,7 +425,15 @@ return [
     ],
 
     'payment_type' => [
-        'cash_on_delivery' => 'الدفع عند الأستلام',
-        'paymob' => 'الدفع paymob'
+        'colors' => [
+            'cash_on_delivery' =>  'light',
+            'paymob' =>  'warning',
+            'wallet' => 'info', 
+        ],
+        'status' => [
+            'cash_on_delivery' => 'الدفع عند الأستلام',
+            'paymob' => 'دفع بطاقة إئتمان',
+            'wallet' => 'محفظة ألكترونية',
+        ]
     ],  
 ];

@@ -60,7 +60,7 @@ class PayMobController extends Controller
             }
         }
 
-        $order->update(['paymob_order_id' => $paymobOrder->id]); // save paymob order id for later usage. 
+        $order->update(['paymob_orderid' => $paymobOrder->id]); // save paymob order id for later usage. 
         
         // Request body
         $json = [ 
@@ -190,7 +190,7 @@ class PayMobController extends Controller
     public function processedCallback(Request $request)
     {
         $data = $request->all();
-        $order   = Order::withoutGlobalScope('completed')->find($data['merchant_order_id']);
+        $order   = Order::withoutGlobalScope('completed')->where('paymob_orderid',$data['order'])->first();
         if(!$order){
             return $this->failed();
         }

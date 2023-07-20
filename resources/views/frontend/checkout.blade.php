@@ -74,7 +74,7 @@
                                         </div> 
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label class="field-label">{{ trans('frontend.checkout.phone_number') }}</label>
-                                            <input type="text" name="phone_number" value="{{old('phone_number',auth()->user()->phone_number ?? '')}}" placeholder="" required>
+                                            <input type="text" name="phone_number" value="{{old('phone_number',auth()->user()->phone_number ?? '')}}" placeholder="" required id="phone_number" onkeyup="wallet_number()">
                                         </div>
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label class="field-label">   {{ trans('frontend.checkout.phone_number_2') }}</label>
@@ -253,6 +253,7 @@
                                                             <div class="radio-option">
                                                                 <input type="radio" name="payment_option" id="payment-3" value="wallet"  @if(old('payment_option') == 'wallet') checked @endif>
                                                                 <label for="payment-3">   {{ trans('frontend.checkout.wallet') }}</label>
+                                                                (<span id="wallet_number"></span>)
                                                             </div>
                                                         </li>
                                                     @endif
@@ -302,5 +303,11 @@
                 $('#email').css('display','none');
             }
         }
+        function wallet_number(){
+            $('#wallet_number').html($('#phone_number').val());
+        }
+        $(document).ready(function() {
+            wallet_number();
+        });
     </script>
 @endsection
