@@ -94,8 +94,6 @@
                         <div id="table-receipts">
                             {{-- ajax call --}}
                         </div>
-                        <hr>
-                        <button type="submit" class="btn btn-success">{{ trans('global.continue') }}</button>
                     </form>
                 </div>
             </div>

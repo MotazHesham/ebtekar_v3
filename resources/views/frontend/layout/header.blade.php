@@ -286,7 +286,7 @@
                                     <li>
                                         <a class="dark-menu-item" href="javascript:void(0)"> {{ trans('frontend.header.products') }}</a>
                                         <ul>
-                                            @foreach (\App\Models\Category::where('website_setting_id',$site_settings->id)->with('sub_categories.sub_sub_categories')->get() as $category)
+                                            @foreach (\App\Models\Category::where('published',1)->where('website_setting_id',$site_settings->id)->with('sub_categories.sub_sub_categories')->get() as $category)
                                                 <li>
                                                     <a  href="{{ route('frontend.products.category',$category->slug) }}">{{ $category->name }}</a>
                                                     <ul>

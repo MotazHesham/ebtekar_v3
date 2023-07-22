@@ -14,6 +14,7 @@ class CreateCategoriesTable extends Migration
             $table->string('slug');
             $table->boolean('design')->default(0);
             $table->boolean('featured')->default(0);
+            $table->boolean('published')->default(1);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->unsignedBigInteger('website_setting_id')->nullable();

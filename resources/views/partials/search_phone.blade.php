@@ -32,3 +32,5 @@
         </div>
     @endif
 </div>
+<hr>
+<button type="submit" class="btn btn-success" @if($are_you_sure) onclick="return confirm('{{ trans('global.areYouSure') }}');" @endif>{{ trans('global.continue') }}</button>

@@ -103,6 +103,7 @@ class HomeController extends Controller
     public function search_by_phone(Request $request){
         global $phone;
         $phone = $request->phone;
+        $are_you_sure = false;
         $receipt_social = ReceiptSocial::where(function ($query) {
                                             $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
                                                     ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
@@ -123,7 +124,10 @@ class HomeController extends Controller
                                                                     })->count();
 
         $banned_phones = BannedPhone::where('phone',$phone)->first();
-        return view('partials.search_phone',compact('receipt_social','receipt_company','receipt_client','customers_orders','sellers_orders','banned_phones'));
+        if($receipt_social > 0 || $receipt_company > 0 || $receipt_client > 0 || $customers_orders > 0 || $sellers_orders > 0 || $banned_phones > 0 ){
+            $are_you_sure = true;
+        }
+        return view('partials.search_phone',compact('receipt_social','receipt_company','receipt_client','customers_orders','sellers_orders','banned_phones','are_you_sure'));
     }
 
     public function index()

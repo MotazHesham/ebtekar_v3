@@ -25,11 +25,11 @@ class UpdateOrderRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                'string',
+                config('panel.phone_number_validation'), 
                 'required',
             ],
             'phone_number_2' => [
-                'string',
+                config('panel.phone_number_validation'), 
                 'required',
             ],
             'shipping_address' => [

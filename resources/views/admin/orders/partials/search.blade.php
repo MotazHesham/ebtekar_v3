@@ -138,14 +138,28 @@
                             </option>
                         @endforeach
                     </select> 
-                    <select class="form-control mb-2 @isset($payment_status) isset @endisset" name="payment_status" id="payment_status" onchange="sort_orders()">
-                        <option value="">{{ trans('cruds.order.fields.payment_status') }}</option> 
-                        @foreach(trans('global.payment_status.status') as $key => $status)
-                            <option value="{{ $key }}" @isset($payment_status) @if ($payment_status == $key) selected @endif @endisset>
-                                {{ $status }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($payment_status) isset @endisset" name="payment_status" id="payment_status" onchange="sort_orders()">
+                                <option value="">{{ trans('cruds.order.fields.payment_status') }}</option> 
+                                @foreach(trans('global.payment_status.status') as $key => $status)
+                                    <option value="{{ $key }}" @isset($payment_status) @if ($payment_status == $key) selected @endif @endisset>
+                                        {{ $status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($payment_type) isset @endisset" name="payment_type" id="payment_type" onchange="sort_orders()">
+                                <option value="">{{ trans('cruds.order.fields.payment_type') }}</option> 
+                                @foreach(trans('global.payment_type.status') as $key => $status)
+                                    <option value="{{ $key }}" @isset($payment_type) @if ($payment_type == $key) selected @endif @endisset>
+                                        {{ $status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
 
                     <select class="form-control mb-2 @isset($playlist_status) isset @endisset" name="playlist_status"id="playlist_status" onchange="sort_orders()">

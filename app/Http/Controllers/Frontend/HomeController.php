@@ -28,7 +28,7 @@ class HomeController extends Controller
         $sliders = Slider::where('website_setting_id',$site_settings->id)->with('media')->where('published',1)->get();
         $new_products = Product::where('website_setting_id',$site_settings->id)->with('media')->where('published',1)->where('todays_deal',1)->orderBy('created_at','desc')->take(10)->get();
         $home_categories = HomeCategory::where('website_setting_id',$site_settings->id)->with('category.media')->orderBy('created_at','desc')->get();
-        $freatured_categories = Category::where('website_setting_id',$site_settings->id)->where('featured',1)->with(['media','products' => function ($query) {
+        $freatured_categories = Category::where('website_setting_id',$site_settings->id)->where('published',1)->where('featured',1)->with(['media','products' => function ($query) {
                                                 $query->where('published', 1)->where('featured', 1)->orderBy('created_at', 'desc'); 
                                             }])->orderBy('created_at','desc')->get();
         $banners_1 = Banner::where('website_setting_id',$site_settings->id)->with('media')->where('position',1)->where('published',1)->orderBy('updated_at','desc')->get()->take(2);

@@ -60,6 +60,9 @@ class CustomersController extends Controller
             $table->addColumn('user_website_site_name', function ($row) {
                 return $row->user ? $row->user->website->site_name : '';
             }); 
+            $table->addColumn('created_at', function ($row) {
+                return $row->created_at ? $row->created_at : '';
+            });
             $table->rawColumns(['actions', 'placeholder', 'user']);
 
             return $table->make(true);

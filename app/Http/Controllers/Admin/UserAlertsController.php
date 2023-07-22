@@ -57,11 +57,19 @@ class UserAlertsController extends Controller
             $table->editColumn('alert_text', function ($row) {
                 return $row->alert_text ? $row->alert_text : '';
             });
-            $table->editColumn('alert_link', function ($row) {
-                return $row->alert_link ? $row->alert_link : '';
+            $table->editColumn('data', function ($row) {
+                if($row->data){ 
+                    $data = explode('&',$row->data);
+                    return '<a class="btn btn-success btn-sm rounded-pill text-white"
+                                onclick="show_details('.$data[0].',\''.$data[1].'\')" >
+                                أظهارالصور
+                            </a>'; 
+                }else{
+                    return '';
+                } 
             }); 
 
-            $table->rawColumns(['placeholder']);
+            $table->rawColumns(['placeholder','data']);
 
             return $table->make(true);
         }

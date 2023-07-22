@@ -91,7 +91,14 @@ class CategoriesController extends Controller
                     <span class="c-switch-slider"></span>
                 </label>';
             }); 
-            $table->rawColumns(['actions', 'placeholder', 'banner', 'icon', 'design', 'featured','website_site_name']);
+            $table->editColumn('published', function ($row) { 
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'published\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->published ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>';
+            }); 
+            $table->rawColumns(['actions', 'placeholder', 'banner', 'icon', 'design', 'featured','published','website_site_name']);
 
             return $table->make(true);
         }

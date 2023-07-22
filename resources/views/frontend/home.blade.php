@@ -7,7 +7,7 @@
 
 
             @foreach ($sliders as $slider)
-                <div>
+                <a href="{{ $slider->link }}" target="_blanc">
                     <div class="slide-main">
                         <img src="{{ $slider->photo->getUrl() }}" class="img-fluid bg-img" alt="ebtekar-slider">
                         <div class="@if($loop->first) container @else custom-container @endif">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     </section>

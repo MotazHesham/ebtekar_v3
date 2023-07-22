@@ -20,6 +20,9 @@
                             التحويل
                         </th>  
                         <th>
+                            البيانات 
+                        </th>  
+                        <th>
                             التاريخ
                         </th> 
                     </tr>
@@ -52,6 +55,10 @@
                     {
                         data: 'alert_text',
                         name: 'alert_text'
+                    },  
+                    {
+                        data: 'data',
+                        name: 'data'
                     },  
                     {
                         data: 'created_at',

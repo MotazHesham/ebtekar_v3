@@ -18,8 +18,7 @@ class StoreBannedPhoneRequest extends FormRequest
     {
         return [
             'phone' => [
-                'regex:' . config('panel.phone_number_format'), 
-                'size:' . config('panel.phone_number_size'), 
+                config('panel.phone_number_validation'), 
                 'required',
             ],
             'reason' => [

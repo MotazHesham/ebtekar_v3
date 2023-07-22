@@ -69,6 +69,7 @@ class PlaylistController extends Controller
             $userAlert = UserAlert::create([
                 'alert_text' => $raw->order_num . ' ' . $body,
                 'alert_link' => route('admin.playlists.index', 'design'),
+                'data' => $raw->id . '&' . $request->model_type,
                 'type' => 'private', 
             ]);
             $userAlert->users()->sync([$request->designer_id]);
@@ -136,6 +137,7 @@ class PlaylistController extends Controller
             $userAlert = UserAlert::create([
                 'alert_text' => $raw->order_num . ' ' . $body,
                 'alert_link' => route('admin.playlists.index',$raw->playlist_status),
+                'data' => $raw->id . '&' . $request->model_type,
                 'type' => 'private', 
             ]);
             $userAlert->users()->sync([$auth_id]);
@@ -159,6 +161,7 @@ class PlaylistController extends Controller
         UserAlert::create([
             'alert_text' => $raw->order_num . ' ' . $body_2 . ' عن طريق ' . auth()->user()->name ,
             'alert_link' => $route,
+            'data' => $raw->id . '&' . $request->model_type,
             'type' => 'playlist',
         ]);  
         $tokens = User::whereNotNull('device_token')->whereHas('roles.permissions',function($query){
@@ -172,6 +175,7 @@ class PlaylistController extends Controller
         $userAlert_2 = UserAlert::create([
             'alert_text' => $raw->order_num . ' ' . $body_2,
             'alert_link' => $route,
+            'data' => $raw->id . '&' . $request->model_type,
             'type' => 'history', 
         ]);
         $userAlert_2->users()->sync([Auth::id()]);
@@ -232,12 +236,15 @@ class PlaylistController extends Controller
         
         $type = $request->type;  
         $playlists = ViewPlaylistData::orderBy('send_to_playlist_date','desc')->where('playlist_status',$type); 
+        $websites = WebsiteSetting::pluck('site_name', 'id');
         
 
         $order_num = null;
         $user_id = null;
+        $website_setting_id = null;
         $description = null;
         $to_date = null;
+        $quickly = null;
         $view = 'all';
 
         if( $request->view != null){
@@ -251,6 +258,14 @@ class PlaylistController extends Controller
         if( $request->user_id != null){
             $user_id = $request->user_id;
             $playlists = $playlists->where('user_id',$request->user_id); 
+        }
+        if( $request->quickly != null){
+            $quickly = $request->quickly;
+            $playlists = $playlists->where('quickly',$request->quickly); 
+        }
+        if( $request->website_setting_id != null){
+            $website_setting_id = $request->website_setting_id;
+            $playlists = $playlists->where('website_setting_id',$request->website_setting_id); 
         }
         if ($request->order_num != null){
             $order_num = $request->order_num;
@@ -272,7 +287,7 @@ class PlaylistController extends Controller
             $dates = null;
         } 
         // return $dates;
-        return view('admin.playlists.index',compact('dates','playlists','view','staffs','type', 'order_num','user_id','description','to_date'));
+        return view('admin.playlists.index',compact('dates','playlists','view','staffs','type', 'order_num','user_id','quickly','website_setting_id','description','to_date','websites'));
 
     } 
 }

@@ -107,8 +107,46 @@ class ProductsController extends Controller
     {
         abort_if(Gate::denies('product_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $website_setting_id = $request->website_setting_id != null  ? $request->website_setting_id  : null;
+        $category_id = $request->category_id != null ? $request->category_id : null;
+        $sub_category_id = $request->sub_category_id != null ? $request->sub_category_id : null;
+        $sub_sub_category_id = $request->sub_sub_category_id != null ? $request->sub_sub_category_id : null; 
+        $weight = $request->weight != null ? $request->weight : null; 
+        $flash_deal = $request->flash_deal != null ? $request->flash_deal : null; 
+        $published = $request->published != null ? $request->published : null; 
+        $featured = $request->featured != null ? $request->featured : null; 
+        $todays_deal = $request->todays_deal != null ? $request->todays_deal : null; 
+
         if ($request->ajax()) {
-            $query = Product::with(['user', 'category', 'sub_category', 'sub_sub_category', 'design','website'])->select(sprintf('%s.*', (new Product)->table));
+            $query = Product::with(['user', 'category', 'sub_category', 'sub_sub_category', 'design','website']);
+            if($website_setting_id != null){
+                $query = $query->where('website_setting_id',$website_setting_id);
+            }
+            if($category_id != null){
+                $query = $query->where('category_id',$category_id);
+            }
+            if($sub_category_id != null){
+                $query = $query->where('sub_category_id',$sub_category_id);
+            }
+            if($sub_sub_category_id != null){
+                $query = $query->where('sub_sub_category_id',$sub_sub_category_id);
+            }
+            if($weight != null){
+                $query = $query->where('weight',$weight);
+            }
+            if($flash_deal != null){
+                $query = $query->where('flash_deal',$flash_deal);
+            }
+            if($published != null){
+                $query = $query->where('published',$published);
+            }
+            if($featured != null){
+                $query = $query->where('featured',$featured);
+            }
+            if($todays_deal != null){
+                $query = $query->where('todays_deal',$todays_deal);
+            }
+            $query = $query->select(sprintf('%s.*', (new Product)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -225,7 +263,9 @@ class ProductsController extends Controller
             return $table->make(true);
         }
 
-        return view('admin.products.index');
+
+        $websites = WebsiteSetting::pluck('site_name', 'id');
+        return view('admin.products.index',compact('websites','website_setting_id','category_id','sub_category_id','sub_sub_category_id','weight','flash_deal','published','featured','todays_deal'));
     }
 
     public function create()

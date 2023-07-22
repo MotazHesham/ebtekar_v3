@@ -305,6 +305,18 @@
         });
 
 
+
+        function show_details(id, model_type) {
+            $.post('{{ route('admin.playlists.show_details') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                model_type: model_type
+            }, function(data) {
+                $('#AjaxModal .modal-dialog').html(null);
+                $('#AjaxModal').modal('show');
+                $('#AjaxModal .modal-dialog').html(data);
+            });
+        }
         function get_categories_by_website(call_others = null) {
             var website_setting_id = $('#website_setting_id').val();
             $.post('{{ route('admin.website-settings.get_categories_by_website') }}', {

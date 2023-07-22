@@ -376,7 +376,7 @@
 
     <!-- flash Deal product -->
     @php
-        $flash_deal_product = \App\Models\Product::where('flash_deal',1)->where('published',1)->inRandomOrder()->first();
+        $flash_deal_product = \App\Models\Product::where('flash_deal',1)->where('website_setting_id',$site_settings->id)->where('published',1)->inRandomOrder()->first();
     @endphp
     @if($flash_deal_product) 
         @php

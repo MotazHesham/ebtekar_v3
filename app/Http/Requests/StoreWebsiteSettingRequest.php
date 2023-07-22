@@ -39,7 +39,7 @@ class StoreWebsiteSettingRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                'string',
+                config('panel.phone_number_validation'), 
                 'nullable',
             ],
             'facebook' => [

@@ -26,7 +26,7 @@ class UpdateContactuRequest extends FormRequest
                 'nullable',
             ],
             'phone_number' => [
-                'string',
+                config('panel.phone_number_validation'), 
                 'nullable',
             ],
         ];

@@ -26,8 +26,7 @@ class UpdateSellerRequest extends FormRequest
                 'unique:users,email,' . request()->user_id,
             ],
             'phone_number' => [
-                'regex:' . config('panel.phone_number_format'), 
-                'size:' . config('panel.phone_number_size'), 
+                config('panel.phone_number_validation'), 
                 'required',
             ],
             'seller_type' => [

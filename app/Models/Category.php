@@ -37,6 +37,7 @@ class Category extends Model implements HasMedia
         'slug',
         'design',
         'featured',
+        'published',
         'meta_title',
         'meta_description',
         'website_setting_id',

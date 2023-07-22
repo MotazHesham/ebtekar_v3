@@ -26,8 +26,7 @@ class StoreSellerRequest extends FormRequest
                 'unique:users',
             ],
             'phone_number' => [
-                'regex:' . config('panel.phone_number_format'), 
-                'size:' . config('panel.phone_number_size'), 
+                config('panel.phone_number_validation'), 
                 'required',
             ],
             'password' => [

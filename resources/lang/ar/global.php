@@ -356,9 +356,27 @@ return [
         'include_orders' => 'اختيار فواتير',
         'returned' => 'حالة المرتجع',
         'sent_to_delivery' => 'الأرسال الشحن',
+
         '0_quickly' => 'غير عاجل',
         '1_quickly' => 'عاجل',
-        'quickly' => 'الأستعجال',
+        'quickly' => 'حالة العاجل',
+
+        '0_featured' => 'غير مميز',
+        '1_featured' => 'مميز',
+        'featured' => 'حالة المميز',
+
+        '0_todays_deal' => 'غير صفقة اليوم',
+        '1_todays_deal' => 'صفقة اليوم',
+        'todays_deal' => 'حالة صفقة اليوم',
+
+        '0_flash_deal' => 'غير صفقة فلاش',
+        '1_flash_deal' => 'صفقة فلاش',
+        'flash_deal' => 'حالة صفقة فلاش',
+
+        '0_published' => 'غير منشور',
+        '1_published' => 'منشور',
+        'published' => 'حالة النشر',
+
         'no_answer' => 'الرد',
         'add_product' => 'أضافة منتج',
         'edit_product' => 'تعديل المنتج',

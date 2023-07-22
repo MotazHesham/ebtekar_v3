@@ -42,15 +42,15 @@
                 @elseif($playlist->model_type == 'social') 
                     @foreach($raw->receiptsReceiptSocialProducts as $receipt_product) 
                         @if ($receipt_product->products != null)
-                            <h3 style="color: #8b304f;text-align: center;">{{$receipt_product->products->name}} ({{$receipt_product->quantity}})</h3>
+                            <h3 style="color: #8b304f;text-align: center;">{{$receipt_product->title}} ({{$receipt_product->quantity}})</h3>
                             <div style="font-size:20px"><?php echo $receipt_product->description; ?></div>
                             <div> 
                                 @foreach ($receipt_product->products->photos as $key => $media)
                                     <a href="{{ $media->getUrl() }}" target="_blank"><img width="150" height="150" src={{ $media->getUrl()  }}/></a>
-                                @endforeach 
-                                @if(is_array(json_decode($receipt_product->photos)) && count(json_decode($receipt_product->photos)) > 0)
-                                    <div>
-                                        @foreach (json_decode($receipt_product->photos) as $key => $photo)
+                                @endforeach  
+                                <div>
+                                    @if($receipt_product->photos)
+                                        @foreach(json_decode($receipt_product->photos) as $key => $photo)
                                             <div style="display: inline;position: relative;">
                                                 <a href="{{ asset($photo->photo) }}" target="_blanc">
                                                     <img style="padding:3px" src="{{ asset($photo->photo) }}" alt="" height="140" width="140" title="{{$photo->note}}">
@@ -65,8 +65,8 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                    </div>
-                                @endif
+                                    @endif
+                                </div> 
                                 <br>
                                 @if($receipt_product->pdf)
                                     <a href="{{ asset($receipt_product->pdf) }}" target="_blanc" class="btn btn-info">show pdf</a>

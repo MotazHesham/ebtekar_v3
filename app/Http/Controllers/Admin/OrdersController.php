@@ -121,6 +121,7 @@ class OrdersController extends Controller
         $order_num = null;
         $delivery_status = null;
         $payment_status = null;
+        $payment_type = null;
         $user_id = null;
         $delivery_man_id = null;
         $from = null;
@@ -177,6 +178,10 @@ class OrdersController extends Controller
         if ($request->payment_status != null) {
             $payment_status = $request->payment_status;
             $orders = $orders->where('payment_status',$payment_status);
+        }
+        if ($request->payment_type != null) {
+            $payment_type = $request->payment_type;
+            $orders = $orders->where('payment_type',$payment_type);
         }
         if ($request->website_setting_id != null) {
             $website_setting_id = $request->website_setting_id;
@@ -291,7 +296,7 @@ class OrdersController extends Controller
         ];
         $orders = $orders->orderBy('created_at', 'desc')->paginate(15);
         return view('admin.orders.index', compact('statistics','users','orders','country_id','quickly','delivery_man_id','website_setting_id','websites',
-                                            'payment_status','delivery_status','calling', 'playlist_status','sent_to_delivery','date_type',
+                                            'payment_status','delivery_status','calling', 'playlist_status','sent_to_delivery','date_type','payment_type',
                                             'client_name','phone' ,'order_num', 'countries','delivery_mans','exclude', 'include', 'from_date',
                                             'user_id','from' , 'to','commission_status','sent_to_wasla','order_type','to_date','description'));
     }

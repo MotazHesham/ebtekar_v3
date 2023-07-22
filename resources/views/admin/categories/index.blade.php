@@ -40,6 +40,9 @@
                             {{ trans('cruds.category.fields.featured') }}
                         </th>
                         <th>
+                            {{ trans('cruds.category.fields.published') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -148,6 +151,10 @@
                     {
                         data: 'featured',
                         name: 'featured'
+                    }, 
+                    {
+                        data: 'published',
+                        name: 'published'
                     }, 
                     {
                         data: 'actions',

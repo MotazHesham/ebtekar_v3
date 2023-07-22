@@ -14,7 +14,7 @@
 
     {{-- order card --}}
     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-        <div class="card order-card" data-id="{{ $key }}" id="order-card-{{ $key }}"
+        <div class="card order-card" data-id="{{ $item['id'] }}" id="order-card-{{ $item['id'] }}"
             style="margin-bottom:30px"> 
             {{-- code --}}
             <div class=" order-card-left-side text-center mb-3"
@@ -63,7 +63,7 @@
             </div>
 
             {{-- action Buttons --}}
-            <div class="order-card-actions" id="order-card-actions-{{ $key }}">
+            <div class="order-card-actions" id="order-card-actions-{{ $item['id'] }}">
                 @if (auth()->user()->is_admin || $authenticated == auth()->user()->id)
                     <a class="btn btn-danger btn-sm rounded-pill text-white"
                         onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">
