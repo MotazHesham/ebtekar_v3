@@ -49,7 +49,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::get('search', 'ProductController@search')->name('search'); 
     Route::get('search?category={category_slug}', 'ProductController@search')->name('products.category');
     Route::get('search?sub_category={subcategory_slug}', 'ProductController@search')->name('products.subcategory');
-    Route::get('search?sub_subcategory={subsubcategory_slug}', 'ProductController@search')->name('products.subsubcategory');
+    Route::get('search?sub_sub_category={subsubcategory_slug}', 'ProductController@search')->name('products.subsubcategory');
 
     // cart
     Route::get('cart', 'CartController@index')->name('cart');
