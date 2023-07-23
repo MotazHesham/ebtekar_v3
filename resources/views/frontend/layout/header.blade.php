@@ -6,39 +6,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-5 col-md-7 col-sm-6">
-                    <div class="top-header-left">
-                        @if($site_settings->id != 4)
-                            <div class="Figures-store" style="background: #F1948A">
-                                <a href="https://shirtistore.com" target="_blanc">
-                                    <h6> Shirti Store  </h6>
-                                </a>
-                            </div>
-                        @endif
-                        @if($site_settings->id != 3)
-                            <div class="Figures-store">
-                                <a href="https://figures-store.com" target="_blanc">
-                                    <h6>Figures store </h6>
-                                </a>
-                            </div>
-                        @endif
-                        @if($site_settings->id != 2)
-                            <div class="Ertgal-link">
-                                <a href="https://ertgal.com" target="_blanc">
-                                    <h6>
-                                        Ertgal store
-                                    </h6>
-                                </a>
-                            </div>
-                        @endif
-                        @if($site_settings->id != 1)
-                            <div class="Ertgal-link" style="background: #d19002">
-                                <a href="https://ebtekarstore.com" target="_blanc">  
-                                    <h6>
-                                        EBTEKAR store
-                                    </h6>
-                                </a>             
-                            </div>
-                        @endif
+                    <div class="top-header-left"> 
                     </div>
                 </div>
                 <div class="col-xl-7 col-md-5 col-sm-6">

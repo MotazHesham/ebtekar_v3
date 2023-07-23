@@ -520,7 +520,7 @@ class ReceiptSocialController extends Controller
             }
             $receipts = $receipts->where(function ($query) use($include2) {
                 for ($i = 0; $i < count($include2); $i++){
-                    $query->orwhere('order_num', 'like',  '%' . $include2[$i] .'%');
+                    $query->orwhere('order_num', 'like',  '%#' . $include2[$i]);
                 }      
             });
         }

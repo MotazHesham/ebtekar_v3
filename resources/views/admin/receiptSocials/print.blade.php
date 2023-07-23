@@ -56,6 +56,9 @@
                     <tr>
                         <td class="gry-color small" >Phone: {{ $site_settings->phone_number }}</td>
                     </tr>
+                    <tr> 
+                        <td class="gry-color" >{{ $receipt->created_at }}</td>
+                    </tr>
                 </table>
                 <table>
                     <tr>
@@ -76,7 +79,7 @@
             </div>
             <div class="text-center" style="margin-bottom: 10px;color:red !important">
                 {{$receipt->order_num}}
-                <span style="color:red;">:رقم الأوردر</span>
+                <span style="color:red;">:رقم الأوردر</span> 
             </div>
             <div style="position:relative"> 
                 <table class="table table-bordered text-center" style="width:380px;position:absolute;right:10px;top:0" id="price-{{$receipt->id}}">

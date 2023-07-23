@@ -127,13 +127,15 @@
 
 <div class="sidebar sidebar-light sidebar-lg sidebar-end sidebar-overlaid hide" id="aside">
     <div class="sidebar-header bg-transparent p-0">
-        <ul class="nav nav-underline nav-underline-primary" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab">
-                    <i class="c-sidebar-nav-icon fa-fw fas fa-bars">
-                    </i>
-                </a>
-            </li>
+        <ul class="nav nav-underline nav-underline-primary" role="tablist"> 
+            @if(auth()->user()->is_admin)
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab">
+                        <i class="c-sidebar-nav-icon fa-fw fas fa-bars">
+                        </i>
+                    </a>
+                </li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#messages" role="tab">
                     <i class="c-sidebar-nav-icon fa-fw far fa-comment-dots">
@@ -161,30 +163,31 @@
     </div>
     <!-- Tab panes-->
     <div class="tab-content">
-        <div class="tab-pane active" id="timeline" role="tabpanel">
-            <div class="list-group list-group-flush">
-                <div
-                    class="list-group-item border-start-4 border-start-secondary bg-light text-center fw-bold text-medium-emphasis text-uppercase small dark:bg-white dark:bg-opacity-10 dark:text-medium-emphasis">
-                    مراحل التشغيل <a href="{{ route('admin.user-alerts.playlist') }}">عرض الكل</a>
-                </div>
-
-                @if (count(
-                        $alerts = \App\Models\UserAlert::where('type', 'playlist')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
-                    @foreach ($alerts as $alert)
-                        <div class="list-group-item border-start-4 border-start-warning list-group-item-divider">
-                            <div>{{ $alert->alert_text }}</div>
-                            <small class="text-medium-emphasis me-3">
-                                {{ $alert->created_at }}
-                            </small>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="text-center">
-                        {{ trans('global.no_alerts') }}
+        @if(auth()->user()->is_admin)
+            <div class="tab-pane active" id="timeline" role="tabpanel">
+                <div class="list-group list-group-flush">
+                    <div
+                        class="list-group-item border-start-4 border-start-secondary bg-light text-center fw-bold text-medium-emphasis text-uppercase small dark:bg-white dark:bg-opacity-10 dark:text-medium-emphasis">
+                        مراحل التشغيل <a href="{{ route('admin.user-alerts.playlist') }}">عرض الكل</a>
                     </div>
-                @endif
+
+                    @if (count($alerts = \App\Models\UserAlert::where('type', 'playlist')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
+                        @foreach ($alerts as $alert)
+                            <div class="list-group-item border-start-4 border-start-warning list-group-item-divider">
+                                <div>{{ $alert->alert_text }}</div>
+                                <small class="text-medium-emphasis me-3">
+                                    {{ $alert->created_at }}
+                                </small>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="text-center">
+                            {{ trans('global.no_alerts') }}
+                        </div>
+                    @endif
+                </div>
             </div>
-        </div>
+        @endif
         <div class="tab-pane" id="history" role="tabpanel">
             <div class="list-group list-group-flush">
                 <div
