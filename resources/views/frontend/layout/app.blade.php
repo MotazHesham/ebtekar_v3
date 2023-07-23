@@ -76,13 +76,13 @@
 
     @if(app()->isProduction())
         <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-232371041-1"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-HPT5XJBR84"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'UA-232371041-1');
+            gtag('config', 'G-HPT5XJBR84');
         </script>
         
         <!-- Facebook Pixel Code -->
