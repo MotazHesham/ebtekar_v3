@@ -15,6 +15,10 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    public function show_qr_code(Request $request){
+        $order_num = $request->order_num;
+        return view('partials.qr_code',compact('order_num'));
+    }
     public function qr_scanner($type){
         $delivery_mans = User::where('user_type','delivery_man')->get();
         return view('admin.playlists.qr_code_scanner',compact('type','delivery_mans'));

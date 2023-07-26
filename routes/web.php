@@ -27,6 +27,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('/', 'HomeController@index')->name('home');
     Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
     Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');
+    Route::post('show_qr_code', 'HomeController@show_qr_code')->name('show_qr_code');
 
 
     Route::get('qr_scanner/{type}','HomeController@qr_scanner')->name('qr_scanner');

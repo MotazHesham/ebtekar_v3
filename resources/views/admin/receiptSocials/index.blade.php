@@ -221,6 +221,7 @@
                         <tr data-entry-id="{{ $receipt->id }}" class=" @if($receipt->quickly) quickly @elseif($receipt->returned) returned @elseif($receipt->done) done @endif">
                             <td>
                                 <br>{{ ($key+1) + ($receipts->currentPage() - 1)*$receipts->perPage() }}
+                                <i class="fas fa-qrcode" onclick="show_qr_code('{{$receipt->order_num}}')" style="cursor: pointer"></i>
                             </td>
                             <td>
                                 <span class="order_num badge rounded-pill
@@ -513,7 +514,19 @@
     </div>
 @endsection
 
-@section('scripts')
+@section('scripts') 
+    <script>
+        function show_qr_code(order_num){
+            $.post('{{ route('admin.show_qr_code') }}', {
+                _token: '{{ csrf_token() }}',
+                order_num: order_num
+            }, function(data) {
+                $('#AjaxModal .modal-dialog').html(null);
+                $('#AjaxModal').modal('show');
+                $('#AjaxModal .modal-dialog').html(data); 
+            });
+        }
+    </script>
     <script>
         Dropzone.options.uploadedFileDropzone = {
             url: '{{ route('admin.excel-files.storeMedia') }}',

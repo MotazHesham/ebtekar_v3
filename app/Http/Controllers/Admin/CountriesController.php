@@ -69,14 +69,14 @@ class CountriesController extends Controller
             $table->editColumn('status', function ($row) {
                 return '
                 <label class="c-switch c-switch-pill c-switch-success">
-                    <input onchange="update_statuses(this,\'status\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->status ? "checked" : null) .' }}>
+                    <input onchange="update_statuses(this,\'status\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->status ? "checked" : null) .'>
                     <span class="c-switch-slider"></span>
                 </label>';
             });
             $table->editColumn('website', function ($row) {
                 return '
                 <label class="c-switch c-switch-pill c-switch-success">
-                    <input onchange="update_statuses(this,\'website\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->website ? "checked" : null) .' }}>
+                    <input onchange="update_statuses(this,\'website\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->website ? "checked" : null) .'>
                     <span class="c-switch-slider"></span>
                 </label>';
             });
