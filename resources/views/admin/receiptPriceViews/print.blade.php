@@ -134,7 +134,7 @@
                     </tr>
                     <tr>
                         <td class="text-right small" style="font-size: 1.2rem;">
-                            <span>{{ $receipt->phone }}</span>
+                            <span>{{ $receipt->phone_number }}</span>
                             <span class="gry-color strong" style="float:right">: تليفون </span>
                         </td>
                         <td class="text-right small" style="font-size: 1.2rem;">
