@@ -15,6 +15,34 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    public function magic_trick(Request $request){
+        if($request->has('reset')){ 
+            session(['orders' => null]);
+        }
+        return view('magic_trick');
+    }
+    public function magic_trick_store(Request $request){
+        
+        $order = [
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'model' => $request->model,
+            'cost' => $request->cost,
+        ];
+        
+        // Retrieve the existing orders array from the session
+        $orders = session('orders', []);
+
+        // Add the new order to the orders array
+        $orders[] = $order;
+
+        // Store the updated orders array in the session
+        session(['orders' => $orders]);
+
+        return view('magic_trick_table'); 
+    }
+    
     public function show_qr_code(Request $request){
         $order_num = $request->order_num;
         return view('partials.qr_code',compact('order_num'));

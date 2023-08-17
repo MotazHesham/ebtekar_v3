@@ -12,6 +12,10 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
+Route::get('magic_trick','Admin\HomeController@magic_trick')->name('magic_trick');
+Route::post('magic_trick_store','Admin\HomeController@magic_trick_store')->name('magic_trick_store');
+
+
 // related to push notification via firebase
 Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token');  
 

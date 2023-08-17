@@ -19,8 +19,9 @@
             {{-- code --}}
             <div class=" order-card-left-side text-center mb-3"
                 style="color: white;margin-bottom:20px;
-                    @if ($item['quickly'] == 1) background-image: linear-gradient(#9f1b2e,#1a1313) @endif
-                    @if ($item['shipping_country_id'] == 20) background:#7c42c9 @endif">
+                    @if ($item['quickly'] == 1 && $item['shipping_country_id'] == 20)  background-image: linear-gradient(270deg,#9f1b2e,black,#7C42C9); 
+                    @elseif ($item['shipping_country_id'] == 20) background:#7c42c9;
+                    @elseif ($item['quickly'] == 1)background-image: linear-gradient(#9f1b2e,#1a1313);@endif">
 
                 {{ $item['order_num'] }}
                 @if ($item['printing_times'] == 0)
