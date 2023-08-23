@@ -94,7 +94,7 @@
                 <ul class="tabs tab-title">
                     @foreach ($freatured_categories as $key => $freatured_category) 
                         <li @if ($loop->first) class="current" @endif>
-                            <a href="tab-{{ $key + 1 }}">
+                            <a href="tab-featured-{{ $key + 1 }}">
                                 <img src="{{ $freatured_category->icon ? $freatured_category->icon->getUrl('preview') : '' }}" alt="category"
                                     class="" heigh="30" width="30">
                                     &nbsp;
@@ -116,7 +116,7 @@
                     <div class="theme-tab">
                         <div class="tab-content-cls">
                             @foreach ($freatured_categories as $key => $featured_category) 
-                                <div id="tab-{{ $key + 1}}" class="tab-content @if ($loop->first) active default @endif" @if (!$loop->first) style="display:none" @endif>
+                                <div id="tab-featured-{{ $key + 1}}" class="tab-content @if ($loop->first) active default @endif" @if (!$loop->first) style="display:none" @endif>
                                     <div class="media-slide-5 no-arrow">
                                         @foreach ($featured_category->products->take(21)->chunk(3) as $chunk)
                                             <div>
