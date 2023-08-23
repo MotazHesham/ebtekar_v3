@@ -42,8 +42,11 @@
                                     </div>
                                 </div>
                                 <div class="pro-add">
+                                    <a href="javascript:void(0)" onclick="edit_cart('{{$cartItem['id']}}')">
+                                        <i data-feather="edit" style="font-size:15px"></i>
+                                    </a>
                                     <a href="{{ route('frontend.cart.delete', $cartItem['id']) }}">
-                                        <i data-feather="trash-2"></i>
+                                        <i data-feather="trash-2" style="font-size:15px"></i>
                                     </a>
                                 </div>
                             </div>

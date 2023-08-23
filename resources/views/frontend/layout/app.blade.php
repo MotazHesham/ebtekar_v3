@@ -49,6 +49,7 @@
 
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main.css') }}" media="screen" id="color"> 
 
     <link rel="stylesheet" href="{{ asset('dashboard_offline/css/select2.min.css') }}">
     <style>
@@ -166,90 +167,10 @@
 
 
     <!-- edit product modal start-->
-    <div class="modal fade bd-example-modal-lg theme-modal pro-edit-modal" id="edit-product" tabindex="-1"
-        role="dialog" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg theme-modal pro-edit-modal" id="edit-product" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content ">
-                <div class="modal-body">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                    <div class="pro-group">
-                        <div class="product-img">
-                            <div class="media">
-                                <div class="img-wraper">
-                                    <a href="product-page.html">
-                                        <img src="{{ asset('frontend/assets/images/product/7.jpg') }}" alt="" class="img-fluid">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <a href="product-page.html">
-                                        <h3>بوكس بالاسم</h3>
-                                    </a>
-                                    <h6>le 80<span>le 120</span></h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pro-group">
-                        <h6 class="product-title">المقاس</h6>
-                        <div class="size-box">
-                            <ul>
-                                <li><a href="javascript:void(0)">10*12</a></li>
-                                <li><a href="javascript:void(0)">16*20</a></li>
-                                <li><a href="javascript:void(0)">15*15</a></li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="pro-group">
-                        <h6 class="product-title">اختر اللون</h6>
-                        <div class="color-selector inline">
-                            <ul>
-                                <li>
-                                    <div class="color-1 active"></div>
-                                </li>
-                                <li>
-                                    <div class="color-2"></div>
-                                </li>
-                                <li>
-                                    <div class="color-3"></div>
-                                </li>
-                                <li>
-                                    <div class="color-4"></div>
-                                </li>
-                                <li>
-                                    <div class="color-5"></div>
-                                </li>
-                                <li>
-                                    <div class="color-6"></div>
-                                </li>
-                                <li>
-                                    <div class="color-7"></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="pro-group">
-                        <h6 class="product-title">الكمية</h6>
-                        <div class="qty-box">
-                            <div class="input-group">
-                                <button class="qty-minus"></button>
-                                <input class="qty-adj form-control" type="number" value="1" />
-                                <button class="qty-plus"></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pro-group mb-0">
-                        <div class="modal-btn">
-                            <a href="cart.html" class="btn btn-solid btn-sm">
-                                اضف الى السلة
-                            </a>
-                            <a href="product-page.html" class="btn btn-solid btn-sm">
-                                المزيد من التفاصيل
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-content">
+                {{-- ajax call --}}
             </div>
         </div>
     </div>
@@ -383,7 +304,7 @@
             $flash_deal_img =  isset($flash_deal_product->photos[0]) ? $flash_deal_product->photos[0]->getUrl('preview') : '';
         @endphp
         <div class="product-notification" id="dismiss">
-            <span onclick="dismiss();" class="btn-close" aria-hidden="true"></span>
+            <span onclick="dismiss();" style="cursor: pointer" class="btn-close" aria-hidden="true"></span>
             <a href="{{ route('frontend.product',$flash_deal_product->slug) }}">
                 <div class="media">
                     <img class="me-2" src="{{ $flash_deal_img }}" alt="">
@@ -440,6 +361,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
     <script>
+        function dismiss(){
+            $('#dismiss').remove();
+        }
         
         @if(app()->isProduction())
             // messanger chatpopup
@@ -496,6 +420,7 @@
         
         var photo_id = 2;
         function add_more_slider_image(){
+            console.log('test');
             var photoAdd =  '<div class="row">'; 
             photoAdd += '<div class="col-md-1">';
             photoAdd += '<button type="button" onclick="delete_this_row(this)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>';
@@ -513,6 +438,14 @@
         } 
         function delete_this_row(em){
             $(em).closest('.row').remove();
+        }
+
+        function edit_cart(id){
+            $('#edit-product').modal('show');
+            $('#edit-product .modal-content').html(null);
+            $.post('{{ route('frontend.cart.edit') }}', {_token:'{{ csrf_token() }}',id:id}, function(data){
+                $('#edit-product .modal-content').html(data);
+            });
         }
 
         function quick_view(id){

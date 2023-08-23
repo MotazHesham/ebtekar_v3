@@ -43,14 +43,15 @@ class ProductController extends Controller
         }
         return redirect()->back();
     }
-    public function product($slug){ 
+    public function product($slug){  
         $site_settings = get_site_setting();
         $product  = Product::where('website_setting_id',$site_settings->id)->where('slug', $slug)->first();
         if(!$product){
             abort(404);
         }
         $reviews = Review::with('user')->where('product_id',$product->id)->where('published',1)->get();
-        return view('frontend.product',compact('product','reviews'));
+        $related_products = Product::where('sub_category_id', $product->sub_category_id)->where('id', '!=', $product->id)->where('published', '1')->take(10)->get();
+        return view('frontend.product',compact('product','reviews','related_products'));
     }
 
     public function quick_view(Request $request){

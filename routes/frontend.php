@@ -53,6 +53,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
 
     // cart
     Route::get('cart', 'CartController@index')->name('cart');
+    Route::post('cart/edit', 'CartController@edit')->name('cart.edit');
     Route::post('cart/add', 'CartController@add')->name('cart.add');
     Route::post('cart/update', 'CartController@update')->name('cart.update');
     Route::get('cart/delete/{id}', 'CartController@delete')->name('cart.delete');

@@ -171,6 +171,7 @@ return [
         'printed_photos' => 'الصور المراد طباعتها علي المنتج',
         'add_more' => 'أضف المزيد',
         'add_to_cart' => 'أضف إلي السلة',
+        'edit_cart' => 'تحديث',
         'description' => 'الوصف',
         'color' => 'اللون',
         'quantity' => 'العدد',

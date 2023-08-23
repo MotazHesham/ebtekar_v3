@@ -64,7 +64,16 @@ class CartController extends Controller
         return back();
     }
 
-    public function update(Request $request){ 
+
+    public function edit(Request $request){
+        $product  = Product::findOrFail($request->id);
+        $cart = session('cart')->where('id',$request->id)->first();
+        return view('frontend.partials.edit_cart',compact('product','cart'));
+    }
+
+    public function update(Request $request){
+        // return $request;
+        
         $total = $cartIteam_total = 0;
         
         $cart = collect();
@@ -84,6 +93,28 @@ class CartController extends Controller
                 $cartItem['quantity'] = $request->quantity;
                 $cartIteam_total = ($price['value'] * $cartItem['quantity'] );
                 $cartIteam_commission = ($commission['value'] * $cartItem['quantity'] );
+
+                // when editing the photo or description
+                if(!$request->ajax()){
+                    $photos = array();  
+                    if($request->has('previous_photos')){
+                        foreach ($request->previous_photos as $key => $prev) {
+                            $photos[]['photo'] = $prev;  
+                        }
+                    }
+                    if($request->hasFile('photos')){
+                        foreach ($request->photos as $key => $photo) {
+                            $photos[]['photo'] = $photo->store('uploads/orders/products/photos');  
+                        }
+                    }  
+                    if($request->has('photos_note')){ 
+                        foreach ($request->photos_note as $key2 => $note) {  
+                            $photos[$key2]['note'] = $note ?? '';  
+                        } 
+                    }  
+                    $cartItem['description'] = $request->description;
+                    $cartItem['photos'] = json_encode($photos); 
+                }
             }
             $cart->push($cartItem);
             session()->put('cart', $cart);
@@ -91,11 +122,17 @@ class CartController extends Controller
             $total += ($price['value'] * $cartItem['quantity'] );
         }
 
-        return [ 
-            'total_cost' => $total . $price['symbol'],
-            'cartIteam_total' => $cartIteam_total . $price['symbol'],
-            'cartIteam_commission' => $cartIteam_commission . $price['symbol'],
-        ];
+        if($request->ajax()){
+            return [ 
+                'total_cost' => $total . $price['symbol'],
+                'cartIteam_total' => $cartIteam_total . $price['symbol'],
+                'cartIteam_commission' => $cartIteam_commission . $price['symbol'],
+            ];
+        }else{
+            alert('تم التعديل بنجاح','','success');
+            return redirect()->back();
+        }
+
     }
 
     public function delete(Request $request){

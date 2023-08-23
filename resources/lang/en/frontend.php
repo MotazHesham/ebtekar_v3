@@ -171,6 +171,7 @@ return [
         'printed_photos' => 'Add Your own photos',
         'add_more' => 'Add more',
         'add_to_cart' => 'Add To Cart',
+        'edit_cart' => 'Update',
         'description' => 'Description',
         'color' => 'Color',
         'quantity' => 'Quantity',

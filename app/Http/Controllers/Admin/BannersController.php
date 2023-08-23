@@ -44,7 +44,7 @@ class BannersController extends Controller
     }
 
     public function store(StoreBannerRequest $request)
-    {
+    { 
         $banner = Banner::create($request->all());
 
         if ($request->input('photo', false)) {
@@ -57,8 +57,7 @@ class BannersController extends Controller
 
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.banners.index');
-    }
-
+    } 
     public function edit(Banner $banner)
     {
         abort_if(Gate::denies('banner_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');

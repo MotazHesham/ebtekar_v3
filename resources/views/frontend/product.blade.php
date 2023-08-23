@@ -396,71 +396,9 @@
             <div class="row">
                 <div class="col pr-0">
                     <div class="product-slide-5 product-m no-arrow">
-                        @foreach (\App\Models\Product::where('sub_category_id', $product->sub_category_id)->where('id', '!=', $product->id)->where('published', '1')->limit(10)->get() as $key => $related_product)
+                        @foreach ($related_products as $key => $related_product)
                             
-                            @php
-                                $front_imag_2 = isset($related_product->photos[0]) ? $related_product->photos[0]->getUrl('preview2') : '';
-                                $back_imag_2 = isset($related_product->photos[1]) ? $related_product->photos[1]->getUrl('preview2') : $front_imag_2;
-                            @endphp 
-
-                            <div>
-                                <div class="product-box product-box2">
-                                    <div class="product-imgbox">
-                                        <div class="product-front">
-                                            <a href="{{ route('frontend.product',$related_product->slug) }}">
-                                                <img src="{{ $front_imag_2 }}"
-                                                    class="img-fluid" alt="product">
-                                            </a>
-                                        </div>
-                                        <div class="product-back">
-                                            <a href="{{ route('frontend.product',$related_product->slug) }}">
-                                                <img src="{{ $back_imag_2 }}"
-                                                    class="img-fluid" alt="product">
-                                            </a>
-                                        </div>
-                                        <div class="product-icon icon-inline">
-                                            @if($product->variant_product || $product->special)
-                                                <a href="{{ route('frontend.product', $product->slug) }}" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
-                                                    <i data-feather="shopping-cart"></i>
-                                                </a>
-                                            @else  
-                                                <form id="add-to-cart-form" action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;">
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{$product->id}}">
-                                                    <input type="hidden" name="variant" id="variant">
-                                                    <button type="submit" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
-                                                        <i data-feather="shopping-cart"></i>
-                                                    </button>
-                                                </form>
-                                            @endif
-                                            <a href="{{ route('frontend.wishlist.add',$product->slug) }}" class="add-to-wish tooltip-top"
-                                                data-tippy-content="Add to Wishlist">
-                                                <i data-feather="heart"></i>
-                                            </a>
-                                            <a href="javascript:void(0)" onclick="quick_view('{{$product->id}}')" data-bs-toggle="modal" data-bs-target="#quick-view"
-                                                class="tooltip-top" data-tippy-content="Quick View">
-                                                <i data-feather="eye"></i>
-                                            </a> 
-                                        </div>
-                                        @if(auth()->check() && auth()->user()->user_type == 'seller')
-                                            <div class="new-label1">
-                                                <div class="text-center"> <small> {{ trans('frontend.product.commission') }}  <br> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </small> </div>
-                                            </div> 
-                                        @endif
-                                    </div>
-                                    <div class="product-detail product-detail2 ">
-                                        <ul>
-                                            @include('frontend.partials.rate',['rate' => $product->rating])
-                                        </ul>
-                                        <a href="{{ route('frontend.product',$related_product->slug) }}">
-                                            <h3> {{ $related_product->name }} </h3>
-                                        </a>
-                                        <h5>
-                                            <?php echo $product->calc_price_as_text(); ?>  
-                                        </h5>
-                                    </div>
-                                </div>
-                            </div>
+                            @include('frontend.partials.single-product',['product' => $related_product]) 
 
                         @endforeach
                     </div>
