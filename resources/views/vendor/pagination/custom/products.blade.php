@@ -26,7 +26,7 @@
     </ul>
 </div>
 <div class="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between">
-    <ul class="pagination" style="overflow: scroll">
+    <ul class="pagination" style="overflow-x: auto">
         {{-- Previous Page Link --}}
 
         <li class="page-item">
