@@ -17389,10 +17389,7 @@
     .rtl .setting-box {
       direction: ltr; }
       .rtl .setting-box h1, .rtl .setting-box h2, .rtl .setting-box h3, .rtl .setting-box h4, .rtl .setting-box h5, .rtl .setting-box h6, .rtl .setting-box p {
-        text-align: left; }
-    .rtl .brand-logo img {
-      -webkit-transform: scaleX(-1);
-              transform: scaleX(-1); }
+        text-align: left; } 
     .rtl [dir="rtl"] .slick-slide {
       float: left; }
     .rtl .effect-cls:before, .rtl .effect-cls:after {
@@ -18265,10 +18262,7 @@
     .rtl .collection-banner .collection-banner-main .collection-banner-contain .shop {
       text-align: right; }
     .rtl .collection-banner .collection-banner-main .collection-banner-contain.text-center h3, .rtl .collection-banner .collection-banner-main .collection-banner-contain.text-center h4, .rtl .collection-banner .collection-banner-main .collection-banner-contain.text-center .shop {
-      text-align: center; }
-    .rtl .collection-banner .collection-banner-main .collection-img {
-      -webkit-transform: scaleX(-1);
-              transform: scaleX(-1); }
+      text-align: center; } 
     .rtl .collection-banner .collection-banner-main.banner-3 h4 {
       text-align: center; }
     .rtl .collection-banner .collection-banner-main.banner-5 .collection-banner-contain h3, .rtl .collection-banner .collection-banner-main.banner-5 .collection-banner-contain .shop, .rtl .collection-banner .collection-banner-main.banner-5 .collection-banner-contain h4 {
