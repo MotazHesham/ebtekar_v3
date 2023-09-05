@@ -104,7 +104,7 @@ class PlaylistController extends Controller
         } 
         $raw->send_to_playlist_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
         $raw->playlist_status = $request->status;
-        $raw->save(); 
+        $raw->save();  
 
         $auth_id = 0;
         $to_playlist = '';  

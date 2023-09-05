@@ -30,8 +30,10 @@ class ReceiptCompanyObserver
 
     public function updating(ReceiptCompany $receiptComapny){ 
         // Get The Cost of the Shipping Country
-        $country = Country::findOrFail($receiptComapny->shipping_country_id); 
-        $receiptComapny->shipping_country_cost = $country->cost; 
+        $country = Country::find($receiptComapny->shipping_country_id); 
+        if($country){
+            $receiptComapny->shipping_country_cost = $country->cost; 
+        }
     }
 
 

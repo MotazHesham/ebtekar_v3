@@ -1,6 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="ar">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>فاتورة
         أبتكار</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -160,10 +163,13 @@
 
         </div>
     @endforeach
+
+    <script src="{{ asset('dashboard_offline/js/jquery.min.js') }}"></script>
 	<script>
         $(document).ready(function() {
             window.print()
         });
+        
 	</script>
 
 </body>

@@ -76,7 +76,7 @@
                     </a>
                 @endif
                 @if ($type == 'design')
-                    <a target="_blanc" class="btn btn-light  btn-sm rounded-pill "
+                    <a target="print-frame" class="btn btn-light  btn-sm rounded-pill "
                         href="{{ route('admin.playlists.print', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
                         {{ trans('global.print') }}
                     </a>

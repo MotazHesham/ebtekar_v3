@@ -218,7 +218,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('receipt_outgoing_print')
-                                                    <a class="dropdown-item" target="_blanc"
+                                                    <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-outgoings.print', $receipt->id) }}">
                                                         {{ trans('global.print') }}
                                                         <i class="fas fa-print" style="color:yellowgreen"></i>

@@ -456,7 +456,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('receipt_social_print')
-                                                    <a class="dropdown-item" target="_blanc"
+                                                    <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-socials.print', $receipt->id) }}">
                                                         {{ trans('global.print') }}
                                                         <i class="fas fa-print" style="color:yellowgreen"></i>
@@ -470,7 +470,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('receipt_social_receive_money')
-                                                    <a class="dropdown-item" target="_blanc"
+                                                    <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-socials.receive_money', $receipt->id) }}">
                                                         {{ trans('global.receive_money') }}
                                                         <i class="fas fa-money-bill-wave" style="color:cadetblue"></i>

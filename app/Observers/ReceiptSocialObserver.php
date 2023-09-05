@@ -38,8 +38,10 @@ class ReceiptSocialObserver
 
     public function updating(ReceiptSocial $receiptSocial){ 
         // Get The Cost of the Shipping Country
-        $country = Country::findOrFail($receiptSocial->shipping_country_id); 
-        $receiptSocial->shipping_country_cost = $country->cost; 
+        $country = Country::find($receiptSocial->shipping_country_id); 
+        if($country){
+            $receiptSocial->shipping_country_cost = $country->cost; 
+        }
     }
 
     /**

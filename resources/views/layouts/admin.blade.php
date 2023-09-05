@@ -138,6 +138,10 @@
                             </ul>
                         </div>
                     @endif
+
+                    {{-- for printing purpose --}}
+                    <iframe name="print-frame" id="print-frame" frameborder="0" style="width: 100%; position: absolute; z-index: -1; top: -14%;"></iframe>
+
                     @yield('content')
 
                 </div>

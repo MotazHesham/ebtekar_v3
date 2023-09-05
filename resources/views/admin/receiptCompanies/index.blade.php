@@ -369,7 +369,7 @@
                                                     </a>
                                                 @endcan
                                                 @can('receipt_company_print')
-                                                    <a class="dropdown-item" target="_blanc"
+                                                    <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-companies.print', $receipt->id) }}">
                                                         {{ trans('global.print') }}
                                                         <i class="fas fa-print" style="color:yellowgreen"></i>
