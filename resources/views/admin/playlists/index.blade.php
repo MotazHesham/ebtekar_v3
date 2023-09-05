@@ -208,6 +208,18 @@
             $('#sort_playlist').submit();
         }
 
+        function check_printable(id,model_type){
+            $.post('{{ route('admin.playlists.check_printable') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                model_type: model_type, 
+            }, function(data) {
+                if (data == 1) { 
+                    showAlert('error', 'تم الطباعة من قبل');
+                }
+            }); 
+        }
+
 
         function change_status(id, model_type, type, condition) {
             $.post('{{ route('admin.playlists.update_playlist_status') }}', {

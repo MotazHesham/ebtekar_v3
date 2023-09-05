@@ -214,8 +214,8 @@ class PlaylistController extends Controller
         }
         $printed = Printable::where('user_id',Auth::id())->where('printable_id',$id)->where('printable_model',$printable_model)->first();
         if($printed){ 
-            alert('تم الطباعة من قبل','','error');
-            return redirect()->back();
+            // alert('تم الطباعة من قبل','','error');
+            return 0;
         }else{
             if(!auth()->user()->is_admin){
                 Printable::create([
@@ -225,6 +225,22 @@ class PlaylistController extends Controller
                 ]);
             }
             return redirect()->route($print_route,$id);
+        } 
+    }
+    public function check_printable(Request $request){
+        
+        if($request->model_type == 'social'){ 
+            $printable_model = 'App\Models\ReceiptSocial'; 
+        }elseif($request->model_type == 'company'){ 
+            $printable_model = 'App\Models\ReceiptCompany';  
+        }elseif($request->model_type == 'order'){ 
+            $printable_model = 'App\Models\Order';  
+        }
+        $printed = Printable::where('user_id',Auth::id())->where('printable_id',$request->id)->where('printable_model',$printable_model)->first();
+        if($printed){  
+            return 1;
+        }else{ 
+            return 0;
         } 
     }
     

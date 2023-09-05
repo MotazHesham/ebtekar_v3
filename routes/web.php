@@ -307,6 +307,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('playlists/update_playlist_users', 'PlaylistController@update_playlist_users')->name('playlists.update_playlist_users');
     Route::post('playlists/playlist_users', 'PlaylistController@playlist_users')->name('playlists.playlist_users');
     Route::post('playlists/update_playlist_status', 'PlaylistController@update_playlist_status')->name('playlists.update_playlist_status');
+    Route::post('playlists/check_printable', 'PlaylistController@check_printable')->name('playlists.check_printable');
     Route::post('playlists/show_details', 'PlaylistController@show_details')->name('playlists.show_details');
     Route::get('playlists/print/{id}/{model_type}', 'PlaylistController@print')->name('playlists.print');
     Route::get('playlists/{type}', 'PlaylistController@index')->name('playlists.index');
