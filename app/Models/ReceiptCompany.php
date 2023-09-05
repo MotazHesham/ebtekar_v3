@@ -184,37 +184,37 @@ class ReceiptCompany extends Model implements HasMedia
 
     public function staff()
     {
-        return $this->belongsTo(User::class, 'staff_id');
+        return $this->belongsTo(User::class, 'staff_id')->withTrashed();
     }
 
     public function designer()
     {
-        return $this->belongsTo(User::class, 'designer_id');
+        return $this->belongsTo(User::class, 'designer_id')->withTrashed();
     }
 
     public function preparer()
     {
-        return $this->belongsTo(User::class, 'preparer_id');
+        return $this->belongsTo(User::class, 'preparer_id')->withTrashed();
     }
 
     public function manufacturer()
     {
-        return $this->belongsTo(User::class, 'manufacturer_id');
+        return $this->belongsTo(User::class, 'manufacturer_id')->withTrashed();
     }
 
     public function shipmenter()
     {
-        return $this->belongsTo(User::class, 'shipmenter_id');
+        return $this->belongsTo(User::class, 'shipmenter_id')->withTrashed();
     }
 
     public function delivery_man()
     {
-        return $this->belongsTo(User::class, 'delivery_man_id');
+        return $this->belongsTo(User::class, 'delivery_man_id')->withTrashed();
     }
 
     public function shipping_country()
     {
-        return $this->belongsTo(Country::class, 'shipping_country_id');
+        return $this->belongsTo(Country::class, 'shipping_country_id')->withTrashed();
     }
 
 	// operations 
