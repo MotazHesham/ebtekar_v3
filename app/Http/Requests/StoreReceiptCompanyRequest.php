@@ -26,10 +26,12 @@ class StoreReceiptCompanyRequest extends FormRequest
             ],
             'phone_number' => [
                 config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'required',
             ],
             'phone_number_2' => [
                 config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'nullable',
             ],
             'deliver_date' => [

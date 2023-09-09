@@ -25,11 +25,13 @@ class UpdateReceiptSocialRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                config('panel.phone_number_validation'), 
+                config('panel.phone_number_validation'),  
+                config('panel.phone_number_language'),  
                 'required',
             ],
             'phone_number_2' => [
                 config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'nullable',
             ], 
             'shipping_address' => [

@@ -26,10 +26,12 @@ class StoreQualityResponsibleRequest extends FormRequest
             ],
             'phone_number' => [
                 config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'required',
             ],
             'wts_phone' => [
                 config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'required',
             ],
             'country_code' => [

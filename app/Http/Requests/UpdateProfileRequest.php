@@ -33,6 +33,7 @@ class UpdateProfileRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . auth()->id()],
             'phone_number' => [
                 config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'required',
             ],
         ];

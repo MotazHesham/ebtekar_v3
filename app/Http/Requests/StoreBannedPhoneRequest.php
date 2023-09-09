@@ -19,6 +19,7 @@ class StoreBannedPhoneRequest extends FormRequest
         return [
             'phone' => [
                 config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'required',
             ],
             'reason' => [

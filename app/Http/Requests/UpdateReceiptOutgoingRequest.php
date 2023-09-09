@@ -27,6 +27,7 @@ class UpdateReceiptOutgoingRequest extends FormRequest
             ],
             'phone_number' => [
                 config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'required',
             ],
         ];

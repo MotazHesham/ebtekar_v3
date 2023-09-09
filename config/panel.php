@@ -11,6 +11,7 @@ return [
     ],
     'registration_default_role' => '2',
     'phone_number_validation' => 'phone:EG,SA,AE,QA,KW', //EGYPT, SAUDI , EMIRATES ,QATAR , KUWAIT
+    'phone_number_language' => 'regex:/[0-9]/',
     'phone_number_format' => '/(01)[0-9]{9}/',
     'phone_number_size' => '11' 
 ];
