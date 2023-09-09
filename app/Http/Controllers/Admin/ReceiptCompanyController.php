@@ -383,6 +383,12 @@ class ReceiptCompanyController extends Controller
         abort_if(Gate::denies('receipt_company_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $receiptCompany = ReceiptCompany::withTrashed()->find($id); 
+        if($receiptCompany->playlist_status != 'pending'){ 
+            if(!auth()->user()->is_admin){ 
+                alert('Cant delete','Contact Ur Adminstrator','warning'); 
+                return 1;
+            }
+        }
         if($receiptCompany->deleted_at != null){
             $receiptCompany->forceDelete();
         }else{

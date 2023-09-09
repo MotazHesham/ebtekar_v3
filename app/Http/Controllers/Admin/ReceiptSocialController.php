@@ -691,12 +691,17 @@ class ReceiptSocialController extends Controller
         abort_if(Gate::denies('receipt_social_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $receiptSocial = ReceiptSocial::withTrashed()->find($id); 
+        if($receiptSocial->playlist_status != 'pending'){ 
+            if(!auth()->user()->is_admin){ 
+                alert('Cant delete','Contact Ur Adminstrator','warning'); 
+                return 1;
+            }
+        }
         if($receiptSocial->deleted_at != null){
             $receiptSocial->forceDelete();
         }else{
             $receiptSocial->delete();
-        }
-        
+        } 
 
         alert(trans('flash.deleted'),'','success');
 
