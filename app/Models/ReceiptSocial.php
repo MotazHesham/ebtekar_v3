@@ -77,6 +77,7 @@ class ReceiptSocial extends Model
         'confirm',
         'returned',
         'supplied',
+        'hold',
         'printing_times', 
         'shipping_country_cost', 
         'shipping_address',

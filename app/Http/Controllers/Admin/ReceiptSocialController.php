@@ -118,7 +118,11 @@ class ReceiptSocialController extends Controller
             $receipt->payment_status = $type == 'done' ? 'paid' : 'unpaid';
         }
         $receipt->save();
-        return 1;
+        if($request->ajax()){
+            return 1;
+        }else{
+            return redirect()->back();
+        }
     }
 
     public function duplicate($id){

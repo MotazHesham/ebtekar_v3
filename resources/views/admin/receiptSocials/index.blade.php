@@ -395,6 +395,21 @@
                                     class="badge text-bg-{{ trans('global.payment_status.colors.' . $receipt->payment_status) }} mb-1">
                                     {{ $receipt->payment_status ? trans('global.payment_status.status.' . $receipt->payment_status) : '' }}
                                 </span>
+                                <br> 
+                                @can('hold')
+                                    <form action="{{ route('admin.receipt-socials.update_statuses') }}" method="POST" style="display: inline">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $receipt->id }}">
+                                        <input type="hidden" name="type" value="hold">
+                                        @if($receipt->hold == 0)
+                                            <input type="hidden" name="status" value="1">
+                                            <button type="submit" class="btn btn-dark btn-sm rounded-pill">Hold </button>
+                                        @else 
+                                            <input type="hidden" name="status" value="0">
+                                            <button type="submit" class="btn btn-warning btn-sm rounded-pill">UnHold </button> 
+                                        @endif
+                                    </form>
+                                @endcan
                                 @if($receipt->playlist_status == 'pending')
                                     @if($receipt->receipts_receipt_social_products_count  > 0)
                                         <button class="btn btn-success btn-sm rounded-pill" onclick="playlist_users('{{$receipt->id}}','social')">أرسال للديزاينر</button>
@@ -432,67 +447,68 @@
                                             </span>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdown-menu-{{ $receipt->id }}">
-                                            
-                                            @can('receipt_social_product_access')
-                                                <a class="dropdown-item" style="cursor: pointer"
-                                                    onclick="view_products('{{ $receipt->id }}')">
-                                                    {{ trans('global.extra.view_products') }}
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            @endcan
-                                            @if(!isset($deleted))
-                                                @can('receipt_social_product_create')
+                                                @can('receipt_social_product_access')
                                                     <a class="dropdown-item" style="cursor: pointer"
-                                                        onclick="add_product('{{ $receipt->id }}')">
-                                                        {{ trans('global.extra.add_product') }}
-                                                        <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
+                                                        onclick="view_products('{{ $receipt->id }}')">
+                                                        {{ trans('global.extra.view_products') }}
+                                                        <i class="fas fa-eye"></i>
                                                     </a>
                                                 @endcan
-                                                @can('receipt_social_edit')
+                                            @if(!$receipt->hold || auth()->user()->is_admin)
+                                                @if(!isset($deleted))
+                                                    @can('receipt_social_product_create')
+                                                        <a class="dropdown-item" style="cursor: pointer"
+                                                            onclick="add_product('{{ $receipt->id }}')">
+                                                            {{ trans('global.extra.add_product') }}
+                                                            <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
+                                                        </a>
+                                                    @endcan
+                                                    @can('receipt_social_edit')
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('admin.receipt-socials.edit', $receipt->id) }}">
+                                                            {{ trans('global.edit') }}
+                                                            <i class="far fa-edit" style="color:cornflowerblue"></i>
+                                                        </a>
+                                                    @endcan
+                                                    @can('receipt_social_print')
+                                                        <a class="dropdown-item" target="print-frame"
+                                                            href="{{ route('admin.receipt-socials.print', $receipt->id) }}">
+                                                            {{ trans('global.print') }}
+                                                            <i class="fas fa-print" style="color:yellowgreen"></i>
+                                                        </a>
+                                                    @endcan
+                                                    @can('receipt_social_duplicate')
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('admin.receipt-socials.duplicate', $receipt->id) }}">
+                                                            {{ trans('global.duplicate') }}
+                                                            <i class="far fa-clone" style="color:blueviolet"></i>
+                                                        </a>
+                                                    @endcan
+                                                    @can('receipt_social_receive_money')
+                                                        <a class="dropdown-item" target="print-frame"
+                                                            href="{{ route('admin.receipt-socials.receive_money', $receipt->id) }}">
+                                                            {{ trans('global.receive_money') }}
+                                                            <i class="fas fa-money-bill-wave" style="color:cadetblue"></i>
+                                                        </a>
+                                                    @endcan
+                                                @else  
+                                                    @can('receipt_social_restore')
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('admin.receipt-socials.restore', $receipt->id) }}">
+                                                            {{ trans('global.restore') }}
+                                                            <i class="fas fa-undo" style="color:grey"></i>
+                                                        </a>  
+                                                    @endcan
+                                                @endif
+                                                @can('receipt_social_delete')
+                                                    <?php $route = route('admin.receipt-socials.destroy', $receipt->id); ?>
                                                     <a class="dropdown-item"
-                                                        href="{{ route('admin.receipt-socials.edit', $receipt->id) }}">
-                                                        {{ trans('global.edit') }}
-                                                        <i class="far fa-edit" style="color:cornflowerblue"></i>
+                                                        href="#" onclick="deleteConfirmation('{{$route}}')">
+                                                        {{ trans('global.delete') }} @isset($deleted) {{ trans('global.permanently') }} @endisset
+                                                        <i class="fas fa-trash-alt" style="color:darkred"></i>
                                                     </a>
-                                                @endcan
-                                                @can('receipt_social_print')
-                                                    <a class="dropdown-item" target="print-frame"
-                                                        href="{{ route('admin.receipt-socials.print', $receipt->id) }}">
-                                                        {{ trans('global.print') }}
-                                                        <i class="fas fa-print" style="color:yellowgreen"></i>
-                                                    </a>
-                                                @endcan
-                                                @can('receipt_social_duplicate')
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('admin.receipt-socials.duplicate', $receipt->id) }}">
-                                                        {{ trans('global.duplicate') }}
-                                                        <i class="far fa-clone" style="color:blueviolet"></i>
-                                                    </a>
-                                                @endcan
-                                                @can('receipt_social_receive_money')
-                                                    <a class="dropdown-item" target="print-frame"
-                                                        href="{{ route('admin.receipt-socials.receive_money', $receipt->id) }}">
-                                                        {{ trans('global.receive_money') }}
-                                                        <i class="fas fa-money-bill-wave" style="color:cadetblue"></i>
-                                                    </a>
-                                                @endcan
-                                            @else  
-                                                @can('receipt_social_restore')
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('admin.receipt-socials.restore', $receipt->id) }}">
-                                                        {{ trans('global.restore') }}
-                                                        <i class="fas fa-undo" style="color:grey"></i>
-                                                    </a>  
                                                 @endcan
                                             @endif
-                                            @can('receipt_social_delete')
-                                                <?php $route = route('admin.receipt-socials.destroy', $receipt->id); ?>
-                                                <a class="dropdown-item"
-                                                    href="#" onclick="deleteConfirmation('{{$route}}')">
-                                                    {{ trans('global.delete') }} @isset($deleted) {{ trans('global.permanently') }} @endisset
-                                                    <i class="fas fa-trash-alt" style="color:darkred"></i>
-                                                </a>
-                                            @endcan
                                         </div>
                                     </div>
                                 </div>

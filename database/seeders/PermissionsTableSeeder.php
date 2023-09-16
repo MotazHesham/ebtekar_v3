@@ -1089,6 +1089,10 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'hold',
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'profile_password_edit',
             ],
         ];

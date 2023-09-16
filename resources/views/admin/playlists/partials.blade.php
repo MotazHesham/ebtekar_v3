@@ -65,27 +65,29 @@
 
             {{-- action Buttons --}}
             <div class="order-card-actions" id="order-card-actions-{{ $item['id'] }}">
-                @if (auth()->user()->is_admin || $authenticated == auth()->user()->id)
-                    <a class="btn btn-danger btn-sm rounded-pill text-white"
-                        onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">
-                        {{ $title_back }}
-                    </a>
-                    <a class="btn btn-warning btn-sm rounded-pill text-white"
-                        @if ($item['printing_times'] == 0) onclick="alert('قم بالطباعة أولا')"  @else onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send')" @endif>
-                        {{ $title_send }}
+                @if(!$item['hold'] || auth()->user()->is_admin)
+                    @if (auth()->user()->is_admin || $authenticated == auth()->user()->id)
+                        <a class="btn btn-danger btn-sm rounded-pill text-white"
+                            onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">
+                            {{ $title_back }}
+                        </a>
+                        <a class="btn btn-warning btn-sm rounded-pill text-white"
+                            @if ($item['printing_times'] == 0) onclick="alert('قم بالطباعة أولا')"  @else onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send')" @endif>
+                            {{ $title_send }}
+                        </a>
+                    @endif
+                    @if ($type == 'design')
+                        <a target="print-frame" class="btn btn-light  btn-sm rounded-pill" onclick="check_printable('{{ $item['id'] }}','{{ $item['model_type'] }}')"
+                            href="{{ route('admin.playlists.print', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
+                            {{ trans('global.print') }}
+                        </a>
+                    @endif
+                    <a class="btn btn-success btn-sm rounded-pill text-white"
+                        onclick="show_details('{{ $item['id'] }}','{{ $item['model_type'] }}')"
+                        title="{{ __('Order Details') }}">
+                        أظهارالصور
                     </a>
                 @endif
-                @if ($type == 'design')
-                    <a target="print-frame" class="btn btn-light  btn-sm rounded-pill" onclick="check_printable('{{ $item['id'] }}','{{ $item['model_type'] }}')"
-                        href="{{ route('admin.playlists.print', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
-                        {{ trans('global.print') }}
-                    </a>
-                @endif
-                <a class="btn btn-success btn-sm rounded-pill text-white"
-                    onclick="show_details('{{ $item['id'] }}','{{ $item['model_type'] }}')"
-                    title="{{ __('Order Details') }}">
-                    أظهارالصور
-                </a>
             </div>
         </div>
     </div>

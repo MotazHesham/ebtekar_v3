@@ -271,6 +271,7 @@ return [
     'contactu_access' => 'قائمة تواصل مععنا',
     'subscribe_delete' => 'حذف أشتراك',
     'subscribe_access' => 'قائمة الأشتراكات',
+    'hold' => 'hold',
     'profile_password_edit' => 'تعديل تعديل البروفايل',
 
 ];
