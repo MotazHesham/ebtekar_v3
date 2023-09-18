@@ -70,6 +70,13 @@ class HomeController extends Controller
                 }
             }
         } 
+        
+        if($order->hold){
+            return [
+                'status' => 0,
+                'message' => "<div class='alert alert-danger'>".$request->code." Order Is Hold</div>"
+            ];
+        }
 
         if ($request->type == 'design') { 
             $authenticated = $order->designer_id;
