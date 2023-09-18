@@ -15,6 +15,9 @@
             </div>
         </div>
     @endcan
+
+    @include('admin.receiptSocialProducts.search')
+
     <div class="card">
         <div class="card-header">
             {{ trans('cruds.receiptSocialProduct.title_singular') }} {{ trans('global.list') }}

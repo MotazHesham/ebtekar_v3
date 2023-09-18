@@ -68,7 +68,13 @@ class ReceiptSocialProduct extends Model implements HasMedia
     {
         return $this->belongsToMany(ReceiptSocial::class);
     }
+    
     public function website(){
         return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+    } 
+    
+    public function receiptProducts()
+    {
+        return $this->hasMany(ReceiptSocialProductPivot::class,'receipt_social_product_id');
     }
 }

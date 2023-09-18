@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ReceiptProductExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyReceiptSocialProductRequest;
@@ -11,9 +12,11 @@ use App\Models\ReceiptSocialProduct;
 use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 
 class ReceiptSocialProductController extends Controller
 {
@@ -22,6 +25,27 @@ class ReceiptSocialProductController extends Controller
     public function index(Request $request)
     {
         abort_if(Gate::denies('receipt_social_product_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if(!$request->ajax() && $request->has('download')){ 
+
+            $products = ReceiptSocialProduct::orderBy('created_at','desc')->with('receiptProducts.receipt');
+
+            if ($request->search != null){ 
+                $GLOBALS['search'] = $request->search;
+                $products = $products->where(function($Q){
+                    $Q->where('name','like','%'.$GLOBALS['search'].'%')->orWhere('price','like','%'.$GLOBALS['search'].'%');
+                })->orderBy('created_at','desc');
+            }
+
+            if ($request->from_date != null && $request->to_date != null) { 
+                $GLOBALS['from_date'] = Carbon::createFromFormat(config('panel.date_format') . ' H:i:s', $request->from_date . ' ' . '00:00:00')->format('Y-m-d H:i:s');
+                $GLOBALS['to_date'] = Carbon::createFromFormat(config('panel.date_format') . ' H:i:s', $request->to_date . ' ' . '23:59:59')->format('Y-m-d H:i:s');  
+                $products = $products->with('receiptProducts',function($q){
+                    return $q->whereBetween('created_at',[$GLOBALS['from_date'] ,$GLOBALS['to_date']]);
+                }); 
+            }  
+            return Excel::download(new ReceiptProductExport($products->get()), 'receipt_products.xlsx'); 
+        }
 
         if ($request->ajax()) {
             $query = ReceiptSocialProduct::with('website')->select(sprintf('%s.*', (new ReceiptSocialProduct)->table));
@@ -78,7 +102,9 @@ class ReceiptSocialProductController extends Controller
             return $table->make(true);
         }
 
-        return view('admin.receiptSocialProducts.index');
+        $enable_multiple_form_submit = true;
+        
+        return view('admin.receiptSocialProducts.index',compact('enable_multiple_form_submit'));
     }
 
     public function create()

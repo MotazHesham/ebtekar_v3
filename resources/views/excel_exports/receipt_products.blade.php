@@ -47,20 +47,20 @@
             <tr>
 
             </tr>
-            @foreach ($row->product_in_receitps as $receipt_social_product)
-                @if($receipt_social_product->receipt_social && $receipt_social_product->receipt_social->done) {{-- if receipt delivered --}}
+            @foreach ($row->receiptProducts as $receipt_social_product)
+                @if($receipt_social_product->receipt && $receipt_social_product->receipt->done) {{-- if receipt delivered --}}
 
                     @php
-                        $sum += $receipt_social_product->total;
+                        $sum += $receipt_social_product->total_cost;
                         $qnt += $receipt_social_product->quantity;
                     @endphp
                     <tr>
-                        <td>{{ $receipt_social_product->receipt_social->order_num ?? 'not-found' }}</td>
-                        <td>{{ $receipt_social_product->receipt_social->client_name ?? 'not-found' }}</td>
-                        <td>{{ $receipt_social_product->receipt_social->phone ?? 'not-found' }}</td>
+                        <td>{{ $receipt_social_product->receipt->order_num ?? 'not-found' }}</td>
+                        <td>{{ $receipt_social_product->receipt->client_name ?? 'not-found' }}</td>
+                        <td>{{ $receipt_social_product->receipt->phone_number ?? 'not-found' }}</td>
                         <td>{{ $receipt_social_product->quantity }}</td>
-                        <td>{{ $receipt_social_product->total }}</td>
-                        <td>{{ format_date(strtotime($receipt_social_product->created_at)) }}</td>
+                        <td>{{ $receipt_social_product->total_cost }}</td>
+                        <td>{{ $receipt_social_product->created_at }}</td>
                     </tr>
                 @endif
             @endforeach
