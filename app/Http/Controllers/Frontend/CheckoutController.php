@@ -159,8 +159,8 @@ class CheckoutController extends Controller
                         $product->save();
                     }
 
-                    $prices = product_price_in_cart($cartItem['quantity'],$cartItem['variation'],$product);
-                    $calc_total_for_product= ($prices['price']['value'] + $currency->$weight) * $cartItem['quantity']  ;
+                    $prices = calc_product_cost($product,$cartItem['variation']);
+                    $calc_total_for_product= ($prices['price'] + $currency->$weight) * $cartItem['quantity']  ;
                     $total_cost += $calc_total_for_product;
 
                     //add commission to seller 
@@ -175,7 +175,7 @@ class CheckoutController extends Controller
                         'commission' => $prices['commission'] ?? 0,
                         'email_sent' => $cartItem['email_sent'] ?? 0,
                         'quantity' => $cartItem['quantity'],
-                        'price' => $prices['price']['value'],
+                        'price' => $prices['price'],
                         'weight_price' =>  $currency->$weight,
                         'total_cost' => $calc_total_for_product,
                         'photos' => $cartItem['photos'] ?? null, 

@@ -79,7 +79,7 @@ class CartController extends Controller
         $cart = collect();
         foreach(session('cart') as $cartItem){ 
 
-            $product_stock =  ProductStock::where('variant', $cartItem['variation'])->first();
+            $product_stock =  ProductStock::where('variant', $cartItem['variation'])->where('product_id',$cartItem['product_id'])->first();
             $product = Product::find($cartItem['product_id']);
             if($product_stock){ 
                 $price = front_calc_product_currency($product->calc_discount($product_stock->unit_price),$product->weight);

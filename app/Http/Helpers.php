@@ -126,19 +126,35 @@ if (! function_exists('single_design_calcualtions')) {
     }
 }
 
+
+if (!function_exists('calc_product_cost')) {
+    function calc_product_cost($product, $variation){
+
+        $product_stock = \App\Models\ProductStock::where('variant', $variation)->where('product_id',$product->id)->first(); 
+
+        $unit_price =  $product_stock ? $product_stock->unit_price : $product->unit_price;
+        $purchase_price = $product_stock ? $product_stock->purchase_price : $product->purchase_price;  
+        
+        return [
+            'price_before_discount' => $unit_price,
+            'price' => $product->calc_discount($unit_price),
+            'commission' => $unit_price - $purchase_price,
+        ];
+    }
+}
+
 if (!function_exists('product_price_in_cart')) {
     function product_price_in_cart($quantity,$variation,$product)
     {
-        $product_stock = \App\Models\ProductStock::where('variant', $variation)->first();
-        if($product_stock){
-            $price_before_discount = front_calc_product_currency($product_stock->unit_price,$product->weight);
-            $price = front_calc_product_currency($product->calc_discount($product_stock->unit_price),$product->weight);
-            $commission = front_calc_commission_currency($product_stock->unit_price , $product_stock->purchase_price)['value'] * $quantity; 
-        }else{
-            $price_before_discount = front_calc_product_currency($product->unit_price,$product->weight);
-            $price = front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight); 
-            $commission = front_calc_commission_currency($product->unit_price, $product->purchase_price)['value'] * $quantity;
-        } 
+        $product_stock = \App\Models\ProductStock::where('variant', $variation)->where('product_id',$product->id)->first(); 
+
+        $unit_price =  $product_stock ? $product_stock->unit_price : $product->unit_price;
+        $purchase_price = $product_stock ? $product_stock->purchase_price : $product->purchase_price; 
+        
+        $price_before_discount = front_calc_product_currency($unit_price,$product->weight);
+        $price = front_calc_product_currency($product->calc_discount($unit_price),$product->weight); 
+        $commission = front_calc_commission_currency($unit_price, $purchase_price)['value'] * $quantity;
+
         $h2 = '';
         
         if($product->discount > 0){
