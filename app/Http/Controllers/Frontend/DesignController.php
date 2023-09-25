@@ -40,7 +40,7 @@ class DesignController extends Controller
         return view('frontend.designer.designs.edit',compact('design','mockup','designer_images'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request){ 
         $mockup = Mockup::find($request->mockup_id);
         $design = new Design;
         $design->dataset1 = json_encode($request->dataset1);

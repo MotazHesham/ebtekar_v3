@@ -193,17 +193,17 @@ class ProductsController extends Controller
             $table->editColumn('video_link', function ($row) {
                 return $row->video_link ? $row->video_link : '';
             });
-            $table->editColumn('photos', function ($row) {
-                if (! $row->photos) {
-                    return '';
-                }
-                $links = [];
-                foreach ($row->photos as $media) {
-                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
-                }
+            // $table->editColumn('photos', function ($row) {
+            //     if (! $row->photos) {
+            //         return '';
+            //     }
+            //     $links = [];
+            //     foreach ($row->photos as $media) {
+            //         $links[] = '<a href="' . $media->getUrl() . '" target="_blank"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
+            //     }
 
-                return implode(' ', $links);
-            });
+            //     return implode(' ', $links);
+            // });
             $table->editColumn('statuses', function ($row) { 
                 $flash_deal = '<label class="c-switch c-switch-pill c-switch-success">
                                     <input onchange="update_statuses(this,\'flash_deal\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->flash_deal ? "checked" : null) .'>
@@ -258,7 +258,7 @@ class ProductsController extends Controller
                 return $row->website->site_name ?? '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'photos', 'statuses', 'categories','unit_price','name','website_site_name']);
+            $table->rawColumns(['actions', 'placeholder' , 'statuses', 'categories','unit_price','name','website_site_name']);
 
             return $table->make(true);
         }

@@ -43,9 +43,9 @@
                         <th>
                             {{ trans('cruds.receiptSocialProduct.fields.commission') }}
                         </th>
-                        <th>
+                        {{-- <th>
                             {{ trans('cruds.receiptSocialProduct.fields.photos') }}
-                        </th>
+                        </th> --}}
                         <th>
                             {{ trans('global.extra.website_setting_id') }}
                         </th>
@@ -133,12 +133,12 @@
                         data: 'commission',
                         name: 'commission'
                     },
-                    {
-                        data: 'photos',
-                        name: 'photos',
-                        sortable: false,
-                        searchable: false
-                    },
+                    // {
+                    //     data: 'photos',
+                    //     name: 'photos',
+                    //     sortable: false,
+                    //     searchable: false
+                    // },
                     {
                         data: 'website_site_name',
                         name: 'website.site_name'
