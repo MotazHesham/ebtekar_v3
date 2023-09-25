@@ -19,7 +19,7 @@
                                     <div class="animat-block">
 
                                         @foreach ($sliders as $key => $slider)
-                                            <img src="{{ $slider->photo->getUrl() }}" class="img-fluid animat1"
+                                            <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid animat1"
                                                 alt="ebtekar-slider">
                                         @endforeach
 
