@@ -9,7 +9,7 @@
             @foreach ($sliders as $slider)
                 <a href="{{ $slider->link }}" target="_blanc">
                     <div class="slide-main">
-                        <img src="{{ $slider->photo->getUrl() }}" class="img-fluid bg-img" alt="ebtekar-slider">
+                        <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid bg-img" alt="ebtekar-slider">
                         <div class="@if($loop->first) container @else custom-container @endif">
                             <div class="row">
                                 <div class="col-12 p-0">
