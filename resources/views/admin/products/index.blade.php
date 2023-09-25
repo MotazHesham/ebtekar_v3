@@ -157,9 +157,9 @@
                         <th>
                             {{ trans('cruds.product.fields.unit_price') }}
                         </th>
-                        <th>
+                        {{-- <th>
                             {{ trans('cruds.product.fields.photos') }}
-                        </th>
+                        </th> --}}
                         <th>
                             {{ trans('cruds.product.fields.statuses') }}
                         </th> 
@@ -349,12 +349,12 @@
                         data: 'unit_price',
                         name: 'unit_price'
                     },
-                    {
-                        data: 'photos',
-                        name: 'photos',
-                        sortable: false,
-                        searchable: false
-                    },
+                    // {
+                    //     data: 'photos',
+                    //     name: 'photos',
+                    //     sortable: false,
+                    //     searchable: false
+                    // },
                     {
                         data: 'statuses',
                         name: 'statuses',
