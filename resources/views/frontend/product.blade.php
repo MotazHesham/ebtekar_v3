@@ -119,10 +119,10 @@
                                 <h2>{{ $product->name }}</h2>
                                 <ul class="pro-price" id="">
                                     @if($product->discount > 0)
-                                        <li id="product-price-for-variant">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
-                                        <li><span id="product-price-calc-discount">{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}</span></li>
+                                        <li id="product-price-for-variant" style="font-size: 30px;">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
+                                        <li><span id="product-price-calc-discount" style="font-size: 30px;"> {{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}</span></li>
                                     @else
-                                        <li id="product-price-for-variant">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
+                                        <li id="product-price-for-variant" style="font-size: 30px;">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
                                     @endif
                                     @if(auth()->check() && auth()->user()->user_type == 'seller')
                                         <li id="product-commission-for-variant">

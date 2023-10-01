@@ -63,7 +63,7 @@
                 <table>
                     <tr>
                         <td> 
-                            <img loading="lazy"  src="{{ asset($site_settings->logo->getUrl()) }}" height="130" style="display:inline-block;">
+                            <img src="{{ asset($site_settings->logo->getUrl()) }}" height="130" style="display:inline-block;">
                         </td>
                     </tr>
                 </table>
