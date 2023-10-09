@@ -1,12 +1,11 @@
 
 @php
-    $image = $product->photos[0] ? $product->photos[0]->getUrl('preview2') : '';
+    $image = $product->photos[0] ? $product->photos[0]->getUrl() : '';
 @endphp 
 <div class="row">
     <div class="col-lg-6 col-xs-12">
         <div class="quick-view-img">
-            <img src="{{ $image }}" alt=""
-                class="img-fluid bg-img">
+            <img src="{{ $image }}" alt="" class="img-fluid bg-img">
         </div>
     </div>
     <div class="col-lg-6 rtl-text">

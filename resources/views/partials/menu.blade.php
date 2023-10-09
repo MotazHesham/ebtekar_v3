@@ -103,25 +103,18 @@
         @endcan
         @can('playlist_access')
             @php
-                // this is a counter to count the playlist depend on the status (design,manufacturing,prepare,shipment)
-                $playlists_to_count = DB::table('view_playlist_data')
-                                ->whereNotIn('playlist_status',['pending','finish'])
-                                ->select('playlist_status', DB::raw('count(*) as total'))
-                                ->groupBy('playlist_status')
-                                ->get();
+                // this is a counter to count the playlist depend on the status (design,manufacturing,prepare,shipment) 
                 $playlists_counter = [
-                    'design' => 0,
-                    'manufacturing' => 0,
-                    'prepare' => 0,
-                    'shipment' => 0,
+                    'design' => \App\Models\ViewPlaylistData::where('playlist_status','design')->count(),
+                    'manufacturing' => \App\Models\ViewPlaylistData::where('playlist_status','manufacturing')->count(),
+                    'prepare' => \App\Models\ViewPlaylistData::where('playlist_status','prepare')->count(),
+                    'shipment' => \App\Models\ViewPlaylistData::where('playlist_status','shipment')->count(),
                 ];
-                $playlists_counter_sum = 0;
-                foreach($playlists_to_count as $play_raw_group){
-                    if(Gate::allows('playlist_'.$play_raw_group->playlist_status)){
-                        $playlists_counter_sum += $play_raw_group->total;
-                    }
-                    $playlists_counter[$play_raw_group->playlist_status] = $play_raw_group->total;
-                }
+                $playlists_counter_sum = 0; 
+                $playlists_counter_sum += Gate::allows('playlist_design') ? $playlists_counter['design'] : 0; 
+                $playlists_counter_sum += Gate::allows('playlist_manufacturing') ? $playlists_counter['manufacturing'] : 0; 
+                $playlists_counter_sum += Gate::allows('playlist_prepare') ? $playlists_counter['prepare'] : 0; 
+                $playlists_counter_sum += Gate::allows('playlist_shipment') ? $playlists_counter['shipment'] : 0; 
             @endphp
         <li class="c-sidebar-nav-dropdown {{ request()->is("admin/playlists/*") ? "c-active" : "" }}">
             <a class="c-sidebar-nav-dropdown-toggle" href="#">

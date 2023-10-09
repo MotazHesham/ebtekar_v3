@@ -206,7 +206,7 @@
                                             <div class="row">
                                                 @foreach($products as $product) 
                                                     <div class="col-xl-3 col-lg-3 col-md-4 col-6 col-grid-box">
-                                                        @include('frontend.partials.single-product',['product' => $product])
+                                                        @include('frontend.partials.single-product',['product' => $product, 'preview' => 'preview3'])
                                                     </div>
                                                 @endforeach
                                             </div>

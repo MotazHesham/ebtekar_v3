@@ -47,7 +47,7 @@
                 <div class="col pr-0">
                     <div class="product-slide-5 product-m no-arrow">
                         @foreach ($new_products as $product) 
-                            @include('frontend.partials.single-product',['product' => $product])
+                            @include('frontend.partials.single-product',['product' => $product, 'preview' => 'preview2'])
                         @endforeach
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                                                 <div class="media-banner b-g-white1 border-0">
                                                     @foreach ($chunk as $product)  
                                                         @php
-                                                            $product_image = isset($product->photos[0]) ? $product->photos[0]->getUrl('preview2') : ''; 
+                                                            $product_image = isset($product->photos[0]) ? $product->photos[0]->getUrl('thumb') : ''; 
                                                         @endphp 
                                                         <div class="media-banner-box">
                                                             <div class="media">
@@ -232,7 +232,7 @@
                 <div class="col pr-0">
                     <div class="product-slide-5 product-m no-arrow">
                         @foreach ($best_selling_products as $product) 
-                            @include('frontend.partials.single-product',['product' => $product])
+                            @include('frontend.partials.single-product',['product' => $product, 'preview' => 'preview2'])
                         @endforeach
                     </div>
                 </div>

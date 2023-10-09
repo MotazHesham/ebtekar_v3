@@ -103,7 +103,7 @@
                             <div class="col-12 p-0">
                                 <div class="slider-nav"> 
                                     @foreach($product->photos as $key => $media)
-                                        <div><img src="{{ $media->getUrl('preview2') }}" alt=""
+                                        <div><img src="{{ $media->getUrl('preview') }}" alt=""
                                                 class="img-fluid  image_zoom_cls-{{$key}}"></div>
                                     @endforeach 
                                 </div>
@@ -310,7 +310,7 @@
                                     <!-- 16:9 aspect ratio -->
                                     <div class="embed-responsive embed-responsive-16by9 mb-5">
                                         @if ($product->video_provider == 'youtube' && $product->video_link != null)
-                                            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ explode('=', $product->video_link)[1] ?? '' }}"></iframe>
+                                            {!! $product->video_link !!}
                                         @elseif ($product->video_provider == 'dailymotion' && $product->video_link != null)
                                             <iframe class="embed-responsive-item" src="https://www.dailymotion.com/embed/video/{{ explode('video/', $product->video_link)[1] ?? '' }}"></iframe>
                                         @elseif ($product->video_provider == 'vimeo' && $product->video_link != null)
@@ -398,7 +398,7 @@
                     <div class="product-slide-5 product-m no-arrow">
                         @foreach ($related_products as $key => $related_product)
                             
-                            @include('frontend.partials.single-product',['product' => $related_product]) 
+                            @include('frontend.partials.single-product',['product' => $related_product, 'preview' => 'preview2']) 
 
                         @endforeach
                     </div>

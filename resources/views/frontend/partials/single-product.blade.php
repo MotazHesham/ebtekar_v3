@@ -1,7 +1,7 @@
 
 @php
-    $front_image = isset($product->photos[0]) ? $product->photos[0]->getUrl('preview2') : '';
-    $back_image = isset($product->photos[1]) ? $product->photos[1]->getUrl('preview2') : $front_image;
+    $front_image = isset($product->photos[0]) ? $product->photos[0]->getUrl($preview) : '';
+    $back_image = isset($product->photos[1]) ? $product->photos[1]->getUrl($preview) : $front_image;
 @endphp 
 
 <div>

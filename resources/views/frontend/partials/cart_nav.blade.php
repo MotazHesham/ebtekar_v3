@@ -9,7 +9,7 @@
                 $image = '';
                 if ($product) {
                     if ($product->photos != null) {
-                        $image = isset($product->photos[0]) ? $product->photos[0]->getUrl('preview2') : '';
+                        $image = isset($product->photos[0]) ? $product->photos[0]->getUrl('thumb') : '';
                     }
                     $prices = product_price_in_cart($cartItem['quantity'], $cartItem['variation'], $product);
                     $total += $prices['price']['value'] * $cartItem['quantity'];

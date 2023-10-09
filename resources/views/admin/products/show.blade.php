@@ -70,21 +70,17 @@
                         <td>
                             {{ $product->attributes }}
                         </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.product.fields.choice_options') }}
-                        </th>
-                        <td>
-                            {{ $product->choice_options }}
-                        </td>
-                    </tr>
+                    </tr> 
                     <tr>
                         <th>
                             {{ trans('cruds.product.fields.colors') }}
                         </th>
                         <td>
-                            {{ $product->colors }}
+                            @if (count(json_decode($product->colors)) > 0)
+                                @foreach (json_decode($product->colors) as $key => $color)
+                                    <span style="background: {{$color}}">{{$color}}</span>
+                                @endforeach
+                            @endif
                         </td>
                     </tr>
                     <tr>

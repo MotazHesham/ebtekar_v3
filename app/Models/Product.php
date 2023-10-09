@@ -101,9 +101,10 @@ class Product extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->fit('crop', 50, 50);
-        $this->addMediaConversion('preview')->fit('crop', 120, 120);
-        $this->addMediaConversion('preview2')->fit('crop', 450, 450); 
+        $this->addMediaConversion('thumb')->fit('crop', 84, 108);
+        $this->addMediaConversion('preview')->fit('crop', 123, 123);
+        $this->addMediaConversion('preview2')->fit('crop', 203, 203); 
+        $this->addMediaConversion('preview3')->fit('crop', 254, 254); 
     }
 
     public function getPhotosAttribute()
@@ -113,6 +114,8 @@ class Product extends Model implements HasMedia
             $item->url       = $item->getUrl();
             $item->thumbnail = $item->getUrl('thumb');
             $item->preview   = $item->getUrl('preview');
+            $item->preview2   = $item->getUrl('preview2');
+            $item->preview3   = $item->getUrl('preview3');
         });
 
         return $files;

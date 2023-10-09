@@ -21,7 +21,7 @@ class CreateProductsTable extends Migration
             $table->longText('colors')->nullable();
             $table->longText('tags')->nullable();
             $table->string('video_provider')->nullable();
-            $table->string('video_link')->nullable();
+            $table->string('video_link',1000)->nullable();
             $table->longText('description')->nullable();
             $table->string('discount_type')->nullable();
             $table->decimal('discount', 15, 2)->nullable();
