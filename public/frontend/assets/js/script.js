@@ -1383,21 +1383,21 @@ $('.feature-slide').slick({
   $(".bg_size_content").parent().addClass('b_size_content');
   $(".bg-img" ).parent().addClass('bg-size');
 
-  jQuery('.bg-img').each(function() {
+  // jQuery('.bg-img').each(function() {
 
-    var el = $(this),
-      src = el.attr('src'),
-      parent = el.parent();
+  //   var el = $(this),
+  //     src = el.attr('src'),
+  //     parent = el.parent();
 
-    parent.css({
-      'background-image': 'url(' + src + ')',
-      'background-size': 'cover',
-      'background-position': 'center',
-      'display' : 'block'
-    });
+  //   parent.css({
+  //     'background-image': 'url(' + src + ')',
+  //     'background-size': 'cover',
+  //     'background-position': 'center',
+  //     'display' : 'block'
+  //   });
 
-    el.hide();
-  });
+  //   el.hide();
+  // });
 
   /*=====================
    05 toggle nav

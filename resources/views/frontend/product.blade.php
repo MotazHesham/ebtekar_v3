@@ -283,12 +283,8 @@
             <div class="row">
                 <div class="col-sm-12 col-lg-12 ">
                     <div class=" creative-card creative-inner">
-                        <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
-                            <li class="nav-item"><a class="nav-link active" id="top-home-tab" data-bs-toggle="tab"
-                                    href="#top-home" role="tab" aria-selected="true">{{ trans('frontend.product.product_description') }}</a>
-                                <div class="material-border"></div>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" id="contact-top-tab" data-bs-toggle="tab"
+                        <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist"> 
+                            <li class="nav-item"><a class="nav-link active" id="contact-top-tab" data-bs-toggle="tab"
                                     href="#top-contact" role="tab" aria-selected="false">{{ trans('frontend.product.video') }}</a>
                                 <div class="material-border"></div>
                             </li>
@@ -297,14 +293,8 @@
                                 <div class="material-border"></div>
                             </li>
                         </ul>
-                        <div class="tab-content nav-material" id="top-tabContent">
-                            <div class="tab-pane fade show active" id="top-home" role="tabpanel"
-                                aria-labelledby="top-home-tab">
-                                <p>
-                                    <?php echo $product->description; ?>
-                                </p>
-                            </div>
-                            <div class="tab-pane fade" id="top-contact" role="tabpanel"
+                        <div class="tab-content nav-material" id="top-tabContent"> 
+                            <div class="tab-pane fade show active" id="top-contact" role="tabpanel"
                                 aria-labelledby="contact-top-tab">
                                 <div class="mt-4 text-center">
                                     <!-- 16:9 aspect ratio -->

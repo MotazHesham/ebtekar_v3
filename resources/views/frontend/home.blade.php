@@ -3,30 +3,11 @@
 @section('content')
     <!--home slider start-->
     <section class="furniture-slide" style="direction: ltr;">
-        <div class="slide-1 no-arrow">
-
-
+        <div class="slide-1 no-arrow"> 
             @foreach ($sliders as $slider)
                 <a href="{{ $slider->link }}" target="_blanc">
                     <div class="slide-main">
-                        <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid bg-img" alt="ebtekar-slider">
-                        <div class="@if($loop->first) container @else custom-container @endif">
-                            <div class="row">
-                                <div class="col-12 p-0">
-
-                                    <div class="slide-contain"> 
-                                    </div>
-                                    <div class="animat-block">
-
-                                        @foreach ($sliders as $key => $slider)
-                                            <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid animat1"
-                                                alt="ebtekar-slider">
-                                        @endforeach
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid bg-img" alt="ebtekar-slider"> 
                     </div>
                 </a>
             @endforeach
