@@ -7,7 +7,7 @@
             @foreach ($sliders as $slider)
                 <a href="{{ $slider->link }}" target="_blanc">
                     <div class="slide-main">
-                        <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid bg-img" alt="ebtekar-slider"> 
+                        <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid bg-img" alt="ebtekar-slider" style="width: 100%"> 
                     </div>
                 </a>
             @endforeach

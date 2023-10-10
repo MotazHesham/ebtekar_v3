@@ -278,12 +278,12 @@
                                     </li>
                                     <!--product-end end-->
 
-                                    <li>
+                                    {{-- <li>
                                         <a class="dark-menu-item" href="{{ route('frontend.beseller') }}"> {{ trans('frontend.header.be_seller') }}</a>
                                     </li>
                                     <li>
                                         <a class="dark-menu-item" href="{{ route('frontend.bedesigner') }}">{{ trans('frontend.header.be_designer') }} </a>
-                                    </li>
+                                    </li> --}}
                                     <li>
 
                                     <li>
