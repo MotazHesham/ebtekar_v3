@@ -26558,4 +26558,13 @@
     flex-flow: row wrap;
     align-items: center;
   }
-  
+  .icon-block .mobile-search svg, .icon-block .mobile-wishlist svg, .icon-block .mobile-cart svg, .icon-block .mobile-setting svg, .icon-block .mobile-user svg {
+      fill: #ffffff !important;
+      width: 22px !important; }
+
+
+
+.mobile-setting .fa {
+  color: #fff;
+  font-size: 22px;
+} 
