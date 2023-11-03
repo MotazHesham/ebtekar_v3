@@ -233,13 +233,21 @@
                                     </div> 
 
                                     <div class="product-buttons">
-                                        @if($product->special)
-                                            <a href="" class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ trans('frontend.product.custom_product') }}</a>
-                                        @else
-                                            <button type="submit" id="cartEffect"
-                                                class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart">
+                                        @if($product->current_stock > 0)
+                                            @if($product->special)
+                                                <a href="" class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ trans('frontend.product.custom_product') }}</a>
+                                            @else
+                                                <button type="submit" id="cartEffect"
+                                                    class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                    {{ trans('frontend.product.add_to_cart') }}
+                                                </button>
+                                            @endif
+                                        @else 
+                                            <button type="button"
+                                                class="btn cart-btn btn-danger tooltip-top" data-tippy-content="Add to cart">
                                                 <i class="fa fa-shopping-cart"></i>
-                                                {{ trans('frontend.product.add_to_cart') }}
+                                                Out Of Stock
                                             </button>
                                         @endif
                                         <a href="{{ route('frontend.wishlist.add',$product->slug) }}" class="btn btn-normal add-to-wish tooltip-top"

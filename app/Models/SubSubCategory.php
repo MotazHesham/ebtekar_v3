@@ -28,6 +28,7 @@ class SubSubCategory extends Model
         'meta_description',
         'sub_category_id',
         'website_setting_id',
+        'published',
         'created_at',
         'updated_at',
         'deleted_at',

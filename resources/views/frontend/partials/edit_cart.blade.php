@@ -1,5 +1,6 @@
 @php
     $image = $product->photos[0] ? $product->photos[0]->getUrl('preview2') : '';
+    $prices = product_price_in_cart($cart['quantity'],$cart['variation'],$product);
 @endphp
 <div class="modal-body">
     <form id="add-to-cart-form" action="{{ route('frontend.cart.update') }}" method="POST" enctype="multipart/form-data">
@@ -17,9 +18,9 @@
                                 </a> 
                                 <div class="media-body">
                                     <a href="{{ route('frontend.product', $product->slug) }}">
-                                        <h3>{{ $product->name }}</h3>
+                                        <h3>{{ $product->name }} <b>@if($cart['variation']) ( {{ $cart['variation'] }} ) @endif</b></h3>
                                     </a>
-                                    <h6> {!! $product->calc_price_as_text() !!} </h6>
+                                    <h6> <?php echo $prices['h2']; ?> 
                                 </div>
                             </div>
                         </div>

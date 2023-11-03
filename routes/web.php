@@ -230,6 +230,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('orders/update_delivery_man', 'OrdersController@update_delivery_man')->name('orders.update_delivery_man');
     Route::delete('orders/destroy_product/{id}', 'OrdersController@destroy_product')->name('orders.destroy_product');
     Route::get('orders/print/{id}', 'OrdersController@print')->name('orders.print');
+    Route::post('orders/add_order_detail', 'OrdersController@add_order_detail')->name('orders.add_order_detail');
+    Route::post('orders/store_order_detail', 'OrdersController@store_order_detail')->name('orders.store_order_detail');
+    Route::post('orders/edit_order_detail', 'OrdersController@edit_order_detail')->name('orders.edit_order_detail');
     Route::post('orders/update_order_detail', 'OrdersController@update_order_detail')->name('orders.update_order_detail');
     Route::post('orders/show_order_detail', 'OrdersController@show_order_detail')->name('orders.show_order_detail');
     Route::post('orders/update_delivery_man', 'OrdersController@update_delivery_man')->name('orders.update_delivery_man');
@@ -288,10 +291,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Sub Category
     Route::delete('sub-categories/destroy', 'SubCategoryController@massDestroy')->name('sub-categories.massDestroy');
+    Route::post('sub-categories/update_statuses', 'SubCategoryController@update_statuses')->name('sub-categories.update_statuses');
     Route::resource('sub-categories', 'SubCategoryController');
 
     // Sub Sub Category
     Route::delete('sub-sub-categories/destroy', 'SubSubCategoryController@massDestroy')->name('sub-sub-categories.massDestroy');
+    Route::post('sub-sub-categories/update_statuses', 'SubSubCategoryController@update_statuses')->name('sub-sub-categories.update_statuses');
     Route::resource('sub-sub-categories', 'SubSubCategoryController');
 
     // Attributes

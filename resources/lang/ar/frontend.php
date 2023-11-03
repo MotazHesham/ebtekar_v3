@@ -181,6 +181,7 @@ return [
         'video' => 'فيديو',
         'rate' => 'التقييم',
         'send' => 'أرسال',
+        'cost' => 'السعر',
         'comment' => 'التعليق',
         'write_comment' => 'اكتب تقييمك هنا',
         'product_description' => 'تفاصيل المنتج',

@@ -103,7 +103,12 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><a href="{{ route('frontend.cart.delete',$cartItem['id']) }}" class="icon"><i class="ti-close"></i></a></td>
+                                            <td>
+                                                <a href="javascript:void(0)" onclick="edit_cart('{{$cartItem['id']}}')">
+                                                    <i data-feather="edit" style="font-size:15px"></i>
+                                                </a>
+                                                <a href="{{ route('frontend.cart.delete',$cartItem['id']) }}" class="icon"><i class="ti-close"></i></a>
+                                            </td>
                                             <td>
                                                 <h2 class="td-color" id="td-total-{{$cartItem['id']}}">{{  ($prices['price']['value'] * $cartItem['quantity'])  }} {{ $prices['price']['symbol'] }}</h2>
                                                 @if(auth()->check() && auth()->user()->user_type == 'seller')

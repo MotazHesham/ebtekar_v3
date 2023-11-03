@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model; 
+use App\Traits\Auditable;
 use DateTimeInterface;
 
 class OrderDetail extends Model
 {
+    use Auditable;
+
     public $table = 'order_details';
 
     protected $dates = [

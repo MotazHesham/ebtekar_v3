@@ -130,53 +130,67 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-body">
-                @if($order->orderDetails)
+                @if($order->orderDetails) 
+
+                    <div style="margin-bottom: 10px;" class="row">
+                        <div class="col-lg-12">
+                            <button class="btn btn-success" onclick="add_order_detail('{{$order->id}}')">
+                                {{ trans('global.add') }} {{ trans('cruds.product.title_singular') }}
+                            </button>
+                        </div>
+                    </div> 
+
                     <table  class="table table-bordered table-striped table-hover datatable table-responsive-lg table-responsive-md table-responsive-sm">
                         <thead>
                             <th>{{ trans('cruds.order.extra.id') }}</th>
                             <th>{{ trans('cruds.order.extra.product') }}</th>
+                            <th>{{ trans('cruds.order.extra.variation') }}</th>
                             <th>{{ trans('cruds.order.extra.total_cost') }}</th>
-                            <th>{{ trans('cruds.order.extra.commission') }}</th>
-                            <th>{{ trans('cruds.order.extra.extra_commission') }}</th>
+                            <th>{{ trans('cruds.order.extra.commission') }}</th> 
                             <th></th>
                         </thead>
                         <tbody>
                                 @foreach($order->orderDetails as $orderDetail)
-                                    <form action="{{ route('admin.orders.update_order_detail') }}" method="POST">
-                                        @csrf 
-                                        <input type="hidden" name="id" value="{{$orderDetail->id}}">
-                                        <tr>
-                                            <td>{{ $orderDetail->id }}</td> 
-                                            <td>
-                                                @foreach($orderDetail->product->photos as $media)
-                                                    <img src="{{ $media->getUrl('thumb')}}" alt="">
-                                                @endforeach
+                                    <tr>
+                                        <td>{{ $orderDetail->id }}</td> 
+                                        <td>
+                                            @foreach($orderDetail->product->photos as $media)
+                                                <img src="{{ $media->getUrl('thumb')}}" alt="">
+                                            @endforeach
+                                            <br>
+                                            <a style="color: black" target="_blanc" href="{{ route('admin.products.show',$orderDetail->product->id ?? 1) }}"> {{ $orderDetail->product->name ?? 'Deleted' }}</a>
+                                        </td>
+                                        <td>{{ $orderDetail->variation ?? '' }}</td>
+                                        <td>
+                                            <span class="badge badge-dark">{{ trans('cruds.order.extra.quantity') }} {{ $orderDetail->quantity }}</span>
+                                            <span class="badge badge-dark">{{ trans('cruds.order.extra.price') }} {{ $orderDetail->calc_price($order->exchange_rate) }} {{ $order->symbol }}</span>
+                                            <br>
+                                            <span class="badge badge-success">{{ trans('cruds.order.extra.total_cost') }} {{ $orderDetail->total_cost($order->exchange_rate) }} {{ $order->symbol }}</span>
+    
+                                        </td>
+                                        <td>
+                                            {{ dashboard_currency($orderDetail->commission) }}
+                                            @if($orderDetail->extra_commission)
                                                 <br>
-                                                <a style="color: black" target="_blanc" href="{{ route('admin.products.show',$orderDetail->product->id ?? 1) }}"> {{ $orderDetail->product->name ?? 'Deleted' }}</a>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dark">{{ trans('cruds.order.extra.quantity') }} {{ $orderDetail->quantity }}</span>
-                                                <span class="badge badge-dark">{{ trans('cruds.order.extra.price') }} {{ $orderDetail->calc_price($order->exchange_rate) }} {{ $order->symbol }}</span>
-                                                <br>
-                                                <span class="badge badge-success">{{ trans('cruds.order.extra.total_cost') }} {{ $orderDetail->total_cost($order->exchange_rate) }} {{ $order->symbol }}</span>
-        
-                                            </td>
-                                            <td>{{ dashboard_currency($orderDetail->commission) }}</td>
-                                            <td><input style="min-width: 70px" type="number" class="form-control" name="extra_commission" value="{{ $orderDetail->extra_commission }}" required></td>
-                                            <td> 
-                                                <a class="btn btn-primary" href="#" onclick="show_details('{{$orderDetail->id}}')">
-                                                    {{ trans('global.view') }} 
-                                                </a>
-                                                <button class="btn btn-info" type="submit">
-                                                    {{ trans('global.update') }} 
-                                                </button>
-                                                <?php $route = route('admin.orders.destroy_product', $orderDetail->id); ?>
-                                                <a class="btn btn-danger" href="#"  onclick="deleteConfirmation('{{$route}}')">
-                                                    {{ trans('global.delete') }} 
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </form>
+                                                <span class="badge badge-success">
+                                                    {{ trans('cruds.order.extra.extra_commission') }}
+                                                    {{ dashboard_currency($orderDetail->extra_commission) }}
+                                                </span>
+                                            @endif
+                                        </td> 
+                                        <td> 
+                                            <a class="btn btn-primary" href="#" onclick="show_details('{{$orderDetail->id}}')">
+                                                {{ trans('global.view') }} 
+                                            </a>
+                                            <button class="btn btn-info" onclick="edit_order_detail('{{$orderDetail->id}}')">
+                                                {{ trans('global.edit') }} 
+                                            </button>
+                                            <?php $route = route('admin.orders.destroy_product', $orderDetail->id); ?>
+                                            <a class="btn btn-danger" href="#"  onclick="deleteConfirmation('{{$route}}')">
+                                                {{ trans('global.delete') }} 
+                                            </a>
+                                        </td>
+                                    </tr> 
                                 @endforeach
                         </tbody>
                     </table>
@@ -361,6 +375,27 @@
     <script>
         function show_details(id){ 
             $.post('{{ route('admin.orders.show_order_detail') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id
+            }, function(data) {
+                $('#AjaxModal .modal-dialog').html(null);
+                $('#AjaxModal').modal('show');
+                $('#AjaxModal .modal-dialog').html(data);
+            });
+        }
+
+        function edit_order_detail(id){
+            $.post('{{ route('admin.orders.edit_order_detail') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id
+            }, function(data) {
+                $('#AjaxModal .modal-dialog').html(null);
+                $('#AjaxModal').modal('show');
+                $('#AjaxModal .modal-dialog').html(data);
+            });
+        }
+        function add_order_detail(id){
+            $.post('{{ route('admin.orders.add_order_detail') }}', {
                 _token: '{{ csrf_token() }}',
                 id: id
             }, function(data) {

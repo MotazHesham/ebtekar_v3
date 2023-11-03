@@ -258,12 +258,12 @@
                                                 <li>
                                                     <a  href="{{ route('frontend.products.category',$category->slug) }}">{{ $category->name }}</a>
                                                     <ul>
-                                                        @foreach ($category->sub_categories as $subcategory)
+                                                        @foreach ($category->sub_categories->where('published',1) as $subcategory)
                                                             <li>
                                                                 <a
                                                                     href="{{ route('frontend.products.subcategory', $subcategory->slug) }}">{{ $subcategory->name }}</a>
                                                                 <ul>
-                                                                    @foreach ($subcategory->sub_sub_categories as $subsubcategory)
+                                                                    @foreach ($subcategory->sub_sub_categories->where('published',1) as $subsubcategory)
                                                                         <li><a
                                                                                 href="{{ route('frontend.products.subsubcategory', $subsubcategory->slug) }}">{{ $subsubcategory->name }}</a>
                                                                         </li>

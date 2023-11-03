@@ -378,17 +378,93 @@ class OrdersController extends Controller
         $orderDetail->load(['product','order']);
         return view('admin.orders.partials.show_details', compact('orderDetail'));
     }
+
+    public function add_order_detail(Request $request){
+        $order = Order::findOrfail($request->id);
+        $products = Product::where('website_setting_id',$order->website_setting_id)->get();
+        return view('admin.orders.partials.add_order_detail', compact('order','products'));
+    }
+    public function store_order_detail(Request $request){
+        $orderDetail = new OrderDetail;
+        $orderDetail->description = $request->description;
+        $orderDetail->price = $request->price;
+        $orderDetail->weight_price = 0;
+        $orderDetail->commission = 0; 
+        $orderDetail->quantity = $request->quantity;
+        $orderDetail->extra_commission = $request->extra_commission;
+        $orderDetail->total_cost = ($request->price * $request->quantity);
+        $orderDetail->product_id = $request->product_id;
+        $orderDetail->order_id = $request->order_id;
+
+        $photos = array();  
+        if($request->hasFile('photos')){
+            foreach ($request->photos as $key => $photo) {
+                $photos[$key]['photo'] = $photo->store('uploads/orders/products/photos');
+                $photos[$key]['note'] = $request->photos_note[$key] ?? '';  
+            }
+        } 
+        $orderDetail->photos = json_encode($photos);
+        if($orderDetail->save()){ 
+            $order = Order::with('orderDetails')->find($orderDetail->order_id);
+            $extra_commission = 0;
+            $total_cost = 0;
+            foreach($order->orderDetails as $raw){
+                $extra_commission += $raw->extra_commission;
+                $total_cost += $raw->total_cost;
+            }
+            $order->extra_commission = $extra_commission;
+            $order->total_cost = $total_cost;
+            $order->save();
+        }
+
+        toast(trans('flash.global.success_title'),'success'); 
+        return redirect()->route('admin.orders.show',$request->order_id);
+    }
+
+    public function edit_order_detail(Request $request){
+        $orderDetail = OrderDetail::findOrFail($request->id);
+        $orderDetail->load(['order']);
+        $product = Product::findOrFail($orderDetail->product_id);
+        return view('admin.orders.partials.edit_order_detail', compact('orderDetail','product'));
+    }
+
     public function update_order_detail(Request $request){
         $orderDetail = OrderDetail::findOrFail($request->id);
         $orderDetail->extra_commission = $request->extra_commission;
+        $orderDetail->price = $request->price;
+        $orderDetail->quantity = $request->quantity;
+        $orderDetail->total_cost = $request->quantity * ($request->price + $orderDetail->weight);
+        $orderDetail->description = $request->description;
+        
+        $photos = array();  
+        if($request->has('previous_photos')){
+            foreach ($request->previous_photos as $key => $prev) {
+                $photos[]['photo'] = $prev;  
+            }
+        }
+        if($request->hasFile('photos')){
+            foreach ($request->photos as $key => $photo) {
+                $photos[]['photo'] = $photo->store('uploads/orders/products/photos');  
+            }
+        }  
+        if($request->has('photos_note')){ 
+            foreach ($request->photos_note as $key2 => $note) {  
+                $photos[$key2]['note'] = $note ?? '';  
+            } 
+        }   
+        $orderDetail->photos = json_encode($photos); 
+        
         
         if($orderDetail->save()){
             $order = Order::with('orderDetails')->find($orderDetail->order_id);
             $extra_commission = 0;
+            $total_cost = 0;
             foreach($order->orderDetails as $raw){
-                $extra_commission = $extra_commission + $raw->extra_commission;
+                $extra_commission += $raw->extra_commission;
+                $total_cost += $raw->total_cost;
             }
             $order->extra_commission = $extra_commission;
+            $order->total_cost = $total_cost;
             $order->save();
         }else{
             return 0;

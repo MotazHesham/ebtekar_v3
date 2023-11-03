@@ -17,6 +17,15 @@ use Illuminate\Support\Str;
 
 class SubCategoryController extends Controller
 {
+    
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $subcategory = SubCategory::findOrFail($request->id);
+        $subcategory->$type = $request->status; 
+        $subcategory->save();
+        return 1;
+    }
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('sub_category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -59,7 +68,14 @@ class SubCategoryController extends Controller
             $table->editColumn('website_site_name', function ($row) { 
                 return $row->website->site_name ?? '';
             });
-            $table->rawColumns(['actions', 'placeholder', 'category','website_site_name']);
+            $table->editColumn('published', function ($row) { 
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'published\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->published ? "checked" : null) .' }}>
+                    <span class="c-switch-slider"></span>
+                </label>';
+            }); 
+            $table->rawColumns(['actions', 'placeholder','published', 'category','website_site_name']);
 
             return $table->make(true);
         }

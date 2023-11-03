@@ -31,6 +31,8 @@
             @php
                 $sum = 0;
                 $qnt = 0;
+                $sum2 = 0;
+                $qnt2 = 0;
             @endphp
             <tr>
 
@@ -55,7 +57,7 @@
                         $qnt += $receipt_social_product->quantity;
                     @endphp
                     <tr>
-                        <td>{{ $receipt_social_product->receipt->order_num ?? 'not-found' }}</td>
+                        <td>{{ $receipt_social_product->receipt->order_num ?? 'not-found' }} - تم التسليم</td>
                         <td>{{ $receipt_social_product->receipt->client_name ?? 'not-found' }}</td>
                         <td>{{ $receipt_social_product->receipt->phone_number ?? 'not-found' }}</td>
                         <td>{{ $receipt_social_product->quantity }}</td>
@@ -71,6 +73,33 @@
                 <td></td>
                 <td>الكمية : {{ $qnt }}</td>
                 <td>المجموع : {{ $sum }}</td>
+                <td></td>
+            </tr>
+            <tr></tr>
+            @foreach ($row->receiptProducts as $receipt_social_product)
+                @if($receipt_social_product->receipt && !$receipt_social_product->receipt->done) {{-- if receipt delivered --}}
+
+                    @php
+                        $sum2 += $receipt_social_product->total_cost;
+                        $qnt2 += $receipt_social_product->quantity;
+                    @endphp
+                    <tr>
+                        <td>{{ $receipt_social_product->receipt->order_num ?? 'not-found' }} - لم يتم التسليم</td>
+                        <td>{{ $receipt_social_product->receipt->client_name ?? 'not-found' }}</td>
+                        <td>{{ $receipt_social_product->receipt->phone_number ?? 'not-found' }}</td>
+                        <td>{{ $receipt_social_product->quantity }}</td>
+                        <td>{{ $receipt_social_product->total_cost }}</td>
+                        <td>{{ $receipt_social_product->created_at }}</td>
+                    </tr>
+                @endif
+            @endforeach
+            <tr></tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>الكمية : {{ $qnt2 }}</td>
+                <td>المجموع : {{ $sum2 }}</td>
                 <td></td>
             </tr>
         @endforeach

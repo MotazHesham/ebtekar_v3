@@ -34,6 +34,9 @@
                             {{ trans('global.extra.website_setting_id') }}
                         </th>
                         <th>
+                            {{ trans('cruds.category.fields.published') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -45,6 +48,21 @@
 @section('scripts')
     @parent
     <script>
+        function update_statuses(el,type){
+            if(el.checked){
+                var status = 1;
+            }
+            else{
+                var status = 0;
+            }
+            $.post('{{ route('admin.sub-sub-categories.update_statuses') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status, type:type}, function(data){
+                if(data == 1){
+                    showAlert('success', 'Success', '');
+                }else{
+                    showAlert('danger', 'Something went wrong', '');
+                }
+            });
+        }
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('sub_sub_category_delete')
@@ -113,6 +131,10 @@
                     {
                         data: 'website_site_name',
                         name: 'website.site_name'
+                    }, 
+                    {
+                        data: 'published',
+                        name: 'published'
                     }, 
                     {
                         data: 'actions',

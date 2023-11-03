@@ -14,21 +14,23 @@
                 @if (is_array(json_decode($orderDetail->photos)) && count(json_decode($orderDetail->photos)) > 0)
                     <div>
                         @foreach (json_decode($orderDetail->photos) as $key => $photo)
-                            <div style="display: inline;position: relative;">
-                                <img style="padding:3px" src="{{ asset($photo->photo) }}" alt="" height="140" width="140"
-                                    title="{{$photo->note}}">
-                                <div style=" display: inline; position: absolute; left: 11px; top: -22px;">
-                                    <div
-                                        style=" background-color: #00000069; text-align: center; color: white; width: 120px;">
-                                        {{$photo->note}}
+                            @isset($photo->photo)
+                                <div style="display: inline;position: relative;">
+                                    <img style="padding:3px" src="{{ asset($photo->photo) }}" alt="" height="140" width="140"
+                                        title="{{$photo->note}}">
+                                    <div style=" display: inline; position: absolute; left: 11px; top: -22px;">
+                                        <div
+                                            style=" background-color: #00000069; text-align: center; color: white; width: 120px;">
+                                            {{$photo->note}}
+                                        </div>
+                                    </div>
+                                    <div class="text-center" style="display: inline;position: absolute; left: 3px; top: -58px;">
+                                        <a href="{{ asset($photo->photo) }}"
+                                            download="{{ $order_code }}_{{ $key }}_{{$photo->note}}"
+                                            class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
                                     </div>
                                 </div>
-                                <div class="text-center" style="display: inline;position: absolute; left: 3px; top: -58px;">
-                                    <a href="{{ asset($photo->photo) }}"
-                                        download="{{ $order_code }}_{{ $key }}_{{$photo->note}}"
-                                        class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
-                                </div>
-                            </div>
+                            @endisset
                         @endforeach
                     </div>
                 @else
