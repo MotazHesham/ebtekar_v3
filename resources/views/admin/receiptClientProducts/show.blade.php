@@ -41,6 +41,22 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.receiptClientProduct.fields.price_parts') }}
+                        </th>
+                        <td>
+                            {{ $receiptClientProduct->price_parts }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.receiptClientProduct.fields.price_permissions') }}
+                        </th>
+                        <td>
+                            {{ $receiptClientProduct->price_permissions }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.receiptClientProduct.fields.receipts') }}
                         </th>
                         <td>

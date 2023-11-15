@@ -37,6 +37,12 @@
                             {{ trans('cruds.receiptClientProduct.fields.price') }}
                         </th>
                         <th>
+                            {{ trans('cruds.receiptClientProduct.fields.price_parts') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.receiptClientProduct.fields.price_permissions') }}
+                        </th>
+                        <th>
                             {{ trans('global.extra.website_setting_id') }}
                         </th>
                         <th>
@@ -115,6 +121,14 @@
                     {
                         data: 'price',
                         name: 'price'
+                    },
+                    {
+                        data: 'price_parts',
+                        name: 'price_parts'
+                    },
+                    {
+                        data: 'price_permissions',
+                        name: 'price_permissions'
                     },
                     {
                         data: 'website_site_name',

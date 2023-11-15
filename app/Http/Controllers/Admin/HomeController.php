@@ -7,14 +7,37 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\BannedPhone;
 use App\Models\Order;
+use App\Models\RBranch;
+use App\Models\RClient;
 use App\Models\ReceiptClient;
+use App\Models\ReceiptClientProduct;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
-{
+{ 
+    public function transfer(){
+        $receipts = ReceiptClient::all();
+        foreach($receipts as $receipt){
+            if(!RClient::where('name',$receipt->client_name)->first()){
+                $rClient = RClient::create([
+                    'name' => $receipt->client_name,
+                    'phone_number' => $receipt->phone_number,
+                    'manage_type' => 'seperate',
+                ]);
+
+                RBranch::create([
+                    'name' => $receipt->client_name,
+                    'phone_number' => $receipt->phone_number,
+                    'payment_type' => 'cash',
+                    'r_client_id' => $rClient->id,
+                ]);
+            }
+        }
+    }
+
     public function magic_trick(Request $request){
         if($request->has('reset')){ 
             session(['orders' => null]);

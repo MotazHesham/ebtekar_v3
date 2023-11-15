@@ -43,6 +43,26 @@
                 <span class="help-block">{{ trans('cruds.receiptClientProduct.fields.price_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="price_parts">{{ trans('cruds.receiptClientProduct.fields.price_parts') }}</label>
+                <input class="form-control {{ $errors->has('price_parts') ? 'is-invalid' : '' }}" type="number" name="price_parts" id="price_parts" value="{{ old('price_parts', '') }}" step="0.01" required>
+                @if($errors->has('price_parts'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('price_parts') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.receiptClientProduct.fields.price_parts_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="price_permissions">{{ trans('cruds.receiptClientProduct.fields.price_permissions') }}</label>
+                <input class="form-control {{ $errors->has('price_permissions') ? 'is-invalid' : '' }}" type="number" name="price_permissions" id="price_permissions" value="{{ old('price_permissions', '') }}" step="0.01" required>
+                @if($errors->has('price_permissions'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('price_permissions') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.receiptClientProduct.fields.price_permissions_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

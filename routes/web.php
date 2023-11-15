@@ -28,6 +28,9 @@ Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectTo
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () {
+
+    Route::get('transfer', 'HomeController@transfer'); 
+
     Route::get('/', 'HomeController@index')->name('home');
     Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
     Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');
@@ -111,6 +114,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('receipt-clients/view_products', 'ReceiptClientController@view_products')->name('receipt-clients.view_products');
     Route::post('receipt-clients/add_product', 'ReceiptClientController@add_product')->name('receipt-clients.add_product');
     Route::post('receipt-clients/edit_product', 'ReceiptClientController@edit_product')->name('receipt-clients.edit_product');
+    Route::post('receipt-clients/permission_status', 'ReceiptClientController@permission_status')->name('receipt-clients.permission_status');
+    Route::post('receipt-clients/add_income', 'ReceiptClientController@add_income')->name('receipt-clients.add_income');
+    Route::post('receipt-clients/branches', 'ReceiptClientController@branches')->name('receipt-clients.branches');
     Route::delete('receipt-clients/destroy', 'ReceiptClientController@massDestroy')->name('receipt-clients.massDestroy');
     Route::resource('receipt-clients', 'ReceiptClientController');
 
@@ -359,6 +365,34 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Subscribe
     Route::delete('subscribes/destroy', 'SubscribeController@massDestroy')->name('subscribes.massDestroy');
     Route::resource('subscribes', 'SubscribeController', ['except' => ['create', 'store', 'edit', 'update', 'show']]);
+    
+    // Expense Category
+    Route::delete('expense-categories/destroy', 'ExpenseCategoryController@massDestroy')->name('expense-categories.massDestroy');
+    Route::resource('expense-categories', 'ExpenseCategoryController');
+
+    // Income Category
+    Route::delete('income-categories/destroy', 'IncomeCategoryController@massDestroy')->name('income-categories.massDestroy');
+    Route::resource('income-categories', 'IncomeCategoryController');
+
+    // Expense
+    Route::delete('expenses/destroy', 'ExpenseController@massDestroy')->name('expenses.massDestroy');
+    Route::resource('expenses', 'ExpenseController');
+
+    // Income
+    Route::delete('incomes/destroy', 'IncomeController@massDestroy')->name('incomes.massDestroy');
+    Route::resource('incomes', 'IncomeController');
+
+    // Expense Report
+    Route::delete('expense-reports/destroy', 'ExpenseReportController@massDestroy')->name('expense-reports.massDestroy');
+    Route::resource('expense-reports', 'ExpenseReportController');
+
+    // R Clients
+    Route::delete('r-clients/destroy', 'RClientsController@massDestroy')->name('r-clients.massDestroy');
+    Route::resource('r-clients', 'RClientsController');
+
+    // R Branche
+    Route::delete('r-branches/destroy', 'RBrancheController@massDestroy')->name('r-branches.massDestroy');
+    Route::resource('r-branches', 'RBrancheController');
     
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');

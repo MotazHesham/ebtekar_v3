@@ -15,7 +15,7 @@
         <form method="POST" action="{{ route("admin.receipt-clients.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
                     <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
                         @foreach($websites as $id => $entry)
@@ -29,6 +29,29 @@
                     @endif 
                 </div>
                 <div class="form-group col-md-4">
+                    <label class="required" for="r_client_id">{{ trans('cruds.receiptClient.fields.r_client_id') }}</label>
+                    <select class="form-control select2 {{ $errors->has('r_client_id') ? 'is-invalid' : '' }}" name="r_client_id" id="r_client_id" required onchange="branches()">
+                        @foreach($rclients as $id => $entry)
+                            <option value="{{ $id }}" {{ old('r_client_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                        @endforeach
+                    </select>
+                    @if($errors->has('r_client_id'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('r_client_id') }}
+                        </div>
+                    @endif 
+                </div>
+                <div class="form-group col-md-4" > 
+                    <label class="required" for="r_branch_id">{{ trans('cruds.receiptClient.fields.r_branch_id') }}</label>
+                    <select class="form-control select2 {{ $errors->has('r_branch_id') ? 'is-invalid' : '' }}" name="r_branch_id" id="r_branch_id" required> 
+                    </select>
+                    @if($errors->has('r_branch_id'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('r_branch_id') }}
+                        </div>
+                    @endif 
+                </div>
+                <div class="form-group col-md-4">
                     <label for="date_of_receiving_order">{{ trans('cruds.receiptClient.fields.date_of_receiving_order') }}</label>
                     <input class="form-control date {{ $errors->has('date_of_receiving_order') ? 'is-invalid' : '' }}" type="text" name="date_of_receiving_order" id="date_of_receiving_order" value="{{ old('date_of_receiving_order') }}">
                     @if($errors->has('date_of_receiving_order'))
@@ -37,27 +60,7 @@
                         </div>
                     @endif
                     <span class="help-block">{{ trans('cruds.receiptClient.fields.date_of_receiving_order_helper') }}</span>
-                </div> 
-                <div class="form-group col-md-4">
-                    <label class="required" for="client_name">{{ trans('cruds.receiptClient.fields.client_name') }}</label>
-                    <input class="form-control {{ $errors->has('client_name') ? 'is-invalid' : '' }}" type="text" name="client_name" id="client_name" value="{{ old('client_name', $previous_data['client_name']) }}" required>
-                    @if($errors->has('client_name'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('client_name') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.receiptClient.fields.client_name_helper') }}</span>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="required" for="phone_number">{{ trans('cruds.receiptClient.fields.phone_number') }}</label>
-                    <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}" type="text" name="phone_number" id="phone_number" value="{{ old('phone_number', $previous_data['phone_number']) }}" required>
-                    @if($errors->has('phone_number'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('phone_number') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.receiptClient.fields.phone_number_helper') }}</span>
-                </div>
+                </div>  
                 <div class="form-group col-md-4">
                     <label for="deposit">{{ trans('cruds.receiptClient.fields.deposit') }}</label>
                     <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}" type="number" name="deposit" id="deposit" value="{{ old('deposit') }}" step="0.01" required>
@@ -78,7 +81,7 @@
                     @endif
                     <span class="help-block">{{ trans('cruds.receiptClient.fields.discount_helper') }}</span>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     <label for="note">{{ trans('cruds.receiptClient.fields.note') }}</label>
                     <textarea class="form-control {{ $errors->has('note') ? 'is-invalid' : '' }}" name="note" id="note" rows="4">{{ old('note') }}</textarea>
                     @if($errors->has('note'))
@@ -101,4 +104,19 @@
 
 
 
+@endsection
+
+@section('scripts')
+    @parent 
+    <script>
+        function branches(){
+            var id = $('#r_client_id').val();
+            $.post('{{ route('admin.receipt-clients.branches') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id, 
+            }, function(data) { 
+                $('#r_branch_id').html(data);
+            });
+        }
+    </script>
 @endsection

@@ -21,6 +21,13 @@ class ReceiptClient extends Model
         'phone_number',
     ];
 
+    public const PERMISSION_STATUS_SELECT = [
+        'deliverd' => 'تم تسليم الأوردر',
+        'receive_premission'   => 'تم استلام الأذن',
+        'permission_segment'   => 'تم تجزئة الأذن',
+        'permission_complete'   => 'تم صرف الأذن',
+    ];
+
     protected $dates = [
         'date_of_receiving_order',
         'created_at',
@@ -40,8 +47,10 @@ class ReceiptClient extends Model
         'done',
         'quickly',
         'printing_times',
+        'permission_status',
         'staff_id',
         'website_setting_id',
+        'r_branch_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -72,6 +81,16 @@ class ReceiptClient extends Model
         return $this->belongsTo(User::class, 'staff_id');
     }
 
+    public function branch()
+    {
+        return $this->belongsTo(RBranch::class, 'r_branch_id');
+    }
+
+    public function incomes()
+    {
+        return $this->morphMany(Income::class, 'model');
+    }
+
     public function website(){
         return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
@@ -88,4 +107,21 @@ class ReceiptClient extends Model
 	public function calc_total_for_client(){
 		return $this->total_cost - $this->calc_discount()  - $this->deposit;
 	}
+
+    public function add_income(){ 
+        Income::create([ 
+            'income_category_id' => 1,
+            'entry_date' => $this->created_at,
+            'amount' => $this->calc_total_cost(),
+            'description' => '',
+            'model_id' => $this->id,
+            'model_type' => 'App\Models\ReceiptClient',
+        ]);
+        return 1;
+    }
+
+    public function price_type(){ 
+        $payment_type = $this->branch ?  '_' . $this->branch->payment_type : '';
+        return $payment_type == '_cach' ? 'price'  : 'price'. $payment_type;
+    }
 }

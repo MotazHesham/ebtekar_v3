@@ -1,4 +1,4 @@
-<div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" style="background: linear-gradient(86deg,#000000 0%,#05073f 100%)">
+<div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" @if (app()->isLocal()) style="background: linear-gradient(270deg,#1116ff 0%,#5b3771 100%);" @else style="background: linear-gradient(86deg,#000000 0%,#05073f 100%)" @endif>
 
     <div class="c-sidebar-brand d-md-down-none">
         <a class="c-sidebar-brand-full h4" >
@@ -38,16 +38,48 @@
                             </a>
                         </li>
                     @endcan
-                    @can('receipt_client_access')
-                        <li class="c-sidebar-nav-item">
-                            <a href="{{ route("admin.receipt-clients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-clients") || request()->is("admin/receipt-clients/*") ? "c-active" : "" }}">
-                                <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
+                    @can('receipt_client_managment_access')
+                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/r-clients*") ? "c-show" : "" }} {{ request()->is("admin/r-branches*") ? "c-show" : "" }} {{ request()->is("admin/receipt-clients*") ? "c-show" : "" }}">
+                            <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                                <i class="fa-fw fas fa-align-right c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.receiptClient.title') }}
+                                {{ trans('cruds.receiptClientManagment.title') }}
                             </a>
+                            <ul class="c-sidebar-nav-dropdown-items">
+                                @can('r_client_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.r-clients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/r-clients") || request()->is("admin/r-clients/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw far fa-building c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.rClient.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('r_branch_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.r-branches.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/r-branches") || request()->is("admin/r-branches/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-code-branch c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.rBranch.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('receipt_client_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.receipt-clients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-clients") || request()->is("admin/receipt-clients/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.receiptClient.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
                         </li>
-                    @endcan 
+                    @endcan
                     @can('receipt_company_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.receipt-companies.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-companies") || request()->is("admin/receipt-companies/*") ? "c-active" : "" }}">
@@ -618,6 +650,68 @@
 
 
         <li class="nav-title">عام</li>
+        @can('expense_management_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/expense-categories*") ? "c-show" : "" }} {{ request()->is("admin/income-categories*") ? "c-show" : "" }} {{ request()->is("admin/expenses*") ? "c-show" : "" }} {{ request()->is("admin/incomes*") ? "c-show" : "" }} {{ request()->is("admin/expense-reports*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-money-bill c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.expenseManagement.title') }}
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('expense_category_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.expense-categories.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/expense-categories") || request()->is("admin/expense-categories/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-list c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.expenseCategory.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('income_category_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.income-categories.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/income-categories") || request()->is("admin/income-categories/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-list c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.incomeCategory.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('expense_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.expenses.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/expenses") || request()->is("admin/expenses/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-arrow-circle-right c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.expense.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('income_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.incomes.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/incomes") || request()->is("admin/incomes/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-arrow-circle-right c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.income.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('expense_report_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.expense-reports.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/expense-reports") || request()->is("admin/expense-reports/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-chart-line c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.expenseReport.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
         @can('setting_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/website-settings*") ? "c-show" : "" }} {{ request()->is("admin/user-alerts*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/socials*") ? "c-show" : "" }} {{ request()->is("admin/polices*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">

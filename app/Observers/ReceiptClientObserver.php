@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\RBranch;
 use App\Models\ReceiptClient;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +31,11 @@ class ReceiptClientObserver
 
         // Assign the Creator Of The Receipt
         $receiptClient->staff_id = Auth::id();  
+
+        // Assign the client name and phone 
+        $branch = RBranch::find($receiptClient->r_branch_id);
+        $receiptClient->client_name = $branch->name;
+        $receiptClient->phone_number = $branch->phone_number;
     }
 
     /**

@@ -1093,6 +1093,154 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'expense_management_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_category_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_category_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_category_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_category_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_category_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_category_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_category_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_category_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_category_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_category_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'income_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_report_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_report_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_report_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_report_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'expense_report_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_client_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_client_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_client_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_client_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_client_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_branch_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_branch_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_branch_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_branch_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'r_branch_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_client_managment_access',
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'profile_password_edit',
             ],
         ];

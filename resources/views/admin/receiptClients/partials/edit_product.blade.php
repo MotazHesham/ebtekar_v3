@@ -13,7 +13,9 @@
                         <option value="">أختر المنتج</option>
                         @foreach ($products as $product)
                             <option value="{{ $product->id }}" @if($receipt_client_product_pivot->receipt_client_product_id == $product->id) selected @endif>
-                                {{ $product->name }} - {{ $product->price }}
+                                @if($product->$price_type > 0 )
+                                    {{ $product->name }} - {{ $product->$price_type }}
+                                @endif
                             </option>
                         @endforeach
                     </select>
