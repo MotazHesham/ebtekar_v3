@@ -27,10 +27,8 @@ Auth::routes();
 Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () {
-
-    Route::get('transfer', 'HomeController@transfer'); 
-
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () { 
+    
     Route::get('/', 'HomeController@index')->name('home');
     Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
     Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');

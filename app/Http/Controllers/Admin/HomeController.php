@@ -17,26 +17,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
-{ 
-    public function transfer(){
-        $receipts = ReceiptClient::all();
-        foreach($receipts as $receipt){
-            if(!RClient::where('name',$receipt->client_name)->first()){
-                $rClient = RClient::create([
-                    'name' => $receipt->client_name,
-                    'phone_number' => $receipt->phone_number,
-                    'manage_type' => 'seperate',
-                ]);
-
-                RBranch::create([
-                    'name' => $receipt->client_name,
-                    'phone_number' => $receipt->phone_number,
-                    'payment_type' => 'cash',
-                    'r_client_id' => $rClient->id,
-                ]);
-            }
-        }
-    }
+{  
 
     public function magic_trick(Request $request){
         if($request->has('reset')){ 
