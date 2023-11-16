@@ -10,6 +10,7 @@ use App\Models\Income;
 use App\Models\IncomeCategory;
 use App\Models\RBranch;
 use App\Models\RClient;
+use App\Models\ReceiptBranch;
 use App\Models\ReceiptClient;
 use Gate;
 use Illuminate\Http\Request;
@@ -40,14 +41,14 @@ class IncomeController extends Controller
         $income = Income::create($request->all());
 
         if($request->has('model_type')){
-            if($request->model_type == 'App\Models\ReceiptClient'){
-                $incomes = Income::where('model_type','App\Models\ReceiptClient')->where('model_id',$request->model_id)->get();
+            if($request->model_type == 'App\Models\ReceiptBranch'){
+                $incomes = Income::where('model_type','App\Models\ReceiptBranch')->where('model_id',$request->model_id)->get();
                 $total = $incomes ? $incomes->sum('amount') : 0;
-                $receipt = ReceiptClient::find($request->model_id);
+                $receipt = ReceiptBranch::find($request->model_id);
                 $receipt->permission_status = $total >= $receipt->calc_total_cost() ? 'permission_complete' : 'permission_segment';
                 $receipt->save();
                 alert('تم صرف جزء من الأذن','','success');
-                return redirect()->route('admin.receipt-clients.index');
+                return redirect()->route('admin.receipt-branches.index');
             }elseif($request->model_type == 'App\Models\RBranch'){
                 $rBranch = RBranch::find($request->model_id);
                 $rBranch->remaining -= $request->amount;

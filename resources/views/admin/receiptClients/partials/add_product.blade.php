@@ -13,11 +13,9 @@
                     <select class="form-control select2 mb-2" name="product_id" id="product_id" required>
                         <option value="">أختر المنتج</option>
                         @foreach ($products as $product)
-                            @if($product->$price_type > 0 )
-                                <option value="{{ $product->id }}">
-                                    {{ $product->name }} - {{ $product->$price_type }}
-                                </option>
-                            @endif
+                            <option value="{{ $product->id }}">
+                                {{ $product->name }} - {{ $product->price }}
+                            </option>
                         @endforeach
                     </select>
                 </div>

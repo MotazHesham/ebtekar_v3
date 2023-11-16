@@ -8,10 +8,6 @@ use App\Http\Requests\MassDestroyReceiptClientRequest;
 use App\Http\Requests\StoreReceiptClientRequest;
 use App\Http\Requests\UpdateReceiptClientRequest;
 use App\Models\GeneralSetting;
-use App\Models\Income;
-use App\Models\IncomeCategory;
-use App\Models\RBranch;
-use App\Models\RClient;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptClientProduct;
 use App\Models\ReceiptClientProductPivot;
@@ -41,61 +37,15 @@ class ReceiptClientController extends Controller
         return view('admin.receiptClients.print',compact('receipts'));
     }
 
-    public function add_income(Request $request){ 
-        $receipt = ReceiptClient::find($request->id);  
-        return view('admin.receiptClients.partials.income',compact('receipt'));
-    }
-
-    public function branches(Request $request){ 
-        $branches = RBranch::where('r_client_id',$request->id)->get();  
-        return view('admin.receiptClients.partials.branches',compact('branches'));
-    }
-
-    public function permission_status(Request $request){
-        $receipt = ReceiptClient::findOrFail($request->id);
-        if($request->has('receive_premission')){
-            $receipt->permission_status = 'receive_premission';
-        }elseif($request->has('permission_complete')){
-            $receipt->permission_status = 'permission_complete';
-            $receipt->add_income();
-        }
-        $receipt->save();
-        return redirect()->route('admin.receipt-clients.index');
-    }
-
     public function update_statuses(Request $request){ 
         $type = $request->type;
         $receipt = ReceiptClient::findOrFail($request->id);
         $receipt->$type = $request->status;
         if (($type == 'done') && $request->status == 1) {
-            $receipt->quickly = 0; 
-            $status = '2'; 
-            if($receipt->branch){
-                if($receipt->branch->payment_type == 'permissions'){
-                    $status = '3';
-                    $receipt->permission_status = 'deliverd';
-                }elseif($receipt->branch->payment_type == 'cash'){ 
-                    $receipt->add_income();
-                }elseif($receipt->branch->payment_type == 'parts'){ 
-                    if($receipt->branch->r_client->managment_type == 'seperate'){
-                        $receipt->branch->remaining += $receipt->calc_total_cost();
-                        $receipt->branch->save();
-                    }else{
-                        $receipt->branch->r_client->remaining += $receipt->calc_total_cost();
-                        $receipt->branch->r_client->save();
-                    }
-                }
-            } 
-        }else{ 
-            $status = '1';
+            $receipt->quickly = 0;
         }
-        
         $receipt->save();
-        return [
-            'status' => $status,
-            'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>',
-            'second' => view('admin.receiptClients.partials.permission_status',compact('receipt'))->render(),
-        ];
+        return 1;
     }
 
     public function duplicate($id){
@@ -156,21 +106,19 @@ class ReceiptClientController extends Controller
             $receipt_client_product_pivot = ReceiptClientProductPivot::find($request->id); 
             $receipt = ReceiptClient::find($receipt_client_product_pivot->receipt_client_id);
             $products = ReceiptClientProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
-            $price_type = $receipt->price_type();
-            return view('admin.receiptClients.partials.edit_product',compact('receipt_client_product_pivot','products','price_type'));
+            return view('admin.receiptClients.partials.edit_product',compact('receipt_client_product_pivot','products'));
         }else{ 
 
             $receipt_product_pivot = ReceiptClientProductPivot::find($request->receipt_product_pivot_id);
             $receipt = ReceiptClient::find($receipt_product_pivot->receipt_client_id);
-            $price_type = $receipt->price_type();
             
             $product = ReceiptClientProduct::findOrFail($request->product_id); 
 
             $receipt_product_pivot->receipt_client_product_id = $request->product_id;
             $receipt_product_pivot->description = $product->name;
-            $receipt_product_pivot->price = $product->$price_type;
+            $receipt_product_pivot->price = $product->price;
             $receipt_product_pivot->quantity = $request->quantity;
-            $receipt_product_pivot->total_cost = ($request->quantity * $product->$price_type);
+            $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
             $receipt_product_pivot->save();
 
             // calculate the costing of products in receipt
@@ -197,11 +145,9 @@ class ReceiptClientController extends Controller
             $products = ReceiptClientProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
             $receipt_id = $request->id;
             $order_num = $receipt->order_num;
-            $price_type = $receipt->price_type();
-            return view('admin.receiptClients.partials.add_product',compact('products','receipt_id','order_num','price_type'));
+            return view('admin.receiptClients.partials.add_product',compact('products','receipt_id','order_num'));
         }else{
             $receipt = ReceiptClient::find($request->receipt_id);  
-            $price_type = $receipt->price_type();
 
             $product = ReceiptClientProduct::findOrFail($request->product_id);
 
@@ -209,9 +155,9 @@ class ReceiptClientController extends Controller
             $receipt_product_pivot->receipt_client_id = $request->receipt_id;
             $receipt_product_pivot->receipt_client_product_id = $request->product_id; 
             $receipt_product_pivot->description = $product->name;
-            $receipt_product_pivot->price = $product->$price_type;
+            $receipt_product_pivot->price = $product->price;
             $receipt_product_pivot->quantity = $request->quantity; 
-            $receipt_product_pivot->total_cost = ($request->quantity * $product->$price_type);
+            $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
             $receipt_product_pivot->save();
             
             $receipt_products = ReceiptClientProductPivot::where('receipt_client_id', $request->receipt_id)->get();
@@ -270,9 +216,9 @@ class ReceiptClientController extends Controller
 
         if(request('deleted')){
             $deleted = 1; 
-            $receipts = ReceiptClient::with(['staff:id,name','branch','incomes'])->onlyTrashed();  
+            $receipts = ReceiptClient::with(['staff:id,name'])->onlyTrashed();  
         }else{
-            $receipts = ReceiptClient::with(['staff:id,name','branch','incomes']);  
+            $receipts = ReceiptClient::with(['staff:id,name']);  
         }
 
         if ($request->done != null) {
@@ -382,11 +328,9 @@ class ReceiptClientController extends Controller
 
         $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $rclients = RClient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $website_setting_id = $request->website_setting_id;
 
-        return view('admin.receiptClients.create', compact('previous_data' , 'websites','website_setting_id','rclients'));
+        return view('admin.receiptClients.create', compact('previous_data' , 'websites','website_setting_id'));
     }
 
     public function store(StoreReceiptClientRequest $request)
@@ -408,9 +352,7 @@ class ReceiptClientController extends Controller
 
         $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
 
-        $rclients = RBranch::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        return view('admin.receiptClients.edit', compact('receiptClient','websites','rclients'));
+        return view('admin.receiptClients.edit', compact('receiptClient','websites'));
     }
 
     public function update(UpdateReceiptClientRequest $request, ReceiptClient $receiptClient)

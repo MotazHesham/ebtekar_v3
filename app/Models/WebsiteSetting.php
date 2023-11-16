@@ -29,7 +29,7 @@ class WebsiteSetting extends Model implements HasMedia
     ];
 
     // places to edit if add a new website
-    // 1 - [order_num] in receipts observers (receipt-socials / receipt-client / receipt-price-view ) && checkoutController to generate order_num for orders
+    // 1 - [order_num] in receipts observers (receipt-socials / receipt-client / receipt-branch / receipt-price-view ) && checkoutController to generate order_num for orders
     // 2 - site_title in [ resources => lang => panel ]
     // 3 - footer about the site in [ frontend => partials => footer ]
     // 4 - in db add colors.css

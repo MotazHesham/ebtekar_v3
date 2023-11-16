@@ -22,6 +22,7 @@ class Income extends Model
     ]; 
 
     public const MODEL_TPYE_SELECT = [
+        'App\Models\ReceiptBranch'        => 'ReceiptBranch', 
         'App\Models\ReceiptClient'        => 'ReceiptClient', 
     ];
 

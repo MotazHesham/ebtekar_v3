@@ -3,7 +3,7 @@
 <div class="row mb-3 text-center">
     @can('receipt_client_create') 
         <div class="col-lg-4">
-            <a class="btn btn-success" href="{{ route('admin.receipt-clients.create') }}">
+            <a class="btn btn-success" href="#" data-toggle="modal" data-target="#phoneModal">
                 {{ trans('global.add') }} {{ trans('cruds.receiptClient.title_singular') }}
             </a>
         </div> 
@@ -258,23 +258,13 @@
                                             {{ trans('cruds.receiptClient.fields.done') }}
                                         </span>
                                         <br>
-                                        <div id="done-{{$receipt->id}}">
-                                            @if($receipt->done)
-                                                <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
-                                            @else
-                                                <label class="c-switch c-switch-pill c-switch-success">
-                                                    <input onchange="update_statuses(this,'done')" value="{{ $receipt->id }}"
-                                                        type="checkbox" class="c-switch-input"
-                                                        {{ $receipt->done ? 'checked' : null }}>
-                                                    <span class="c-switch-slider"></span>
-                                                </label>
-                                            @endif
-                                        </div>
+                                        <label class="c-switch c-switch-pill c-switch-success">
+                                            <input onchange="update_statuses(this,'done')" value="{{ $receipt->id }}"
+                                                type="checkbox" class="c-switch-input"
+                                                {{ $receipt->done ? 'checked' : null }}>
+                                            <span class="c-switch-slider"></span>
+                                        </label>
                                     </div>
-                                </div>
-                                <div id="payment-{{$receipt->id}}">
-                                    {{-- اذا كانت الفاتورة لأدارة تتعامل بالدفع عن طريق الأذونات نظهر هنا زرار لاستلام الأذن --}}
-                                    @include('admin.receiptClients.partials.permission_status')
                                 </div>
                             </td>
                             <td>
@@ -410,15 +400,10 @@
                 status: status,
                 type: type
             }, function(data) {
-                if (data['status'] == '1') {
+                if (data == 1) {
                     showAlert('success', 'Success', '');
-                } else if(data['status'] == '2') { 
-                    $('#done-'+el.value).html(data['first']);
-                    showAlert('success', 'Success', '');
-                }else if(data['status'] == '3') { 
-                    $('#done-'+el.value).html(data['first']);
-                    $('#payment-'+el.value).html(data['second']);
-                    showAlert('success', 'Success', '');
+                } else {
+                    showAlert('danger', 'Something went wrong', '');
                 }
             });
         }
@@ -441,17 +426,6 @@
                         }
                     );
                 }
-            });
-        }
-
-        function add_income(id) {
-            $.post('{{ route('admin.receipt-clients.add_income') }}', {
-                _token: '{{ csrf_token() }}',
-                id: id
-            }, function(data) {
-                $('#AjaxModal .modal-dialog').html(null);
-                $('#AjaxModal').modal('show');
-                $('#AjaxModal .modal-dialog').html(data); 
             });
         }
 

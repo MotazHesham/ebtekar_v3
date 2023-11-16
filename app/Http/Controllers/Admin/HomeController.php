@@ -9,8 +9,12 @@ use App\Models\BannedPhone;
 use App\Models\Order;
 use App\Models\RBranch;
 use App\Models\RClient;
+use App\Models\ReceiptBranch;
+use App\Models\ReceiptBranchProduct;
+use App\Models\ReceiptBranchProductPivot;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptClientProduct;
+use App\Models\ReceiptClientProductPivot;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
 use App\Models\User;
@@ -18,6 +22,59 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {  
+    public function transfer(){
+        foreach(ReceiptClient::all() as $raw){
+            $receipt_branch = new ReceiptBranch();
+            $receipt_branch->date_of_receiving_order = $raw->date_of_receiving_order;
+            $receipt_branch->order_num = $raw->order_num;
+            $receipt_branch->client_name = $raw->client_name;
+            $receipt_branch->phone_number = $raw->phone_number;
+            $receipt_branch->deposit = $raw->deposit;
+            $receipt_branch->discount = $raw->discount;
+            $receipt_branch->note = $raw->note;
+            $receipt_branch->total_cost = $raw->total_cost;
+            $receipt_branch->done = $raw->done;
+            $receipt_branch->quickly = $raw->quickly;
+            $receipt_branch->printing_times = $raw->printing_times; 
+            $receipt_branch->staff_id = $raw->staff_id;
+            $receipt_branch->website_setting_id = $raw->website_setting_id; 
+            $receipt_branch->created_at = $raw->created_at;
+            $receipt_branch->updated_at = $raw->updated_at;
+            $receipt_branch->deleted_at = $raw->deleted_at;
+            $receipt_branch->save();
+        }
+
+        foreach(ReceiptClientProduct::all() as $raw2){
+            $receipt_branch_product = new ReceiptBranchProduct(); 
+            $receipt_branch_product->name = $raw2->name;
+            $receipt_branch_product->price = $raw2->price;
+            $receipt_branch_product->price_parts = $raw2->price;
+            $receipt_branch_product->price_permissions = $raw2->price;
+            $receipt_branch_product->website_setting_id = $raw2->website_setting_id;
+            $receipt_branch_product->created_at = $raw2->created_at;
+            $receipt_branch_product->updated_at = $raw2->updated_at;
+            $receipt_branch_product->deleted_at = $raw2->deleted_at;
+            $receipt_branch_product->save();
+
+        }
+
+        foreach (ReceiptClientProductPivot::all() as $raw3){
+            if(ReceiptBranch::find($raw3->receipt_client_id) && ReceiptBranchProduct::find($raw3->receipt_client_product_id)){
+                $receipt_branch_product_pivot = new ReceiptBranchProductPivot();
+                $receipt_branch_product_pivot->description = $raw3->description;
+                $receipt_branch_product_pivot->quantity = $raw3->quantity;
+                $receipt_branch_product_pivot->price = $raw3->price;
+                $receipt_branch_product_pivot->total_cost = $raw3->total_cost;
+                $receipt_branch_product_pivot->receipt_branch_id = $raw3->receipt_client_id;
+                $receipt_branch_product_pivot->receipt_branch_product_id = $raw3->receipt_client_product_id;
+                $receipt_branch_product_pivot->created_at = $raw3->created_at;
+                $receipt_branch_product_pivot->updated_at = $raw3->updated_at; 
+                $receipt_branch_product_pivot->save();
+            }
+        }
+
+        return 'success';
+    }
 
     public function magic_trick(Request $request){
         if($request->has('reset')){ 

@@ -29,6 +29,7 @@ Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProv
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () { 
     
+    Route::get('transfer', 'HomeController@transfer')->name('z');
     Route::get('/', 'HomeController@index')->name('home');
     Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
     Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');
@@ -112,15 +113,32 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('receipt-clients/view_products', 'ReceiptClientController@view_products')->name('receipt-clients.view_products');
     Route::post('receipt-clients/add_product', 'ReceiptClientController@add_product')->name('receipt-clients.add_product');
     Route::post('receipt-clients/edit_product', 'ReceiptClientController@edit_product')->name('receipt-clients.edit_product');
-    Route::post('receipt-clients/permission_status', 'ReceiptClientController@permission_status')->name('receipt-clients.permission_status');
-    Route::post('receipt-clients/add_income', 'ReceiptClientController@add_income')->name('receipt-clients.add_income');
-    Route::post('receipt-clients/branches', 'ReceiptClientController@branches')->name('receipt-clients.branches');
     Route::delete('receipt-clients/destroy', 'ReceiptClientController@massDestroy')->name('receipt-clients.massDestroy');
     Route::resource('receipt-clients', 'ReceiptClientController');
 
     // Receipt Client Product
     Route::delete('receipt-client-products/destroy', 'ReceiptClientProductController@massDestroy')->name('receipt-client-products.massDestroy');
     Route::resource('receipt-client-products', 'ReceiptClientProductController');
+
+    // Receipt Branch
+    Route::delete('receipt-branches/destroy_product/{id}', 'ReceiptBranchController@destroy_product')->name('receipt-branches.destroy_product');
+    Route::get('receipt-branches/restore/{id}', 'ReceiptBranchController@restore')->name('receipt-branches.restore');
+    Route::get('receipt-branches/print/{id}', 'ReceiptBranchController@print')->name('receipt-branches.print');
+    Route::get('receipt-branches/receive_money/{id}', 'ReceiptBranchController@receive_money')->name('receipt-branches.receive_money');
+    Route::get('receipt-branches/duplicate/{id}', 'ReceiptBranchController@duplicate')->name('receipt-branches.duplicate');
+    Route::post('receipt-branches/update_statuses', 'ReceiptBranchController@update_statuses')->name('receipt-branches.update_statuses');
+    Route::post('receipt-branches/view_products', 'ReceiptBranchController@view_products')->name('receipt-branches.view_products');
+    Route::post('receipt-branches/add_product', 'ReceiptBranchController@add_product')->name('receipt-branches.add_product');
+    Route::post('receipt-branches/edit_product', 'ReceiptBranchController@edit_product')->name('receipt-branches.edit_product');
+    Route::post('receipt-branches/permission_status', 'ReceiptBranchController@permission_status')->name('receipt-branches.permission_status');
+    Route::post('receipt-branches/add_income', 'ReceiptBranchController@add_income')->name('receipt-branches.add_income');
+    Route::post('receipt-branches/branches', 'ReceiptBranchController@branches')->name('receipt-branches.branches');
+    Route::delete('receipt-branches/destroy', 'ReceiptBranchController@massDestroy')->name('receipt-branches.massDestroy');
+    Route::resource('receipt-branches', 'ReceiptBranchController');
+
+    // Receipt Branch Product
+    Route::delete('receipt-branch-products/destroy', 'ReceiptBranchProductController@massDestroy')->name('receipt-branch-products.massDestroy');
+    Route::resource('receipt-branch-products', 'ReceiptBranchProductController');
 
     // Receipt Company
     Route::get('receipt-companies/restore/{id}', 'ReceiptCompanyController@restore')->name('receipt-companies.restore');

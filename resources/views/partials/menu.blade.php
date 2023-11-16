@@ -38,13 +38,23 @@
                             </a>
                         </li>
                     @endcan
-                    @can('receipt_client_managment_access')
-                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/r-clients*") ? "c-show" : "" }} {{ request()->is("admin/r-branches*") ? "c-show" : "" }} {{ request()->is("admin/receipt-clients*") ? "c-show" : "" }}">
+                    @can('receipt_client_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.receipt-clients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-clients") || request()->is("admin/receipt-clients/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.receiptClient.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('receipt_branch_managment_access')
+                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/r-clients*") ? "c-show" : "" }} {{ request()->is("admin/r-branches*") ? "c-show" : "" }} {{ request()->is("admin/receipt-branches*") ? "c-show" : "" }}">
                             <a class="c-sidebar-nav-dropdown-toggle" href="#">
                                 <i class="fa-fw fas fa-align-right c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.receiptClientManagment.title') }}
+                                {{ trans('cruds.receiptBranchManagment.title') }}
                             </a>
                             <ul class="c-sidebar-nav-dropdown-items">
                                 @can('r_client_access')
@@ -67,13 +77,13 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('receipt_client_access')
+                                @can('receipt_branch_access')
                                     <li class="c-sidebar-nav-item">
-                                        <a href="{{ route("admin.receipt-clients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-clients") || request()->is("admin/receipt-clients/*") ? "c-active" : "" }}">
+                                        <a href="{{ route("admin.receipt-branches.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/receipt-branches") || request()->is("admin/receipt-branches/*") ? "c-active" : "" }}">
                                             <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.receiptClient.title') }}
+                                            {{ trans('cruds.receiptBranch.title') }}
                                         </a>
                                     </li>
                                 @endcan

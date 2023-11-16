@@ -2,7 +2,7 @@
     <div class="modal-header">
         <h5 class="modal-title">صرف جزء من الأذن</h5>
         &nbsp;&nbsp;&nbsp;
-        <a href="{{ route('admin.receipt-clients.index', ['cancel_popup' => 1]) }}"
+        <a href="{{ route('admin.receipt-branches.index', ['cancel_popup' => 1]) }}"
             class="btn btn-danger btn-lg mb-1">أغلاق القائمة</a>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
@@ -10,7 +10,7 @@
         <form method="POST" action="{{ route('admin.incomes.store') }}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="model_id" value="{{ $receipt->id }}">
-            <input type="hidden" name="model_type" value="App\Models\ReceiptClient">
+            <input type="hidden" name="model_type" value="App\Models\ReceiptBranch">
             <input type="hidden" name="income_category_id" value="1">
             <div class="row">
                 <div class="form-group col-md-4">

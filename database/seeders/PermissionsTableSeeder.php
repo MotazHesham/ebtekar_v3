@@ -1237,7 +1237,63 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
-                'title' => 'receipt_client_managment_access',
+                'title' => 'receipt_branch_managment_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_print',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_restore',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_duplicate',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_receive_money',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_product_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_product_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_product_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_product_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_product_access',
             ],
             [
                 'id'    => $i++,

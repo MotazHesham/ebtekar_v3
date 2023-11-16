@@ -22,7 +22,8 @@ class UpdateRClientRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                'string',
+                config('panel.phone_number_validation'), 
+                config('panel.phone_number_language'),  
                 'required',
             ],
         ];

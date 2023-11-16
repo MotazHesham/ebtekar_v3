@@ -26,7 +26,8 @@ class IncomeCategory extends Model
         'deleted_at',
     ];
 
-    // 1 => receipt clients
+    // 1 => receipt branches
+    // 2 => receipt clients
 
     protected function serializeDate(DateTimeInterface $date)
     {

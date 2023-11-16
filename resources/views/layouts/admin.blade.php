@@ -384,13 +384,13 @@
             });
         }
 
-        function showAlert(type, title, message) {
+        function showAlert(type, title, message,seconds = 3000) {
             swal({
                 title: title,
                 text: message,
                 type: type,
                 showConfirmButton: 'Okay',
-                timer: 3000
+                timer: seconds
             });
         }
 
