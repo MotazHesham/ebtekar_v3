@@ -139,9 +139,11 @@
                 <div class="col-md-3">
                     <input type="submit" value="{{ trans('global.search') }}" name="search" class="btn btn-success btn-rounded btn-block">
                 </div>
-                <div class="col-md-2">
-                    <input type="submit" value="{{ trans('global.download') }}" name="download" class="btn btn-info btn-rounded btn-block">
-                </div>
+                @if(auth()->user()->is_admin )
+                    <div class="col-md-2">
+                        <input type="submit" value="{{ trans('global.download') }}" name="download" class="btn btn-info btn-rounded btn-block">
+                    </div>
+                @endif
                 @can('receipt_client_print')
                     <div class="col-md-2">
                         <input type="submit" value="{{ trans('global.print') }}" name="print" class="btn btn-danger btn-rounded btn-block">

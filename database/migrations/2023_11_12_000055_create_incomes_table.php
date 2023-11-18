@@ -12,7 +12,7 @@ class CreateIncomesTable extends Migration
             $table->bigIncrements('id');
             $table->date('entry_date')->nullable();
             $table->decimal('amount', 15, 2)->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('model_id')->nullable();
             $table->string('model_type')->nullable();
             $table->timestamps();

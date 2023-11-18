@@ -66,7 +66,7 @@
             {{-- action Buttons --}}
             <div class="order-card-actions" id="order-card-actions-{{ $item['id'] }}">
                 @if(!$item['hold'] || auth()->user()->is_admin)
-                    @if (auth()->user()->is_admin || $authenticated == auth()->user()->id)
+                    @if (auth()->user()->is_admin || $authenticated == auth()->user()->id || Gate::allows('transfer_receipts'))
                         <a class="btn btn-danger btn-sm rounded-pill text-white"
                             onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">
                             {{ $title_back }}

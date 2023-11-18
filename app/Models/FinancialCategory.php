@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ExpenseCategory extends Model
+class FinancialCategory extends Model
 {
     use SoftDeletes, HasFactory;
 
-    public $table = 'expense_categories';
+    public $table = 'financial_categories';
+
+    public const TYPE_RADIO = [
+        'minus' => 'Minus',
+        'plus'  => 'Plus',
+    ];
 
     protected $dates = [
         'created_at',
@@ -21,12 +26,11 @@ class ExpenseCategory extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-
-    // 1 employee salery
 
     protected function serializeDate(DateTimeInterface $date)
     {

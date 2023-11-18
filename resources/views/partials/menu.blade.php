@@ -467,13 +467,13 @@
                             </a>
                         </li>
                     @endcan
-                    @can('borrows_and_subtraction_access')
-                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/employees*") ? "c-show" : "" }} {{ request()->is("admin/borrows*") ? "c-show" : "" }} {{ request()->is("admin/subtractions*") ? "c-show" : "" }}">
+                    @can('employee_managment_access')
+                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/employees*") ? "c-show" : "" }} {{ request()->is("admin/financial-categories*") ? "c-show" : "" }} {{ request()->is("admin/employee-financials*") ? "c-show" : "" }}">
                             <a class="c-sidebar-nav-dropdown-toggle" href="#">
                                 <i class="fa-fw fas fa-file-invoice-dollar c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.borrowsAndSubtraction.title') }}
+                                {{ trans('cruds.employeeManagmentAccess.title') }}
                             </a>
                             <ul class="c-sidebar-nav-dropdown-items">
                                 @can('employee_access')
@@ -486,23 +486,23 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @can('borrow_access')
+                                @can('financial_category_access')
                                     <li class="c-sidebar-nav-item">
-                                        <a href="{{ route("admin.borrows.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/borrows") || request()->is("admin/borrows/*") ? "c-active" : "" }}">
-                                            <i class="fa-fw fas fa-minus-circle c-sidebar-nav-icon">
+                                        <a href="{{ route("admin.financial-categories.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/financial-categories") || request()->is("admin/financial-categories/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-braille c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.borrow.title') }}
+                                            {{ trans('cruds.financialCategory.title') }}
                                         </a>
                                     </li>
                                 @endcan
-                                @can('subtraction_access')
+                                @can('employee_financial_access')
                                     <li class="c-sidebar-nav-item">
-                                        <a href="{{ route("admin.subtractions.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/subtractions") || request()->is("admin/subtractions/*") ? "c-active" : "" }}">
-                                            <i class="fa-fw fab fa-creative-commons-nc c-sidebar-nav-icon">
+                                        <a href="{{ route("admin.employee-financials.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/employee-financials") || request()->is("admin/employee-financials/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-dollar-sign c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.subtraction.title') }}
+                                            {{ trans('cruds.employeeFinancial.title') }}
                                         </a>
                                     </li>
                                 @endcan

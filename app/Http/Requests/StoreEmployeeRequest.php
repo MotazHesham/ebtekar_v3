@@ -25,8 +25,19 @@ class StoreEmployeeRequest extends FormRequest
                 'required',
             ],
             'phone_number' => [
-                config('panel.phone_number_validation'), 
+                'string',
                 'required',
+            ],
+            'salery' => [
+                'required',
+            ],
+            'address' => [
+                'string',
+                'nullable',
+            ],
+            'job_description' => [
+                'string',
+                'nullable',
             ],
         ];
     }

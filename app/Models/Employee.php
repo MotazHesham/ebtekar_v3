@@ -24,6 +24,9 @@ class Employee extends Model
         'name',
         'email',
         'phone_number',
+        'salery',
+        'address',
+        'job_description',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -33,4 +36,18 @@ class Employee extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
+
+    public function employeeEmployeeFinancials()
+    {
+        return $this->hasMany(EmployeeFinancial::class, 'employee_id', 'id');
+    }
+
+    public function calc_financials($month, $year){
+        return $this->employeeEmployeeFinancials()->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->sum('amount') + $this->salery;;
+    }
+    
+    public function expenses()
+    {
+        return $this->morphMany(Expense::class, 'model');
+    } 
 }

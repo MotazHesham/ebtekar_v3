@@ -3,13 +3,13 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.borrow.title') }}
+        {{ trans('global.show') }} {{ trans('cruds.employeeFinancial.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.borrows.index') }}">
+                <a class="btn btn-default" href="{{ route('admin.employee-financials.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
@@ -17,40 +17,48 @@
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.borrow.fields.id') }}
+                            {{ trans('cruds.employeeFinancial.fields.id') }}
                         </th>
                         <td>
-                            {{ $borrow->id }}
+                            {{ $employeeFinancial->id }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.borrow.fields.employee') }}
+                            {{ trans('cruds.employeeFinancial.fields.employee') }}
                         </th>
                         <td>
-                            {{ $borrow->employee->name ?? '' }}
+                            {{ $employeeFinancial->employee->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.borrow.fields.amount') }}
+                            {{ trans('cruds.employeeFinancial.fields.financial_category') }}
                         </th>
                         <td>
-                            {{ $borrow->amount }}
+                            {{ $employeeFinancial->financial_category->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.borrow.fields.status') }}
+                            {{ trans('cruds.employeeFinancial.fields.amount') }}
                         </th>
                         <td>
-                            <input type="checkbox" disabled="disabled" {{ $borrow->status ? 'checked' : '' }}>
+                            {{ $employeeFinancial->amount }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.employeeFinancial.fields.reason') }}
+                        </th>
+                        <td>
+                            {{ $employeeFinancial->reason }}
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.borrows.index') }}">
+                <a class="btn btn-default" href="{{ route('admin.employee-financials.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>

@@ -7,6 +7,7 @@ use App\Http\Requests\MassDestroyEmployeeRequest;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Employee;
+use App\Models\FinancialCategory;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,6 +53,15 @@ class EmployeesController extends Controller
             $table->editColumn('phone_number', function ($row) {
                 return $row->phone_number ? $row->phone_number : '';
             });
+            $table->editColumn('salery', function ($row) {
+                return $row->salery ? $row->salery : '';
+            });
+            $table->editColumn('address', function ($row) {
+                return $row->address ? $row->address : '';
+            });
+            $table->editColumn('job_description', function ($row) {
+                return $row->job_description ? $row->job_description : '';
+            });
 
             $table->rawColumns(['actions', 'placeholder']);
 
@@ -93,7 +103,11 @@ class EmployeesController extends Controller
     {
         abort_if(Gate::denies('employee_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.employees.show', compact('employee'));
+        $employee->load('employeeEmployeeFinancials.financial_category');
+        
+        $financial_categories = FinancialCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.employees.show', compact('employee','financial_categories'));
     }
 
     public function destroy(Employee $employee)

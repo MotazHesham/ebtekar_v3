@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\EmployeeExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyExpenseRequest;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
+use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
+use App\Models\FinancialCategory;
 use Gate;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExpenseController extends Controller
@@ -34,7 +38,34 @@ class ExpenseController extends Controller
 
     public function store(StoreExpenseRequest $request)
     {
-        $expense = Expense::create($request->all());
+        $validated_request = $request->all(); 
+        if($request->has('model_type')){
+            
+            if($request->model_type == 'App\Models\Employee'){
+                $employee = Employee::find($request->model_id);
+                $month = substr($request->entry_date,3,2);
+                $year = substr($request->entry_date,6,4); 
+
+                if($request->has('download')){
+                    return Excel::download(new EmployeeExport($employee,$month,$year), $employee->name.'_('.$month.')_('.$year.').xlsx');
+                } 
+
+                $validated_request['amount'] = $employee->calc_financials($month,$year); 
+                $description = ' الراتب ' . $employee->salery . '<br>';
+                
+                foreach($employee->employeeEmployeeFinancials()->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->get()->groupBy('financial_category_id') as $cat =>  $raw){
+                    $description .=  FinancialCategory::find($cat)->name .' => ' . $raw->sum('amount') . '<br>';
+                }
+
+                $validated_request['description'] = $description;
+        
+                Expense::create($validated_request);
+
+                return redirect()->route('admin.employees.show',$request->model_id);
+            }
+        }
+
+        Expense::create($validated_request);
 
         return redirect()->route('admin.expenses.index');
     }

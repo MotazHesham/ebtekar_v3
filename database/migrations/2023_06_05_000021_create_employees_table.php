@@ -13,6 +13,9 @@ class CreateEmployeesTable extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('phone_number');
+            $table->decimal('salery', 15, 2);
+            $table->string('address')->nullable();
+            $table->string('job_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

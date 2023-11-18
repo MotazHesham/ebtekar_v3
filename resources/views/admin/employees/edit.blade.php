@@ -41,6 +41,36 @@
                 <span class="help-block">{{ trans('cruds.employee.fields.phone_number_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="salery">{{ trans('cruds.employee.fields.salery') }}</label>
+                <input class="form-control {{ $errors->has('salery') ? 'is-invalid' : '' }}" type="number" name="salery" id="salery" value="{{ old('salery', $employee->salery) }}" step="0.01" required>
+                @if($errors->has('salery'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('salery') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.employee.fields.salery_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="address">{{ trans('cruds.employee.fields.address') }}</label>
+                <input class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" type="text" name="address" id="address" value="{{ old('address', $employee->address) }}">
+                @if($errors->has('address'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('address') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.employee.fields.address_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="job_description">{{ trans('cruds.employee.fields.job_description') }}</label>
+                <input class="form-control {{ $errors->has('job_description') ? 'is-invalid' : '' }}" type="text" name="job_description" id="job_description" value="{{ old('job_description', $employee->job_description) }}">
+                @if($errors->has('job_description'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('job_description') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.employee.fields.job_description_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

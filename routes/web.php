@@ -171,21 +171,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Commission Requests
     Route::delete('commission-requests/destroy', 'CommissionRequestsController@massDestroy')->name('commission-requests.massDestroy');
-    Route::resource('commission-requests', 'CommissionRequestsController');
-
-
-    // Borrows
-    Route::delete('borrows/destroy', 'BorrowsController@massDestroy')->name('borrows.massDestroy');
-    Route::resource('borrows', 'BorrowsController');
-
-    // Subtractions
-    Route::delete('subtractions/destroy', 'SubtractionsController@massDestroy')->name('subtractions.massDestroy');
-    Route::resource('subtractions', 'SubtractionsController');
+    Route::resource('commission-requests', 'CommissionRequestsController'); 
 
     // Employees
     Route::delete('employees/destroy', 'EmployeesController@massDestroy')->name('employees.massDestroy');
     Route::resource('employees', 'EmployeesController');
 
+    // Financial Category
+    Route::delete('financial-categories/destroy', 'FinancialCategoryController@massDestroy')->name('financial-categories.massDestroy');
+    Route::resource('financial-categories', 'FinancialCategoryController');
+
+    // Employee Financial
+    Route::delete('employee-financials/destroy', 'EmployeeFinancialController@massDestroy')->name('employee-financials.massDestroy');
+    Route::resource('employee-financials', 'EmployeeFinancialController');
+    
     // Countries
     Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
     Route::post('countries/update_statuses', 'CountriesController@update_statuses')->name('countries.update_statuses');

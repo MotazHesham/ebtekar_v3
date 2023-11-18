@@ -41,8 +41,10 @@ class ReceiptBranchObserver
     public function updating(ReceiptBranch $receiptBranch){ 
         // Assign the branch name and phone 
         $branch = RBranch::find($receiptBranch->r_branch_id);
-        $receiptBranch->client_name = $branch->name;
-        $receiptBranch->phone_number = $branch->phone_number;
+        if($branch){
+            $receiptBranch->client_name = $branch->name;
+            $receiptBranch->phone_number = $branch->phone_number;
+        }
     }
     /**
      * Handle the ReceiptBranch "created" event.

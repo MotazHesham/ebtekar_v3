@@ -374,47 +374,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'commission_request_access',
-            ], 
-            [
-                'id'    => $i++,
-                'title' => 'borrow_create',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'borrow_edit',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'borrow_show',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'borrow_delete',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'borrow_access',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'subtraction_create',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'subtraction_edit',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'subtraction_show',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'subtraction_delete',
-            ],
-            [
-                'id'    => $i++,
-                'title' => 'subtraction_access',
-            ],
+            ],  
             [
                 'id'    => $i++,
                 'title' => 'employee_create',
@@ -893,10 +853,6 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
-                'title' => 'borrows_and_subtraction_access',
-            ],
-            [
-                'id'    => $i++,
                 'title' => 'faq_management_access',
             ],
             [
@@ -1297,8 +1253,56 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'employee_managment_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_category_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_category_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_category_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_category_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_category_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'employee_financial_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'employee_financial_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'employee_financial_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'employee_financial_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'employee_financial_access',
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'profile_password_edit',
             ],
+            [
+                'id'    => $i++,
+                'title' => 'transfer_receipts',
+            ], 
         ];
 
         Permission::insert($permissions);

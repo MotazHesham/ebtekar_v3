@@ -1,46 +1,43 @@
 @extends('layouts.admin')
 @section('content')
-    @can('employee_create')
+    @can('employee_financial_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.employees.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.employee.title_singular') }}
+                <a class="btn btn-success" href="{{ route('admin.employee-financials.create') }}">
+                    {{ trans('global.add') }} {{ trans('cruds.employeeFinancial.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.employee.title_singular') }} {{ trans('global.list') }}
+            {{ trans('cruds.employeeFinancial.title_singular') }} {{ trans('global.list') }}
         </div>
 
         <div class="card-body">
-            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-Employee">
+            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-EmployeeFinancial">
                 <thead>
                     <tr>
                         <th width="10">
 
                         </th>
                         <th>
-                            {{ trans('cruds.employee.fields.id') }}
+                            {{ trans('cruds.employeeFinancial.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.employee.fields.name') }}
+                            {{ trans('cruds.employeeFinancial.fields.employee') }}
                         </th>
                         <th>
-                            {{ trans('cruds.employee.fields.email') }}
+                            {{ trans('cruds.employeeFinancial.fields.financial_category') }}
                         </th>
                         <th>
-                            {{ trans('cruds.employee.fields.phone_number') }}
+                            {{ trans('cruds.employeeFinancial.fields.amount') }}
                         </th>
                         <th>
-                            {{ trans('cruds.employee.fields.salery') }}
+                            {{ trans('cruds.employeeFinancial.fields.reason') }}
                         </th>
                         <th>
-                            {{ trans('cruds.employee.fields.address') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.employee.fields.job_description') }}
+                            {{ trans('cruds.employeeFinancial.fields.created_at') }}
                         </th>
                         <th>
                             &nbsp;
@@ -56,11 +53,11 @@
     <script>
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-            @can('employee_delete')
+            @can('employee_financial_delete')
                 let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
-                    url: "{{ route('admin.employees.massDestroy') }}",
+                    url: "{{ route('admin.employee-financials.massDestroy') }}",
                     className: 'btn-danger',
                     action: function(e, dt, node, config) {
                         var ids = $.map(dt.rows({
@@ -102,7 +99,7 @@
                 serverSide: true,
                 retrieve: true,
                 aaSorting: [],
-                ajax: "{{ route('admin.employees.index') }}",
+                ajax: "{{ route('admin.employee-financials.index') }}",
                 columns: [{
                         data: 'placeholder',
                         name: 'placeholder'
@@ -112,28 +109,24 @@
                         name: 'id'
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'employee_name',
+                        name: 'employee.name'
                     },
                     {
-                        data: 'email',
-                        name: 'email'
+                        data: 'financial_category_name',
+                        name: 'financial_category.name'
                     },
                     {
-                        data: 'phone_number',
-                        name: 'phone_number'
+                        data: 'amount',
+                        name: 'amount'
                     },
                     {
-                        data: 'salery',
-                        name: 'salery'
+                        data: 'reason',
+                        name: 'reason'
                     },
                     {
-                        data: 'address',
-                        name: 'address'
-                    },
-                    {
-                        data: 'job_description',
-                        name: 'job_description'
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'actions',
@@ -146,7 +139,7 @@
                 ],
                 pageLength: 25,
             };
-            let table = $('.datatable-Employee').DataTable(dtOverrideGlobals);
+            let table = $('.datatable-EmployeeFinancial').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();
