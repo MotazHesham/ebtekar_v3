@@ -26,6 +26,11 @@ class ReceiptSocial extends Model
         'unpaid' => 'unPaid',
         'paid'   => 'Paid',
     ];
+    public const DEPOSIT_TYPE_SELECT = [
+        'cash' => 'كاش',
+        'wallet'   => 'محفظة ألكترونية',
+        'bank'   => 'تحويل بنكي',
+    ];
 
     public const CLIENT_TYPE_SELECT = [
         'individual' => 'Individual',
@@ -91,6 +96,7 @@ class ReceiptSocial extends Model
         'delivery_status',
         'note',
         'payment_status',
+        'deposit_type',
         'playlist_status',
         'staff_id',
         'designer_id',
@@ -100,6 +106,7 @@ class ReceiptSocial extends Model
         'delivery_man_id',
         'shipping_country_id',
         'website_setting_id',
+        'financial_account_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -205,6 +212,11 @@ class ReceiptSocial extends Model
         return $this->belongsTo(Country::class, 'shipping_country_id')->withTrashed();
     }
 
+    public function financial_account()
+    {
+        return $this->belongsTo(FinancialAccount::class, 'financial_account_id')->withTrashed();
+    }
+
     public function socials()
     {
         return $this->belongsToMany(Social::class)->withTrashed();
@@ -231,4 +243,21 @@ class ReceiptSocial extends Model
 		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost  - $this->deposit;
 	}
 
+    
+    public function incomes()
+    {
+        return $this->morphMany(Income::class, 'model');
+    }
+    
+    public function add_income(){ 
+        Income::create([ 
+            'income_category_id' => 3,
+            'entry_date' => date(config('panel.date_format')),
+            'amount' => $this->calc_total(),
+            'description' => $this->order_num,
+            'model_id' => $this->id,
+            'model_type' => 'App\Models\ReceiptSocial',
+        ]);
+        return 1;
+    }
 }

@@ -78,11 +78,19 @@ class ExpenseController extends Controller
 
         $expense->load('expense_category');
 
+        if($expense->model_type){
+            alert("Cant Update This expense",'','error');
+            return redirect()->back();
+        }
         return view('admin.expenses.edit', compact('expense', 'expense_categories'));
     }
 
     public function update(UpdateExpenseRequest $request, Expense $expense)
     {
+        if($expense->model_type){
+            alert("Cant Update This expense",'','error');
+            return redirect()->back();
+        }
         $expense->update($request->all());
 
         return redirect()->route('admin.expenses.index');

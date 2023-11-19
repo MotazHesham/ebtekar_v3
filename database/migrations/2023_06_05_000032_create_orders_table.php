@@ -28,6 +28,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('calling')->default(0);
             $table->boolean('quickly')->default(0);
             $table->boolean('supplied')->default(0);
+            $table->boolean('done')->default(0);
             $table->datetime('done_time')->nullable();
             $table->datetime('send_to_delivery_date')->nullable();
             $table->datetime('send_to_playlist_date')->nullable();

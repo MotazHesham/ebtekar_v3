@@ -141,22 +141,28 @@
                 </div> 
                 <div class="col-md-3">  
                     
-                    <select class="form-control mb-2 @isset($client_type) isset @endisset" name="client_type" id="client_type" onchange="sort_receipt_social()">
-                        <option value="">{{ trans('cruds.receiptSocial.fields.client_type') }}</option>
-                        <option value="individual"
-                            @isset($client_type) @if ($client_type == 'individual') selected @endif @endisset>
-                            Individual</option>
-                        <option value="corporate"
-                            @isset($client_type) @if ($client_type == 'corporate') selected @endif @endisset>
-                            Corporate</option>
-                    </select>
-                    <select class="form-control mb-2 @isset($quickly) isset @endisset" name="quickly" id="quickly" onchange="sort_receipt_social()">
-                        <option value="">{{ trans('global.extra.quickly') }}</option>
-                        <option value="0" @isset($quickly) @if ($quickly == '0') selected @endif @endisset>
-                            {{ trans('global.extra.0_quickly') }}</option>
-                        <option value="1" @isset($quickly) @if ($quickly == '1') selected @endif @endisset>
-                            {{ trans('global.extra.1_quickly') }}</option>
-                    </select>  
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($client_type) isset @endisset" name="client_type" id="client_type" onchange="sort_receipt_social()">
+                                <option value="">{{ trans('cruds.receiptSocial.fields.client_type') }}</option>
+                                <option value="individual"
+                                    @isset($client_type) @if ($client_type == 'individual') selected @endif @endisset>
+                                    Individual</option>
+                                <option value="corporate"
+                                    @isset($client_type) @if ($client_type == 'corporate') selected @endif @endisset>
+                                    Corporate</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($quickly) isset @endisset" name="quickly" id="quickly" onchange="sort_receipt_social()">
+                                <option value="">{{ trans('global.extra.quickly') }}</option>
+                                <option value="0" @isset($quickly) @if ($quickly == '0') selected @endif @endisset>
+                                    {{ trans('global.extra.0_quickly') }}</option>
+                                <option value="1" @isset($quickly) @if ($quickly == '1') selected @endif @endisset>
+                                    {{ trans('global.extra.1_quickly') }}</option>
+                            </select>  
+                        </div>
+                    </div>
 
                     <select class="form-control mb-2 @isset($delivery_status) isset @endisset" name="delivery_status" id="delivery_status" onchange="sort_receipt_social()">
                         <option value="">{{ trans('cruds.receiptSocial.fields.delivery_status') }}</option> 
@@ -185,7 +191,28 @@
                         @endforeach
                     </select>
 
-                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($deposit_type) isset @endisset" name="deposit_type" id="deposit_type" onchange="sort_receipt_social()">
+                                <option value="">{{ trans('cruds.receiptSocial.fields.deposit_type') }}</option> 
+                                @foreach(\App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT as $key => $label)
+                                    <option value="{{ $key }}" @isset($deposit_type) @if ($deposit_type == $key) selected @endif @endisset>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6"> 
+                            <select class="form-control mb-2 @isset($financial_account_id) isset @endisset" name="financial_account_id" id="financial_account_id" onchange="sort_receipt_social()">
+                                <option value="">{{ trans('cruds.receiptSocial.fields.financial_account_id') }}</option> 
+                                @foreach($financial_accounts as $raw)
+                                    <option value="{{ $raw->id }}" @isset($financial_account_id) @if ($financial_account_id == $raw->id) selected @endif @endisset>
+                                        {{ $raw->account }} - {{  $raw->description }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                 </div> 
                 <div class="col-md-3">
 

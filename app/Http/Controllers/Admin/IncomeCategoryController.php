@@ -40,12 +40,23 @@ class IncomeCategoryController extends Controller
     {
         abort_if(Gate::denies('income_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        if(in_array($incomeCategory->id,[1,2,3,4,5])){
+            alert("Cant Update This Category",'','error');
+            return redirect()->back();
+        }
+
         return view('admin.incomeCategories.edit', compact('incomeCategory'));
     }
 
     public function update(UpdateIncomeCategoryRequest $request, IncomeCategory $incomeCategory)
     {
+        if(in_array($incomeCategory->id,[1,2,3,4,5])){
+            alert("Cant Update This Category",'','error');
+            return redirect()->back();
+        }
+        
         $incomeCategory->update($request->all());
+
 
         return redirect()->route('admin.income-categories.index');
     }

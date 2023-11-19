@@ -1,6 +1,53 @@
 @extends('layouts.admin')
 @section('content')
 
+    <div class="row mb-3 text-center">
+
+        <div class="col-md-3">
+            <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#uploadFedexModal">
+                {{ trans('global.extra.upload_fedex') }}
+            </a>
+        </div>
+    </div>
+    
+
+    <!-- Upload Fedex Modal -->
+    <div class="modal fade" id="uploadFedexModal" tabindex="-1" aria-labelledby="uploadFedexModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadFedexModalLabel"> </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.orders.upload_fedex') }}" method="POST" enctype="multipart/form-data">
+                        @csrf  
+                        <div class="form-group">
+                            <label class="required">النوع</label>
+                            <select name="type" class="form-control" id="" required>
+                                <option value="done">التسليم</option>
+                                <option value="supplied">التوريد</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="required" for="uploaded_file">{{ trans('cruds.excelFile.fields.uploaded_file') }}</label>
+                            <div class="needsclick dropzone {{ $errors->has('uploaded_file') ? 'is-invalid' : '' }}" id="uploaded_file-dropzone">
+                            </div>
+                            @if($errors->has('uploaded_file'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('uploaded_file') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.excelFile.fields.uploaded_file_helper') }}</span>
+                        </div>
+                        <hr>
+                        <button type="submit" class="btn btn-success">{{ trans('global.continue') }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-xl-3 col-md-12">
             <div class="card">
@@ -218,6 +265,44 @@
                                         = {{ exchange_rate($order->calc_total_for_client(),$order->exchange_rate)  }} {{ $order->symbol }}
                                     </span>
                                 </div> 
+                                <div style="display: flex;justify-content: space-between;">
+                                    <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
+                                        <span>
+                                            {{ trans('cruds.receiptSocial.fields.done') }}
+                                        </span>
+                                        <br>
+                                        <div id="done-{{$order->id}}">
+                                            @if($order->done)
+                                                <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
+                                            @else
+                                                <label class="c-switch c-switch-pill c-switch-success">
+                                                    <input onchange="update_statuses(this,'done')" value="{{ $order->id }}"
+                                                        type="checkbox" class="c-switch-input"
+                                                        {{ $order->done ? 'checked' : null }}>
+                                                    <span class="c-switch-slider"></span>
+                                                </label>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
+                                        <span>
+                                            {{ trans('cruds.order.fields.supplied') }}
+                                        </span>
+                                        <br>
+                                        <div id="supplied-{{$order->id}}">
+                                            @if($order->supplied)
+                                                <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
+                                            @else
+                                                <label class="c-switch c-switch-pill c-switch-success">
+                                                    <input onchange="update_statuses(this,'supplied')" value="{{ $order->id }}"
+                                                        type="checkbox" class="c-switch-input"
+                                                        {{ $order->supplied ? 'checked' : null }}>
+                                                    <span class="c-switch-slider"></span>
+                                                </label>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                             <td> 
                                 <div>
@@ -326,6 +411,48 @@
 @endsection
 @section('scripts')
     @parent
+    
+    <script>
+        Dropzone.options.uploadedFileDropzone = {
+            url: '{{ route('admin.excel-files.storeMedia') }}',
+            maxFilesize: 5, // MB
+            maxFiles: 1,
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            params: {
+                size: 5
+            },
+            success: function(file, response) {
+                $('form').find('input[name="uploaded_file"]').remove()
+                $('form').append('<input type="hidden" name="uploaded_file" value="' + response.name + '">')
+            },
+            removedfile: function(file) {
+                file.previewElement.remove()
+                if (file.status !== 'error') {
+                    $('form').find('input[name="uploaded_file"]').remove()
+                    this.options.maxFiles = this.options.maxFiles + 1
+                }
+            }, 
+            error: function(file, response) {
+                if ($.type(response) === 'string') {
+                    var message = response //dropzone sends it's own error messages in string
+                } else {
+                    var message = response.errors.file
+                }
+                file.previewElement.classList.add('dz-error')
+                _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+                _results = []
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    node = _ref[_i]
+                    _results.push(node.textContent = message)
+                }
+
+                return _results
+            }
+        }
+    </script>
     <script> 
         function sort_orders(el) {
             $('#sort_orders').submit();
@@ -340,10 +467,14 @@
                 var status = 0;
             }
             $.post('{{ route('admin.orders.update_statuses') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status, type:type}, function(data){
-                if(data == 1){
-                    showAlert('success', 'Success', '');
-                }else{
-                    showAlert('danger', 'Something went wrong', '');
+                if (data['status'] == '1') {
+                    showAlert('success', 'Success', data['message']);
+                } else if(data['status'] == '2') { 
+                    $('#done-'+el.value).html(data['first']);
+                    showAlert('success', 'Success', data['message']);
+                } else if(data['status'] == '3') { 
+                    $('#supplied-'+el.value).html(data['first']);
+                    showAlert('success', 'Success', data['message']);
                 }
             });
         }

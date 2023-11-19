@@ -20,11 +20,17 @@ class Expense extends Model
         'updated_at',
         'deleted_at',
     ];
+    public const MODEL_TPYE_SELECT = [
+        'App\Models\Employee'        => 'Employee',  
+        'App\Models\Material'        => 'Material', 
+    ];
+
 
     protected $fillable = [
         'expense_category_id',
         'entry_date',
         'amount',
+        'quantity',
         'description',
         'model_id',
         'model_type',

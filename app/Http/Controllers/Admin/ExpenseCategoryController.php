@@ -40,12 +40,23 @@ class ExpenseCategoryController extends Controller
     {
         abort_if(Gate::denies('expense_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        if(in_array($expenseCategory->id,[1,2])){
+            alert("Cant Update This Category",'','error');
+            return redirect()->back();
+        }
+
         return view('admin.expenseCategories.edit', compact('expenseCategory'));
     }
 
     public function update(UpdateExpenseCategoryRequest $request, ExpenseCategory $expenseCategory)
     {
+        if(in_array($expenseCategory->id,[1,2])){
+            alert("Cant Update This Category",'','error');
+            return redirect()->back();
+        }
+        
         $expenseCategory->update($request->all());
+
 
         return redirect()->route('admin.expense-categories.index');
     }
@@ -64,16 +75,5 @@ class ExpenseCategoryController extends Controller
         $expenseCategory->delete();
 
         return back();
-    }
-
-    public function massDestroy(MassDestroyExpenseCategoryRequest $request)
-    {
-        $expenseCategories = ExpenseCategory::find(request('ids'));
-
-        foreach ($expenseCategories as $expenseCategory) {
-            $expenseCategory->delete();
-        }
-
-        return response(null, Response::HTTP_NO_CONTENT);
-    }
+    } 
 }

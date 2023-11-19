@@ -660,6 +660,16 @@
 
 
         <li class="nav-title">عام</li>
+        @can('material_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.materials.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/materials") || request()->is("admin/materials/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-feather-alt c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.material.title') }}
+                </a>
+            </li>
+        @endcan
         @can('expense_management_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/expense-categories*") ? "c-show" : "" }} {{ request()->is("admin/income-categories*") ? "c-show" : "" }} {{ request()->is("admin/expenses*") ? "c-show" : "" }} {{ request()->is("admin/incomes*") ? "c-show" : "" }} {{ request()->is("admin/expense-reports*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -721,9 +731,9 @@
                     @endcan
                 </ul>
             </li>
-        @endcan
+        @endcan 
         @can('setting_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/website-settings*") ? "c-show" : "" }} {{ request()->is("admin/user-alerts*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/socials*") ? "c-show" : "" }} {{ request()->is("admin/polices*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/website-settings*") ? "c-show" : "" }} {{ request()->is("admin/subscribes*") ? "c-show" : "" }} {{ request()->is("admin/contactus*") ? "c-show" : "" }} {{ request()->is("admin/currencies*") ? "c-show" : "" }} {{ request()->is("admin/faq-questions*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/socials*") ? "c-show" : "" }} {{ request()->is("admin/polices*") ? "c-show" : "" }} {{ request()->is("admin/financial-accounts*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-cog c-sidebar-nav-icon">
 
@@ -738,6 +748,16 @@
 
                                 </i>
                                 {{ trans('cruds.websiteSetting.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('financial_account_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.financial-accounts.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/financial-accounts") || request()->is("admin/financial-accounts/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-hand-holding-usd c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.financialAccount.title') }}
                             </a>
                         </li>
                     @endcan

@@ -258,6 +258,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('orders/show_order_detail', 'OrdersController@show_order_detail')->name('orders.show_order_detail');
     Route::post('orders/update_delivery_man', 'OrdersController@update_delivery_man')->name('orders.update_delivery_man');
     Route::post('orders/update_statuses', 'OrdersController@update_statuses')->name('orders.update_statuses');
+    Route::post('orders/upload_fedex', 'OrdersController@upload_fedex')->name('orders.upload_fedex');
     Route::resource('orders', 'OrdersController');
 
     // Receipt Outgoing
@@ -408,6 +409,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // R Branche
     Route::delete('r-branches/destroy', 'RBrancheController@massDestroy')->name('r-branches.massDestroy');
     Route::resource('r-branches', 'RBrancheController');
+
+    
+    // Financial Accounts
+    Route::delete('financial-accounts/destroy', 'FinancialAccountsController@massDestroy')->name('financial-accounts.massDestroy');
+    Route::post('financial-accounts/update_statuses', 'FinancialAccountsController@update_statuses')->name('financial-accounts.update_statuses');
+    Route::resource('financial-accounts', 'FinancialAccountsController');
+    
+    // Materials
+    Route::delete('materials/destroy', 'MaterialsController@massDestroy')->name('materials.massDestroy');
+    Route::post('materials/stock', 'MaterialsController@stock')->name('materials.stock');
+    Route::resource('materials', 'MaterialsController');
     
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');

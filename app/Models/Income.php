@@ -24,12 +24,16 @@ class Income extends Model
     public const MODEL_TPYE_SELECT = [
         'App\Models\ReceiptBranch'        => 'ReceiptBranch', 
         'App\Models\ReceiptClient'        => 'ReceiptClient', 
+        'App\Models\ReceiptSocial'        => 'ReceiptSocial', 
+        'App\Models\Order'        => 'Order', 
+        'App\Models\Material'        => 'Material', 
     ];
 
     protected $fillable = [
         'income_category_id',
         'entry_date',
         'amount',
+        'quantity',
         'description',
         'model_id',
         'model_type',

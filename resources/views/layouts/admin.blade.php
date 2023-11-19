@@ -72,7 +72,8 @@
         }
 
         .total_cost {
-            font-size: 18px
+            font-size: 18px;
+            padding: 18px;
         }
 
         .isset {

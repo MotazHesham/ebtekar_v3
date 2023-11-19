@@ -111,7 +111,7 @@ class ReceiptBranch extends Model
     public function add_income(){ 
         Income::create([ 
             'income_category_id' => 1,
-            'entry_date' => $this->created_at,
+            'entry_date' => date(config('panel.date_format')),
             'amount' => $this->calc_total_cost(),
             'description' => '',
             'model_id' => $this->id,

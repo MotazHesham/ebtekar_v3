@@ -27,6 +27,7 @@ class ExpenseCategory extends Model
     ];
 
     // 1 employee salery
+    // 2 Materials
 
     protected function serializeDate(DateTimeInterface $date)
     {

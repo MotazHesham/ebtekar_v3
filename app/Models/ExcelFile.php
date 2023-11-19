@@ -23,7 +23,12 @@ class ExcelFile extends Model implements HasMedia
     ];
 
     public const TYPE_SELECT = [
-        'social_delivery' => 'Social Delivery',
+        'social_delivery' => 'فواتير سوشيال',
+        'orders_delivery' => 'فواتير الموقع',
+    ];
+    public const TYPE2_SELECT = [
+        'done' => 'تسليم',
+        'supplied' => 'توريد',
     ];
 
     protected $dates = [
@@ -34,6 +39,7 @@ class ExcelFile extends Model implements HasMedia
 
     protected $fillable = [
         'type',
+        'type2',
         'results',
         'created_at',
         'updated_at',

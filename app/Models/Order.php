@@ -107,6 +107,7 @@ class Order extends Model
         'calling',
         'quickly',
         'supplied',
+        'done',
         'done_time',
         'send_to_delivery_date',
         'send_to_playlist_date',
@@ -267,4 +268,22 @@ class Order extends Model
 	public function calc_total_for_client(){
 		return $this->calc_total() - $this->deposit_amount - $this->calc_discount();
 	}
+
+    
+    public function incomes()
+    {
+        return $this->morphMany(Income::class, 'model');
+    }
+    
+    public function add_income(){ 
+        Income::create([ 
+            'income_category_id' => 4,
+            'entry_date' => date(config('panel.date_format')),
+            'amount' => $this->calc_total() - $this->calc_discount(),
+            'description' => $this->order_num . '-' . exchange_rate($this->calc_total_for_client(),$this->exchange_rate) . $this->symbol ,
+            'model_id' => $this->id,
+            'model_type' => 'App\Models\Order',
+        ]);
+        return 1;
+    }
 }

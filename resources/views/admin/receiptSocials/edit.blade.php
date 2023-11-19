@@ -96,6 +96,26 @@
                                     <span
                                         class="help-block">{{ trans('cruds.receiptSocial.fields.shipping_country_id_helper') }}</span>
                                 </div>
+                                <div class="form-group">
+                                    <label class="required">{{ trans('cruds.receiptSocial.fields.deposit_type') }}</label>
+                                    <select class="form-control {{ $errors->has('deposit_type') ? 'is-invalid' : '' }}"
+                                        name="deposit_type" id="deposit_type" required>
+                                        <option value disabled {{ old('deposit_type', null) === null ? 'selected' : '' }}>
+                                            {{ trans('global.pleaseSelect') }}</option>
+                                        @foreach (App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT as $key => $label)
+                                            <option value="{{ $key }}"
+                                                {{ old('deposit_type',$receiptSocial->deposit_type) === (string) $key ? 'selected' : '' }}>
+                                                {{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('deposit_type'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('deposit_type') }}
+                                        </div>
+                                    @endif
+                                    <span
+                                        class="help-block">{{ trans('cruds.receiptSocial.fields.deposit_type_helper') }}</span>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -159,6 +179,28 @@
                                     @endif
                                     <span
                                         class="help-block">{{ trans('cruds.receiptSocial.fields.deposit_helper') }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required"
+                                        for="financial_account_id">{{ trans('cruds.receiptSocial.fields.financial_account_id') }}</label>
+                                    <select
+                                        class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
+                                        name="financial_account_id" id="financial_account_id" required>
+                                        <option  value="">{{ trans('global.pleaseSelect') }}</option>
+                                        @foreach ($financial_accounts as $raw)
+                                            <option value="{{ $raw->id }}"
+                                                {{ old('financial_account_id',$receiptSocial->financial_account_id) == $raw->id ? 'selected' : '' }}>
+                                                {{ $raw->account }} - {{ $raw->description }}
+                                            </option>
+                                        @endforeach 
+                                    </select>
+                                    @if ($errors->has('financial_account_id'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('financial_account_id') }}
+                                        </div>
+                                    @endif
+                                    <span
+                                        class="help-block">{{ trans('cruds.receiptSocial.fields.financial_account_id_helper') }}</span>
                                 </div>
                             </div>
                         </div>

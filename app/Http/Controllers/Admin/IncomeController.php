@@ -74,11 +74,21 @@ class IncomeController extends Controller
 
         $income->load('income_category');
 
+        
+        if($income->model_type){
+            alert("Cant Update This income",'','error');
+            return redirect()->back();
+        }
+
         return view('admin.incomes.edit', compact('income', 'income_categories'));
     }
 
     public function update(UpdateIncomeRequest $request, Income $income)
     {
+        if($income->model_type){
+            alert("Cant Update This income",'','error');
+            return redirect()->back();
+        }
         $income->update($request->all());
 
         return redirect()->route('admin.incomes.index');

@@ -323,7 +323,17 @@ return [
     'employee_financial_show' => 'عرض حسابات الموظفين',
     'employee_financial_delete' => 'حذف حسابات الموظفين',
     'employee_financial_access' => 'قائمة حسابات الموظفين',
-    'transfer_receipts' => 'أمكانية تحويل فواتير الغير',
+    'material_create' => 'أضافة خامة',
+    'material_edit' => 'تعديل خامة',
+    'material_show' => 'عرض خامة',
+    'material_delete' => 'حذف خامة',
+    'material_access' => 'قائمة الخامات',
+    'financial_account_create' => 'أضافة محفظة',
+    'financial_account_edit' => 'تعديل محفظة',
+    'financial_account_show' => 'عرض محفظة',
+    'financial_account_delete' => 'حذف محفظة',
+    'financial_account_access' => 'قائمة المحافظ الألكترونية',
+    'transfer_receipts' => 'أمكانية تحويل فواتير الغير', 
     'profile_password_edit' => 'تعديل تعديل البروفايل',
 
 ];

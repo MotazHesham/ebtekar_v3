@@ -23,6 +23,7 @@ class ExpenseReportController extends Controller
             ->whereBetween('entry_date', [$from, $to]);
 
         $incomes = Income::with('income_category')
+            ->where('income_category_id','!=',5) // عدم حساب الخامات من ضمن الأيرادات
             ->whereBetween('entry_date', [$from, $to]);
 
         $expensesTotal   = $expenses->sum('amount');

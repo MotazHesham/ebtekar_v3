@@ -1297,6 +1297,46 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'material_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'material_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'material_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'material_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'material_access',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_account_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_account_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_account_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_account_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'financial_account_access',
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'profile_password_edit',
             ],
             [

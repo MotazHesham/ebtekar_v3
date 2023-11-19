@@ -19,6 +19,9 @@
                             {{ trans('cruds.excelFile.fields.type') }}
                         </th>
                         <th>
+                            {{ trans('cruds.excelFile.fields.type') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.excelFile.fields.uploaded_file') }}
                         </th>
                         <th>
@@ -63,6 +66,10 @@
                     {
                         data: 'type',
                         name: 'type'
+                    },
+                    {
+                        data: 'type2',
+                        name: 'type2'
                     },
                     {
                         data: 'uploaded_file',

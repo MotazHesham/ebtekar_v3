@@ -13,6 +13,7 @@ use App\Http\Requests\UpdateReceiptSocialRequest;
 use App\Imports\ReceiptSocialImport;
 use App\Models\Country;
 use App\Models\ExcelFile;
+use App\Models\FinancialAccount;
 use App\Models\GeneralSetting;
 use App\Models\ReceiptSocial; 
 use App\Models\ReceiptSocialProduct;
@@ -50,16 +51,31 @@ class ReceiptSocialController extends Controller
             if($key != 0){
                 $receipt_social = ReceiptSocial::where('order_num',$row[1])->first();
                 if($receipt_social){
-                    if($receipt_social->done){
-                        $row[] = 'تم التسليم من قبل';
-                        $rejected[] = $row;
-                    }else{
-                        $code_cost = $countries[$row[2]] ?? 0;
-                        $row[] = $code_cost;
-                        $row[] = $row[3] - $code_cost;
-                        $accepted[] = $row;
-                        $receipt_social->done = 1;
-                        $receipt_social->save();
+                    if($request->type == 'done'){
+                        if($receipt_social->done){
+                            $row[] = 'تم التسليم من قبل';
+                            $rejected[] = $row;
+                        }else{
+                            $code_cost = $countries[$row[2]] ?? 0;
+                            $row[] = $code_cost;
+                            $row[] = $row[3] - $code_cost;
+                            $accepted[] = $row;
+                            $receipt_social->done = 1;
+                            $receipt_social->save();
+                        }
+                    }elseif($request->type == 'supplied'){
+                        if($receipt_social->supplied){
+                            $row[] = 'تم التوريد من قبل';
+                            $rejected[] = $row;
+                        }else{
+                            $code_cost = $countries[$row[2]] ?? 0;
+                            $row[] = $code_cost;
+                            $row[] = $row[3] - $code_cost;
+                            $accepted[] = $row;
+                            $receipt_social->supplied = 1;
+                            $receipt_social->save();
+                            $receipt_social->add_income();
+                        }
                     }
                 }else{
                     $row [] = 'Not Found';
@@ -72,6 +88,7 @@ class ReceiptSocialController extends Controller
             'rejected' => count($rejected),
         ]);
 
+        $excelFile->type2 = $request->type;
         $rows = [
             'accepted' => $accepted,
             'rejected' => $rejected,
@@ -112,14 +129,24 @@ class ReceiptSocialController extends Controller
         $type = $request->type;
         $receipt = ReceiptSocial::findOrFail($request->id);
         $receipt->$type = $request->status;
+        $status = '1';
         if (in_array($request->type,['done','returned']) && $request->status == 1) {
             $receipt->quickly = 0;
             $receipt->delivery_status = $type == 'done' ? 'delivered' : 'cancel';
             $receipt->payment_status = $type == 'done' ? 'paid' : 'unpaid';
         }
+        
+        if (($type == 'supplied') && $request->status == 1) {
+            $status = '2';
+            $receipt->add_income();
+        } 
         $receipt->save();
         if($request->ajax()){
-            return 1;
+            return [
+                'status' => $status,
+                'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>', 
+                'message' => '',
+            ];
         }else{
             return redirect()->back();
         }
@@ -357,6 +384,7 @@ class ReceiptSocialController extends Controller
         $socials = Social::all();
         $countries = Country::where('status',1)->get()->groupBy('type'); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
+        $financial_accounts = FinancialAccount::get();
         
         if($request->has('cancel_popup')){
             session()->put('store_receipt_id',null);
@@ -388,15 +416,17 @@ class ReceiptSocialController extends Controller
         $playlist_status = null;
         $description = null; 
         $deleted = null;
+        $deposit_type = null;
+        $financial_account_id = null;
         $website_setting_id = null;
 
         $enable_multiple_form_submit = true;
 
         if(request('deleted')){
             $deleted = 1;
-            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country'])->withCount('receiptsReceiptSocialProducts')->onlyTrashed(); 
+            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts')->onlyTrashed(); 
         }else{
-            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country'])->withCount('receiptsReceiptSocialProducts'); 
+            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts'); 
         }
 
         if ($request->client_type != null) {
@@ -422,6 +452,16 @@ class ReceiptSocialController extends Controller
             $receipts = $receipts->whereHas('socials', function ($q) {
                 $q->where('id', $GLOBALS['social_id']);
             });
+        }
+
+        if ($request->deposit_type != null) {
+            $receipts = $receipts->where('deposit_type', $request->deposit_type);
+            $deposit_type = $request->deposit_type;
+        }
+
+        if ($request->financial_account_id != null) {
+            $receipts = $receipts->where('financial_account_id', $request->financial_account_id);
+            $financial_account_id = $request->financial_account_id;
         }
 
         if ($request->done != null) {
@@ -558,9 +598,9 @@ class ReceiptSocialController extends Controller
         return view('admin.receiptSocials.index', compact(
             'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id',
-            'country_id','returned','date_type','phone','client_name','order_num', 'deleted',
-            'quickly','playlist_status','description', 'include','socials','delivery_mans',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  
+            'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts',
+            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type',
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id',
         ));
     }
 
@@ -629,13 +669,15 @@ class ReceiptSocialController extends Controller
 
         $socials = Social::pluck('name', 'id');
 
+        $financial_accounts = FinancialAccount::where('active',1)->get();
+
         $previous_data = searchByPhone($request->phone_number);
 
         $website_setting_id = $request->website_setting_id;
 
         $websites = WebsiteSetting::pluck('site_name', 'id');
         
-        return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data' , 'websites','website_setting_id'));
+        return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data' , 'websites','website_setting_id','financial_accounts'));
     }
 
     public function store(StoreReceiptSocialRequest $request)
@@ -660,6 +702,8 @@ class ReceiptSocialController extends Controller
 
         $socials = Social::pluck('name', 'id'); 
 
+        $financial_accounts = FinancialAccount::where('active',1)->get();
+
         $receiptSocial->load('delivery_man', 'shipping_country', 'socials');
 
         if($site_settings->delivery_system == 'wasla'){
@@ -669,7 +713,7 @@ class ReceiptSocialController extends Controller
             $response = '';
         } 
 
-        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response'));
+        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response','financial_accounts'));
     }
 
     public function update(UpdateReceiptSocialRequest $request, ReceiptSocial $receiptSocial)

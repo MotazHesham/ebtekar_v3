@@ -50,6 +50,9 @@ class ExcelFilesController extends Controller
             $table->editColumn('type', function ($row) {
                 return $row->type ? ExcelFile::TYPE_SELECT[$row->type] : '';
             });
+            $table->editColumn('type2', function ($row) {
+                return $row->type2 ? ExcelFile::TYPE2_SELECT[$row->type2] : '';
+            });
             $table->editColumn('uploaded_file', function ($row) {
                 return $row->uploaded_file ? '<a href="' . $row->uploaded_file->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>' : '';
             });

@@ -19,7 +19,7 @@
         @endcan
 
         <div class="col-md-3">
-            <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#uoloadFedexModal">
+            <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#uploadFedexModal">
                 {{ trans('global.extra.upload_fedex') }}
             </a>
         </div>
@@ -40,16 +40,23 @@
     </div>
 
     <!-- Upload Fedex Modal -->
-    <div class="modal fade" id="uoloadFedexModal" tabindex="-1" aria-labelledby="uoloadFedexModalLabel" aria-hidden="true">
+    <div class="modal fade" id="uploadFedexModal" tabindex="-1" aria-labelledby="uploadFedexModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="uoloadFedexModalLabel"> </h5>
+                    <h5 class="modal-title" id="uploadFedexModalLabel"> </h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('admin.receipt-socials.upload_fedex') }}" method="POST" enctype="multipart/form-data">
                         @csrf  
+                        <div class="form-group">
+                            <label class="required">النوع</label>
+                            <select name="type" class="form-control" id="" required>
+                                <option value="done">التسليم</option>
+                                <option value="supplied">التوريد</option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label class="required" for="uploaded_file">{{ trans('cruds.excelFile.fields.uploaded_file') }}</label>
                             <div class="needsclick dropzone {{ $errors->has('uploaded_file') ? 'is-invalid' : '' }}" id="uploaded_file-dropzone">
@@ -299,7 +306,23 @@
                                 </span>
                                 {{ $receipt->shipping_address ?? '' }}
                             </td>
-                            <td>
+                            <td> 
+                                <div style="display:flex;justify-content:space-between">
+                                    @if($receipt->deposit_type )
+                                        <span class="badge rounded-pill text-bg-info text-white  mb-1">
+                                            {{ trans('cruds.receiptSocial.fields.deposit_type') }}
+                                            <br>
+                                            {{ $receipt->deposit_type ? \App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT[$receipt->deposit_type] : '' }}
+                                        </span>
+                                    @endif
+                                    @if($receipt->financial_account )
+                                        <span class="badge rounded-pill text-bg-info text-white  mb-1">
+                                            {{ trans('cruds.receiptSocial.fields.financial_account_id') }}
+                                            <br>
+                                            {{ $receipt->financial_account->account ?? '' }}
+                                        </span>
+                                    @endif
+                                </div>
                                 <div style="display:flex;justify-content:space-between">
                                     @if($receipt->deposit > 0)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
@@ -315,8 +338,6 @@
                                             {{ dashboard_currency($receipt->extra_commission) }}
                                         </span>
                                     @endif
-                                </div>
-                                <div style="display:flex;justify-content:space-between">
                                     <span class="badge rounded-pill text-bg-light  mb-1">
                                         {{ trans('cruds.receiptSocial.fields.shipping_country_cost') }}
                                         <br>
@@ -328,9 +349,29 @@
                                         {{ dashboard_currency($receipt->total_cost) }}
                                     </span>
                                 </div>
-                                <span class="badge rounded-pill text-bg-success text-white mb-1 total_cost">
-                                    = {{ dashboard_currency($receipt->calc_total_for_client()) }}
-                                </span>
+                                <div style="display:flex;justify-content:space-between">
+                                    <span class="badge rounded-pill text-bg-success text-white mb-1 total_cost">
+                                        = {{ dashboard_currency($receipt->calc_total_for_client()) }}
+                                    </span>
+                                    <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
+                                        <span>
+                                            {{ trans('cruds.receiptSocial.fields.supplied') }}
+                                        </span>
+                                        <br>
+                                        <div id="supplied-{{$receipt->id}}">
+                                            @if($receipt->supplied)
+                                                <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
+                                            @else
+                                                <label class="c-switch c-switch-pill c-switch-success">
+                                                    <input onchange="update_statuses(this,'supplied')" value="{{ $receipt->id }}"
+                                                        type="checkbox" class="c-switch-input"
+                                                        {{ $receipt->supplied ? 'checked' : null }}>
+                                                    <span class="c-switch-slider"></span>
+                                                </label>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 <div style="display: flex;justify-content: space-between;">
@@ -676,11 +717,12 @@
                 var status = 0;
             }
             $.post('{{ route('admin.receipt-socials.update_statuses') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status, type:type}, function(data){
-                if(data == 1){
-                    showAlert('success', 'Success', '');
-                }else{
-                    showAlert('danger', 'Something went wrong', '');
-                }
+                if (data['status'] == '1') {
+                    showAlert('success', 'Success', data['message']);
+                } else if(data['status'] == '2') { 
+                    $('#supplied-'+el.value).html(data['first']);
+                    showAlert('success', 'Success', data['message']);
+                } 
             });
         }
 

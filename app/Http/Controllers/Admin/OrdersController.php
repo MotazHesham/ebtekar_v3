@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\OrdersExport;
+use App\Exports\OrdersResultsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WaslaController;
 use App\Http\Requests\MassDestroyOrderRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Imports\OrderImport;
 use App\Models\Category;
 use App\Models\Country;
+use App\Models\ExcelFile;
 use App\Models\GeneralSetting;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -25,12 +28,96 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrdersController extends Controller
 {
+    public function upload_fedex(Request $request){
+
+        $now_time = time();
+        $excelFile = new ExcelFile();
+        $excelFile->type = 'orders_delivery';
+        
+        $excelFile->addMedia(storage_path('tmp/uploads/' . basename($request->input('uploaded_file'))))->toMediaCollection('uploaded_file'); 
+
+        $sheets = (new OrderImport)->toCollection(storage_path('tmp/uploads/' . basename($request->input('uploaded_file'))));
+        $accepted = [];
+        $rejected = [];
+        $countries = [];
+        foreach(Country::all() as $country){
+            if($country->code){
+                $countries[$country->code] = $country->code_cost;
+            }
+        }
+        foreach($sheets[0] as $key => $row){
+            if($key != 0){
+                $order = Order::where('order_num',$row[1])->first();
+                if($order){
+                    if($request->type == 'done'){
+                        if($order->done){
+                            $row[] = 'تم التسليم من قبل';
+                            $rejected[] = $row;
+                        }else{
+                            $code_cost = $countries[$row[2]] ?? 0;
+                            $row[] = $code_cost;
+                            $row[] = $row[3] - $code_cost;
+                            $accepted[] = $row;
+                            $order->done = 1;
+                            $order->save();
+                        }
+                    }elseif($request->type == 'supplied'){
+                        if($order->supplied){
+                            $row[] = 'تم التوريد من قبل';
+                            $rejected[] = $row;
+                        }else{
+                            $code_cost = $countries[$row[2]] ?? 0;
+                            $row[] = $code_cost;
+                            $row[] = $row[3] - $code_cost;
+                            $accepted[] = $row;
+                            $order->supplied = 1;
+                            $order->save();
+                            $order->add_income();
+                        }
+                    }
+                }else{
+                    $row [] = 'Not Found';
+                    $rejected[] = $row;
+                }
+            }
+        }
+        $excelFile->results = json_encode([
+            'accepted' => count($accepted),
+            'rejected' => count($rejected),
+        ]);
+
+        $excelFile->type2 = $request->type;
+        $rows = [
+            'accepted' => $accepted,
+            'rejected' => $rejected,
+        ]; 
+        $path = 'tmp/uploads/'.$now_time . '_orders_results.xlsx';
+        Excel::store(new OrdersResultsExport($rows), $path);  
+        $excelFile->addMedia(storage_path('app/' . $path))->toMediaCollection('result_file'); 
+        $excelFile->save();
+        return redirect()->route('admin.excel-files.index');
+
+    }
+
     public function update_statuses(Request $request){ 
         $type = $request->type;
         $order = Order::findOrFail($request->id);
         $order->$type = $request->status; 
+        $status = '1';
+        if (($type == 'done') && $request->status == 1) {
+            $status = '2';
+            $order->delivery_status = 'delivered';
+        }
+        if (($type == 'supplied') && $request->status == 1) {
+            $status = '3';
+            $order->add_income();
+        } 
         $order->save();
-        return 1;
+        return [
+            'status' => $status,
+            'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>', 
+            'message' => '',
+        ];
     }
 
     public function print($id){
