@@ -27,6 +27,7 @@ class Income extends Model
         'App\Models\ReceiptSocial'        => 'ReceiptSocial', 
         'App\Models\Order'        => 'Order', 
         'App\Models\Material'        => 'Material', 
+        'App\Models\FinancialAccount'        => 'FinancialAccount', 
     ];
 
     protected $fillable = [

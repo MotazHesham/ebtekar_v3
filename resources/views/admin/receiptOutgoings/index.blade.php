@@ -26,7 +26,7 @@
     </div>
     
     <div class="row">
-        @if(auth()->user()->is_admin)
+        @if(Gate::allows('statistics_receipts'))
             <div class="col-xl-3 col-md-12">
                 <div class="card">
                     <div class="card-body">
@@ -68,7 +68,7 @@
                 </div>
             </div>
         @endif
-        <div class="@if(auth()->user()->is_admin) col-xl-9 @else col-xl-12 @endif col-md-12">
+        <div class="@if(Gate::allows('statistics_receipts')) col-xl-9 @else col-xl-12 @endif col-md-12">
             @include('admin.receiptOutgoings.partials.search')
         </div>
     </div>

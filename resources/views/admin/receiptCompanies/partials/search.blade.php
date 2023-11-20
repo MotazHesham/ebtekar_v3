@@ -233,7 +233,7 @@
                 <div class="col-md-3">
                     <input type="submit" value="{{ trans('global.search') }}" name="search" class="btn btn-success btn-rounded btn-block">
                 </div>
-                @if(auth()->user()->is_admin )
+                @if(Gate::allows('download_receipts'))
                     <div class="col-md-2">
                         <input type="submit" value="{{ trans('global.download') }}" name="download" class="btn btn-info btn-rounded btn-block">
                     </div>

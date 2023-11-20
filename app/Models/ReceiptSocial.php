@@ -253,7 +253,7 @@ class ReceiptSocial extends Model
         Income::create([ 
             'income_category_id' => 3,
             'entry_date' => date(config('panel.date_format')),
-            'amount' => $this->calc_total(),
+            'amount' => $this->calc_total_for_client(),
             'description' => $this->order_num,
             'model_id' => $this->id,
             'model_type' => 'App\Models\ReceiptSocial',

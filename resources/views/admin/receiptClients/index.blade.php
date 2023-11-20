@@ -64,7 +64,7 @@
     </div>
 
     <div class="row">
-        @if(auth()->user()->is_admin)
+        @if(Gate::allows('statistics_receipts'))
             <div class="col-xl-3 col-md-12">
                 <div class="card">
                     <div class="card-body">
@@ -121,7 +121,7 @@
                 </div>
             </div>
         @endif
-        <div class="@if(auth()->user()->is_admin) col-xl-9 @else col-xl-12 @endif col-md-12">
+        <div class="@if(Gate::allows('statistics_receipts')) col-xl-9 @else col-xl-12 @endif col-md-12">
             @include('admin.receiptClients.partials.search')
         </div>
     </div>
@@ -258,15 +258,37 @@
                                             {{ trans('cruds.receiptClient.fields.done') }}
                                         </span>
                                         <br>
-                                        <label class="c-switch c-switch-pill c-switch-success">
-                                            <input onchange="update_statuses(this,'done')" value="{{ $receipt->id }}"
-                                                type="checkbox" class="c-switch-input"
-                                                {{ $receipt->done ? 'checked' : null }}>
-                                            <span class="c-switch-slider"></span>
-                                        </label>
+                                        
+                                        <div id="done-{{$receipt->id}}">
+                                            @if($receipt->done)
+                                                <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
+                                            @else
+                                                <label class="c-switch c-switch-pill c-switch-success">
+                                                    <input onchange="update_statuses(this,'done')" value="{{ $receipt->id }}"
+                                                        type="checkbox" class="c-switch-input"
+                                                        {{ $receipt->done ? 'checked' : null }}>
+                                                    <span class="c-switch-slider"></span>
+                                                </label>
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </div> 
+                                <div style="display:flex;justify-content:space-between">
+                                    @if($receipt->deposit_type )
+                                        <span class="badge rounded-pill text-bg-info text-white  mb-1">
+                                            {{ trans('cruds.receiptSocial.fields.deposit_type') }}
+                                            <br>
+                                            {{ $receipt->deposit_type ? \App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT[$receipt->deposit_type] : '' }}
+                                        </span>
+                                    @endif
+                                    @if($receipt->financial_account )
+                                        <span class="badge rounded-pill text-bg-info text-white  mb-1">
+                                            {{ trans('cruds.receiptSocial.fields.financial_account_id') }}
+                                            <br>
+                                            {{ $receipt->financial_account->account ?? '' }}
+                                        </span>
+                                    @endif
+                                </div> 
                             <td>
                                 <span class="badge text-bg-danger text-white mb-1">
                                     {{ trans('global.extra.created_by') }}
@@ -400,11 +422,12 @@
                 status: status,
                 type: type
             }, function(data) {
-                if (data == 1) {
-                    showAlert('success', 'Success', '');
-                } else {
-                    showAlert('danger', 'Something went wrong', '');
-                }
+                if (data['status'] == '1') {
+                    showAlert('success', 'Success', data['message']);
+                } else if(data['status'] == '2') { 
+                    $('#done-'+el.value).html(data['first']);
+                    showAlert('success', 'Success', data['message']);
+                } 
             });
         }
 

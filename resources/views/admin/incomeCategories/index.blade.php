@@ -46,7 +46,7 @@
                                     {{ $incomeCategory->name ?? '' }}
                                 </td>
                                 <td>
-                                    @if(!in_array($incomeCategory->id,[1,2,3,4,5]))
+                                    @if(!in_array($incomeCategory->id,[1,2,3,4,5,6]))
                                         @can('income_category_show')
                                             <a class="btn btn-xs btn-primary"
                                                 href="{{ route('admin.income-categories.show', $incomeCategory->id) }}">

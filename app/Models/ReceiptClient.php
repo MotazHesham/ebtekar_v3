@@ -34,6 +34,7 @@ class ReceiptClient extends Model
         'client_name',
         'phone_number',
         'deposit',
+        'deposit_type',
         'discount',
         'note',
         'total_cost',
@@ -41,6 +42,7 @@ class ReceiptClient extends Model
         'quickly',
         'printing_times',
         'staff_id',
+        'financial_account_id',
         'website_setting_id',
         'created_at',
         'updated_at',
@@ -67,6 +69,12 @@ class ReceiptClient extends Model
         $this->attributes['date_of_receiving_order'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
 
+    
+    public function financial_account()
+    {
+        return $this->belongsTo(FinancialAccount::class, 'financial_account_id')->withTrashed();
+    }
+    
     public function staff()
     {
         return $this->belongsTo(User::class, 'staff_id');
@@ -88,4 +96,21 @@ class ReceiptClient extends Model
 	public function calc_total_for_client(){
 		return $this->total_cost - $this->calc_discount()  - $this->deposit;
 	}
+    
+    public function incomes()
+    {
+        return $this->morphMany(Income::class, 'model');
+    } 
+    
+    public function add_income(){ 
+        Income::create([ 
+            'income_category_id' => 2,
+            'entry_date' => date(config('panel.date_format')),
+            'amount' => $this->calc_total_for_client(),
+            'description' => $this->order_num,
+            'model_id' => $this->id,
+            'model_type' => 'App\Models\ReceiptClient',
+        ]);
+        return 1;
+    }
 }

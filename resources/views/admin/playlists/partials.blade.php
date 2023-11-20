@@ -72,7 +72,7 @@
                             {{ $title_back }}
                         </a>
                         <a class="btn btn-warning btn-sm rounded-pill text-white"
-                            @if ($item['printing_times'] == 0) onclick="alert('قم بالطباعة أولا')"  @else onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send')" @endif>
+                            onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send')">
                             {{ $title_send }}
                         </a>
                     @endif

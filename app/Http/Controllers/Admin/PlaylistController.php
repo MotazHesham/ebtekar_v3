@@ -94,14 +94,19 @@ class PlaylistController extends Controller
         
         if($request->model_type == 'social'){
             $raw = ReceiptSocial::find($request->id);
-            $route = route('admin.receipt-socials.index');
+            $route = route('admin.receipt-socials.index'); 
         }elseif($request->model_type == 'company'){
             $raw = ReceiptCompany::find($request->id);
-            $route = route('admin.receipt-companies.index');
+            $route = route('admin.receipt-companies.index'); 
         }elseif($request->model_type == 'order'){
             $raw = Order::find($request->id);
-            $route = route('admin.orders.index');
+            $route = route('admin.orders.index'); 
+        }  
+
+        if($raw->printing_times == 0){  
+            return 0; // should printing the receipt first
         } 
+
         $raw->send_to_playlist_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
         $raw->playlist_status = $request->status;
         $raw->save();  

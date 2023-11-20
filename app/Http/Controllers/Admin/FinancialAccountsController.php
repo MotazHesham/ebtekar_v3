@@ -60,7 +60,7 @@ class FinancialAccountsController extends Controller
     public function show(FinancialAccount $financialAccount)
     {
         abort_if(Gate::denies('financial_account_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
+        $financialAccount->load('incomes','receipts_social');
         return view('admin.financialAccounts.show', compact('financialAccount'));
     }
 

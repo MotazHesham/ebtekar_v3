@@ -31,6 +31,7 @@ class IncomeCategory extends Model
     // 3 => receipt social
     // 4 => orders 
     // 5 => materials 
+    // 6 => financial accounts 
 
     protected function serializeDate(DateTimeInterface $date)
     {

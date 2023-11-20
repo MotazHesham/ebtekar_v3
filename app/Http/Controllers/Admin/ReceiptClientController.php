@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyReceiptClientRequest;
 use App\Http\Requests\StoreReceiptClientRequest;
 use App\Http\Requests\UpdateReceiptClientRequest;
+use App\Models\FinancialAccount;
 use App\Models\GeneralSetting;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptClientProduct;
@@ -41,11 +42,18 @@ class ReceiptClientController extends Controller
         $type = $request->type;
         $receipt = ReceiptClient::findOrFail($request->id);
         $receipt->$type = $request->status;
+        $status = '1';
         if (($type == 'done') && $request->status == 1) {
-            $receipt->quickly = 0;
+            $status = '2';
+            $receipt->quickly = 0; 
+            $receipt->add_income();
         }
         $receipt->save();
-        return 1;
+        return [
+            'status' => $status,
+            'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>', 
+            'message' => '',
+        ];
     }
 
     public function duplicate($id){
@@ -188,6 +196,7 @@ class ReceiptClientController extends Controller
 
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->get(); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
+        $financial_accounts = FinancialAccount::get();
 
         if($request->has('cancel_popup')){
             session()->put('store_receipt_id',null);
@@ -210,15 +219,17 @@ class ReceiptClientController extends Controller
         $description = null; 
         $deleted = null; 
         $website_setting_id = null; 
+        $deposit_type = null;
+        $financial_account_id = null;
 
         
         $enable_multiple_form_submit = true;
 
         if(request('deleted')){
             $deleted = 1; 
-            $receipts = ReceiptClient::with(['staff:id,name'])->onlyTrashed();  
+            $receipts = ReceiptClient::with(['staff:id,name','financial_account'])->onlyTrashed();  
         }else{
-            $receipts = ReceiptClient::with(['staff:id,name']);  
+            $receipts = ReceiptClient::with(['staff:id,name','financial_account']);  
         }
 
         if ($request->done != null) {
@@ -234,6 +245,16 @@ class ReceiptClientController extends Controller
         if ($request->staff_id != null) {
             $receipts = $receipts->where('staff_id', $request->staff_id);
             $staff_id = $request->staff_id;
+        }
+
+        if ($request->deposit_type != null) {
+            $receipts = $receipts->where('deposit_type', $request->deposit_type);
+            $deposit_type = $request->deposit_type;
+        }
+
+        if ($request->financial_account_id != null) {
+            $receipts = $receipts->where('financial_account_id', $request->financial_account_id);
+            $financial_account_id = $request->financial_account_id;
         }
 
         if ($request->website_setting_id != null) {
@@ -315,9 +336,9 @@ class ReceiptClientController extends Controller
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.receiptClients.index',compact(
-            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','websites',
+            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','websites','financial_accounts',
             'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include', 'quickly','enable_multiple_form_submit',
-            'done', 'description', 'receipts', 'statistics','deleted','website_setting_id'));
+            'done', 'description', 'receipts', 'statistics','deleted','website_setting_id','deposit_type','financial_account_id'));
     }
 
     public function create(Request $request)
@@ -330,7 +351,9 @@ class ReceiptClientController extends Controller
 
         $website_setting_id = $request->website_setting_id;
 
-        return view('admin.receiptClients.create', compact('previous_data' , 'websites','website_setting_id'));
+        $financial_accounts = FinancialAccount::where('active',1)->get();
+
+        return view('admin.receiptClients.create', compact('previous_data' , 'websites','website_setting_id','financial_accounts'));
     }
 
     public function store(StoreReceiptClientRequest $request)
@@ -352,7 +375,9 @@ class ReceiptClientController extends Controller
 
         $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
 
-        return view('admin.receiptClients.edit', compact('receiptClient','websites'));
+        $financial_accounts = FinancialAccount::where('active',1)->get();
+        
+        return view('admin.receiptClients.edit', compact('receiptClient','websites','financial_accounts'));
     }
 
     public function update(UpdateReceiptClientRequest $request, ReceiptClient $receiptClient)

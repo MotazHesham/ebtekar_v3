@@ -172,14 +172,30 @@
                             </option>
                         @endforeach
                     </select> 
-                    <select class="form-control mb-2 @isset($payment_status) isset @endisset" name="payment_status" id="payment_status" onchange="sort_receipt_social()">
-                        <option value="">{{ trans('cruds.receiptSocial.fields.payment_status') }}</option> 
-                        @foreach(trans('global.payment_status.status') as $key => $status)
-                            <option value="{{ $key }}" @isset($payment_status) @if ($payment_status == $key) selected @endif @endisset>
-                                {{ $status }}
-                            </option>
-                        @endforeach
-                    </select>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($payment_status) isset @endisset" name="payment_status" id="payment_status" onchange="sort_receipt_social()">
+                                <option value="">{{ trans('cruds.receiptSocial.fields.payment_status') }}</option> 
+                                @foreach(trans('global.payment_status.status') as $key => $status)
+                                    <option value="{{ $key }}" @isset($payment_status) @if ($payment_status == $key) selected @endif @endisset>
+                                        {{ $status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($supplied) isset @endisset" name="supplied" id="supplied" onchange="sort_receipt_social()">
+                                <option value="">{{ trans('cruds.receiptSocial.fields.supplied') }}</option>
+                                <option value="1" @isset($supplied) @if ($supplied == '1') selected @endif @endisset>
+                                    تم التوريد
+                                </option>
+                                <option value="0" @isset($supplied) @if ($supplied == '0') selected @endif @endisset>
+                                    لم يتم التوريد
+                                </option>
+                            </select>
+                        </div>
+                    </div>
 
 
                     <select class="form-control mb-2 @isset($playlist_status) isset @endisset" name="playlist_status"id="playlist_status" onchange="sort_receipt_social()">
@@ -284,7 +300,7 @@
                 <div class="col-md-3">
                     <input type="submit" value="{{ trans('global.search') }}" name="search" class="btn btn-success btn-rounded btn-block">
                 </div>
-                @if(auth()->user()->is_admin )
+                @if(Gate::allows('download_receipts'))
                     <div class="col-md-2">
                         <input type="submit" value="{{ trans('global.download') }}" name="download" class="btn btn-info btn-rounded btn-block">
                     </div>

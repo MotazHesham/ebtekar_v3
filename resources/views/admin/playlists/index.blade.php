@@ -232,6 +232,8 @@
                 if (data == 1) {
                     location.reload();
                     showAlert('success', 'تم الأرسال');
+                }else{
+                    showAlert('error', 'قم بالطباعة أولا');
                 }
             });
         }

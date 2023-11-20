@@ -411,6 +411,7 @@ class ReceiptSocialController extends Controller
         $confirm = null; 
         $quickly = null;
         $done = null;
+        $supplied = null;
         $returned = null;
         $country_id = null;
         $playlist_status = null;
@@ -467,6 +468,11 @@ class ReceiptSocialController extends Controller
         if ($request->done != null) {
             $receipts = $receipts->where('done', $request->done);
             $done = $request->done;
+        }
+
+        if ($request->supplied != null) {
+            $receipts = $receipts->where('supplied', $request->supplied);
+            $supplied = $request->supplied;
         }
 
         if ($request->confirm != null) {
@@ -599,7 +605,7 @@ class ReceiptSocialController extends Controller
             'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts',
-            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type',
+            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id',
         ));
     }

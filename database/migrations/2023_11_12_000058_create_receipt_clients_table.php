@@ -15,6 +15,7 @@ class CreateReceiptClientsTable extends Migration
             $table->string('client_name');
             $table->string('phone_number');
             $table->decimal('deposit', 15, 2)->nullable();
+            $table->string('deposit_type')->nullable();
             $table->decimal('discount', 15, 2)->nullable();
             $table->longText('note')->nullable();
             $table->decimal('total_cost', 15, 2)->nullable();
@@ -23,6 +24,8 @@ class CreateReceiptClientsTable extends Migration
             $table->integer('printing_times')->nullable();
             $table->unsignedBigInteger('website_setting_id')->nullable();
             $table->foreign('website_setting_id', 'website_setting_fk_86542348')->references('id')->on('website_settings');
+            $table->unsignedBigInteger('financial_account_id')->nullable();
+            $table->foreign('financial_account_id', 'financial_account_fk_8699908')->references('id')->on('financial_accounts');
             $table->timestamps();
             $table->softDeletes();
         });

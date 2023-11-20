@@ -335,5 +335,7 @@ return [
     'financial_account_access' => 'قائمة المحافظ الألكترونية',
     'transfer_receipts' => 'أمكانية تحويل فواتير الغير', 
     'profile_password_edit' => 'تعديل تعديل البروفايل',
+    'download_receipts' => 'تحميل الفواتير',
+    'statistics_receipts' => 'أحصائيات الفواتير', 
 
 ];

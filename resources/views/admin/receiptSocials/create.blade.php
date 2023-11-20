@@ -101,7 +101,7 @@
                                     <span
                                         class="help-block">{{ trans('cruds.receiptSocial.fields.shipping_country_id_helper') }}</span>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="deposit_type_div" style="display: none">
                                     <label class="required">{{ trans('cruds.receiptSocial.fields.deposit_type') }}</label>
                                     <select class="form-control {{ $errors->has('deposit_type') ? 'is-invalid' : '' }}"
                                         name="deposit_type" id="deposit_type" required>
@@ -179,7 +179,7 @@
                                     <label for="deposit" class="required">{{ trans('cruds.receiptSocial.fields.deposit') }}</label>
                                     <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}"
                                         type="number" name="deposit" id="deposit" value="{{ old('deposit') }}"
-                                        step="0.01" required>
+                                        step="0.01" required onkeyup="change_deposit()">
                                     @if ($errors->has('deposit'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('deposit') }}
@@ -188,7 +188,7 @@
                                     <span
                                         class="help-block">{{ trans('cruds.receiptSocial.fields.deposit_helper') }}</span>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="financial_account_div" style="display: none">
                                     <label class="required"
                                         for="financial_account_id">{{ trans('cruds.receiptSocial.fields.financial_account_id') }}</label>
                                     <select
@@ -271,4 +271,25 @@
             </form>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    @parent 
+    <script>
+        function change_deposit(){
+            var deposit = document.getElementById("deposit").value;
+            if(deposit > 0){
+                console.log(deposit);
+                $('#deposit_type').prop('required', true);
+                $('#financial_account_id').prop('required', true);
+                $('#deposit_type_div').css('display','block');
+                $('#financial_account_div').css('display','block');
+            }else{
+                $('#deposit_type').prop('required', false);
+                $('#financial_account_id').prop('required', false);
+                $('#deposit_type_div').css('display','none');
+                $('#financial_account_div').css('display','none');
+            }
+        }
+    </script>
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyIncomeRequest;
 use App\Http\Requests\StoreIncomeRequest;
 use App\Http\Requests\UpdateIncomeRequest;
+use App\Models\FinancialAccount;
 use App\Models\Income;
 use App\Models\IncomeCategory;
 use App\Models\RBranch;
@@ -61,6 +62,9 @@ class IncomeController extends Controller
                 $rClient->save();
                 alert('تم أضافة دفعة بنجاح','','success');
                 return redirect()->route('admin.r-clients.show',$rClient->id);
+            }elseif($request->model_type == 'App\Models\FinancialAccount'){ 
+                alert('تم أضافة سحب بنجاح','','success');
+                return redirect()->route('admin.financial-accounts.show',$request->model_id);
             }
         }
         return redirect()->route('admin.incomes.index');

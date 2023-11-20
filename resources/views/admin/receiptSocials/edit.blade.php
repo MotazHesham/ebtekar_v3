@@ -96,10 +96,10 @@
                                     <span
                                         class="help-block">{{ trans('cruds.receiptSocial.fields.shipping_country_id_helper') }}</span>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="deposit_type_div" style="display: none">
                                     <label class="required">{{ trans('cruds.receiptSocial.fields.deposit_type') }}</label>
                                     <select class="form-control {{ $errors->has('deposit_type') ? 'is-invalid' : '' }}"
-                                        name="deposit_type" id="deposit_type" required>
+                                        name="deposit_type" id="deposit_type">
                                         <option value disabled {{ old('deposit_type', null) === null ? 'selected' : '' }}>
                                             {{ trans('global.pleaseSelect') }}</option>
                                         @foreach (App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT as $key => $label)
@@ -121,7 +121,7 @@
                                 <div class="form-group">
                                     <label class="required">{{ trans('cruds.receiptSocial.fields.client_type') }}</label>
                                     <select class="form-control {{ $errors->has('client_type') ? 'is-invalid' : '' }}"
-                                        name="client_type" id="client_type" required>
+                                        name="client_type" id="client_type">
                                         <option value disabled {{ old('client_type', null) === null ? 'selected' : '' }}>
                                             {{ trans('global.pleaseSelect') }}</option>
                                         @foreach (App\Models\ReceiptSocial::CLIENT_TYPE_SELECT as $key => $label)
@@ -171,7 +171,7 @@
                                     <label for="deposit">{{ trans('cruds.receiptSocial.fields.deposit') }}</label>
                                     <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}"
                                         type="number" name="deposit" id="deposit"
-                                        value="{{ old('deposit', $receiptSocial->deposit) }}" step="0.01" required>
+                                        value="{{ old('deposit', $receiptSocial->deposit) }}" step="0.01" required onkeyup="change_deposit()">
                                     @if ($errors->has('deposit'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('deposit') }}
@@ -180,12 +180,12 @@
                                     <span
                                         class="help-block">{{ trans('cruds.receiptSocial.fields.deposit_helper') }}</span>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="financial_account_div" style="display: none">
                                     <label class="required"
                                         for="financial_account_id">{{ trans('cruds.receiptSocial.fields.financial_account_id') }}</label>
                                     <select
                                         class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
-                                        name="financial_account_id" id="financial_account_id" required>
+                                        name="financial_account_id" id="financial_account_id">
                                         <option  value="">{{ trans('global.pleaseSelect') }}</option>
                                         @foreach ($financial_accounts as $raw)
                                             <option value="{{ $raw->id }}"
@@ -268,4 +268,25 @@
 
 
 
+@endsection
+
+@section('scripts')
+    @parent 
+    <script>
+        function change_deposit(){
+            var deposit = document.getElementById("deposit").value;
+            if(deposit > 0){
+                console.log(deposit);
+                $('#deposit_type').prop('required', true);
+                $('#financial_account_id').prop('required', true);
+                $('#deposit_type_div').css('display','block');
+                $('#financial_account_div').css('display','block');
+            }else{
+                $('#deposit_type').prop('required', false);
+                $('#financial_account_id').prop('required', false);
+                $('#deposit_type_div').css('display','none');
+                $('#financial_account_div').css('display','none');
+            }
+        }
+    </script>
 @endsection

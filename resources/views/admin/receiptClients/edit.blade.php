@@ -49,13 +49,55 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="deposit">{{ trans('cruds.receiptClient.fields.deposit') }}</label>
-                    <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}" type="number" name="deposit" id="deposit" value="{{ old('deposit', $receiptClient->deposit) }}" step="0.01" required>
+                    <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}" type="number" name="deposit" id="deposit" value="{{ old('deposit', $receiptClient->deposit) }}" step="0.01" onkeyup="change_deposit()" required>
                     @if($errors->has('deposit'))
                         <div class="invalid-feedback">
                             {{ $errors->first('deposit') }}
                         </div>
                     @endif
                     <span class="help-block">{{ trans('cruds.receiptClient.fields.deposit_helper') }}</span>
+                </div>
+                <div class="form-group" id="deposit_type_div" style="display: none">
+                    <label class="required">{{ trans('cruds.receiptSocial.fields.deposit_type') }}</label>
+                    <select class="form-control {{ $errors->has('deposit_type') ? 'is-invalid' : '' }}"
+                        name="deposit_type" id="deposit_type">
+                        <option value disabled {{ old('deposit_type', null) === null ? 'selected' : '' }}>
+                            {{ trans('global.pleaseSelect') }}</option>
+                        @foreach (App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT as $key => $label)
+                            <option value="{{ $key }}"
+                                {{ old('deposit_type',$receiptClient->deposit_type) === (string) $key ? 'selected' : '' }}>
+                                {{ $label }}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('deposit_type'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('deposit_type') }}
+                        </div>
+                    @endif
+                    <span
+                        class="help-block">{{ trans('cruds.receiptSocial.fields.deposit_type_helper') }}</span>
+                </div>
+                <div class="form-group" id="financial_account_div" style="display: none">
+                    <label class="required"
+                        for="financial_account_id">{{ trans('cruds.receiptSocial.fields.financial_account_id') }}</label>
+                    <select
+                        class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
+                        name="financial_account_id" id="financial_account_id">
+                        <option  value="">{{ trans('global.pleaseSelect') }}</option>
+                        @foreach ($financial_accounts as $raw)
+                            <option value="{{ $raw->id }}"
+                                {{ old('financial_account_id',$receiptClient->financial_account_id) == $raw->id ? 'selected' : '' }}>
+                                {{ $raw->account }} - {{ $raw->description }}
+                            </option>
+                        @endforeach 
+                    </select>
+                    @if ($errors->has('financial_account_id'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('financial_account_id') }}
+                        </div>
+                    @endif
+                    <span
+                        class="help-block">{{ trans('cruds.receiptSocial.fields.financial_account_id_helper') }}</span>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="discount">{{ trans('cruds.receiptClient.fields.discount') }}</label>
@@ -89,4 +131,25 @@
 
 
 
+@endsection
+
+@section('scripts')
+    @parent 
+    <script>
+        function change_deposit(){
+            var deposit = document.getElementById("deposit").value;
+            if(deposit > 0){
+                console.log(deposit);
+                $('#deposit_type').prop('required', true);
+                $('#financial_account_id').prop('required', true);
+                $('#deposit_type_div').css('display','block');
+                $('#financial_account_div').css('display','block');
+            }else{
+                $('#deposit_type').prop('required', false);
+                $('#financial_account_id').prop('required', false);
+                $('#deposit_type_div').css('display','none');
+                $('#financial_account_div').css('display','none');
+            }
+        }
+    </script>
 @endsection

@@ -1343,6 +1343,14 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => $i++,
                 'title' => 'transfer_receipts',
             ], 
+            [
+                'id'    => $i++,
+                'title' => 'download_receipts',
+            ], 
+            [
+                'id'    => $i++,
+                'title' => 'statistics_receipts',
+            ], 
         ];
 
         Permission::insert($permissions);

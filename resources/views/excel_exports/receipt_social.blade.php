@@ -27,6 +27,9 @@
                 بواسطة
             </th>
             <th>
+                المحفطة
+            </th>
+            <th>
                 تاريخ
             </th>
         </tr>
@@ -36,6 +39,7 @@
     @php
         $sum = 0;
         $sum2 = 0;
+        $sum3= 0;
     @endphp
 
     <tbody>
@@ -44,6 +48,7 @@
             @php
                 $sum += $receipt->calc_total_for_client() ;
                 $sum2 += ($receipt->commission + $receipt->extra_commission) ;
+                $sum3 += $receipt->deposit ;
                 $description = '';
                 foreach($receipt->receiptsReceiptSocialProducts as $key => $product){
                     $description .= $product->title . " - [ (" . $product->price . "x" . $product->quantity . ") = " . $product->total_cost . "] ";
@@ -59,7 +64,13 @@
                 <td>{{ $receipt->calc_total_for_client() }}</td>
                 <td>{{ $receipt->commission + $receipt->extra_commission }}</td>
                 <td><?php echo nl2br($description ?? ''); ?></td>
-                <td>{{ $receipt->staff ? $receipt->staff->email : '' }}</td>
+                <td>{{ $receipt->staff ? $receipt->staff->name : '' }}</td>
+                <td> 
+                    {{ $receipt->deposit_type ? \App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT[$receipt->deposit_type] : '' }}
+                    <br>
+                    {{ $receipt->financial_account ? $receipt->financial_account->account : '' }}
+                    
+                </td>
                 <td>{{ $receipt->created_at }}</td>
             </tr>
         @endforeach
@@ -69,7 +80,7 @@
             <td></td>
             <td></td>
             <td></td> 
-            <td></td>
+            <td>المجموع : {{ $sum3 }}</td>
             <td>المجموع : {{ $sum }}</td>
             <td>المجموع : {{ $sum2 }}</td>
             <td></td>
