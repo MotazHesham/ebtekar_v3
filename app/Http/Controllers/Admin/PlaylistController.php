@@ -103,7 +103,7 @@ class PlaylistController extends Controller
             $route = route('admin.orders.index'); 
         }  
 
-        if($raw->printing_times == 0){  
+        if($raw->printing_times == 0 && $raw->playlist_status == 'design' && $request->condition == 'send'){  
             return 0; // should printing the receipt first
         } 
 
