@@ -40,23 +40,17 @@ class ReceiptSocialController extends Controller
 
         $sheets = (new ReceiptSocialImport)->toCollection(storage_path('tmp/uploads/' . basename($request->input('uploaded_file'))));
         $accepted = [];
-        $rejected = [];
-        $countries = [];
-        foreach(Country::all() as $country){
-            if($country->code){
-                $countries[$country->code] = $country->code_cost;
-            }
-        }
+        $rejected = []; 
         foreach($sheets[0] as $key => $row){
             if($key != 0){
                 $receipt_social = ReceiptSocial::where('order_num',$row[1])->first();
                 if($receipt_social){
+                    $code_cost = $receipt_social->shipping_country->code_cost ?? 0;
                     if($request->type == 'done'){
                         if($receipt_social->done){
                             $row[] = 'تم التسليم من قبل';
                             $rejected[] = $row;
-                        }else{
-                            $code_cost = $countries[$row[2]] ?? 0;
+                        }else{ 
                             $row[] = $code_cost;
                             $row[] = $row[3] - $code_cost;
                             $accepted[] = $row;
@@ -67,8 +61,7 @@ class ReceiptSocialController extends Controller
                         if($receipt_social->supplied){
                             $row[] = 'تم التوريد من قبل';
                             $rejected[] = $row;
-                        }else{
-                            $code_cost = $countries[$row[2]] ?? 0;
+                        }else{ 
                             $row[] = $code_cost;
                             $row[] = $row[3] - $code_cost;
                             $accepted[] = $row;
