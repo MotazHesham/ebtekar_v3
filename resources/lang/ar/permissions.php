@@ -337,5 +337,10 @@ return [
     'profile_password_edit' => 'تعديل تعديل البروفايل',
     'download_receipts' => 'تحميل الفواتير',
     'statistics_receipts' => 'أحصائيات الفواتير', 
+    'material_income' => 'سحب من المخزن',
+    'material_expense' => 'أدخال للمخزن',
+    'supplied' => 'التوريد',
+    'done' => 'التسليم',
+    'soft_delete' => 'المحذوفات',
 
 ];

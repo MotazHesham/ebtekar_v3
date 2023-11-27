@@ -158,6 +158,7 @@ class ReceiptCompanyController extends Controller
         $enable_multiple_form_submit = true;
         
         if(request('deleted')){
+            abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
             $deleted = 1;
             $receipts = ReceiptCompany::with(['staff:id,name','delivery_man:id,name','shipping_country'])->onlyTrashed(); 
         }else{

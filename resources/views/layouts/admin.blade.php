@@ -168,6 +168,30 @@
         </div>
     </div>
 
+    <!-- Modal Employee -->
+    <div class="modal fade" id="employeeModal" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AjaxModalLabel">Write the Password Of Employee Access </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.employees.access')}}" method="POST">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="password" class="form-control" name="password" required placeholder="Password">
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     @include('sweetalert::alert')
 
 

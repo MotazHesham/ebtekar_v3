@@ -275,12 +275,15 @@
                                             @if($order->done)
                                                 <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
                                             @else
-                                                <label class="c-switch c-switch-pill c-switch-success">
-                                                    <input onchange="update_statuses(this,'done')" value="{{ $order->id }}"
-                                                        type="checkbox" class="c-switch-input"
-                                                        {{ $order->done ? 'checked' : null }}>
-                                                    <span class="c-switch-slider"></span>
-                                                </label>
+                                            
+                                                @if(Gate::allows('done'))
+                                                    <label class="c-switch c-switch-pill c-switch-success">
+                                                        <input onchange="update_statuses(this,'done')" value="{{ $order->id }}"
+                                                            type="checkbox" class="c-switch-input"
+                                                            {{ $order->done ? 'checked' : null }}>
+                                                        <span class="c-switch-slider"></span>
+                                                    </label>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -293,12 +296,15 @@
                                             @if($order->supplied)
                                                 <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
                                             @else
-                                                <label class="c-switch c-switch-pill c-switch-success">
-                                                    <input onchange="update_statuses(this,'supplied')" value="{{ $order->id }}"
-                                                        type="checkbox" class="c-switch-input"
-                                                        {{ $order->supplied ? 'checked' : null }}>
-                                                    <span class="c-switch-slider"></span>
-                                                </label>
+                                            
+                                                @if(Gate::allows('supplied'))
+                                                    <label class="c-switch c-switch-pill c-switch-success">
+                                                        <input onchange="update_statuses(this,'supplied')" value="{{ $order->id }}"
+                                                            type="checkbox" class="c-switch-input"
+                                                            {{ $order->supplied ? 'checked' : null }}>
+                                                        <span class="c-switch-slider"></span>
+                                                    </label>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>

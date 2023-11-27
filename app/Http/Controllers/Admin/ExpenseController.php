@@ -11,8 +11,10 @@ use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\FinancialCategory;
+use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,6 +44,14 @@ class ExpenseController extends Controller
         if($request->has('model_type')){
             
             if($request->model_type == 'App\Models\Employee'){
+                $site_settings = WebsiteSetting::first();  
+                if(Cookie::has('access_employee') && $site_settings->employee_password == Cookie::get('access_employee')){ 
+                    // continue
+                }else{
+                    toast('قم بتسجيل الدخول مرة أخري لقائمة السلف','warning');
+                    return redirect()->route('admin.home');
+                }
+
                 $employee = Employee::find($request->model_id);
                 $month = substr($request->entry_date,3,2);
                 $year = substr($request->entry_date,6,4); 

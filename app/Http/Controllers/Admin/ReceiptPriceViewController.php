@@ -156,6 +156,7 @@ class ReceiptPriceViewController extends Controller
         $website_setting_id = null;
 
         if(request('deleted')){
+            abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
             $deleted = 1; 
             $receipts = ReceiptPriceView::with(['staff:id,name'])->onlyTrashed(); 
         }else{

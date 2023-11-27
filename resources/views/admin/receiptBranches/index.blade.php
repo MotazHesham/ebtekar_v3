@@ -24,11 +24,13 @@
             </a>
         </div>
     @else 
-        <div class="col-md-3">
-            <a class="btn btn-danger" href="{{ route('admin.receipt-branches.index',['deleted' => 1]) }}">
-                {{ trans('global.extra.deleted_receipts') }}
-            </a>
-        </div>
+        @if(Gate::allows('soft_delete'))
+            <div class="col-md-3">
+                <a class="btn btn-danger" href="{{ route('admin.receipt-branches.index',['deleted' => 1]) }}">
+                    {{ trans('global.extra.deleted_receipts') }}
+                </a>
+            </div>
+        @endif
     @endif
 </div>
 
@@ -262,12 +264,15 @@
                                             @if($receipt->done)
                                                 <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
                                             @else
-                                                <label class="c-switch c-switch-pill c-switch-success">
-                                                    <input onchange="update_statuses(this,'done')" value="{{ $receipt->id }}"
-                                                        type="checkbox" class="c-switch-input"
-                                                        {{ $receipt->done ? 'checked' : null }}>
-                                                    <span class="c-switch-slider"></span>
-                                                </label>
+                                            
+                                                @if(Gate::allows('done'))
+                                                    <label class="c-switch c-switch-pill c-switch-success">
+                                                        <input onchange="update_statuses(this,'done')" value="{{ $receipt->id }}"
+                                                            type="checkbox" class="c-switch-input"
+                                                            {{ $receipt->done ? 'checked' : null }}>
+                                                        <span class="c-switch-slider"></span>
+                                                    </label>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -382,9 +387,13 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
-
+    <script> 
         $(document).ready(function() {
+            
+            $('input[type=checkbox]').on('click',function() {     
+                return confirm('are you sure?');
+            });
+
             @if(session('store_receipt_id') && session('store_receipt_id') != null)
                 add_product('{{session("store_receipt_id")}}') 
             @endif

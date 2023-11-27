@@ -8,13 +8,26 @@ use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Employee;
 use App\Models\FinancialCategory;
+use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmployeesController extends Controller
 {
+    public function access(Request $request){
+        
+        $site_settings = WebsiteSetting::first();   
+        if($site_settings->employee_password == $request->password){  
+            Cookie::queue(Cookie::make('access_employee',$request->password,20));
+            return redirect()->route('admin.employees.index'); 
+        }else{ 
+            toast('قم بتسجيل الدخول مرة أخري لقائمة السلف','warning');
+            return redirect()->route('admin.home');
+        }
+    }
     public function index(Request $request)
     {
         abort_if(Gate::denies('employee_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');

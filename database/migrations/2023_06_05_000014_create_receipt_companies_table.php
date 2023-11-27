@@ -22,6 +22,7 @@ class CreateReceiptCompaniesTable extends Migration
             $table->boolean('done')->default(0)->nullable();
             $table->boolean('no_answer')->default(0)->nullable();
             $table->boolean('supplied')->default(0)->nullable();
+            $table->boolean('client_review')->default(0)->nullable();
             $table->integer('printing_times')->nullable();
             $table->date('deliver_date')->nullable();
             $table->date('date_of_receiving_order')->nullable();

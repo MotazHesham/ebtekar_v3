@@ -23,6 +23,20 @@ use Illuminate\Support\Facades\Gate;
 class PlaylistController extends Controller
 {
 
+    public function client_review($id , $model_type){   
+        if($model_type == 'social'){
+            $raw = ReceiptSocial::find($id); 
+        }elseif($model_type == 'company'){
+            $raw = ReceiptCompany::find($id); 
+        }elseif($model_type == 'order'){
+            $raw = Order::find($id); 
+        }  
+        $raw->client_review = $raw->client_review ? 0 : 1;
+        $raw->save();
+        toast('Success .....','success');
+        return redirect()->route('admin.playlists.index', 'design');
+    }
+
     public function playlist_users(Request $request){   
         if($request->model_type == 'social'){
             $raw = ReceiptSocial::find($request->id); 
@@ -266,6 +280,7 @@ class PlaylistController extends Controller
         $description = null;
         $to_date = null;
         $quickly = null;
+        $client_review = null;
         $view = 'all';
 
         if( $request->view != null){
@@ -283,6 +298,10 @@ class PlaylistController extends Controller
         if( $request->quickly != null){
             $quickly = $request->quickly;
             $playlists = $playlists->where('quickly',$request->quickly); 
+        }
+        if( $request->client_review != null){
+            $client_review = $request->client_review;
+            $playlists = $playlists->where('client_review',$request->client_review); 
         }
         if( $request->website_setting_id != null){
             $website_setting_id = $request->website_setting_id;
@@ -308,7 +327,7 @@ class PlaylistController extends Controller
             $dates = null;
         } 
         // return $dates;
-        return view('admin.playlists.index',compact('dates','playlists','view','staffs','type', 'order_num','user_id','quickly','website_setting_id','description','to_date','websites'));
+        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','quickly','website_setting_id','description','to_date','websites'));
 
     } 
 }

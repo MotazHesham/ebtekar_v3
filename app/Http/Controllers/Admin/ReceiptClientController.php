@@ -226,6 +226,7 @@ class ReceiptClientController extends Controller
         $enable_multiple_form_submit = true;
 
         if(request('deleted')){
+            abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
             $deleted = 1; 
             $receipts = ReceiptClient::with(['staff:id,name','financial_account'])->onlyTrashed();  
         }else{

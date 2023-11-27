@@ -63,6 +63,14 @@
                             {{ trans('global.extra.1_quickly') }}</option>
                     </select>  
                 </div>
+                <div class="col-md-4">
+                    <select class="form-control mb-2 @isset($client_review) isset @endisset" name="client_review"
+                        id="client_review" onchange="sort_playlist()">
+                        <option value="">الكل</option>
+                        <option value="0" @if ($client_review == '0') selected @endif>قيد التنفيذ</option>
+                        <option value="1" @if ($client_review == '1') selected @endif>تحت المراجعة</option>
+                    </select>
+                </div>
             </div>
 
 

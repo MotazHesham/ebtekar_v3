@@ -24,6 +24,9 @@
                     @elseif ($item['quickly'] == 1)background-image: linear-gradient(#9f1b2e,#1a1313);@endif">
 
                 {{ $item['order_num'] }}
+                @if ($item['client_review'])
+                    <span class="pull-right badge badge-warning">مرسل للمراجعة</span>
+                @endif
                 @if ($item['printing_times'] == 0)
                     <span class="pull-right badge badge-info">{{ __('New') }}</span>
                 @endif
@@ -66,6 +69,13 @@
             {{-- action Buttons --}}
             <div class="order-card-actions" id="order-card-actions-{{ $item['id'] }}">
                 @if(!$item['hold'] || auth()->user()->is_admin)
+                    
+                    @if ($type == 'design') 
+                        <a class="btn btn-info  btn-sm rounded-pill" 
+                            href="{{ route('admin.playlists.client_review', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
+                            @if($item['client_review']) تعديل جديد @else مراجعة العميل @endif
+                        </a>
+                    @endif
                     @if (auth()->user()->is_admin || $authenticated == auth()->user()->id || Gate::allows('transfer_receipts'))
                         <a class="btn btn-danger btn-sm rounded-pill text-white"
                             onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">

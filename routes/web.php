@@ -173,17 +173,23 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('commission-requests/destroy', 'CommissionRequestsController@massDestroy')->name('commission-requests.massDestroy');
     Route::resource('commission-requests', 'CommissionRequestsController'); 
 
-    // Employees
-    Route::delete('employees/destroy', 'EmployeesController@massDestroy')->name('employees.massDestroy');
-    Route::resource('employees', 'EmployeesController');
+    // Employees set password
+    Route::post('employees/access', 'EmployeesController@access')->name('employees.access');
+    
+    Route::group(['middleware' => 'access_employee'], function () { 
+        // Employees
+        Route::delete('employees/destroy', 'EmployeesController@massDestroy')->name('employees.massDestroy');
+        Route::resource('employees', 'EmployeesController'); 
 
-    // Financial Category
-    Route::delete('financial-categories/destroy', 'FinancialCategoryController@massDestroy')->name('financial-categories.massDestroy');
-    Route::resource('financial-categories', 'FinancialCategoryController');
+        // Financial Category
+        Route::delete('financial-categories/destroy', 'FinancialCategoryController@massDestroy')->name('financial-categories.massDestroy');
+        Route::resource('financial-categories', 'FinancialCategoryController');
+        
+        // Employee Financial
+        Route::delete('employee-financials/destroy', 'EmployeeFinancialController@massDestroy')->name('employee-financials.massDestroy');
+        Route::resource('employee-financials', 'EmployeeFinancialController');
+    });
 
-    // Employee Financial
-    Route::delete('employee-financials/destroy', 'EmployeeFinancialController@massDestroy')->name('employee-financials.massDestroy');
-    Route::resource('employee-financials', 'EmployeeFinancialController');
     
     // Countries
     Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
@@ -331,6 +337,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Playlist
     Route::delete('playlists/destroy', 'PlaylistController@massDestroy')->name('playlists.massDestroy');
+    Route::get('playlists/client_review/{id}/{model_type}', 'PlaylistController@client_review')->name('playlists.client_review');
     Route::post('playlists/update_playlist_users', 'PlaylistController@update_playlist_users')->name('playlists.update_playlist_users');
     Route::post('playlists/playlist_users', 'PlaylistController@playlist_users')->name('playlists.playlist_users');
     Route::post('playlists/update_playlist_status', 'PlaylistController@update_playlist_status')->name('playlists.update_playlist_status');

@@ -15,12 +15,14 @@
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
-        @else 
-            <div class="col-md-3">
-                <a class="btn btn-danger" href="{{ route('admin.receipt-companies.index',['deleted' => 1]) }}">
-                    {{ trans('global.extra.deleted_receipts') }}
-                </a>
-            </div>
+        @else  
+            @if(Gate::allows('soft_delete'))
+                <div class="col-md-3">
+                    <a class="btn btn-danger" href="{{ route('admin.receipt-companies.index',['deleted' => 1]) }}">
+                        {{ trans('global.extra.deleted_receipts') }}
+                    </a>
+                </div>
+            @endif
         @endif
     </div>
 

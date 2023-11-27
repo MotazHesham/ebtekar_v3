@@ -335,5 +335,12 @@ return [
     'financial_account_access' => 'قائمة المحافظ الألكترونية',
     'transfer_receipts' => 'أمكانية تحويل فواتير الغير', 
     'profile_password_edit' => 'تعديل تعديل البروفايل',
+    'download_receipts' => 'تحميل الفواتير',
+    'statistics_receipts' => 'أحصائيات الفواتير', 
+    'material_income' => 'سحب من المخزن',
+    'material_expense' => 'أدخال للمخزن',
+    'supplied' => 'التوريد',
+    'done' => 'التسليم',
+    'soft_delete' => 'المحذوفات',
 
 ];

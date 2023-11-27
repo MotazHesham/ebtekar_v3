@@ -30,12 +30,14 @@
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
-        @else 
-            <div class="col-md-3">
-                <a class="btn btn-danger" href="{{ route('admin.receipt-socials.index',['deleted' => 1]) }}">
-                    {{ trans('global.extra.deleted_receipts') }}
-                </a>
-            </div>
+        @else                        
+            @if(Gate::allows('soft_delete'))
+                <div class="col-md-3">
+                    <a class="btn btn-danger" href="{{ route('admin.receipt-socials.index',['deleted' => 1]) }}">
+                        {{ trans('global.extra.deleted_receipts') }}
+                    </a>
+                </div>
+            @endif
         @endif
     </div>
 
@@ -362,12 +364,14 @@
                                             @if($receipt->supplied)
                                                 <i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>
                                             @else
-                                                <label class="c-switch c-switch-pill c-switch-success">
-                                                    <input onchange="update_statuses(this,'supplied')" value="{{ $receipt->id }}"
-                                                        type="checkbox" class="c-switch-input"
-                                                        {{ $receipt->supplied ? 'checked' : null }}>
-                                                    <span class="c-switch-slider"></span>
-                                                </label>
+                                                @if(Gate::allows('supplied'))
+                                                    <label class="c-switch c-switch-pill c-switch-success">
+                                                        <input onchange="update_statuses(this,'supplied')" value="{{ $receipt->id }}"
+                                                            type="checkbox" class="c-switch-input"
+                                                            {{ $receipt->supplied ? 'checked' : null }}>
+                                                        <span class="c-switch-slider"></span>
+                                                    </label>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -418,12 +422,15 @@
                                             {{ trans('cruds.receiptSocial.fields.done') }}
                                         </span>
                                         <br>
-                                        <label class="c-switch c-switch-pill c-switch-success">
-                                            <input onchange="update_statuses(this,'done')" value="{{ $receipt->id }}"
-                                                type="checkbox" class="c-switch-input"
-                                                {{ $receipt->done ? 'checked' : null }}>
-                                            <span class="c-switch-slider"></span>
-                                        </label>
+                                        
+                                        @if(Gate::allows('done'))
+                                            <label class="c-switch c-switch-pill c-switch-success">
+                                                <input  onchange="update_statuses(this,'done')" value="{{ $receipt->id }}"
+                                                    type="checkbox" class="c-switch-input"
+                                                    {{ $receipt->done ? 'checked' : null }}>
+                                                <span class="c-switch-slider"></span>
+                                            </label>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
@@ -573,6 +580,12 @@
 
 @section('scripts') 
     <script>
+        $(document).ready(function() {  
+            $('input[type=checkbox]').on('click',function() {     
+                return confirm('are you sure?');
+            });
+        });
+
         function show_qr_code(order_num){
             $.post('{{ route('admin.show_qr_code') }}', {
                 _token: '{{ csrf_token() }}',

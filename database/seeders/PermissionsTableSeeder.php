@@ -1351,6 +1351,26 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => $i++,
                 'title' => 'statistics_receipts',
             ], 
+            [
+                'id'    => $i++,
+                'title' => 'material_income',
+            ], 
+            [
+                'id'    => $i++,
+                'title' => 'material_expense',
+            ], 
+            [
+                'id'    => $i++,
+                'title' => 'supplied',
+            ], 
+            [
+                'id'    => $i++,
+                'title' => 'done',
+            ], 
+            [
+                'id'    => $i++,
+                'title' => 'soft_delete',
+            ], 
         ];
 
         Permission::insert($permissions);

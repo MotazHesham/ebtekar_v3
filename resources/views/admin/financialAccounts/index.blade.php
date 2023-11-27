@@ -77,17 +77,6 @@
                                         </a>
                                     @endcan
 
-                                    @can('financial_account_delete')
-                                        <form action="{{ route('admin.financial-accounts.destroy', $financialAccount->id) }}"
-                                            method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
-                                            style="display: inline-block;">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                            <input type="submit" class="btn btn-xs btn-danger"
-                                                value="{{ trans('global.delete') }}">
-                                        </form>
-                                    @endcan
-
                                 </td>
 
                             </tr>
@@ -101,64 +90,28 @@
 @section('scripts')
     @parent
     <script>
-        
-        function update_statuses(el,type){
-            if(el.checked){
+        function update_statuses(el, type) {
+            if (el.checked) {
                 var status = 1;
-            }
-            else{
+            } else {
                 var status = 0;
             }
-            $.post('{{ route('admin.financial-accounts.update_statuses') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status, type:type}, function(data){
-                if(data == 1){
+            $.post('{{ route('admin.financial-accounts.update_statuses') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status,
+                type: type
+            }, function(data) {
+                if (data == 1) {
                     showAlert('success', 'Success', '');
-                }else{
+                } else {
                     showAlert('danger', 'Something went wrong', '');
                 }
             });
         }
 
         $(function() {
-            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-            @can('financial_account_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-                let deleteButton = {
-                    text: deleteButtonTrans,
-                    url: "{{ route('admin.financial-accounts.massDestroy') }}",
-                    className: 'btn-danger',
-                    action: function(e, dt, node, config) {
-                        var ids = $.map(dt.rows({
-                            selected: true
-                        }).nodes(), function(entry) {
-                            return $(entry).data('entry-id')
-                        });
-
-                        if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
-
-                            return
-                        }
-
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
-                            $.ajax({
-                                    headers: {
-                                        'x-csrf-token': _token
-                                    },
-                                    method: 'POST',
-                                    url: config.url,
-                                    data: {
-                                        ids: ids,
-                                        _method: 'DELETE'
-                                    }
-                                })
-                                .done(function() {
-                                    location.reload()
-                                })
-                        }
-                    }
-                }
-                dtButtons.push(deleteButton)
-            @endcan
+            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons) 
 
             $.extend(true, $.fn.dataTable.defaults, {
                 orderCellsTop: true,

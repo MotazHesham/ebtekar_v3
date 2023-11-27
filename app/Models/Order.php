@@ -107,6 +107,7 @@ class Order extends Model
         'calling',
         'quickly',
         'supplied',
+        'client_review',
         'done',
         'done_time',
         'send_to_delivery_date',

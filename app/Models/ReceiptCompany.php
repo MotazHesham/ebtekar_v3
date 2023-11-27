@@ -82,6 +82,7 @@ class ReceiptCompany extends Model implements HasMedia
         'done',
         'no_answer',
         'supplied',
+        'client_review',
         'printing_times',
         'deliver_date',
         'date_of_receiving_order',

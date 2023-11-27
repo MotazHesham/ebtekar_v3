@@ -107,6 +107,11 @@
                     <a class="dropdown-item" href="{{ route("admin.currencies.index") }}">
                         Currencies <i class="fas fa-hand-holding-usd"> </i>
                     </a> 
+                    @if(Gate::allows('employee_access'))
+                        <a class="dropdown-item" style="cursor: pointer" data-toggle="modal" data-target="#employeeModal" >
+                            Access Employee <i class="fas fa-users"></i>
+                        </a>
+                    @endif
                     <a class="dropdown-item" href="{{ route("admin.website-settings.index") }}">
                         Settings <i class="fas fa-cog"></i>
                     </a>

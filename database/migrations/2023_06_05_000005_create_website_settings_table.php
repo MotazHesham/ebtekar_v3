@@ -35,7 +35,7 @@ return new class extends Migration
             $table->longText('welcome_message')->nullable();
             $table->string('video_instructions')->nullable();
             $table->string('delivery_system')->nullable();
-            $table->string('borrow_password')->nullable();
+            $table->string('employee_password')->nullable();
             $table->unsignedBigInteger('designer_id')->nullable();
             $table->foreign('designer_id', 'designer_fk_8581724')->references('id')->on('users');
             $table->unsignedBigInteger('preparer_id')->nullable();

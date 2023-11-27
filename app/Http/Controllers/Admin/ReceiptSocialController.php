@@ -416,7 +416,8 @@ class ReceiptSocialController extends Controller
 
         $enable_multiple_form_submit = true;
 
-        if(request('deleted')){
+        if(request('deleted')){ 
+            abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
             $deleted = 1;
             $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts')->onlyTrashed(); 
         }else{
