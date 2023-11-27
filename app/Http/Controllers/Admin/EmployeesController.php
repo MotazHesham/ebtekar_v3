@@ -21,7 +21,7 @@ class EmployeesController extends Controller
         
         $site_settings = WebsiteSetting::first();   
         if($site_settings->employee_password == $request->password){  
-            Cookie::queue(Cookie::make('access_employee',$request->password,20));
+            Cookie::queue(Cookie::make('access_employee',$request->password,5));
             return redirect()->route('admin.employees.index'); 
         }else{ 
             toast('قم بتسجيل الدخول مرة أخري لقائمة السلف','warning');
