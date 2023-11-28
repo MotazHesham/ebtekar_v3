@@ -350,6 +350,12 @@ class ReceiptCompanyController extends Controller
 
     public function update(UpdateReceiptCompanyRequest $request, ReceiptCompany $receiptCompany)
     {
+        if($receiptCompany->playlist_status != 'pending'){ 
+            if(!auth()->user()->is_admin){ 
+                alert('Cant Update','Contact Ur Adminstrator','warning'); 
+                return redirect()->back();
+            }
+        }
         $receiptCompany->update($request->all());
 
         if (count($receiptCompany->photos) > 0) {

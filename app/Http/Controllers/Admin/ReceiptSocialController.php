@@ -188,7 +188,7 @@ class ReceiptSocialController extends Controller
         $receipt_social_product_pivot = ReceiptSocialProductPivot::find($id);
         $receipt = ReceiptSocial::find($receipt_social_product_pivot->receipt_social_id);
         if (!auth()->user()->is_admin) {
-            if (!$receipt->playlist_status == 'pending') {
+            if ($receipt->playlist_status != 'pending') {
                 alert('لايمكن حذف منتج من هذه الفاتورة','','error');
                 return 1;
             }
@@ -230,7 +230,7 @@ class ReceiptSocialController extends Controller
             $receipt = ReceiptSocial::find($receipt_product_pivot->receipt_social_id);
 
             if (!auth()->user()->is_admin) {
-                if (!$receipt->playlist_status == 'pending') {
+                if ($receipt->playlist_status != 'pending') {
                     alert('لايمكن تعديل منتج في هذه الفاتورة','','error');
                     return redirect()->back();
                 }
@@ -308,7 +308,7 @@ class ReceiptSocialController extends Controller
             $receipt = ReceiptSocial::find($request->receipt_id);
             
             if (!auth()->user()->is_admin) {
-                if (!$receipt->playlist_status == 'pending'){
+                if ($receipt->playlist_status != 'pending'){
                     alert('لايمكن أضافة منتج في هذه الفاتورة','','error');
                     return redirect()->back();
                 }
@@ -695,7 +695,6 @@ class ReceiptSocialController extends Controller
     public function edit(ReceiptSocial $receiptSocial)
     {
         abort_if(Gate::denies('receipt_social_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         $site_settings = get_site_setting(); 
 
         $shipping_countries = Country::select('cost','name', 'id')->get();
@@ -718,6 +717,12 @@ class ReceiptSocialController extends Controller
 
     public function update(UpdateReceiptSocialRequest $request, ReceiptSocial $receiptSocial)
     {
+        if (!auth()->user()->is_admin) { 
+            if ($receiptSocial->playlist_status != 'pending'){
+                alert('لايمكن التعديل في هذه الفاتورة','','error');
+                return redirect()->back();
+            }
+        }
         $receiptSocial->update($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
 

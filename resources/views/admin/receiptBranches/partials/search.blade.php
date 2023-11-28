@@ -96,7 +96,7 @@
                     <div class="row mb-2">
                         <div class="col-md-4  @isset($r_client_id) isset @endisset"> 
                             <select class="form-control select2" style="width: 200px" name="r_client_id" id="r_client_id" onchange="sort_receipt_branch()">
-                                <option value="">أختر الأدراة</option>
+                                <option value="">أختر الإدارة</option>
                                 @foreach ($rClients as $id => $entry)
                                     <option value="{{ $id }}" @isset($r_client_id) @if ($r_client_id == $id) selected @endif @endisset>
                                         {{ $entry }}
