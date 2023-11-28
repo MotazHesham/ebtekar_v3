@@ -114,7 +114,7 @@ class OrdersController extends Controller
     }
 
     public function print($id){
-        $orders = Order::with('orderDetails','user')->whereIn('id',[$id])->get(); 
+        $orders = Order::with('orderDetails.product','user')->whereIn('id',[$id])->get(); 
         foreach($orders as $order){
             $order->printing_times += 1;
             $order->save();

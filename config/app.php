@@ -6,6 +6,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | BarCode Type
+    |-------------------------------------------------------------------------- 
+    |
+    */
+
+    'barcode_type' => env('BARCODE_TYPE', ''),
+    /*
+    |--------------------------------------------------------------------------
     | FCM TOKEN KEY
     |--------------------------------------------------------------------------
     |
@@ -192,6 +200,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class, 
+        Milon\Barcode\BarcodeServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -221,6 +230,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class, 
     ])->toArray(),
 
 ];

@@ -9,5 +9,15 @@
         @else
             {!! QrCode::size(500)->generate($order_num) !!}
         @endproduction
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        
+        @php  
+            echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG($bar_code, config('app.barcode_type')) . '" alt="barcode"   />';
+        @endphp
     </div>
 </div>

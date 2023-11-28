@@ -78,7 +78,13 @@
                             <img loading="lazy" src="{{ asset($site_settings->logo->getUrl()) }}" height="40"
                                 style="display:inline-block;">
                         </td>
-                        <td style="font-size: 2.5rem;" class="text-right strong">{!! QrCode::size(100)->generate($receipt->order_num) !!}</td>
+                        <td style="font-size: 2.5rem;" class="text-right strong">
+                            @php 
+                                $bar_code = 'c-' . $receipt->id; 
+                                echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG($bar_code, config('app.barcode_type')) . '" alt="barcode"   />';
+                            @endphp
+                        {!! QrCode::size(100)->generate($receipt->order_num) !!} 
+                        </td>
                     </tr>
                 </table>
                 <table>

@@ -54,7 +54,7 @@
             <h3>Scann Results</h3>
             <div  id="order_scanned"></div>
         </div>
-    </div>
+    </div> 
 </div>
 
 @endsection

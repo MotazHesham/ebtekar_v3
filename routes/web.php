@@ -38,6 +38,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::get('qr_scanner/{type}','HomeController@qr_scanner')->name('qr_scanner');
     Route::post('qr_output','HomeController@qr_output')->name('qr_output');
+    Route::get('barcode_scanner/{type}','HomeController@barcode_scanner')->name('barcode_scanner');
+    Route::post('bar_code_output','HomeController@bar_code_output')->name('bar_code_output');
     
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');

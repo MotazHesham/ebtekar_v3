@@ -230,7 +230,7 @@
                         <tr data-entry-id="{{ $receipt->id }}" class=" @if($receipt->quickly) quickly @elseif($receipt->returned) returned @elseif($receipt->done) done @endif">
                             <td>
                                 <br>{{ ($key+1) + ($receipts->currentPage() - 1)*$receipts->perPage() }}
-                                <i class="fas fa-qrcode" onclick="show_qr_code('{{$receipt->order_num}}')" style="cursor: pointer"></i>
+                                <i class="fas fa-qrcode" onclick="show_qr_code('{{$receipt->order_num}}','s-{{$receipt->id}}')" style="cursor: pointer"></i>
                             </td>
                             <td>
                                 <span class="order_num badge rounded-pill
@@ -586,10 +586,11 @@
             });
         });
 
-        function show_qr_code(order_num){
+        function show_qr_code(order_num,bar_code){
             $.post('{{ route('admin.show_qr_code') }}', {
                 _token: '{{ csrf_token() }}',
-                order_num: order_num
+                order_num: order_num,
+                bar_code: bar_code,
             }, function(data) {
                 $('#AjaxModal .modal-dialog').html(null);
                 $('#AjaxModal').modal('show');

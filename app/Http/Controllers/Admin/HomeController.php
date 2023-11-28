@@ -56,13 +56,100 @@ class HomeController extends Controller
     
     public function show_qr_code(Request $request){
         $order_num = $request->order_num;
-        return view('partials.qr_code',compact('order_num'));
+        $bar_code = $request->bar_code;
+        return view('partials.qr_code',compact('order_num','bar_code'));
     }
     public function qr_scanner($type){
         $delivery_mans = User::where('user_type','delivery_man')->get();
         return view('admin.playlists.qr_code_scanner',compact('type','delivery_mans'));
     }
+    public function barcode_scanner($type){
+        $delivery_mans = User::where('user_type','delivery_man')->get();
+        return view('admin.playlists.bar_code_scanner',compact('type','delivery_mans'));
+    }
 
+    public function bar_code_output(Request $request){
+        // s => for receipt social model
+        // c => for receipt company model
+        // o => for Order model
+        $bar_code =  explode('-',$request->code); 
+
+        if($bar_code[0] == 's'){
+            $order = ReceiptSocial::find($bar_code[1]); 
+            $model_type = 'social';
+        }elseif($bar_code[0] == 'c'){
+            $order = ReceiptCompany::find($bar_code[1]); 
+            $model_type = 'company';
+        }elseif($bar_code[0] == 'o'){
+            $order = Order::find($bar_code[1]); 
+            $model_type = 'order';
+        }else{
+            return [
+                'status' => 0,
+                'message' => "<div class='alert alert-danger'>".$request->code." Order Not Found</div>"
+            ];
+        }  
+        if($order->hold){
+            return [
+                'status' => 0,
+                'message' => "<div class='alert alert-danger'>".$order->order_num." Order Is Hold</div>"
+            ];
+        }
+
+        if ($request->type == 'design') { 
+            $authenticated = $order->designer_id;
+        } elseif ($request->type == 'manufacturing') {
+            $authenticated = $order->manufacturer_id;
+        } elseif ($request->type == 'prepare') {
+            $authenticated = $order->preparer_id;
+        } elseif ($request->type == 'shipment') {
+            $authenticated = $order->shipmenter_id;
+        }
+
+        if($order->playlist_status == $request->type){
+            if($authenticated == auth()->user()->id || auth()->user()->is_admin  || Gate::allows('transfer_receipts')){
+                if($order->playlist_status == 'design'){
+                    $next_type = 'manufacturing';
+                }elseif($order->playlist_status == 'manufacturing'){
+                    $next_type = 'prepare';
+                }elseif($order->playlist_status == 'prepare'){
+                    $next_type = 'shipment';
+                }elseif($order->playlist_status == 'shipment'){
+                    $next_type = 'finish';
+
+                    $order->delivery_man_id = $request->delivery_man_id;
+                    $order->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
+                    $order->delivery_status = 'on_delivery';
+
+                    $order->save();
+                }else{
+                    return [
+                        'status' => 0,
+                        'message' => "<div class='alert alert-danger'>".$order->order_num." SomeThing Went Wrong</div>"
+                    ];
+                }
+            }else{
+                return [
+                    'status' => 0,
+                    'message' => "<div class='alert alert-danger'>".$order->order_num." Not Authenticated</div>"
+                ];
+            }
+        }else{
+            return [
+                'status' => 0,
+                'message' => "<div class='alert alert-danger'>".$order->order_num." الطلب في مرحلة مختلفة</div>"
+            ];
+        }
+
+
+        $playlistcontroller = new PlaylistController();
+        $array = ['model_type' => $model_type,'id' => $order->id , 'status' => $next_type , 'condition' => 'send'];
+        $array0 = new \Illuminate\Http\Request($array);
+        return [
+            'status' => $playlistcontroller->update_playlist_status($array0),
+            'message' => "<div class='alert alert-success'>".$order->order_num." تم الأرسال</div>"
+        ];
+    }
     public function qr_output(Request $request){
 
         $order = ReceiptCompany::where('order_num',$request->code)->first(); 

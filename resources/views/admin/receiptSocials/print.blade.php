@@ -69,7 +69,11 @@
                 </table>
                 <div style="position: absolute;right:120px;top:65px;font-size:40px">
 
-                    {!! QrCode::size(75)->generate($receipt->order_num) !!}
+                    {!! QrCode::size(75)->generate($receipt->order_num) !!} 
+                    @php 
+                        $bar_code = 's-' . $receipt->id; 
+                        echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG($bar_code, config('app.barcode_type')) . '" alt="barcode"   />';
+                    @endphp
                     <div class="text-center" style="line-height: 0;">
                         @foreach($receipt->socials as $social)
                             <img src="{{asset($social->photo)}}" height="20" width="20" alt="">

@@ -6,6 +6,8 @@
                 </div>
                 <div><a class="btn btn-success btn-rounded" href="{{ route('admin.qr_scanner', $type) }}">Qr Scanner</a>
                 </div>
+                <div><a class="btn btn-info btn-rounded" href="{{ route('admin.barcode_scanner', $type) }}">BarCode Scanner</a>
+                </div>
                 <select class="form-control @isset($website_setting_id) isset @endisset" style="width: 200px"
                     name="website_setting_id" id="website_setting_id" onchange="sort_playlist()">
                     <option value="">أختر الموقع</option>
