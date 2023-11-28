@@ -108,7 +108,7 @@
                         <div class="col-md-4  @isset($r_branch_id) isset @endisset">
                             <select class="form-control  select2" style="width: 200px" name="r_branch_id" id="r_branch_id" onchange="sort_receipt_branch()">
                                 <option value="">أختر الفرع</option>
-                                @foreach ($rClients as $id => $entry)
+                                @foreach ($rBranches as $id => $entry)
                                     <option value="{{ $id }}" @isset($r_branch_id) @if ($r_branch_id == $id) selected @endif @endisset>
                                         {{ $entry }}
                                     </option>
