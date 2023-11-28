@@ -361,10 +361,21 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <button class="btn btn-danger btn-lg btn-block" type="submit">
-                {{ trans('global.save') }}
-            </button>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button class="btn btn-danger btn-lg btn-block" type="submit">
+                        {{ trans('global.save') }}
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg btn-block" type="submit" name="arrange_photos">
+                        حفظ وترتيب الصور
+                    </button>
+                </div>
+            </div>
         </div>
     </form>
 @endsection

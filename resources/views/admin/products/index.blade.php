@@ -383,6 +383,7 @@
                     [1, 'desc']
                 ],
                 pageLength: 25,
+                stateSave: true
             };
             let table = $('.datatable-Product').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {

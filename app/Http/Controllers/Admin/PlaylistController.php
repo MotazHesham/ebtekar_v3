@@ -34,7 +34,7 @@ class PlaylistController extends Controller
         $raw->client_review = $raw->client_review ? 0 : 1;
         $raw->save();
         toast('Success .....','success');
-        return redirect()->route('admin.playlists.index', 'design');
+        return redirect()->back();
     }
 
     public function playlist_users(Request $request){   

@@ -75,7 +75,7 @@ class ReceiptClientController extends Controller
             $new_receipt_product->save();
         }
         alert('Receipt has been inserted successfully','','success');
-        return redirect()->route('admin.receipt-clients.index');
+        return redirect()->back();
     }
 
     public function view_products(Request $request){
@@ -143,7 +143,7 @@ class ReceiptClientController extends Controller
             session()->put('update_receipt_id',$receipt->id);
 
             toast(trans('flash.global.update_title'),'success'); 
-            return redirect()->route('admin.receipt-clients.index');
+            return redirect()->back();
         }
     }
 
@@ -186,7 +186,7 @@ class ReceiptClientController extends Controller
             }
 
             toast(trans('flash.global.success_title'),'success');
-            return redirect()->route('admin.receipt-clients.index');
+            return redirect()->back();
         }
     }
 

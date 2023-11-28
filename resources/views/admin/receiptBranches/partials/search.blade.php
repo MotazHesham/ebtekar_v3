@@ -93,6 +93,40 @@
                                 name="to_date" id="to_date" placeholder="{{ trans('global.extra.to_date') }}">
                         </div>
                     </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4  @isset($r_client_id) isset @endisset"> 
+                            <select class="form-control select2" style="width: 200px" name="r_client_id" id="r_client_id" onchange="sort_receipt_branch()">
+                                <option value="">أختر الأدراة</option>
+                                @foreach ($rClients as $id => $entry)
+                                    <option value="{{ $id }}" @isset($r_client_id) @if ($r_client_id == $id) selected @endif @endisset>
+                                        {{ $entry }}
+                                    </option>
+                                @endforeach
+                            </select> 
+                        </div>
+                    
+                        <div class="col-md-4  @isset($r_branch_id) isset @endisset">
+                            <select class="form-control  select2" style="width: 200px" name="r_branch_id" id="r_branch_id" onchange="sort_receipt_branch()">
+                                <option value="">أختر الفرع</option>
+                                @foreach ($rClients as $id => $entry)
+                                    <option value="{{ $id }}" @isset($r_branch_id) @if ($r_branch_id == $id) selected @endif @endisset>
+                                        {{ $entry }}
+                                    </option>
+                                @endforeach
+                            </select> 
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control mb-2 @isset($permission_status) isset @endisset" name="permission_status" id="permission_status" onchange="sort_receipt_branch()">
+                                <option value="">حالة الأذن</option> 
+                                @foreach(\App\Models\ReceiptBranch::PERMISSION_STATUS_SELECT as $key => $label)
+                                    <option value="{{ $key }}" @isset($permission_status) @if ($permission_status == $key) selected @endif @endisset>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3"></div> 
+                    </div>
                 </div>  
                 <div class="col-md-4">
 
@@ -131,7 +165,7 @@
                         </div>
                     </div> 
 
-                </div>
+                </div> 
             </div>
                 
 

@@ -120,11 +120,20 @@
                             {{ trans('cruds.product.fields.photos') }}
                         </th>
                         <td>
-                            @foreach($product->photos as $key => $media)
-                                <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
-                                    <img src="{{ $media->getUrl('thumb') }}">
-                                </a>
-                            @endforeach
+                            <form action="{{ route('admin.products.sorting_images') }}" method="POST">
+                                @csrf
+                                <div class="row">
+                                    @foreach($product->photos as $key => $media)
+                                        <div class="col-md-2">
+                                            <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
+                                                <img src="{{ $media->getUrl('thumb') }}">
+                                            </a>
+                                            <input type="number" class="form-control" name="media[{{ $media->id }}]" value="{{ $media->order_column }}">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <input type="submit" class="btn btn-info" type="submit" value="submit">
+                            </form>
                         </td>
                     </tr>
                     <tr>

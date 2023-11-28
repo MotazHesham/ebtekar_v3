@@ -28,6 +28,16 @@ class ProductsController extends Controller
 {
     use MediaUploadingTrait;
 
+    public function sorting_images(Request $request) {
+        foreach($request->media as $key => $value){
+            $media = Media::find($key);
+            $media->order_column = $value;
+            $media->save();
+        }
+        toast('Success...','success');
+        return redirect()->back();
+    }
+
     public function update_statuses(Request $request){ 
         $type = $request->type;
         $product = Product::findOrFail($request->id);
@@ -367,6 +377,9 @@ class ProductsController extends Controller
         } 
         
         toast(trans('flash.global.success_title'),'success'); 
+        if($request->has('arrange_photos')){
+            return redirect()->route('admin.products.show',$product->id);
+        }
         return redirect()->route('admin.products.index');
     }
 
@@ -493,6 +506,9 @@ class ProductsController extends Controller
             $product->pdf->delete();
         }
 
+        if($request->has('arrange_photos')){
+            return redirect()->route('admin.products.show',$product->id);
+        }
         toast(trans('flash.global.update_title'),'success'); 
         return redirect()->route('admin.products.index');
     }

@@ -54,7 +54,7 @@ class ReceiptBranchController extends Controller
             $receipt->add_income();
         }
         $receipt->save();
-        return redirect()->route('admin.receipt-branches.index');
+        return redirect()->back();
     }
 
     public function update_statuses(Request $request){ 
@@ -117,7 +117,7 @@ class ReceiptBranchController extends Controller
             $new_receipt_product->save();
         }
         alert('Receipt has been inserted successfully','','success');
-        return redirect()->route('admin.receipt-branches.index');
+        return redirect()->back();
     }
 
     public function view_products(Request $request){
@@ -187,7 +187,7 @@ class ReceiptBranchController extends Controller
             session()->put('update_receipt_id',$receipt->id);
 
             toast(trans('flash.global.update_title'),'success'); 
-            return redirect()->route('admin.receipt-branches.index');
+            return redirect()->back();
         }
     }
 
@@ -232,7 +232,7 @@ class ReceiptBranchController extends Controller
             }
 
             toast(trans('flash.global.success_title'),'success');
-            return redirect()->route('admin.receipt-branches.index');
+            return redirect()->back();
         }
     }
 
@@ -242,6 +242,8 @@ class ReceiptBranchController extends Controller
 
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->get(); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
+        $rClients = RClient::pluck('name', 'id');
+        $rBranches = RBranch::pluck('name', 'id');
 
         if($request->has('cancel_popup')){
             session()->put('store_receipt_id',null);
@@ -264,6 +266,9 @@ class ReceiptBranchController extends Controller
         $description = null; 
         $deleted = null; 
         $website_setting_id = null; 
+        $r_client_id = null; 
+        $r_branch_id = null; 
+        $permission_status = null; 
 
         
         $enable_multiple_form_submit = true;
@@ -279,6 +284,19 @@ class ReceiptBranchController extends Controller
         if ($request->done != null) {
             $receipts = $receipts->where('done', $request->done);
             $done = $request->done;
+        }
+        if ($request->r_client_id != null) {
+            $related_branches = RBranch::where('r_client_id',$request->r_client_id)->get()->pluck('id');
+            $receipts = $receipts->whereIn('r_branch_id', $related_branches);
+            $r_client_id = $request->r_client_id;
+        }
+        if ($request->r_branch_id != null) {
+            $receipts = $receipts->where('r_branch_id', $request->r_branch_id);
+            $r_branch_id = $request->r_branch_id;
+        }
+        if ($request->permission_status != null) {
+            $receipts = $receipts->where('permission_status', $request->permission_status);
+            $permission_status = $request->permission_status;
         }
         
         if ($request->quickly != null) {
@@ -370,9 +388,9 @@ class ReceiptBranchController extends Controller
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.receiptBranches.index',compact(
-            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','websites',
+            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','websites','rClients','rBranches',
             'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include', 'quickly','enable_multiple_form_submit',
-            'done', 'description', 'receipts', 'statistics','deleted','website_setting_id'));
+            'done', 'description', 'receipts', 'statistics','deleted','website_setting_id','r_client_id','r_branch_id','permission_status'));
     }
 
     public function create(Request $request)
