@@ -9,7 +9,7 @@
                             style="padding: 5px; font-size: 10px; color: green;"></i></span>
                 @endforeach
             </div>
-            @if ($receipt->permission_status == 'deliverd')
+            @if ($receipt->permission_status == 'deliverd' || $receipt->permission_status == null)
                 <button type="submit" name="receive_premission" class="btn btn-primary"
                     onclick="return confirm('Are you sure?');">أستلام الأذن</button>
             @elseif($receipt->permission_status == 'receive_premission')
