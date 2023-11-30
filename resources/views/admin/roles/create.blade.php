@@ -44,14 +44,16 @@
                             @foreach (\App\Models\Permission::where('parent', 1)->get() as $parent)
                                 <div class="tab-pane @if ($loop->first) active @endif" role="tabpanel"
                                     id="{{ $parent->id }}">
-                                    <div style="display: flex;justify-content: flex-start;padding: 20px;">
-                                        <label for="p{{ $parent->id }}"
-                                            style="padding: 0px 20px;">{{ trans('permissions.' . $parent->title) }}</label>
-                                        <label class="c-switch c-switch-pill c-switch-success">
-                                            <input name="permission[]" value="{{ $parent->id }}"
-                                                id="p{{ $parent->id }}" type="checkbox" class="c-switch-input">
-                                            <span class="c-switch-slider"></span>
-                                        </label>
+                                    <div class="card">
+                                        <div style="display: flex;justify-content: flex-start;padding: 20px;">
+                                            <label for="p{{ $parent->id }}"
+                                                style="padding: 0px 20px;">{{ trans('permissions.' . $parent->title) }}</label>
+                                            <label class="c-switch c-switch-pill c-switch-success">
+                                                <input name="permission[]" value="{{ $parent->id }}"
+                                                    id="p{{ $parent->id }}" type="checkbox" class="c-switch-input">
+                                                <span class="c-switch-slider"></span>
+                                            </label>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         @foreach (\App\Models\Permission::whereIn('type', explode('.', $parent->type))->get()->groupBy('type') as $key => $array)
