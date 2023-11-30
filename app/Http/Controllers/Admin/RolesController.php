@@ -26,14 +26,12 @@ class RolesController extends Controller
     public function create()
     {
         abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $permissions = Permission::pluck('title', 'id');
-
-        return view('admin.roles.create', compact('permissions'));
+        
+        return view('admin.roles.create');
     }
 
     public function store(StoreRoleRequest $request)
-    {
+    { 
         $role = Role::create($request->all());
         $role->permissions()->sync($request->input('permissions', []));
 
