@@ -36,6 +36,10 @@ class ReceiptSocialProductController extends Controller
                     $Q->where('name','like','%'.$GLOBALS['search'].'%')->orWhere('price','like','%'.$GLOBALS['search'].'%');
                 })->orderBy('created_at','desc');
             }
+            
+            if ($request->website_setting_id != null){  
+                $products = $products->where('website_setting_id',$request->website_setting_id);
+            }
 
             if ($request->from_date != null && $request->to_date != null) { 
                 $GLOBALS['from_date'] = Carbon::createFromFormat(config('panel.date_format') . ' H:i:s', $request->from_date . ' ' . '00:00:00')->format('Y-m-d H:i:s');

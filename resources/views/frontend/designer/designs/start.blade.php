@@ -126,6 +126,8 @@
                         <div style="background-color: #fff;padding:14px;border-radius: 10px;" class="mb-2">
                             الأوجه
                             <hr>
+                            
+                            <button class="btn btn-warning" onclick="download('tshirt-canvas')"> download front</button>
                             @if ($mockup->preview_1 != null)
                                 <button class="collapsed btn btn-success" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#mockup-div1" aria-expanded="true" aria-controls="mockup-div1">
@@ -167,7 +169,6 @@
 
                         {{-- Images && Texts --}}
                         <div style="background-color: #fff;padding:14px;border-radius: 10px;" class="mb-2">
-
                             <button class="collapsed btn btn-outline-success" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#add-image" aria-expanded="true" aria-controls="add-image">
                                 image
@@ -349,6 +350,16 @@
     {{-- loading plugin --}}
     <script src="{{ asset('js/jquery-loading-overlay.min.js') }}"></script>  
     <script>
+        function download(canvas_id){
+            var canvas = document.getElementById(canvas_id);
+            var dataURL    = canvas.toDataURL("image/png");
+            const downloadLink = document.createElement('a');
+            downloadLink.href = dataURL;
+            downloadLink.download = 'canvas_image.png'; 
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
         function selected_colors() {
             var colors = $('#colors').val();
             for (i = 0; i < colors.length; i++) {
