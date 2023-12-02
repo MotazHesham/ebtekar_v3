@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,7 @@ class EmployeeFinancial extends Model
         'financial_category_id',
         'amount',
         'reason',
+        'entry_date',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -43,5 +45,16 @@ class EmployeeFinancial extends Model
     public function financial_category()
     {
         return $this->belongsTo(FinancialCategory::class, 'financial_category_id');
+    }
+
+    
+    public function getEntryDateAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
+    }
+
+    public function setEntryDateAttribute($value)
+    {
+        $this->attributes['entry_date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
 }

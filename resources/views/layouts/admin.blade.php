@@ -181,10 +181,13 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="password" class="form-control" name="password" required placeholder="Password">
+                                <input type="password" class="form-control" name="password" placeholder="Password">
                             </div>
                             <div class="col-md-3">
                                 <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-danger" name="logout">Logout</button>
                             </div>
                         </div>
                     </form>

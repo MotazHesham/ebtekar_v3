@@ -43,7 +43,7 @@ class Employee extends Model
     }
 
     public function calc_financials($month, $year){
-        return $this->employeeEmployeeFinancials()->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->sum('amount') + $this->salery;;
+        return $this->employeeEmployeeFinancials()->whereYear('entry_date', '=', $year)->whereMonth('entry_date', '=', $month)->sum('amount') + $this->salery;;
     }
     
     public function expenses()

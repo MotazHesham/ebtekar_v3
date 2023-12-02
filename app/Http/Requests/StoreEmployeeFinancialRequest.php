@@ -28,6 +28,10 @@ class StoreEmployeeFinancialRequest extends FormRequest
             'amount' => [
                 'required',
             ],
+            'entry_date' => [
+                'required',
+                'date_format:' . config('panel.date_format'),
+            ],
         ];
     }
 }

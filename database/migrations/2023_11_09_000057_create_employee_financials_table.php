@@ -12,6 +12,7 @@ class CreateEmployeeFinancialsTable extends Migration
             $table->bigIncrements('id');
             $table->decimal('amount', 15, 2);
             $table->longText('reason')->nullable();
+            $table->date('entry_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

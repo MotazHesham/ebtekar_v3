@@ -37,7 +37,7 @@
                             {{ trans('cruds.employeeFinancial.fields.reason') }}
                         </th>
                         <th>
-                            {{ trans('cruds.employeeFinancial.fields.created_at') }}
+                            {{ trans('cruds.income.fields.entry_date') }}
                         </th>
                         <th>
                             &nbsp;
@@ -125,8 +125,8 @@
                         name: 'reason'
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'entry_date',
+                        name: 'entry_date'
                     },
                     {
                         data: 'actions',

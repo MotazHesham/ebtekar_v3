@@ -12,7 +12,7 @@
                 السبب
             </th>  
             <th>
-                تاريخ الأضافة
+                تاريخ  
             </th>  
         </tr>
     </thead>
@@ -23,12 +23,12 @@
         @php
             $total = 0;
         @endphp
-        @foreach($employee->employeeEmployeeFinancials()->with('financial_category')->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->get() as $raw)  
+        @foreach($employee->employeeEmployeeFinancials()->with('financial_category')->whereYear('entry_date', '=', $year)->whereMonth('entry_date', '=', $month)->get() as $raw)  
             <tr>
                 <td>{{ $raw->financial_category->name ?? '' }}</td>
                 <td>{{ $raw->amount }}</td>  
                 <td>{{ $raw->reason }}</td>  
-                <td>{{ $raw->created_at }}</td>   
+                <td>{{ $raw->entry_date }}</td>   
             </tr>
             @php
                 $total += $raw->amount;
@@ -39,7 +39,7 @@
         <tr>
             <td colspan="3" style="text-align: right; font-weight: bold;">{{' الراتب ' . $employee->salery}}</td>
         </tr>
-        @foreach($employee->employeeEmployeeFinancials()->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->get()->groupBy('financial_category_id') as $cat =>  $raw) 
+        @foreach($employee->employeeEmployeeFinancials()->whereYear('entry_date', '=', $year)->whereMonth('entry_date', '=', $month)->get()->groupBy('financial_category_id') as $cat =>  $raw) 
             <tr>
                 <td colspan="3" style="text-align: right; font-weight: bold;">{{\App\Models\FinancialCategory::find($cat)->name .' => ' . $raw->sum('amount')}}</td>
             </tr>

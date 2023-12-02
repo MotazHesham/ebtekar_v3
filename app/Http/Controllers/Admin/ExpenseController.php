@@ -63,7 +63,7 @@ class ExpenseController extends Controller
                 $validated_request['amount'] = $employee->calc_financials($month,$year); 
                 $description = ' الراتب ' . $employee->salery . '<br>';
                 
-                foreach($employee->employeeEmployeeFinancials()->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->get()->groupBy('financial_category_id') as $cat =>  $raw){
+                foreach($employee->employeeEmployeeFinancials()->whereYear('entry_date', '=', $year)->whereMonth('entry_date', '=', $month)->get()->groupBy('financial_category_id') as $cat =>  $raw){
                     $description .=  FinancialCategory::find($cat)->name .' => ' . $raw->sum('amount') . '<br>';
                 }
 

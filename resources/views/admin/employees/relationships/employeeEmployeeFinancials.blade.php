@@ -5,7 +5,7 @@
                 @csrf
                 <input type="hidden" name="employee_id" value="{{ $employee->id }}">
                 <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label class="required"
                             for="financial_category_id">{{ trans('cruds.employeeFinancial.fields.financial_category') }}</label>
                         <select class="form-control select2 {{ $errors->has('financial_category') ? 'is-invalid' : '' }}"
@@ -23,7 +23,7 @@
                         <span
                             class="help-block">{{ trans('cruds.employeeFinancial.fields.financial_category_helper') }}</span>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label class="required" for="amount">{{ trans('cruds.employeeFinancial.fields.amount') }}</label>
                         <input class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" type="number"
                             name="amount" id="amount" value="{{ old('amount', '') }}" step="0.01" required>
@@ -34,7 +34,17 @@
                         @endif
                         <span class="help-block">{{ trans('cruds.employeeFinancial.fields.amount_helper') }}</span>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
+                        <label class="required" for="entry_date">{{ trans('cruds.income.fields.entry_date') }}</label>
+                        <input class="form-control date {{ $errors->has('entry_date') ? 'is-invalid' : '' }}" type="text" name="entry_date" id="entry_date" value="{{ old('entry_date') }}" required>
+                        @if($errors->has('entry_date'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('entry_date') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.income.fields.entry_date_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="reason">{{ trans('cruds.employeeFinancial.fields.reason') }}</label>
                         <textarea class="form-control {{ $errors->has('reason') ? 'is-invalid' : '' }}" name="reason" id="reason">{{ old('reason') }}</textarea>
                         @if ($errors->has('reason'))
@@ -82,7 +92,7 @@
                             {{ trans('cruds.employeeFinancial.fields.reason') }}
                         </th>
                         <th>
-                            {{ trans('cruds.employeeFinancial.fields.created_at') }}
+                            {{ trans('cruds.income.fields.entry_date') }}
                         </th>
                         <th>
                             &nbsp;
@@ -108,7 +118,7 @@
                                 {{ $employeeFinancial->reason ?? '' }}
                             </td>
                             <td>
-                                {{ $employeeFinancial->created_at ?? '' }}
+                                {{ $employeeFinancial->entry_date ?? '' }}
                             </td>
                             <td>
                                 @can('employee_financial_show')

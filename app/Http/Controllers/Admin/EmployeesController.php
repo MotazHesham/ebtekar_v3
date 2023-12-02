@@ -18,13 +18,17 @@ use Yajra\DataTables\Facades\DataTables;
 class EmployeesController extends Controller
 {
     public function access(Request $request){
-        
+        if($request->has('logout')){
+            Cookie::queue(Cookie::make('access_employee',$request->password,0));
+            toast('تم تسجيل الخروج بنجاح','success');
+            return redirect()->route('admin.home');
+        }
         $site_settings = WebsiteSetting::first();   
         if($site_settings->employee_password == $request->password){  
-            Cookie::queue(Cookie::make('access_employee',$request->password,5));
+            Cookie::queue(Cookie::make('access_employee',$request->password,120));
             return redirect()->route('admin.employees.index'); 
         }else{ 
-            toast('قم بتسجيل الدخول مرة أخري لقائمة السلف','warning');
+            toast('قم بتسجيل الدخول مرة أخري لقائمة الموظفين','warning');
             return redirect()->route('admin.home');
         }
     }

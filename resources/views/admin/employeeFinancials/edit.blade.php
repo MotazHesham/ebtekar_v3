@@ -49,6 +49,16 @@
                 <span class="help-block">{{ trans('cruds.employeeFinancial.fields.amount_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="entry_date">{{ trans('cruds.income.fields.entry_date') }}</label>
+                <input class="form-control date {{ $errors->has('entry_date') ? 'is-invalid' : '' }}" type="text" name="entry_date" id="entry_date" value="{{ old('entry_date', $employeeFinancial->entry_date) }}" required>
+                @if($errors->has('entry_date'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('entry_date') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.income.fields.entry_date_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="reason">{{ trans('cruds.employeeFinancial.fields.reason') }}</label>
                 <textarea class="form-control {{ $errors->has('reason') ? 'is-invalid' : '' }}" name="reason" id="reason">{{ old('reason', $employeeFinancial->reason) }}</textarea>
                 @if($errors->has('reason'))
