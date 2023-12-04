@@ -2,6 +2,9 @@
 
 return [ 
     'type' => [
+        'order' => 'طلبات الموقع',
+        'customer' => 'عملاء الموقع',
+        'material' => 'الخامات',
         'role' => 'المجموعات',
         'user' => 'المستخدمين',
         'audit_log' => 'Audit Log',

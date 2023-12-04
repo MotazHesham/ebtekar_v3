@@ -2,6 +2,9 @@
 
 return [ 
     'type' => [
+        'order' => 'طلبات الموقع',
+        'customer' => 'عملاء الموقع',
+        'material' => 'الخامات',
         'role' => 'المجموعات',
         'user' => 'المستخدمين',
         'audit_log' => 'Audit Log',
@@ -46,12 +49,15 @@ return [
         'delivery_order' => 'طلبات الشحن',
         'deliver_man' => 'مندوب الشحن',
         'expense_category' => 'تصنيفات النفقات',
+        'income_category' => 'تصنيفات الايرادات',
         'expense' => 'النفقات',
         'income' => 'الأيرادات',
         'expense_report' => 'التقرير الشهري',   
         'financial_category' => 'أقسام الحسايات',
         'employee_financial' => 'حسابات الموظفين',
         'general' => 'عام', 
+        'banner' => 'البانرز', 
+        'user_alert' => 'تنبيهات المستخدمين', 
     ],
     'user_management_access' => 'قائمة المستخدمين', 
     'role_create' => 'أضافة دور مستخدم',
