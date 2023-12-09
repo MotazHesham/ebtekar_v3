@@ -218,7 +218,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'receipts_managment_access',
-                'type' => 'receipt_social.receipt_client.receipt_company.receipt_outgoing.banned_phone.excel_file.receipt_price_view.r_client.r_branch.receipt_branch',
+                'type' => 'receipt_social.receipt_social_product.receipt_client.receipt_client_product.receipt_company.receipt_outgoing.receipt_outgoing_product.banned_phone.excel_file.receipt_price_view.receipt_price_view_product.r_client.r_branch.receipt_branch.receipt_branch_product',
                 'parent' => 1,
             ],
             [
@@ -1784,7 +1784,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'receipt_branch_managment_access',
-                'type' => 'r_client.r_branch.receipt_branch',
+                'type' => 'r_client.r_branch.receipt_branch.receipt_branch_product',
                 'parent' => 1,
             ],
             [
