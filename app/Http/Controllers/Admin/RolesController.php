@@ -54,12 +54,12 @@ class RolesController extends Controller
     }
 
     public function update(UpdateRoleRequest $request, Role $role)
-    {
+    { 
         if($role->id == 1){
             alert("Cant Update This Role",'','error');
             return redirect()->back();
         }
-        $role->update($request->all());
+        $role->update($request->all()); 
         $role->permissions()->sync($request->input('permissions', []));
 
         return redirect()->route('admin.roles.index');

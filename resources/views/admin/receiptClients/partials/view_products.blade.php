@@ -43,13 +43,13 @@
                         </td>
                         <td> 
                             <div style="display: flex;justify-content: space-evenly">
-                                @can('receipt_client_product_edit')
+                                @can('receipt_client_edit_product')
                                     <a class="btn btn-info text-white" onclick="edit_product('{{$product->id}}')"> 
                                         <i class="far fa-edit"></i>
                                     </a> 
                                 @endcan 
 
-                                @can('receipt_client_product_delete')
+                                @can('receipt_client_delete_product')
                                     <?php $route = route('admin.receipt-clients.destroy_product', $product->id); ?>
                                     <a class="btn btn-danger"
                                         href="#" onclick="deleteConfirmation('{{$route}}')"> 

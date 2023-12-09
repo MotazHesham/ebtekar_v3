@@ -61,7 +61,15 @@
                                         @foreach (\App\Models\Permission::whereIn('type', explode('.', $parent->type))->get()->groupBy('type') as $key => $array)
                                             <div class="col-md-3">
                                                 <div class="card">
-                                                    <div class="card-header">{{ trans('permissions.type.'.$key) }}</div>
+                                                    <div class="card-header">
+                                                        <div style="display: flex;justify-content:space-between">
+                                                            <div>{{ trans('permissions.type.'.$key) }}</div>
+                                                            <div>
+                                                                <button type="button" class="btn btn-success btn-sm btn-pill" onclick="check({{$array}},true)">Check all</button>
+                                                                <button type="button" class="btn btn-outline-warning btn-sm btn-pill" onclick="check({{$array}},false)">UnCheck all</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="card-body">
                                                         @foreach ($array as $raw)
                                                             <div style="display: flex;justify-content: space-evenly">
@@ -87,7 +95,15 @@
                                     @foreach (\App\Models\Permission::where('type', 'general')->get()->groupBy('type') as $key => $array)
                                         <div class="col-md-3">
                                             <div class="card">
-                                                <div class="card-header">{{ trans('permissions.type.'.$key) }}</div>
+                                                <div class="card-header">
+                                                    <div style="display: flex;justify-content:space-between">
+                                                        <div>{{ trans('permissions.type.'.$key) }}</div>
+                                                        <div>
+                                                            <button type="button" class="btn btn-success btn-sm btn-pill" onclick="check({{$array}},true)">Check all</button>
+                                                            <button type="button" class="btn btn-outline-warning btn-sm btn-pill" onclick="check({{$array}},false)">UnCheck all</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="card-body">
                                                     @foreach ($array as $raw)
                                                         <div style="display: flex;justify-content: space-evenly">
@@ -106,7 +122,15 @@
                                     @foreach (\App\Models\Permission::where('parent',2)->get()->groupBy('type') as $key => $array)
                                         <div class="col-md-3">
                                             <div class="card">
-                                                <div class="card-header">{{ trans('permissions.type.'.$key) }}</div>
+                                                <div class="card-header">
+                                                    <div style="display: flex;justify-content:space-between">
+                                                        <div>{{ trans('permissions.type.'.$key) }}</div>
+                                                        <div>
+                                                            <button type="button" class="btn btn-success btn-sm btn-pill" onclick="check({{$array}},true)">Check all</button>
+                                                            <button type="button" class="btn btn-outline-warning btn-sm btn-pill" onclick="check({{$array}},false)">UnCheck all</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="card-body">
                                                     @foreach ($array as $raw)
                                                         <div style="display: flex;justify-content: space-evenly">
@@ -137,4 +161,19 @@
             </button>
         </div>
     </form>
+@endsection
+
+@section('scripts')
+@parent 
+    <script>
+        function check(array, status){
+            for(var i = 0 ; i < array.length ; i++ ){
+                if(status){ // means true
+                    $('#'+array[i].id).attr('checked',true); 
+                }else{
+                    $('#'+array[i].id).attr('checked',false);
+                }
+            }
+        }
+    </script>
 @endsection

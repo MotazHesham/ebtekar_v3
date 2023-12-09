@@ -198,7 +198,7 @@
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdown-menu-{{ $receipt->id }}">
 
-                                            @can('receipt_outgoing_product_access')
+                                            @can('receipt_outgoing_view_products')
                                                 <a class="dropdown-item" style="cursor: pointer"
                                                     onclick="view_products('{{ $receipt->id }}')">
                                                     {{ trans('global.extra.view_products') }}
@@ -206,7 +206,7 @@
                                                 </a>
                                             @endcan
                                             @if(!isset($deleted))
-                                                @can('receipt_outgoing_product_create')
+                                                @can('receipt_outgoing_add_product')
                                                     <a class="dropdown-item" style="cursor: pointer"
                                                         onclick="add_product('{{ $receipt->id }}')">
                                                         {{ trans('global.extra.add_product') }}

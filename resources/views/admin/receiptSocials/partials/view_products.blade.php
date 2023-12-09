@@ -76,13 +76,13 @@
                         </td> 
                         <td> 
                             <div style="display: flex;justify-content: space-between">
-                                @can('receipt_social_product_edit')
+                                @can('receipt_social_edit_product')
                                     <a class="btn btn-info text-white" onclick="edit_product('{{$product->id}}')"> 
                                         <i class="far fa-edit"></i>
                                     </a>
                                 @endcan
 
-                                @can('receipt_social_product_delete')
+                                @can('receipt_social_delete_product')
                                     <?php $route = route('admin.receipt-socials.destroy_product', $product->id); ?>
                                     <a class="btn btn-danger"
                                         href="#" onclick="deleteConfirmation('{{$route}}')"> 

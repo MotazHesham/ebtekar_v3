@@ -14,7 +14,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'user_management_access',
-                'type' => 'role.user.user_alert.employee.audit_log',
+                'type' => 'role.user.user_alert.audit_log',
                 'parent' => 1,
             ], 
             [
@@ -218,7 +218,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'receipts_managment_access',
-                'type' => 'receipt_social.receipt_social_product.receipt_client.receipt_client_product.receipt_company.receipt_outgoing.receipt_outgoing_product.banned_phone.excel_file.receipt_price_view.receipt_price_view_product.r_client.r_branch.receipt_branch.receipt_branch_product',
+                'type' => 'receipt_social.receipt_social_product.receipt_client.receipt_client_product.receipt_company.receipt_outgoing.receipt_outgoing_product.banned_phone.excel_file.receipt_price_view.receipt_price_view_product',
                 'parent' => 1,
             ],
             [
@@ -440,7 +440,7 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'setting_access',
-                'type' => 'website_setting.financial_account.country.social.police.faq_category.faw_question.currency.contactu.subscribe',
+                'type' => 'website_setting.financial_account.country.social.police.currency.contactu.subscribe',
                 'parent' => 1,
             ], 
             [
@@ -2051,6 +2051,126 @@ class PermissionsTableSeeder extends Seeder
                 'type' => 'general',
                 'parent' => 0,
             ], 
+            [
+                'id'    => $i++,
+                'title' => 'receipt_social_view_products',
+                'type' => 'receipt_social',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_social_add_product',
+                'type' => 'receipt_social',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_social_edit_product',
+                'type' => 'receipt_social',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_social_delete_product',
+                'type' => 'receipt_social',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_client_view_products',
+                'type' => 'receipt_client',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_client_add_product',
+                'type' => 'receipt_client',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_client_edit_product',
+                'type' => 'receipt_client',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_client_delete_product',
+                'type' => 'receipt_client',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_outgoing_view_products',
+                'type' => 'receipt_outgoing',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_outgoing_add_product',
+                'type' => 'receipt_outgoing',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_outgoing_edit_product',
+                'type' => 'receipt_outgoing',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_outgoing_delete_product',
+                'type' => 'receipt_outgoing',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_price_view_view_products',
+                'type' => 'receipt_price_view',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_price_view_add_product',
+                'type' => 'receipt_price_view',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_price_view_edit_product',
+                'type' => 'receipt_price_view',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_price_view_delete_product',
+                'type' => 'receipt_price_view',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_view_products',
+                'type' => 'receipt_branch',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_add_product',
+                'type' => 'receipt_branch',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_edit_product',
+                'type' => 'receipt_branch',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'receipt_branch_delete_product',
+                'type' => 'receipt_branch',
+                'parent' => 0,
+            ],
         ];
 
         Permission::insert($permissions);

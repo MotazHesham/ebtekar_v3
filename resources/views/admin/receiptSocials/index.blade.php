@@ -495,7 +495,7 @@
                                             </span>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdown-menu-{{ $receipt->id }}">
-                                                @can('receipt_social_product_access')
+                                                @can('receipt_social_view_products')
                                                     <a class="dropdown-item" style="cursor: pointer"
                                                         onclick="view_products('{{ $receipt->id }}')">
                                                         {{ trans('global.extra.view_products') }}
@@ -504,7 +504,7 @@
                                                 @endcan
                                             @if(!$receipt->hold || auth()->user()->is_admin)
                                                 @if(!isset($deleted))
-                                                    @can('receipt_social_product_create')
+                                                    @can('receipt_social_add_product')
                                                         <a class="dropdown-item" style="cursor: pointer"
                                                             onclick="add_product('{{ $receipt->id }}')">
                                                             {{ trans('global.extra.add_product') }}
