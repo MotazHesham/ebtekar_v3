@@ -57,6 +57,8 @@ return [
         'employee_financial' => 'حسابات الموظفين',
         'general' => 'عام', 
         'banner' => 'البانرز', 
+        'playlist' => 'قوائم التشغيل', 
+        'conversation' => 'المحادثات', 
         'receipt_social_product' => 'منتجات فواتير سوشيال', 
         'receipt_client_product' => 'منتجات فواتير شركات', 
         'receipt_outgoing_product' => 'منتجات فواتير مصروفات', 

@@ -158,61 +158,61 @@
                 $playlists_counter_sum += Gate::allows('playlist_prepare') ? $playlists_counter['prepare'] : 0; 
                 $playlists_counter_sum += Gate::allows('playlist_shipment') ? $playlists_counter['shipment'] : 0; 
             @endphp
-        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/playlists/*") ? "c-active" : "" }}">
-            <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/playlists/*") ? "c-active" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
 
-                </i>
-                {{ trans('cruds.playlist.title') }}
-                @if($playlists_counter_sum) <span class="badge bg-light-gradient text-dark ms-auto">{{ $playlists_counter_sum   }}</span> @endif
-            </a>
-            <ul class="c-sidebar-nav-dropdown-items"> 
-                @can('playlist_design')
-                    <li class="c-sidebar-nav-item">
-                        <a href="{{ route("admin.playlists.index",'design') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/design") ? "c-active" : "" }}">
-                            <i class="fa-fw fas fa-pen-nib c-sidebar-nav-icon">
+                    </i>
+                    {{ trans('cruds.playlist.title') }}
+                    @if($playlists_counter_sum) <span class="badge bg-light-gradient text-dark ms-auto">{{ $playlists_counter_sum   }}</span> @endif
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items"> 
+                    @can('playlist_design')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.playlists.index",'design') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/design") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-pen-nib c-sidebar-nav-icon">
 
-                            </i>
-                            {{ trans('cruds.playlist.menu.design') }} 
-                            @if($playlists_counter['design']) <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>@endif
-                        </a>
-                    </li>
-                @endcan
-                @can('playlist_manufacturing')
-                    <li class="c-sidebar-nav-item">
-                        <a href="{{ route("admin.playlists.index",'manufacturing') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/manufacturing") ? "c-active" : "" }}">
-                            <i class="fa-fw fas fa-building c-sidebar-nav-icon"> 
+                                </i>
+                                {{ trans('cruds.playlist.menu.design') }} 
+                                @if($playlists_counter['design']) <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>@endif
+                            </a>
+                        </li>
+                    @endcan
+                    @can('playlist_manufacturing')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.playlists.index",'manufacturing') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/manufacturing") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-building c-sidebar-nav-icon"> 
 
-                            </i>
-                            {{ trans('cruds.playlist.menu.manufacturing') }}
-                            @if($playlists_counter['manufacturing']) <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> @endif
-                        </a>
-                    </li>
-                @endcan
-                @can('playlist_prepare')
-                    <li class="c-sidebar-nav-item">
-                        <a href="{{ route("admin.playlists.index",'prepare') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/prepare") ? "c-active" : "" }}">
-                            <i class="fa-fw fab fa-envira c-sidebar-nav-icon">
+                                </i>
+                                {{ trans('cruds.playlist.menu.manufacturing') }}
+                                @if($playlists_counter['manufacturing']) <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> @endif
+                            </a>
+                        </li>
+                    @endcan
+                    @can('playlist_prepare')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.playlists.index",'prepare') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/prepare") ? "c-active" : "" }}">
+                                <i class="fa-fw fab fa-envira c-sidebar-nav-icon">
 
-                            </i>
-                            {{ trans('cruds.playlist.menu.prepare') }}
-                            @if($playlists_counter['prepare']) <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> @endif
-                        </a>
-                    </li>
-                @endcan
-                @can('playlist_shipment')
-                    <li class="c-sidebar-nav-item"> 
-                        <a href="{{ route("admin.playlists.index",'shipment') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/shipment") ? "c-active" : "" }}">
-                            <i class="fa-fw fas fa-truck c-sidebar-nav-icon">
+                                </i>
+                                {{ trans('cruds.playlist.menu.prepare') }}
+                                @if($playlists_counter['prepare']) <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> @endif
+                            </a>
+                        </li>
+                    @endcan
+                    @can('playlist_shipment')
+                        <li class="c-sidebar-nav-item"> 
+                            <a href="{{ route("admin.playlists.index",'shipment') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/shipment") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-truck c-sidebar-nav-icon">
 
-                            </i>
-                            {{ trans('cruds.playlist.menu.shipment') }}
-                            @if($playlists_counter['shipment']) <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> @endif
-                        </a>
-                    </li>
-                @endcan
-            </ul>
-        </li>
+                                </i>
+                                {{ trans('cruds.playlist.menu.shipment') }}
+                                @if($playlists_counter['shipment']) <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> @endif
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
         @endcan
         @can('delivery_managment_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/delivery-orders*") ? "c-show" : "" }} {{ request()->is("admin/deliver-men*") ? "c-show" : "" }}">
