@@ -3974,8 +3974,7 @@
         border: none;
         outline: none;
         font-weight: 700;
-        color: #939b9e;
-        background: url("../images/layout-1/drop-1.png") no-repeat scroll 20px 23px;
+        color: #939b9e; 
         text-align: center;
         -moz-text-align-last: center;
              text-align-last: center;
@@ -4827,8 +4826,7 @@
               border: none;
               outline: none;
               font-weight: 700;
-              color: #444444;
-              background: url("../images/layout-1/drop-1.png") no-repeat scroll 20px;
+              color: #444444; 
               text-align: center;
               -moz-text-align-last: center;
                    text-align-last: center;
@@ -19753,9 +19751,7 @@
     .layout-header3 .main-menu .input-block .input-box {
       width: 450px; }
       .layout-header3 .main-menu .input-block .input-box .big-deal-form .input-group {
-        height: 50px; }
-        .layout-header3 .main-menu .input-block .input-box .big-deal-form .input-group select {
-          background: url("../images/layout-1/drop-1.png") no-repeat scroll 20px 18px; }
+        height: 50px; } 
         .layout-header3 .main-menu .input-block .input-box .big-deal-form .input-group span {
           display: none; }
     .category-header-4 .navbar-menu .input-block {
@@ -20834,9 +20830,7 @@
       .category-header .navbar-menu .category-left .nav-block {
         display: none; }
       .category-header .navbar-menu .category-left .input-block .input-box .big-deal-form .input-group {
-        height: 50px; }
-        .category-header .navbar-menu .category-left .input-block .input-box .big-deal-form .input-group select {
-          background: url("../images/layout-1/drop-1.png") no-repeat scroll 20px 19px; }
+        height: 50px; } 
     .category-header .navbar-menu .category-right .contact-block {
       padding: 15px 0; }
     .layout-header3 .main-menu .menu-nav .toggle-nav {
