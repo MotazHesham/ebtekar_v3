@@ -240,13 +240,18 @@ class ReceiptSocialController extends Controller
             $receipt_product_pivot->receipt_social_product_id = $request->product_id;
             $receipt_product_pivot->title = $product->name;
             $receipt_product_pivot->description = $request->description;
-            $receipt_product_pivot->price = $product->price;
+            if (!auth()->user()->is_admin) {
+                $receipt_product_pivot->price = $product->price;
+                $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
+            }else{
+                $receipt_product_pivot->price = $request->price;
+                $receipt_product_pivot->total_cost = ($request->quantity * $request->price);
+            }
             $receipt_product_pivot->quantity = $request->quantity;
             if($request->extra_commission != null){ 
                 $receipt_product_pivot->extra_commission = $request->extra_commission;
             }
             $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
-            $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
 
             if ($request->hasFile('pdf')) {
                 $receipt_product_pivot->pdf= $request->pdf->store('uploads/receipt_social/pdf');

@@ -8,7 +8,7 @@
             @csrf   
             <input type="hidden" name="receipt_product_pivot_id" value="{{ $receipt_social_product_pivot->id }}">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="">{{ trans('global.extra.product') }}</label> 
                         <select class="form-control select2 mb-2" name="product_id" id="product_id" required>
@@ -21,7 +21,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="">{{ trans('global.extra.quantity') }}</label>
                         <input class="form-control" type="number" name="quantity" value="{{ $receipt_social_product_pivot->quantity }}" step="1" min="1" placeholder="{{ trans('global.extra.quantity') }}"  title="{{ trans('global.extra.quantity') }}" required>
@@ -29,10 +29,16 @@
                 </div>
                 
                 @if(auth()->user()->is_admin)
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="">{{ trans('cruds.receiptSocial.fields.extra_commission') }}</label>
                             <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ trans('cruds.receiptSocial.fields.extra_commission') }}" title="{{ trans('cruds.receiptSocial.fields.extra_commission') }}" >
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="">السعر</label>
+                            <input class="form-control" type="number" name="price" value="{{ $receipt_social_product_pivot->price }}" step="0.1" min="0"  >
                         </div>
                     </div>
                 @endif
