@@ -34,10 +34,7 @@ class ProductsController extends Controller
             $media = Media::find($key);
             $media->order_column = $value;
             $media->save();
-        }
-        Cache::forget('home_new_products');
-        Cache::forget('home_featured_categories');
-        Cache::forget('best_selling_products');
+        } 
         toast('Success...','success');
         return redirect()->back();
     }
@@ -47,9 +44,9 @@ class ProductsController extends Controller
         $product = Product::findOrFail($request->id);
         $product->$type = $request->status; 
         $product->save();
-        Cache::forget('home_new_products');
-        Cache::forget('home_featured_categories');
-        Cache::forget('best_selling_products');
+        Cache::forget('home_new_products_' . $product->website_setting_id);
+        Cache::forget('home_featured_categories_' . $product->website_setting_id);
+        Cache::forget('best_selling_products_' . $product->website_setting_id);
         return 1;
     }
 
@@ -387,7 +384,7 @@ class ProductsController extends Controller
         if($request->has('arrange_photos')){
             return redirect()->route('admin.products.show',$product->id);
         }
-        Cache::forget('home_new_products');  
+        Cache::forget('home_new_products_' . $product->website_setting_id); 
         return redirect()->route('admin.products.index');
     }
 
@@ -517,9 +514,9 @@ class ProductsController extends Controller
         if($request->has('arrange_photos')){
             return redirect()->route('admin.products.show',$product->id);
         }
-        Cache::forget('home_new_products');
-        Cache::forget('home_featured_categories');
-        Cache::forget('best_selling_products');
+        Cache::forget('home_new_products_' . $product->website_setting_id);
+        Cache::forget('home_featured_categories_' . $product->website_setting_id);
+        Cache::forget('best_selling_products_' . $product->website_setting_id);
         toast(trans('flash.global.update_title'),'success'); 
         return redirect()->route('admin.products.index');
     }
@@ -540,9 +537,9 @@ class ProductsController extends Controller
         $product->delete();
 
         alert(trans('flash.deleted'),'','success');
-        Cache::forget('home_new_products');
-        Cache::forget('home_featured_categories');
-        Cache::forget('best_selling_products');
+        Cache::forget('home_new_products_' . $product->website_setting_id);
+        Cache::forget('home_featured_categories_' . $product->website_setting_id);
+        Cache::forget('best_selling_products_' . $product->website_setting_id);
         return 1;
     }
 
@@ -552,11 +549,11 @@ class ProductsController extends Controller
 
         foreach ($products as $product) {
             $product->delete();
+            Cache::forget('home_new_products_' . $product->website_setting_id);
+            Cache::forget('home_featured_categories_' . $product->website_setting_id);
+            Cache::forget('best_selling_products_' . $product->website_setting_id);
         }
 
-        Cache::forget('home_new_products');
-        Cache::forget('home_featured_categories');
-        Cache::forget('best_selling_products');
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

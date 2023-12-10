@@ -24,7 +24,7 @@ class SubCategoryController extends Controller
         $subcategory = SubCategory::findOrFail($request->id);
         $subcategory->$type = $request->status; 
         $subcategory->save();
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$subcategory->website_setting_id);
         return 1;
     }
 
@@ -100,7 +100,7 @@ class SubCategoryController extends Controller
         $validated_request['slug'] = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
         $subCategory = SubCategory::create($validated_request);
 
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$subCategory->website_setting_id);
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.sub-categories.index');
     }
@@ -122,7 +122,7 @@ class SubCategoryController extends Controller
     {
         $subCategory->update($request->all());
 
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$subCategory->website_setting_id);
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.sub-categories.index');
     }
@@ -142,7 +142,7 @@ class SubCategoryController extends Controller
 
         $subCategory->delete();
 
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$subCategory->website_setting_id);
         alert(trans('flash.deleted'),'','success');
         return 1;
     }
@@ -153,8 +153,8 @@ class SubCategoryController extends Controller
 
         foreach ($subCategories as $subCategory) {
             $subCategory->delete();
+            Cache::forget('header_nested_categories_'.$subCategory->website_setting_id);
         }
-        Cache::forget('header_nested_categories');
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

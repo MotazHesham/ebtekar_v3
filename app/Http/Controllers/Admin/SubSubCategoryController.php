@@ -24,7 +24,7 @@ class SubSubCategoryController extends Controller
         $subsubcategory = SubSubCategory::findOrFail($request->id);
         $subsubcategory->$type = $request->status; 
         $subsubcategory->save();
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$subsubcategory->website_setting_id);
         return 1;
     }
     public function index(Request $request)
@@ -102,7 +102,7 @@ class SubSubCategoryController extends Controller
         $validated_request['slug'] = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
         $subSubCategory = SubSubCategory::create($validated_request);
 
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$subSubCategory->website_setting_id);
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.sub-sub-categories.index');
     }
@@ -124,7 +124,7 @@ class SubSubCategoryController extends Controller
     {
         $subSubCategory->update($request->all());
 
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$subSubCategory->website_setting_id);
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.sub-sub-categories.index');
     }
@@ -144,7 +144,7 @@ class SubSubCategoryController extends Controller
 
         $subSubCategory->delete();
 
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$subSubCategory->website_setting_id);
         alert(trans('flash.deleted'),'','success');
         return 1;
     }
@@ -155,9 +155,9 @@ class SubSubCategoryController extends Controller
 
         foreach ($subSubCategories as $subSubCategory) {
             $subSubCategory->delete();
+            Cache::forget('header_nested_categories_'.$subSubCategory->website_setting_id);
         }
 
-        Cache::forget('header_nested_categories');
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

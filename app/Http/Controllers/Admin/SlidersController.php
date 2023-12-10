@@ -25,7 +25,7 @@ class SlidersController extends Controller
         $slider = Slider::findOrFail($request->id);
         $slider->$type = $request->status; 
         $slider->save();
-        Cache::forget('home_silders');
+        Cache::forget('home_silders_'.$slider->website_setting_id);
         return 1;
     }
 
@@ -113,7 +113,7 @@ class SlidersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $slider->id]);
         }
 
-        Cache::forget('home_silders');
+        Cache::forget('home_silders_'.$slider->website_setting_id);
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.sliders.index');
     }
@@ -142,7 +142,7 @@ class SlidersController extends Controller
             $slider->photo->delete();
         }
 
-        Cache::forget('home_silders');
+        Cache::forget('home_silders_'.$slider->website_setting_id);
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.sliders.index');
     }
@@ -162,7 +162,7 @@ class SlidersController extends Controller
 
         alert(trans('flash.deleted'),'','success');
 
-        Cache::forget('home_silders');
+        Cache::forget('home_silders_'.$slider->website_setting_id);
         return 1;
     }
 
@@ -172,9 +172,9 @@ class SlidersController extends Controller
 
         foreach ($sliders as $slider) {
             $slider->delete();
+            Cache::forget('home_silders_'.$slider->website_setting_id);
         }
 
-        Cache::forget('home_silders');
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

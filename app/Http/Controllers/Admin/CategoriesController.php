@@ -25,9 +25,9 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($request->id);
         $category->$type = $request->status; 
         $category->save();
-        Cache::forget('home_categories');
-        Cache::forget('home_featured_categories');
-        Cache::forget('header_nested_categories');
+        Cache::forget('home_categories_'.$category->website_setting_id);
+        Cache::forget('home_featured_categories_'.$category->website_setting_id);
+        Cache::forget('header_nested_categories_'.$category->website_setting_id);
         return 1;
     }
 
@@ -138,7 +138,7 @@ class CategoriesController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $category->id]);
         }
 
-        Cache::forget('header_nested_categories');
+        Cache::forget('header_nested_categories_'.$category->website_setting_id);
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.categories.index');
     }
@@ -178,9 +178,9 @@ class CategoriesController extends Controller
             $category->icon->delete();
         }
 
-        Cache::forget('home_categories');
-        Cache::forget('home_featured_categories');
-        Cache::forget('header_nested_categories');
+        Cache::forget('home_categories_'.$category->website_setting_id);
+        Cache::forget('home_featured_categories_'.$category->website_setting_id);
+        Cache::forget('header_nested_categories_'.$category->website_setting_id);
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.categories.index');
     }
@@ -198,9 +198,9 @@ class CategoriesController extends Controller
 
         $category->delete();
 
-        Cache::forget('home_categories');
-        Cache::forget('home_featured_categories');
-        Cache::forget('header_nested_categories');
+        Cache::forget('home_categories_'.$category->website_setting_id);
+        Cache::forget('home_featured_categories_'.$category->website_setting_id);
+        Cache::forget('header_nested_categories_'.$category->website_setting_id);
         alert(trans('flash.deleted'),'','success');
         return 1;
     }
@@ -211,11 +211,10 @@ class CategoriesController extends Controller
 
         foreach ($categories as $category) {
             $category->delete();
-        }
-
-        Cache::forget('home_categories');
-        Cache::forget('home_featured_categories');
-        Cache::forget('header_nested_categories');
+            Cache::forget('home_categories_'.$category->website_setting_id);
+            Cache::forget('home_featured_categories_'.$category->website_setting_id);
+            Cache::forget('header_nested_categories_'.$category->website_setting_id);
+        } 
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
