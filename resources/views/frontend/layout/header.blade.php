@@ -56,7 +56,7 @@
                                     <input type="text" class="form-control" name="search" value="@if(isset($search)) {{$search}} @endif" placeholder="{{ trans('frontend.header.search_product') }}">
                                     <select name="category">
                                         <option value=""> {{ trans('frontend.header.all_products') }}</option>
-                                        @foreach (\App\Models\HomeCategory::where('website_setting_id',$site_settings->id)->with('category')->get() as $homecategory)
+                                        @foreach ($header_home_categories as $homecategory)
                                             <option value="{{$homecategory->category->slug ?? ''}}" @if(isset($category) && $category == $homecategory->category->id) selected @endif>
                                                 {{ $homecategory->category->name ?? '' }}
                                             </option>
@@ -216,7 +216,7 @@
                                 </nav>
                                 <div class="collapse  nav-desk" id="navbarToggleExternalContent">
                                     <ul class="nav-cat title-font">
-                                        @foreach (\App\Models\HomeCategory::where('website_setting_id',$site_settings->id)->with('category')->get() as $homecategory)
+                                        @foreach ($header_home_categories as $homecategory)
                                             <li>
                                                 <a href="{{ route('frontend.products.category',$homecategory->category->slug) }}">{{ $homecategory->category->name ?? '' }}</a>
                                             </li>
@@ -253,12 +253,7 @@
                                     <!--pages meu start-->
                                     <li>
                                         <a class="dark-menu-item" href="javascript:void(0)"> {{ trans('frontend.header.products') }}</a>
-                                        <ul>
-                                            @php
-                                                $header_nested_categories = Cache::rememberForever('header_nested_categories_'.$site_settings->id, function () use ($site_settings){
-                                                    return \App\Models\Category::where('published',1)->where('website_setting_id',$site_settings->id)->with('sub_categories.sub_sub_categories')->get();
-                                                });
-                                            @endphp
+                                        <ul> 
                                             @foreach ($header_nested_categories as $category)
                                                 <li>
                                                     <a  href="{{ route('frontend.products.category',$category->slug) }}">{{ $category->name }}</a>

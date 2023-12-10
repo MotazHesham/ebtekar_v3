@@ -296,9 +296,6 @@
     <!-- Add to account bar end-->
 
     <!-- flash Deal product -->
-    {{-- @php
-        $flash_deal_product = \App\Models\Product::where('flash_deal',1)->where('website_setting_id',$site_settings->id)->where('published',1)->inRandomOrder()->first();
-    @endphp
     @if($flash_deal_product) 
         @php
             $flash_deal_img =  isset($flash_deal_product->photos[0]) ? $flash_deal_product->photos[0]->getUrl('preview') : '';
@@ -315,7 +312,7 @@
                 </div>
             </a>
         </div>  
-    @endif --}}
+    @endif
     <!-- flash Deal product -->
 
     @include('sweetalert::alert')
