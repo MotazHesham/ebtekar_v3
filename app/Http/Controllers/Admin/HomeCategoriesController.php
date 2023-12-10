@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\HomeCategory;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,6 +38,7 @@ class HomeCategoriesController extends Controller
     {
         $homeCategory = HomeCategory::create($request->all());
 
+        Cache::forget('home_categories');
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.home-categories.index');
     }
@@ -57,6 +59,7 @@ class HomeCategoriesController extends Controller
     public function update(UpdateHomeCategoryRequest $request, HomeCategory $homeCategory)
     {
         $homeCategory->update($request->all());
+        Cache::forget('home_categories');
 
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.home-categories.index');
@@ -76,6 +79,7 @@ class HomeCategoriesController extends Controller
         abort_if(Gate::denies('home_category_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $homeCategory->delete();
+        Cache::forget('home_categories');
 
         alert(trans('flash.deleted'),'','success');
 
@@ -89,6 +93,7 @@ class HomeCategoriesController extends Controller
         foreach ($homeCategories as $homeCategory) {
             $homeCategory->delete();
         }
+        Cache::forget('home_categories');
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

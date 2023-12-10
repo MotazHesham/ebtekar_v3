@@ -11,6 +11,7 @@ use App\Models\SubCategory;
 use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
@@ -23,6 +24,7 @@ class SubCategoryController extends Controller
         $subcategory = SubCategory::findOrFail($request->id);
         $subcategory->$type = $request->status; 
         $subcategory->save();
+        Cache::forget('header_nested_categories');
         return 1;
     }
 
@@ -98,6 +100,7 @@ class SubCategoryController extends Controller
         $validated_request['slug'] = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
         $subCategory = SubCategory::create($validated_request);
 
+        Cache::forget('header_nested_categories');
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.sub-categories.index');
     }
@@ -119,6 +122,7 @@ class SubCategoryController extends Controller
     {
         $subCategory->update($request->all());
 
+        Cache::forget('header_nested_categories');
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.sub-categories.index');
     }
@@ -138,6 +142,7 @@ class SubCategoryController extends Controller
 
         $subCategory->delete();
 
+        Cache::forget('header_nested_categories');
         alert(trans('flash.deleted'),'','success');
         return 1;
     }
@@ -149,6 +154,7 @@ class SubCategoryController extends Controller
         foreach ($subCategories as $subCategory) {
             $subCategory->delete();
         }
+        Cache::forget('header_nested_categories');
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

@@ -83,7 +83,7 @@ class Category extends Model implements HasMedia
 
     public function products(){
         return $this->hasMany(Product::class,'category_id');
-    }
+    } 
 
     public function sub_categories(){
         return $this->hasMany(SubCategory::class,'category_id');

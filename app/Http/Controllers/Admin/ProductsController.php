@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,9 @@ class ProductsController extends Controller
             $media->order_column = $value;
             $media->save();
         }
+        Cache::forget('home_new_products');
+        Cache::forget('home_featured_categories');
+        Cache::forget('best_selling_products');
         toast('Success...','success');
         return redirect()->back();
     }
@@ -43,6 +47,9 @@ class ProductsController extends Controller
         $product = Product::findOrFail($request->id);
         $product->$type = $request->status; 
         $product->save();
+        Cache::forget('home_new_products');
+        Cache::forget('home_featured_categories');
+        Cache::forget('best_selling_products');
         return 1;
     }
 
@@ -380,6 +387,7 @@ class ProductsController extends Controller
         if($request->has('arrange_photos')){
             return redirect()->route('admin.products.show',$product->id);
         }
+        Cache::forget('home_new_products');  
         return redirect()->route('admin.products.index');
     }
 
@@ -509,6 +517,9 @@ class ProductsController extends Controller
         if($request->has('arrange_photos')){
             return redirect()->route('admin.products.show',$product->id);
         }
+        Cache::forget('home_new_products');
+        Cache::forget('home_featured_categories');
+        Cache::forget('best_selling_products');
         toast(trans('flash.global.update_title'),'success'); 
         return redirect()->route('admin.products.index');
     }
@@ -529,6 +540,9 @@ class ProductsController extends Controller
         $product->delete();
 
         alert(trans('flash.deleted'),'','success');
+        Cache::forget('home_new_products');
+        Cache::forget('home_featured_categories');
+        Cache::forget('best_selling_products');
         return 1;
     }
 
@@ -540,6 +554,9 @@ class ProductsController extends Controller
             $product->delete();
         }
 
+        Cache::forget('home_new_products');
+        Cache::forget('home_featured_categories');
+        Cache::forget('best_selling_products');
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

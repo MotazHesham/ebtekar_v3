@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +25,9 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($request->id);
         $category->$type = $request->status; 
         $category->save();
+        Cache::forget('home_categories');
+        Cache::forget('home_featured_categories');
+        Cache::forget('header_nested_categories');
         return 1;
     }
 
@@ -134,6 +138,7 @@ class CategoriesController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $category->id]);
         }
 
+        Cache::forget('header_nested_categories');
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.categories.index');
     }
@@ -173,6 +178,9 @@ class CategoriesController extends Controller
             $category->icon->delete();
         }
 
+        Cache::forget('home_categories');
+        Cache::forget('home_featured_categories');
+        Cache::forget('header_nested_categories');
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.categories.index');
     }
@@ -190,6 +198,9 @@ class CategoriesController extends Controller
 
         $category->delete();
 
+        Cache::forget('home_categories');
+        Cache::forget('home_featured_categories');
+        Cache::forget('header_nested_categories');
         alert(trans('flash.deleted'),'','success');
         return 1;
     }
@@ -202,6 +213,9 @@ class CategoriesController extends Controller
             $category->delete();
         }
 
+        Cache::forget('home_categories');
+        Cache::forget('home_featured_categories');
+        Cache::forget('header_nested_categories');
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

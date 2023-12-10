@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateSliderRequest;
 use App\Models\Slider;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +25,7 @@ class SlidersController extends Controller
         $slider = Slider::findOrFail($request->id);
         $slider->$type = $request->status; 
         $slider->save();
+        Cache::forget('home_silders');
         return 1;
     }
 
@@ -111,6 +113,7 @@ class SlidersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $slider->id]);
         }
 
+        Cache::forget('home_silders');
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.sliders.index');
     }
@@ -139,6 +142,7 @@ class SlidersController extends Controller
             $slider->photo->delete();
         }
 
+        Cache::forget('home_silders');
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.sliders.index');
     }
@@ -158,6 +162,7 @@ class SlidersController extends Controller
 
         alert(trans('flash.deleted'),'','success');
 
+        Cache::forget('home_silders');
         return 1;
     }
 
@@ -169,6 +174,7 @@ class SlidersController extends Controller
             $slider->delete();
         }
 
+        Cache::forget('home_silders');
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

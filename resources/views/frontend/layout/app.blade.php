@@ -296,7 +296,7 @@
     <!-- Add to account bar end-->
 
     <!-- flash Deal product -->
-    @php
+    {{-- @php
         $flash_deal_product = \App\Models\Product::where('flash_deal',1)->where('website_setting_id',$site_settings->id)->where('published',1)->inRandomOrder()->first();
     @endphp
     @if($flash_deal_product) 
@@ -315,7 +315,7 @@
                 </div>
             </a>
         </div>  
-    @endif
+    @endif --}}
     <!-- flash Deal product -->
 
     @include('sweetalert::alert')

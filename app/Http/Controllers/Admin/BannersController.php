@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateBannerRequest;
 use App\Models\Banner;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,7 @@ class BannersController extends Controller
         $banner = Banner::findOrFail($request->id);
         $banner->$type = $request->status; 
         $banner->save();
+        Cache::forget('home_banners_1');
         return 1;
     }
 
@@ -55,6 +57,7 @@ class BannersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $banner->id]);
         }
 
+        Cache::forget('home_banners_1');
         toast(trans('flash.global.success_title'),'success');
         return redirect()->route('admin.banners.index');
     } 
@@ -81,6 +84,7 @@ class BannersController extends Controller
             $banner->photo->delete();
         }
 
+        Cache::forget('home_banners_1');
         toast(trans('flash.global.update_title'),'success');
         return redirect()->route('admin.banners.index');
     }
@@ -100,6 +104,7 @@ class BannersController extends Controller
 
         alert(trans('flash.deleted'),'','success');
 
+        Cache::forget('home_banners_1');
         return 1;
     }
 
@@ -111,6 +116,7 @@ class BannersController extends Controller
             $banner->delete();
         }
 
+        Cache::forget('home_banners_1');
         return response(null, Response::HTTP_NO_CONTENT);
     }
 

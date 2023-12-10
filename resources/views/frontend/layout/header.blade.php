@@ -254,7 +254,12 @@
                                     <li>
                                         <a class="dark-menu-item" href="javascript:void(0)"> {{ trans('frontend.header.products') }}</a>
                                         <ul>
-                                            @foreach (\App\Models\Category::where('published',1)->where('website_setting_id',$site_settings->id)->with('sub_categories.sub_sub_categories')->get() as $category)
+                                            @php
+                                                $header_nested_categories = Cache::rememberForever('header_nested_categories', function () use ($site_settings){
+                                                    return \App\Models\Category::where('published',1)->where('website_setting_id',$site_settings->id)->with('sub_categories.sub_sub_categories')->get();
+                                                });
+                                            @endphp
+                                            @foreach ($header_nested_categories as $category)
                                                 <li>
                                                     <a  href="{{ route('frontend.products.category',$category->slug) }}">{{ $category->name }}</a>
                                                     <ul>
