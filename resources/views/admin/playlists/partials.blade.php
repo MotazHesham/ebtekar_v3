@@ -58,8 +58,8 @@
                         </div>
                         <div class="col-md-8">
                             <span class="badge badge-light text-dark mb-1">{{ __('Description') }}</span>
-                            <div class="container-scrollable">
-                                <?php echo $item['description']; ?>
+                            <div class="container-scrollable"> 
+                                {!! strip_tags($item['description'], '<p><br>')  !!}
                             </div>
                         </div>
                     </div>
