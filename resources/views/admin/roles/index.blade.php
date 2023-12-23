@@ -53,12 +53,10 @@
                                         <span class="badge badge-info">{{ trans('permissions.' . $item->title) }}</span>
                                     @endforeach
                                 </td>
-                                <td>
-                                    @can('role_show')
-                                        <a class="btn btn-xs btn-primary" href="{{ route('admin.roles.show', $role->id) }}">
-                                            {{ trans('global.view') }}
-                                        </a>
-                                    @endcan
+                                <td> 
+                                    <a class="btn btn-xs btn-warning" href="{{ route('admin.roles.show', $role->id) }}">
+                                        {{ trans('global.duplicate') }}
+                                    </a> 
 
                                     @can('role_edit')
                                         <a class="btn btn-xs btn-info" href="{{ route('admin.roles.edit', $role->id) }}">

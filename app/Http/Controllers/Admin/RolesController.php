@@ -67,11 +67,12 @@ class RolesController extends Controller
 
     public function show(Role $role)
     {
-        abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $role->load('permissions');
-
-        return view('admin.roles.show', compact('role'));
+        $permissions =  $role->permissions()->get()->pluck('id');; 
+        $new_role = $role->replicate();
+        $new_role->save();
+        
+        $new_role->permissions()->sync($permissions);
+        return redirect()->route('admin.roles.index');
     }
 
     public function destroy(Role $role)
