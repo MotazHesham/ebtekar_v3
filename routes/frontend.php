@@ -25,6 +25,7 @@ Route::get('paymob/callback','PayMobController@processedCallback'); // my own ca
 
 Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
 
+    Route::get('webxr/{id}', 'HomeController@webxr')->name('webxr');
     Route::get('about', 'HomeController@about')->name('about');
     Route::get('events', 'HomeController@events')->name('events');
     Route::get('policies/{policy}', 'HomeController@policies')->name('policies');

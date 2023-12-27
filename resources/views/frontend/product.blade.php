@@ -22,7 +22,8 @@
     <meta name="twitter:site" content="@publisher_handle">
     <meta name="twitter:title" content="{{ $product->meta_title }}">
     <meta name="twitter:description" content="{{ $product->meta_description }}">
-    <meta name="twitter:creator" content="@author_handle">
+    <meta name="twitter:creator"
+        content="@author_handle">
     <meta name="twitter:image" content="{{ $meta_image }}">
     <meta name="twitter:data1" content="{{ $product->calc_price_as_text() }}">
     <meta name="twitter:label1" content="Price">
@@ -33,7 +34,7 @@
     <meta property="og:url" content="{{ route('frontend.product', $product->slug) }}" />
     <meta property="og:image" content="{{ $meta_image }}" />
     <meta property="og:description" content="{{ $product->meta_description }}" />
-    <meta property="og:site_name" content="{{ $site_settings->site_name  }}" />
+    <meta property="og:site_name" content="{{ $site_settings->site_name }}" />
     <meta property="og:price:amount" content="{{ $product->calc_price_as_text() }}" /> 
 @endsection 
 @section('content') 
@@ -94,23 +95,26 @@
                 <div class="row">
                     <div class="col-lg-5 position-relative">
                         <div class="product-slick no-arrow"> 
-                            @foreach($product->photos as $key => $media)
+                            @foreach ($product->photos as $key => $media)
                                 <div><img src="{{ $media->getUrl() }}" alt=""
-                                        class="img-fluid  image_zoom_cls-{{$key}}"></div>
+                                        class="img-fluid  image_zoom_cls-{{ $key }}"></div>
                             @endforeach 
                         </div>
                         <div class="row">
                             <div class="col-12 p-0">
                                 <div class="slider-nav"> 
-                                    @foreach($product->photos as $key => $media)
+                                    @foreach ($product->photos as $key => $media)
                                         <div><img src="{{ $media->getUrl('preview') }}" alt=""
-                                                class="img-fluid  image_zoom_cls-{{$key}}"></div>
+                                                class="img-fluid  image_zoom_cls-{{ $key }}"></div>
                                     @endforeach 
                                 </div>
                             </div>
                         </div>
-                        <div class="image-360" data-bs-toggle="modal" data-bs-target="#view360">
-                            <img src="{{ asset('frontend/assets/images/360deg.png') }}" class="img-fluid" alt="">
+                        {{-- data-bs-toggle="modal" data-bs-target="#view360" --}}
+                        <div class="image-360" > 
+                            <a href=" {{ route('frontend.webxr',$product->id) }}">
+                                <img src="{{ asset('frontend/assets/images/360deg.png') }}" class="img-fluid" alt="">
+                            </a>
                         </div>
                     </div>
                     <div class="col-lg-7 rtl-text">
@@ -118,33 +122,33 @@
                             <div class="pro-group">
                                 <h2>{{ $product->name }}</h2>
                                 <ul class="pro-price" id="">
-                                    @if($product->discount > 0)
-                                        <li id="product-price-for-variant" style="font-size: 30px;">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
-                                        <li><span id="product-price-calc-discount" style="font-size: 30px;"> {{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}</span></li>
+                                    @if ($product->discount > 0)
+                                        <li id="product-price-for-variant" style="font-size: 30px;">{{ front_calc_product_currency($product->unit_price, $product->weight)['as_text'] }}</li>
+                                        <li><span id="product-price-calc-discount" style="font-size: 30px;"> {{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['as_text'] }}</span></li>
                                     @else
-                                        <li id="product-price-for-variant" style="font-size: 30px;">{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
+                                        <li id="product-price-for-variant" style="font-size: 30px;">{{ front_calc_product_currency($product->unit_price, $product->weight)['as_text'] }}</li>
                                     @endif
-                                    @if(auth()->check() && auth()->user()->user_type == 'seller')
+                                    @if (auth()->check() && auth()->user()->user_type == 'seller')
                                         <li id="product-commission-for-variant">
-                                            <div class="text-center"> <small> {{trans('frontend.product.commission')}}:<b> {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['as_text'] }} </b> </small> </div>
+                                            <div class="text-center"> <small> {{ trans('frontend.product.commission') }}:<b> {{ front_calc_commission_currency($product->unit_price, $product->purchase_price)['as_text'] }} </b> </small> </div>
                                         </li> 
                                     @endif
                                 </ul>
                                 <div class="revieu-box">
                                     <ul>
-                                        @include('frontend.partials.rate',['rate' => $product->rating])
+                                        @include('frontend.partials.rate', ['rate' => $product->rating])
                                     </ul>
                                     @php
                                         $count_reviews = $product->reviews()->count()
                                     @endphp
-                                    <a href="#"><span> @if($count_reviews > 0) ({{$count_reviews}} {{ trans('frontend.product.reviews') }}) @endif</span></a>
+                                    <a href="#"><span> @if ($count_reviews > 0) ({{ $count_reviews }} {{ trans('frontend.product.reviews') }}) @endif</span></a>
                                 </div> 
                             </div>
-                            <form id="add-to-cart-form" action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data">
+                            <form id="add-to-cart-form" action="{{ route('frontend.cart.add') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="id" value="{{$product->id}}">
+                                <input type="hidden" name="id" value="{{ $product->id }}">
                                 <input type="hidden" name="variant" id="variant">
-                                @if($product->special)
+                                @if ($product->special)
                                     {{-- Custom the product --}}
                                     <div class="modal fade" id="requist" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -186,13 +190,13 @@
                                             @php
                                                 $attribute = \App\Models\Attribute::find($attr_optn->attribute_id); 
                                             @endphp
-                                            <h6 class="product-title size-text"> {{ $attribute ? $attribute->name : ''}} <span>
+                                            <h6 class="product-title size-text"> {{ $attribute ? $attribute->name : '' }} <span>
                                                 </span></h6>
-                                            <div class="size-box" id="{{$key}}-{{$attr_optn->attribute_id}}">
+                                            <div class="size-box" id="{{ $key }}-{{ $attr_optn->attribute_id }}">
                                                 <ul>
                                                     @foreach ($attr_optn->values as $key2 => $value)
-                                                        <li data-attribute="{{$key}}-{{$attr_optn->attribute_id}}" @if($key2 == 0) class="active" @endif  style="width: fit-content;">
-                                                            <input style="display: none" type="radio" id="{{ $attr_optn->attribute_id }}-{{ $value }}" name="attribute_{{ $attr_optn->attribute_id }}" value="{{ $value }}" @if($key2 == 0) checked @endif>
+                                                        <li data-attribute="{{ $key }}-{{ $attr_optn->attribute_id }}" @if ($key2 == 0) class="active" @endif  style="width: fit-content;">
+                                                            <input style="display: none" type="radio" id="{{ $attr_optn->attribute_id }}-{{ $value }}" name="attribute_{{ $attr_optn->attribute_id }}" value="{{ $value }}" @if ($key2 == 0) checked @endif>
                                                             <label style="width:100%;height:100%;user-select: none;padding: 6px 12px;" for="{{ $attr_optn->attribute_id }}-{{ $value }}">{{ $value }}</label>
                                                         </li>
                                                     @endforeach
@@ -209,8 +213,8 @@
                                                 @if (count(json_decode($product->colors)) > 0)
                                                     @foreach (json_decode($product->colors) as $key => $color)
                                                         <li>
-                                                            <input style="display:none" type="radio" id="{{ $product->id }}-color-{{ $key }}" name="color" value="{{ $color }}" @if($key == 0) checked @endif>
-                                                            <label style="background: {{ $color }};" for="{{ $product->id }}-color-{{ $key }}" data-toggle="tooltip" @if($key == 0) class="active" @endif>
+                                                            <input style="display:none" type="radio" id="{{ $product->id }}-color-{{ $key }}" name="color" value="{{ $color }}" @if ($key == 0) checked @endif>
+                                                            <label style="background: {{ $color }};" for="{{ $product->id }}-color-{{ $key }}" data-toggle="tooltip" @if ($key == 0) class="active" @endif>
 
                                                             </label>
                                                         </li>
@@ -229,12 +233,12 @@
                                             <button class="qty-plus" type="button"></button>
                                         </div>
                                         &nbsp;&nbsp;
-                                        <b>({{ trans('frontend.product.available') }} <span id="available-quantity-span">{{$product->current_stock}}</span>)</b>
+                                        <b>({{ trans('frontend.product.available') }} <span id="available-quantity-span">{{ $product->current_stock }}</span>)</b>
                                     </div> 
 
                                     <div class="product-buttons">
-                                        @if($product->current_stock > 0)
-                                            @if($product->special)
+                                        @if ($product->current_stock > 0)
+                                            @if ($product->special)
                                                 <a href="" class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ trans('frontend.product.custom_product') }}</a>
                                             @else
                                                 <button type="submit" id="cartEffect"
@@ -250,7 +254,7 @@
                                                 Out Of Stock
                                             </button>
                                         @endif
-                                        <a href="{{ route('frontend.wishlist.add',$product->slug) }}" class="btn btn-normal add-to-wish tooltip-top"
+                                        <a href="{{ route('frontend.wishlist.add', $product->slug) }}" class="btn btn-normal add-to-wish tooltip-top"
                                             data-tippy-content="Add to wishlist">
                                             <i class="fa fa-heart" aria-hidden="true"></i>
                                         </a>
@@ -269,7 +273,7 @@
                             <div class="pro-group pb-0">
                                 <h6 class="product-title">{{ trans('frontend.product.share') }}</h6>
                                 <div style="display: flex;justify-content: space-evenly;">
-                                    <div class="fb-share-button"  data-href="{{route('frontend.product',$product->slug)}}"  data-layout="button_count">
+                                    <div class="fb-share-button"  data-href="{{ route('frontend.product', $product->slug) }}"  data-layout="button_count">
                                     </div>
                                     <div>
                                         <a class="twitter-share-button" href="https://twitter.com/intent/tweet" > Tweet</a> 
@@ -319,7 +323,7 @@
                             </div>
                             <div class="tab-pane fade" id="top-review" role="tabpanel" aria-labelledby="review-top-tab">
                                 @auth
-                                    @if(!\App\Models\Review::where('user_id',Auth::id())->where('product_id',$product->id)->first())
+                                    @if (!\App\Models\Review::where('user_id', Auth::id())->where('product_id', $product->id)->first())
                                         <form class="theme-form" method="POST" action="{{ route('frontend.product.rate') }}">
                                             @csrf
                                             <input type="hidden" name="rating" id="user_rate" value="4">
@@ -354,32 +358,32 @@
                                                 </div>
                                             </div>
                                         </form>
-                                    @endif
-                                @endauth
-                                <div style="max-height: 400px; overflow-x: hidden; overflow-y: scroll; padding: 25px;">
-                                    @foreach($reviews as $review)
-                                        <div class="card mb-4">
-                                            <div class="card-header" style="display: flex"> 
-                                                <div>
-                                                    {{ $review->user->name ?? '' }}
-                                                </div>
-                                                <div>&nbsp;</div>
-                                                <ul>
-                                                    @include('frontend.partials.rate',['rate' => $review->rating])
-                                                </ul> 
-                                            </div>
-                                            <div class="card-body">
-                                                <?php echo $review->comment; ?>
-                                            </div>
-                                        </div> 
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                    @endif @endauth
+                                <div style="max-height:
+        400px; overflow-x: hidden; overflow-y: scroll; padding: 25px;">
+    @foreach ($reviews as $review)
+        <div class="card mb-4">
+            <div class="card-header" style="display: flex">
+                <div>
+                    {{ $review->user->name ?? '' }}
                 </div>
+                <div>&nbsp;</div>
+                <ul>
+                    @include('frontend.partials.rate', ['rate' => $review->rating])
+                </ul>
+            </div>
+            <div class="card-body">
+                <?php echo $review->comment; ?>
             </div>
         </div>
+    @endforeach
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
     </section>
     <!-- product-tab ends -->
 
@@ -395,9 +399,10 @@
                 <div class="col pr-0">
                     <div class="product-slide-5 product-m no-arrow">
                         @foreach ($related_products as $key => $related_product)
-                            
-                            @include('frontend.partials.single-product',['product' => $related_product, 'preview' => 'preview2']) 
-
+                            @include('frontend.partials.single-product', [
+                                'product' => $related_product,
+                                'preview' => 'preview2',
+                            ])
                         @endforeach
                     </div>
                 </div>
@@ -405,45 +410,60 @@
         </div>
     </section>
     <!-- related products -->
+
+
+    <!-- 360 view modal popup start-->
+    <div class="modal fade bd-example-modal-lg theme-modal" id="view360" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content view360-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">360 View</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
-@parent
+    @parent 
     <script type="text/javascript">
-        $(document).ready(function() { 
+        $(document).ready(function() {
             getVariantPrice();
 
-            $('#add-to-cart-form input').on('change', function(){
+            $('#add-to-cart-form input').on('change', function() {
                 getVariantPrice();
             });
         });
 
-        function change_rating(rate){
-            if(rate == 1){
+        function change_rating(rate) {
+            if (rate == 1) {
                 var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(2)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(3)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(4)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>';
-            }else if(rate == 2){
+            } else if (rate == 2) {
                 var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
                 str += '<li><i class="fa fa-star" onclick="change_rating(2)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(3)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(4)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>';
-            }else if(rate == 3){
+            } else if (rate == 3) {
                 var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
                 str += '<li><i class="fa fa-star" onclick="change_rating(2)"></i></li>';
                 str += '<li><i class="fa fa-star" onclick="change_rating(3)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(4)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>';
-            }else if(rate == 4){
+            } else if (rate == 4) {
                 var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
                 str += '<li><i class="fa fa-star" onclick="change_rating(2)"></i></li>';
                 str += '<li><i class="fa fa-star" onclick="change_rating(3)"></i></li>';
                 str += '<li><i class="fa fa-star" onclick="change_rating(4)"></i></li>';
                 str += '<li><i class="fa fa-star-o" onclick="change_rating(5)"></i></li>';
-            }else if(rate == 5){
+            } else if (rate == 5) {
                 var str = '<li><i class="fa fa-star" onclick="change_rating(1)"></i></li>';
                 str += '<li><i class="fa fa-star" onclick="change_rating(2)"></i></li>';
                 str += '<li><i class="fa fa-star" onclick="change_rating(3)"></i></li>';

@@ -112,9 +112,7 @@
                         صور المنتج
                     </div>
         
-                    <div class="card-body">
-        
-        
+                    <div class="card-body"> 
                         <div class="form-group">
                             <label class="required" for="photos">{{ trans('cruds.product.fields.photos') }}</label>
                             <div class="needsclick dropzone {{ $errors->has('photos') ? 'is-invalid' : '' }}" id="photos-dropzone">
@@ -125,6 +123,17 @@
                                 </div>
                             @endif
                             <span class="help-block">{{ trans('cruds.product.fields.photos_helper') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="object_3d">3D Object</label>
+                            <div class="needsclick dropzone {{ $errors->has('object_3d') ? 'is-invalid' : '' }}" id="object_3d-dropzone">
+                            </div>
+                            @if ($errors->has('object_3d'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('object_3d') }}
+                                </div>
+                            @endif
+                            <span class="help-block">only (.glb)</span>
                         </div>
                     </div>
                 </div>
@@ -664,6 +673,56 @@
                     this.options.addedfile.call(this, file)
                     file.previewElement.classList.add('dz-complete')
                     $('form').append('<input type="hidden" name="pdf" value="' + file.file_name + '">')
+                    this.options.maxFiles = this.options.maxFiles - 1
+                @endif
+            },
+            error: function(file, response) {
+                if ($.type(response) === 'string') {
+                    var message = response //dropzone sends it's own error messages in string
+                } else {
+                    var message = response.errors.file
+                }
+                file.previewElement.classList.add('dz-error')
+                _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+                _results = []
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    node = _ref[_i]
+                    _results.push(node.textContent = message)
+                }
+
+                return _results
+            }
+        }
+    </script>
+    <script>
+        Dropzone.options.object3dDropzone = {
+            url: '{{ route('admin.products.storeMedia') }}',
+            maxFilesize: 5, // MB
+            maxFiles: 1,
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            params: {
+                size: 5
+            },
+            success: function(file, response) {
+                $('form').find('input[name="object_3d"]').remove()
+                $('form').append('<input type="hidden" name="object_3d" value="' + response.name + '">')
+            },
+            removedfile: function(file) {
+                file.previewElement.remove()
+                if (file.status !== 'error') {
+                    $('form').find('input[name="object_3d"]').remove()
+                    this.options.maxFiles = this.options.maxFiles + 1
+                }
+            },
+            init: function() {
+                @if (isset($product) && $product->object_3d)
+                    var file = {!! json_encode($product->object_3d) !!}
+                    this.options.addedfile.call(this, file)
+                    file.previewElement.classList.add('dz-complete')
+                    $('form').append('<input type="hidden" name="object_3d" value="' + file.file_name + '">')
                     this.options.maxFiles = this.options.maxFiles - 1
                 @endif
             },

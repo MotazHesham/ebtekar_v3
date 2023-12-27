@@ -24,6 +24,11 @@ use Stevebauman\Location\Facades\Location;
 
 class HomeController extends Controller
 {
+    public function webxr($id)
+    {
+        $product = Product::findOrFail($id);  
+        return view('frontend.partials.webxr',compact('product'));    
+    }
     public function index()
     { 
         $site_settings = get_site_setting();

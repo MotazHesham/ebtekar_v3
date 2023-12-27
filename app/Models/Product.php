@@ -24,6 +24,7 @@ class Product extends Model implements HasMedia
     protected $appends = [
         'photos',
         'pdf',
+        'object_3d',
     ];
 
     protected $dates = [
@@ -121,6 +122,11 @@ class Product extends Model implements HasMedia
         return $files;
     }
 
+    public function getObject3dAttribute()
+    {
+        return $this->getMedia('object_3d')->last();
+    }
+    
     public function getPdfAttribute()
     {
         return $this->getMedia('pdf')->last();

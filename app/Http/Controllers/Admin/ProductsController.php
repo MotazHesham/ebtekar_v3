@@ -343,6 +343,10 @@ class ProductsController extends Controller
             $product->addMedia(storage_path('tmp/uploads/' . basename($request->input('pdf'))))->toMediaCollection('pdf');
         }
 
+        if ($request->input('object_3d', false)) {
+            $product->addMedia(storage_path('tmp/uploads/' . basename($request->input('object_3d'))))->toMediaCollection('object_3d');
+        }
+
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $product->id]);
         }
@@ -509,6 +513,17 @@ class ProductsController extends Controller
             }
         } elseif ($product->pdf) {
             $product->pdf->delete();
+        }
+
+        if ($request->input('object_3d', false)) {
+            if (! $product->object_3d || $request->input('object_3d') !== $product->object_3d->file_name) {
+                if ($product->object_3d) {
+                    $product->object_3d->delete();
+                }
+                $product->addMedia(storage_path('tmp/uploads/' . basename($request->input('object_3d'))))->toMediaCollection('object_3d');
+            }
+        } elseif ($product->object_3d) {
+            $product->object_3d->delete();
         }
 
         if($request->has('arrange_photos')){
