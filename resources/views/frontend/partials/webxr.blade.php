@@ -69,7 +69,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
-<body style="background: black">
+<body style="background: white">
 
     <div id="content"> 
         <div id="container" style="position: fixed;"></div> 
