@@ -81,7 +81,7 @@
         </div>
 
         <div class="card-body">
-            <table class=" table table-bordered ajaxTable datatable datatable-ReceiptPriceView">
+            <table class=" table table-bordered   datatable table-responsive-lg table-responsive-md table-responsive-sm datatable-ReceiptPriceView">
                 <thead>
                     <tr>
                         <th>#</th>
