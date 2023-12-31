@@ -1,3 +1,36 @@
+<div class="modal fade" id="manufacturing_items" tabindex="-1" data-keyboard="false" aria-labelledby="manufacturing_itemsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AjaxModalLabel">المنتجات المطوب تصنيعها</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">المنتج</th>
+                            <th scope="col">الكمية المطلوبة</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($items_to_manufacturing)
+                            @foreach ($items_to_manufacturing as $key => $item)
+                                <tr>
+                                    <th scope="row">{{ $key + 1 }}</th>
+                                    <td>{{ $item->title }}</td>
+                                    <td>{{ $item->quantity}}</td> 
+                                </tr> 
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+.
 <form action="" method="GET" id="sort_playlist">
     <div class="card">
         <div class="card-header">
@@ -6,7 +39,13 @@
                 </div>
                 <div><a class="btn btn-success btn-rounded" href="{{ route('admin.qr_scanner', $type) }}">Qr Scanner</a>
                 </div>
-                <div><a class="btn btn-info btn-rounded" href="{{ route('admin.barcode_scanner', $type) }}">BarCode Scanner</a>
+                @if($type == 'manufacturing')
+                    <div><a class="btn btn-dark btn-rounded" href="#"  data-toggle="modal" data-target="#manufacturing_items">Manufacturing
+                            Items</a>
+                    </div>
+                @endif
+                <div><a class="btn btn-info btn-rounded" href="{{ route('admin.barcode_scanner', $type) }}">BarCode
+                        Scanner</a>
                 </div>
                 <select class="form-control @isset($website_setting_id) isset @endisset" style="width: 200px"
                     name="website_setting_id" id="website_setting_id" onchange="sort_playlist()">
@@ -57,17 +96,20 @@
                         placeholder="{{ trans('global.extra.description') }}">
                 </div>
                 <div class="col-md-4">
-                    <select class="form-control mb-2 @isset($quickly) isset @endisset" name="quickly" id="quickly" onchange="sort_playlist()">
+                    <select class="form-control mb-2 @isset($quickly) isset @endisset"
+                        name="quickly" id="quickly" onchange="sort_playlist()">
                         <option value="">{{ trans('global.extra.quickly') }}</option>
-                        <option value="0" @isset($quickly) @if ($quickly == '0') selected @endif @endisset>
+                        <option value="0"
+                            @isset($quickly) @if ($quickly == '0') selected @endif @endisset>
                             {{ trans('global.extra.0_quickly') }}</option>
-                        <option value="1" @isset($quickly) @if ($quickly == '1') selected @endif @endisset>
+                        <option value="1"
+                            @isset($quickly) @if ($quickly == '1') selected @endif @endisset>
                             {{ trans('global.extra.1_quickly') }}</option>
-                    </select>  
+                    </select>
                 </div>
                 <div class="col-md-4">
-                    <select class="form-control mb-2 @isset($client_review) isset @endisset" name="client_review"
-                        id="client_review" onchange="sort_playlist()">
+                    <select class="form-control mb-2 @isset($client_review) isset @endisset"
+                        name="client_review" id="client_review" onchange="sort_playlist()">
                         <option value="">الكل</option>
                         <option value="0" @if ($client_review == '0') selected @endif>قيد التنفيذ</option>
                         <option value="1" @if ($client_review == '1') selected @endif>تحت المراجعة</option>
