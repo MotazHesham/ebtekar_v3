@@ -282,8 +282,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('receipt-outgoings', 'ReceiptOutgoingController');
 
     // Receipt Outgoing Product
-    Route::delete('receipt-outgoing-products/destroy', 'ReceiptOutgoingProductController@massDestroy')->name('receipt-outgoing-products.massDestroy');
-    Route::resource('receipt-outgoing-products', 'ReceiptOutgoingProductController');
+    // Route::delete('receipt-outgoing-products/destroy', 'ReceiptOutgoingProductController@massDestroy')->name('receipt-outgoing-products.massDestroy');
+    // Route::resource('receipt-outgoing-products', 'ReceiptOutgoingProductController');
 
     // Receipt Price View
     Route::delete('receipt-price-views/destroy_product/{id}', 'ReceiptPriceViewController@destroy_product')->name('receipt-price-views.destroy_product');
@@ -298,8 +298,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('receipt-price-views', 'ReceiptPriceViewController');
 
     // Receipt Price View Product
-    Route::delete('receipt-price-view-products/destroy', 'ReceiptPriceViewProductController@massDestroy')->name('receipt-price-view-products.massDestroy');
-    Route::resource('receipt-price-view-products', 'ReceiptPriceViewProductController');
+    // Route::delete('receipt-price-view-products/destroy', 'ReceiptPriceViewProductController@massDestroy')->name('receipt-price-view-products.massDestroy');
+    // Route::resource('receipt-price-view-products', 'ReceiptPriceViewProductController');
 
     // Excel Files
     Route::delete('excel-files/destroy', 'ExcelFilesController@massDestroy')->name('excel-files.massDestroy');
@@ -420,7 +420,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('r-branches/destroy', 'RBrancheController@massDestroy')->name('r-branches.massDestroy');
     Route::resource('r-branches', 'RBrancheController');
 
-    
+    // Qr Products 
+    Route::get('qr-products/destroy/{id}', 'QrProductController@destroy')->name('qr-products.destroy');
+    Route::get('qr-products/print/{id}', 'QrProductController@print')->name('qr-products.print');
+    Route::get('qr-products/delete_name/{id}', 'QrProductController@delete_name')->name('qr-products.delete_name');
+    Route::post('qr-products/view_scanner', 'QrProductController@view_scanner')->name('qr-products.view_scanner');
+    Route::post('qr-products/qr_output', 'QrProductController@qr_output')->name('qr-products.qr_output');
+    Route::post('qr-products/start_scan', 'QrProductController@start_scan')->name('qr-products.start_scan');
+    Route::post('qr-products/show', 'QrProductController@show')->name('qr-products.show');
+    Route::post('qr-products/update', 'QrProductController@update')->name('qr-products.update');
+    Route::post('qr-products/store', 'QrProductController@store')->name('qr-products.store');
+
     // Financial Accounts
     Route::delete('financial-accounts/destroy', 'FinancialAccountsController@massDestroy')->name('financial-accounts.massDestroy');
     Route::post('financial-accounts/update_statuses', 'FinancialAccountsController@update_statuses')->name('financial-accounts.update_statuses');

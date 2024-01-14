@@ -6,7 +6,7 @@
 
         <form method="get">
             <div class="row">
-                <div class="col-3 form-group">
+                <div class="col-md-3 form-group">
                     <label class="control-label" for="y">{{ trans('global.year') }}</label>
                     <select name="y" id="y" class="form-control">
                         @foreach(array_combine(range(date("Y"), 1900), range(date("Y"), 1900)) as $year)
@@ -16,7 +16,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-3 form-group">
+                <div class="col-md-3 form-group">
                     <label class="control-label" for="m">{{ trans('global.month') }}</label>
                     <select name="m" for="m" class="form-control">
                         @foreach(cal_info(0)['months'] as $month)
@@ -26,7 +26,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-4">
+                <div class="col-md-4 mb-2">
                     <label class="control-label">&nbsp;</label><br>
                     <button class="btn btn-primary" type="submit">{{ trans('global.filterDate') }}</button>
                 </div>
@@ -42,7 +42,7 @@
 
     <div class="card-body">
         <div class="row">
-            <div class="col">
+            <div class="col-md-4">
                 <table class="table table-bordered table-striped">
                     <tr>
                         <th>{{ trans('cruds.expenseReport.reports.income') }}</th>
@@ -58,7 +58,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="col">
+            <div class="col-md-4">
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>
@@ -76,7 +76,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col">
+            <div class="col-md-4">
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>

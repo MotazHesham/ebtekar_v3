@@ -76,24 +76,46 @@
             </div>
         </div>
         <div class="col-md-8"> 
-            @if($rBranch->payment_type == 'parts' && $rBranch->r_client->manage_type == 'seperate')
-                <div class="card"> 
-                    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
+            <div class="card"> 
+                <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
+                    @if($rBranch->payment_type == 'parts' && $rBranch->r_client->manage_type == 'seperate')
                         <li class="nav-item">
                             <a class="nav-link active" href="#r_branche_incomes" role="tab" data-toggle="tab">
                                 الدفعات
                             </a>
                         </li>
-                    </ul>
-                    <div class="tab-content">
+                    @endif
+                    <li class="nav-item">
+                        <a class="nav-link @if($rBranch->payment_type != 'parts') active @endif" href="#r_branche_qr_products" role="tab" data-toggle="tab">
+                            منتجات Qr
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#r_branche_qr_history" role="tab" data-toggle="tab">
+                            QrScan History
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    @if($rBranch->payment_type == 'parts' && $rBranch->r_client->manage_type == 'seperate')
                         <div class="tab-pane active" role="tabpanel" id="r_branche_incomes">
                             @includeIf('admin.rBranches.relationships.incomes', [
                                 'incomes' => $rBranch->incomes,
                             ])
                         </div>
+                    @endif
+                    <div class="tab-pane @if($rBranch->payment_type != 'parts') active @endif" role="tabpanel" id="r_branche_qr_products">
+                        @includeIf('admin.rBranches.relationships.qr_products', [
+                            'qr_products' => $rBranch->qr_products,
+                        ])
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="r_branche_qr_history">
+                        @includeIf('admin.rBranches.relationships.qr_scan_history', [
+                            'qr_scan_history' => $rBranch->qr_scan_history,
+                        ])
                     </div>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
 @endsection

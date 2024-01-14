@@ -47,6 +47,14 @@ class RBranch extends Model
         return $this->belongsTo(RClient::class, 'r_client_id');
     } 
 
+    public function qr_products(){
+        return $this->hasMany(QrProduct::class, 'r_branch_id');
+    }
+
+    public function qr_scan_history(){
+        return $this->hasMany(QrScanHistory::class, 'r_branch_id');
+    }
+
     public function incomes()
     {
         return $this->morphMany(Income::class, 'model');
