@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Qr</title>
+    <link rel="stylesheet" href="{{ asset('dashboard_offline/css/bootstrap.min.css') }}">
+    <script src="{{ asset('dashboard_offline/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('dashboard_offline/js/bootstrap.min.js') }}"></script>
 </head>
 <body>
     <h5>{{ $qr_product_key->name ?? '' }}</h5>
@@ -13,5 +16,12 @@
     @else
         {!! QrCode::size(250)->generate('https://ebtekarstore.com?id='.$id) !!}
     @endproduction
+    <script>
+        
+        $(document).ready(function() {
+            window.print()
+        });
+        
+    </script>
 </body>
 </html>

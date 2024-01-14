@@ -42,7 +42,8 @@ class QrProductController extends Controller
                     }else{
                         $names = [];
                     }
-                    array_push($names,$qr_product_key->id);
+                    $name = ['id' => $qr_product_key->id , 'name' => $qr_product_key->name]; 
+                    array_push($names,$name);
                     $results[$qr_product_key->product->id]['names'] =  $names;
                 }else{
                     $results[$qr_product_key->product->id]['product'] =  $product_name;
@@ -55,10 +56,18 @@ class QrProductController extends Controller
 
             $view_results = '<tr> <th>المنتج</th> <th>الكمية</th> </tr>';
             
-            foreach(json_decode($qr_scan_history->results) as $product){
+            foreach(json_decode($qr_scan_history->results) as $key => $product){
+                $qr_product = QrProduct::find($key);
+                $quantity = $qr_product->quantity ?? 0;
+                $count = count($product->names) ?? 0; 
+                    
                 $view_results .='<tr>';
                 $view_results .='<th>'.$product->product.'</th>';
-                $view_results .='<th>'. count($product->names).'</th>'; 
+                $view_results .='<th>';
+                $view_results .='<span class="badge badge-info"> الكمية الدورية : <h5>'. $quantity .'</h5></span>';
+                $view_results .='<span class="badge badge-danger">  Scanned : <h5>' . $count . '</h5></span>';
+                $view_results .='<span class="badge badge-success">  الاحتياج :  <h5>'. $quantity - $count .'</h5></span> ';
+                $view_results .='</th>'; 
                 $view_results .='</tr>';
 
             }
@@ -127,17 +136,41 @@ class QrProductController extends Controller
         $qr_product = QrProduct::find($request->id);
         $qr_product->load('names');
         $names = $qr_product->names()->get();
-        return view('admin.rBranches.relationships.names',compact('qr_product','names'));
+        return view('admin.rBranches.partials.names',compact('qr_product','names'));
     }
 
     public function view_scanner(Request $request){
         $qr_scan_history = QrScanHistory::find($request->id); 
-        return view('admin.rBranches.relationships.scanner',compact('qr_scan_history'));
+        return view('admin.rBranches.partials.scanner',compact('qr_scan_history'));
+    }
+    public function save_print(Request $request){
+        $qr_scan_history = QrScanHistory::find($request->id); 
+        $printed = [];
+        if($qr_scan_history->printed){
+            $printed = explode(',',$qr_scan_history->printed);
+        } 
+        if(!in_array($request->name_id,$printed)){ 
+            $printed[] = $request->name_id;
+            $qr_scan_history->printed = implode(',',$printed);
+            $qr_scan_history->save();
+        }
+    }
+    public function view_result(Request $request){
+        $qr_scan_history = QrScanHistory::find($request->id); 
+
+        $scanned = [];
+        if($qr_scan_history->scanned){
+            $scanned = explode(',',$qr_scan_history->scanned);
+        } 
+        $qr_products = QrProduct::where('r_branch_id',$request->r_branch_id)->with(['names' => function($q) use ($scanned) {
+            return $q->whereNotIn('id',$scanned);
+        }])->get();
+        return view('admin.rBranches.partials.results',compact('qr_scan_history','qr_products'));
     }
     
     public function print($id){
         $qr_product_key = QrProductKey::findOrFail($id); 
-        return view('admin.rBranches.relationships.print',compact('id','qr_product_key'));
+        return view('admin.rBranches.partials.print',compact('id','qr_product_key'));
     }
     
     public function delete_name($id){

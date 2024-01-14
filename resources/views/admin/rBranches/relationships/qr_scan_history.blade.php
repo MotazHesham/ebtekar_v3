@@ -2,7 +2,7 @@
     <div class="card-header">
         <div class="card">
             <div class="card-header">
-                أضافة جديدة
+                أضافة Scan جديدة
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('admin.qr-products.start_scan') }}" enctype="multipart/form-data">
@@ -69,7 +69,8 @@
                                 {{ $history->created_at ?? '' }}
                             </td>
                             <td>
-                                <a href="#" onclick="view_scanner('{{$history->id}}')" data-toggle="modal" data-target="#qr_scan_history" class="btn btn-info btn-xs">scan</a>
+                                <a href="#" onclick="view_scanner('{{$history->id}}')" class="btn btn-info btn-xs">scan</a>
+                                <a href="#" onclick="view_result('{{$history->id}}')" class="btn btn-success btn-xs">result</a>
                             </td>
                         </tr>
                     @endforeach
@@ -84,6 +85,7 @@
     <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest/umd/index.min.js"></script>
     <script type="text/javascript"> 
         var qr_scan_history_id = null;
+
         function view_scanner(id){
             qr_scan_history_id = id;
             $.post('{{ route('admin.qr-products.view_scanner') }}', {
@@ -94,6 +96,27 @@
                 $('#AjaxModal').modal('show');
                 $('#AjaxModal .modal-dialog').html(data); 
                 load_cam();
+            }); 
+        }
+
+        function view_result(id){ 
+            $.post('{{ route('admin.qr-products.view_result') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                r_branch_id: '{{ $rBranch->id }}',
+            }, function(data) {
+                $('#AjaxModal .modal-dialog').html(null);
+                $('#AjaxModal').modal('show');
+                $('#AjaxModal .modal-dialog').html(data);  
+            }); 
+        }
+        function save_print(qr_scan_history_id,name_id){ 
+            $('#tr_needs_'+name_id).css('background-color','#53e753');
+            $.post('{{ route('admin.qr-products.save_print') }}', {
+                _token: '{{ csrf_token() }}',
+                id: qr_scan_history_id, 
+                name_id: name_id, 
+            }, function(data) { 
             }); 
         }
 

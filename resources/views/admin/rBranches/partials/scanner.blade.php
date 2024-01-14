@@ -36,7 +36,7 @@
                             </div> 
                         </section>
                     </div>
-                    <div class="col-md-5" style="overflow-y: scroll;overflow-x:hidden;height:500px"> 
+                    <div class="col-md-4" style="overflow-y: scroll;overflow-x:hidden;height:500px"> 
                         <h5>Scanned</h5>
                         <table class=" table table-bordered table-striped table-hover datatable table-responsive-lg table-responsive-md table-responsive-sm" id="scanned-table">
                             <thead>
@@ -66,7 +66,7 @@
                             </tbody>
                         </table> 
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <h5 style="color: rgb(93, 143, 93)">Results</h5> 
                         <table class=" table table-bordered table-striped table-hover datatable table-responsive-lg table-responsive-md table-responsive-sm" id="results"> 
                             <tbody>
@@ -75,13 +75,20 @@
                                     <th>الكمية</th>
                                 </tr>
                                 @if(json_decode($qr_scan_history->results))
-                                    @foreach(json_decode($qr_scan_history->results) as $product)
+                                    @foreach(json_decode($qr_scan_history->results) as $key =>  $product)
+                                        @php
+                                            $qr_product = \App\Models\QrProduct::find($key);
+                                            $quantity = $qr_product->quantity ?? 0;
+                                            $count = count($product->names) ?? 0;
+                                        @endphp
                                         <tr>
-                                            <th> 
+                                            <th>  
                                                 {{ $product->product ?? '' }}
                                             </th>
                                             <td> 
-                                                {{ count($product->names) ?? 0 }}
+                                                <span class="badge badge-info"> الكمية الدورية : <h5>{{ $quantity}}</h5></span>
+                                                <span class="badge badge-danger">  Scanned : <h5>{{ $count}}</h5></span>
+                                                <span class="badge badge-success">  الاحتياج :  <h5>{{ $quantity - $count}}</h5></span> 
                                             </td>
                                         </tr>
                                     @endforeach

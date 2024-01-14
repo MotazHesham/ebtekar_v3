@@ -93,7 +93,7 @@
                                     {{ $product->id ?? '' }}
                                 </td>
                                 <td>
-                                    <input type="text" name="product" value="{{ $product->product ?? '' }}" class="form-control" id="">
+                                    <input type="text" name="product" id="input-product-qr-{{$product->id}}" value="{{ $product->product ?? '' }}" class="form-control" id="">
                                 </td>
                                 <td>
                                     
@@ -102,7 +102,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <input type="number" name="quantity" value="{{ $product->quantity ?? 0 }}" class="form-control" id=""> 
+                                    <input type="number" name="quantity" id="input-quantity-qr-{{$product->id}}" value="{{ $product->quantity ?? 0 }}" class="form-control" id=""> 
                                 </td>
                                 <td> 
                                 

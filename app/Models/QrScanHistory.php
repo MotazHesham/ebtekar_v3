@@ -20,7 +20,7 @@ class QrScanHistory extends Model
         'name',
         'scanned',
         'results',  
-        'quantity',  
+        'printed',  
         'r_branch_id',  
         'created_at',
         'updated_at',
