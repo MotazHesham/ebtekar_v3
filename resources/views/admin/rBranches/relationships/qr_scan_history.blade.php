@@ -5,6 +5,10 @@
                 أضافة Scan جديدة
             </div>
             <div class="card-body">
+                <form action="{{ route('admin.qr-products.printmore') }}" method="POST" id="print_more_form2">
+                    @csrf 
+                    <input type="hidden" name="ids" id="input-ids2">
+                </form>
                 <form method="POST" action="{{ route('admin.qr-products.start_scan') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="r_branch_id" value="{{ $rBranch->id }}">
@@ -108,6 +112,50 @@
                 $('#AjaxModal .modal-dialog').html(null);
                 $('#AjaxModal').modal('show');
                 $('#AjaxModal .modal-dialog').html(data);  
+            }); 
+        }
+        function load_needs(qr_scan_history_id,qr_product_id){ 
+            $.post('{{ route('admin.qr-products.load_needs') }}', {
+                _token: '{{ csrf_token() }}',
+                qr_product_id: qr_product_id,
+                qr_scan_history_id: qr_scan_history_id, 
+            }, function(data) {
+                $('#load-needs').html(data);
+                let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)  
+                let deleteButtonTrans = "طباعة المحدد"
+                let deleteButton = {
+                    text: deleteButtonTrans, 
+                    className: 'btn-warning',
+                    action: function(e, dt, node, config) {
+                        var ids = $.map(dt.rows({
+                            selected: true
+                        }).nodes(), function(entry) {
+                            return $(entry).data('entry-id')
+                        });
+
+                        if (ids.length === 0) {
+                            alert('{{ trans('global.datatables.zero_selected') }}') 
+                            return
+                        }
+
+                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                            $('#input-ids2').val(ids);
+                            $('#print_more_form2').submit();  
+                        }
+                    }
+                }
+                dtButtons.push(deleteButton) 
+                $.extend(true, $.fn.dataTable.defaults, {
+                    orderCellsTop: true, 
+                    pageLength: 100,
+                });
+                let table = $('.datatable-names2:not(.ajaxTable)').DataTable({
+                    buttons: dtButtons
+                })
+                $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+                    $($.fn.dataTable.tables(true)).DataTable()
+                        .columns.adjust();
+                });
             }); 
         }
         function save_print(qr_scan_history_id,name_id){ 

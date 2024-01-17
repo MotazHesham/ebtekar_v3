@@ -424,6 +424,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('qr-products/destroy/{id}', 'QrProductController@destroy')->name('qr-products.destroy');
     Route::get('qr-products/print/{id}', 'QrProductController@print')->name('qr-products.print');
     Route::get('qr-products/delete_name/{id}', 'QrProductController@delete_name')->name('qr-products.delete_name');
+    Route::post('qr-products/load_needs', 'QrProductController@load_needs')->name('qr-products.load_needs');
+    Route::post('qr-products/printmore', 'QrProductController@printmore')->name('qr-products.printmore');
     Route::post('qr-products/save_print', 'QrProductController@save_print')->name('qr-products.save_print');
     Route::post('qr-products/view_result', 'QrProductController@view_result')->name('qr-products.view_result');
     Route::post('qr-products/view_scanner', 'QrProductController@view_scanner')->name('qr-products.view_scanner');

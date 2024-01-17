@@ -101,10 +101,7 @@ class RBrancheController extends Controller
     }
 
     public function show(RBranch $rBranch)
-    {
-        // return \App\Models\QrProduct::with(['names' => function($q){
-        //     return $q->whereNotIn('id',[]);
-        // }])->get();
+    {  
         abort_if(Gate::denies('r_branch_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $rBranch->load('r_client','qr_products.names','qr_scan_history');

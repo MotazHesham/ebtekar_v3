@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class QrProductController extends Controller
 {
+    public function printmore(Request $request){ 
+        $qr_product_keys = QrProductKey::with('product')->whereIn('id',explode(',',$request->ids))->get(); 
+        return view('admin.rBranches.partials.printmore',compact('qr_product_keys'));
+    }
     public function qr_output(Request $request){
         $qr_product_key = QrProductKey::find(str_replace('https://ebtekarstore.com?id=','',$request->code));
         $qr_scan_history = QrScanHistory::find($request->id);
@@ -143,6 +147,7 @@ class QrProductController extends Controller
         $qr_scan_history = QrScanHistory::find($request->id); 
         return view('admin.rBranches.partials.scanner',compact('qr_scan_history'));
     }
+
     public function save_print(Request $request){
         $qr_scan_history = QrScanHistory::find($request->id); 
         $printed = [];
@@ -166,6 +171,20 @@ class QrProductController extends Controller
             return $q->whereNotIn('id',$scanned);
         }])->get();
         return view('admin.rBranches.partials.results',compact('qr_scan_history','qr_products'));
+    }
+
+    public function load_needs(Request $request){
+        $qr_scan_history = QrScanHistory::find($request->qr_scan_history_id); 
+
+        $scanned = [];
+        if($qr_scan_history->scanned){
+            $scanned = explode(',',$qr_scan_history->scanned);
+        } 
+        $qr_products = QrProduct::where('id',$request->qr_product_id)->with(['names' => function($q) use ($scanned) {
+            return $q->whereNotIn('id',$scanned);
+        }])->get();
+
+        return view('admin.rBranches.partials.load_needs',compact('qr_scan_history','qr_products'));
     }
     
     public function print($id){

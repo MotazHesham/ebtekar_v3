@@ -4,6 +4,10 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
+        <form action="{{ route('admin.qr-products.printmore') }}" method="POST" id="print_more_form">
+            @csrf 
+            <input type="hidden" name="ids" id="input-ids">
+        </form>
         <form method="POST" action="{{ route('admin.qr-products.update') }}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="id" value="{{ $qr_product->id }}"> 

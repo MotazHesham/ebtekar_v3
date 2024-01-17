@@ -97,7 +97,7 @@
                                 </td>
                                 <td>
                                     
-                                    <a class="btn btn-xs btn-info text-white" style="cursor: pointer" onclick="view_products('{{ $product->id }}')">
+                                    <a class="btn btn-xs btn-info text-white" style="cursor: pointer" onclick="view_names('{{ $product->id }}')">
                                         عرض <span class="badge badge-danger">{{ $product->names->count() ?? '' }}</span>
                                     </a>
                                 </td>
@@ -145,7 +145,7 @@
             });
 
         }) 
-        function view_products(id) {
+        function view_names(id) {
             $.post('{{ route('admin.qr-products.show') }}', {
                 _token: '{{ csrf_token() }}',
                 id: id
@@ -154,7 +154,30 @@
                 $('#AjaxModal').modal('show');
                 $('#AjaxModal .modal-dialog').html(data);
                 
-                let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+                let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons) 
+                let deleteButtonTrans = "طباعة المحدد"
+                let deleteButton = {
+                    text: deleteButtonTrans, 
+                    className: 'btn-warning',
+                    action: function(e, dt, node, config) {
+                        var ids = $.map(dt.rows({
+                            selected: true
+                        }).nodes(), function(entry) {
+                            return $(entry).data('entry-id')
+                        });
+
+                        if (ids.length === 0) {
+                            alert('{{ trans('global.datatables.zero_selected') }}') 
+                            return
+                        }
+
+                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                            $('#input-ids').val(ids);
+                            $('#print_more_form').submit();  
+                        }
+                    }
+                }
+                dtButtons.push(deleteButton) 
                 $.extend(true, $.fn.dataTable.defaults, {
                     orderCellsTop: true,
                     order: [

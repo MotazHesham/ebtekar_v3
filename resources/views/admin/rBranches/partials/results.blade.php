@@ -17,6 +17,7 @@
                                 <tr>
                                     <th>المنتج</th>
                                     <th>الكمية</th>
+                                    <th></th>
                                 </tr>
                                 @if(json_decode($qr_scan_history->results))
                                     @foreach(json_decode($qr_scan_history->results) as $key =>  $product)
@@ -34,6 +35,9 @@
                                                 <span class="badge badge-danger">  Scanned : <h5>{{ $count}}</h5></span>
                                                 <span class="badge badge-success">  الاحتياج :  <h5>{{ $quantity - $count}}</h5></span> 
                                             </td>
+                                            <td>
+                                                <button class="btn btn-success" onclick="load_needs('{{$qr_scan_history->id}}','{{$qr_product->id}}')">Load Needs</button>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 @endif
@@ -43,26 +47,9 @@
                     <div class="col-md-6" style="overflow-y: scroll;overflow-x:hidden;height:500px">
                         <h5 style="color: rgb(211, 54, 54)">Needs</h5> 
                         <hr>
-                        @foreach($qr_products as $product)
-                            @if(count($product->names) > 0)
-                                <h3>{{ $product->product ?? '' }}</h3>
-                                <table class=" table table-bordered table-striped table-hover datatable table-responsive-lg table-responsive-md table-responsive-sm"> 
-                                    <tbody> 
-                                        @foreach($product->names as $name)
-                                            <tr id="tr_needs_{{$name->id}}" @if(in_array($name->id,explode(',',$qr_scan_history->printed))) style="background-color: #53e753;" @endif>
-                                                <th> 
-                                                    {{ $name->name ?? '' }}
-                                                </th>
-                                                <td> 
-                                                    <a href="{{ route('admin.qr-products.print',$name->id) }}" target="print-frame" onclick="save_print('{{$qr_scan_history->id}}','{{$name->id}}')" class="btn btn-outline-warning">طباعة</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach 
-                                    </tbody>
-                                </table>  
-                                <hr>
-                            @endif
-                        @endforeach 
+                        <div id="load-needs">
+                            click on (Load Needs) button on specific product... 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,4 +57,4 @@
     </div> 
 </div>
 
-    
+
