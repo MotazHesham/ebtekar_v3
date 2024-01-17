@@ -9,13 +9,14 @@
     <script src="{{ asset('dashboard_offline/js/jquery.min.js') }}"></script>
     <script src="{{ asset('dashboard_offline/js/bootstrap.min.js') }}"></script>
 </head>
-<body>
-    <h5>{{ $qr_product_key->name ?? '' }}</h5>
+<body> 
+    <h1 style="font-size: 4.0rem;">{{ $qr_product_key->name ?? '' }}</h1>
     @production
-    <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(250)->generate('https://ebtekarstore.com?id='.$id)) !!} ">
+    <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(300)->generate('https://ebtekarstore.com?id='.$id)) !!} ">
     @else
-        {!! QrCode::size(250)->generate('https://ebtekarstore.com?id='.$id) !!}
-    @endproduction
+        {!! QrCode::size(300)->generate('https://ebtekarstore.com?id='.$id) !!}
+    @endproduction 
+    <h4>{{ $qr_product_key->product->product ?? '' }}</h4>
     <script>
         
         $(document).ready(function() {

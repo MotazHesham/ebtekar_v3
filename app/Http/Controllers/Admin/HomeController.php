@@ -74,13 +74,13 @@ class HomeController extends Controller
         // o => for Order model
         $bar_code =  explode('-',$request->code); 
 
-        if($bar_code[0] == 's'){
+        if($bar_code[0] == 'S'){
             $order = ReceiptSocial::find($bar_code[1]); 
             $model_type = 'social';
-        }elseif($bar_code[0] == 'c'){
+        }elseif($bar_code[0] == 'C'){
             $order = ReceiptCompany::find($bar_code[1]); 
             $model_type = 'company';
-        }elseif($bar_code[0] == 'o'){
+        }elseif($bar_code[0] == 'O'){
             $order = Order::find($bar_code[1]); 
             $model_type = 'order';
         }else{
