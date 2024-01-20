@@ -20,6 +20,7 @@
                                 @if(is_array(json_decode($orderDetail->photos)) && count(json_decode($orderDetail->photos)) > 0)
                                     <div>
                                         @foreach (json_decode($orderDetail->photos) as $key => $photo)
+                                        @if($photo && isset($photo->photo))
                                             <div style="display: inline;position: relative;">
                                                 <a href="{{ asset($photo->photo) }}" target="_blanc">
                                                     <img style="padding:3px" src="{{ asset($photo->photo) }}" alt="" height="140" width="140" title="{{ $photo->note }}">
@@ -33,6 +34,7 @@
                                                     <a href="{{ asset($photo->photo) }}" download="{{$raw->code}}_{{$key}}_{{ $photo->note }}" class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
                                                 </div>
                                             </div>
+                                            @endif
                                         @endforeach
                                     </div>
                                 @endif
