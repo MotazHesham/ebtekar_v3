@@ -29,6 +29,41 @@ class ProductsController extends Controller
 {
     use MediaUploadingTrait;
 
+    public function edit_prices(Request $request){
+        if($request->category == null && $request->sub_category == null && $request->sub_sub_category == null){ 
+            toast('Missing Fields','warning');
+            return redirect()->back();
+        }
+
+        $products = Product::orderBy('created_at','desc');
+
+        if($request->category != null){
+            $products = $products->where('category_id',$request->category);
+        }
+
+        if($request->sub_category != null){
+            $products = $products->where('sub_category_id',$request->sub_category);
+        }
+
+        if($request->sub_sub_category != null){
+            $products = $products->where('sub_sub_category_id',$request->sub_sub_category);
+        }
+        $products = $products->get();
+
+        foreach($products as $product){
+            if($request->money_type == 'flat'){ 
+                $product->unit_price += $request->unit_price;
+                $product->purchase_price += $request->purchase_price; 
+            }else{
+                $product->unit_price += ($product->unit_price / 100) * $request->unit_price;
+                $product->purchase_price += ($product->purchase_price / 100) * $request->purchase_price; 
+            }
+            $product->save();
+        } 
+        toast('Success...','success');
+        return redirect()->back();
+    }
+
     public function sorting_images(Request $request) {
         foreach($request->media as $key => $value){
             $media = Media::find($key);

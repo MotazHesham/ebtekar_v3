@@ -407,6 +407,7 @@ return [
     'supplied' => 'التوريد',
     'done' => 'التسليم',
     'soft_delete' => 'المحذوفات',
+    'edit_prices' => 'تعديل الأسعار',
     'receipt_social_view_products' => 'عرض المنتجات',
     'receipt_social_add_product' => 'أضافة منتج',
     'receipt_social_edit_product' => 'تعديل منتج',

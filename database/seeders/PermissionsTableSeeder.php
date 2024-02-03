@@ -1567,6 +1567,12 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'edit_prices',
+                'type' => 'general',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'expense_management_access',
                 'type' => 'expense_category.income_category.expense.income.expense_report',
                 'parent' => 1,
