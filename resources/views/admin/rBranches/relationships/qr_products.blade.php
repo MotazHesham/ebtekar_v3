@@ -9,7 +9,7 @@
                     @csrf
                     <input type="hidden" name="r_branch_id" value="{{ $rBranch->id }}"> 
                     <div class="row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label class="required" for="product">المنتج</label>
                             <input class="form-control {{ $errors->has('product') ? 'is-invalid' : '' }}"
                                 type="text" name="product" id="product" value="{{ old('product') }}"
@@ -20,7 +20,7 @@
                                 </div>
                             @endif 
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label class="required" for="quantity"> الكمية</label>
                             <input class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}" type="number"
                                 name="quantity" id="quantity" value="{{ old('quantity', '') }}" step="0.01" required>
@@ -32,12 +32,19 @@
                             <span class="help-block">الكمية المفترض تواجدها في هذا الفرع دائما من هذا المنتج</span>
                         </div> 
 
-                        <div class="form-group col-md-4">
-                            <label class="required"
-                                for="keys">الأسماء</label>
+                        <div class="form-group col-md-6">
+                            <label >أخد الأسماء من منتج أخر</label>
+                            <select name="qr_product_id" id="" class="form-control">
+                                @foreach(\App\Models\QrProduct::all() as $product)
+                                    <option value="{{ $product->id }}">{{ $product->product }}</option>
+                                @endforeach
+                            </select>
+                        </div> 
+
+                        <div class="form-group col-md-6">
+                            <label for="keys">الأسماء</label>
                             <input class="form-control {{ $errors->has('keys') ? 'is-invalid' : '' }}" type="text"
-                                name="keys" id="keys" placeholder="أضف اسم ..." data-role="tagsinput"
-                                required>
+                                name="keys" id="keys" placeholder="أضف اسم ..." data-role="tagsinput">
                             @if ($errors->has('keys'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('keys') }}

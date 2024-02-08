@@ -107,6 +107,16 @@ class QrProductController extends Controller
             ];
         }
 
+        $keys = QrProductKey::where('qr_product_id',$request->qr_product_id)->get();
+        foreach($keys as $key){
+            $names [] = [
+                'qr_product_id' => $qr_product->id, 
+                'name' => $key->name,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ];
+        }
+
         QrProductKey::insert($names);
         alert('Success','','success');
         return redirect()->back();
