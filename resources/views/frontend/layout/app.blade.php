@@ -75,7 +75,7 @@
     </style>
     @yield('styles')
 
-    @if(app()->isProduction())
+    @if(app()->isProduction() && $site_settings->id == 1)
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-HPT5XJBR84"></script>
         <script>
@@ -140,7 +140,7 @@
     @include('frontend.layout.footer')
     <!-- footer end -->
 
-    @if(app()->isProduction())
+    @if(app()->isProduction()  && $site_settings->id == 1)
         <div id="fb-root"></div>
         <!-- Your customer chat code -->
         <div class="fb-customerchat"
@@ -366,7 +366,7 @@
         $(document).ready(function() { 
             console.log(location.protocol);
         });
-        @if(app()->isProduction())
+        @if(app()->isProduction()  && $site_settings->id == 1)
             // messanger chatpopup
             $(document).ready(function() { 
                 window.fbAsyncInit = function() {
