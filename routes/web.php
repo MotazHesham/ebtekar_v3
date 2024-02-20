@@ -4,13 +4,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/slug', function () {
-    foreach(\App\Models\Product::get() as $product){
-        $product->slug = preg_replace('/([^ا-يA-Za-z0-9\-])(uml|acute|grave|circ|tilde|ring)/', '', str_replace(' ', '-',  $product->name)).'-'.\Illuminate\Support\Str::random(7); ;
-        $product->save();
-    }
-    return 'slug';
-});
 Route::get('/home', function () {
     if (session('status')) {
         return redirect()->route('admin.home')->with('status', session('status'));

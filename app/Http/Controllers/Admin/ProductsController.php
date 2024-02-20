@@ -82,6 +82,7 @@ class ProductsController extends Controller
         Cache::forget('home_new_products_' . $product->website_setting_id);
         Cache::forget('home_featured_categories_' . $product->website_setting_id);
         Cache::forget('best_selling_products_' . $product->website_setting_id);
+        Cache::forget('freatured_categories_' . $product->website_setting_id);
         return 1;
     }
 
