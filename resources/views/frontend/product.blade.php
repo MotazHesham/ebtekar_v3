@@ -96,7 +96,7 @@
                     <div class="col-lg-5 position-relative">
                         <div class="product-slick no-arrow"> 
                             @foreach ($product->photos as $key => $media)
-                                <div><img src="{{ $media->getUrl() }}" alt=""
+                                <div><img src="{{ $media->getUrl() }}" alt="{{ $product->name }}"
                                         class="img-fluid  image_zoom_cls-{{ $key }}"></div>
                             @endforeach 
                         </div>
@@ -104,16 +104,16 @@
                             <div class="col-12 p-0">
                                 <div class="slider-nav"> 
                                     @foreach ($product->photos as $key => $media)
-                                        <div><img src="{{ $media->getUrl('preview') }}" alt=""
+                                        <div><img src="{{ $media->getUrl('preview') }}" alt="{{ $product->name }}"
                                                 class="img-fluid  image_zoom_cls-{{ $key }}"></div>
                                     @endforeach 
                                 </div>
                             </div>
                         </div>
-                        {{-- data-bs-toggle="modal" data-bs-target="#view360" --}}
+                        {{-- data-bs-toggle="modal" data-bs-target="2view360" --}}
                         <div class="image-360" data-bs-toggle="modal" data-bs-target="#view360"> 
                             {{-- <a href=" "> --}}
-                                <img src="{{ asset('frontend/assets/images/360deg.png') }}" class="img-fluid" alt="">
+                                <img src="{{ asset('frontend/assets/images/360deg.png') }}" class="img-fluid" alt="360deg">
                             {{-- </a> --}}
                         </div>
                     </div>
@@ -421,26 +421,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    
+
                     <div class="product-right" style="position: absolute;">
                         <div class="pro-group">
                             <h2>{{ $product->name }}</h2>
                             <ul class="pro-price" id="">
                                 @if ($product->discount > 0)
-                                    <li id="product-price-for-variant" style="font-size: 30px;">{{ front_calc_product_currency($product->unit_price, $product->weight)['as_text'] }}</li>
-                                    <li><span id="product-price-calc-discount" style="font-size: 30px;"> {{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['as_text'] }}</span></li>
+                                    <li id="product-price-for-variant" style="font-size: 30px;">
+                                        {{ front_calc_product_currency($product->unit_price, $product->weight)['as_text'] }}
+                                    </li>
+                                    <li><span id="product-price-calc-discount" style="font-size: 30px;">
+                                            {{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['as_text'] }}</span>
+                                    </li>
                                 @else
-                                    <li id="product-price-for-variant" style="font-size: 30px;">{{ front_calc_product_currency($product->unit_price, $product->weight)['as_text'] }}</li>
+                                    <li id="product-price-for-variant" style="font-size: 30px;">
+                                        {{ front_calc_product_currency($product->unit_price, $product->weight)['as_text'] }}
+                                    </li>
                                 @endif
                                 @if (auth()->check() && auth()->user()->user_type == 'seller')
                                     <li id="product-commission-for-variant">
-                                        <div class="text-center"> <small> {{ trans('frontend.product.commission') }}:<b> {{ front_calc_commission_currency($product->unit_price, $product->purchase_price)['as_text'] }} </b> </small> </div>
-                                    </li> 
+                                        <div class="text-center"> <small> {{ trans('frontend.product.commission') }}:<b>
+                                                    {{ front_calc_commission_currency($product->unit_price, $product->purchase_price)['as_text'] }}
+                                                </b> </small> </div>
+                                    </li>
                                 @endif
                             </ul>
                         </div>
                     </div>
-                    <iframe src="{{ route('frontend.webxr',$product->id) }}" frameborder="0" style="width: 100%" height="400"></iframe>
+                    <iframe src="{{ route('frontend.webxr', $product->id) }}" frameborder="0" style="width: 100%"
+                        height="400"></iframe>
                 </div>
             </div>
         </div>
@@ -448,7 +457,7 @@
 @endsection
 
 @section('scripts')
-    @parent 
+    @parent
     <script type="text/javascript">
         $(document).ready(function() {
             getVariantPrice();

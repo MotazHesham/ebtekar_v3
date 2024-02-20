@@ -44,7 +44,7 @@
 
                         <div class="brand-logo logo-sm-center">
                             <a href="{{ route('home') }}">
-                                <img src="{{ $site_settings->logo ? $site_settings->logo->getUrl('thumb') : '' }}" class="img-fluid" alt="logo">
+                                <img src="{{ $site_settings->logo ? $site_settings->logo->getUrl('preview') : '' }}" @if($site_settings->id == 3) width="75%" @else width="50%" @endif  class="img-fluid" alt="logo">
                             </a>
                         </div>
                     </div>

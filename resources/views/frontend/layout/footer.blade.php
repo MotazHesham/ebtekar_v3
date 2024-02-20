@@ -12,7 +12,7 @@
                                 <div class="footer-logo">
                                     <a href="{{ route('home') }}">
                                         <img src="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" class="img-fluid"
-                                            alt="logo">
+                                            alt="logo" style="height: 115px">
                                     </a>
                                 </div>
                                 <p>
@@ -51,9 +51,10 @@
                                         </a>
                                     </li>
                                     <li><a href="{{ route('frontend.policies','support') }}">{{ trans('frontend.footer.support') }} </a></li>
-                                    <li><a href="{{ route('frontend.policies','returned') }}">{{ trans('frontend.footer.returned') }} </a></li>
+                                    <li><a href="{{ route('frontend.policies','return') }}">{{ trans('frontend.footer.returned') }} </a></li>
                                     <li><a href="{{ route('frontend.policies','terms') }}">{{ trans('frontend.footer.terms') }} </a></li>
-                                    <li><a href="{{ route('frontend.policies','seller') }}">{{ trans('frontend.footer.seller') }} </a></li>
+                                    <li><a href="{{ route('frontend.policies','seller') }}">{{ trans('frontend.footer.seller') }} </a></li> 
+                                    <li><a href="{{ route('frontend.policies','privacy') }}">{{ trans('frontend.footer.privacy') }} </a></li> 
                                 </ul>
                             </div>
                         </div>
@@ -66,8 +67,8 @@
                                     <li><i class="fa fa-map-marker"></i>
                                         {{ $site_settings->address }}
                                     </li>
-                                    <li><i class="fa fa-phone"></i>{{ trans('frontend.footer.phone') }}: <span>{{ $site_settings->phone_number}}</span></li>
-                                    <li><i class="fa fa-envelope-o"></i> {{ trans('frontend.footer.email') }}: {{ $site_settings->email }}
+                                    <li><i class="fa fa-phone"></i>{{ trans('frontend.footer.phone') }}: <span> <a class="btn-link" href="tel:{{ $site_settings->phone_number}}">{{ $site_settings->phone_number}}</a> </span></li>
+                                    <li><i class="fa fa-envelope-o"></i> {{ trans('frontend.footer.email') }}: <a class="btn-link" href="mailto:{{ $site_settings->email }}">{{ $site_settings->email }}</a>
                                     </li>
 
                                 </ul>

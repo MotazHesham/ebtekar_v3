@@ -11,6 +11,19 @@
             @method('PUT')
             @csrf
             <div class="form-group">
+                <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
+                    @foreach($websites as $id => $entry)
+                        <option value="{{ $id }}" {{ old('website_setting_id',$police->website_setting_id) == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('website_setting_id'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('website_setting_id') }}
+                    </div>
+                @endif 
+            </div>
+            <div class="form-group">
                 <label class="required">{{ trans('cruds.police.fields.name') }}</label>
                 <select class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" id="name" required>
                     <option value disabled {{ old('name', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>

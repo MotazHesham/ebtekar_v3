@@ -268,7 +268,7 @@ class HomeController extends Controller
     }
 
     public function index()
-    { 
+    {  
         $settings1 = [
             'chart_title'           => trans('cruds.customer.title'),
             'chart_type'            => 'number_block',

@@ -24,14 +24,15 @@ class Police extends Model implements HasMedia
 
     
     public const NAME_SELECT = [
-        'support_policy'     => 'سياسة الدعم',
-        'return_policy'   => 'سياسة المرتجعات',
-        'seller_policy' => 'سياسة البائع', 
+        'support'     => 'سياسة الدعم',
+        'return'   => 'سياسة المرتجعات',
+        'seller' => 'سياسة البائع', 
         'terms' => 'سياسة البنود', 
-        'privacy_policy' => 'سياسة الخصوصية', 
+        'privacy' => 'سياسة الخصوصية', 
     ];
 
     protected $fillable = [
+        'website_setting_id',
         'name',
         'content',
         'created_at',

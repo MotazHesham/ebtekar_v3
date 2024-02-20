@@ -37,6 +37,7 @@ return [
         'home' => 'Home',
         'subscribe' => 'Subscribe',
         'subscribe_now' => 'Subscribe Now',
+        'privacy' => 'Privacy Policy',
     ],
     'about' => [ 
         'ertgal' =>'About Ertgal',

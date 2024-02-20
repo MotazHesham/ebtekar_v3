@@ -162,3 +162,18 @@
 
     </form>
 @endsection
+
+@section('scripts')
+@parent 
+    <script>
+        function check(array, status){
+            for(var i = 0 ; i < array.length ; i++ ){
+                if(status){ // means true
+                    $('#'+array[i].id).attr('checked',true); 
+                }else{
+                    $('#'+array[i].id).attr('checked',false);
+                }
+            }
+        }
+    </script>
+@endsection

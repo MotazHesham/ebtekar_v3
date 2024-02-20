@@ -72,7 +72,8 @@ class HomeController extends Controller
 
     public function policies($policy)
     {
-        $policy = Police::where('name', $policy)->first();
+        $site_settings = get_site_setting();
+        $policy = Police::where('name', $policy)->where('website_setting_id',$site_settings->id)->first();
         return view('frontend.policy', compact('policy'));
     }
 

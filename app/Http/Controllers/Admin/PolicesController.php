@@ -8,6 +8,7 @@ use App\Http\Requests\MassDestroyPoliceRequest;
 use App\Http\Requests\StorePoliceRequest;
 use App\Http\Requests\UpdatePoliceRequest;
 use App\Models\Police;
+use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -30,7 +31,9 @@ class PolicesController extends Controller
     {
         abort_if(Gate::denies('police_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.polices.create');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        
+        return view('admin.polices.create',compact('websites'));
     }
 
     public function store(StorePoliceRequest $request)
@@ -48,7 +51,9 @@ class PolicesController extends Controller
     {
         abort_if(Gate::denies('police_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.polices.edit', compact('police'));
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.polices.edit', compact('police','websites'));
     }
 
     public function update(UpdatePoliceRequest $request, Police $police)

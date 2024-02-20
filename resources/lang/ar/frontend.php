@@ -37,6 +37,7 @@ return [
         'home' => 'الرئيسية',
         'subscribe' => 'القائمة البريدية',
         'subscribe_now' => 'اشترك الان',
+        'privacy' => 'سياسة الخصوصية',
     ],
     'about' => [ 
         'ertgal' =>'عن أرتجار',
