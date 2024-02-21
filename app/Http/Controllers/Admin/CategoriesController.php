@@ -123,7 +123,7 @@ class CategoriesController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $validated_request = $request->all();
-        $validated_request['slug'] = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+        $validated_request['slug'] = preg_replace('/([^ا-يA-Za-z0-9\-])(uml|acute|grave|circ|tilde|ring)/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
         $category = Category::create($validated_request);
 
         if ($request->input('banner', false)) {
