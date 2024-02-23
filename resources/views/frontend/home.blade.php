@@ -99,7 +99,7 @@
                             @foreach ($freatured_categories as $key => $featured_category) 
                                 <div id="tab-featured-{{ $key + 1}}" class="tab-content @if ($loop->first) active default @endif" @if (!$loop->first) style="display:none" @endif>
                                     <div class="media-slide-5 no-arrow">
-                                        @foreach ($featured_category->products->take(21) as $chunk)
+                                        @foreach ($featured_category->products->take(7) as $chunk)
                                             <div>
                                                 <div class="media-banner b-g-white1 border-0">
                                                     @foreach ($chunk as $product)  
