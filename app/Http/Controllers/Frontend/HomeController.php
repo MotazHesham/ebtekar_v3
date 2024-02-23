@@ -30,7 +30,7 @@ class HomeController extends Controller
         return view('frontend.partials.webxr',compact('product'));    
     }
     public function index()
-    { 
+    {   
         $site_settings = get_site_setting();
         $sliders = Cache::rememberForever('home_silders_'.$site_settings->id, function () use ($site_settings) {
             return Slider::where('website_setting_id', $site_settings->id)->with('media')->where('published', 1)->get();
@@ -44,7 +44,7 @@ class HomeController extends Controller
         $freatured_categories =  Cache::rememberForever('freatured_categories_'.$site_settings->id, function () use ($site_settings) {
 
             $categories = Category::where('website_setting_id', $site_settings->id)->where('published', 1)->where('featured', 1)->with(['media','products.media', 'products' => function ($query) {
-                $query->where('published', 1)->where('featured', 1)->orderBy('created_at', 'desc')->take(21);
+                $query->where('published', 1)->where('featured', 1)->orderBy('created_at', 'desc');
             }])->orderBy('created_at', 'desc')->get();
 
             $categories->transform(function ($category) {

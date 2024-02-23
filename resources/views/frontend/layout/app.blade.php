@@ -123,7 +123,7 @@
     <!-- loader start -->
     <div class="loader-wrapper">
         <div>
-            <img src="{{  $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" alt="loader">
+            <img src="{{  $site_settings->logo ? $site_settings->logo->getUrl('thumb') : '' }}" alt="loader">
         </div>
     </div>
     <!-- loader end -->
@@ -346,8 +346,8 @@
     <script src="{{ asset('frontend/assets/js/bootstrap-notify.min.js') }}"></script>
 
     <!-- Theme js-->
-    <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/modal.js') }}"></script>
+    <script   src="{{ asset('frontend/assets/js/script.js') }}"></script>
+    <script   src="{{ asset('frontend/assets/js/modal.js') }}"></script>
 
 
     
