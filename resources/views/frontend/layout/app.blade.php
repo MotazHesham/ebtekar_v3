@@ -397,6 +397,18 @@
             });
         } 
         
+        function showToast(type, title, place) {
+            swal({
+                toast: true,
+                title: title,
+                type: type,
+                position: place,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        }
+        
         $('.select2').select2()
         $('.select-all').click(function () {
             let $select2 = $(this).parent().siblings('.select2')

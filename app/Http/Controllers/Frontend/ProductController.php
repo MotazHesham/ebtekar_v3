@@ -43,6 +43,12 @@ class ProductController extends Controller
         }
         return redirect()->back();
     }
+    
+    public function en_product($id){  
+        $product = Product::findOrFail($id);
+        return redirect()->route('frontend.product',$product->slug);
+    }
+
     public function product($slug){  
         $site_settings = get_site_setting();
         $product  = Product::where('website_setting_id',$site_settings->id)->where('slug', 'like','%' . $slug . '%')->first();

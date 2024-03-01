@@ -42,6 +42,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     Route::post('be-designer', 'DesignerController@register')->name('designer.register');
 
     Route::get('product/{slug}', 'ProductController@product')->name('product'); 
+    Route::get('en_product/{id}', 'ProductController@en_product')->name('en_product'); 
     Route::post('product/quick_view', 'ProductController@quick_view')->name('product.quick_view');
     Route::post('product/variant_price', 'ProductController@variant_price')->name('product.variant_price');
     Route::post('product/rate_product', 'ProductController@rate_product')->name('product.rate');

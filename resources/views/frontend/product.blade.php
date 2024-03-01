@@ -271,7 +271,8 @@
                             </div>
 
                             <div class="pro-group pb-0">
-                                <h6 class="product-title">{{ trans('frontend.product.share') }}</h6>
+                                @php($en_route_product = route('frontend.en_product',$product->id))
+                                <h6 class="product-title"> <a title="Copy Product Link" href="#" onclick="copy_to_clipboard('{{ $en_route_product }}')"><i class="fa fa-copy"></i></a> {{ trans('frontend.product.share') }}</h6>
                                 <div style="display: flex;justify-content: space-evenly;">
                                     <div class="fb-share-button"  data-href="{{ route('frontend.product', $product->slug) }}"  data-layout="button_count">
                                     </div>
@@ -466,6 +467,11 @@
                 getVariantPrice();
             });
         });
+
+        function copy_to_clipboard(text){
+            navigator.clipboard.writeText(text); 
+            showToast('success', "Copied to clipboard",'top-right')
+        }
 
         function change_rating(rate) {
             if (rate == 1) {
