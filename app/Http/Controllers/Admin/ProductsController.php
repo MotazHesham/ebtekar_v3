@@ -452,8 +452,8 @@ class ProductsController extends Controller
         
         $validated_request = $request->all(); 
 
-        $validated_request['tags'] = implode('|',$request->tags);
-        $validated_request['slug'] = preg_replace('/([^ا-يA-Za-z0-9\-])(uml|acute|grave|circ|tilde|ring)/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(7); 
+        $validated_request['tags'] = implode('|',$request->tags); 
+        $validated_request['slug'] = preg_replace('/([^ا-يA-Za-z0-9\-])(uml|acute|grave|circ|tilde|ring)/', '', str_replace(' ', '-', $request->name)).'-'.substr($product->slug, -7);
         $validated_request['colors'] = $request->has('colors') ? json_encode($request->colors) : json_encode(array());
 
         $attribute_options = array();
