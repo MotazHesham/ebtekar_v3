@@ -99,7 +99,7 @@ class SubSubCategoryController extends Controller
     public function store(StoreSubSubCategoryRequest $request)
     { 
         $validated_request = $request->all();
-        $validated_request['slug'] = preg_replace('/([^ا-يA-Za-z0-9\-])(uml|acute|grave|circ|tilde|ring)/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+        $validated_request['slug'] = Str::slug($request->name, '-',null) . '-' . Str::random(5);
         $subSubCategory = SubSubCategory::create($validated_request);
 
         Cache::forget('header_nested_categories_'.$subSubCategory->website_setting_id);

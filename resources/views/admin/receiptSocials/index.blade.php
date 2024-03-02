@@ -18,27 +18,66 @@
             </div>
         @endcan
 
-        <div class="col-md-3">
+        <div class="col-md-2">
             <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#uploadFedexModal">
                 {{ trans('global.extra.upload_fedex') }}
             </a>
         </div>
 
         @if(isset($deleted))
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a class="btn btn-dark" href="{{ route('admin.receipt-socials.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
         @else                        
             @if(Gate::allows('soft_delete'))
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a class="btn btn-danger" href="{{ route('admin.receipt-socials.index',['deleted' => 1]) }}">
                         {{ trans('global.extra.deleted_receipts') }}
                     </a>
                 </div>
             @endif
         @endif
+        <div class="col-md-2">
+            <a class="btn btn-info" href="#" data-toggle="modal" data-target="#productsReportModal">
+                تقارير المنتجات
+            </a>
+        </div>
+    </div>
+
+    <!-- Products Report Modal -->
+    <div class="modal fade" id="productsReportModal" tabindex="-1" aria-labelledby="productsReportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productsReportModalLabel"> </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    <div class="row">
+                        <div class="col-3 form-group">
+                            <label class="control-label" for="start_date">بداية التاريخ</label>
+                            <input class="form-control date {{ $errors->has('start_date') ? 'is-invalid' : '' }}" type="text"
+                                name="start_date" id="start_date" value="{{ $start_date ?? '' }}" required>
+                        </div>
+                        <div class="col-3 form-group">
+                            <label class="control-label" for="end_date">نهاية التاريخ</label>
+                            <input class="form-control date {{ $errors->has('end_date') ? 'is-invalid' : '' }}" type="text"
+                                name="end_date" id="end_date" value="{{ $end_date ?? '' }}" required>
+                        </div>
+                        <div class="col-4">
+                            <label class="control-label">&nbsp;</label><br>
+                            <button class="btn btn-primary" type="button" onclick="products_report()">{{ trans('global.filterDate') }}</button> 
+                        </div>
+                    </div> 
+                    <hr>
+                    <div id="products-report-div">
+                        {{-- ajax request --}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Upload Fedex Modal -->
@@ -585,6 +624,17 @@
                 return confirm('are you sure?');
             });
         });
+
+        function products_report(){
+            $.post('{{ route('admin.receipt-social-products.products_report') }}', {
+                _token: '{{ csrf_token() }}',
+                start_date: $('#start_date').val(),
+                end_date: $('#end_date').val(),
+            }, function(data) {
+                $('#products-report-div').html(null); 
+                $('#products-report-div').html(data); 
+            });
+        }
 
         function show_qr_code(order_num,bar_code){
             $.post('{{ route('admin.show_qr_code') }}', {

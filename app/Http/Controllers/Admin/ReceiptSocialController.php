@@ -21,6 +21,7 @@ use App\Models\ReceiptSocialProductPivot;
 use App\Models\Social;
 use App\Models\User;
 use App\Models\WebsiteSetting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -416,6 +417,7 @@ class ReceiptSocialController extends Controller
         $description = null; 
         $deleted = null;
         $deposit_type = null;
+        $total_cost = null;
         $financial_account_id = null;
         $website_setting_id = null;
 
@@ -457,6 +459,11 @@ class ReceiptSocialController extends Controller
         if ($request->deposit_type != null) {
             $receipts = $receipts->where('deposit_type', $request->deposit_type);
             $deposit_type = $request->deposit_type;
+        }
+
+        if ($request->total_cost != null) {
+            $receipts = $receipts->where('total_cost','>=', $request->total_cost);
+            $total_cost = $request->total_cost;
         }
 
         if ($request->financial_account_id != null) {
@@ -602,7 +609,7 @@ class ReceiptSocialController extends Controller
 
         return view('admin.receiptSocials.index', compact(
             'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
-            'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id',
+            'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts',
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id',

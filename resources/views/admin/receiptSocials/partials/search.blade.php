@@ -5,6 +5,10 @@
                 <div>
                     <b>{{ trans('global.search') }} {{ trans('cruds.receiptSocial.title') }}</b>
                 </div>
+                <div> 
+                    <input type="number" class="form-control mb-2 @isset($total_cost) isset @endisset" id="total_cost" name="total_cost"
+                        @isset($total_cost) value="{{ $total_cost }}" @endisset placeholder="....... سعر الاوردر اكثر من">  
+                </div>
                 <select class="form-control @isset($website_setting_id) isset @endisset" style="width: 200px" name="website_setting_id" id="website_setting_id" onchange="sort_receipt_social()">
                     <option value="">أختر الموقع</option>
                     @foreach ($websites as $id => $entry)

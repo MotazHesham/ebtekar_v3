@@ -102,6 +102,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('receipt-social-products/destroy', 'ReceiptSocialProductController@massDestroy')->name('receipt-social-products.massDestroy');
     Route::post('receipt-social-products/media', 'ReceiptSocialProductController@storeMedia')->name('receipt-social-products.storeMedia');
     Route::post('receipt-social-products/ckmedia', 'ReceiptSocialProductController@storeCKEditorImages')->name('receipt-social-products.storeCKEditorImages');
+    Route::post('receipt-social-products/products_report', 'ReceiptSocialProductController@products_report')->name('receipt-social-products.products_report');
     Route::resource('receipt-social-products', 'ReceiptSocialProductController');
 
     // Receipt Client
