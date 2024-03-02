@@ -5,6 +5,7 @@
             <th scope="col">#</th>
             <th scope="col">المنتج</th>
             <th scope="col">الكمية المطلوبة</th> 
+            <th scope="col">الاجمالي</th> 
         </tr>
     </thead>
     <tbody> 
@@ -13,6 +14,7 @@
                 <th scope="row">{{ $key + 1 }}</th>
                 <td>{{ $product->title }}</td>
                 <td>{{ $product->quantity}}</td> 
+                <td>{{ $product->total_cost}}</td> 
             </tr> 
         @endforeach 
     </tbody>
