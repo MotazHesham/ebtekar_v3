@@ -75,16 +75,14 @@
     </style>
     @yield('styles')
 
-    @if(app()->isProduction() && $site_settings->id == 1)
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-HPT5XJBR84"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-HPT5XJBR84');
-        </script>
+    @if(app()->isProduction() && $site_settings->id == 1) 
+        <!-- Google Tag Manager -->
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-KNZ4MQG');</script>
+        <!-- End Google Tag Manager -->
         
         <!-- Facebook Pixel Code -->
         <script>
@@ -119,6 +117,12 @@
 <body class="bg-light rtl">
 
     
+    @if(app()->isProduction() && $site_settings->id == 1) 
+        <!-- Google Tag Manager (noscript) -->
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KNZ4MQG"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    @endif
 
     <!-- loader start -->
     <div class="loader-wrapper">
