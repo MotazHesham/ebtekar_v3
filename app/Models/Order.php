@@ -44,6 +44,7 @@ class Order extends Model
     public const PAYMENT_TYPE_SELECT = [
         'cash_on_delivery' => 'Cash On Delivery',
         'paymob'           => 'Paymob',
+        'wallet'           => 'Wallet',
     ];
 
     public const COMMISSION_STATUS_SELECT = [
