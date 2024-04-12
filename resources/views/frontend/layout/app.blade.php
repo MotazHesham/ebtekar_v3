@@ -363,13 +363,12 @@
 
     <script>
         
+        $('.add-cartnoty').on('click',function(){ 
+            fbq('track', 'addToCart', {name: $(this).data('name') , value: $(this).data('price'), currency: '{{session("currency")}}'});
+        })
         function dismiss(){
             $('#dismiss').remove();
-        }
-        
-        $(document).ready(function() { 
-            console.log(location.protocol);
-        });
+        } 
         @if(app()->isProduction()  && $site_settings->id == 1)
             // messanger chatpopup
             $(document).ready(function() { 

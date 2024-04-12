@@ -1010,6 +1010,8 @@ return [
             'phone_number_helper'            => ' ',
             'phone_number_2'                 => 'رقم هاتف 2',
             'phone_number_2_helper'          => ' ',
+            'shipping_country_name'                => 'مكان التوصيل',
+            'shipping_country_name_helper'         => ' ',
             'shipping_address'                => 'عنوان الشحن',
             'shipping_address_helper'         => ' ',
             'shipping_country_cost'           => 'تكلفة الشحن',

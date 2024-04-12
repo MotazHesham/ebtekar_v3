@@ -19,7 +19,7 @@
             </div>
             <div class="product-icon icon-inline">
                 @if($product->variant_product || $product->special)
-                    <a href="{{ route('frontend.product', $product->slug) }}" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
+                    <a href="{{ route('frontend.product', $product->slug) }}" class="tooltip-top add-cartnoty" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}" data-name="{{ $product->name }}" data-tippy-content="Add to cart">
                         <i data-feather="shopping-cart"></i>
                     </a>
                 @else  
@@ -27,7 +27,7 @@
                         @csrf
                         <input type="hidden" name="id" value="{{$product->id}}">
                         <input type="hidden" name="variant" >
-                        <button type="submit" class="tooltip-top add-cartnoty" data-tippy-content="Add to cart">
+                        <button type="submit" class="tooltip-top add-cartnoty" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}" data-name="{{ $product->name }}" data-tippy-content="Add to cart">
                             <i data-feather="shopping-cart"></i>
                         </button>
                     </form>

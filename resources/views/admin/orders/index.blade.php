@@ -390,6 +390,12 @@
                                         {{ trans('global.print') }} 
                                     </a>
                                 @endcan
+                                @can('order_edit')
+                                    <a class="btn btn-info" 
+                                        href="{{ route('admin.orders.edit', $order->id) }}">
+                                        {{ trans('global.edit') }} 
+                                    </a>
+                                @endcan
 
                                 @can('order_delete')
                                     <?php $route = route('admin.orders.destroy', $order->id); ?>

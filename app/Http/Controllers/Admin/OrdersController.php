@@ -409,18 +409,18 @@ class OrdersController extends Controller
 
         $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $shipping_countries = Country::select('cost','name', 'id')->get();
 
         $preparers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $delivery_men = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $order->load('user', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipment', 'delivery_man');
+        $order->load('user', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man');
 
         return view('admin.orders.edit', compact('delivery_men', 'order', 'preparers', 'shipping_countries', 'users'));
     }
 
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function update(Request $request, Order $order)
     {
         $order->update($request->all());
 
