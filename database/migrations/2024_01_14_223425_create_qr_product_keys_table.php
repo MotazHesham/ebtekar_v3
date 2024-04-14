@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('qr_product_keys', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name'); 
-            $table->unsignedBigInteger('qr_product_rbranch_id')->on('qr_product_rbranches')->nullable();
-            $table->unsignedBigInteger('r_branch_id')->nullable();
+            $table->string('name');  
+            $table->unsignedBigInteger('qr_product_id')->nullable();
             $table->timestamps(); 
         });
     }
