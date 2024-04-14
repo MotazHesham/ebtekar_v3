@@ -114,10 +114,10 @@
                 $('#AjaxModal .modal-dialog').html(data);  
             }); 
         }
-        function load_needs(qr_scan_history_id,qr_product_id){ 
+        function load_needs(qr_scan_history_id,qr_product_rbranch_id){ 
             $.post('{{ route('admin.qr-products.load_needs') }}', {
                 _token: '{{ csrf_token() }}',
-                qr_product_id: qr_product_id,
+                qr_product_rbranch_id: qr_product_rbranch_id,
                 qr_scan_history_id: qr_scan_history_id, 
             }, function(data) {
                 $('#load-needs').html(data);

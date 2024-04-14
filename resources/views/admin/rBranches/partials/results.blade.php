@@ -36,7 +36,7 @@
                                                 <span class="badge badge-success">  الاحتياج :  <h5>{{ $quantity - $count}}</h5></span> 
                                             </td>
                                             <td>
-                                                <button class="btn btn-success" onclick="load_needs('{{$qr_scan_history->id}}','{{$qr_product->id}}')">Load Needs</button>
+                                                <button class="btn btn-success" onclick="load_needs('{{$qr_scan_history->id}}','{{$qr_product_rbranch->id}}')">Load Needs</button>
                                             </td>
                                         </tr>
                                     @endforeach

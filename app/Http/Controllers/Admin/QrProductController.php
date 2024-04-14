@@ -190,21 +190,21 @@ class QrProductController extends Controller
         if($qr_scan_history->scanned){
             $scanned = explode(',',$qr_scan_history->scanned);
         } 
-        $qr_products = QrProduct::where('r_branch_id',$request->r_branch_id)->with(['names' => function($q) use ($scanned) {
-            return $q->whereNotIn('id',$scanned);
-        }])->get();
-        return view('admin.rBranches.partials.results',compact('qr_scan_history','qr_products'));
+        return view('admin.rBranches.partials.results',compact('qr_scan_history'));
     }
 
     public function load_needs(Request $request){
         $qr_scan_history = QrScanHistory::find($request->qr_scan_history_id); 
+        $qr_product_rbranch = QrProductRBranch::find($request->qr_product_rbranch_id);
 
         $scanned = [];
         if($qr_scan_history->scanned){
             $scanned = explode(',',$qr_scan_history->scanned);
         } 
-        $qr_products = QrProduct::where('id',$request->qr_product_id)->with(['names' => function($q) use ($scanned) {
-            return $q->whereNotIn('id',$scanned);
+
+        $includes = json_decode($qr_product_rbranch->names);
+        $qr_products = QrProduct::where('id',$qr_product_rbranch->qr_product_id)->with(['names' => function($q) use ($scanned,$includes) {
+            return $q->whereNotIn('id',$scanned)->whereIn('id',$includes);
         }])->get();
 
         return view('admin.rBranches.partials.load_needs',compact('qr_scan_history','qr_products'));
