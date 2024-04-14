@@ -15,6 +15,10 @@
                 <div class="form-group col-md-6">
                     <label class="required"
                         for="keys">الأسماء</label> 
+                    <div style="padding-bottom: 4px">
+                        <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                        <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                    </div>
                     <select name="keys[]" id="keys" class="form-control select2" multiple required >
                         @foreach($qr_product->names as $name)
                             <option value="{{ $name->id }}" @if(in_array($name->id,json_decode($qr_product_rbranch->names))) selected @endif>{{ $name->name }}</option>
@@ -86,5 +90,15 @@
         $('.select2').select2({
             dropdownParent: $('#AjaxModal')
         });
+        $('.select-all').click(function () {
+            let $select2 = $(this).parent().siblings('.select2')
+            $select2.find('option').prop('selected', 'selected')
+            $select2.trigger('change')
+        })
+        $('.deselect-all').click(function () {
+            let $select2 = $(this).parent().siblings('.select2')
+            $select2.find('option').prop('selected', '')
+            $select2.trigger('change')
+        })
     }); 
 </script>  
