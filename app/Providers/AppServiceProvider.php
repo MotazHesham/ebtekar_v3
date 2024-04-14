@@ -41,8 +41,11 @@ class AppServiceProvider extends ServiceProvider
             }); 
             $view->with(['header_nested_categories' => $header_nested_categories]);
         });
-        View::composer('frontend.layout.app', function ($view) use($site_settings) {   
-            $view->with(['flash_deal_product' => Product::where('flash_deal',1)->where('website_setting_id',$site_settings->id)->where('published',1)->inRandomOrder()->first()]);
+        View::composer('frontend.layout.app', function ($view) use($site_settings) {    
+            $view->with([
+                            'flash_deal_product' => Product::where('flash_deal',1)->where('website_setting_id',$site_settings->id)->where('published',1)->inRandomOrder()->first(),
+                            'currency_symbol' => session("currency")->symbol ?? 'EGP',
+                        ]);
         });
         View::composer('frontend.layout.header', function ($view) use($site_settings) {   
             $view->with(['header_home_categories' => HomeCategory::where('website_setting_id',$site_settings->id)->with('category')->get()]);

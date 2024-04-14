@@ -364,7 +364,7 @@
     <script>
         
         $('.add-cartnoty').on('click',function(){ 
-            fbq('track', 'addToCart', {name: $(this).data('name') , value: $(this).data('price'), currency: '{{session("currency")->symbol}}'});
+            fbq('track', 'addToCart', {name: $(this).data('name') , value: $(this).data('price'), currency: '{{ $currency_symbol }}'});
         })
         function dismiss(){
             $('#dismiss').remove();
