@@ -16,20 +16,14 @@ class QrProduct extends Model
 
 
     protected $fillable = [
-        'product',
-        'quantity',
-        'r_branch_id',  
+        'product', 
         'created_at',
         'updated_at',
     ]; 
     
-    public function branch()
-    {
-        return $this->belongsTo(RBranch::class, 'r_branch_id');
-    }
 
     public function names()
     {
         return $this->hasMany(QrProductKey::class, 'qr_product_id');
-    }
+    } 
 }

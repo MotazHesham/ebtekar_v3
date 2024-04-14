@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class QrProductKey extends Model
+class QrProductRBranch extends Model
 {
-    public $table = 'qr_product_keys';
+    public $table = 'qr_product_rbranches';
     
     protected $dates = [
         'created_at',
@@ -16,11 +16,18 @@ class QrProductKey extends Model
 
 
     protected $fillable = [
-        'name',
-        'qr_product_id',  
+        'qr_product_id', 
+        'r_branch_id',   
+        'quantity',
+        'names',
         'created_at',
         'updated_at',
-    ];  
+    ]; 
+
+    public function branch()
+    {
+        return $this->belongsTo(RBranch::class, 'r_branch_id');
+    }
     public function product()
     {
         return $this->belongsTo(QrProduct::class, 'qr_product_id');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyRBranchRequest;
 use App\Http\Requests\StoreRBranchRequest;
 use App\Http\Requests\UpdateRBranchRequest;
+use App\Models\QrProductRBranch;
 use App\Models\QrScanHistory;
 use App\Models\RBranch;
 use App\Models\RClient;
@@ -102,9 +103,8 @@ class RBrancheController extends Controller
 
     public function show(RBranch $rBranch)
     {  
-        abort_if(Gate::denies('r_branch_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $rBranch->load('r_client','qr_products.names','qr_scan_history');
+        abort_if(Gate::denies('r_branch_show'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
+        $rBranch->load('r_client','qr_products_rbranch.product','qr_scan_history');
 
         return view('admin.rBranches.show', compact('rBranch'));
     }

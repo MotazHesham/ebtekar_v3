@@ -196,6 +196,7 @@
                     $.post('{{ route('admin.qr-products.qr_output') }}', {
                         _token: '{{ csrf_token() }}',
                         id: qr_scan_history_id, 
+                        branch_id: '{{$rBranch->id}}', 
                         code: result.text, 
                     }, function(data) {
                         console.log(data); 

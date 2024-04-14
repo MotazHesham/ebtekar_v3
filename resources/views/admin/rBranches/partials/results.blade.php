@@ -22,8 +22,8 @@
                                 @if(json_decode($qr_scan_history->results))
                                     @foreach(json_decode($qr_scan_history->results) as $key =>  $product)
                                         @php
-                                            $qr_product = \App\Models\QrProduct::find($key);
-                                            $quantity = $qr_product->quantity ?? 0;
+                                            $qr_product_rbranch = \App\Models\QrProductRBranch::find($key);
+                                            $quantity = $qr_product_rbranch->quantity ?? 0;
                                             $count = count($product->names) ?? 0;
                                         @endphp
                                         <tr>

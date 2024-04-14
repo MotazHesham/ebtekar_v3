@@ -105,8 +105,8 @@
                         </div>
                     @endif
                     <div class="tab-pane @if($rBranch->payment_type != 'parts') active @endif" role="tabpanel" id="r_branche_qr_products">
-                        @includeIf('admin.rBranches.relationships.qr_products', [
-                            'qr_products' => $rBranch->qr_products,
+                        @includeIf('admin.rBranches.relationships.qr_products_rbranch', [
+                            'qr_products_rbranch' => $rBranch->qr_products_rbranch,
                         ])
                     </div>
                     <div class="tab-pane" role="tabpanel" id="r_branche_qr_history">

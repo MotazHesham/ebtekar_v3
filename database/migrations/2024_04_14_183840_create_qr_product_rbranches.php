@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('qr_product_keys', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name'); 
-            $table->unsignedBigInteger('qr_product_rbranch_id')->on('qr_product_rbranches')->nullable();
+        Schema::create('qr_product_rbranches', function (Blueprint $table) {
+            $table->bigIncrements('id'); 
+            $table->integer('quantity')->default(0); 
+            $table->text('names')->nullable(); 
+            $table->unsignedBigInteger('qr_product_id')->nullable();
             $table->unsignedBigInteger('r_branch_id')->nullable();
             $table->timestamps(); 
         });
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('qr_product_keys');
+        Schema::dropIfExists('qr_product_rbranches');
     }
 };

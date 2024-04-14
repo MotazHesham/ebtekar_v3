@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('qr_products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('product');
-            $table->integer('quantity')->default(0); 
-            $table->unsignedBigInteger('r_branch_id')->nullable();
+            $table->string('product'); 
             $table->timestamps(); 
         });
     }

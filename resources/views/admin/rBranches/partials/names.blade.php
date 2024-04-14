@@ -10,13 +10,16 @@
         </form>
         <form method="POST" action="{{ route('admin.qr-products.update') }}" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="id" value="{{ $qr_product->id }}"> 
+            <input type="hidden" name="id" value="{{ $qr_product_rbranch->id }}"> 
             <div class="row">  
                 <div class="form-group col-md-6">
                     <label class="required"
-                        for="keys">الأسماء</label>
-                    <input class="form-control {{ $errors->has('keys') ? 'is-invalid' : '' }}" type="text"
-                        name="keys" id="keys" placeholder="أضف اسم ..." data-role="tagsinput" required>
+                        for="keys">الأسماء</label> 
+                    <select name="keys[]" id="keys" class="form-control select2" multiple required >
+                        @foreach($qr_product->names as $name)
+                            <option value="{{ $name->id }}" @if(in_array($name->id,json_decode($qr_product_rbranch->names))) selected @endif>{{ $name->name }}</option>
+                        @endforeach
+                    </select>
                     @if ($errors->has('keys'))
                         <div class="invalid-feedback">
                             {{ $errors->first('keys') }}
@@ -62,7 +65,7 @@
                         </td>  
                         <td>  
                             <a href="{{ route('admin.qr-products.print',$name->id) }}" target="_blanc" class="btn btn-warning">طباعة</a>
-                            <a href="{{ route('admin.qr-products.delete_name',$name->id) }}" onclick="return confirm('are you sure?')" class="btn btn-danger">حذف</a>
+                            {{-- <a href="{{ route('admin.qr-products.delete_name',$name->id) }}" onclick="return confirm('are you sure?')" class="btn btn-danger">حذف</a> --}}
                         </td> 
                     </tr>
                 @empty
@@ -79,6 +82,9 @@
 
 <script>
     $(function() {
-        $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
+        $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();  
+        $('.select2').select2({
+            dropdownParent: $('#AjaxModal')
+        });
     }); 
 </script>  

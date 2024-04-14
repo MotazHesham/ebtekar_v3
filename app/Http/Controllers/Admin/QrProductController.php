@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\QrProduct;
 use App\Models\QrProductKey;
+use App\Models\QrProductRBranch;
 use App\Models\QrScanHistory;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,12 @@ class QrProductController extends Controller
     public function qr_output(Request $request){
         $qr_product_key = QrProductKey::find(str_replace('https://ebtekarstore.com?id=','',$request->code));
         $qr_scan_history = QrScanHistory::find($request->id);
-        if($qr_product_key && $qr_scan_history){
+        $qr_product_rbranch = QrProductRBranch::where('qr_product_id',$qr_product_key->qr_product_id)->where('r_branch_id',$request->branch_id)->first();
+        if($qr_product_key && $qr_scan_history && $qr_product_rbranch){
+            if(!in_array($qr_product_key->id,json_decode($qr_product_rbranch->names))){ 
+                return response()->json(['status' => false,'message'=>'الاسم غير موجود في قائمة اسماء المنتج داخل هذا الفرع']);
+            }
+
             $product_name = $qr_product_key->product->product ?? '';
             $tr = '<tr>'; 
             $tr .= '<td>'.$qr_product_key->id.'</td>';
@@ -40,18 +46,18 @@ class QrProductController extends Controller
                 $results = [];
                 if($qr_scan_history->results){
                     $results = json_decode($qr_scan_history->results,TRUE);
-                    $results[$qr_product_key->product->id]['product'] =  $product_name;
-                    if(array_key_exists('names',$results[$qr_product_key->product->id])){
-                        $names = $results[$qr_product_key->product->id]['names'];
+                    $results[$qr_product_rbranch->id]['product'] =  $product_name;
+                    if(array_key_exists('names',$results[$qr_product_rbranch->id])){
+                        $names = $results[$qr_product_rbranch->id]['names'];
                     }else{
                         $names = [];
                     }
                     $name = ['id' => $qr_product_key->id , 'name' => $qr_product_key->name]; 
                     array_push($names,$name);
-                    $results[$qr_product_key->product->id]['names'] =  $names;
+                    $results[$qr_product_rbranch->id]['names'] =  $names;
                 }else{
-                    $results[$qr_product_key->product->id]['product'] =  $product_name;
-                    $results[$qr_product_key->product->id]['names'] =  $scanned;
+                    $results[$qr_product_rbranch->id]['product'] =  $product_name;
+                    $results[$qr_product_rbranch->id]['names'] =  $scanned;
                 }
 
                 $qr_scan_history->results = json_encode($results);
@@ -61,8 +67,8 @@ class QrProductController extends Controller
             $view_results = '<tr> <th>المنتج</th> <th>الكمية</th> </tr>';
             
             foreach(json_decode($qr_scan_history->results) as $key => $product){
-                $qr_product = QrProduct::find($key);
-                $quantity = $qr_product->quantity ?? 0;
+                $qr_product_rbranch = QrProductRBranch::find($key);
+                $quantity = $qr_product_rbranch->quantity ?? 0;
                 $count = count($product->names) ?? 0; 
                     
                 $view_results .='<tr>';
@@ -91,10 +97,8 @@ class QrProductController extends Controller
     }
     
     public function store(Request $request){ 
-        $qr_product = QrProduct::create([
-            'r_branch_id'=>$request->r_branch_id,
-            'product'=>$request->product,
-            'quantity'=>$request->quantity,
+        $qr_product = QrProduct::create([ 
+            'product'=>$request->product, 
         ]);
 
         $names = [];
@@ -121,25 +125,32 @@ class QrProductController extends Controller
         alert('Success','','success');
         return redirect()->back();
     }
+    
+    public function store2(Request $request){  
+        if(QrProductRBranch::where('qr_product_id', $request->qr_product_id)->where('r_branch_id',$request->r_branch_id)->count() != 0){ 
+            alert('هذا المنتج موجود بالفعل في هذا الفرع!!','','warning');
+            return redirect()->back();
+        }
+        QrProductRBranch::create([
+            'qr_product_id' => $request->qr_product_id, 
+            'r_branch_id'=> $request->r_branch_id,   
+            'quantity'=> $request->quantity,
+            'names'=> json_encode($request->keys),
+        ]);
+        alert('Success','','success');
+        return redirect()->back();
+    }
 
     public function update(Request $request){
         if($request->has('update_keys')){ 
-            $names = [];
-            foreach(explode(',',$request->keys) as $name){ 
-                $names [] = [
-                    'qr_product_id' => $request->id, 
-                    'name' => $name,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ];
-            } 
-            QrProductKey::insert($names);
+            $qr_product_rbranch = QrProductRBranch::find($request->id);
+            $qr_product_rbranch->names = json_encode($request->keys);
+            $qr_product_rbranch->save();
             alert('Success','','success');
             return redirect()->back();
         }
-        $qr_product = QrProduct::findOrFail($request->id);
-        $qr_product->update([ 
-            'product'=>$request->product,
+        $qr_product_rbranch = QrProductRBranch::findOrFail($request->id);
+        $qr_product_rbranch->update([  
             'quantity'=>$request->quantity,
         ]);
         alert('Success','','success');
@@ -147,10 +158,12 @@ class QrProductController extends Controller
     }
 
     public function show(Request $request){
-        $qr_product = QrProduct::find($request->id);
-        $qr_product->load('names');
-        $names = $qr_product->names()->get();
-        return view('admin.rBranches.partials.names',compact('qr_product','names'));
+        $qr_product_rbranch = QrProductRBranch::find($request->id);
+        $qr_product_rbranch->load('product');
+        $qr_product = $qr_product_rbranch->product;
+        
+        $names = QrProductKey::whereIn('id',json_decode($qr_product_rbranch->names))->get();
+        return view('admin.rBranches.partials.names',compact('qr_product','qr_product_rbranch','names'));
     }
 
     public function view_scanner(Request $request){
@@ -197,6 +210,15 @@ class QrProductController extends Controller
         return view('admin.rBranches.partials.load_needs',compact('qr_scan_history','qr_products'));
     }
     
+    public function get_names(Request $request){
+        $qr_product = QrProduct::findOrFail($request->id); 
+        $output = '';
+        foreach($qr_product->names as $name){
+            $output .= '<option value="'.$name->id.'">'.$name->name.'</option>';
+        }
+        return $output;
+    }
+    
     public function print($id){
         $qr_product_key = QrProductKey::findOrFail($id); 
         return view('admin.rBranches.partials.print',compact('id','qr_product_key'));
@@ -211,7 +233,7 @@ class QrProductController extends Controller
 
     public function destroy($id)
     { 
-        $qr_product = QrProduct::findOrFail($id);
+        $qr_product = QrProductRBranch::findOrFail($id);
         $qr_product->delete();
 
         return redirect()->back();
