@@ -1,56 +1,5 @@
 <div class="card">
-    <div class="card-header">
-        
-        <div class="card">
-            <div class="card-header">
-                أضافة منتج عام
-            </div>
-            <div class="card-body">
-                <form method="POST" action="{{ route('admin.qr-products.store') }}" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="r_branch_id" value="{{ $rBranch->id }}"> 
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label class="required" for="product">المنتج</label>
-                            <input class="form-control {{ $errors->has('product') ? 'is-invalid' : '' }}"
-                                type="text" name="product" id="product" value="{{ old('product') }}"
-                                required>
-                            @if ($errors->has('product'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('product') }}
-                                </div>
-                            @endif 
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label >أخد الأسماء من منتج أخر</label>
-                            <select name="qr_product_id" id="" class="form-control">
-                                <option disabled selected>أختر منتج</option>
-                                @foreach(\App\Models\QrProduct::all() as $product)
-                                    <option value="{{ $product->id }}">{{ $product->product }}</option>
-                                @endforeach
-                            </select>
-                        </div> 
-                        <div class="form-group col-md-6">
-                            <label for="keys">الأسماء</label>
-                            <input class="form-control {{ $errors->has('keys') ? 'is-invalid' : '' }}" type="text"
-                                name="keys" id="keys" placeholder="أضف اسم ..." data-role="tagsinput">
-                            @if ($errors->has('keys'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('keys') }}
-                                </div>
-                            @endif 
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label ><br></label>
-                            <button class="btn btn-success btn-block btn-warning text-dark" type="submit">
-                                أضافة المنتج
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <hr>
+    <div class="card-header"> 
         <div class="card">
             <div class="card-header">
                 أضافة منتج للفرع
@@ -98,6 +47,16 @@
                             @if ($errors->has('keys'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('keys') }}
+                                </div>
+                            @endif 
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="keys2">اسماء اخري</label>
+                            <input class="form-control {{ $errors->has('keys2') ? 'is-invalid' : '' }}" type="text"
+                                name="keys2" id="keys2" placeholder="أضف اسم ..." data-role="tagsinput">
+                            @if ($errors->has('keys2'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('keys2') }}
                                 </div>
                             @endif 
                         </div>

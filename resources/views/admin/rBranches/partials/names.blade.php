@@ -31,8 +31,18 @@
                     @endif 
                 </div>
                 <div class="form-group col-md-6">
-                    <br> 
-                    <button class="btn btn-success" type="submit" name="update_keys">
+                    <label for="keys2">اسماء اخري</label>
+                    <input class="form-control {{ $errors->has('keys2') ? 'is-invalid' : '' }}" type="text"
+                        name="keys2" id="keys2" placeholder="أضف اسم ..." data-role="tagsinput">
+                    @if ($errors->has('keys2'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('keys2') }}
+                        </div>
+                    @endif 
+                </div>
+                <div class="form-group col-md-4">
+                    <label for=""><br> </label>
+                    <button class="btn btn-success btn-block" type="submit" name="update_keys">
                         {{ trans('global.save') }}
                     </button>
                 </div>
@@ -69,7 +79,7 @@
                         </td>  
                         <td>  
                             <a href="{{ route('admin.qr-products.print',$name->id) }}" target="_blanc" class="btn btn-warning">طباعة</a>
-                            {{-- <a href="{{ route('admin.qr-products.delete_name',$name->id) }}" onclick="return confirm('are you sure?')" class="btn btn-danger">حذف</a> --}}
+                            <a href="{{ route('admin.qr-products.delete_name',['name_id' => $name->id,'qr_product_rbranch_id' => $qr_product_rbranch->id]) }}" onclick="return confirm('are you sure?')" class="btn btn-danger">حذف</a>
                         </td> 
                     </tr>
                 @empty

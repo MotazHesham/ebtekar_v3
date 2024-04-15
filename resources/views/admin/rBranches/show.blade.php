@@ -86,8 +86,13 @@
                         </li>
                     @endif
                     <li class="nav-item">
-                        <a class="nav-link @if($rBranch->payment_type != 'parts') active @endif" href="#r_branche_qr_products" role="tab" data-toggle="tab">
+                        <a class="nav-link @if($rBranch->payment_type != 'parts') active @endif" href="#qr_products" role="tab" data-toggle="tab">
                             منتجات Qr
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#r_branche_qr_products" role="tab" data-toggle="tab">
+                            منتجات الفرع
                         </a>
                     </li>
                     <li class="nav-item">
@@ -104,7 +109,12 @@
                             ])
                         </div>
                     @endif
-                    <div class="tab-pane @if($rBranch->payment_type != 'parts') active @endif" role="tabpanel" id="r_branche_qr_products">
+                    <div class="tab-pane @if($rBranch->payment_type != 'parts') active @endif" role="tabpanel" id="qr_products">
+                        @includeIf('admin.rBranches.relationships.qr_products', [
+                            'qr_products' => $qr_products,
+                        ])
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="r_branche_qr_products">
                         @includeIf('admin.rBranches.relationships.qr_products_rbranch', [
                             'qr_products_rbranch' => $rBranch->qr_products_rbranch,
                         ])

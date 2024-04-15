@@ -423,8 +423,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Qr Products 
     Route::get('qr-products/destroy/{id}', 'QrProductController@destroy')->name('qr-products.destroy');
+    Route::get('qr-products/destroy_product/{id}', 'QrProductController@destroy_product')->name('qr-products.destroy_product');
     Route::get('qr-products/print/{id}', 'QrProductController@print')->name('qr-products.print');
-    Route::get('qr-products/delete_name/{id}', 'QrProductController@delete_name')->name('qr-products.delete_name');
+    Route::get('qr-products/delete_name/{name_id}/{qr_product_rbranch_id}', 'QrProductController@delete_name')->name('qr-products.delete_name');
     Route::post('qr-products/get_names', 'QrProductController@get_names')->name('qr-products.get_names');
     Route::post('qr-products/load_needs', 'QrProductController@load_needs')->name('qr-products.load_needs');
     Route::post('qr-products/printmore', 'QrProductController@printmore')->name('qr-products.printmore');
@@ -435,6 +436,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('qr-products/start_scan', 'QrProductController@start_scan')->name('qr-products.start_scan');
     Route::post('qr-products/show', 'QrProductController@show')->name('qr-products.show');
     Route::post('qr-products/update', 'QrProductController@update')->name('qr-products.update');
+    Route::post('qr-products/update_product', 'QrProductController@update_product')->name('qr-products.update_product');
     Route::post('qr-products/store', 'QrProductController@store')->name('qr-products.store');
     Route::post('qr-product-rbranch/store', 'QrProductController@store2')->name('qr-product-rbranch.store');
 
