@@ -110,5 +110,6 @@
             $select2.find('option').prop('selected', '')
             $select2.trigger('change')
         })
+        $('.select2').css({height:'200px',overflow:'scroll'});
     }); 
 </script>  
