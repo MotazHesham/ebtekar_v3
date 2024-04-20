@@ -151,7 +151,7 @@ class ProductController extends Controller
         }
 
         if($request->category != null){
-            $category = Category::where('slug', $request->category)->first();
+            $category = Category::where('slug','like','%' . $request->category . '%')->first();
             if($category){
                 $meta_title = $category->meta_title;
                 $meta_description = $category->meta_description;
@@ -162,8 +162,8 @@ class ProductController extends Controller
             }
         }
         if($request->sub_category != null){
-
-            $sub_category = SubCategory::where('slug', $request->sub_category)->first();
+            
+            $sub_category = SubCategory::where('slug','like','%' . $request->sub_category . '%')->first();
             if($sub_category){
                 $meta_title = $sub_category->meta_title;
                 $meta_description = $sub_category->meta_description;
@@ -175,7 +175,7 @@ class ProductController extends Controller
         }
 
         if($request->sub_sub_category != null){  
-            $sub_sub_category = SubSubCategory::where('slug', $request->sub_sub_category)->first();
+            $sub_sub_category = SubSubCategory::where('slug','like','%' . $request->sub_sub_category . '%')->first();
             if($sub_sub_category){ 
                 $meta_title = $sub_sub_category->meta_title;
                 $meta_description = $sub_sub_category->meta_description;
