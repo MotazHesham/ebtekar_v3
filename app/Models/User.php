@@ -106,12 +106,7 @@ class User extends Authenticatable implements HasMedia
                 }
 
                 $user->verification_token = $token;
-                $user->save();
-
-                $registrationRole = config('panel.registration_default_role');
-                if (!$user->roles()->get()->contains($registrationRole)) {
-                    $user->roles()->attach($registrationRole);
-                }
+                $user->save(); 
 
                 $user->notify(new VerifyUserNotification($user));
             }

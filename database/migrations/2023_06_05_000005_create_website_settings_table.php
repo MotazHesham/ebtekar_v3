@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('css_file_name')->nullable();
             $table->string('site_name');
+            $table->string('url')->nullable();
             $table->string('domains');
             $table->longText('keywords_seo');
             $table->string('author_seo');

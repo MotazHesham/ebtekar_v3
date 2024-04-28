@@ -13,10 +13,14 @@ class VerifyUserNotification extends Notification implements ShouldQueue
     use Queueable;
 
     private $user = null;
+    private $email = null;
+    private $site_name = null;
 
-    public function __construct(User $user)
+    public function __construct(User $user,$email,$site_name)
     {
         $this->user = $user;
+        $this->email = $email;
+        $this->site_name = $site_name;
     }
 
     public function via($notifiable)
@@ -26,9 +30,8 @@ class VerifyUserNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
-        $site_settings = get_site_setting();
         return (new MailMessage)
-            ->from($site_settings->email, $site_settings->site_name)
+            ->from($this->email,$this->site_name)
             ->greeting('Hello!')
             ->line(trans('global.verifyYourUser'))
             ->action(trans('global.clickHereToVerify'), route('userVerification', $this->user->verification_token))

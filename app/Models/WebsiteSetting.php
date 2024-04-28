@@ -45,6 +45,7 @@ class WebsiteSetting extends Model implements HasMedia
         'site_name',
         'css_file_name',
         'domains',
+        'url',
         'description_seo',
         'keywords_seo',
         'author_seo',
