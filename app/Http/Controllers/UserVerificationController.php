@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\VerifyUserMail;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;  
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 
 class UserVerificationController extends Controller
 {
@@ -19,5 +23,28 @@ class UserVerificationController extends Controller
         $user->save();
 
         return redirect()->route('login')->with('message', trans('global.emailVerificationSuccess'));
+    }
+
+    public function verify(){
+        return view('auth.verify');
+    }
+
+    public function resend(Request $request){
+        $request->validate([
+            'email' => 'required|string|email',
+        ]);
+        
+        
+        $site_settings = get_site_setting(); 
+        $user = User::where('email',$request->email)->first();
+        if(!$user){
+            return abort(404);
+        }
+        $token     = Str::random(64); 
+        $user->verification_token = $token;
+        $user->save(); 
+
+        Mail::to($user->email)->send(new VerifyUserMail($user,$site_settings)); 
+        return redirect()->back()->with('message', 'success');
     }
 }

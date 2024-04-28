@@ -19,7 +19,8 @@ Route::post('magic_trick_store','Admin\HomeController@magic_trick_store')->name(
 Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token');  
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
-
+Route::get('user/verify','UserVerificationController@verify')->name('user.verify');
+Route::post('verification/resend','UserVerificationController@resend')->name('verification.resend');
 Auth::routes();
 
 //social - login

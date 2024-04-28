@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Mail\ResetPasswordMail;
+use App\Mail\VerifyUserMail;
 use App\Notifications\VerifyUserNotification;
 use App\Traits\Auditable;
 use Carbon\Carbon;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -97,6 +100,7 @@ class User extends Authenticatable implements HasMedia
                 $user->verified_at = Carbon::now()->format(config('panel.date_format') . ' ' . config('panel.time_format'));
                 $user->save();
             } elseif (!$user->verification_token) {
+                $site_settings = get_site_setting(); 
                 $token     = Str::random(64);
                 $usedToken = self::where('verification_token', $token)->first();
 
@@ -108,7 +112,7 @@ class User extends Authenticatable implements HasMedia
                 $user->verification_token = $token;
                 $user->save(); 
 
-                $user->notify(new VerifyUserNotification($user));
+                Mail::to($user->email)->send(new VerifyUserMail($user,$site_settings));
             }
         });
     } 
@@ -143,8 +147,10 @@ class User extends Authenticatable implements HasMedia
 
     public function sendPasswordResetNotification($token)
     {
+        // $this->notify(new ResetPasswordNotification($token,$site_settings)); 
         $site_settings = get_site_setting();
-        $this->notify(new ResetPasswordNotification($token,$site_settings));
+        $url = $site_settings->url . '/password/reset/' . $token . '?email=' . $this->email; 
+        Mail::to($this->email)->send(new ResetPasswordMail($url,$site_settings)); 
     }
 
     public function getPhotoAttribute()

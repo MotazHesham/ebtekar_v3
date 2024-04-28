@@ -267,8 +267,7 @@ class CheckoutController extends Controller
                 return redirect()->route('home');
             }
         }catch (\Exception $ex){
-            DB::rollBack();
-            return $ex;
+            DB::rollBack(); 
             toast("SomeThing Went Wrong!",'error');
             return redirect()->route('home');
         }
@@ -278,7 +277,7 @@ class CheckoutController extends Controller
     //redirects to this method after a successfull checkout
     public function checkout_done($order_id, $payment)
     { 
-        $order = Order::withoutGlobalScope('completed')->find($order_id);
+        $order = Order::withoutGlobalScope('completed')->with('orderDetails.product')->find($order_id);
         $order->payment_status = $payment;
         $order->completed = 1;
         if($payment == 'paid'){
