@@ -33,7 +33,8 @@ class CheckoutController extends Controller
         }
 
         $countries = Country::where('status',1)->where('website',1)->get()->groupBy('type'); 
-        return view('frontend.checkout',compact('countries'));
+        $currency_symbol =  session("currency")->symbol ?? 'EGP';
+        return view('frontend.checkout',compact('countries','currency_symbol'));
     } 
 
     public function checkout(CheckoutOrder $request){  
