@@ -134,8 +134,10 @@
                 </div>
             </div>
             <div class="row cart-buttons">
-                <div class="col-12"><a href="{{ route('frontend.search') }}" class="btn btn-normal">  {{ trans('frontend.cart.shoping') }} </a> <a
-                        href="{{ route('frontend.payment_select') }}" class="btn btn-normal ms-3">  {{ trans('frontend.cart.payment') }}  </a></div>
+                <div class="col-12">
+                    <a href="{{ route('frontend.search') }}" class="btn btn-normal">  {{ trans('frontend.cart.shoping') }} </a> 
+                    <a href="{{ route('frontend.payment_select') }}" class="btn btn-normal ms-3 initiate-checkout">  {{ trans('frontend.cart.payment') }}  </a>
+                </div>
             </div>
         </div>
     </section>

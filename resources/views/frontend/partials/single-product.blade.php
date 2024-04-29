@@ -33,7 +33,7 @@
                     </form>
                 @endif
                 <a href="{{ route('frontend.wishlist.add',$product->slug) }}" class="add-to-wish tooltip-top"
-                    data-tippy-content="Add to Wishlist">
+                    data-tippy-content="Add to Wishlist" data-name="{{ $product->name }}">
                     <i data-feather="heart"></i>
                 </a>
                 <a href="javascript:void(0)" onclick="quick_view('{{$product->id}}')" data-bs-toggle="modal" data-bs-target="#quick-view"

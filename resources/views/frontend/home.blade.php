@@ -146,10 +146,10 @@
                                                                                     </form>
                                                                                 @endif
                                                                                 <a href="{{ route('frontend.wishlist.add', $product->slug) }}"
-                                                                                    class="add-to-wish tooltip-top"
+                                                                                    class="add-to-wish tooltip-top" data-name="{{ $product->name }}"
                                                                                     data-tippy-content="Add to Wishlist"><i
                                                                                         data-feather="heart"
-                                                                                        class="add-to-wish"></i></a>
+                                                                                        class="add-to-wish" data-name="{{ $product->name }}"></i></a>
                                                                                 <a href="javascript:void(0)" onclick="quick_view('{{$product->id}}')" data-bs-toggle="modal" data-bs-target="#quick-view" class="tooltip-top"  data-tippy-content="Quick View"><i  data-feather="eye"></i></a>
 
                                                                             </div>

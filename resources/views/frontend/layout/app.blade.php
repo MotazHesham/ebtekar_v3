@@ -81,7 +81,7 @@
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-PDWZQJS9');</script>
+            })(window,document,'script','dataLayer','GTM-PM74GFD2');</script>
         <!-- End Google Tag Manager -->
         
         <!-- Facebook Pixel Code -->
@@ -119,7 +119,7 @@
     
     @if(app()->isProduction() && $site_settings->id == 1) 
         <!-- Google Tag Manager (noscript) -->
-            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PDWZQJS9"
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PM74GFD2"
             height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- End Google Tag Manager (noscript) -->
     @endif
@@ -364,8 +364,17 @@
     <script>
         
         $('.add-cartnoty').on('click',function(){ 
-            fbq('track', 'addToCart', {name: $(this).data('name') , value: $(this).data('price'), currency: '{{ $currency_symbol }}'});
+            fbq('track', 'AddToCart', {name: $(this).data('name') , value: $(this).data('price')}); 
         })
+        $('.add-to-wish').on('click',function(){  
+            fbq('track', 'AddToWishlist', {name: $(this).data('name')});
+        })
+        $('.initiate-checkout').on('click',function(){  
+            fbq('track', 'InitiateCheckout');
+        })
+        @if(isset($search))
+            fbq('track', 'Search', {search_string: '{{$search}}'});
+        @endif
         function dismiss(){
             $('#dismiss').remove();
         } 

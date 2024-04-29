@@ -239,23 +239,24 @@
                                     <div class="product-buttons">
                                         @if ($product->current_stock > 0)
                                             @if ($product->special)
-                                                <a href="" class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ trans('frontend.product.custom_product') }}</a>
+                                                <a href=""  data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}" data-name="{{ $product->name }}"
+                                                class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ trans('frontend.product.custom_product') }}</a>
                                             @else
-                                                <button type="submit" id="cartEffect"
+                                                <button type="submit" id="cartEffect" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}" data-name="{{ $product->name }}"
                                                     class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart">
                                                     <i class="fa fa-shopping-cart"></i>
                                                     {{ trans('frontend.product.add_to_cart') }}
                                                 </button>
                                             @endif
                                         @else 
-                                            <button type="button"
+                                            <button type="button" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}" data-name="{{ $product->name }}"
                                                 class="btn cart-btn btn-danger tooltip-top" data-tippy-content="Add to cart">
                                                 <i class="fa fa-shopping-cart"></i>
                                                 Out Of Stock
                                             </button>
                                         @endif
                                         <a href="{{ route('frontend.wishlist.add', $product->slug) }}" class="btn btn-normal add-to-wish tooltip-top"
-                                            data-tippy-content="Add to wishlist">
+                                            data-tippy-content="Add to wishlist" data-name="{{ $product->name }}">
                                             <i class="fa fa-heart" aria-hidden="true"></i>
                                         </a>
                                     </div>
@@ -466,6 +467,12 @@
             $('#add-to-cart-form input').on('change', function() {
                 getVariantPrice();
             });
+            
+            $('.cart-btn').on('click',function(){ 
+                fbq('track', 'AddToCart', {name: $(this).data('name') , value: $(this).data('price')});
+            })
+
+            fbq('track', 'ViewContent', {content_name: '{{ $product->name }}' , content_category:'{{ $product->category->name }}'});
         });
 
         function copy_to_clipboard(text){

@@ -262,7 +262,7 @@
                                             </div>
                                         </div>
                                         <div class="text-right">
-                                            <button type="submit" class="btn-normal btn">{{ trans('frontend.checkout.pay') }}</button>
+                                            <button type="submit" class="btn-normal btn" id="checkout-order">{{ trans('frontend.checkout.pay') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -283,6 +283,11 @@
     <script src="{{ asset('dashboard_offline/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
+        
+        $('#checkout-order').on('click',function(){  
+            fbq('track', 'AddPaymentInfo');
+            fbq('track', 'Purchase',{currency: '{{ $currency_symbol }}',value: '{{$total}}'});
+        })
         $('#free_shipping').on('change',function(){ 
             var free_shipping = $('#free_shipping').val();
             if(free_shipping == '1'){

@@ -69,7 +69,7 @@
 <li>
     <div class="buttons">
         <a href="{{ route('frontend.cart') }}" class="btn btn-solid btn-sm">{{ trans('frontend.cart.show_cart') }}</a>
-        <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm ">{{ trans('frontend.cart.payment_direct') }}</a>
+        <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm initiate-checkout">{{ trans('frontend.cart.payment_direct') }}</a>
     </div>
 </li>
 </ul>
