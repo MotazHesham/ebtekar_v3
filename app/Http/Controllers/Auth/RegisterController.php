@@ -71,7 +71,7 @@ class RegisterController extends Controller
                 'phone_number'    => $data['phone_number'],
                 'user_type'    => 'customer',
                 'approved'    => 1,
-                // 'verified'    => 1,
+                'verified'    => 1,
                 'password' => Hash::make($data['password']),
             ]);
         }
