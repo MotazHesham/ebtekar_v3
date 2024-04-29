@@ -9,7 +9,7 @@
                     <div>
                         <h2> دخول المستخدمين</h2>
                         <ul>
-                            <li><a href="index.html">الرئيسية</a></li>
+                            <li><a href="{{ route('home') }}">الرئيسية</a></li>
                             <li><i class="fa fa-angle-double-left"></i></li>
                             <li><a href="javascript:void(0)">{{ trans('global.reset_password') }}</a></li>
                         </ul>

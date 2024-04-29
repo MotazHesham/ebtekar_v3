@@ -10,7 +10,7 @@
                         <div>
                             <h2>تسجيل مستخدم</h2>
                             <ul>
-                                <li><a href="index.html">الرئيسية</a></li>
+                                <li><a href="{{ route('home') }}">الرئيسية</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
                                 <li><a href="javascript:void(0)">تسجيل مستخدم</a></li>
                             </ul>

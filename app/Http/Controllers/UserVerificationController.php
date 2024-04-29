@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendVerificationMail;
 use App\Mail\VerifyUserMail;
 use App\Models\User;
 use Carbon\Carbon;
@@ -32,8 +33,8 @@ class UserVerificationController extends Controller
     public function resend(Request $request){
         $request->validate([
             'email' => 'required|string|email',
-        ]);
-        
+        ]); 
+
         
         $site_settings = get_site_setting(); 
         $user = User::where('email',$request->email)->first();
@@ -43,8 +44,8 @@ class UserVerificationController extends Controller
         $token     = Str::random(64); 
         $user->verification_token = $token;
         $user->save(); 
-
-        Mail::to($user->email)->send(new VerifyUserMail($user,$site_settings)); 
+        
+        SendVerificationMail::dispatch($user,$site_settings,$user->email); 
         return redirect()->back()->with('message', 'success');
     }
 }
