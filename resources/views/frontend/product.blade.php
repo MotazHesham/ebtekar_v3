@@ -467,10 +467,6 @@
             $('#add-to-cart-form input').on('change', function() {
                 getVariantPrice();
             });
-            
-            $('.cart-btn').on('click',function(){ 
-                fbq('track', 'AddToCart', {name: $(this).data('name') , value: $(this).data('price')});
-            })
 
             fbq('track', 'ViewContent', {content_name: '{{ $product->name }}' , content_category:'{{ $product->category->name }}'});
         });

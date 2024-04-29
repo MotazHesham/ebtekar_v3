@@ -364,8 +364,13 @@
     <script>
         
         $('.add-cartnoty').on('click',function(){ 
-            fbq('track', 'AddToCart', {name: $(this).data('name') , value: $(this).data('price')}); 
+            fbq('track', 'AddToCart', {name: $(this).data('name') , value: $(this).data('price'), currency: '{{ $currency_symbol }}'}); 
         })
+            
+        $('.cart-btn').on('click',function(){ 
+            fbq('track', 'AddToCart', {name: $(this).data('name') , value: $(this).data('price'), currency: '{{ $currency_symbol }}'});
+        })
+        
         $('.add-to-wish').on('click',function(){  
             fbq('track', 'AddToWishlist', {name: $(this).data('name')});
         })
