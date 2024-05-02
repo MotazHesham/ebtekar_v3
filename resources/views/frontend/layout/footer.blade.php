@@ -6,7 +6,7 @@
                     <div class="footer-main">
                         <div class="footer-box">
                             <div class="footer-title mobile-title">
-                                <h5>عن ابتكار</h5>
+                                {{-- <h5>عن ابتكار</h5> --}}
                             </div>
                             <div class="footer-contant">
                                 <div class="footer-logo">

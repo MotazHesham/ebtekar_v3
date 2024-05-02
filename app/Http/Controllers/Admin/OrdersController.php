@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\OrderDeliveryExport;
 use App\Exports\OrdersExport;
 use App\Exports\OrdersResultsExport;
 use App\Http\Controllers\Controller;
@@ -358,6 +359,10 @@ class OrdersController extends Controller
         if($request->has('download')){
             return Excel::download(new OrdersExport($orders->get()), 'orders.xlsx');
         } 
+
+        if ($request->has('download_delivery')) {
+            return Excel::download(new OrderDeliveryExport($orders->with('orderDetails.product')->get()), 'orders_delivery_(' . $from_date . ')_(' . $to_date . ').xlsx');
+        }
 
         if ($request->has('print')) {
             $orders = $orders->with('orderDetails.product')->get();

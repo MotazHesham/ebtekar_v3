@@ -256,6 +256,9 @@
                 <div class="col-md-2">
                     <a class="btn btn-warning btn-rounded btn-block"  href="{{ route('admin.orders.index') }}">{{ trans('global.reset') }}</a>
                 </div> 
+                <div class="col-md-3">
+                    <input type="submit" value="{{ trans('global.download_for_delivery') }}" name="download_delivery" class="btn btn-dark btn-rounded btn-block">
+                </div>
             </div> 
         </form>
 
