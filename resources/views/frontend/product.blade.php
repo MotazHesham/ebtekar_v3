@@ -36,7 +36,7 @@
     <meta property="og:description" content="{{ $product->meta_description }}" />
     <meta property="og:site_name" content="{{ $site_settings->site_name }}" />
     <meta property="og:price:amount" content="{{ $product->calc_price_as_text() }}" /> 
-@endsection 
+@endsection  
 @section('content') 
 
     {{-- this is for share product in facebook --}}
@@ -239,24 +239,24 @@
                                     <div class="product-buttons">
                                         @if ($product->current_stock > 0)
                                             @if ($product->special)
-                                                <a href=""  data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}" data-name="{{ $product->name }}"
+                                                <a href=""  data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}" data-name="{{ $product->name }}"
                                                 class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ trans('frontend.product.custom_product') }}</a>
                                             @else
-                                                <button type="submit" id="cartEffect" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}" data-name="{{ $product->name }}"
+                                                <button type="submit" id="cartEffect" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}" data-name="{{ $product->name }}"
                                                     class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart">
                                                     <i class="fa fa-shopping-cart"></i>
                                                     {{ trans('frontend.product.add_to_cart') }}
                                                 </button>
                                             @endif
                                         @else 
-                                            <button type="button" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}" data-name="{{ $product->name }}"
+                                            <button type="button" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}" data-name="{{ $product->name }}"
                                                 class="btn cart-btn btn-danger tooltip-top" data-tippy-content="Add to cart">
                                                 <i class="fa fa-shopping-cart"></i>
                                                 Out Of Stock
                                             </button>
                                         @endif
                                         <a href="{{ route('frontend.wishlist.add', $product->slug) }}" class="btn btn-normal add-to-wish tooltip-top"
-                                            data-tippy-content="Add to wishlist" data-name="{{ $product->name }}">
+                                            data-tippy-content="Add to wishlist" data-name="{{ $product->name }}" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}">
                                             <i class="fa fa-heart" aria-hidden="true"></i>
                                         </a>
                                     </div>
@@ -272,7 +272,7 @@
                             </div>
 
                             <div class="pro-group pb-0">
-                                @php($en_route_product = route('frontend.en_product',$product->id))
+                                @php($en_route_product = route('frontend.en_product', $product->id))
                                 <h6 class="product-title"> <a title="Copy Product Link" href="#" onclick="copy_to_clipboard('{{ $en_route_product }}')"><i class="fa fa-copy"></i></a> {{ trans('frontend.product.share') }}</h6>
                                 <div style="display: flex;justify-content: space-evenly;">
                                     <div class="fb-share-button"  data-href="{{ route('frontend.product', $product->slug) }}"  data-layout="button_count">
@@ -468,12 +468,34 @@
                 getVariantPrice();
             });
 
-            fbq('track', 'ViewContent', {content_name: '{{ $product->name }}' , content_category:'{{ $product->category->name }}'});
+            // fbq('track', 'ViewContent', {
+            //     content_name: '{{ $product->name }}',
+            //     content_category: '{{ $product->category->name }}'
+            // });
+            
+            dataLayer.push({
+                ecommerce: null
+            });
+
+            dataLayer.push({
+                'event': 'view_item',
+                'ecommerce': {
+                    currencyCode: 'EGP',
+                    detail: {
+                        products: [{
+                            id: "{{ $product->id }}",
+                            name: "{{ $product->name }}",
+                            category: "{{ $product->category->name ?? '' }}",
+                            price: "{{ front_calc_product_currency($product->unit_price, $product->weight)['value'] }}",
+                        }]
+                    }
+                }
+            })
         });
 
-        function copy_to_clipboard(text){
-            navigator.clipboard.writeText(text); 
-            showToast('success', "Copied to clipboard",'top-right')
+        function copy_to_clipboard(text) {
+            navigator.clipboard.writeText(text);
+            showToast('success', "Copied to clipboard", 'top-right')
         }
 
         function change_rating(rate) {

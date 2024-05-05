@@ -36,14 +36,14 @@ class HomeController extends Controller
             return Slider::where('website_setting_id', $site_settings->id)->with('media')->where('published', 1)->get();
         });
         $new_products = Cache::rememberForever('home_new_products_'.$site_settings->id, function () use ($site_settings) {
-            return Product::where('website_setting_id', $site_settings->id)->with('media')->where('published', 1)->where('todays_deal', 1)->orderBy('created_at', 'desc')->take(10)->get();
+            return Product::where('website_setting_id', $site_settings->id)->with('media','category')->where('published', 1)->where('todays_deal', 1)->orderBy('created_at', 'desc')->take(10)->get();
         });
         $home_categories = Cache::rememberForever('home_categories_'.$site_settings->id, function () use ($site_settings) {
             return HomeCategory::where('website_setting_id', $site_settings->id)->with('category.media')->orderBy('created_at', 'desc')->get();
         });
         $freatured_categories =  Cache::rememberForever('freatured_categories_'.$site_settings->id, function () use ($site_settings) {
 
-            $categories = Category::where('website_setting_id', $site_settings->id)->where('published', 1)->where('featured', 1)->with(['media','products.media', 'products' => function ($query) {
+            $categories = Category::where('website_setting_id', $site_settings->id)->where('published', 1)->where('featured', 1)->with(['media','products.media','products.category', 'products' => function ($query) {
                 $query->where('published', 1)->where('featured', 1)->orderBy('created_at', 'desc');
             }])->orderBy('created_at', 'desc')->get();
 
@@ -59,7 +59,7 @@ class HomeController extends Controller
             return Banner::where('website_setting_id', $site_settings->id)->with('media')->where('position', 1)->where('published', 1)->orderBy('updated_at', 'desc')->get()->take(2);
         });
         $best_selling_products = Cache::rememberForever('home_best_selling_products_'.$site_settings->id, function () use ($site_settings) {
-            return Product::where('website_setting_id', $site_settings->id)->with('media')->where('published', 1)->orderBy('num_of_sale', 'desc')->take(10)->get();
+            return Product::where('website_setting_id', $site_settings->id)->with('media','category')->where('published', 1)->orderBy('num_of_sale', 'desc')->take(10)->get();
         });
         return view('frontend.home', compact('sliders', 'new_products', 'home_categories', 'freatured_categories', 'banners_1', 'best_selling_products'));
     }

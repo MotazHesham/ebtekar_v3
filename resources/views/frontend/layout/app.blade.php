@@ -95,7 +95,7 @@
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '201006871905666');
-            fbq('track', 'PageView');
+            // fbq('track', 'PageView');
         </script>
         <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=201006871905666&ev=PageView&noscript=1"
@@ -356,6 +356,7 @@
 
     
     <script src="{{ asset('dashboard_offline/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('js/dataLayers.js') }}"></script>
     
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
@@ -364,21 +365,38 @@
     <script>
         
         $('.add-cartnoty').on('click',function(){ 
-            fbq('track', 'AddToCart', {name: $(this).data('name') , value: $(this).data('price'), currency: '{{ $currency_symbol }}'}); 
+            const name = $(this).data('name');
+            const price = $(this).data('price');
+            const category = $(this).data('category');
+            const id = $(this).data('id');
+            // fbq('track', 'AddToCart', {name: name , value: price , currency: '{{ $currency_symbol }}'}); 
+            addToCartDataLayer(id,name,category,price);
         })
             
         $('.cart-btn').on('click',function(){ 
-            fbq('track', 'AddToCart', {name: $(this).data('name') , value: $(this).data('price'), currency: '{{ $currency_symbol }}'});
+            const name = $(this).data('name');
+            const price = $(this).data('price');
+            const category = $(this).data('category');
+            const id = $(this).data('id');
+            // fbq('track', 'AddToCart', {name: name , value: price, currency: '{{ $currency_symbol }}'});
+            addToCartDataLayer(id,name,category,price);
         })
         
         $('.add-to-wish').on('click',function(){  
-            fbq('track', 'AddToWishlist', {name: $(this).data('name')});
+            const name = $(this).data('name'); 
+            const price = $(this).data('price');
+            const category = $(this).data('category');
+            const id = $(this).data('id');
+            // fbq('track', 'AddToWishlist', {name: $(this).data('name')});
+            wishListDataLayer(id,name,category,price);
         })
-        $('.initiate-checkout').on('click',function(){  
-            fbq('track', 'InitiateCheckout');
-        })
+        // $('.initiate-checkout').on('click',function(){  
+        //     fbq('track', 'InitiateCheckout');
+        // })
+
         @if(isset($search))
-            fbq('track', 'Search', {search_string: '{{$search}}'});
+            // fbq('track', 'Search', {search_string: '{{$search}}'});
+            search_dataLayer('{{$search}}')
         @endif
         function dismiss(){
             $('#dismiss').remove();

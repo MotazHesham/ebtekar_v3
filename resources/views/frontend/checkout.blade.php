@@ -160,6 +160,7 @@
                                         <ul class="qty">
                                             @php
                                                 $total = 0;
+                                                $count_cart = session('cart') ? session('cart')->count() : 0;
                                             @endphp
                                             @if(session('cart'))
                                                 @foreach(session('cart') as $cartItem)
@@ -285,8 +286,9 @@
     <script>
         
         $('#checkout-order').on('click',function(){  
-            fbq('track', 'AddPaymentInfo');
-            fbq('track', 'Purchase',{currency: '{{ $currency_symbol }}',value: '{{$total}}'});
+            // fbq('track', 'AddPaymentInfo');
+            // fbq('track', 'Purchase',{currency: '{{ $currency_symbol }}',value: '{{$total}}'});
+            checkoutOrder_dataLayer('{{$total}}','{{$count_cart}}');
         })
         $('#free_shipping').on('change',function(){ 
             var free_shipping = $('#free_shipping').val();

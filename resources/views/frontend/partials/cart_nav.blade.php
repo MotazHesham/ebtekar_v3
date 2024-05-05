@@ -1,8 +1,9 @@
 <ul class="cart_product">
     @php
         $total = 0;
+        $count_cart = session('cart') ? session('cart')->count() : 0;
     @endphp
-    @if (session('cart'))
+    @if (session('cart')) 
         @foreach (session('cart') as $key => $cartItem)
             @php
                 $product = \App\Models\Product::find($cartItem['product_id']);
@@ -69,7 +70,7 @@
 <li>
     <div class="buttons">
         <a href="{{ route('frontend.cart') }}" class="btn btn-solid btn-sm">{{ trans('frontend.cart.show_cart') }}</a>
-        <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm initiate-checkout">{{ trans('frontend.cart.payment_direct') }}</a>
+        <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm " onclick="initiate_checkout_dataLayer('{{$total ?? 0}}','{{$count_cart}}')">{{ trans('frontend.cart.payment_direct') }}</a>
     </div>
 </li>
 </ul>
