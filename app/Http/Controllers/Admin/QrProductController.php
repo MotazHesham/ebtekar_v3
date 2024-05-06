@@ -36,9 +36,9 @@ class QrProductController extends Controller
             if($qr_scan_history->scanned){
                 $scanned = explode(',',$qr_scan_history->scanned);
             } 
-            if(in_array($qr_product_key->id,$scanned)){ 
-                return response()->json(['status' => false,'message'=>'already exist']);
-            }else{ 
+            // if(in_array($qr_product_key->id,$scanned)){ 
+            //     return response()->json(['status' => false,'message'=>'already exist']);
+            // }else{ 
                 $scanned[] = $qr_product_key->id;
                 $qr_scan_history->scanned = implode(',',$scanned);
                 
@@ -62,7 +62,7 @@ class QrProductController extends Controller
 
                 $qr_scan_history->results = json_encode($results);
                 $qr_scan_history->save();
-            }
+            // }
 
             $view_results = '<tr> <th>المنتج</th> <th>الكمية</th> </tr>';
             
