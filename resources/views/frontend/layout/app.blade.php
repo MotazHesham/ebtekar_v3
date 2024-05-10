@@ -75,13 +75,13 @@
     </style>
     @yield('styles')
 
-    @if(app()->isProduction() && $site_settings->id == 1) 
+    @if(app()->isProduction() && $site_settings->tag_manager ) 
         <!-- Google Tag Manager -->
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-PM74GFD2');</script>
+            })(window,document,'script','dataLayer','{{ $site_settings->tag_manager }}');</script>
         <!-- End Google Tag Manager -->
         
         <!-- Facebook Pixel Code -->
@@ -94,11 +94,11 @@
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '201006871905666');
+            fbq('init', '{{$site_settings->fb_pixel_id}}');
             // fbq('track', 'PageView');
         </script>
         <noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=201006871905666&ev=PageView&noscript=1"
+        src="https://www.facebook.com/tr?id={{$site_settings->fb_pixel_id}}&ev=PageView&noscript=1"
         /></noscript>
         <!-- End Facebook Pixel Code -->
             
@@ -117,9 +117,9 @@
 <body class="bg-light rtl">
 
     
-    @if(app()->isProduction() && $site_settings->id == 1) 
+    @if(app()->isProduction() && $site_settings->tag_manager ) 
         <!-- Google Tag Manager (noscript) -->
-            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PM74GFD2"
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $site_settings->tag_manager }}"
             height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- End Google Tag Manager (noscript) -->
     @endif

@@ -61,6 +61,8 @@ class WebsiteSetting extends Model implements HasMedia
         'linkedin',
         'whatsapp',
         'youtube',
+        'tag_manager',
+        'fb_pixel_id',
         'google_plus',
         'welcome_message',
         'video_instructions',
