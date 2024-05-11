@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -67,7 +68,7 @@ class RegisterController extends Controller
         {
             
             $site_settings = get_site_setting();
-            return User::create([
+            $user = User::create([
                 'name'     => $data['name'],
                 'email'    => $data['email'],
                 'phone_number'    => $data['phone_number'],
@@ -77,5 +78,11 @@ class RegisterController extends Controller
                 'password' => Hash::make($data['password']),
                 'website_setting_id' => $site_settings->id,
             ]);
+
+            Customer::create([
+                'user_id' => $user->id
+            ]);
+            
+            return $user;
         }
 }
