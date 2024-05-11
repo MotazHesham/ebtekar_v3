@@ -58,7 +58,7 @@ class CustomersController extends Controller
                 return $row->user ? $row->user->address : '';
             });
             $table->addColumn('user_website_site_name', function ($row) {
-                return $row->user ? $row->user->website->site_name : '';
+                return $row->user->website ? $row->user->website->site_name : '';
             }); 
             $table->addColumn('created_at', function ($row) {
                 return $row->created_at ? $row->created_at : '';

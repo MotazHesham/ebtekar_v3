@@ -65,6 +65,8 @@ class RegisterController extends Controller
         */
         protected function create(array $data)
         {
+            
+            $site_settings = get_site_setting();
             return User::create([
                 'name'     => $data['name'],
                 'email'    => $data['email'],
@@ -73,6 +75,7 @@ class RegisterController extends Controller
                 'approved'    => 1,
                 'verified'    => 1,
                 'password' => Hash::make($data['password']),
+                'website_setting_id' => $site_settings->id,
             ]);
         }
 }
