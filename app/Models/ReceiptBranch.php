@@ -26,6 +26,7 @@ class ReceiptBranch extends Model
         'receive_premission'   => 'تم استلام الأذن',
         'permission_segment'   => 'تم تجزئة الأذن',
         'permission_complete'   => 'تم صرف الأذن',
+        'permission_complete_2'   => 'تم تسليم الأذن',
     ];
 
     protected $dates = [
@@ -121,7 +122,12 @@ class ReceiptBranch extends Model
     }
 
     public function price_type(){ 
-        $payment_type = $this->branch ?  '_' . $this->branch->payment_type : '';
+        if($this->branch){
+            $zz =  $this->branch->payment_type == 'permissions_parts' ? 'permissions' : $this->branch->payment_type;
+        }else{
+            $zz = '';
+        }
+        $payment_type = $this->branch ?  '_' . $zz : '';
         return $payment_type == '_cash' ? 'price'  : 'price'. $payment_type;
     }
 }

@@ -52,6 +52,19 @@ class ReceiptBranchController extends Controller
         }elseif($request->has('permission_complete')){
             $receipt->permission_status = 'permission_complete';
             $receipt->add_income();
+        }elseif($request->has('permission_complete_2')){
+            $receipt->permission_status = 'permission_complete_2';
+            if($receipt->branch->r_client->manage_type == 'seperate'){
+                $message = 'المديونية السابقة ' . $receipt->branch->remaining . ' ,,,,';
+                $receipt->branch->remaining += $receipt->calc_total_cost(); 
+                $receipt->branch->save();
+                $message .= 'تم أضافة مديونية ' . $receipt->calc_total_cost() . ' إلي ' . $receipt->branch->name . ' وأصبح أجمالي المديونية ' . $receipt->branch->remaining;
+            }elseif($receipt->branch->r_client->manage_type == 'unified'){
+                $message = 'المديونية السابقة ' . $receipt->branch->r_client->remaining . ' ,,,,';
+                $receipt->branch->r_client->remaining += $receipt->calc_total_cost();
+                $receipt->branch->r_client->save();
+                $message .= 'تم أضافة مديونية ' . $receipt->calc_total_cost() . ' إلي ' . $receipt->branch->r_client->name . ' وأصبح أجمالي المديونية ' . $receipt->branch->r_client->remaining;
+            }
         }
         $receipt->save();
         return redirect()->back();
@@ -83,6 +96,8 @@ class ReceiptBranchController extends Controller
                         $receipt->branch->r_client->save();
                         $message .= 'تم أضافة مديونية ' . $receipt->calc_total_cost() . ' إلي ' . $receipt->branch->r_client->name . ' وأصبح أجمالي المديونية ' . $receipt->branch->r_client->remaining;
                     }
+                }elseif($receipt->branch->payment_type == 'permissions_parts'){
+                    $status = '4'; 
                 }
             } 
         }else{ 

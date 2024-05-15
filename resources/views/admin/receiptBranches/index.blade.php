@@ -428,6 +428,10 @@
                     $('#done-'+el.value).html(data['first']);
                     $('#payment-'+el.value).html(data['second']);
                     showAlert('success', 'Success', data['message'], 6000000);
+                }else if(data['status'] == '4') { 
+                    $('#done-'+el.value).html(data['first']);
+                    $('#payment-'+el.value).html(data['second']);
+                    showAlert('success', 'Success', data['message'], 6000000);
                 }
             });
         }

@@ -24,6 +24,7 @@ class RBranch extends Model
         'cash'        => 'كاش',
         'parts'       => 'دفعات',
         'permissions' => 'أذونات',
+        'permissions_parts' => 'أذونات بدفعة',
     ];
 
     protected $fillable = [

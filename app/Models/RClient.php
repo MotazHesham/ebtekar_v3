@@ -21,8 +21,8 @@ class RClient extends Model
     ];
 
     public const MANAGE_TYPE_SELECT = [
-        'seperate' => 'أدارات منفصلة',
-        'unified'  => 'أداراة موحدة',
+        'seperate' => 'إدارات منفصلة',
+        'unified'  => 'إدارة موحدة',
     ];
 
     protected $fillable = [
