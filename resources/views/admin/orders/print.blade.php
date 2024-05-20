@@ -215,6 +215,7 @@
 
         </div>
     @endforeach
+    <script src="{{ asset('dashboard_offline/js/jquery.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             window.print()
