@@ -130,7 +130,7 @@
 
                 <table class="padding text-left small border-bottom">
 
-                    <img src="{{ asset($site_settings->logo->getUrl()) }}" alt=""
+                    <img src="{{ asset($site_settings->logo->getUrl()) }}" height="800" alt=""
                         style="position: absolute;opacity:0.15;top:180px;">
                     <thead>
                         <tr class="gry-color" style="background: #eceff4;">
