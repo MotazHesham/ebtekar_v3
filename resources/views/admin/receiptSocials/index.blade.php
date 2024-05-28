@@ -500,7 +500,11 @@
                                 @endcan
                                 @if($receipt->playlist_status == 'pending')
                                     @if($receipt->receipts_receipt_social_products_count  > 0)
-                                        <button class="btn btn-success btn-sm rounded-pill" onclick="playlist_users('{{$receipt->id}}','social')">أرسال للديزاينر</button>
+                                        @if($receipt->website_setting_id == 5)
+                                            <button class="btn btn-danger btn-sm rounded-pill" onclick="playlist_users('{{$receipt->id}}','social')">أرسال للتجهيز</button>
+                                        @else
+                                            <button class="btn btn-success btn-sm rounded-pill" onclick="playlist_users('{{$receipt->id}}','social')">أرسال للديزاينر</button>
+                                        @endif
                                     @endif
                                 @else  
                                     <span onclick="playlist_users('{{$receipt->id}}','social')" 
