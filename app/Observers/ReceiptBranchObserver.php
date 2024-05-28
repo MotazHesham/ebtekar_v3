@@ -24,6 +24,8 @@ class ReceiptBranchObserver
             $str = 'figures-';
         }elseif($receiptBranch->website_setting_id == 4){
             $str = 'shirti-';
+        }elseif($receiptBranch->website_setting_id == 5){
+            $str = 'martobia-';
         }else{ 
             $str = 'ebtekar-';
         }

@@ -177,6 +177,7 @@
                                     @if($receipt->website_setting_id == 2) order_num_ertgal 
                                     @elseif($receipt->website_setting_id == 3) order_num_figures 
                                     @elseif($receipt->website_setting_id == 4) order_num_shirti 
+                                    @elseif($receipt->website_setting_id == 5) order_num_martobia
                                     @else order_num_ebtekar @endif text-white mb-1" 
                                     onclick="show_logs('App\\Models\\ReceiptBranch','{{ $receipt->id }}','receiptBranch')">
                                     @if($receipt->printing_times == 0) 

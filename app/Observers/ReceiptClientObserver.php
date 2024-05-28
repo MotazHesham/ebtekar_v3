@@ -23,6 +23,8 @@ class ReceiptClientObserver
             $str = 'figures-';
         }elseif($receiptClient->website_setting_id == 4){
             $str = 'shirti-';
+        }elseif($receiptClient->website_setting_id == 5){
+            $str = 'martobia-';
         }else{ 
             $str = 'ebtekar-';
         }
