@@ -27,7 +27,7 @@ class CountriesController extends Controller
         abort_if(Gate::denies('country_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Country::query()->select(sprintf('%s.*', (new Country)->table));
+        $query = Country::query()->where('type','!=','cities')->select(sprintf('%s.*', (new Country)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
