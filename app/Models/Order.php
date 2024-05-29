@@ -271,7 +271,20 @@ class Order extends Model
 		return $this->calc_total() - $this->deposit_amount - $this->calc_discount();
 	}
 
-    
+    public function get_products_details(){
+        $this->load('orderDetails.product');
+        $description = '';
+        $i = 0;
+        $len = count($this->orderDetails);
+        foreach($this->orderDetails as $detail){
+            $description .= $detail->product->name . ' (عدد ' . $detail->quantity . ')';
+            if($i != $len - 1){
+                $description .= ' - ';
+            }
+            $i++;
+        }
+        return $description;
+    }
     public function incomes()
     {
         return $this->morphMany(Income::class, 'model');

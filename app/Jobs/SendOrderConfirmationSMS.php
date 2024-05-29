@@ -39,7 +39,7 @@ class SendOrderConfirmationSMS implements ShouldQueue
             "to" => "20" . $this->order->phone_number,
             "type" => "template",
             "template" => [
-                "name" => "order_checkout",
+                "name" => "checkout_v1",
                 "language" => [
                     "code" => "ar"
                 ],
@@ -61,7 +61,7 @@ class SendOrderConfirmationSMS implements ShouldQueue
                             ],
                             [
                                 "type" => "text",
-                                "text" => "Ebtekar Store"
+                                "text" => $this->order->get_products_details()
                             ],
                         ]
                     ]
