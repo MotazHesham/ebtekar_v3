@@ -7,6 +7,7 @@ use App\Http\Controllers\PayMobController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Requests\Frontend\CheckoutOrder;
 use App\Jobs\SendOrderConfirmationMail;
+use App\Jobs\SendOrderConfirmationSMS;
 use App\Jobs\SendPushNotification;
 use App\Models\Cart;
 use App\Models\Country;
@@ -314,6 +315,10 @@ class CheckoutController extends Controller
         // send the order confirmation to the user
         if($order->user){
             SendOrderConfirmationMail::dispatch($order,$site_settings,$order->user->email); // job for sending confirmation mail
+        }
+
+        if($order->phone_number){
+            SendOrderConfirmationSMS::dispatch($order,$site_settings,$order->phone_number); // job for send whatsapp message
         }
 
         return 1;
