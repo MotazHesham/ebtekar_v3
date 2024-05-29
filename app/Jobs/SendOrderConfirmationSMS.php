@@ -57,7 +57,7 @@ class SendOrderConfirmationSMS implements ShouldQueue
                             ],
                             [
                                 "type" => "text",
-                                "text" => $this->order->calc_total_for_client()
+                                "text" => $this->order->calc_total() - $this->order->calc_discount()
                             ],
                             [
                                 "type" => "text",
