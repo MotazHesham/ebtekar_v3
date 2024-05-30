@@ -35,7 +35,7 @@
     </div>
     <div class="col-md-6">
         <div class="text-center">
-            <h3>Scann Results</h3>
+            <h3>Scann Results <b class="badge badge-success" id="scan-counter">0</b></h3>
             <div  id="order_scanned"></div>
         </div>
     </div> 
@@ -45,6 +45,7 @@
 
 @section('scripts') 
 <script type="text/javascript">
+    var counter = 1;
     $('#bar_code').on('change',function(){ 
         var bar_code = $(this).val();
 
@@ -65,8 +66,9 @@
             $('#order_scanned').prepend(data.message); 
             if (data.status == 1) {
                 showAlert('success','تم الأرسال');
+                $('#scan-counter').html(counter++);
             } else {
-                showAlert('error','لم يتم الأرسال');
+                showAlert('error','لم يتم الأرسال'); 
             }
             $('#bar_code').val(null);
             $('#bar_code').focus();
