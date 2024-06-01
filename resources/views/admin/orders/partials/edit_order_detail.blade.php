@@ -111,7 +111,7 @@
                             @endif
 
                             <div id="product-images2">
-                                @if (count(json_decode($orderDetail->photos)) == 0)
+                                @if (is_array(json_decode($orderDetail->photos)) && count(json_decode($orderDetail->photos)) == 0)
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <input type="file" id="photos-1" name="photos[]" class="form-control">
