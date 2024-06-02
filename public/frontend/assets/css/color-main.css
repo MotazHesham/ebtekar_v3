@@ -8976,16 +8976,16 @@
       .color-selector ul li:nth-child(n+2) > div.active:after {
         -webkit-filter: invert(1);
                 filter: invert(1); }
-    .color-selector ul li > div {
+    .color-selector ul li > label {
       height: 22px;
       width: 22px;
       border-radius: 5px;
       margin-right: 10px;
       cursor: pointer;
       border: 1px solid #dddddd; }
-      .color-selector ul li > div.active {
+      .color-selector ul li > label.active {
         position: relative; }
-        .color-selector ul li > div.active:after {
+        .color-selector ul li > label.active:after {
           content: "";
           background-image: url("data:image/svg+xml;charset=utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path fill='%23000' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/></svg>");
           top: 5px;
@@ -11441,7 +11441,7 @@
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex; }
-      .color-selector ul li > div {
+      .color-selector ul li > label {
         margin-left: 5px; }
       .color-selector ul li:nth-child(n+2) {
         margin-top: 5px; }
@@ -17842,7 +17842,7 @@
     .rtl .product-offer .offer-contain ul li .code-lable {
       margin-left: 10px;
       margin-right: unset; }
-    .rtl .color-selector ul li > div {
+    .rtl .color-selector ul li > label {
       margin-left: 5px;
       margin-right: unset; }
     .rtl .single-product-tables {
@@ -19107,7 +19107,7 @@
         margin-left: unset; }
       .rtl .product-right.product-form-box .pro-group .size-box ul li {
         margin-left: unset; }
-      .rtl .product-right.product-form-box .pro-group .color-selector ul li > div {
+      .rtl .product-right.product-form-box .pro-group .color-selector ul li > label {
         margin-left: unset; }
       .rtl .add_to_cart.top .cart-inner .cart_media ul.cart_product li:nth-child(n+2), .rtl .add_to_cart .bottom .cart-inner .cart_media ul.cart_product li:nth-child(n+2) {
         margin-left: unset;
@@ -25551,7 +25551,7 @@
       background-color: #3c3c3c; }
     .dark .color-selector ul li {
       color: #e7eaec; }
-      .dark .color-selector ul li > div {
+      .dark .color-selector ul li > label {
         border-color: #3c3c3c; }
     .dark .nav-tabs {
       border-color: #3c3c3c; }

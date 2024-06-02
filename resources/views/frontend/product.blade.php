@@ -213,8 +213,9 @@
                                                 @if (count(json_decode($product->colors)) > 0)
                                                     @foreach (json_decode($product->colors) as $key => $color)
                                                         <li>
-                                                            <input style="display:none" type="radio" id="{{ $product->id }}-color-{{ $key }}" name="color" value="{{ $color }}" @if ($key == 0) checked @endif>
-                                                            <label style="background: {{ $color }};" for="{{ $product->id }}-color-{{ $key }}" data-toggle="tooltip" @if ($key == 0) class="active" @endif>
+                                                            <input style="display: none" type="radio" id="{{ $product->id }}-color-{{ $key }}" name="color" value="{{ $color }}" @if ($key == 0) checked @endif>
+
+                                                            <label style="background: {{ $color }};" class="color-{{$key + 1 }}   @if ($key == 0) active @endif" for="{{ $product->id }}-color-{{ $key }}">
 
                                                             </label>
                                                         </li>
@@ -462,6 +463,12 @@
     @parent
     <script type="text/javascript">
         $(document).ready(function() {
+            
+            $('.color-selector ul li > label').on('click', function(e) {
+                $(".color-selector ul li > label").removeClass("active");
+                $(this).addClass("active");
+            });
+            
             getVariantPrice();
 
             $('#add-to-cart-form input').on('change', function() {
