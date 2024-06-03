@@ -363,7 +363,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
     <script>
+
+        @if(session('open_cart'))
+            $(document).ready(function(){
+                openCart(); 
+            })
+        @endif 
         
+        $(document).ready(function(){
+            $('.mobile-search').on('click', function (){  
+                setTimeout(function() {
+                    $('#mobile-search-input').focus(); // to pop up the keyboad on mobile
+                }, 100); 
+            });
+        })
+
         $('.add-cartnoty').on('click',function(){ 
             const name = $(this).data('name');
             const price = $(this).data('price');

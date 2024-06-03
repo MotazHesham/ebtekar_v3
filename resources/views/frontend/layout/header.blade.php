@@ -144,7 +144,7 @@
                                             </div>
                                             <div class="cart-item">
                                                 <h5>{{ trans('frontend.header.cart') }} </h5>
-                                                <h5>{{ trans('frontend.header.shoping') }}</h5>
+                                                <h5>{{ trans('frontend.header.shoping') }}</h5> 
                                             </div>
                                         </div>
                                     </a> 
@@ -176,7 +176,7 @@
                             </g>
                         </svg>
                     </span>
-                    <input type="text" class="form-control" placeholder="search your product" name="search" @isset($search) value="{{$search}}" @endisset> 
+                    <input type="text" id="mobile-search-input" class="form-control" placeholder="search your product"  name="search" @isset($search) value="{{$search}}" @endisset> 
                     <span class="input-group-text close-searchbar">
                         <svg viewBox="0 0 329.26933 329" xmlns="http://www.w3.org/2000/svg">
                             <path

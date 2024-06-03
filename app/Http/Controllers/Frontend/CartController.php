@@ -61,7 +61,7 @@ class CartController extends Controller
         }
 
         toast('Success added to cart','success');
-        return back();
+        return redirect()->back()->with(['open_cart'=>true]);
     }
 
 
@@ -130,7 +130,7 @@ class CartController extends Controller
             ];
         }else{
             alert('تم التعديل بنجاح','','success');
-            return redirect()->back();
+            return redirect()->back()->with(['open_cart'=>true]);
         }
 
     }
@@ -142,6 +142,6 @@ class CartController extends Controller
             session()->put('cart',$cart); 
         }
         toast('Success Removed item to cart','success');
-        return back();
+        return redirect()->back()->with(['open_cart'=>true]);
     }
 }
