@@ -222,6 +222,15 @@ class PlaylistController extends Controller
         return view('admin.playlists.photos',compact('raw','playlist'));
     }
 
+    public function required_items(Request $request){
+        $type = $request->type;
+        $items = ReceiptSocialProductPivot::whereHas('receipt',function($q) use ($type){
+            $q->where('playlist_status',$type);
+        })->selectRaw('title, sum(quantity) as quantity')->groupBy('title')->get();
+
+        return view('admin.playlists.required_items',compact('items'));
+    }
+
     public function print($id,$model_type){
         
         if($model_type == 'social'){
@@ -275,16 +284,10 @@ class PlaylistController extends Controller
 
         $staffs = User::whereIn('user_type',['staff','seller'])->get();
         
-        $items_to_manufacturing = null;
         $type = $request->type;  
         $playlists = ViewPlaylistData::orderBy('send_to_playlist_date','desc')->where('playlist_status',$type); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
         
-        if($type == 'manufacturing'){
-            $items_to_manufacturing = ReceiptSocialProductPivot::whereHas('receipt',function($q){
-                                                                    $q->where('playlist_status','manufacturing');
-                                                                })->selectRaw('title, sum(quantity) as quantity')->groupBy('title')->get();
-        }
         $order_num = null;
         $user_id = null;
         $website_setting_id = null;
@@ -338,7 +341,7 @@ class PlaylistController extends Controller
             $dates = null;
         } 
         // return $dates;
-        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','quickly','website_setting_id','description','to_date','websites','items_to_manufacturing'));
+        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','quickly','website_setting_id','description','to_date','websites'));
 
     } 
 }

@@ -208,6 +208,16 @@
             $('#sort_playlist').submit();
         }
 
+        function required_items(type){
+            $.post('{{ route('admin.playlists.required_items') }}', {
+                _token: '{{ csrf_token() }}', 
+                type: type, 
+            }, function(data) { 
+                $('#manufacturing_items .modal-dialog').html(null);
+                $('#manufacturing_items').modal('show');
+                $('#manufacturing_items .modal-dialog').html(data);
+            }); 
+        }
         function check_printable(id,model_type){
             $.post('{{ route('admin.playlists.check_printable') }}', {
                 _token: '{{ csrf_token() }}',

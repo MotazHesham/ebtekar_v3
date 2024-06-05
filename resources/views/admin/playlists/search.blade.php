@@ -1,33 +1,6 @@
 <div class="modal fade" id="manufacturing_items" tabindex="-1" data-keyboard="false" aria-labelledby="manufacturing_itemsLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="AjaxModalLabel">المنتجات المطوب تصنيعها</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">المنتج</th>
-                            <th scope="col">الكمية المطلوبة</th> 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if($items_to_manufacturing)
-                            @foreach ($items_to_manufacturing as $key => $item)
-                                <tr>
-                                    <th scope="row">{{ $key + 1 }}</th>
-                                    <td>{{ $item->title }}</td>
-                                    <td>{{ $item->quantity}}</td> 
-                                </tr> 
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        
     </div>
 </div>
 .
@@ -38,12 +11,12 @@
                 <div>{{ trans('global.search') }} {{ trans('global.list') }} {{ trans('cruds.playlist.menu.' . $type) }}
                 </div>
                 <div><a class="btn btn-success btn-rounded" href="{{ route('admin.qr_scanner', $type) }}">Qr Scanner</a>
-                </div>
-                @if($type == 'manufacturing')
-                    <div><a class="btn btn-dark btn-rounded" href="#"  data-toggle="modal" data-target="#manufacturing_items">Manufacturing
-                            Items</a>
-                    </div>
-                @endif
+                </div> 
+                <div>
+                    <a class="btn btn-dark btn-rounded" href="#" onclick="required_items('{{$type}}')">
+                        الكمية المطلوبة في المرحلة
+                    </a>
+                </div> 
                 <div><a class="btn btn-info btn-rounded" href="{{ route('admin.barcode_scanner', $type) }}">BarCode
                         Scanner</a>
                 </div>
