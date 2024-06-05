@@ -12,6 +12,7 @@ use App\Jobs\SendPushNotification;
 use App\Models\Cart;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\DeviceUserToken;
 use App\Models\GeneralSetting;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -307,9 +308,10 @@ class CheckoutController extends Controller
         $userAlert->users()->sync($allowed_users_ids); 
 
         // send push notification to users has the permission and has a device_token to send via firebase
-        $tokens = User::whereNotNull('device_token')->whereHas('roles.permissions',function($query){
+        $ids = User::whereNotNull('device_token')->whereHas('roles.permissions',function($query){
             $query->where('permissions.title','order_show');
-        })->where('user_type','staff')->pluck('device_token')->all();   
+        })->where('user_type','staff')->pluck('id')->all();   
+        $tokens = DeviceUserToken::whereIn('id',$ids)->pluck('device_token')->all();
         SendPushNotification::dispatch($title, $body, $tokens,route('admin.orders.show', $order->id),$site_settings);  // job for sending push notification
 
         // send the order confirmation to the user

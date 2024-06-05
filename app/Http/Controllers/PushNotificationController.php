@@ -2,21 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeviceUserToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie; 
+use Auth;
 
 
 class PushNotificationController extends Controller
-{
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+{ 
 
     /**
      * Show the application dashboard.
@@ -38,7 +31,13 @@ class PushNotificationController extends Controller
             return response()->json(['already have token']);
         }else{ 
             Cookie::queue(Cookie::make('device_token',$request->token,1000));
-            auth()->user()->update(['device_token'=>$request->token]);
+            if(Auth::check()){
+                auth()->user()->update(['device_token'=>$request->token]);
+                DeviceUserToken::updateOrCreate(
+                    ['user_id' => auth()->user()->id],
+                    ['device_token' => $request->token]
+                );
+            }
             return response()->json(['token saved successfully.']);
         } 
     }
@@ -82,7 +81,7 @@ class PushNotificationController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
 
         $response = curl_exec($ch);
-
+        
         return $response;
     }
 }
