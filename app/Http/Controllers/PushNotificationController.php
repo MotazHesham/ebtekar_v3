@@ -33,10 +33,10 @@ class PushNotificationController extends Controller
             Cookie::queue(Cookie::make('device_token',$request->token,1000));
             if(Auth::check()){
                 auth()->user()->update(['device_token'=>$request->token]);
-                DeviceUserToken::updateOrCreate(
-                    ['user_id' => auth()->user()->id],
-                    ['device_token' => $request->token]
-                );
+                DeviceUserToken::firstOrCreate([
+                    'user_id' => auth()->user()->id,
+                    'device_token' => $request->token
+                ]);
             }
             return response()->json(['token saved successfully.']);
         } 
