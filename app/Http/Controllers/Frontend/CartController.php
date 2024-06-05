@@ -61,7 +61,12 @@ class CartController extends Controller
         }
 
         toast('Success added to cart','success');
-        return redirect()->back()->with(['open_cart'=>true]);
+        
+        if($request->has('buy_now')){
+            return redirect()->route('frontend.payment_select');
+        }else{
+            return redirect()->back()->with(['open_cart'=>true]);
+        }
     }
 
 

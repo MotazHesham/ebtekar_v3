@@ -22,7 +22,7 @@
                             <span class="help-block">{{ trans('cruds.product.fields.name_helper') }}</span>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label class="required">{{ trans('cruds.product.fields.weight') }}</label>
                                 <select class="form-control {{ $errors->has('weight') ? 'is-invalid' : '' }}" name="weight" id="weight" required>
                                     <option value disabled {{ old('weight', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
@@ -37,7 +37,7 @@
                                 @endif
                                 <span class="help-block">{{ trans('cruds.product.fields.weight_helper') }}</span>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label class="required">{{ trans('cruds.product.fields.special') }}</label>
                                 <select class="form-control {{ $errors->has('special') ? 'is-invalid' : '' }}" name="special" id="special" required>
                                     <option value disabled {{ old('special', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
@@ -51,6 +51,21 @@
                                     </div>
                                 @endif
                                 <span class="help-block">{{ trans('cruds.product.fields.special_helper') }}</span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="required">{{ trans('cruds.product.fields.require_photos') }}</label>
+                                <select class="form-control {{ $errors->has('require_photos') ? 'is-invalid' : '' }}" name="require_photos" id="require_photos" required>
+                                    <option value disabled {{ old('require_photos', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                                    @foreach(App\Models\Product::SPECIAL_SELECT as $key => $label)
+                                        <option value="{{ $key }}" {{ old('require_photos', '') ==  $key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('require_photos'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('require_photos') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.product.fields.require_photos_helper') }}</span>
                             </div>
                         </div>
                         <div class="form-group">

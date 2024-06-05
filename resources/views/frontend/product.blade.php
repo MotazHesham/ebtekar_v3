@@ -159,25 +159,27 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body"> 
-                                                    <h5 class="mb-3">{{ trans('frontend.product.printed_photos') }}</h5>
-                                                    <div id="product-images">
-                                                        <div class="row">
-                                                            <div class="col-md-6 mb-3">
-                                                                <input type="file" id="photos-1" name="photos[]" class="form-control"> 
-                                                            </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="{{ trans('frontend.product.photo_note') }}" >
+                                                    @if($product->require_photos)
+                                                        <h5 class="mb-3">{{ trans('frontend.product.printed_photos') }}</h5>
+                                                        <div id="product-images">
+                                                            <div class="row">
+                                                                <div class="col-md-6 mb-3">
+                                                                    <input type="file" id="photos-1" name="photos[]" class="form-control"> 
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="{{ trans('frontend.product.photo_note') }}" >
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">{{ trans('frontend.product.add_more') }}</button>
-                                    
+                                                        <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">{{ trans('frontend.product.add_more') }}</button>
+                                                    @endif
                                                     <div class="col-12 mb-3">
                                                         <label>{{ trans('frontend.product.description') }}</label>
-                                                        <textarea class="form-control" name="description" placeholder="{{ trans('frontend.product.description') }}" rows="3" required></textarea>
+                                                        <textarea class="form-control" name="description" placeholder="اكتب هنا الاسم والتفاصيل المراد طباعتها على المنتج" rows="3" required></textarea>
                                                     </div>
                                     
                                                     <button type="submit" class="btn btn-rounded black-btn me-3">{{ trans('frontend.product.add_to_cart') }}</button> 
+                                                    <button type="submit" name="buy_now" class="btn btn-rounded black-btn me-3">اشتري الان</button> 
                                                 </div>
                                             </div>
                                         </div>
@@ -215,7 +217,7 @@
                                                         <li>
                                                             <input style="display: none" type="radio" id="{{ $product->id }}-color-{{ $key }}" name="color" value="{{ $color }}" @if ($key == 0) checked @endif>
 
-                                                            <label style="background: {{ $color }};" class="color-{{$key + 1 }}   @if ($key == 0) active @endif" for="{{ $product->id }}-color-{{ $key }}">
+                                                            <label style="background: {{ $color }};" class="color-{{ $key + 1 }}   @if ($key == 0) active @endif" for="{{ $product->id }}-color-{{ $key }}">
 
                                                             </label>
                                                         </li>
@@ -248,6 +250,11 @@
                                                     <i class="fa fa-shopping-cart"></i>
                                                     {{ trans('frontend.product.add_to_cart') }}
                                                 </button>
+                                                <button type="submit" name="buy_now" id="cartEffect" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}" data-name="{{ $product->name }}"
+                                                    class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Buy Now">
+                                                    <i class="fa fa-dollar"></i>
+                                                    اشتري الأن
+                                                </button>
                                             @endif
                                         @else 
                                             <button type="button" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}" data-name="{{ $product->name }}"
@@ -257,7 +264,7 @@
                                             </button>
                                         @endif
                                         <a href="{{ route('frontend.wishlist.add', $product->slug) }}" class="btn btn-normal add-to-wish tooltip-top"
-                                            data-tippy-content="Add to wishlist" data-name="{{ $product->name }}" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}">
+                                            data-tippy-content="Add to wishlist" data-name="{{ $product->name }}" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}">
                                             <i class="fa fa-heart" aria-hidden="true"></i>
                                         </a>
                                     </div>
@@ -463,12 +470,12 @@
     @parent
     <script type="text/javascript">
         $(document).ready(function() {
-            
+
             $('.color-selector ul li > label').on('click', function(e) {
                 $(".color-selector ul li > label").removeClass("active");
                 $(this).addClass("active");
             });
-            
+
             getVariantPrice();
 
             $('#add-to-cart-form input').on('change', function() {
@@ -479,7 +486,7 @@
             //     content_name: '{{ $product->name }}',
             //     content_category: '{{ $product->category->name }}'
             // });
-            
+
             dataLayer.push({
                 ecommerce: null
             });

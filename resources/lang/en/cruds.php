@@ -1301,6 +1301,8 @@ return [
             'todays_deal_helper'      => ' ',
             'special'             => 'منتج مخصوص',
             'special_helper'      => ' ',
+            'require_photos'             => 'يتطلب صورة ؟',
+            'require_photos_helper'      => ' ',
             'statuses'                => 'الحالات',
             'statuses_helper'         => ' ',
             'variant_product'         => 'النوع',

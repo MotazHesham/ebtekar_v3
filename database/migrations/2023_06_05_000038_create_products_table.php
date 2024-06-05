@@ -33,6 +33,7 @@ class CreateProductsTable extends Migration
             $table->boolean('todays_deal')->default(0);
             $table->boolean('special')->default(0);
             $table->boolean('variant_product')->default(0);
+            $table->boolean('require_photos')->default(0);
             $table->float('rating', 15, 2)->nullable();
             $table->integer('current_stock')->default(0);
             $table->integer('num_of_sale')->default(0);

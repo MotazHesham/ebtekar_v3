@@ -81,6 +81,7 @@ class Product extends Model implements HasMedia
         'featured',
         'todays_deal',
         'special',
+        'require_photos',
         'variant_product',
         'rating',
         'current_stock',
