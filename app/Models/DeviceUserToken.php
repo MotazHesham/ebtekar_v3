@@ -25,7 +25,7 @@ class DeviceUserToken extends Model
         'browser_type',
         'browser_version',
         'platform_type',
-        'playform_version',
+        'platform_version',
         'user_id',
         'created_at',
         'updated_at', 

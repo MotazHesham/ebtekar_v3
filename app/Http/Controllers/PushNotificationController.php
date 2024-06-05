@@ -44,7 +44,7 @@ class PushNotificationController extends Controller
                         'browser_type' => Browser::browserFamily(),
                         'browser_version' => Browser::browserVersion(),
                         'platform_type' => Browser::platformFamily(),
-                        'playform_version' => Browser::platformVersion(),
+                        'platform_version' => Browser::platformVersion(),
                         ]
                     );
             }
