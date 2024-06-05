@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\PushNotificationController; 
 use App\Jobs\SendPushNotification; 
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Printable;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
@@ -227,8 +228,11 @@ class PlaylistController extends Controller
         $items = ReceiptSocialProductPivot::whereHas('receipt',function($q) use ($type){
             $q->where('playlist_status',$type);
         })->selectRaw('title, sum(quantity) as quantity')->groupBy('title')->get();
+        $items2 = OrderDetail::whereHas('order',function($q) use ($type){
+            $q->where('playlist_status',$type);
+        })->selectRaw('product_id, sum(quantity) as quantity')->groupBy('product_id')->get();
 
-        return view('admin.playlists.required_items',compact('items'));
+        return view('admin.playlists.required_items',compact('items','items2'));
     }
 
     public function print($id,$model_type){
