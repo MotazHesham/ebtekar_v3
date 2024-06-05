@@ -109,6 +109,17 @@
                     @endif
                     <span class="help-block">{{ trans('cruds.order.fields.deposit_amount_helper') }}</span>
                 </div> 
+                <div class="form-group col-md-6">
+                    <label for="note">{{ trans('cruds.order.fields.note') }}</label>
+                    <textarea class="form-control {{ $errors->has('note') ? 'is-invalid' : '' }}" name="note" id="note"
+                        rows="6">{{ old('note',$order->note) }}</textarea>
+                    @if ($errors->has('note'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('note') }}
+                        </div>
+                    @endif
+                    <span class="help-block">{{ trans('cruds.order.fields.note_helper') }}</span>
+                </div>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
