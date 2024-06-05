@@ -20,6 +20,12 @@ class DeviceUserToken extends Model
 
     protected $fillable = [
         'device_token',
+        'userAgent',
+        'device_type',
+        'browser_type',
+        'browser_version',
+        'platform_type',
+        'playform_version',
         'user_id',
         'created_at',
         'updated_at', 

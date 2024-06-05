@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('user_device_tokens', function (Blueprint $table) {
             $table->bigIncrements('id'); 
             $table->text('device_token');
+            $table->text('userAgent')->nullable();
+            $table->string('device_type')->nullable();
+            $table->string('browser_type')->nullable();
+            $table->string('browser_version')->nullable();
+            $table->string('platform_type')->nullable();
+            $table->string('playform_version')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id', 'user_fk_89258161')->references('id')->on('users');
             $table->timestamps();

@@ -6,7 +6,7 @@ use App\Models\DeviceUserToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie; 
 use Auth;
-
+use Browser;
 
 class PushNotificationController extends Controller
 { 
@@ -33,10 +33,20 @@ class PushNotificationController extends Controller
             Cookie::queue(Cookie::make('device_token',$request->token,1000));
             if(Auth::check()){
                 auth()->user()->update(['device_token'=>$request->token]);
-                DeviceUserToken::firstOrCreate([
-                    'user_id' => auth()->user()->id,
-                    'device_token' => $request->token
-                ]);
+                DeviceUserToken::updateOrCreate(
+                    [
+                        'user_id' => auth()->user()->id,
+                        'device_token' => $request->token,
+                    ],
+                    [
+                        'userAgent' => Browser::userAgent(),
+                        'device_type' => Browser::deviceType(),
+                        'browser_type' => Browser::browserFamily(),
+                        'browser_version' => Browser::browserVersion(),
+                        'platform_type' => Browser::platformFamily(),
+                        'playform_version' => Browser::platformVersion(),
+                        ]
+                    );
             }
             return response()->json(['token saved successfully.']);
         } 
