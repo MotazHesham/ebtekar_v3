@@ -311,7 +311,7 @@ class CheckoutController extends Controller
         $ids = User::whereNotNull('device_token')->whereHas('roles.permissions',function($query){
             $query->where('permissions.title','order_show');
         })->where('user_type','staff')->pluck('id')->all();   
-        $tokens = DeviceUserToken::whereIn('id',$ids)->pluck('device_token')->all();
+        $tokens = DeviceUserToken::whereIn('user_id',$ids)->pluck('device_token')->all();
         SendPushNotification::dispatch($title, $body, $tokens,route('admin.orders.show', $order->id),$site_settings);  // job for sending push notification
 
         // send the order confirmation to the user
