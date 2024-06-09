@@ -10,20 +10,18 @@ class ReceiptOutgoingObserver
 {
     
     public function creating(ReceiptOutgoing $receiptOutgoing){
-        
-        DB::transaction(function () use ($receiptOutgoing) {
-            // Getting next Order Num
-            $last_receipt_outgoing = ReceiptOutgoing::lockForUpdate()->latest()->first();
-            if ($last_receipt_outgoing) {
-                $order_num = $last_receipt_outgoing->order_num ? intval(str_replace('#', '', strrchr($last_receipt_outgoing->order_num, "#"))) : 0;
-            } else {
-                $order_num = 0;
-            }
-            $receiptOutgoing->order_num = 'receipt-outgoings#' . ($order_num + 1);
+    
+        // Getting next Order Num
+        $last_receipt_outgoing = ReceiptOutgoing::latest()->first();
+        if ($last_receipt_outgoing) {
+            $order_num = $last_receipt_outgoing->order_num ? intval(str_replace('#', '', strrchr($last_receipt_outgoing->order_num, "#"))) : 0;
+        } else {
+            $order_num = 0;
+        }
+        $receiptOutgoing->order_num = 'receipt-outgoings#' . ($order_num + 1);
 
-            // Assign the Creator Of The Receipt
-            $receiptOutgoing->staff_id = Auth::id();  
-        });
+        // Assign the Creator Of The Receipt
+        $receiptOutgoing->staff_id = Auth::id(); 
     }
 
     /**

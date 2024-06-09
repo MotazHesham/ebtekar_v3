@@ -11,30 +11,28 @@ class ReceiptClientObserver
     
     public function creating(ReceiptClient $receiptClient){
         
-        DB::transaction(function () use ($receiptClient) {
-            // Getting next Order Num
-            $last_receipt_client = ReceiptClient::where('website_setting_id',$receiptClient->website_setting_id)->lockForUpdate()->latest()->first();
-            if ($last_receipt_client) {
-                $order_num = $last_receipt_client->order_num ? intval(str_replace('#', '', strrchr($last_receipt_client->order_num, "#"))) : 0;
-            } else {
-                $order_num = 0;
-            }
-            if($receiptClient->website_setting_id == 2){
-                $str = 'ertgal-';
-            }elseif($receiptClient->website_setting_id == 3){
-                $str = 'figures-';
-            }elseif($receiptClient->website_setting_id == 4){
-                $str = 'shirti-';
-            }elseif($receiptClient->website_setting_id == 5){
-                $str = 'martobia-';
-            }else{ 
-                $str = 'ebtekar-';
-            }
-            $receiptClient->order_num = $str . 'client#' . ($order_num + 1);
+        // Getting next Order Num
+        $last_receipt_client = ReceiptClient::where('website_setting_id',$receiptClient->website_setting_id)->latest()->first();
+        if ($last_receipt_client) {
+            $order_num = $last_receipt_client->order_num ? intval(str_replace('#', '', strrchr($last_receipt_client->order_num, "#"))) : 0;
+        } else {
+            $order_num = 0;
+        }
+        if($receiptClient->website_setting_id == 2){
+            $str = 'ertgal-';
+        }elseif($receiptClient->website_setting_id == 3){
+            $str = 'figures-';
+        }elseif($receiptClient->website_setting_id == 4){
+            $str = 'shirti-';
+        }elseif($receiptClient->website_setting_id == 5){
+            $str = 'martobia-';
+        }else{ 
+            $str = 'ebtekar-';
+        }
+        $receiptClient->order_num = $str . 'client#' . ($order_num + 1);
 
-            // Assign the Creator Of The Receipt
-            $receiptClient->staff_id = Auth::id();  
-        });
+        // Assign the Creator Of The Receipt
+        $receiptClient->staff_id = Auth::id();
 
     }
 

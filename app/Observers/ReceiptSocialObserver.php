@@ -12,35 +12,33 @@ class ReceiptSocialObserver
 {
     public function creating(ReceiptSocial $receiptSocial){
         
-        DB::transaction(function () use ($receiptSocial) {
-            // Getting next Order Num
-            $last_receipt_social = ReceiptSocial::where('website_setting_id',$receiptSocial->website_setting_id)->lockForUpdate()->latest()->first();
-            
-            if ($last_receipt_social) {
-                $order_num = $last_receipt_social->order_num ? intval(str_replace('#', '', strrchr($last_receipt_social->order_num, "#"))) : 0;
-            } else {
-                $order_num = 0;
-            } 
-            if($receiptSocial->website_setting_id == 2){
-                $str = 'ertgal-';
-            }elseif($receiptSocial->website_setting_id == 3){
-                $str = 'figures-';
-            }elseif($receiptSocial->website_setting_id == 4){
-                $str = 'shirti-';
-            }elseif($receiptSocial->website_setting_id == 5){
-                $str = 'martobia-';
-            }else{ 
-                $str = 'ebtekar-';
-            }
-            $receiptSocial->order_num = $str . 'social#' . ($order_num + 1);
+        // Getting next Order Num
+        $last_receipt_social = ReceiptSocial::where('website_setting_id',$receiptSocial->website_setting_id)->latest()->first();
+        
+        if ($last_receipt_social) {
+            $order_num = $last_receipt_social->order_num ? intval(str_replace('#', '', strrchr($last_receipt_social->order_num, "#"))) : 0;
+        } else {
+            $order_num = 0;
+        } 
+        if($receiptSocial->website_setting_id == 2){
+            $str = 'ertgal-';
+        }elseif($receiptSocial->website_setting_id == 3){
+            $str = 'figures-';
+        }elseif($receiptSocial->website_setting_id == 4){
+            $str = 'shirti-';
+        }elseif($receiptSocial->website_setting_id == 5){
+            $str = 'martobia-';
+        }else{ 
+            $str = 'ebtekar-';
+        }
+        $receiptSocial->order_num = $str . 'social#' . ($order_num + 1);
 
-            // Assign the Creator Of The Receipt
-            $receiptSocial->staff_id = Auth::id(); 
+        // Assign the Creator Of The Receipt
+        $receiptSocial->staff_id = Auth::id(); 
 
-            // Get The Cost of the Shipping Country
-            $country = Country::findOrFail($receiptSocial->shipping_country_id); 
-            $receiptSocial->shipping_country_cost = $country->cost; 
-        });
+        // Get The Cost of the Shipping Country
+        $country = Country::findOrFail($receiptSocial->shipping_country_id); 
+        $receiptSocial->shipping_country_cost = $country->cost; 
     }
 
     public function updating(ReceiptSocial $receiptSocial){ 
