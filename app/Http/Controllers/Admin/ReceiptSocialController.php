@@ -162,6 +162,7 @@ class ReceiptSocialController extends Controller
         $new_receipt->shipping_country_cost = $receipt_social->shipping_country_cost;
         $new_receipt->shipping_address = $receipt_social->shipping_address;
         $new_receipt->client_type = $receipt_social->client_type;
+        $new_receipt->website_setting_id = $receipt_social->website_setting_id;
         $new_receipt->save();
 
         $receipt_products = ReceiptSocialProductPivot::where('receipt_social_id',$receipt_social->id)->get();

@@ -5,26 +5,29 @@ namespace App\Observers;
 use App\Models\Country;
 use App\Models\ReceiptCompany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReceiptCompanyObserver
 {
     public function creating(ReceiptCompany $receiptComapny){
         
-        // Getting next Order Num
-        $last_receipt_comapny = ReceiptCompany::latest()->first();
-        if ($last_receipt_comapny) {
-            $order_num = $last_receipt_comapny->order_num ? intval(str_replace('#', '', strrchr($last_receipt_comapny->order_num, "#"))) : 0;
-        } else {
-            $order_num = 0;
-        }
-        $receiptComapny->order_num = 'receipt-company#' . ($order_num + 1);
+        DB::transaction(function () use ($receiptComapny) {
+            // Getting next Order Num
+            $last_receipt_comapny = ReceiptCompany::lockForUpdate()->latest()->first();
+            if ($last_receipt_comapny) {
+                $order_num = $last_receipt_comapny->order_num ? intval(str_replace('#', '', strrchr($last_receipt_comapny->order_num, "#"))) : 0;
+            } else {
+                $order_num = 0;
+            }
+            $receiptComapny->order_num = 'receipt-company#' . ($order_num + 1);
 
-        // Assign the Creator Of The Receipt
-        $receiptComapny->staff_id = Auth::id();  
+            // Assign the Creator Of The Receipt
+            $receiptComapny->staff_id = Auth::id();  
 
-        // Get The Cost of the Shipping Country
-        $country = Country::findOrFail($receiptComapny->shipping_country_id); 
-        $receiptComapny->shipping_country_cost = $country->cost;  
+            // Get The Cost of the Shipping Country
+            $country = Country::findOrFail($receiptComapny->shipping_country_id); 
+            $receiptComapny->shipping_country_cost = $country->cost;  
+        });
 
     }
 
