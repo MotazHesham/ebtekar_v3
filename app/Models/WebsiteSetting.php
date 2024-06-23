@@ -40,6 +40,14 @@ class WebsiteSetting extends Model implements HasMedia
         'ebtekar' => 'Ebtekar',
         'wasla'   => 'Wasla',
     ];
+    public const WEBSITES = [
+        "" => 'ابتكار',
+        1 => 'ابتكار',
+        2   => 'ارتجال',
+        3   => 'فيجرز',
+        4   => 'شيرتي',
+        5   => 'مارتوبيا',
+    ];
 
     protected $fillable = [
         'site_name',

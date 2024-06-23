@@ -441,20 +441,16 @@ class HomeController extends Controller
         $chart5 = new LaravelChart($settings5);
 
         $settings05 = [
-            'chart_title'           => trans('cruds.receiptCompany.extra.chart_by_month'),
-            'chart_type'            => 'radar',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\ReceiptCompany',
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'month',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'total_cost',
-            'filter_field'          => 'created_at',
-            'filter_period'         => 'year',
-            'group_by_field_format' => 'd/m/Y  h:i a',
+            'chart_title'           => trans('cruds.receiptSocial.extra.chart_by_website'),
+            'chart_type'            => 'doughnut',
+            'report_type'           => 'group_by_string',
+            'model'                 => 'App\Models\ReceiptSocial',
+            'group_by_field'        => 'website_setting_id', 
+            'aggregate_function'    => 'count', 
+            'filter_field'          => 'created_at', 
             'column_class'          => 'col-md-4',
             'entries_number'        => '5',
-            'translation_key'       => 'receiptCompany',
+            'translation_key'       => 'ReceiptSocial',
         ];
 
         $chart05 = new LaravelChart($settings05);
@@ -464,7 +460,7 @@ class HomeController extends Controller
             'chart_type'            => 'doughnut',
             'report_type'           => 'group_by_string',
             'model'                 => 'App\Models\Order',
-            'group_by_field'        => 'order_type', 
+            'group_by_field'        => 'website_setting_id', 
             'aggregate_function'    => 'count',
             'filter_field'          => 'created_at', 
             'column_class'          => 'col-md-4',

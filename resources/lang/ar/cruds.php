@@ -207,7 +207,8 @@ return [
         'title'          => 'فواتير سوشيال',
         'title_singular' => 'فاتورة سوشيال',
         'extra' => [
-            'chart_by_month' => 'أحصائيات فواتير السوشيال هذه السنة'
+            'chart_by_month' => 'أحصائيات فواتير السوشيال هذه السنة',
+            'chart_by_website' => 'فواتير السوشيال',
         ],
         'fields'         => [
             'id'                             => 'ID',

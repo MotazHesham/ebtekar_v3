@@ -45,19 +45,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="{{ $chart5->options['column_class'] }}">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>{!! $chart5->options['chart_title'] !!}</h5>
-                                {!! $chart5->renderHtml() !!}
-                            </div>
-                        </div>
-                    </div>
                     <div class="{{ $chart6->options['column_class'] }}">
                         <div class="card">
                             <div class="card-body">
                                 <h5>{!! $chart6->options['chart_title'] !!}</h5>
                                 {!! $chart6->renderHtml() !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="{{ $chart5->options['column_class'] }}">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>{!! $chart5->options['chart_title'] !!}</h5>
+                                {!! $chart5->renderHtml() !!}
                             </div>
                         </div>
                     </div>
