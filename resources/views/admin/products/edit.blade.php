@@ -361,6 +361,17 @@
                         <span class="help-block">{{ trans('cruds.product.fields.pdf_helper') }}</span>
                     </div> 
                     <div class="form-group col-md-12">
+                        <label for="slug">{{ trans('cruds.product.fields.slug') }}</label>
+                        <input class="form-control {{ $errors->has('slug') ? 'is-invalid' : '' }}" type="text"
+                            name="slug" id="slug" value="{{ old('slug',$product->slug) }}">
+                        @if ($errors->has('slug'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('slug') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.product.fields.slug_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
                         <label for="meta_title">{{ trans('cruds.product.fields.meta_title') }}</label>
                         <input class="form-control {{ $errors->has('meta_title') ? 'is-invalid' : '' }}" type="text"
                             name="meta_title" id="meta_title" value="{{ old('meta_title',$product->meta_title) }}">

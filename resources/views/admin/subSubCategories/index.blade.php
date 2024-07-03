@@ -28,6 +28,9 @@
                             {{ trans('cruds.subSubCategory.fields.name') }}
                         </th>
                         <th>
+                            {{ trans('cruds.subCategory.fields.category') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.subSubCategory.fields.sub_category') }}
                         </th>
                         <th>
@@ -124,6 +127,10 @@
                         data: 'name',
                         name: 'name'
                     }, 
+                    {
+                        data: 'category_name',
+                        name: 'sub_category.category.name'
+                    },
                     {
                         data: 'sub_category_name',
                         name: 'sub_category.name'

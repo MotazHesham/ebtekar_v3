@@ -30,9 +30,9 @@ class SubSubCategoryController extends Controller
     public function index(Request $request)
     {
         abort_if(Gate::denies('sub_sub_category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
+        
         if ($request->ajax()) {
-            $query = SubSubCategory::with(['sub_category'])->select(sprintf('%s.*', (new SubSubCategory)->table))->with('website');
+            $query = SubSubCategory::with(['sub_category.category'])->select(sprintf('%s.*', (new SubSubCategory)->table))->with('website');
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -68,6 +68,9 @@ class SubSubCategoryController extends Controller
             $table->addColumn('sub_category_name', function ($row) {
                 return $row->sub_category ? $row->sub_category->name : '';
             });
+            $table->addColumn('category_name', function ($row) {
+                return $row->sub_category->category ? $row->sub_category->category->name : '';
+            });
 
             $table->editColumn('website_site_name', function ($row) { 
                 return $row->website->site_name ?? '';
@@ -79,7 +82,7 @@ class SubSubCategoryController extends Controller
                     <span class="c-switch-slider"></span>
                 </label>';
             }); 
-            $table->rawColumns(['actions', 'placeholder','published', 'sub_category','website_site_name']);
+            $table->rawColumns(['actions', 'placeholder','published', 'sub_category','website_site_name','category_name']);
 
             return $table->make(true);
         }

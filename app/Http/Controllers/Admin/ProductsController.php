@@ -452,8 +452,7 @@ class ProductsController extends Controller
         
         $validated_request = $request->all(); 
 
-        $validated_request['tags'] = implode('|',$request->tags); 
-        $validated_request['slug'] = Str::slug($request->name, '-',null) . '-' . substr($product->slug, -7);
+        $validated_request['tags'] = implode('|',$request->tags);  
         $validated_request['colors'] = $request->has('colors') ? json_encode($request->colors) : json_encode(array());
 
         $attribute_options = array();
