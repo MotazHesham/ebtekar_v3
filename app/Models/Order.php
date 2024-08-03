@@ -139,6 +139,7 @@ class Order extends Model
         'shipmenter_id',
         'delivery_man_id',
         'website_setting_id',
+        'social_user_id',
         'created_at',
         'updated_at',
         'deleted_at',

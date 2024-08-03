@@ -205,7 +205,7 @@ class CheckoutController extends Controller
                     }
                 }
                 $order->commission = $total_commission;
-                $order->total_cost = $total_cost;
+                $order->total_cost = $total_cost; 
                 $order->save();
 
 
