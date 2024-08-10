@@ -11,7 +11,7 @@
             @method('PUT')
             @csrf
             <div class="row">
-                <div class="form-group">
+                <div class="form-group col-md-6">
                     <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
                     <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
                         @foreach($websites as $id => $entry)
@@ -21,6 +21,24 @@
                     @if($errors->has('website_setting_id'))
                         <div class="invalid-feedback">
                             {{ $errors->first('website_setting_id') }}
+                        </div>
+                    @endif 
+                </div>
+                <div class="form-group col-md-6">
+                    <label>نوع المنتج</label>
+                    <select class="form-control {{ $errors->has('product_type') ? 'is-invalid' : '' }}"
+                        name="product_type" id="product_type">
+                        <option value disabled {{ old('product_type', null) === null ? 'selected' : '' }}>
+                            {{ trans('global.pleaseSelect') }}</option>
+                        @foreach (App\Models\ReceiptSocialProduct::PRODUCT_TYPE_SELECT as $key => $label)
+                            <option value="{{ $key }}"
+                                {{ old('product_type',$receiptSocialProduct->product_type) === (string) $key ? 'selected' : '' }}>{{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('product_type'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('product_type') }}
                         </div>
                     @endif 
                 </div>

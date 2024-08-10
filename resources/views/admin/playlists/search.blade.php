@@ -62,13 +62,13 @@
                     </select>
 
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <input type="text" class="form-control mb-2 @isset($description) isset @endisset"
                         id="description" name="description"
                         @isset($description) value="{{ $description }}" @endisset
                         placeholder="{{ trans('global.extra.description') }}">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <select class="form-control mb-2 @isset($quickly) isset @endisset"
                         name="quickly" id="quickly" onchange="sort_playlist()">
                         <option value="">{{ trans('global.extra.quickly') }}</option>
@@ -80,12 +80,19 @@
                             {{ trans('global.extra.1_quickly') }}</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <select class="form-control mb-2 @isset($client_review) isset @endisset"
                         name="client_review" id="client_review" onchange="sort_playlist()">
                         <option value="">الكل</option>
                         <option value="0" @if ($client_review == '0') selected @endif>قيد التنفيذ</option>
                         <option value="1" @if ($client_review == '1') selected @endif>تحت المراجعة</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control mb-2 @isset($is_seasoned) isset @endisset"
+                        name="is_seasoned" id="is_seasoned" onchange="sort_playlist()">
+                        <option value="">الكل</option>
+                        <option value="1" @if ($is_seasoned == '1') selected @endif>منتجات سيزون</option> 
                     </select>
                 </div>
             </div>

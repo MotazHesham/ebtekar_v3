@@ -94,6 +94,9 @@ class ReceiptSocialProductController extends Controller
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
             });
+            $table->editColumn('product_type', function ($row) {
+                return $row->product_type ? ReceiptSocialProduct::PRODUCT_TYPE_SELECT[$row->product_type] : '';
+            });
             $table->editColumn('price', function ($row) {
                 return $row->price ? $row->price : '';
             });

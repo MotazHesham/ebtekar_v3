@@ -294,6 +294,9 @@ class ReceiptSocialController extends Controller
             $receipt->total_cost = $sum;
             $receipt->commission = $sum2;
             $receipt->extra_commission = $sum3;
+            if(!$receipt->is_seasoned){
+                $receipt->is_seasoned = $product->product_type == 'season' ? 1 : 0;
+            }
             $receipt->save(); 
             
             // store the receipt social id in session so when redirect to the table open the popup to view products after edit
@@ -362,6 +365,9 @@ class ReceiptSocialController extends Controller
             $receipt->total_cost = $sum;
             $receipt->commission = $sum2;
             $receipt->extra_commission = $sum3;
+            if(!$receipt->is_seasoned){
+                $receipt->is_seasoned = $product->product_type == 'season' ? 1 : 0;
+            }
             $receipt->save();
             if($request->has('add_more')){
                 session()->put('store_receipt_id',$receipt->id);

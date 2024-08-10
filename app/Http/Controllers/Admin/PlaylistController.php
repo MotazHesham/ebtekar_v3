@@ -299,6 +299,7 @@ class PlaylistController extends Controller
         $to_date = null;
         $quickly = null;
         $client_review = null;
+        $is_seasoned = null;
         $view = 'all';
 
         if( $request->view != null){
@@ -316,6 +317,10 @@ class PlaylistController extends Controller
         if( $request->quickly != null){
             $quickly = $request->quickly;
             $playlists = $playlists->where('quickly',$request->quickly); 
+        }
+        if( $request->is_seasoned != null){
+            $is_seasoned = $request->is_seasoned;
+            $playlists = $playlists->where('is_seasoned',$request->is_seasoned); 
         }
         if( $request->client_review != null){
             $client_review = $request->client_review;
@@ -345,7 +350,7 @@ class PlaylistController extends Controller
             $dates = null;
         } 
         // return $dates;
-        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','quickly','website_setting_id','description','to_date','websites'));
+        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','is_seasoned','quickly','website_setting_id','description','to_date','websites'));
 
     } 
 }

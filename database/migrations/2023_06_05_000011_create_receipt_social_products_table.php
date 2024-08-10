@@ -10,6 +10,7 @@ class CreateReceiptSocialProductsTable extends Migration
     {
         Schema::create('receipt_social_products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('product_type')->nullable();
             $table->string('name');
             $table->decimal('price', 15, 2);
             $table->decimal('commission', 15, 2)->nullable(); 

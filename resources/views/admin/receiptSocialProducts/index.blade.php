@@ -38,6 +38,9 @@
                             {{ trans('cruds.receiptSocialProduct.fields.name') }}
                         </th>
                         <th>
+                            نوع المنتج
+                        </th>
+                        <th>
                             {{ trans('cruds.receiptSocialProduct.fields.price') }}
                         </th>
                         <th>
@@ -124,6 +127,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'product_type',
+                        name: 'product_type'
                     },
                     {
                         data: 'price',

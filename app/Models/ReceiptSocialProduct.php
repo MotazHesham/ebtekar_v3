@@ -25,6 +25,10 @@ class ReceiptSocialProduct extends Model implements HasMedia
 
     public $table = 'receipt_social_products';
 
+    public const PRODUCT_TYPE_SELECT = [
+        'season' => 'منتج سيزون', 
+    ];
+
     protected $dates = [
         'created_at',
         'updated_at',
@@ -32,6 +36,7 @@ class ReceiptSocialProduct extends Model implements HasMedia
     ];
 
     protected $fillable = [
+        'product_type',
         'name',
         'price',
         'commission',
