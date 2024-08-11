@@ -14,7 +14,15 @@
                                     $image = isset($orderDetail->product->photos[0]) ? $orderDetail->product->photos[0]->getUrl('preview2') : '';
                                 @endphp     
                                 <a href="{{ $image }}" target="_blank"><img width="150" height="150" src={{ $image }}/></a>
-                                {{ $orderDetail->product->name ?? '' }} <strong>({{ $orderDetail->quantity ?? '' }})</strong>
+                                <div style="display: inline">{{ $orderDetail->product->name ?? '' }} <strong style="display: inline">({{ $orderDetail->quantity ?? '' }})</strong>
+                                
+                                    
+                                    {!! $orderDetail->product->category ? '<span style="color:white;padding: 5px;border-radius: 11px;;background:#8b304f">' .  $orderDetail->product->category->name . '</span>' : '' !!} 
+                                    
+                                    {!! $orderDetail->product->sub_category ?  '<span style="color:white;padding: 5px;border-radius: 11px;;background:#30718b">' . $orderDetail->product->sub_category->name . '</span>' : '' !!} 
+                                    
+                                    {!! $orderDetail->product->sub_sub_category ?  '<span style="color:white;padding: 5px;border-radius: 11px;;background:#308b5d">' . $orderDetail->product->sub_sub_category->name . '</span>' : '' !!} 
+                                </div> 
                                 <br>
                                 {{ $orderDetail->description ?? '' }}
                                 @if(is_array(json_decode($orderDetail->photos)) && count(json_decode($orderDetail->photos)) > 0)
