@@ -93,6 +93,7 @@
                         name="is_seasoned" id="is_seasoned" onchange="sort_playlist()">
                         <option value="">الكل</option>
                         <option value="1" @if ($is_seasoned == '1') selected @endif>منتجات سيزون</option> 
+                        <option value="0" @if ($is_seasoned == '0') selected @endif>منتجات خارج السيزون</option> 
                     </select>
                 </div>
             </div>
