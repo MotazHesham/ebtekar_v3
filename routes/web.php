@@ -311,6 +311,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Products
     Route::delete('products/destroy', 'ProductsController@massDestroy')->name('products.massDestroy');
     Route::post('products/edit_prices', 'ProductsController@edit_prices')->name('products.edit_prices');
+    Route::get('products/duplicate/{id}', 'ProductsController@duplicate')->name('products.duplicate');
     Route::post('products/sorting_images', 'ProductsController@sorting_images')->name('products.sorting_images');
     Route::post('products/update_product', 'ProductsController@update')->name('products.update_product');
     Route::post('products/update_statuses', 'ProductsController@update_statuses')->name('products.update_statuses');

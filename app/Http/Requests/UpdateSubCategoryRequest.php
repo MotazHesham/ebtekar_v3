@@ -21,6 +21,11 @@ class UpdateSubCategoryRequest extends FormRequest
                 'string',
                 'required',
             ], 
+            'slug' => [
+                'string',
+                'required',
+                'unique:sub_categories,slug,' . request()->id,
+            ],
             'meta_title' => [
                 'string',
                 'nullable',

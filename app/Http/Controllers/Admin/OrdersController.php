@@ -106,12 +106,16 @@ class OrdersController extends Controller
             $status = '3';
             $order->add_income();
         } 
-        $order->save();
-        return [
-            'status' => $status,
-            'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>', 
-            'message' => '',
-        ];
+        $order->save(); 
+        if($request->ajax()){
+            return [
+                'status' => $status,
+                'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>', 
+                'message' => '',
+            ];
+        }else{
+            return redirect()->back();
+        }
     }
 
     public function print($id){

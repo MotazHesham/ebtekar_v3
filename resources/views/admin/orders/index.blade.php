@@ -352,6 +352,20 @@
                                     class="badge text-bg-{{ trans('global.payment_status.colors.' . $order->payment_status) }} mb-1">
                                     {{ $order->payment_status ? trans('global.payment_status.status.' . $order->payment_status) : '' }}
                                 </span>
+                                @can('hold')
+                                    <form action="{{ route('admin.orders.update_statuses') }}" method="POST" style="display: inline">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $order->id }}">
+                                        <input type="hidden" name="type" value="hold">
+                                        @if($order->hold == 0)
+                                            <input type="hidden" name="status" value="1">
+                                            <button type="submit" class="btn btn-dark btn-sm rounded-pill">Hold </button>
+                                        @else 
+                                            <input type="hidden" name="status" value="0">
+                                            <button type="submit" class="btn btn-warning btn-sm rounded-pill">UnHold </button> 
+                                        @endif
+                                    </form>
+                                @endcan
                                 @if($order->playlist_status == 'pending')
                                     <button class="btn btn-success btn-sm rounded-pill" onclick="playlist_users('{{$order->id}}','order')">أرسال للديزاينر</button>
                                 @else  
@@ -390,20 +404,23 @@
                                         {{ trans('global.print') }} 
                                     </a>
                                 @endcan
-                                @can('order_edit')
-                                    <a class="btn btn-info" 
-                                        href="{{ route('admin.orders.edit', $order->id) }}">
-                                        {{ trans('global.edit') }} 
-                                    </a>
-                                @endcan
+                                
+                                @if(!$order->hold || auth()->user()->is_admin)
+                                    @can('order_edit')
+                                        <a class="btn btn-info" 
+                                            href="{{ route('admin.orders.edit', $order->id) }}">
+                                            {{ trans('global.edit') }} 
+                                        </a>
+                                    @endcan
 
-                                @can('order_delete')
-                                    <?php $route = route('admin.orders.destroy', $order->id); ?>
-                                    <a class="btn btn-danger"
-                                        href="#" onclick="deleteConfirmation('{{$route}}')">
-                                        {{ trans('global.delete') }} 
-                                    </a>
-                                @endcan
+                                    @can('order_delete')
+                                        <?php $route = route('admin.orders.destroy', $order->id); ?>
+                                        <a class="btn btn-danger"
+                                            href="#" onclick="deleteConfirmation('{{$route}}')">
+                                            {{ trans('global.delete') }} 
+                                        </a>
+                                    @endcan
+                                @endif
                             </td>
                         </tr>
                     @empty

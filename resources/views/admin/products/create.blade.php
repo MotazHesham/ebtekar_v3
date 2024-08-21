@@ -377,17 +377,24 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <button class="btn btn-danger btn-lg btn-block" type="submit">
                         {{ trans('global.save') }}
                     </button>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <button class="btn btn-success btn-lg btn-block" type="submit" name="arrange_photos">
                         حفظ وترتيب الصور
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <button class="btn btn-warning btn-lg btn-block" type="submit" name="duplicate">
+                        حفظ وتكرار المنتج
                     </button>
                 </div>
             </div>

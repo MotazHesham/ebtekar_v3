@@ -10,6 +10,7 @@
         <form method="POST" action="{{ route("admin.sub-categories.update", [$subCategory->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
+            <input type="hidden" name="id" value="{{$subCategory->id}}">
             <div class="form-group">
                 <label class="required" for="name">{{ trans('cruds.subCategory.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', $subCategory->name) }}" required>
@@ -20,6 +21,16 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.subCategory.fields.name_helper') }}</span>
             </div> 
+            <div class="form-group">
+                <label for="slug">{{ trans('cruds.subCategory.fields.slug') }}</label>
+                <input class="form-control {{ $errors->has('slug') ? 'is-invalid' : '' }}" type="text" name="slug" id="slug" value="{{ old('slug', $subCategory->slug) }}">
+                @if($errors->has('slug'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('slug') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.subCategory.fields.slug_helper') }}</span>
+            </div>
             <div class="form-group">
                 <label for="meta_title">{{ trans('cruds.subCategory.fields.meta_title') }}</label>
                 <input class="form-control {{ $errors->has('meta_title') ? 'is-invalid' : '' }}" type="text" name="meta_title" id="meta_title" value="{{ old('meta_title', $subCategory->meta_title) }}">

@@ -29,6 +29,12 @@ class ProductsController extends Controller
 {
     use MediaUploadingTrait;
 
+    public function duplicate($id){
+        $product = Product::findOrFail($id);
+        $product->duplicate();
+        alert()->success('Product duplicated successfully');
+        return redirect()->route('admin.products.index');
+    }
     public function edit_prices(Request $request){
         if($request->category == null && $request->sub_category == null && $request->sub_sub_category == null){ 
             toast('Missing Fields','warning');
@@ -208,7 +214,11 @@ class ProductsController extends Controller
                 $deleteGate    = 'product_delete';
                 $crudRoutePart = 'products';
 
-                return view('partials.datatablesActions', compact(
+                $duplicate = '<a class="btn btn-xs btn-warning" href="' . \route('admin.' . $crudRoutePart . '.duplicate', $row->id) .'">
+                                ' . trans('global.duplicate') .'
+                            </a>';  
+
+                return $duplicate . ' &nbsp;' . view('partials.datatablesActions', compact(
                     'viewGate',
                     'editGate',
                     'deleteGate',
@@ -420,11 +430,19 @@ class ProductsController extends Controller
             }
         } 
         
-        toast(trans('flash.global.success_title'),'success'); 
+        Cache::forget('home_new_products_' . $product->website_setting_id); 
+
         if($request->has('arrange_photos')){
+            toast(trans('flash.global.success_title'),'success'); 
             return redirect()->route('admin.products.show',$product->id);
         }
-        Cache::forget('home_new_products_' . $product->website_setting_id); 
+
+        if($request->has('duplicate')){
+            $new_product = $product->duplicate();
+            alert()->success('تم أضافة المنتج بنجاح وتكراره','انت الأن تقوم بتعديل المنتج المكرر');
+            return redirect()->route('admin.products.edit',$new_product->id);
+        }
+        toast(trans('flash.global.success_title'),'success'); 
         return redirect()->route('admin.products.index');
     }
 

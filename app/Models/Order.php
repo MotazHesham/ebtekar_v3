@@ -110,6 +110,7 @@ class Order extends Model
         'supplied',
         'client_review',
         'done',
+        'hold',
         'done_time',
         'send_to_delivery_date',
         'send_to_playlist_date',

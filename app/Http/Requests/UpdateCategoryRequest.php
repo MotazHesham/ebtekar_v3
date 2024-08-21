@@ -24,6 +24,11 @@ class UpdateCategoryRequest extends FormRequest
             'banner' => [
                 'required',
             ],
+            'slug' => [
+                'string',
+                'required',
+                'unique:categories,slug,' . request()->id,
+            ],
             'icon' => [
                 'required',
             ], 

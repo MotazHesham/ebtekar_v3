@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Str;
 
 class Product extends Model implements HasMedia
 {
@@ -131,6 +132,21 @@ class Product extends Model implements HasMedia
     public function getPdfAttribute()
     {
         return $this->getMedia('pdf')->last();
+    }
+
+    public function duplicate(){
+        
+        $newProduct = $this->replicate();
+        $newProduct->slug = Str::slug($this->name, '-',null) . '-' . Str::random(7);
+        $newProduct->save();
+
+        foreach($this->stocks as $stock){
+            $newStock = $stock->replicate();
+            $newStock->product_id = $newProduct->id;
+            $newStock->save();
+        }
+        
+        return $newProduct;
     }
 
     public function stocks()

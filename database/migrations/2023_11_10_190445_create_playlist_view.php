@@ -51,7 +51,7 @@ return new class extends Migration
 
                 SELECT CONCAT("order") AS model_type,ords.id,ords.order_num,ords.client_name,ords.phone_number,ords.phone_number_2,ords.deposit_amount as deposit,ords.total_cost,ords.shipping_address,ords.shipping_country_id,
                 ords.delivery_status,ords.payment_status,ords.playlist_status,ords.delay_reason,ords.cancel_reason,ords.designer_id,ords.preparer_id,ords.manufacturer_id,ords.user_id As added_by,CONCAT(0) AS is_seasoned,
-                ords.shipmenter_id,ords.delivery_man_id,ords.note,ords.send_to_playlist_date,ords.send_to_delivery_date,ords.quickly,ords.client_review,ords.printing_times,ords.website_setting_id,CONCAT(0) AS hold,ords.created_at,ords.updated_at,ords.deleted_at,
+                ords.shipmenter_id,ords.delivery_man_id,ords.note,ords.send_to_playlist_date,ords.send_to_delivery_date,ords.quickly,ords.client_review,ords.printing_times,ords.website_setting_id,ords.hold,ords.created_at,ords.updated_at,ords.deleted_at,
                 GROUP_CONCAT(CONCAT(p.name, "(", ords_detls.quantity, ") <br>",ords_detls.description) SEPARATOR "<hr>") AS description
                 FROM orders ords
                 JOIN order_details ords_detls ON ords.id = ords_detls.order_id 

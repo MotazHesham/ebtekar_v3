@@ -14,7 +14,7 @@
                                     $image = isset($orderDetail->product->photos[0]) ? $orderDetail->product->photos[0]->getUrl('preview2') : '';
                                 @endphp     
                                 <a href="{{ $image }}" target="_blank"><img width="150" height="150" src={{ $image }}/></a>
-                                <div style="display: inline">{{ $orderDetail->product->name ?? '' }} <strong style="display: inline">({{ $orderDetail->quantity ?? '' }})</strong>
+                                <div style="display: inline">{{ $orderDetail->product->name ?? '' }} {{ $orderDetail->variation ? ' - (' . $orderDetail->variation . ')': '' }} <strong style="display: inline">({{ $orderDetail->quantity ?? '' }})</strong>
                                 
                                     
                                     {!! $orderDetail->product->category ? '<span style="color:white;padding: 5px;border-radius: 11px;;background:#8b304f">' .  $orderDetail->product->category->name . '</span>' : '' !!} 
