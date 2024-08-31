@@ -96,7 +96,7 @@
                     <div class="row">
                         <div class="col pr-0">
                             <div class="product-slide-5 product-m no-arrow">
-                                @foreach ($featured_category->products as $product) 
+                                @foreach ($featured_category->products->take(8) as $product) 
                                     @include('frontend.partials.single-product',['product' => $product, 'preview' => 'preview2'])
                                 @endforeach
                             </div>

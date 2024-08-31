@@ -44,10 +44,10 @@ class HomeController extends Controller
         $freatured_categories =  Cache::rememberForever('freatured_categories_'.$site_settings->id, function () use ($site_settings) {
 
             $categories = Category::where('website_setting_id', $site_settings->id)->where('published', 1)->where('featured', 1)->with(['media','products.media','products.category', 'products' => function ($query) {
-                $query->where('published', 1)->where('featured', 1)->orderBy('created_at', 'desc')->take(7);
+                $query->where('published', 1)->where('featured', 1)->orderBy('created_at', 'desc');
             }])->orderBy('created_at', 'desc')->get(); 
             return $categories;
-        }); 
+        });  
 
         $banners_1 = Cache::rememberForever('home_banners_1_'.$site_settings->id, function () use ($site_settings) {
             return Banner::where('website_setting_id', $site_settings->id)->with('media')->where('position', 1)->where('published', 1)->orderBy('updated_at', 'desc')->get()->take(2);
