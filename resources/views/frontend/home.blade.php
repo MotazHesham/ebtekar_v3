@@ -89,89 +89,23 @@
     </section>
     <!--tab product-->
 
-    <!--media banner start-->
-    <section class="section-pb-space" style="direction: ltr;">
-        <div class="container">
-            <div class="row ">
-                <div class="col-12">
-                    <div class="theme-tab">
-                        <div class="tab-content-cls">
-                            @foreach ($freatured_categories as $key => $featured_category) 
-                                <div id="tab-featured-{{ $key + 1}}" class="tab-content @if ($loop->first) active default @endif" @if (!$loop->first) style="display:none" @endif>
-                                    <div class="media-slide-5 no-arrow">
-                                        @foreach ($featured_category->products->take(7) as $chunk)
-                                            <div>
-                                                <div class="media-banner b-g-white1 border-0">
-                                                    @foreach ($chunk as $product)  
-                                                        @php
-                                                            $product_image = isset($product->photos[0]) ? $product->photos[0]->getUrl('thumb') : ''; 
-                                                        @endphp 
-                                                        <div class="media-banner-box">
-                                                            <div class="media">
-                                                                <a href="{{ route('frontend.product', $product->slug) }}">
-                                                                    <img src="{{ $product_image }}" class="img-fluid  " style="width: 86px;height:110px" alt="banner">
-                                                                </a>
-                                                                <div class="media-body">
-                                                                    <div class="media-contant">
-                                                                        <div>
-                                                                            <div class="product-detail">
-                                                                                <ul class="rating">
-                                                                                    @include('frontend.partials.rate',['rate' => $product->rating])
-                                                                                </ul>
-                                                                                <a
-                                                                                    href="{{ route('frontend.product', $product->slug) }}">
-                                                                                    <p>{{ $product->name }}</p>
-                                                                                </a>
-                                                                                <h6>
-                                                                                    <?php echo $product->calc_price_as_text(); ?>  
-                                                                                    @if(auth()->check() && auth()->user()->user_type == 'seller')
-                                                                                        <br>
-                                                                                        <button class="btn btn-outline-warning btn-sm"> الربح : {{ front_calc_commission_currency($product->unit_price,$product->purchase_price)['value'] }} </button> 
-                                                                                    @endif
-                                                                                </h6>
-                                                                            </div>
-                                                                            <div class="cart-info">
-                                                                                @if($product->variant_product || $product->special)
-                                                                                    <a href="{{ route('frontend.product', $product->slug) }}" class="tooltip-top add-cartnoty" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value']}}" data-name="{{ $product->name }}" data-tippy-content="Add to cart">
-                                                                                        <i data-feather="shopping-cart"></i>
-                                                                                    </a>
-                                                                                @else  
-                                                                                    <form action="{{route('frontend.cart.add')}}" method="POST" enctype="multipart/form-data" style="margin-left: 7px;display:inline">
-                                                                                        @csrf
-                                                                                        <input type="hidden" name="id" value="{{$product->id}}">
-                                                                                        <input type="hidden" name="variant">
-                                                                                        <button type="submit" class="tooltip-top add-cartnoty" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value']}}" data-name="{{ $product->name }}" data-tippy-content="Add to cart">
-                                                                                            <i data-feather="shopping-cart"></i>
-                                                                                        </button>
-                                                                                    </form>
-                                                                                @endif
-                                                                                <a href="{{ route('frontend.wishlist.add', $product->slug) }}"
-                                                                                    class="add-to-wish tooltip-top" data-name="{{ $product->name }}" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}"
-                                                                                    data-tippy-content="Add to Wishlist"><i
-                                                                                        data-feather="heart"
-                                                                                        class="add-to-wish" data-name="{{ $product->name }}" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }}"></i></a>
-                                                                                <a href="javascript:void(0)" onclick="quick_view('{{$product->id}}')" data-bs-toggle="modal" data-bs-target="#quick-view" class="tooltip-top"  data-tippy-content="Quick View"><i  data-feather="eye"></i></a>
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div> 
-                            @endforeach
+    @foreach ($freatured_categories as $key => $featured_category) 
+        <div id="tab-featured-{{ $key + 1}}" class="tab-content @if ($loop->first) active default @endif" @if (!$loop->first) style="display:none" @endif>
+            <section class="section-big-pb-space ratio_asos product" style="direction: ltr;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col pr-0">
+                            <div class="product-slide-5 product-m no-arrow">
+                                @foreach ($featured_category->products as $product) 
+                                    @include('frontend.partials.single-product',['product' => $product, 'preview' => 'preview2'])
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    <!--media banner end-->
+            </section>
+        </div> 
+    @endforeach 
 
     <!--collection banner start-->
     <section class="collection-banner layout-3">
