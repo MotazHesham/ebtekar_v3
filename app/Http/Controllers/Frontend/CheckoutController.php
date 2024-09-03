@@ -249,7 +249,7 @@ class CheckoutController extends Controller
                     $paymobwalletpayment = new PaymobWalletPayment();
                     //pay function
                     $response = $paymobwalletpayment->pay(
-                        $order->calc_total_for_client(), 
+                        $order->calc_total_for_client() * $order->exchange_rate, 
                         $user_id = $user->id ?? null, 
                         $user_first_name = $request->first_name, 
                         $user_last_name = $request->last_name, 
