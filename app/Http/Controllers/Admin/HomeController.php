@@ -19,6 +19,8 @@ use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {  
@@ -268,7 +270,7 @@ class HomeController extends Controller
     }
 
     public function index()
-    {  
+    {   
         $settings1 = [
             'chart_title'           => trans('cruds.customer.title'),
             'chart_type'            => 'number_block',

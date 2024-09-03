@@ -10,6 +10,7 @@
         <form method="POST" action="{{ route("admin.currencies.update", [$currency->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
+            <input type="hidden" name="symbol" value="{{$currency->symbol}}">
             <div class="row"> 
                 <div class="form-group col-md-3">
                     <label class="required" for="name">{{ trans('cruds.currency.fields.name') }}</label>
@@ -20,17 +21,7 @@
                         </div>
                     @endif
                     <span class="help-block">{{ trans('cruds.currency.fields.name_helper') }}</span>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="required" for="symbol">{{ trans('cruds.currency.fields.symbol') }}</label>
-                    <input class="form-control {{ $errors->has('symbol') ? 'is-invalid' : '' }}" type="text" name="symbol" id="symbol" value="{{ old('symbol', $currency->symbol) }}" required>
-                    @if($errors->has('symbol'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('symbol') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.currency.fields.symbol_helper') }}</span>
-                </div>
+                </div> 
                 <div class="form-group col-md-3">
                     <label class="required" for="exchange_rate">{{ trans('cruds.currency.fields.exchange_rate') }}</label>
                     <input class="form-control {{ $errors->has('exchange_rate') ? 'is-invalid' : '' }}" type="number" name="exchange_rate" id="exchange_rate" value="{{ old('exchange_rate', $currency->exchange_rate) }}" step="0.01" required>

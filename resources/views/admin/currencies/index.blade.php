@@ -1,14 +1,5 @@
 @extends('layouts.admin')
-@section('content')
-    @can('currency_create')
-        <div style="margin-bottom: 10px;" class="row">
-            <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.currencies.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.currency.title_singular') }}
-                </a>
-            </div>
-        </div>
-    @endcan
+@section('content') 
     <div class="card">
         <div class="card-header">
             {{ trans('cruds.currency.title_singular') }} {{ trans('global.list') }}
@@ -87,14 +78,7 @@
                                             href="{{ route('admin.currencies.edit', $currency->id) }}">
                                             {{ trans('global.edit') }}
                                         </a>
-                                    @endcan
-
-                                    @can('currency_delete') 
-                                        <?php $route = route('admin.currencies.destroy', $currency->id); ?>
-                                        <a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('{{$route}}')">
-                                            {{ trans('global.delete') }}  
-                                        </a>  
-                                    @endcan
+                                    @endcan 
 
                                 </td>
 
@@ -125,47 +109,7 @@
             });
         }
         $(function() {
-            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-            @can('currency_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-                let deleteButton = {
-                    text: deleteButtonTrans,
-                    url: "{{ route('admin.currencies.massDestroy') }}",
-                    className: 'btn-danger',
-                    action: function(e, dt, node, config) {
-                        var ids = $.map(dt.rows({
-                            selected: true
-                        }).nodes(), function(entry) {
-                            return $(entry).data('entry-id')
-                        });
-
-                        if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
-
-                            return
-                        }
-
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
-                            $.ajax({
-                                    headers: {
-                                        'x-csrf-token': _token
-                                    },
-                                    method: 'POST',
-                                    url: config.url,
-                                    data: {
-                                        ids: ids,
-                                        _method: 'DELETE'
-                                    }
-                                })
-                                .done(function() {
-                                    location.reload()
-                                })
-                        }
-                    }
-                }
-                dtButtons.push(deleteButton)
-            @endcan
-
+            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons) 
             $.extend(true, $.fn.dataTable.defaults, {
                 orderCellsTop: true,
                 order: [

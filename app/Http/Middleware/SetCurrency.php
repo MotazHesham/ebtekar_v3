@@ -33,6 +33,9 @@ class SetCurrency
         $country_code = Session::get('country_code') ?? 'EG'; 
         $currency = Currency::where('code',$country_code)->first();
         Session::put('currency',$currency);
+
+        // set the currency rates
+        setCurrencyRate();
         
         return $next($request);
     }

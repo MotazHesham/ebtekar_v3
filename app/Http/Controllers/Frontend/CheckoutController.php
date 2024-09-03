@@ -22,6 +22,7 @@ use App\Models\User;
 use App\Models\UserAlert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Nafezly\Payments\Classes\PaymobWalletPayment;
@@ -229,7 +230,7 @@ class CheckoutController extends Controller
                     $paymobPayment = new PaymobPayment();
                     //pay function
                     $response = $paymobPayment->pay(
-                        $order->calc_total_for_client() * $order->exchange_rate, 
+                        $order->calc_total_for_client() * Cache::get('currency_rates')[$order->symbol], 
                         $user_id = $user->id ?? null, 
                         $user_first_name = $request->first_name, 
                         $user_last_name = $request->last_name, 
@@ -249,7 +250,7 @@ class CheckoutController extends Controller
                     $paymobwalletpayment = new PaymobWalletPayment();
                     //pay function
                     $response = $paymobwalletpayment->pay(
-                        $order->calc_total_for_client() * $order->exchange_rate, 
+                        $order->calc_total_for_client() * Cache::get('currency_rates')[$order->symbol], 
                         $user_id = $user->id ?? null, 
                         $user_first_name = $request->first_name, 
                         $user_last_name = $request->last_name, 

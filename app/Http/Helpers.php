@@ -10,6 +10,8 @@ use App\Models\ReceiptClient;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
 use App\Models\WebsiteSetting;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Stevebauman\Location\Facades\Location;
 
@@ -19,10 +21,46 @@ if (!function_exists('get_site_setting')) {
         return WebsiteSetting::where('domains','like','%' . request()->getHost() . '%')->first() ?? WebsiteSetting::first(); 
     }
 } 
+
 if (!function_exists('dashboard_currency')) {
     function dashboard_currency($value)
     {
         return $value . ' EGP';
+    }
+}
+
+if (!function_exists('setCurrencyRate')) {
+    function setCurrencyRate()
+    {
+        Cache::remember('currency_rates', 21600, function () {  // 6 hours
+            $response = Http::get('https://api.currencyfreaks.com/v2.0/rates/latest?apikey='.config('app.currencyfreaks_api_key').'&symbols=EGP,SAR,KWD,AED'); 
+            if ($response->successful()) {
+                $jsonData = $response->json(); 
+    
+                // Extract the base currency and rates
+                $baseCurrency = $jsonData['base'];
+                $rates = $jsonData['rates'];
+    
+                // Convert the base currency to EGP
+                if ($baseCurrency !== 'EGP') {
+                    $newRates = [];
+                    foreach ($rates as $currency => $rate) {
+                        $newRates[$currency] =  $rates['EGP'] / $rate;
+                    }
+                    $rates = $newRates;
+                }
+    
+                return $rates;
+    
+            } else { 
+                return [
+                    'AED' => 13,
+                    'SAR' => 13,
+                    'KWD' => 160,
+                    'EGP' => 1
+                ];
+            }
+        });    
     }
 }
 
