@@ -242,22 +242,20 @@
                                                             <input type="radio" name="payment_option" id="payment-1" value="cash_on_delivery" checked>
                                                             <label for="payment-1">   {{ trans('frontend.checkout.cash_on_delivery') }}  </label>
                                                         </div>
+                                                    </li> 
+                                                    <li>
+                                                        <div class="radio-option">
+                                                            <input type="radio" name="payment_option" id="payment-2" value="paymob"  @if(old('payment_option') == 'paymob') checked @endif>
+                                                            <label for="payment-2">   {{ trans('frontend.checkout.paymob') }}</label>
+                                                        </div>
                                                     </li>
-                                                    @if(session('country_code') == 'EG')
-                                                        <li>
-                                                            <div class="radio-option">
-                                                                <input type="radio" name="payment_option" id="payment-2" value="paymob"  @if(old('payment_option') == 'paymob') checked @endif>
-                                                                <label for="payment-2">   {{ trans('frontend.checkout.paymob') }}</label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="radio-option">
-                                                                <input type="radio" name="payment_option" id="payment-3" value="wallet"  @if(old('payment_option') == 'wallet') checked @endif>
-                                                                <label for="payment-3">   {{ trans('frontend.checkout.wallet') }}</label>
-                                                                (<span id="wallet_number"></span>)
-                                                            </div>
-                                                        </li>
-                                                    @endif
+                                                    <li>
+                                                        <div class="radio-option">
+                                                            <input type="radio" name="payment_option" id="payment-3" value="wallet"  @if(old('payment_option') == 'wallet') checked @endif>
+                                                            <label for="payment-3">   {{ trans('frontend.checkout.wallet') }}</label>
+                                                            (<span id="wallet_number"></span>)
+                                                        </div>
+                                                    </li> 
 
                                                 </ul>
                                             </div>
