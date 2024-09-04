@@ -45,7 +45,7 @@ if (!function_exists('setCurrencyRate')) {
                 if ($baseCurrency !== 'EGP') {
                     $newRates = [];
                     foreach ($rates as $currency => $rate) {
-                        $newRates[$currency] =  $rates['EGP'] / $rate;
+                        $newRates[$currency] =  round($rates['EGP'] / $rate,2);
                     }
                     $rates = $newRates;
                 }

@@ -216,6 +216,8 @@ class CheckoutController extends Controller
                     $seller->save();
                 }
 
+                $currenct_exchange_rate = Cache::get('currency_rates')[$order->symbol];
+
                 if($request->payment_option == 'cash_on_delivery'){
                     if($this->checkout_done($order->id,'unpaid')){
                         DB::commit();
@@ -228,9 +230,9 @@ class CheckoutController extends Controller
                 }elseif($request->payment_option == 'paymob'){ 
                     DB::commit(); 
                     $paymobPayment = new PaymobPayment();
-                    //pay function
+                    //pay function 
                     $response = $paymobPayment->pay(
-                        $order->calc_total_for_client() * Cache::get('currency_rates')[$order->symbol], 
+                        ($order->calc_total_for_client()/$order->exchange_rate) * $currenct_exchange_rate, 
                         $user_id = $user->id ?? null, 
                         $user_first_name = $request->first_name, 
                         $user_last_name = $request->last_name, 
@@ -250,7 +252,7 @@ class CheckoutController extends Controller
                     $paymobwalletpayment = new PaymobWalletPayment();
                     //pay function
                     $response = $paymobwalletpayment->pay(
-                        $order->calc_total_for_client() * Cache::get('currency_rates')[$order->symbol], 
+                        ($order->calc_total_for_client()/$order->exchange_rate) * $currenct_exchange_rate, 
                         $user_id = $user->id ?? null, 
                         $user_first_name = $request->first_name, 
                         $user_last_name = $request->last_name, 
@@ -271,6 +273,7 @@ class CheckoutController extends Controller
                 return redirect()->route('home');
             }
         }catch (\Exception $ex){
+            dd($ex);
             DB::rollBack(); 
             toast("SomeThing Went Wrong!",'error');
             return redirect()->route('home');

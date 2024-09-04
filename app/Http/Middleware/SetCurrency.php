@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Currency;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 use Stevebauman\Location\Facades\Location;
