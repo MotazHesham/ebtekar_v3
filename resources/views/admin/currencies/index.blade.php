@@ -1,5 +1,18 @@
 @extends('layouts.admin')
 @section('content') 
+    <div class="row">
+        @foreach(\Cache::get('currency_rates') as $symbole => $value)
+            <div class="col-md-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body pb-0">
+                        <div class="text-value">{{ $symbole }}</div>
+                        <div>{{ $value }}</div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
     <div class="card">
         <div class="card-header">
             {{ trans('cruds.currency.title_singular') }} {{ trans('global.list') }}

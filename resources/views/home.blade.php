@@ -114,19 +114,6 @@
                         </div> 
                     </div> 
                     <div class="col-md-6"> 
-                        <div class="row">
-                            @foreach(\Cache::get('currency_rates') as $symbole => $value)
-                                <div class="col-md-3">
-                                    <div class="card text-white bg-primary">
-                                        <div class="card-body pb-0">
-                                            <div class="text-value">{{ $symbole }}</div>
-                                            <div>{{ $value }}</div>
-                                            <br />
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
                         <div class="row mt-2">
                             <div class="{{ $settings7['column_class'] }}">
                                 <div class="card text-white bg-success">
