@@ -52,7 +52,7 @@ class ProductController extends Controller
 
     public function product($slug){   
         $site_settings = get_site_setting();
-        $product  = Product::where('website_setting_id',$site_settings->id)->where('slug', $slug)->first();
+        $product  = Product::where('website_setting_id',$site_settings->id)->where('slug', $slug)->where('published',1)->first();
         if(!$product){
             abort(404);
         }
