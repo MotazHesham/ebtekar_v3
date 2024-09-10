@@ -60,6 +60,8 @@
             @php
                 $description = '';
                 foreach($order->orderDetails as $key => $order_detail){
+                    $name = $order_detail->product->name ?? 'N/A';
+                    $quantity = $order_detail->quantity ?? 'N/A';
                     $description .= $order_detail->product->name . " - [" . $order_detail->quantity . "]";
                     $description .= '<br> --------- <br>';
                 }
