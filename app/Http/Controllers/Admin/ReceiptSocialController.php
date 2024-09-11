@@ -578,8 +578,10 @@ class ReceiptSocialController extends Controller
         }
         if ($request->include != null) {
             $include = $request->include; 
-            foreach(explode(',',$include) as $inc){
-                $include2[] = $inc;
+            foreach(explode(',',$include) as $inc){ 
+                foreach(explode(' ',$inc) as $inccc){
+                    $include2[] = $inccc;
+                }
             }
             $receipts = $receipts->where(function ($query) use($include2) {
                 for ($i = 0; $i < count($include2); $i++){
