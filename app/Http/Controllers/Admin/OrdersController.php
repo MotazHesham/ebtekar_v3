@@ -349,9 +349,11 @@ class OrdersController extends Controller
             });
         }
         if ($request->include != null) {
-            $include = $request->include; 
-            foreach(explode(',',$include) as $inc){
-                $include2[] = $inc;
+            $include = $request->include;  
+            foreach(explode(',',$include) as $inc){ 
+                foreach(explode(' ',$inc) as $inccc){
+                    $include2[] = $inccc;
+                }
             }
             $orders = $orders->where(function ($query) use($include2) {
                 for ($i = 0; $i < count($include2); $i++){
