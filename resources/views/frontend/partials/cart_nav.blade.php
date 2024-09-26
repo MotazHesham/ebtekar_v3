@@ -1,5 +1,6 @@
 <ul class="cart_product">
-    @php
+    @php 
+        validateCart();
         $total = 0;
         $count_cart = session('cart') ? session('cart')->count() : 0;
     @endphp

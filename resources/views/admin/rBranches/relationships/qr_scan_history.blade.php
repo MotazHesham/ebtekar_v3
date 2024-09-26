@@ -5,10 +5,14 @@
                 أضافة Scan جديدة
             </div>
             <div class="card-body">
+
                 <form action="{{ route('admin.qr-products.printmore') }}" method="POST" id="print_more_form2">
                     @csrf 
                     <input type="hidden" name="ids" id="input-ids2">
+                    <input type="hidden" name="print_type" value="print" id="print_type">
                 </form>
+
+
                 <form method="POST" action="{{ route('admin.qr-products.start_scan') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="r_branch_id" value="{{ $rBranch->id }}">
@@ -122,6 +126,7 @@
             }, function(data) {
                 $('#load-needs').html(data);
                 let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)  
+
                 let deleteButtonTrans = "طباعة المحدد"
                 let deleteButton = {
                     text: deleteButtonTrans, 
@@ -139,12 +144,39 @@
                         }
 
                         if (confirm('{{ __('global.areYouSure') }}')) {
-                            $('#input-ids2').val(ids);
+                            $('#input-ids2').val(ids); 
                             $('#print_more_form2').submit();  
                         }
                     }
                 }
+
+                let excelButtonTrans = "المحدد في Excel"
+                let excelButton = {
+                    text: excelButtonTrans, 
+                    className: 'btn-success',
+                    action: function(e, dt, node, config) {
+                        var ids = $.map(dt.rows({
+                            selected: true
+                        }).nodes(), function(entry) {
+                            return $(entry).data('entry-id')
+                        });
+
+                        if (ids.length === 0) {
+                            alert('{{ __('global.datatables.zero_selected') }}') 
+                            return
+                        }
+
+                        if (confirm('{{ __('global.areYouSure') }}')) {
+                            $('#input-ids2').val(ids);
+                            $('#print_type').val('excel');
+                            $('#print_more_form2').submit();  
+                        }
+                    }
+                }
+
                 dtButtons.push(deleteButton) 
+                dtButtons.push(excelButton) 
+
                 $.extend(true, $.fn.dataTable.defaults, {
                     orderCellsTop: true, 
                     pageLength: 100,

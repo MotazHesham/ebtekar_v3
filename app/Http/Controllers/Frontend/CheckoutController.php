@@ -49,7 +49,14 @@ class CheckoutController extends Controller
             if(!session('cart')){
                 alert("قم بأضافة منتجات الي السلة أولا",'','warning');
                 return redirect()->route('home');
+            } 
+            
+            $validatedCart = validateCart(); // check for avaialbilty for product
+            if($validatedCart['return']){ 
+                alert($validatedCart['alert_text'],'','warning');
+                return redirect()->route($validatedCart['route']);
             }
+
 
             if($request->discount_code != null){
                 $seller = Seller::where('discount_code',$request->discount_code)->first();

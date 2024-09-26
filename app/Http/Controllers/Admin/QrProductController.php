@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\QrProductExport;
 use App\Http\Controllers\Controller;
 use App\Models\QrProduct;
 use App\Models\QrProductKey;
 use App\Models\QrProductRBranch;
 use App\Models\QrScanHistory;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class QrProductController extends Controller
 {
     public function printmore(Request $request){ 
         $qr_product_keys = QrProductKey::with('product')->whereIn('id',explode(',',$request->ids))->get(); 
+        if($request->print_type == 'excel' ){
+            return Excel::download(new QrProductExport($qr_product_keys), 'names.xlsx');
+        }
         return view('admin.rBranches.partials.printmore',compact('qr_product_keys'));
     }
     public function qr_output(Request $request){
