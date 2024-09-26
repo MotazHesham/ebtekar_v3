@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($product->names as $name)
+                @foreach ($product->names->take($limit) as $name)
                     <tr data-entry-id="{{ $name->id }}" id="tr_needs_{{ $name->id }}"
                         @if (in_array($name->id, explode(',', $qr_scan_history->printed))) style="background-color: #53e753;" @endif>
                         <td></td>

@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class QrProductController extends Controller
 {
+    
     public function printmore(Request $request){ 
         $qr_product_keys = QrProductKey::with('product')->whereIn('id',explode(',',$request->ids))->get(); 
         if($request->print_type == 'excel' ){
@@ -237,7 +238,8 @@ class QrProductController extends Controller
             return $q->whereNotIn('id',$scanned)->whereIn('id',$includes);
         }])->get();
 
-        return view('admin.rBranches.partials.load_needs',compact('qr_scan_history','qr_products'));
+        $limit = $qr_product_rbranch->quantity - count($scanned);
+        return view('admin.rBranches.partials.load_needs',compact('qr_scan_history','qr_products','limit'));
     }
     
     public function get_names(Request $request){
