@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.seller.title') }}
+        {{ __('global.show') }} {{ __('cruds.seller.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.sellers.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.id') }}
+                            {{ __('cruds.seller.fields.id') }}
                         </th>
                         <td>
                             {{ $seller->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.user') }}
+                            {{ __('cruds.seller.fields.user') }}
                         </th>
                         <td>
                             {{ $seller->user->name ?? '' }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.seller_type') }}
+                            {{ __('cruds.seller.fields.seller_type') }}
                         </th>
                         <td>
                             {{ App\Models\Seller::SELLER_TYPE_SELECT[$seller->seller_type] ?? '' }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.discount') }}
+                            {{ __('cruds.seller.fields.discount') }}
                         </th>
                         <td>
                             {{ $seller->discount }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.discount_code') }}
+                            {{ __('cruds.seller.fields.discount_code') }}
                         </th>
                         <td>
                             {{ $seller->discount_code }}
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.order_out_website') }}
+                            {{ __('cruds.seller.fields.order_out_website') }}
                         </th>
                         <td>
                             {{ $seller->order_out_website }}
@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.order_in_website') }}
+                            {{ __('cruds.seller.fields.order_in_website') }}
                         </th>
                         <td>
                             {{ $seller->order_in_website }}
@@ -73,7 +73,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.qualification') }}
+                            {{ __('cruds.seller.fields.qualification') }}
                         </th>
                         <td>
                             {{ $seller->qualification }}
@@ -81,7 +81,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.social_name') }}
+                            {{ __('cruds.seller.fields.social_name') }}
                         </th>
                         <td>
                             {{ $seller->social_name }}
@@ -89,7 +89,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.social_link') }}
+                            {{ __('cruds.seller.fields.social_link') }}
                         </th>
                         <td>
                             {{ $seller->social_link }}
@@ -97,7 +97,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.seller_code') }}
+                            {{ __('cruds.seller.fields.seller_code') }}
                         </th>
                         <td>
                             {{ $seller->seller_code }}
@@ -105,7 +105,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.identity_back') }}
+                            {{ __('cruds.seller.fields.identity_back') }}
                         </th>
                         <td>
                             @if($seller->identity_back)
@@ -117,7 +117,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.seller.fields.identity_front') }}
+                            {{ __('cruds.seller.fields.identity_front') }}
                         </th>
                         <td>
                             @if($seller->identity_front)
@@ -131,7 +131,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.sellers.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

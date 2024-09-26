@@ -53,9 +53,9 @@
                             <form class="big-deal-form" action="{{route('frontend.search')}}">
                                 <div class="input-group ">
                                     <span class="search"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control" name="search" value="@if(isset($search)) {{$search}} @endif" placeholder="{{ trans('frontend.header.search_product') }}">
+                                    <input type="text" class="form-control" name="search" value="@if(isset($search)) {{$search}} @endif" placeholder="{{ __('frontend.header.search_product') }}">
                                     <select name="category">
-                                        <option value=""> {{ trans('frontend.header.all_products') }}</option>
+                                        <option value=""> {{ __('frontend.header.all_products') }}</option>
                                         @foreach ($header_home_categories as $homecategory)
                                             <option value="{{$homecategory->category->slug ?? ''}}" @if(isset($category) && $category == $homecategory->category->id) selected @endif>
                                                 {{ $homecategory->category->name ?? '' }}
@@ -143,8 +143,8 @@
                                                 </svg>
                                             </div>
                                             <div class="cart-item">
-                                                <h5>{{ trans('frontend.header.cart') }} </h5>
-                                                <h5>{{ trans('frontend.header.shoping') }}</h5> 
+                                                <h5>{{ __('frontend.header.cart') }} </h5>
+                                                <h5>{{ __('frontend.header.shoping') }}</h5> 
                                             </div>
                                         </div>
                                     </a> 
@@ -212,7 +212,7 @@
                                     <button class="navbar-toggler" type="button">
                                         <span class="navbar-icon"><i class="fa fa-arrow-down"></i></span>
                                     </button>
-                                    <h5 class="mb-0  text-white title-font"> {{ trans('frontend.header.shoping_by_category') }} </h5>
+                                    <h5 class="mb-0  text-white title-font"> {{ __('frontend.header.shoping_by_category') }} </h5>
                                 </nav>
                                 <div class="collapse  nav-desk" id="navbarToggleExternalContent">
                                     <ul class="nav-cat title-font">
@@ -242,17 +242,17 @@
 
                                     <!--SHOP-->
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('home') }}"> {{ trans('frontend.header.home') }}</a>
+                                        <a class="dark-menu-item" href="{{ route('home') }}"> {{ __('frontend.header.home') }}</a>
                                     </li>
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('frontend.search') }}">{{ trans('frontend.header.new_products') }} </a>
+                                        <a class="dark-menu-item" href="{{ route('frontend.search') }}">{{ __('frontend.header.new_products') }} </a>
                                     </li>
 
 
 
                                     <!--pages meu start-->
                                     <li>
-                                        <a class="dark-menu-item" href="javascript:void(0)"> {{ trans('frontend.header.products') }}</a>
+                                        <a class="dark-menu-item" href="javascript:void(0)"> {{ __('frontend.header.products') }}</a>
                                         <ul> 
                                             @foreach ($header_nested_categories as $category)
                                                 <li>
@@ -279,15 +279,15 @@
                                     <!--product-end end-->
 
                                     {{-- <li>
-                                        <a class="dark-menu-item" href="{{ route('frontend.beseller') }}"> {{ trans('frontend.header.be_seller') }}</a>
+                                        <a class="dark-menu-item" href="{{ route('frontend.beseller') }}"> {{ __('frontend.header.be_seller') }}</a>
                                     </li>
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('frontend.bedesigner') }}">{{ trans('frontend.header.be_designer') }} </a>
+                                        <a class="dark-menu-item" href="{{ route('frontend.bedesigner') }}">{{ __('frontend.header.be_designer') }} </a>
                                     </li> --}}
                                     <li>
 
                                     <li>
-                                        <a class="dark-menu-item" href="{{ route('frontend.contact') }}"> {{ trans('frontend.header.contact_us') }} </a>
+                                        <a class="dark-menu-item" href="{{ route('frontend.contact') }}"> {{ __('frontend.header.contact_us') }} </a>
                                     </li>
                                     <li>
                                 </ul>
@@ -369,8 +369,8 @@
                                             </g>
                                         </svg> 
                                         <div class="cart-item">
-                                            <h5>{{ trans('frontend.header.cart') }} </h5>
-                                            <h5>{{ trans('frontend.header.shoping') }}</h5>
+                                            <h5>{{ __('frontend.header.cart') }} </h5>
+                                            <h5>{{ __('frontend.header.shoping') }}</h5>
                                         </div>  
                                         <div class="item-count-contain">
                                             {{ session('cart') ? session('cart')->count() : 0 }}

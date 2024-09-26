@@ -5,7 +5,7 @@
         @can('receipt_outgoing_create')
             <div class="col-md-3">
                 <a class="btn btn-success" href="{{ route('admin.receipt-outgoings.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.receiptOutgoing.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.receiptOutgoing.title_singular') }}
                 </a>
             </div>
         @endcan
@@ -13,7 +13,7 @@
         @if(isset($deleted))
             <div class="col-md-3">
                 <a class="btn btn-dark" href="{{ route('admin.receipt-outgoings.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         @else 
@@ -21,7 +21,7 @@
             @if(Gate::allows('soft_delete'))
                 <div class="col-md-3">
                     <a class="btn btn-danger" href="{{ route('admin.receipt-outgoings.index',['deleted' => 1]) }}">
-                        {{ trans('global.extra.deleted_receipts') }}
+                        {{ __('global.extra.deleted_receipts') }}
                     </a>
                 </div>
             @endif
@@ -33,7 +33,7 @@
             <div class="col-xl-3 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <b>{{ trans('global.statistics') }} {{ trans('cruds.receiptOutgoing.title') }}</b>
+                        <b>{{ __('global.statistics') }} {{ __('cruds.receiptOutgoing.title') }}</b>
                         <hr>
                         <div class="row">
                             <div class="col-md-12 col-sm-12">
@@ -78,9 +78,9 @@
 
     <div class="card">
         <div class="card-header">
-            {{ trans('global.list') }} {{ trans('cruds.receiptOutgoing.title') }}
+            {{ __('global.list') }} {{ __('cruds.receiptOutgoing.title') }}
             @isset($deleted)
-                {{ trans('global.deleted') }}
+                {{ __('global.deleted') }}
             @endisset
         </div>
 
@@ -90,22 +90,22 @@
                     <tr> 
                         <th>#</th>    
                         <th>
-                            {{ trans('global.extra.client') }}
+                            {{ __('global.extra.client') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.dates') }}
+                            {{ __('global.extra.dates') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptOutgoing.fields.total_cost') }}
+                            {{ __('cruds.receiptOutgoing.fields.total_cost') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.statuses') }}
+                            {{ __('global.extra.statuses') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.stages') }}
+                            {{ __('global.extra.stages') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptOutgoing.fields.note') }}
+                            {{ __('cruds.receiptOutgoing.fields.note') }}
                         </th>  
                         <th>
                             &nbsp;
@@ -144,13 +144,13 @@
                             </td>
                             <td>
                                 <span class="badge text-bg-primary text-white mb-1">
-                                    {{ trans('cruds.receiptOutgoing.fields.created_at') }}
+                                    {{ __('cruds.receiptOutgoing.fields.created_at') }}
                                     <br> {{ $receipt->created_at }}
                                 </span>
                                 @if ($receipt->date_of_receiving_order)
                                     <br>
                                     <span class="badge text-bg-light mb-1">
-                                        {{ trans('cruds.receiptOutgoing.fields.date_of_receiving_order') }}
+                                        {{ __('cruds.receiptOutgoing.fields.date_of_receiving_order') }}
                                         <br> {{ $receipt->date_of_receiving_order }}
                                     </span>
                                 @endif
@@ -163,7 +163,7 @@
                             <td> 
                                 <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
                                     <span>
-                                        {{ trans('cruds.receiptOutgoing.fields.done') }}
+                                        {{ __('cruds.receiptOutgoing.fields.done') }}
                                     </span>
                                     <br>
                                     <label class="c-switch c-switch-pill c-switch-success">
@@ -176,7 +176,7 @@
                             </td>
                             <td>
                                 <span class="badge text-bg-danger text-white mb-1">
-                                    {{ trans('global.extra.created_by') }}
+                                    {{ __('global.extra.created_by') }}
                                     =>
                                     {{ $receipt->staff->name ?? '' }}
                                 </span>
@@ -201,7 +201,7 @@
                                             @can('receipt_outgoing_view_products')
                                                 <a class="dropdown-item" style="cursor: pointer"
                                                     onclick="view_products('{{ $receipt->id }}')">
-                                                    {{ trans('global.extra.view_products') }}
+                                                    {{ __('global.extra.view_products') }}
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             @endcan
@@ -209,28 +209,28 @@
                                                 @can('receipt_outgoing_add_product')
                                                     <a class="dropdown-item" style="cursor: pointer"
                                                         onclick="add_product('{{ $receipt->id }}')">
-                                                        {{ trans('global.extra.add_product') }}
+                                                        {{ __('global.extra.add_product') }}
                                                         <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_outgoing_edit')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-outgoings.edit', $receipt->id) }}">
-                                                        {{ trans('global.edit') }}
+                                                        {{ __('global.edit') }}
                                                         <i class="far fa-edit" style="color:cornflowerblue"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_outgoing_print')
                                                     <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-outgoings.print', $receipt->id) }}">
-                                                        {{ trans('global.print') }}
+                                                        {{ __('global.print') }}
                                                         <i class="fas fa-print" style="color:yellowgreen"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_outgoing_duplicate')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-outgoings.duplicate', $receipt->id) }}">
-                                                        {{ trans('global.duplicate') }}
+                                                        {{ __('global.duplicate') }}
                                                         <i class="far fa-clone" style="color:blueviolet"></i>
                                                     </a>
                                                 @endcan
@@ -238,7 +238,7 @@
                                                 @can('receipt_outgoing_restore')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-outgoings.restore', $receipt->id) }}">
-                                                        {{ trans('global.restore') }}
+                                                        {{ __('global.restore') }}
                                                         <i class="fas fa-undo" style="color:grey"></i>
                                                     </a>  
                                                 @endcan
@@ -247,7 +247,7 @@
                                                 <?php $route = route('admin.receipt-outgoings.destroy', $receipt->id); ?>
                                                 <a class="dropdown-item" href="#"
                                                     onclick="deleteConfirmation('{{ $route }}')">
-                                                    {{ trans('global.delete') }}   @isset($deleted) {{ trans('global.permanently') }} @endisset
+                                                    {{ __('global.delete') }}   @isset($deleted) {{ __('global.permanently') }} @endisset
                                                     <i class="fas fa-trash-alt" style="color:darkred"></i>
                                                 </a>
                                             @endcan

@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.slider.title_singular') }}
+        {{ __('global.edit') }} {{ __('cruds.slider.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -11,7 +11,7 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                <label class="required" for="website_setting_id">{{ __('global.extra.website_setting_id') }}</label>
                 <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
                     @foreach($websites as $id => $entry)
                         <option value="{{ $id }}" {{ old('website_setting_id',$slider->website_setting_id) == $id ? 'selected' : '' }}>{{ $entry }}</option>
@@ -24,7 +24,7 @@
                 @endif 
             </div>
             <div class="form-group">
-                <label class="required" for="photo">{{ trans('cruds.slider.fields.photo') }}</label>
+                <label class="required" for="photo">{{ __('cruds.slider.fields.photo') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('photo') ? 'is-invalid' : '' }}" id="photo-dropzone">
                 </div>
                 @if($errors->has('photo'))
@@ -32,21 +32,21 @@
                         {{ $errors->first('photo') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.slider.fields.photo_helper') }}</span>
+                <span class="help-block">{{ __('cruds.slider.fields.photo_helper') }}</span>
             </div> 
             <div class="form-group">
-                <label for="link">{{ trans('cruds.slider.fields.link') }}</label>
+                <label for="link">{{ __('cruds.slider.fields.link') }}</label>
                 <input class="form-control {{ $errors->has('link') ? 'is-invalid' : '' }}" type="text" name="link" id="link" value="{{ old('link', $slider->link) }}">
                 @if($errors->has('link'))
                     <div class="invalid-feedback">
                         {{ $errors->first('link') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.slider.fields.link_helper') }}</span>
+                <span class="help-block">{{ __('cruds.slider.fields.link_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

@@ -4,14 +4,14 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.polices.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.police.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.police.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.police.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.police.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -23,10 +23,10 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.police.fields.id') }}
+                            {{ __('cruds.police.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.police.fields.name') }}
+                            {{ __('cruds.police.fields.name') }}
                         </th>
                         <th>
                             &nbsp;
@@ -48,21 +48,21 @@
                             <td>
                                 @can('police_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.polices.show', $police->id) }}">
-                                        {{ trans('global.view') }}
+                                        {{ __('global.view') }}
                                     </a>
                                 @endcan
 
                                 @can('police_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.polices.edit', $police->id) }}">
-                                        {{ trans('global.edit') }}
+                                        {{ __('global.edit') }}
                                     </a>
                                 @endcan
 
                                 @can('police_delete')
-                                    <form action="{{ route('admin.polices.destroy', $police->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                    <form action="{{ route('admin.polices.destroy', $police->id) }}" method="POST" onsubmit="return confirm('{{ __('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ __('global.delete') }}">
                                     </form>
                                 @endcan
 
@@ -85,7 +85,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('police_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.polices.massDestroy') }}",
@@ -96,12 +96,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',

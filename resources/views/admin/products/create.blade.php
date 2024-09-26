@@ -11,7 +11,7 @@
         
                     <div class="card-body">
                         <div class="form-group">
-                            <label class="required" for="name">{{ trans('cruds.product.fields.name') }}</label>
+                            <label class="required" for="name">{{ __('cruds.product.fields.name') }}</label>
                             <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name"
                                 id="name" value="{{ old('name', '') }}" required>
                             @if ($errors->has('name'))
@@ -19,13 +19,13 @@
                                     {{ $errors->first('name') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.name_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.name_helper') }}</span>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <label class="required">{{ trans('cruds.product.fields.weight') }}</label>
+                                <label class="required">{{ __('cruds.product.fields.weight') }}</label>
                                 <select class="form-control {{ $errors->has('weight') ? 'is-invalid' : '' }}" name="weight" id="weight" required>
-                                    <option value disabled {{ old('weight', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                                    <option value disabled {{ old('weight', null) === null ? 'selected' : '' }}>{{ __('global.pleaseSelect') }}</option>
                                     @foreach(App\Models\Product::WEIGHT_SELECT as $key => $label)
                                         <option value="{{ $key }}" {{ old('weight', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
@@ -35,12 +35,12 @@
                                         {{ $errors->first('weight') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.product.fields.weight_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.product.fields.weight_helper') }}</span>
                             </div>
                             <div class="form-group col-md-4">
-                                <label class="required">{{ trans('cruds.product.fields.special') }}</label>
+                                <label class="required">{{ __('cruds.product.fields.special') }}</label>
                                 <select class="form-control {{ $errors->has('special') ? 'is-invalid' : '' }}" name="special" id="special" required>
-                                    <option value disabled {{ old('special', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                                    <option value disabled {{ old('special', null) === null ? 'selected' : '' }}>{{ __('global.pleaseSelect') }}</option>
                                     @foreach(App\Models\Product::SPECIAL_SELECT as $key => $label)
                                         <option value="{{ $key }}" {{ old('special', '') ==  $key ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
@@ -50,12 +50,12 @@
                                         {{ $errors->first('special') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.product.fields.special_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.product.fields.special_helper') }}</span>
                             </div>
                             <div class="form-group col-md-4">
-                                <label class="required">{{ trans('cruds.product.fields.require_photos') }}</label>
+                                <label class="required">{{ __('cruds.product.fields.require_photos') }}</label>
                                 <select class="form-control {{ $errors->has('require_photos') ? 'is-invalid' : '' }}" name="require_photos" id="require_photos" required>
-                                    <option value disabled {{ old('require_photos', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                                    <option value disabled {{ old('require_photos', null) === null ? 'selected' : '' }}>{{ __('global.pleaseSelect') }}</option>
                                     @foreach(App\Models\Product::SPECIAL_SELECT as $key => $label)
                                         <option value="{{ $key }}" {{ old('require_photos', '') ==  $key ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
@@ -65,11 +65,11 @@
                                         {{ $errors->first('require_photos') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.product.fields.require_photos_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.product.fields.require_photos_helper') }}</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                            <label class="required" for="website_setting_id">{{ __('global.extra.website_setting_id') }}</label>
                             <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
                                 @foreach($websites as $id => $entry)
                                     <option value="{{ $id }}" {{ old('website_setting_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
@@ -82,7 +82,7 @@
                             @endif 
                         </div>
                         <div class="form-group">
-                            <label class="required" for="category_id">{{ trans('cruds.product.fields.category') }}</label>
+                            <label class="required" for="category_id">{{ __('cruds.product.fields.category') }}</label>
                             <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category_id" id="category_id" required>
                                 {{-- ajax call --}}
                             </select>
@@ -91,10 +91,10 @@
                                     {{ $errors->first('category') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.category_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.category_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label class="required" for="sub_category_id">{{ trans('cruds.product.fields.sub_category') }}</label>
+                            <label class="required" for="sub_category_id">{{ __('cruds.product.fields.sub_category') }}</label>
                             <select class="form-control select2 {{ $errors->has('sub_category') ? 'is-invalid' : '' }}"  name="sub_category_id" id="sub_category_id" required>
                                 {{-- ajax call --}}
                             </select>
@@ -103,10 +103,10 @@
                                     {{ $errors->first('sub_category') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.sub_category_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.sub_category_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label for="sub_sub_category_id">{{ trans('cruds.product.fields.sub_sub_category') }}</label>
+                            <label for="sub_sub_category_id">{{ __('cruds.product.fields.sub_sub_category') }}</label>
                             <select class="form-control select2 {{ $errors->has('sub_sub_category') ? 'is-invalid' : '' }}" name="sub_sub_category_id" id="sub_sub_category_id">
                                 {{-- ajax call --}}
                             </select>
@@ -115,17 +115,17 @@
                                     {{ $errors->first('sub_sub_category') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.sub_sub_category_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.sub_sub_category_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label for="tags">{{ trans('cruds.product.fields.tags') }}</label> 
+                            <label for="tags">{{ __('cruds.product.fields.tags') }}</label> 
                             <input type="text" class="form-control {{ $errors->has('tags') ? 'is-invalid' : '' }}" name="tags[]" placeholder="add tags ..." data-role="tagsinput">
                             @if ($errors->has('tags'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('tags') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.tags_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.tags_helper') }}</span>
                         </div> 
                     </div>
                 </div>
@@ -138,7 +138,7 @@
         
                     <div class="card-body"> 
                         <div class="form-group">
-                            <label class="required" for="photos">{{ trans('cruds.product.fields.photos') }}</label>
+                            <label class="required" for="photos">{{ __('cruds.product.fields.photos') }}</label>
                             <div class="needsclick dropzone {{ $errors->has('photos') ? 'is-invalid' : '' }}" id="photos-dropzone">
                             </div>
                             @if ($errors->has('photos'))
@@ -146,7 +146,7 @@
                                     {{ $errors->first('photos') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.photos_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.photos_helper') }}</span>
                         </div>
                         <div class="form-group">
                             <label for="object_3d">3D Object</label>
@@ -169,11 +169,11 @@
 
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="video_provider">{{ trans('cruds.product.fields.video_provider') }}</label> 
+                            <label for="video_provider">{{ __('cruds.product.fields.video_provider') }}</label> 
                             <select class="form-control {{ $errors->has('video_provider') ? 'is-invalid' : '' }}"
                                 name="video_provider" id="video_provider">
                                 <option value disabled {{ old('video_provider', null) === null ? 'selected' : '' }}>
-                                    {{ trans('global.pleaseSelect') }}</option>
+                                    {{ __('global.pleaseSelect') }}</option>
                                 @foreach (App\Models\Product::VIDEO_PROVIDER_SELECT as $key => $label)
                                     <option value="{{ $key }}"
                                         {{ old('video_provider', 'flat') === (string) $key ? 'selected' : '' }}>{{ $label }}
@@ -185,10 +185,10 @@
                                     {{ $errors->first('video_provider') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.video_provider_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.video_provider_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label for="video_link">{{ trans('cruds.product.fields.video_link') }}</label>
+                            <label for="video_link">{{ __('cruds.product.fields.video_link') }}</label>
                             <input class="form-control {{ $errors->has('video_link') ? 'is-invalid' : '' }}" type="text"
                                 name="video_link" id="video_link" value="{{ old('video_link', '') }}">
                             @if ($errors->has('video_link'))
@@ -196,7 +196,7 @@
                                     {{ $errors->first('video_link') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.video_link_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.video_link_helper') }}</span>
                         </div>
                     </div>
                 </div>
@@ -212,7 +212,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label class="required" for="unit_price">{{ trans('cruds.product.fields.unit_price') }}</label>
+                                <label class="required" for="unit_price">{{ __('cruds.product.fields.unit_price') }}</label>
                                 <input class="form-control {{ $errors->has('unit_price') ? 'is-invalid' : '' }}" type="number"
                                     name="unit_price" id="unit_price" value="{{ old('unit_price', '') }}" step="0.01" required>
                                 @if ($errors->has('unit_price'))
@@ -220,10 +220,10 @@
                                         {{ $errors->first('unit_price') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.product.fields.unit_price_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.product.fields.unit_price_helper') }}</span>
                             </div>
                             <div class="form-group col-md-6">
-                                <label class="required" for="purchase_price">{{ trans('cruds.product.fields.purchase_price') }}</label>
+                                <label class="required" for="purchase_price">{{ __('cruds.product.fields.purchase_price') }}</label>
                                 <input class="form-control {{ $errors->has('purchase_price') ? 'is-invalid' : '' }}" type="number"
                                     name="purchase_price" id="purchase_price" value="{{ old('purchase_price', '') }}" step="0.01"
                                     required>
@@ -232,14 +232,14 @@
                                         {{ $errors->first('purchase_price') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.product.fields.purchase_price_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.product.fields.purchase_price_helper') }}</span>
                             </div>
                             <div class="form-group col-md-6">
-                                <label>{{ trans('cruds.product.fields.discount_type') }}</label>
+                                <label>{{ __('cruds.product.fields.discount_type') }}</label>
                                 <select class="form-control {{ $errors->has('discount_type') ? 'is-invalid' : '' }}"
                                     name="discount_type" id="discount_type">
                                     <option value disabled {{ old('discount_type', null) === null ? 'selected' : '' }}>
-                                        {{ trans('global.pleaseSelect') }}</option>
+                                        {{ __('global.pleaseSelect') }}</option>
                                     @foreach (App\Models\Product::DISCOUNT_TYPE_SELECT as $key => $label)
                                         <option value="{{ $key }}"
                                             {{ old('discount_type', 'flat') === (string) $key ? 'selected' : '' }}>{{ $label }}
@@ -251,10 +251,10 @@
                                         {{ $errors->first('discount_type') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.product.fields.discount_type_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.product.fields.discount_type_helper') }}</span>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="discount">{{ trans('cruds.product.fields.discount') }}</label>
+                                <label for="discount">{{ __('cruds.product.fields.discount') }}</label>
                                 <input class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}" type="number"
                                     name="discount" id="discount" value="{{ old('discount', '0') }}" step="0.01">
                                 @if ($errors->has('discount'))
@@ -262,10 +262,10 @@
                                         {{ $errors->first('discount') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.product.fields.discount_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.product.fields.discount_helper') }}</span>
                             </div>
                             <div class="form-group col-md-12">
-                                <label for="current_stock">{{ trans('cruds.product.fields.current_stock') }}</label>
+                                <label for="current_stock">{{ __('cruds.product.fields.current_stock') }}</label>
                                 <input class="form-control {{ $errors->has('current_stock') ? 'is-invalid' : '' }}" type="number"
                                     name="current_stock" id="current_stock" value="{{ old('current_stock', '0') }}" step="0.01">
                                 @if ($errors->has('current_stock'))
@@ -273,7 +273,7 @@
                                         {{ $errors->first('current_stock') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.product.fields.current_stock_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.product.fields.current_stock_helper') }}</span>
                             </div>
                         </div>
                     </div>
@@ -286,7 +286,7 @@
                     </div> 
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="colors">{{ trans('cruds.product.fields.colors') }}</label>
+                            <label for="colors">{{ __('cruds.product.fields.colors') }}</label>
                             <select class="form-control select2 color-var-select {{ $errors->has('colors') ? 'is-invalid' : '' }}" name="colors[]" id="colors" multiple>
                                 @foreach ($colors as $code => $entry)
                                     <option value="{{ $code }}" {{ old('colors') == $code ? 'selected' : '' }}> {{ $entry }} </option>
@@ -297,10 +297,10 @@
                                     {{ $errors->first('colors') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.colors_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.colors_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label for="attributes">{{ trans('cruds.product.fields.attributes') }}</label>
+                            <label for="attributes">{{ __('cruds.product.fields.attributes') }}</label>
                             <select class="form-control select2 {{ $errors->has('attributes') ? 'is-invalid' : '' }}" name="attributes[]" id="attributes" multiple>
                                 @foreach ($attributes as $id => $entry)
                                     <option value="{{ $id }}" {{ old('attributes') == $id ? 'selected' : '' }}> {{ $entry }}</option>
@@ -311,7 +311,7 @@
                                     {{ $errors->first('attributes') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.attributes_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.attributes_helper') }}</span>
                         </div>
                         <div id="attribute_options">
                             {{-- ajax call --}}
@@ -330,7 +330,7 @@
             <div class="card-body">
                 <div class="row"> 
                     <div class="form-group col-md-6">
-                        <label for="description">{{ trans('cruds.product.fields.description') }}</label>
+                        <label for="description">{{ __('cruds.product.fields.description') }}</label>
                         <textarea class="form-control ckeditor {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description"
                             id="description">{!! old('description') !!}</textarea>
                         @if ($errors->has('description'))
@@ -338,10 +338,10 @@
                                 {{ $errors->first('description') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.product.fields.description_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.product.fields.description_helper') }}</span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="pdf">{{ trans('cruds.product.fields.pdf') }}</label>
+                        <label for="pdf">{{ __('cruds.product.fields.pdf') }}</label>
                         <div class="needsclick dropzone {{ $errors->has('pdf') ? 'is-invalid' : '' }}" id="pdf-dropzone">
                         </div>
                         @if ($errors->has('pdf'))
@@ -349,10 +349,10 @@
                                 {{ $errors->first('pdf') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.product.fields.pdf_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.product.fields.pdf_helper') }}</span>
                     </div>
                     <div class="form-group col-md-12">
-                        <label for="meta_title">{{ trans('cruds.product.fields.meta_title') }}</label>
+                        <label for="meta_title">{{ __('cruds.product.fields.meta_title') }}</label>
                         <input class="form-control {{ $errors->has('meta_title') ? 'is-invalid' : '' }}" type="text"
                             name="meta_title" id="meta_title" value="{{ old('meta_title', '') }}">
                         @if ($errors->has('meta_title'))
@@ -360,10 +360,10 @@
                                 {{ $errors->first('meta_title') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.product.fields.meta_title_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.product.fields.meta_title_helper') }}</span>
                     </div>
                     <div class="form-group col-md-12">
-                        <label for="meta_description">{{ trans('cruds.product.fields.meta_description') }}</label>
+                        <label for="meta_description">{{ __('cruds.product.fields.meta_description') }}</label>
                         <textarea class="form-control {{ $errors->has('meta_description') ? 'is-invalid' : '' }}" name="meta_description"
                             id="meta_description">{{ old('meta_description') }}</textarea>
                         @if ($errors->has('meta_description'))
@@ -371,7 +371,7 @@
                                 {{ $errors->first('meta_description') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.product.fields.meta_description_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.product.fields.meta_description_helper') }}</span>
                     </div>
                 </div>
             </div>
@@ -380,7 +380,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <button class="btn btn-danger btn-lg btn-block" type="submit">
-                        {{ trans('global.save') }}
+                        {{ __('global.save') }}
                     </button>
                 </div>
             </div>

@@ -211,6 +211,7 @@ class PlaylistController extends Controller
     public function show_details(Request $request){
 
         $playlist = ViewPlaylistData::where('model_type',$request->model_type)->where('id',$request->id)->first();
+        $raw = null;
         if($request->model_type == 'social'){
             $raw = ReceiptSocial::find($request->id);
             $raw->load('receiptsReceiptSocialProducts.products');

@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.auditLog.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.auditLog.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -14,25 +14,25 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.auditLog.fields.id') }}
+                        {{ __('cruds.auditLog.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.auditLog.fields.description') }}
+                        {{ __('cruds.auditLog.fields.description') }}
                     </th>
                     <th>
-                        {{ trans('cruds.auditLog.fields.subject_id') }}
+                        {{ __('cruds.auditLog.fields.subject_id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.auditLog.fields.subject_type') }}
+                        {{ __('cruds.auditLog.fields.subject_type') }}
                     </th>
                     <th>
-                        {{ trans('cruds.auditLog.fields.user_id') }}
+                        {{ __('cruds.auditLog.fields.user_id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.auditLog.fields.host') }}
+                        {{ __('cruds.auditLog.fields.host') }}
                     </th>
                     <th>
-                        {{ trans('cruds.auditLog.fields.created_at') }}
+                        {{ __('cruds.auditLog.fields.created_at') }}
                     </th>
                     <th>
                         &nbsp;
@@ -68,7 +68,7 @@
 { data: 'user_id', name: 'user_id' },
 { data: 'host', name: 'host' },
 { data: 'created_at', name: 'created_at' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
+{ data: 'actions', name: '{{ __('global.actions') }}' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],

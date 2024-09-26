@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.banner.title') }}
+        {{ __('global.show') }} {{ __('cruds.banner.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.banners.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.banner.fields.id') }}
+                            {{ __('cruds.banner.fields.id') }}
                         </th>
                         <td>
                             {{ $banner->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.banner.fields.photo') }}
+                            {{ __('cruds.banner.fields.photo') }}
                         </th>
                         <td>
                             @if($banner->photo)
@@ -37,7 +37,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.banner.fields.url') }}
+                            {{ __('cruds.banner.fields.url') }}
                         </th>
                         <td>
                             {{ $banner->url }}
@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.banner.fields.position') }}
+                            {{ __('cruds.banner.fields.position') }}
                         </th>
                         <td>
                             {{ App\Models\Banner::POSITION_SELECT[$banner->position] ?? '' }}
@@ -53,7 +53,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.banner.fields.published') }}
+                            {{ __('cruds.banner.fields.published') }}
                         </th>
                         <td>
                             <input type="checkbox" disabled="disabled" {{ $banner->published ? 'checked' : '' }}>
@@ -63,7 +63,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.banners.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

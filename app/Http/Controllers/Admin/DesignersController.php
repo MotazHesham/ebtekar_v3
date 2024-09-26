@@ -107,7 +107,7 @@ class DesignersController extends Controller
             'store_name' => $request->store_name, 
         ]);
 
-        toast(trans('flash.global.success_title'),'success'); 
+        toast(__('flash.global.success_title'),'success'); 
         return redirect()->route('admin.designers.index');
     }
 
@@ -145,7 +145,7 @@ class DesignersController extends Controller
         } elseif ($user->photo) {
             $user->photo->delete();
         }
-        toast(trans('flash.global.update_title'),'success'); 
+        toast(__('flash.global.update_title'),'success'); 
         return redirect()->route('admin.designers.index');
     }
 
@@ -162,7 +162,7 @@ class DesignersController extends Controller
 
         $designer->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
         return 1;
     }
 

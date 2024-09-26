@@ -75,9 +75,9 @@ class CustomersController extends Controller
     {
         abort_if(Gate::denies('customer_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
         return view('admin.customers.create', compact('users' , 'websites'));
     }
 
@@ -98,7 +98,7 @@ class CustomersController extends Controller
             'user_id' => $user->id,
         ]);
 
-        toast(trans('flash.global.success_title'),'success'); 
+        toast(__('flash.global.success_title'),'success'); 
         return redirect()->route('admin.customers.index');
     }
 
@@ -106,10 +106,10 @@ class CustomersController extends Controller
     {
         abort_if(Gate::denies('customer_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $customer->load('user');
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
         
         return view('admin.customers.edit', compact('customer', 'users','websites'));
     }
@@ -125,7 +125,7 @@ class CustomersController extends Controller
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]); 
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.customers.index');
     }
 
@@ -144,7 +144,7 @@ class CustomersController extends Controller
 
         $customer->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     }

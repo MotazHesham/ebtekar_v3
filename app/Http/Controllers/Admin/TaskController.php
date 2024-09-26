@@ -33,11 +33,11 @@ class TaskController extends Controller
     {
         abort_if(Gate::denies('task_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $statuses = TaskStatus::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $statuses = TaskStatus::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $tags = TaskTag::pluck('name', 'id');
 
-        $assigned_tos = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $assigned_tos = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.tasks.create', compact('assigned_tos', 'statuses', 'tags'));
     }
@@ -61,11 +61,11 @@ class TaskController extends Controller
     {
         abort_if(Gate::denies('task_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $statuses = TaskStatus::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $statuses = TaskStatus::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $tags = TaskTag::pluck('name', 'id');
 
-        $assigned_tos = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $assigned_tos = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $task->load('status', 'tags', 'assigned_to');
 

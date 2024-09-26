@@ -133,7 +133,7 @@ class OrdersController extends Controller
         $order->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
         $order->delivery_status = 'on_delivery'; 
         $order->save();
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.orders.show',$order->id);
     }
 
@@ -396,13 +396,13 @@ class OrdersController extends Controller
     {
         abort_if(Gate::denies('order_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $shipping_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $shipping_countries = Country::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $preparers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $preparers = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $delivery_men = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $delivery_men = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.orders.create', compact('delivery_men', 'preparers', 'shipping_countries', 'users'));
     }
@@ -418,13 +418,13 @@ class OrdersController extends Controller
     {
         abort_if(Gate::denies('order_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $shipping_countries = Country::select('cost','name', 'id')->get();
 
-        $preparers = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $preparers = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $delivery_men = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $delivery_men = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $order->load('user', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man');
 
@@ -508,7 +508,7 @@ class OrdersController extends Controller
             $order->save();
         }
 
-        toast(trans('flash.global.success_title'),'success'); 
+        toast(__('flash.global.success_title'),'success'); 
         return redirect()->route('admin.orders.show',$request->order_id);
     }
 
@@ -561,7 +561,7 @@ class OrdersController extends Controller
             return 0;
         }
         
-        toast(trans('flash.global.update_title'),'success'); 
+        toast(__('flash.global.update_title'),'success'); 
         return redirect()->route('admin.orders.show',$orderDetail->order_id);
     } 
 
@@ -571,7 +571,7 @@ class OrdersController extends Controller
         $order = Order::find($orderDetail->order_id);
 
         if($order->playlist_status != 'pending'){
-            alert(trans('flash.cant_delete'),'','error');
+            alert(__('flash.cant_delete'),'','error');
             return 1;
         }  
 
@@ -581,7 +581,7 @@ class OrdersController extends Controller
         $order->save();
         
         $orderDetail->delete();
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
         return 1;
     } 
 }

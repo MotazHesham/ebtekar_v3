@@ -14,7 +14,7 @@
             <input type="hidden" name="income_category_id" value="1">
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label class="required" for="entry_date">{{ trans('cruds.income.fields.entry_date') }}</label>
+                    <label class="required" for="entry_date">{{ __('cruds.income.fields.entry_date') }}</label>
                     <input class="form-control date {{ $errors->has('entry_date') ? 'is-invalid' : '' }}" type="text"
                         name="entry_date" id="entry_date" value="{{ old('entry_date') }}" required>
                     @if ($errors->has('entry_date'))
@@ -22,10 +22,10 @@
                             {{ $errors->first('entry_date') }}
                         </div>
                     @endif
-                    <span class="help-block">{{ trans('cruds.income.fields.entry_date_helper') }}</span>
+                    <span class="help-block">{{ __('cruds.income.fields.entry_date_helper') }}</span>
                 </div>
                 <div class="form-group col-md-4">
-                    <label class="required" for="amount">{{ trans('cruds.income.fields.amount') }}</label>
+                    <label class="required" for="amount">{{ __('cruds.income.fields.amount') }}</label>
                     <input class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" type="number"
                         name="amount" id="amount" value="{{ old('amount', '') }}" step="0.01" required>
                     @if ($errors->has('amount'))
@@ -33,10 +33,10 @@
                             {{ $errors->first('amount') }}
                         </div>
                     @endif
-                    <span class="help-block">{{ trans('cruds.income.fields.amount_helper') }}</span>
+                    <span class="help-block">{{ __('cruds.income.fields.amount_helper') }}</span>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="description">{{ trans('cruds.income.fields.description') }}</label>
+                    <label for="description">{{ __('cruds.income.fields.description') }}</label>
                     <input class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" type="text"
                         name="description" id="description" value="{{ old('description', '') }}">
                     @if ($errors->has('description'))
@@ -44,13 +44,13 @@
                             {{ $errors->first('description') }}
                         </div>
                     @endif
-                    <span class="help-block">{{ trans('cruds.income.fields.description_helper') }}</span>
+                    <span class="help-block">{{ __('cruds.income.fields.description_helper') }}</span>
                 </div>
 
             </div>
             <div class="form-group">
                 <button class="btn btn-success" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.currency.title') }}
+        {{ __('global.show') }} {{ __('cruds.currency.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.currencies.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.id') }}
+                            {{ __('cruds.currency.fields.id') }}
                         </th>
                         <td>
                             {{ $currency->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.name') }}
+                            {{ __('cruds.currency.fields.name') }}
                         </th>
                         <td>
                             {{ $currency->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.symbol') }}
+                            {{ __('cruds.currency.fields.symbol') }}
                         </th>
                         <td>
                             {{ $currency->symbol }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.exchange_rate') }}
+                            {{ __('cruds.currency.fields.exchange_rate') }}
                         </th>
                         <td>
                             {{ $currency->exchange_rate }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.status') }}
+                            {{ __('cruds.currency.fields.status') }}
                         </th>
                         <td>
                             <input type="checkbox" disabled="disabled" {{ $currency->status ? 'checked' : '' }}>
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.code') }}
+                            {{ __('cruds.currency.fields.code') }}
                         </th>
                         <td>
                             {{ $currency->code }}
@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.half_kg') }}
+                            {{ __('cruds.currency.fields.half_kg') }}
                         </th>
                         <td>
                             {{ $currency->half_kg }}
@@ -73,7 +73,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.one_kg') }}
+                            {{ __('cruds.currency.fields.one_kg') }}
                         </th>
                         <td>
                             {{ $currency->one_kg }}
@@ -81,7 +81,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.one_half_kg') }}
+                            {{ __('cruds.currency.fields.one_half_kg') }}
                         </th>
                         <td>
                             {{ $currency->one_half_kg }}
@@ -89,7 +89,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.two_kg') }}
+                            {{ __('cruds.currency.fields.two_kg') }}
                         </th>
                         <td>
                             {{ $currency->two_kg }}
@@ -97,7 +97,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.two_half_kg') }}
+                            {{ __('cruds.currency.fields.two_half_kg') }}
                         </th>
                         <td>
                             {{ $currency->two_half_kg }}
@@ -105,7 +105,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.three_kg') }}
+                            {{ __('cruds.currency.fields.three_kg') }}
                         </th>
                         <td>
                             {{ $currency->three_kg }}
@@ -115,7 +115,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.currencies.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

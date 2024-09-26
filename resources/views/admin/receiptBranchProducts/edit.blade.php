@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.receiptBranchProduct.title_singular') }}
+        {{ __('global.edit') }} {{ __('cruds.receiptBranchProduct.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -11,7 +11,7 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                <label class="required" for="website_setting_id">{{ __('global.extra.website_setting_id') }}</label>
                 <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
                     @foreach($websites as $id => $entry)
                         <option value="{{ $id }}" {{ old('website_setting_id',$receiptBranchProduct->website_setting_id) == $id ? 'selected' : '' }}>{{ $entry }}</option>
@@ -24,48 +24,48 @@
                 @endif 
             </div>
             <div class="form-group">
-                <label class="required" for="name">{{ trans('cruds.receiptBranchProduct.fields.name') }}</label>
+                <label class="required" for="name">{{ __('cruds.receiptBranchProduct.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', $receiptBranchProduct->name) }}" required>
                 @if($errors->has('name'))
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.receiptBranchProduct.fields.name_helper') }}</span>
+                <span class="help-block">{{ __('cruds.receiptBranchProduct.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="price">{{ trans('cruds.receiptBranchProduct.fields.price') }}</label>
+                <label class="required" for="price">{{ __('cruds.receiptBranchProduct.fields.price') }}</label>
                 <input class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}" type="number" name="price" id="price" value="{{ old('price', $receiptBranchProduct->price) }}" step="0.01" required>
                 @if($errors->has('price'))
                     <div class="invalid-feedback">
                         {{ $errors->first('price') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.receiptBranchProduct.fields.price_helper') }}</span>
+                <span class="help-block">{{ __('cruds.receiptBranchProduct.fields.price_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="price_parts">{{ trans('cruds.receiptBranchProduct.fields.price_parts') }}</label>
+                <label class="required" for="price_parts">{{ __('cruds.receiptBranchProduct.fields.price_parts') }}</label>
                 <input class="form-control {{ $errors->has('price_parts') ? 'is-invalid' : '' }}" type="number" name="price_parts" id="price_parts" value="{{ old('price_parts', $receiptBranchProduct->price_parts) }}" step="0.01" required>
                 @if($errors->has('price_parts'))
                     <div class="invalid-feedback">
                         {{ $errors->first('price_parts') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.receiptBranchProduct.fields.price_parts_helper') }}</span>
+                <span class="help-block">{{ __('cruds.receiptBranchProduct.fields.price_parts_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="price_permissions">{{ trans('cruds.receiptBranchProduct.fields.price_permissions') }}</label>
+                <label class="required" for="price_permissions">{{ __('cruds.receiptBranchProduct.fields.price_permissions') }}</label>
                 <input class="form-control {{ $errors->has('price_permissions') ? 'is-invalid' : '' }}" type="number" name="price_permissions" id="price_permissions" value="{{ old('price_permissions', $receiptBranchProduct->price_permissions) }}" step="0.01" required>
                 @if($errors->has('price_permissions'))
                     <div class="invalid-feedback">
                         {{ $errors->first('price_permissions') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.receiptBranchProduct.fields.price_permissions_helper') }}</span>
+                <span class="help-block">{{ __('cruds.receiptBranchProduct.fields.price_permissions_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

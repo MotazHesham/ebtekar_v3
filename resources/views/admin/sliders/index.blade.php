@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.sliders.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.slider.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.slider.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.slider.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.slider.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -22,19 +22,19 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.slider.fields.id') }}
+                            {{ __('cruds.slider.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.slider.fields.photo') }}
+                            {{ __('cruds.slider.fields.photo') }}
                         </th>
                         <th>
-                            {{ trans('cruds.slider.fields.published') }}
+                            {{ __('cruds.slider.fields.published') }}
                         </th>
                         <th>
-                            {{ trans('cruds.slider.fields.link') }}
+                            {{ __('cruds.slider.fields.link') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.website_setting_id') }}
+                            {{ __('global.extra.website_setting_id') }}
                         </th>
                         <th>
                             &nbsp;
@@ -68,7 +68,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('slider_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.sliders.massDestroy') }}",
@@ -81,12 +81,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -142,7 +142,7 @@
                     }, 
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

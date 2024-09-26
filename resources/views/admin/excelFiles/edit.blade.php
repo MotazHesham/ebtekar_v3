@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.excelFile.title_singular') }}
+        {{ __('global.edit') }} {{ __('cruds.excelFile.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -11,9 +11,9 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label>{{ trans('cruds.excelFile.fields.type') }}</label>
+                <label>{{ __('cruds.excelFile.fields.type') }}</label>
                 <select class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}" name="type" id="type">
-                    <option value disabled {{ old('type', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    <option value disabled {{ old('type', null) === null ? 'selected' : '' }}>{{ __('global.pleaseSelect') }}</option>
                     @foreach(App\Models\ExcelFile::TYPE_SELECT as $key => $label)
                         <option value="{{ $key }}" {{ old('type', $excelFile->type) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
@@ -23,10 +23,10 @@
                         {{ $errors->first('type') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.excelFile.fields.type_helper') }}</span>
+                <span class="help-block">{{ __('cruds.excelFile.fields.type_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="uploaded_file">{{ trans('cruds.excelFile.fields.uploaded_file') }}</label>
+                <label class="required" for="uploaded_file">{{ __('cruds.excelFile.fields.uploaded_file') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('uploaded_file') ? 'is-invalid' : '' }}" id="uploaded_file-dropzone">
                 </div>
                 @if($errors->has('uploaded_file'))
@@ -34,10 +34,10 @@
                         {{ $errors->first('uploaded_file') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.excelFile.fields.uploaded_file_helper') }}</span>
+                <span class="help-block">{{ __('cruds.excelFile.fields.uploaded_file_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="result_file">{{ trans('cruds.excelFile.fields.result_file') }}</label>
+                <label class="required" for="result_file">{{ __('cruds.excelFile.fields.result_file') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('result_file') ? 'is-invalid' : '' }}" id="result_file-dropzone">
                 </div>
                 @if($errors->has('result_file'))
@@ -45,21 +45,21 @@
                         {{ $errors->first('result_file') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.excelFile.fields.result_file_helper') }}</span>
+                <span class="help-block">{{ __('cruds.excelFile.fields.result_file_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="results">{{ trans('cruds.excelFile.fields.results') }}</label>
+                <label class="required" for="results">{{ __('cruds.excelFile.fields.results') }}</label>
                 <textarea class="form-control {{ $errors->has('results') ? 'is-invalid' : '' }}" name="results" id="results" required>{{ old('results', $excelFile->results) }}</textarea>
                 @if($errors->has('results'))
                     <div class="invalid-feedback">
                         {{ $errors->first('results') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.excelFile.fields.results_helper') }}</span>
+                <span class="help-block">{{ __('cruds.excelFile.fields.results_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

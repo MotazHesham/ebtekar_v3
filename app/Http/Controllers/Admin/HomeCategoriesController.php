@@ -29,7 +29,7 @@ class HomeCategoriesController extends Controller
     {
         abort_if(Gate::denies('home_category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.homeCategories.create', compact('websites'));
     }
@@ -39,7 +39,7 @@ class HomeCategoriesController extends Controller
         $homeCategory = HomeCategory::create($request->all());
 
         Cache::forget('home_categories_'.$homeCategory->website_setting_id);
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.home-categories.index');
     }
 
@@ -47,11 +47,11 @@ class HomeCategoriesController extends Controller
     {
         abort_if(Gate::denies('home_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = Category::where('website_setting_id',$homeCategory->website_setting_id)->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $categories = Category::where('website_setting_id',$homeCategory->website_setting_id)->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $homeCategory->load('category');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
         return view('admin.homeCategories.edit', compact('categories', 'homeCategory','websites'));
     }
@@ -61,7 +61,7 @@ class HomeCategoriesController extends Controller
         $homeCategory->update($request->all());
         Cache::forget('home_categories_'.$homeCategory->website_setting_id);
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.home-categories.index');
     }
 
@@ -81,7 +81,7 @@ class HomeCategoriesController extends Controller
         $homeCategory->delete();
         Cache::forget('home_categories_'.$homeCategory->website_setting_id);
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     }

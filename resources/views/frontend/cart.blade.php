@@ -8,11 +8,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>{{ trans('frontend.cart.shoping_cart') }}</h2>
+                            <h2>{{ __('frontend.cart.shoping_cart') }}</h2>
                             <ul>
-                                <li><a href="{{ route('frontend.dashboard') }}">{{ trans('frontend.about.dashboard') }}</a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">{{ __('frontend.about.dashboard') }}</a></li>
                                 <li><i class="fa fa-angle-double-right"></i></li>
-                                <li><a href="{{ route('frontend.cart') }}">{{ trans('frontend.cart.shoping_cart') }}</a></li>
+                                <li><a href="{{ route('frontend.cart') }}">{{ __('frontend.cart.shoping_cart') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -31,12 +31,12 @@
                     <table class="table cart-table table-responsive-xs">
                         <thead>
                             <tr class="table-head">
-                                <th scope="col">   {{ trans('frontend.cart.product_photos') }}</th>
-                                <th scope="col">   {{ trans('frontend.cart.product_name') }}</th>
-                                <th scope="col">{{ trans('frontend.cart.price') }}</th>
-                                <th scope="col">{{ trans('frontend.cart.quantity') }}</th>
+                                <th scope="col">   {{ __('frontend.cart.product_photos') }}</th>
+                                <th scope="col">   {{ __('frontend.cart.product_name') }}</th>
+                                <th scope="col">{{ __('frontend.cart.price') }}</th>
+                                <th scope="col">{{ __('frontend.cart.quantity') }}</th>
                                 <th scope="col"></th>
-                                <th scope="col">{{ trans('frontend.cart.total') }}</th>
+                                <th scope="col">{{ __('frontend.cart.total') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -124,7 +124,7 @@
                     <table class="table cart-table table-responsive-md">
                         <tfoot>
                             <tr>
-                                <td> {{ trans('frontend.cart.total_cost') }}:</td>
+                                <td> {{ __('frontend.cart.total_cost') }}:</td>
                                 <td>
                                     <h2 id="td-total-cost">  {{  $total ?? ''  }} {{ $prices['price']['symbol'] ?? '' }} </h2>
                                 </td>
@@ -135,8 +135,8 @@
             </div>
             <div class="row cart-buttons">
                 <div class="col-12">
-                    <a href="{{ route('frontend.search') }}" class="btn btn-normal">  {{ trans('frontend.cart.shoping') }} </a> 
-                    <a href="{{ route('frontend.payment_select') }}" class="btn btn-normal ms-3 initiate-checkout">  {{ trans('frontend.cart.payment') }}  </a>
+                    <a href="{{ route('frontend.search') }}" class="btn btn-normal">  {{ __('frontend.cart.shoping') }} </a> 
+                    <a href="{{ route('frontend.payment_select') }}" class="btn btn-normal ms-3 initiate-checkout">  {{ __('frontend.cart.payment') }}  </a>
                 </div>
             </div>
         </div>

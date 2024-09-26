@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.police.title_singular') }}
+        {{ __('global.edit') }} {{ __('cruds.police.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -11,7 +11,7 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                <label class="required" for="website_setting_id">{{ __('global.extra.website_setting_id') }}</label>
                 <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
                     @foreach($websites as $id => $entry)
                         <option value="{{ $id }}" {{ old('website_setting_id',$police->website_setting_id) == $id ? 'selected' : '' }}>{{ $entry }}</option>
@@ -24,9 +24,9 @@
                 @endif 
             </div>
             <div class="form-group">
-                <label class="required">{{ trans('cruds.police.fields.name') }}</label>
+                <label class="required">{{ __('cruds.police.fields.name') }}</label>
                 <select class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" id="name" required>
-                    <option value disabled {{ old('name', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    <option value disabled {{ old('name', null) === null ? 'selected' : '' }}>{{ __('global.pleaseSelect') }}</option>
                     @foreach(App\Models\Police::NAME_SELECT as $key => $label)
                         <option value="{{ $key }}" {{ old('name', $police->name) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
@@ -36,21 +36,21 @@
                         {{ $errors->first('name') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.police.fields.name_helper') }}</span>
+                <span class="help-block">{{ __('cruds.police.fields.name_helper') }}</span>
             </div> 
             <div class="form-group">
-                <label for="content">{{ trans('cruds.police.fields.content') }}</label>
+                <label for="content">{{ __('cruds.police.fields.content') }}</label>
                 <textarea class="form-control ckeditor {{ $errors->has('content') ? 'is-invalid' : '' }}" name="content" id="content">{!! old('content', $police->content) !!}</textarea>
                 @if($errors->has('content'))
                     <div class="invalid-feedback">
                         {{ $errors->first('content') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.police.fields.content_helper') }}</span>
+                <span class="help-block">{{ __('cruds.police.fields.content_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

@@ -102,7 +102,7 @@
                                     <a class="btn btn-xs btn-danger"
                                         href="{{ route('admin.qr-products.destroy_product', $raw->id) }}"
                                         onclick="return confirm('are you sure?')">
-                                        {{ trans('global.delete') }}
+                                        {{ __('global.delete') }}
                                     </a>
                                 </td>
 

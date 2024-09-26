@@ -115,7 +115,7 @@ class CategoriesController extends Controller
         abort_if(Gate::denies('category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.categories.create',compact('websites'));
     }
@@ -139,7 +139,7 @@ class CategoriesController extends Controller
         }
 
         Cache::forget('header_nested_categories_'.$category->website_setting_id);
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.categories.index');
     }
 
@@ -147,7 +147,7 @@ class CategoriesController extends Controller
     {
         abort_if(Gate::denies('category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
         
         return view('admin.categories.edit', compact('category','websites'));
     }
@@ -181,7 +181,7 @@ class CategoriesController extends Controller
         Cache::forget('home_categories_'.$category->website_setting_id);
         Cache::forget('home_featured_categories_'.$category->website_setting_id);
         Cache::forget('header_nested_categories_'.$category->website_setting_id);
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.categories.index');
     }
 
@@ -201,7 +201,7 @@ class CategoriesController extends Controller
         Cache::forget('home_categories_'.$category->website_setting_id);
         Cache::forget('home_featured_categories_'.$category->website_setting_id);
         Cache::forget('header_nested_categories_'.$category->website_setting_id);
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
         return 1;
     }
 

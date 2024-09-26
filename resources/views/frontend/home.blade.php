@@ -17,7 +17,7 @@
 
     <!--title start-->
     <div class="title8 section-big-pt-space">
-        <h4>{{ trans('frontend.home.new_products') }}</h4>
+        <h4>{{ __('frontend.home.new_products') }}</h4>
     </div>
     <!--title end-->
 
@@ -135,7 +135,7 @@
 
     <!--title start-->
     <div class="title8 section-big-pt-space">
-        <h4>{{ trans('frontend.home.most_selling') }}</h4>
+        <h4>{{ __('frontend.home.most_selling') }}</h4>
     </div>
     <!--title end-->
 

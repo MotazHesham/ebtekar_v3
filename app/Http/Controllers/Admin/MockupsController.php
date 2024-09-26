@@ -174,7 +174,7 @@ class MockupsController extends Controller
     {
         abort_if(Gate::denies('mockup_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = Category::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $categories = Category::pluck('name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
         $colors = Color::pluck('name', 'code');
 
@@ -330,7 +330,7 @@ class MockupsController extends Controller
     {
         abort_if(Gate::denies('mockup_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
         
-        $categories = Category::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $categories = Category::pluck('name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
         $colors = Color::pluck('name', 'code');
 

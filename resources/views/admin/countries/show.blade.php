@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.country.title') }}
+        {{ __('global.show') }} {{ __('cruds.country.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.countries.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.country.fields.id') }}
+                            {{ __('cruds.country.fields.id') }}
                         </th>
                         <td>
                             {{ $country->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.country.fields.name') }}
+                            {{ __('cruds.country.fields.name') }}
                         </th>
                         <td>
                             {{ $country->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.country.fields.cost') }}
+                            {{ __('cruds.country.fields.cost') }}
                         </th>
                         <td>
                             {{ $country->cost }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.country.fields.code') }}
+                            {{ __('cruds.country.fields.code') }}
                         </th>
                         <td>
                             {{ $country->code }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.country.fields.code_cost') }}
+                            {{ __('cruds.country.fields.code_cost') }}
                         </th>
                         <td>
                             {{ $country->code_cost }}
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.country.fields.type') }}
+                            {{ __('cruds.country.fields.type') }}
                         </th>
                         <td>
                             {{ App\Models\Country::TYPE_SELECT[$country->type] ?? '' }}
@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.country.fields.status') }}
+                            {{ __('cruds.country.fields.status') }}
                         </th>
                         <td>
                             <input type="checkbox" disabled="disabled" {{ $country->status ? 'checked' : '' }}>
@@ -73,7 +73,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.country.fields.website') }}
+                            {{ __('cruds.country.fields.website') }}
                         </th>
                         <td>
                             <input type="checkbox" disabled="disabled" {{ $country->website ? 'checked' : '' }}>
@@ -83,7 +83,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.countries.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

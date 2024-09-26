@@ -72,9 +72,9 @@ class EmployeeFinancialController extends Controller
     {
         abort_if(Gate::denies('employee_financial_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $employees = Employee::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $employees = Employee::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $financial_categories = FinancialCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $financial_categories = FinancialCategory::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.employeeFinancials.create', compact('employees', 'financial_categories'));
     }
@@ -97,9 +97,9 @@ class EmployeeFinancialController extends Controller
     {
         abort_if(Gate::denies('employee_financial_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $employees = Employee::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $employees = Employee::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $financial_categories = FinancialCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $financial_categories = FinancialCategory::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $employeeFinancial->load('employee', 'financial_category');
 

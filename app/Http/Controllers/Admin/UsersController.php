@@ -113,7 +113,7 @@ class UsersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $user->id]);
         }
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.users.index');
     }
 
@@ -145,7 +145,7 @@ class UsersController extends Controller
             $user->photo->delete();
         }
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.users.index');
     }
 
@@ -164,7 +164,7 @@ class UsersController extends Controller
 
         $user->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     }

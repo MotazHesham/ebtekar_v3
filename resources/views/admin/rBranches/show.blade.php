@@ -4,21 +4,21 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    {{ trans('global.show') }} {{ trans('cruds.rBranch.title') }}
+                    {{ __('global.show') }} {{ __('cruds.rBranch.title') }}
                 </div>
 
                 <div class="card-body">
                     <div class="form-group">
                         <div class="form-group">
                             <a class="btn btn-default" href="{{ route('admin.r-branches.index') }}">
-                                {{ trans('global.back_to_list') }}
+                                {{ __('global.back_to_list') }}
                             </a>
                         </div>
                         <table class="table table-bordered table-striped">
                             <tbody>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.rBranch.fields.id') }}
+                                        {{ __('cruds.rBranch.fields.id') }}
                                     </th>
                                     <td>
                                         {{ $rBranch->id }}
@@ -26,7 +26,7 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.rBranch.fields.name') }}
+                                        {{ __('cruds.rBranch.fields.name') }}
                                     </th>
                                     <td>
                                         {{ $rBranch->name }}
@@ -34,7 +34,7 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.rBranch.fields.phone_number') }}
+                                        {{ __('cruds.rBranch.fields.phone_number') }}
                                     </th>
                                     <td>
                                         {{ $rBranch->phone_number }}
@@ -42,7 +42,7 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.rBranch.fields.remaining') }}
+                                        {{ __('cruds.rBranch.fields.remaining') }}
                                     </th>
                                     <td>
                                         {{ $rBranch->remaining }}
@@ -50,7 +50,7 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.rBranch.fields.payment_type') }}
+                                        {{ __('cruds.rBranch.fields.payment_type') }}
                                     </th>
                                     <td>
                                         {{ App\Models\RBranch::PAYMENT_TYPE_SELECT[$rBranch->payment_type] ?? '' }}
@@ -58,7 +58,7 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.rBranch.fields.r_client') }}
+                                        {{ __('cruds.rBranch.fields.r_client') }}
                                     </th>
                                     <td>
                                         {{ $rBranch->r_client->name ?? '' }}
@@ -68,7 +68,7 @@
                         </table>
                         <div class="form-group">
                             <a class="btn btn-default" href="{{ route('admin.r-branches.index') }}">
-                                {{ trans('global.back_to_list') }}
+                                {{ __('global.back_to_list') }}
                             </a>
                         </div>
                     </div>

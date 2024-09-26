@@ -2,21 +2,21 @@
 @section('content')
     <div class="form-group">
         <a class="btn btn-dark" href="{{ route('admin.receipt-branches.index') }}">
-            {{ trans('global.back_to_list') }}
+            {{ __('global.back_to_list') }}
         </a>
     </div>
     @can('receipt_branch_product_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.receipt-branch-products.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.receiptBranchProduct.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.receiptBranchProduct.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.receiptBranchProduct.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.receiptBranchProduct.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -28,22 +28,22 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.id') }}
+                            {{ __('cruds.receiptBranchProduct.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.name') }}
+                            {{ __('cruds.receiptBranchProduct.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.price') }}
+                            {{ __('cruds.receiptBranchProduct.fields.price') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.price_parts') }}
+                            {{ __('cruds.receiptBranchProduct.fields.price_parts') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.price_permissions') }}
+                            {{ __('cruds.receiptBranchProduct.fields.price_permissions') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.website_setting_id') }}
+                            {{ __('global.extra.website_setting_id') }}
                         </th>
                         <th>
                             &nbsp;
@@ -60,7 +60,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('receipt_branch_product_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.receipt-branch-products.massDestroy') }}",
@@ -73,12 +73,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -136,7 +136,7 @@
                     }, 
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

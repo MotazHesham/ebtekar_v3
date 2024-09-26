@@ -215,7 +215,7 @@ class ProductsController extends Controller
                 $crudRoutePart = 'products';
 
                 $duplicate = '<a class="btn btn-xs btn-warning" href="' . \route('admin.' . $crudRoutePart . '.duplicate', $row->id) .'">
-                                ' . trans('global.duplicate') .'
+                                ' . __('global.duplicate') .'
                             </a>';  
 
                 return $duplicate . ' &nbsp;' . view('partials.datatablesActions', compact(
@@ -284,20 +284,20 @@ class ProductsController extends Controller
                 
                 $str = '<div style="display: flex;justify-content: space-between;">';
                 $str .= '<div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;" class="badge text-bg-light mb-1">';     
-                $str .= '<span>'.trans('cruds.product.fields.flash_deal').'</span>'; 
+                $str .= '<span>'.__('cruds.product.fields.flash_deal').'</span>'; 
                 $str .=  $flash_deal;
                 $str .=  '</div>';
                 $str .= '<div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;" class="badge text-bg-light mb-1">';     
-                $str .= '<span>'.trans('cruds.product.fields.published').'</span>'; 
+                $str .= '<span>'.__('cruds.product.fields.published').'</span>'; 
                 $str .=  $published;
                 $str .=  '</div>'; 
                 
                 $str .= '<div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;" class="badge text-bg-light mb-1">';     
-                $str .= '<span>'.trans('cruds.product.fields.featured').'</span>'; 
+                $str .= '<span>'.__('cruds.product.fields.featured').'</span>'; 
                 $str .=  $featured;
                 $str .=  '</div>';
                 $str .= '<div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;" class="badge text-bg-light mb-1">';     
-                $str .= '<span>'.trans('cruds.product.fields.todays_deal').'</span>'; 
+                $str .= '<span>'.__('cruds.product.fields.todays_deal').'</span>'; 
                 $str .=  $todays_deal;
                 $str .=  '</div>'; 
                 $str .=  '</div>';   
@@ -336,7 +336,7 @@ class ProductsController extends Controller
 
         $attributes = Attribute::pluck('name', 'id'); 
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.products.create', compact('colors','attributes' , 'websites'));
     }
@@ -433,7 +433,7 @@ class ProductsController extends Controller
         Cache::forget('home_new_products_' . $product->website_setting_id); 
 
         if($request->has('arrange_photos')){
-            toast(trans('flash.global.success_title'),'success'); 
+            toast(__('flash.global.success_title'),'success'); 
             return redirect()->route('admin.products.show',$product->id);
         }
 
@@ -442,7 +442,7 @@ class ProductsController extends Controller
             alert()->success('تم أضافة المنتج بنجاح وتكراره','انت الأن تقوم بتعديل المنتج المكرر');
             return redirect()->route('admin.products.edit',$new_product->id);
         }
-        toast(trans('flash.global.success_title'),'success'); 
+        toast(__('flash.global.success_title'),'success'); 
         return redirect()->route('admin.products.index');
     }
 
@@ -454,11 +454,11 @@ class ProductsController extends Controller
 
         $attributes = Attribute::pluck('name', 'id');
 
-        $categories = Category::where('website_setting_id',$product->website_setting_id)->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');  
+        $categories = Category::where('website_setting_id',$product->website_setting_id)->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');  
 
         $product->load('user', 'category', 'sub_category', 'sub_sub_category', 'design');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
         return view('admin.products.edit', compact('categories', 'product', 'colors', 'attributes','websites'));
     }
@@ -585,7 +585,7 @@ class ProductsController extends Controller
         Cache::forget('home_new_products_' . $product->website_setting_id);
         Cache::forget('home_featured_categories_' . $product->website_setting_id);
         Cache::forget('best_selling_products_' . $product->website_setting_id);
-        toast(trans('flash.global.update_title'),'success'); 
+        toast(__('flash.global.update_title'),'success'); 
         return redirect()->route('admin.products.index');
     }
 
@@ -604,7 +604,7 @@ class ProductsController extends Controller
 
         $product->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
         Cache::forget('home_new_products_' . $product->website_setting_id);
         Cache::forget('home_featured_categories_' . $product->website_setting_id);
         Cache::forget('best_selling_products_' . $product->website_setting_id);

@@ -65,7 +65,7 @@
                         @endforeach
                     @else
                         <div class="text-center">
-                            {{ trans('global.no_alerts') }}
+                            {{ __('global.no_alerts') }}
                         </div>
                     @endif
                 </div>
@@ -187,7 +187,7 @@
                         @endforeach
                     @else
                         <div class="text-center">
-                            {{ trans('global.no_alerts') }}
+                            {{ __('global.no_alerts') }}
                         </div>
                     @endif
                 </div>
@@ -211,7 +211,7 @@
                     @endforeach
                 @else
                     <div class="text-center">
-                        {{ trans('global.no_alerts') }}
+                        {{ __('global.no_alerts') }}
                     </div>
                 @endif
             </div>

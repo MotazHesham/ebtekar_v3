@@ -47,7 +47,7 @@
                                                 <div class="row align-items-center">
                                                     <div class="col-2">
                                                         <a href="{{route('frontend.designer-images.delete',$design->id)}}" class="btn btn-danger" >
-                                                            {{ trans('global.delete')}}
+                                                            {{ __('global.delete')}}
                                                         </a>
                                                     </div> 
                                                 </div>

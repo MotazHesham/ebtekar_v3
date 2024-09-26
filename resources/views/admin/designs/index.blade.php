@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.designs.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.design.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.design.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.design.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.design.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -22,25 +22,25 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.design.fields.id') }}
+                            {{ __('cruds.design.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.design.fields.design_name') }}
+                            {{ __('cruds.design.fields.design_name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.design.fields.profit') }}
+                            {{ __('cruds.design.fields.profit') }}
                         </th>
                         <th>
-                            {{ trans('cruds.design.extra.profits') }}
+                            {{ __('cruds.design.extra.profits') }}
                         </th>
                         <th>
-                            {{ trans('cruds.design.fields.status') }}
+                            {{ __('cruds.design.fields.status') }}
                         </th> 
                         <th>
-                            {{ trans('cruds.design.fields.user') }}
+                            {{ __('cruds.design.fields.user') }}
                         </th>
                         <th>
-                            {{ trans('cruds.design.fields.mockup') }}
+                            {{ __('cruds.design.fields.mockup') }}
                         </th>
                         <th>
                             &nbsp;
@@ -108,7 +108,7 @@
                     },
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

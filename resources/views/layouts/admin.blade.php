@@ -428,12 +428,12 @@
 
         function deleteConfirmation(route, div = null, partials = false) {
             swal({
-                title: "{{ trans('flash.delete_') }}",
-                text: "{{ trans('flash.sure_') }}",
+                title: "{{ __('flash.delete_') }}",
+                text: "{{ __('flash.sure_') }}",
                 type: "warning",
                 showCancelButton: !0,
-                confirmButtonText: "{{ trans('flash.yes_') }}",
-                cancelButtonText: "{{ trans('flash.no_') }}",
+                confirmButtonText: "{{ __('flash.yes_') }}",
+                cancelButtonText: "{{ __('flash.no_') }}",
                 reverseButtons: !0
             }).then(function(e) {
 
@@ -471,14 +471,14 @@
         }
 
         $(function() {
-            let copyButtonTrans = '{{ trans('global.datatables.copy') }}'
-            let csvButtonTrans = '{{ trans('global.datatables.csv') }}'
-            let excelButtonTrans = '{{ trans('global.datatables.excel') }}'
-            let pdfButtonTrans = '{{ trans('global.datatables.pdf') }}'
-            let printButtonTrans = '{{ trans('global.datatables.print') }}'
-            let colvisButtonTrans = '{{ trans('global.datatables.colvis') }}'
-            let selectAllButtonTrans = '{{ trans('global.select_all') }}'
-            let selectNoneButtonTrans = '{{ trans('global.deselect_all') }}'
+            let copyButtonTrans = '{{ __('global.datatables.copy') }}'
+            let csvButtonTrans = '{{ __('global.datatables.csv') }}'
+            let excelButtonTrans = '{{ __('global.datatables.excel') }}'
+            let pdfButtonTrans = '{{ __('global.datatables.pdf') }}'
+            let printButtonTrans = '{{ __('global.datatables.print') }}'
+            let colvisButtonTrans = '{{ __('global.datatables.colvis') }}'
+            let selectAllButtonTrans = '{{ __('global.select_all') }}'
+            let selectNoneButtonTrans = '{{ __('global.deselect_all') }}'
 
             let languages = {
                 'en': 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json'
@@ -620,22 +620,22 @@
                 },
                 templateResult: formatItem,
                 templateSelection: formatItemSelection,
-                placeholder: '{{ trans('global.search') }}...',
+                placeholder: '{{ __('global.search') }}...',
                 language: {
                     inputTooShort: function(args) {
                         var remainingChars = args.minimum - args.input.length;
-                        var translation = '{{ trans('global.search_input_too_short') }}';
+                        var translation = '{{ __('global.search_input_too_short') }}';
 
                         return translation.replace(':count', remainingChars);
                     },
                     errorLoading: function() {
-                        return '{{ trans('global.results_could_not_be_loaded') }}';
+                        return '{{ __('global.results_could_not_be_loaded') }}';
                     },
                     searching: function() {
-                        return '{{ trans('global.searching') }}';
+                        return '{{ __('global.searching') }}';
                     },
                     noResults: function() {
-                        return '{{ trans('global.no_results') }}';
+                        return '{{ __('global.no_results') }}';
                     },
                 }
 
@@ -643,7 +643,7 @@
 
             function formatItem(item) {
                 if (item.loading) {
-                    return '{{ trans('global.searching') }}...';
+                    return '{{ __('global.searching') }}...';
                 }
                 var markup = "<div class='searchable-link' href='" + item.url + "'>";
                 markup += "<div class='searchable-title'>" + item.model + "</div>";
@@ -658,7 +658,7 @@
 
             function formatItemSelection(item) {
                 if (!item.model) {
-                    return '{{ trans('global.search') }}...';
+                    return '{{ __('global.search') }}...';
                 }
                 return item.model;
             }

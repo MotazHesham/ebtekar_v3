@@ -4,7 +4,7 @@
     @can('receipt_branch_create') 
         <div class="col-lg-4">
             <a class="btn btn-success" href="{{ route('admin.receipt-branches.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.receiptBranch.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.receiptBranch.title_singular') }}
             </a>
         </div> 
     @endcan
@@ -12,7 +12,7 @@
     @can('receipt_branch_product_access')
         <div class="col-md-4">
             <a class="btn btn-info" href="{{ route('admin.receipt-branch-products.index') }}">
-                {{ trans('cruds.receiptBranchProduct.title') }}
+                {{ __('cruds.receiptBranchProduct.title') }}
             </a>
         </div>
     @endcan
@@ -20,14 +20,14 @@
     @if(isset($deleted))
         <div class="col-md-3">
             <a class="btn btn-dark" href="{{ route('admin.receipt-branches.index') }}">
-                {{ trans('global.back_to_list') }}
+                {{ __('global.back_to_list') }}
             </a>
         </div>
     @else 
         @if(Gate::allows('soft_delete'))
             <div class="col-md-3">
                 <a class="btn btn-danger" href="{{ route('admin.receipt-branches.index',['deleted' => 1]) }}">
-                    {{ trans('global.extra.deleted_receipts') }}
+                    {{ __('global.extra.deleted_receipts') }}
                 </a>
             </div>
         @endif
@@ -39,8 +39,8 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="phoneModalLabel">{{ trans('global.add') }}
-                        {{ trans('cruds.receiptBranch.title_singular') }}</h5>
+                    <h5 class="modal-title" id="phoneModalLabel">{{ __('global.add') }}
+                        {{ __('cruds.receiptBranch.title_singular') }}</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -54,7 +54,7 @@
                             @endforeach 
                         </div>
                         <input type="text" name="phone_number" class="form-control" required
-                            placeholder="{{ trans('cruds.receiptBranch.fields.phone_number') }}"
+                            placeholder="{{ __('cruds.receiptBranch.fields.phone_number') }}"
                             onkeyup="searchByPhone(this)">
                         <div id="table-receipts">
                             {{-- ajax call --}}
@@ -70,7 +70,7 @@
             <div class="col-xl-3 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <b>{{ trans('global.statistics') }} {{ trans('cruds.receiptBranch.title') }}</b>
+                        <b>{{ __('global.statistics') }} {{ __('cruds.receiptBranch.title') }}</b>
                         <hr> 
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
@@ -130,9 +130,9 @@
     
     <div class="card">
         <div class="card-header">
-            {{ trans('global.list') }} {{ trans('cruds.receiptBranch.title') }}
+            {{ __('global.list') }} {{ __('cruds.receiptBranch.title') }}
             @isset($deleted)
-                {{ trans('global.deleted') }}
+                {{ __('global.deleted') }}
             @endisset
         </div>
 
@@ -143,22 +143,22 @@
 
                         <th>#</th>
                         <th>
-                            {{ trans('global.extra.client') }}
+                            {{ __('global.extra.client') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.dates') }}
+                            {{ __('global.extra.dates') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptBranch.fields.total_cost') }}
+                            {{ __('cruds.receiptBranch.fields.total_cost') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.statuses') }}
+                            {{ __('global.extra.statuses') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.stages') }}
+                            {{ __('global.extra.stages') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptBranch.fields.note') }}
+                            {{ __('cruds.receiptBranch.fields.note') }}
                         </th>
                         <th>
                             &nbsp;
@@ -202,13 +202,13 @@
                             </td>
                             <td>
                                 <span class="badge text-bg-primary text-white mb-1">
-                                    {{ trans('cruds.receiptBranch.fields.created_at') }}
+                                    {{ __('cruds.receiptBranch.fields.created_at') }}
                                     <br> {{ $receipt->created_at }}
                                 </span>
                                 @if ($receipt->date_of_receiving_order)
                                     <br>
                                     <span class="badge text-bg-light mb-1">
-                                        {{ trans('cruds.receiptBranch.fields.date_of_receiving_order') }}
+                                        {{ __('cruds.receiptBranch.fields.date_of_receiving_order') }}
                                         <br> {{ $receipt->date_of_receiving_order }}
                                     </span>
                                 @endif
@@ -217,7 +217,7 @@
                                 <div style="display:flex;justify-content:space-between">
                                     @if($receipt->deposit)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
-                                            {{ trans('cruds.receiptBranch.fields.deposit') }}
+                                            {{ __('cruds.receiptBranch.fields.deposit') }}
                                             <br>
                                             {{ dashboard_currency($receipt->deposit) }}
                                         </span>
@@ -225,7 +225,7 @@
 
                                     @if($receipt->discount)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
-                                            {{ trans('cruds.receiptBranch.fields.discount') }}
+                                            {{ __('cruds.receiptBranch.fields.discount') }}
                                             <br>
                                             {{ $receipt->discount }}%
                                         </span>
@@ -233,7 +233,7 @@
                                 </div>
                                 <div style="display:flex;justify-content:space-between">
                                     <span class="badge rounded-pill text-bg-light  mb-1">
-                                        {{ trans('cruds.receiptBranch.fields.total_cost') }}
+                                        {{ __('cruds.receiptBranch.fields.total_cost') }}
                                         <br>
                                         {{ dashboard_currency($receipt->total_cost) }}
                                     </span>
@@ -247,7 +247,7 @@
                                     <div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;"
                                         class="badge text-bg-light mb-1">
                                         <span>
-                                            {{ trans('cruds.receiptBranch.fields.quickly') }}
+                                            {{ __('cruds.receiptBranch.fields.quickly') }}
                                         </span>
                                         <label class="c-switch c-switch-pill c-switch-success">
                                             <input onchange="update_statuses(this,'quickly')" value="{{ $receipt->id }}"
@@ -258,7 +258,7 @@
                                     </div>
                                     <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
                                         <span>
-                                            {{ trans('cruds.receiptBranch.fields.done') }}
+                                            {{ __('cruds.receiptBranch.fields.done') }}
                                         </span>
                                         <br>
                                         <div id="done-{{$receipt->id}}">
@@ -285,7 +285,7 @@
                             </td>
                             <td>
                                 <span class="badge text-bg-danger text-white mb-1">
-                                    {{ trans('global.extra.created_by') }}
+                                    {{ __('global.extra.created_by') }}
                                     =>
                                     {{ $receipt->staff->name ?? '' }}
                                 </span>
@@ -310,7 +310,7 @@
                                             @can('receipt_branch_view_products')
                                                 <a class="dropdown-item" style="cursor: pointer"
                                                     onclick="view_products('{{ $receipt->id }}')">
-                                                    {{ trans('global.extra.view_products') }}
+                                                    {{ __('global.extra.view_products') }}
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             @endcan
@@ -318,35 +318,35 @@
                                                 @can('receipt_branch_add_product')
                                                     <a class="dropdown-item" style="cursor: pointer"
                                                         onclick="add_product('{{ $receipt->id }}')">
-                                                        {{ trans('global.extra.add_product') }}
+                                                        {{ __('global.extra.add_product') }}
                                                         <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_branch_edit')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-branches.edit', $receipt->id) }}">
-                                                        {{ trans('global.edit') }}
+                                                        {{ __('global.edit') }}
                                                         <i class="far fa-edit" style="color:cornflowerblue"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_branch_print')
                                                     <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-branches.print', $receipt->id) }}">
-                                                        {{ trans('global.print') }}
+                                                        {{ __('global.print') }}
                                                         <i class="fas fa-print" style="color:yellowgreen"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_branch_duplicate')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-branches.duplicate', $receipt->id) }}">
-                                                        {{ trans('global.duplicate') }}
+                                                        {{ __('global.duplicate') }}
                                                         <i class="far fa-clone" style="color:blueviolet"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_branch_receive_money')
                                                     <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-branches.receive_money', $receipt->id) }}">
-                                                        {{ trans('global.receive_money') }}
+                                                        {{ __('global.receive_money') }}
                                                         <i class="fas fa-money-bill-wave" style="color:cadetblue"></i>
                                                     </a>
                                                 @endcan 
@@ -354,7 +354,7 @@
                                                 @can('receipt_branch_restore')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-branches.restore', $receipt->id) }}">
-                                                        {{ trans('global.restore') }}
+                                                        {{ __('global.restore') }}
                                                         <i class="fas fa-undo" style="color:grey"></i>
                                                     </a>  
                                                 @endcan
@@ -363,7 +363,7 @@
                                                 <?php $route = route('admin.receipt-branches.destroy', $receipt->id); ?>
                                                 <a class="dropdown-item" href="#"
                                                     onclick="deleteConfirmation('{{ $route }}')">
-                                                    {{ trans('global.delete') }}  @isset($deleted) {{ trans('global.permanently') }} @endisset
+                                                    {{ __('global.delete') }}  @isset($deleted) {{ __('global.permanently') }} @endisset
                                                     <i class="fas fa-trash-alt" style="color:darkred"></i>
                                                 </a>
                                             @endcan

@@ -5,7 +5,7 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.website-settings.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.websiteSetting.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.websiteSetting.title_singular') }}
             </a>
         </div>
     </div>
@@ -13,7 +13,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.websiteSetting.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.websiteSetting.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -25,13 +25,13 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.id') }}
+                            {{ __('cruds.websiteSetting.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.logo') }}
+                            {{ __('cruds.websiteSetting.fields.logo') }}
                         </th>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.site_name') }}
+                            {{ __('cruds.websiteSetting.fields.site_name') }}
                         </th>
                         <th>
                             &nbsp;
@@ -60,13 +60,13 @@
                             <td>
                                 @can('website_setting_show')
                                     {{-- <a class="btn btn-xs btn-primary" href="{{ route('admin.website-settings.show', $websiteSetting->id) }}">
-                                        {{ trans('global.view') }}
+                                        {{ __('global.view') }}
                                     </a> --}}
                                 @endcan
 
                                 @can('website_setting_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.website-settings.edit', $websiteSetting->id) }}">
-                                        {{ trans('global.edit') }}
+                                        {{ __('global.edit') }}
                                     </a>
                                 @endcan
 

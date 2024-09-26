@@ -4,14 +4,14 @@
         @can('receipt_price_view_create')
             <div class="col-md-3">
                 <a class="btn btn-success" href="{{ route('admin.receipt-price-views.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.receiptPriceView.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.receiptPriceView.title_singular') }}
                 </a>
             </div>
         @endcan
         @if(isset($deleted))
             <div class="col-md-3">
                 <a class="btn btn-dark" href="{{ route('admin.receipt-price-views.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         @else 
@@ -19,7 +19,7 @@
             @if(Gate::allows('soft_delete'))
                 <div class="col-md-3">
                     <a class="btn btn-danger" href="{{ route('admin.receipt-price-views.index',['deleted' => 1]) }}">
-                        {{ trans('global.extra.deleted_receipts') }}
+                        {{ __('global.extra.deleted_receipts') }}
                     </a>
                 </div>
             @endif
@@ -30,7 +30,7 @@
             <div class="col-xl-3 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <b>{{ trans('global.statistics') }} {{ trans('cruds.receiptPriceView.title') }}</b>
+                        <b>{{ __('global.statistics') }} {{ __('cruds.receiptPriceView.title') }}</b>
                         <hr>
                         <div class="row">
                             <div class="col-md-12 col-sm-12">
@@ -74,9 +74,9 @@
     </div>
     <div class="card">
         <div class="card-header">
-            {{ trans('global.list') }} {{ trans('cruds.receiptPriceView.title') }} 
+            {{ __('global.list') }} {{ __('cruds.receiptPriceView.title') }} 
             @isset($deleted)
-                {{ trans('global.deleted') }}
+                {{ __('global.deleted') }}
             @endisset
         </div>
 
@@ -86,28 +86,28 @@
                     <tr>
                         <th>#</th>
                         <th>
-                            {{ trans('global.extra.client') }}
+                            {{ __('global.extra.client') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.dates') }}
+                            {{ __('global.extra.dates') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptPriceView.fields.total_cost') }}
+                            {{ __('cruds.receiptPriceView.fields.total_cost') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptPriceView.fields.place') }}
+                            {{ __('cruds.receiptPriceView.fields.place') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptPriceView.fields.relate_duration') }}
+                            {{ __('cruds.receiptPriceView.fields.relate_duration') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptPriceView.fields.supply_duration') }}
+                            {{ __('cruds.receiptPriceView.fields.supply_duration') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptPriceView.fields.payment') }}
+                            {{ __('cruds.receiptPriceView.fields.payment') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptPriceView.fields.added_value') }}
+                            {{ __('cruds.receiptPriceView.fields.added_value') }}
                         </th>
                         <td>
                             &nbsp;
@@ -155,13 +155,13 @@
                             </td>
                             <td>
                                 <span class="badge text-bg-primary text-white mb-1">
-                                    {{ trans('cruds.receiptPriceView.fields.created_at') }}
+                                    {{ __('cruds.receiptPriceView.fields.created_at') }}
                                     <br> {{ $receipt->created_at }}
                                 </span>
                                 @if ($receipt->date_of_receiving_order)
                                     <br>
                                     <span class="badge text-bg-light mb-1">
-                                        {{ trans('cruds.receiptPriceView.fields.date_of_receiving_order') }}
+                                        {{ __('cruds.receiptPriceView.fields.date_of_receiving_order') }}
                                         <br> {{ $receipt->date_of_receiving_order }}
                                     </span>
                                 @endif
@@ -170,13 +170,13 @@
                                 <div style="display:flex;justify-content:space-between"> 
                                     @if($receipt->added_value)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
-                                            {{ trans('cruds.receiptPriceView.fields.added_value') }}
+                                            {{ __('cruds.receiptPriceView.fields.added_value') }}
                                             <br>
                                             {{ dashboard_currency($receipt->calc_added_value()) }}
                                         </span>
                                     @endif
                                     <span class="badge rounded-pill text-bg-light  mb-1">
-                                        {{ trans('cruds.receiptPriceView.fields.total_cost') }}
+                                        {{ __('cruds.receiptPriceView.fields.total_cost') }}
                                         <br>
                                         {{ dashboard_currency($receipt->total_cost) }}
                                     </span>
@@ -208,7 +208,7 @@
                             </td>  
                             <td>
                                 <span class="badge text-bg-danger text-white mb-1">
-                                    {{ trans('global.extra.created_by') }}
+                                    {{ __('global.extra.created_by') }}
                                     =>
                                     {{ $receipt->staff->name ?? '' }}
                                 </span>
@@ -230,7 +230,7 @@
                                             @can('receipt_price_view_view_products')
                                                 <a class="dropdown-item" style="cursor: pointer"
                                                     onclick="view_products('{{ $receipt->id }}')">
-                                                    {{ trans('global.extra.view_products') }}
+                                                    {{ __('global.extra.view_products') }}
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             @endcan
@@ -238,28 +238,28 @@
                                                 @can('receipt_price_view_add_product')
                                                     <a class="dropdown-item" style="cursor: pointer"
                                                         onclick="add_product('{{ $receipt->id }}')">
-                                                        {{ trans('global.extra.add_product') }}
+                                                        {{ __('global.extra.add_product') }}
                                                         <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_price_view_edit')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-price-views.edit', $receipt->id) }}">
-                                                        {{ trans('global.edit') }}
+                                                        {{ __('global.edit') }}
                                                         <i class="far fa-edit" style="color:cornflowerblue"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_price_view_print')
                                                     <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-price-views.print', $receipt->id) }}">
-                                                        {{ trans('global.print') }}
+                                                        {{ __('global.print') }}
                                                         <i class="fas fa-print" style="color:yellowgreen"></i>
                                                     </a>
                                                 @endcan
                                                 @can('receipt_price_view_duplicate')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-price-views.duplicate', $receipt->id) }}">
-                                                        {{ trans('global.duplicate') }}
+                                                        {{ __('global.duplicate') }}
                                                         <i class="far fa-clone" style="color:blueviolet"></i>
                                                     </a>
                                                 @endcan
@@ -267,7 +267,7 @@
                                                 @can('receipt_price_view_restore')
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.receipt-price-views.restore', $receipt->id) }}">
-                                                        {{ trans('global.restore') }}
+                                                        {{ __('global.restore') }}
                                                         <i class="fas fa-undo" style="color:grey"></i>
                                                     </a>  
                                                 @endcan
@@ -276,7 +276,7 @@
                                                 <?php $route = route('admin.receipt-price-views.destroy', $receipt->id); ?>
                                                 <a class="dropdown-item" href="#"
                                                     onclick="deleteConfirmation('{{ $route }}')">
-                                                    {{ trans('global.delete') }}   @isset($deleted) {{ trans('global.permanently') }} @endisset
+                                                    {{ __('global.delete') }}   @isset($deleted) {{ __('global.permanently') }} @endisset
                                                     <i class="fas fa-trash-alt" style="color:darkred"></i>
                                                 </a>
                                             @endcan

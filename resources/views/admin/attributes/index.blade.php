@@ -4,14 +4,14 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.attributes.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.attribute.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.attribute.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.attribute.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.attribute.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -22,10 +22,10 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.attribute.fields.id') }}
+                        {{ __('cruds.attribute.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.attribute.fields.name') }}
+                        {{ __('cruds.attribute.fields.name') }}
                     </th>
                     <th>
                         &nbsp;
@@ -45,7 +45,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('attribute_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.attributes.massDestroy') }}",
@@ -56,12 +56,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',
@@ -85,7 +85,7 @@
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
 { data: 'name', name: 'name' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
+{ data: 'actions', name: '{{ __('global.actions') }}' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],

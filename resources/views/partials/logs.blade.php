@@ -28,7 +28,7 @@
                                 @foreach(json_decode($log->properties) as $key => $value)
                                     <div class="col-md-4 mb-2">
                                         @if(!is_array($value)) 
-                                            <span class="badge badge-info">{{ trans('cruds.'.$crud_name.'.fields.'.$key) }}</span> 
+                                            <span class="badge badge-info">{{ __('cruds.'.$crud_name.'.fields.'.$key) }}</span> 
                                             {{ $value }}
                                         @endif
                                     </div>

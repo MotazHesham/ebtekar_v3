@@ -4,14 +4,14 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.user-alerts.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.userAlert.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.userAlert.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.userAlert.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.userAlert.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -22,19 +22,19 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.userAlert.fields.id') }}
+                        {{ __('cruds.userAlert.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.userAlert.fields.alert_text') }}
+                        {{ __('cruds.userAlert.fields.alert_text') }}
                     </th>
                     <th>
-                        {{ trans('cruds.userAlert.fields.alert_link') }}
+                        {{ __('cruds.userAlert.fields.alert_link') }}
                     </th>
                     <th>
-                        {{ trans('cruds.userAlert.fields.user') }}
+                        {{ __('cruds.userAlert.fields.user') }}
                     </th>
                     <th>
-                        {{ trans('cruds.userAlert.fields.created_at') }}
+                        {{ __('cruds.userAlert.fields.created_at') }}
                     </th>
                     <th>
                         &nbsp;
@@ -54,7 +54,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('user_alert_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.user-alerts.massDestroy') }}",
@@ -65,12 +65,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',
@@ -97,7 +97,7 @@
 { data: 'alert_link', name: 'alert_link' },
 { data: 'user', name: 'users.name' },
 { data: 'created_at', name: 'created_at' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
+{ data: 'actions', name: '{{ __('global.actions') }}' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],

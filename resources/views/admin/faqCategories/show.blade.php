@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.faqCategory.title') }}
+        {{ __('global.show') }} {{ __('cruds.faqCategory.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.faq-categories.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.faqCategory.fields.id') }}
+                            {{ __('cruds.faqCategory.fields.id') }}
                         </th>
                         <td>
                             {{ $faqCategory->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.faqCategory.fields.category') }}
+                            {{ __('cruds.faqCategory.fields.category') }}
                         </th>
                         <td>
                             {{ $faqCategory->category }}
@@ -35,7 +35,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.faq-categories.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

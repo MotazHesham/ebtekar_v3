@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.social.title_singular') }}
+        {{ __('global.edit') }} {{ __('cruds.social.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -11,17 +11,17 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label class="required" for="name">{{ trans('cruds.social.fields.name') }}</label>
+                <label class="required" for="name">{{ __('cruds.social.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', $social->name) }}" required>
                 @if($errors->has('name'))
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.social.fields.name_helper') }}</span>
+                <span class="help-block">{{ __('cruds.social.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="photo">{{ trans('cruds.social.fields.photo') }}</label>
+                <label class="required" for="photo">{{ __('cruds.social.fields.photo') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('photo') ? 'is-invalid' : '' }}" id="photo-dropzone">
                 </div>
                 @if($errors->has('photo'))
@@ -29,11 +29,11 @@
                         {{ $errors->first('photo') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.social.fields.photo_helper') }}</span>
+                <span class="help-block">{{ __('cruds.social.fields.photo_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

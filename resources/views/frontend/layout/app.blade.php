@@ -185,7 +185,7 @@
         <a href="javascript:void(0)" class="overlay" onclick="closeCart()"></a>
         <div class="cart-inner">
             <div class="cart_top">
-                <h3>{{ trans('frontend.cart.shoping_cart') }}</h3>
+                <h3>{{ __('frontend.cart.shoping_cart') }}</h3>
                 <div class="close-cart">
                     <a href="javascript:void(0)" onclick="closeCart()">
                         <i class="fa fa-times" aria-hidden="true"></i>
@@ -204,7 +204,7 @@
         <a href="javascript:void(0)" class="overlay" onclick="closeWishlist()"></a>
         <div class="cart-inner">
             <div class="cart_top">
-                <h3>{{ trans('frontend.app.favorites') }}</h3>
+                <h3>{{ __('frontend.app.favorites') }}</h3>
                 <div class="close-cart">
                     <a href="javascript:void(0)" onclick="closeWishlist()">
                         <i class="fa fa-times" aria-hidden="true"></i>
@@ -251,7 +251,7 @@
                 <ul class="cart_total">
                     <li>
                         <div class="buttons">
-                            <a href="{{ route('frontend.wishlist')}}" class="btn btn-solid btn-block btn-md">{{ trans('frontend.app.show_favorites') }}</a>
+                            <a href="{{ route('frontend.wishlist')}}" class="btn btn-solid btn-block btn-md">{{ __('frontend.app.show_favorites') }}</a>
                         </div>
                     </li>
                 </ul>

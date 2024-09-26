@@ -124,7 +124,7 @@
 
     <div class="card">
         <div class="card-header">
-            {{ trans('global.list') }} {{ trans('cruds.playlist.menu.' . $type) }}
+            {{ __('global.list') }} {{ __('cruds.playlist.menu.' . $type) }}
         </div>
 
         <div class="card-body">

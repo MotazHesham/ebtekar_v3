@@ -78,6 +78,13 @@ class HomeController extends Controller
 
     public function contact_store(Request $request)
     {
+        $this->validate($request,[ 
+            'first_name' => 'string|required|max:255',
+            'last_name' => 'string|required|max:255',
+            'email' => 'string|required|max:255',
+            'phone_number' => 'string|required|max:255',
+            'message' => 'string|required|max:255', 
+        ]);
         Contactu::create($request->all());
         alert('Your message sent successfully', '', 'success');
         return redirect()->route('frontend.contact');

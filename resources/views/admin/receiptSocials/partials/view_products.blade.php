@@ -1,6 +1,6 @@
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title">{{ trans('global.extra.view_products') }} <b>{{ $receipt->order_num }}</b> </h5>
+        <h5 class="modal-title">{{ __('global.extra.view_products') }} <b>{{ $receipt->order_num }}</b> </h5>
         &nbsp;&nbsp;&nbsp;
         <a href="{{ route('admin.receipt-socials.index',['cancel_popup' => 1 ]) }}" class="btn btn-danger btn-lg mb-1">أغلاق القائمة</a>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
@@ -10,28 +10,28 @@
             <thead>
                 <tr>
                     <th>
-                        {{ trans('cruds.receiptSocialProduct.fields.name') }}
+                        {{ __('cruds.receiptSocialProduct.fields.name') }}
                     </th>
                     <th>
-                        {{ trans('global.extra.description') }}
+                        {{ __('global.extra.description') }}
                     </th>
                     <th>
-                        {{ trans('cruds.receiptSocialProduct.fields.price') }}
+                        {{ __('cruds.receiptSocialProduct.fields.price') }}
                     </th>
                     <th>
-                        {{ trans('cruds.receiptSocial.fields.extra_commission') }}
+                        {{ __('cruds.receiptSocial.fields.extra_commission') }}
                     </th>
                     <th>
-                        {{ trans('global.extra.quantity') }}
+                        {{ __('global.extra.quantity') }}
                     </th>
                     <th>
-                        {{ trans('cruds.receiptSocial.fields.total_cost') }}
+                        {{ __('cruds.receiptSocial.fields.total_cost') }}
                     </th>
                     <th>
-                        {{ trans('cruds.receiptSocial.fields.commission') }}
+                        {{ __('cruds.receiptSocial.fields.commission') }}
                     </th>
                     <th>
-                        {{ trans('cruds.receiptSocialProduct.fields.photos') }}
+                        {{ __('cruds.receiptSocialProduct.fields.photos') }}
                     </th>
                     <th>
                         &nbsp;

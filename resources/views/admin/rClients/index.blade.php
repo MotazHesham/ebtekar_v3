@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.r-clients.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.rClient.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.rClient.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.rClient.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.rClient.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -22,19 +22,19 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.rClient.fields.id') }}
+                            {{ __('cruds.rClient.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rClient.fields.name') }}
+                            {{ __('cruds.rClient.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rClient.fields.phone_number') }}
+                            {{ __('cruds.rClient.fields.phone_number') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rClient.fields.remaining') }}
+                            {{ __('cruds.rClient.fields.remaining') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rClient.fields.manage_type') }}
+                            {{ __('cruds.rClient.fields.manage_type') }}
                         </th>
                         <th>
                             &nbsp;
@@ -51,7 +51,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('r_client_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.r-clients.massDestroy') }}",
@@ -64,12 +64,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -123,7 +123,7 @@
                     },
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

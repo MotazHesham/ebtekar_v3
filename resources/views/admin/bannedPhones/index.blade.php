@@ -4,14 +4,14 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.banned-phones.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.bannedPhone.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.bannedPhone.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.bannedPhone.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.bannedPhone.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -22,13 +22,13 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.bannedPhone.fields.id') }}
+                        {{ __('cruds.bannedPhone.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.bannedPhone.fields.phone') }}
+                        {{ __('cruds.bannedPhone.fields.phone') }}
                     </th>
                     <th>
-                        {{ trans('cruds.bannedPhone.fields.reason') }}
+                        {{ __('cruds.bannedPhone.fields.reason') }}
                     </th>
                     <th>
                         &nbsp;
@@ -48,7 +48,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('banned_phone_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.banned-phones.massDestroy') }}",
@@ -59,12 +59,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',
@@ -89,7 +89,7 @@
 { data: 'id', name: 'id' },
 { data: 'phone', name: 'phone' },
 { data: 'reason', name: 'reason' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
+{ data: 'actions', name: '{{ __('global.actions') }}' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],

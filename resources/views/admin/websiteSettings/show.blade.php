@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.websiteSetting.title') }}
+        {{ __('global.show') }} {{ __('cruds.websiteSetting.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.website-settings.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.id') }}
+                            {{ __('cruds.websiteSetting.fields.id') }}
                         </th>
                         <td>
                             {{ $websiteSetting->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.logo') }}
+                            {{ __('cruds.websiteSetting.fields.logo') }}
                         </th>
                         <td>
                             @if($websiteSetting->logo)
@@ -37,7 +37,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.site_name') }}
+                            {{ __('cruds.websiteSetting.fields.site_name') }}
                         </th>
                         <td>
                             {{ $websiteSetting->site_name }}
@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.address') }}
+                            {{ __('cruds.websiteSetting.fields.address') }}
                         </th>
                         <td>
                             {{ $websiteSetting->address }}
@@ -53,7 +53,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.description') }}
+                            {{ __('cruds.websiteSetting.fields.description') }}
                         </th>
                         <td>
                             {{ $websiteSetting->description }}
@@ -61,7 +61,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.phone_number') }}
+                            {{ __('cruds.websiteSetting.fields.phone_number') }}
                         </th>
                         <td>
                             {{ $websiteSetting->phone_number }}
@@ -69,7 +69,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.email') }}
+                            {{ __('cruds.websiteSetting.fields.email') }}
                         </th>
                         <td>
                             {{ $websiteSetting->email }}
@@ -77,7 +77,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.facebook') }}
+                            {{ __('cruds.websiteSetting.fields.facebook') }}
                         </th>
                         <td>
                             {{ $websiteSetting->facebook }}
@@ -85,7 +85,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.instagram') }}
+                            {{ __('cruds.websiteSetting.fields.instagram') }}
                         </th>
                         <td>
                             {{ $websiteSetting->instagram }}
@@ -93,7 +93,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.twitter') }}
+                            {{ __('cruds.websiteSetting.fields.twitter') }}
                         </th>
                         <td>
                             {{ $websiteSetting->twitter }}
@@ -101,7 +101,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.telegram') }}
+                            {{ __('cruds.websiteSetting.fields.telegram') }}
                         </th>
                         <td>
                             {{ $websiteSetting->telegram }}
@@ -109,7 +109,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.linkedin') }}
+                            {{ __('cruds.websiteSetting.fields.linkedin') }}
                         </th>
                         <td>
                             {{ $websiteSetting->linkedin }}
@@ -117,7 +117,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.whatsapp') }}
+                            {{ __('cruds.websiteSetting.fields.whatsapp') }}
                         </th>
                         <td>
                             {{ $websiteSetting->whatsapp }}
@@ -125,7 +125,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.youtube') }}
+                            {{ __('cruds.websiteSetting.fields.youtube') }}
                         </th>
                         <td>
                             {{ $websiteSetting->youtube }}
@@ -133,7 +133,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.google_plus') }}
+                            {{ __('cruds.websiteSetting.fields.google_plus') }}
                         </th>
                         <td>
                             {{ $websiteSetting->google_plus }}
@@ -141,7 +141,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.welcome_message') }}
+                            {{ __('cruds.websiteSetting.fields.welcome_message') }}
                         </th>
                         <td>
                             {{ $websiteSetting->welcome_message }}
@@ -149,7 +149,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.photos') }}
+                            {{ __('cruds.websiteSetting.fields.photos') }}
                         </th>
                         <td>
                             @foreach($websiteSetting->photos as $key => $media)
@@ -161,7 +161,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.video_instructions') }}
+                            {{ __('cruds.websiteSetting.fields.video_instructions') }}
                         </th>
                         <td>
                             {{ $websiteSetting->video_instructions }}
@@ -169,7 +169,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.delivery_system') }}
+                            {{ __('cruds.websiteSetting.fields.delivery_system') }}
                         </th>
                         <td>
                             {{ App\Models\WebsiteSetting::DELIVERY_SYSTEM_SELECT[$websiteSetting->delivery_system] ?? '' }}
@@ -177,7 +177,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.designer') }}
+                            {{ __('cruds.websiteSetting.fields.designer') }}
                         </th>
                         <td>
                             {{ $websiteSetting->designer->name ?? '' }}
@@ -185,7 +185,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.preparer') }}
+                            {{ __('cruds.websiteSetting.fields.preparer') }}
                         </th>
                         <td>
                             {{ $websiteSetting->preparer->name ?? '' }}
@@ -193,7 +193,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.manufacturer') }}
+                            {{ __('cruds.websiteSetting.fields.manufacturer') }}
                         </th>
                         <td>
                             {{ $websiteSetting->manufacturer->name ?? '' }}
@@ -201,7 +201,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.websiteSetting.fields.shipment') }}
+                            {{ __('cruds.websiteSetting.fields.shipment') }}
                         </th>
                         <td>
                             {{ $websiteSetting->shipment->name ?? '' }}
@@ -211,7 +211,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.website-settings.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

@@ -42,7 +42,7 @@
                         </td> 
                         <td>{{dashboard_currency($order->commission)}}</td> 
                         <td>
-                            {{ $order->delivery_status ? trans('global.delivery_status.status.' . $order->delivery_status) : '' }}
+                            {{ $order->delivery_status ? __('global.delivery_status.status.' . $order->delivery_status) : '' }}
                         </td>  
                         <td>{{ $order->created_at }}</td> 
                     </tr>

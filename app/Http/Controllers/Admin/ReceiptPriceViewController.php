@@ -72,7 +72,7 @@ class ReceiptPriceViewController extends Controller
         $receipt->total_cost = $sum; 
         $receipt->save();
 
-        alert(trans('flash.deleted'),'','success'); 
+        alert(__('flash.deleted'),'','success'); 
         return 1;
     }
     public function edit_product(Request $request){
@@ -125,7 +125,7 @@ class ReceiptPriceViewController extends Controller
             $receipt->total_cost = $sum;
             $receipt->save();
 
-            alert(trans('flash.global.success_title'),trans('flash.global.success_body'),'success');
+            alert(__('flash.global.success_title'),__('flash.global.success_body'),'success');
             return redirect()->route('admin.receipt-price-views.index');
         }
     }
@@ -264,7 +264,7 @@ class ReceiptPriceViewController extends Controller
     {
         abort_if(Gate::denies('receipt_price_view_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
         
         return view('admin.receiptPriceViews.create',compact('websites'));
     }
@@ -273,7 +273,7 @@ class ReceiptPriceViewController extends Controller
     {
         $receiptPriceView = ReceiptPriceView::create($request->all());
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-price-views.index');
     }
 
@@ -281,7 +281,7 @@ class ReceiptPriceViewController extends Controller
     {
         abort_if(Gate::denies('receipt_price_view_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
         return view('admin.receiptPriceViews.edit', compact('receiptPriceView','websites'));
     }
@@ -290,7 +290,7 @@ class ReceiptPriceViewController extends Controller
     {
         $receiptPriceView->update($request->all());
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.receipt-price-views.index');
     }
 
@@ -313,7 +313,7 @@ class ReceiptPriceViewController extends Controller
         }
         
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     } 
@@ -325,7 +325,7 @@ class ReceiptPriceViewController extends Controller
         $receiptPriceView = ReceiptPriceView::withTrashed()->find($id);
         $receiptPriceView->restore();
 
-        alert(trans('flash.restored'),'','success');
+        alert(__('flash.restored'),'','success');
 
         return redirect()->route('admin.receipt-price-views.index');
     } 

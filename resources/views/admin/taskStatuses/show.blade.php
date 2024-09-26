@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.taskStatus.title') }}
+        {{ __('global.show') }} {{ __('cruds.taskStatus.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.task-statuses.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.taskStatus.fields.id') }}
+                            {{ __('cruds.taskStatus.fields.id') }}
                         </th>
                         <td>
                             {{ $taskStatus->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.taskStatus.fields.name') }}
+                            {{ __('cruds.taskStatus.fields.name') }}
                         </th>
                         <td>
                             {{ $taskStatus->name }}
@@ -35,7 +35,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.task-statuses.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

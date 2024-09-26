@@ -272,7 +272,7 @@ class HomeController extends Controller
     public function index()
     {   
         $settings1 = [
-            'chart_title'           => trans('cruds.customer.title'),
+            'chart_title'           => __('cruds.customer.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Customer',
@@ -310,7 +310,7 @@ class HomeController extends Controller
         }
 
         $settings2 = [
-            'chart_title'           => trans('cruds.product.title'),
+            'chart_title'           => __('cruds.product.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Product',
@@ -348,7 +348,7 @@ class HomeController extends Controller
         }
 
         $settings3 = [
-            'chart_title'           => trans('cruds.order.title'),
+            'chart_title'           => __('cruds.order.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Order',
@@ -386,7 +386,7 @@ class HomeController extends Controller
         }
 
         $settings4 = [
-            'chart_title'           => trans('cruds.receiptSocial.title'),
+            'chart_title'           => __('cruds.receiptSocial.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\ReceiptSocial',
@@ -424,7 +424,7 @@ class HomeController extends Controller
         }
 
         $settings5 = [
-            'chart_title'           => trans('cruds.receiptSocial.extra.chart_by_month'),
+            'chart_title'           => __('cruds.receiptSocial.extra.chart_by_month'),
             'chart_type'            => 'radar',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\ReceiptSocial',
@@ -443,7 +443,7 @@ class HomeController extends Controller
         $chart5 = new LaravelChart($settings5);
 
         $settings05 = [
-            'chart_title'           => trans('cruds.receiptSocial.extra.chart_by_website'),
+            'chart_title'           => __('cruds.receiptSocial.extra.chart_by_website'),
             'chart_type'            => 'doughnut',
             'report_type'           => 'group_by_string',
             'model'                 => 'App\Models\ReceiptSocial',
@@ -458,7 +458,7 @@ class HomeController extends Controller
         $chart05 = new LaravelChart($settings05);
 
         $settings6 = [
-            'chart_title'           => trans('cruds.order.extra.chart_by_order_type'),
+            'chart_title'           => __('cruds.order.extra.chart_by_order_type'),
             'chart_type'            => 'doughnut',
             'report_type'           => 'group_by_string',
             'model'                 => 'App\Models\Order',
@@ -473,7 +473,7 @@ class HomeController extends Controller
         $chart6 = new LaravelChart($settings6);
 
         $settings7 = [
-            'chart_title'           => trans('cruds.product.extra.published_products'),
+            'chart_title'           => __('cruds.product.extra.published_products'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Product',
@@ -511,7 +511,7 @@ class HomeController extends Controller
         }
         
         $settings07 = [
-            'chart_title'           => trans('cruds.category.title'),
+            'chart_title'           => __('cruds.category.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Category',
@@ -549,7 +549,7 @@ class HomeController extends Controller
         }
 
         $settings8 = [
-            'chart_title'           => trans('cruds.subCategory.title'),
+            'chart_title'           => __('cruds.subCategory.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\SubCategory',
@@ -587,7 +587,7 @@ class HomeController extends Controller
         }
 
         $settings9 = [
-            'chart_title'           => trans('cruds.subSubCategory.title'),
+            'chart_title'           => __('cruds.subSubCategory.title'),
             'chart_type'            => 'number_block',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\SubSubCategory',
@@ -625,7 +625,7 @@ class HomeController extends Controller
         }
 
         $settings10 = [
-            'chart_title'           => trans('cruds.order.extra.latest_orders'),
+            'chart_title'           => __('cruds.order.extra.latest_orders'),
             'chart_type'            => 'latest_entries',
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Order',

@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.subCategory.title') }}
+        {{ __('global.show') }} {{ __('cruds.subCategory.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-light" href="{{ route('admin.sub-categories.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.subCategory.fields.id') }}
+                            {{ __('cruds.subCategory.fields.id') }}
                         </th>
                         <td>
                             {{ $subCategory->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.subCategory.fields.name') }}
+                            {{ __('cruds.subCategory.fields.name') }}
                         </th>
                         <td>
                             {{ $subCategory->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.subCategory.fields.slug') }}
+                            {{ __('cruds.subCategory.fields.slug') }}
                         </th>
                         <td>
                             {{ $subCategory->slug }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.subCategory.fields.meta_title') }}
+                            {{ __('cruds.subCategory.fields.meta_title') }}
                         </th>
                         <td>
                             {{ $subCategory->meta_title }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.subCategory.fields.meta_description') }}
+                            {{ __('cruds.subCategory.fields.meta_description') }}
                         </th>
                         <td>
                             {{ $subCategory->meta_description }}
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.subCategory.fields.category') }}
+                            {{ __('cruds.subCategory.fields.category') }}
                         </th>
                         <td>
                             {{ $subCategory->category->name ?? '' }}
@@ -67,7 +67,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-light" href="{{ route('admin.sub-categories.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

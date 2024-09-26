@@ -148,7 +148,7 @@
                     <span style="float: left">الدفع</span>:<strong
                         class="text-main">{{ $order->payment_type ? \App\Models\Order::PAYMENT_TYPE_SELECT[$order->payment_type] : '' }}</strong><br>
                     <span style="float: left">حالة الدفع</span>:<strong
-                        class="text-main">{{ $order->payment_status ? trans('global.payment_status.status.' . $order->payment_status) : '' }}</strong><br>
+                        class="text-main">{{ $order->payment_status ? __('global.payment_status.status.' . $order->payment_status) : '' }}</strong><br>
                 </table>
             </div>
 
@@ -187,24 +187,24 @@
                 <table style="width: 40%;margin-left:auto;" class="text-right sm-padding small strong">
                     <tbody>
                         <tr>
-                            <th class="gry-color text-left">{{ trans('cruds.order.extra.sub_total') }}</th>
+                            <th class="gry-color text-left">{{ __('cruds.order.extra.sub_total') }}</th>
                             <td class="currency">+ {{ dashboard_currency($order->calc_total_cost()) }}
                             </td>
                         </tr>
                         <tr>
-                            <th class="gry-color text-left">{{ trans('cruds.order.fields.deposit_amount') }}</th>
+                            <th class="gry-color text-left">{{ __('cruds.order.fields.deposit_amount') }}</th>
                             <td class="currency">- {{ dashboard_currency($order->deposit_amount) }}</td>
                         </tr>
                         <tr>
-                            <th class="gry-color text-left">{{ trans('cruds.order.fields.discount') }}</th>
+                            <th class="gry-color text-left">{{ __('cruds.order.fields.discount') }}</th>
                             <td class="currency">- {{ dashboard_currency($order->calc_discount()) }}</td>
                         </tr>
                         <tr>
-                            <th class="gry-color text-left">{{ trans('cruds.order.extra.shipping_country_cost') }}</th>
+                            <th class="gry-color text-left">{{ __('cruds.order.extra.shipping_country_cost') }}</th>
                             <td class="currency">+ {{ dashboard_currency($order->shipping_country_cost) }}</td>
                         </tr>
                         <tr>
-                            <th class="text-left strong">{{ trans('cruds.order.fields.total') }}</th>
+                            <th class="text-left strong">{{ __('cruds.order.fields.total') }}</th>
                             <td class="currency">=
                                 {{ dashboard_currency($order->calc_total_for_client()) }}
                             </td>

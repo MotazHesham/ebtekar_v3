@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.receiptSocialProduct.title') }}
+        {{ __('global.show') }} {{ __('cruds.receiptSocialProduct.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.receipt-social-products.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.id') }}
+                            {{ __('cruds.receiptSocialProduct.fields.id') }}
                         </th>
                         <td>
                             {{ $receiptSocialProduct->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.name') }}
+                            {{ __('cruds.receiptSocialProduct.fields.name') }}
                         </th>
                         <td>
                             {{ $receiptSocialProduct->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.price') }}
+                            {{ __('cruds.receiptSocialProduct.fields.price') }}
                         </th>
                         <td>
                             {{ $receiptSocialProduct->price }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.commission') }}
+                            {{ __('cruds.receiptSocialProduct.fields.commission') }}
                         </th>
                         <td>
                             {{ $receiptSocialProduct->commission }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.photos') }}
+                            {{ __('cruds.receiptSocialProduct.fields.photos') }}
                         </th>
                         <td>
                             @foreach($receiptSocialProduct->photos as $key => $media)
@@ -61,7 +61,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.receipts') }}
+                            {{ __('cruds.receiptSocialProduct.fields.receipts') }}
                         </th>
                         <td>
                             @foreach($receiptSocialProduct->receipts as $key => $receipts)
@@ -73,7 +73,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.receipt-social-products.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.r-branches.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.rBranch.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.rBranch.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.rBranch.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.rBranch.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -22,22 +22,22 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.rBranch.fields.id') }}
+                            {{ __('cruds.rBranch.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rBranch.fields.name') }}
+                            {{ __('cruds.rBranch.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rBranch.fields.phone_number') }}
+                            {{ __('cruds.rBranch.fields.phone_number') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rBranch.fields.remaining') }}
+                            {{ __('cruds.rBranch.fields.remaining') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rBranch.fields.payment_type') }}
+                            {{ __('cruds.rBranch.fields.payment_type') }}
                         </th>
                         <th>
-                            {{ trans('cruds.rBranch.fields.r_client') }}
+                            {{ __('cruds.rBranch.fields.r_client') }}
                         </th>
                         <th>
                             &nbsp;
@@ -54,7 +54,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('r_branch_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.r-branches.massDestroy') }}",
@@ -67,12 +67,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -130,7 +130,7 @@
                     },
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

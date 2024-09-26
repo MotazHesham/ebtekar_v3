@@ -4,14 +4,14 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.socials.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.social.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.social.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.social.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.social.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -23,13 +23,13 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.social.fields.id') }}
+                            {{ __('cruds.social.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.social.fields.name') }}
+                            {{ __('cruds.social.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.social.fields.photo') }}
+                            {{ __('cruds.social.fields.photo') }}
                         </th>
                         <th>
                             &nbsp;
@@ -58,20 +58,20 @@
                             <td>
                                 @can('social_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.socials.show', $social->id) }}">
-                                        {{ trans('global.view') }}
+                                        {{ __('global.view') }}
                                     </a>
                                 @endcan
 
                                 @can('social_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.socials.edit', $social->id) }}">
-                                        {{ trans('global.edit') }}
+                                        {{ __('global.edit') }}
                                     </a>
                                 @endcan
 
                                 @can('social_delete')
                                     <?php $route = route('admin.socials.destroy', $social->id); ?>
                                     <a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('{{$route}}')">
-                                        {{ trans('global.delete') }}  
+                                        {{ __('global.delete') }}  
                                     </a>  
                                 @endcan
 
@@ -94,7 +94,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('social_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.socials.massDestroy') }}",
@@ -105,12 +105,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',

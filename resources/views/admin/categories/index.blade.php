@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.categories.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.category.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.category.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.category.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.category.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -22,25 +22,25 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.category.fields.id') }}
+                            {{ __('cruds.category.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.category.fields.name') }}
+                            {{ __('cruds.category.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.category.fields.banner') }}
+                            {{ __('cruds.category.fields.banner') }}
                         </th>
                         <th>
-                            {{ trans('cruds.category.fields.icon') }}
+                            {{ __('cruds.category.fields.icon') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.website_setting_id') }}
+                            {{ __('global.extra.website_setting_id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.category.fields.featured') }}
+                            {{ __('cruds.category.fields.featured') }}
                         </th>
                         <th>
-                            {{ trans('cruds.category.fields.published') }}
+                            {{ __('cruds.category.fields.published') }}
                         </th>
                         <th>
                             &nbsp;
@@ -74,7 +74,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('category_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.categories.massDestroy') }}",
@@ -87,12 +87,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -158,7 +158,7 @@
                     }, 
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

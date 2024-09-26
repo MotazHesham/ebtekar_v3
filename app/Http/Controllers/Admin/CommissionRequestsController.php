@@ -98,11 +98,11 @@ class CommissionRequestsController extends Controller
     {
         abort_if(Gate::denies('commission_request_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $created_bies = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $created_bies = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $done_by_users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $done_by_users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.commissionRequests.create', compact('created_bies', 'done_by_users', 'users'));
     }

@@ -4,14 +4,14 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.quality-responsibles.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.qualityResponsible.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.qualityResponsible.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.qualityResponsible.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.qualityResponsible.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -23,22 +23,22 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.qualityResponsible.fields.id') }}
+                            {{ __('cruds.qualityResponsible.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.qualityResponsible.fields.name') }}
+                            {{ __('cruds.qualityResponsible.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.qualityResponsible.fields.photo') }}
+                            {{ __('cruds.qualityResponsible.fields.photo') }}
                         </th>
                         <th>
-                            {{ trans('cruds.qualityResponsible.fields.phone_number') }}
+                            {{ __('cruds.qualityResponsible.fields.phone_number') }}
                         </th>
                         <th>
-                            {{ trans('cruds.qualityResponsible.fields.wts_phone') }}
+                            {{ __('cruds.qualityResponsible.fields.wts_phone') }}
                         </th>
                         <th>
-                            {{ trans('cruds.qualityResponsible.fields.country_code') }}
+                            {{ __('cruds.qualityResponsible.fields.country_code') }}
                         </th>
                         <th>
                             &nbsp;
@@ -76,20 +76,20 @@
                             <td>
                                 @can('quality_responsible_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.quality-responsibles.show', $qualityResponsible->id) }}">
-                                        {{ trans('global.view') }}
+                                        {{ __('global.view') }}
                                     </a>
                                 @endcan
 
                                 @can('quality_responsible_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.quality-responsibles.edit', $qualityResponsible->id) }}">
-                                        {{ trans('global.edit') }}
+                                        {{ __('global.edit') }}
                                     </a>
                                 @endcan
 
                                 @can('quality_responsible_delete')
                                 <?php $route = route('admin.quality-responsibles.destroy', $qualityResponsible->id); ?>
                                 <a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('{{$route}}')">
-                                    {{ trans('global.delete') }}  
+                                    {{ __('global.delete') }}  
                                 </a> 
                                 @endcan
 
@@ -112,7 +112,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('quality_responsible_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.quality-responsibles.massDestroy') }}",
@@ -123,12 +123,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',

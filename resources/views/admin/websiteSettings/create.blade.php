@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            {{ trans('global.create') }} {{ trans('cruds.websiteSetting.title_singular') }}
+            {{ __('global.create') }} {{ __('cruds.websiteSetting.title_singular') }}
         </div>
 
         <div class="card-body">
@@ -10,7 +10,7 @@
                 @csrf
                 <div class="row">
                     <div class="form-group col-md-4">
-                        <label class="required" for="logo">{{ trans('cruds.websiteSetting.fields.logo') }}</label>
+                        <label class="required" for="logo">{{ __('cruds.websiteSetting.fields.logo') }}</label>
                         <div class="needsclick dropzone {{ $errors->has('logo') ? 'is-invalid' : '' }}" id="logo-dropzone">
                         </div>
                         @if ($errors->has('logo'))
@@ -18,10 +18,10 @@
                                 {{ $errors->first('logo') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.logo_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.logo_helper') }}</span>
                     </div>
                     <div class="form-group col-md-8">
-                        <label for="photos">{{ trans('cruds.websiteSetting.fields.photos') }}</label>
+                        <label for="photos">{{ __('cruds.websiteSetting.fields.photos') }}</label>
                         <div class="needsclick dropzone {{ $errors->has('photos') ? 'is-invalid' : '' }}"
                             id="photos-dropzone">
                         </div>
@@ -30,11 +30,11 @@
                                 {{ $errors->first('photos') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.photos_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.photos_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label class="required"
-                            for="site_name">{{ trans('cruds.websiteSetting.fields.site_name') }}</label>
+                            for="site_name">{{ __('cruds.websiteSetting.fields.site_name') }}</label>
                         <input class="form-control {{ $errors->has('site_name') ? 'is-invalid' : '' }}" type="text"
                             name="site_name" id="site_name" value="{{ old('site_name') }}" required>
                         @if ($errors->has('site_name'))
@@ -42,10 +42,10 @@
                                 {{ $errors->first('site_name') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.site_name_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.site_name_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="required" for="domains">{{ trans('cruds.websiteSetting.fields.domains') }}</label>
+                        <label class="required" for="domains">{{ __('cruds.websiteSetting.fields.domains') }}</label>
                         <input class="form-control {{ $errors->has('domains') ? 'is-invalid' : '' }}" type="text"
                             name="domains[]" id="domains" 
                             placeholder="add domains (example.com)..." data-role="tagsinput" required>
@@ -54,11 +54,11 @@
                                 {{ $errors->first('domains') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.domains_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.domains_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label class="required"
-                            for="keywords_seo">{{ trans('cruds.websiteSetting.fields.keywords_seo') }}</label>
+                            for="keywords_seo">{{ __('cruds.websiteSetting.fields.keywords_seo') }}</label>
                         <input class="form-control {{ $errors->has('keywords_seo') ? 'is-invalid' : '' }}" type="text"
                             name="keywords_seo[]" id="keywords_seo" placeholder="add tags ..." data-role="tagsinput"
                             required>
@@ -67,11 +67,11 @@
                                 {{ $errors->first('keywords_seo') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.keywords_seo_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.keywords_seo_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label class="required"
-                            for="author_seo">{{ trans('cruds.websiteSetting.fields.author_seo') }}</label>
+                            for="author_seo">{{ __('cruds.websiteSetting.fields.author_seo') }}</label>
                         <input class="form-control {{ $errors->has('author_seo') ? 'is-invalid' : '' }}" type="text"
                             name="author_seo" id="author_seo" value="{{ old('author_seo', '') }}" required>
                         @if ($errors->has('author_seo'))
@@ -79,11 +79,11 @@
                                 {{ $errors->first('author_seo') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.author_seo_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.author_seo_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label class="required"
-                            for="sitemap_link_seo">{{ trans('cruds.websiteSetting.fields.sitemap_link_seo') }}</label>
+                            for="sitemap_link_seo">{{ __('cruds.websiteSetting.fields.sitemap_link_seo') }}</label>
                         <input class="form-control {{ $errors->has('sitemap_link_seo') ? 'is-invalid' : '' }}"
                             type="text" name="sitemap_link_seo" id="sitemap_link_seo"
                             value="{{ old('sitemap_link_seo', '') }}" required>
@@ -92,11 +92,11 @@
                                 {{ $errors->first('sitemap_link_seo') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.sitemap_link_seo_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.sitemap_link_seo_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label class="required"
-                            for="description_seo">{{ trans('cruds.websiteSetting.fields.description_seo') }}</label>
+                            for="description_seo">{{ __('cruds.websiteSetting.fields.description_seo') }}</label>
                         <textarea class="form-control {{ $errors->has('description_seo') ? 'is-invalid' : '' }}" name="description_seo"
                             id="description_seo" required>{{ old('description_seo') }}</textarea>
                         @if ($errors->has('description_seo'))
@@ -104,20 +104,20 @@
                                 {{ $errors->first('description_seo') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.description_seo_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.description_seo_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="address">{{ trans('cruds.websiteSetting.fields.address') }}</label>
+                        <label for="address">{{ __('cruds.websiteSetting.fields.address') }}</label>
                         <textarea class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" name="address" id="address">{{ old('address') }}</textarea>
                         @if ($errors->has('address'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('address') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.address_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.address_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="description">{{ trans('cruds.websiteSetting.fields.description') }}</label>
+                        <label for="description">{{ __('cruds.websiteSetting.fields.description') }}</label>
                         <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description"
                             id="description">{{ old('description') }}</textarea>
                         @if ($errors->has('description'))
@@ -125,10 +125,10 @@
                                 {{ $errors->first('description') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.description_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.description_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="phone_number">{{ trans('cruds.websiteSetting.fields.phone_number') }}</label>
+                        <label for="phone_number">{{ __('cruds.websiteSetting.fields.phone_number') }}</label>
                         <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}" type="text"
                             name="phone_number" id="phone_number" value="{{ old('phone_number') }}">
                         @if ($errors->has('phone_number'))
@@ -136,10 +136,10 @@
                                 {{ $errors->first('phone_number') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.phone_number_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.phone_number_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="email">{{ trans('cruds.websiteSetting.fields.email') }}</label>
+                        <label for="email">{{ __('cruds.websiteSetting.fields.email') }}</label>
                         <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="email"
                             name="email" id="email" value="{{ old('email') }}">
                         @if ($errors->has('email'))
@@ -147,10 +147,10 @@
                                 {{ $errors->first('email') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.email_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.email_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="facebook">{{ trans('cruds.websiteSetting.fields.facebook') }}</label>
+                        <label for="facebook">{{ __('cruds.websiteSetting.fields.facebook') }}</label>
                         <input class="form-control {{ $errors->has('facebook') ? 'is-invalid' : '' }}" type="text"
                             name="facebook" id="facebook" value="{{ old('facebook') }}">
                         @if ($errors->has('facebook'))
@@ -158,10 +158,10 @@
                                 {{ $errors->first('facebook') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.facebook_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.facebook_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="instagram">{{ trans('cruds.websiteSetting.fields.instagram') }}</label>
+                        <label for="instagram">{{ __('cruds.websiteSetting.fields.instagram') }}</label>
                         <input class="form-control {{ $errors->has('instagram') ? 'is-invalid' : '' }}" type="text"
                             name="instagram" id="instagram" value="{{ old('instagram') }}">
                         @if ($errors->has('instagram'))
@@ -169,10 +169,10 @@
                                 {{ $errors->first('instagram') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.instagram_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.instagram_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="twitter">{{ trans('cruds.websiteSetting.fields.twitter') }}</label>
+                        <label for="twitter">{{ __('cruds.websiteSetting.fields.twitter') }}</label>
                         <input class="form-control {{ $errors->has('twitter') ? 'is-invalid' : '' }}" type="text"
                             name="twitter" id="twitter" value="{{ old('twitter') }}">
                         @if ($errors->has('twitter'))
@@ -180,10 +180,10 @@
                                 {{ $errors->first('twitter') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.twitter_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.twitter_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="telegram">{{ trans('cruds.websiteSetting.fields.telegram') }}</label>
+                        <label for="telegram">{{ __('cruds.websiteSetting.fields.telegram') }}</label>
                         <input class="form-control {{ $errors->has('telegram') ? 'is-invalid' : '' }}" type="text"
                             name="telegram" id="telegram" value="{{ old('telegram') }}">
                         @if ($errors->has('telegram'))
@@ -191,10 +191,10 @@
                                 {{ $errors->first('telegram') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.telegram_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.telegram_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="linkedin">{{ trans('cruds.websiteSetting.fields.linkedin') }}</label>
+                        <label for="linkedin">{{ __('cruds.websiteSetting.fields.linkedin') }}</label>
                         <input class="form-control {{ $errors->has('linkedin') ? 'is-invalid' : '' }}" type="text"
                             name="linkedin" id="linkedin" value="{{ old('linkedin') }}">
                         @if ($errors->has('linkedin'))
@@ -202,10 +202,10 @@
                                 {{ $errors->first('linkedin') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.linkedin_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.linkedin_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="whatsapp">{{ trans('cruds.websiteSetting.fields.whatsapp') }}</label>
+                        <label for="whatsapp">{{ __('cruds.websiteSetting.fields.whatsapp') }}</label>
                         <input class="form-control {{ $errors->has('whatsapp') ? 'is-invalid' : '' }}" type="text"
                             name="whatsapp" id="whatsapp" value="{{ old('whatsapp') }}">
                         @if ($errors->has('whatsapp'))
@@ -213,10 +213,10 @@
                                 {{ $errors->first('whatsapp') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.whatsapp_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.whatsapp_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="youtube">{{ trans('cruds.websiteSetting.fields.youtube') }}</label>
+                        <label for="youtube">{{ __('cruds.websiteSetting.fields.youtube') }}</label>
                         <input class="form-control {{ $errors->has('youtube') ? 'is-invalid' : '' }}" type="text"
                             name="youtube" id="youtube" value="{{ old('youtube') }}">
                         @if ($errors->has('youtube'))
@@ -224,10 +224,10 @@
                                 {{ $errors->first('youtube') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.youtube_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.youtube_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="google_plus">{{ trans('cruds.websiteSetting.fields.google_plus') }}</label>
+                        <label for="google_plus">{{ __('cruds.websiteSetting.fields.google_plus') }}</label>
                         <input class="form-control {{ $errors->has('google_plus') ? 'is-invalid' : '' }}" type="text"
                             name="google_plus" id="google_plus" value="{{ old('google_plus') }}">
                         @if ($errors->has('google_plus'))
@@ -235,10 +235,10 @@
                                 {{ $errors->first('google_plus') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.google_plus_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.google_plus_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="welcome_message">{{ trans('cruds.websiteSetting.fields.welcome_message') }}</label>
+                        <label for="welcome_message">{{ __('cruds.websiteSetting.fields.welcome_message') }}</label>
                         <textarea class="form-control {{ $errors->has('welcome_message') ? 'is-invalid' : '' }}" name="welcome_message"
                             id="welcome_message">{{ old('welcome_message') }}</textarea>
                         @if ($errors->has('welcome_message'))
@@ -246,11 +246,11 @@
                                 {{ $errors->first('welcome_message') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.welcome_message_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.welcome_message_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label
-                            for="video_instructions">{{ trans('cruds.websiteSetting.fields.video_instructions') }}</label>
+                            for="video_instructions">{{ __('cruds.websiteSetting.fields.video_instructions') }}</label>
                         <input class="form-control {{ $errors->has('video_instructions') ? 'is-invalid' : '' }}"
                             type="text" name="video_instructions" id="video_instructions"
                             value="{{ old('video_instructions') }}">
@@ -260,14 +260,14 @@
                             </div>
                         @endif
                         <span
-                            class="help-block">{{ trans('cruds.websiteSetting.fields.video_instructions_helper') }}</span>
+                            class="help-block">{{ __('cruds.websiteSetting.fields.video_instructions_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label>{{ trans('cruds.websiteSetting.fields.delivery_system') }}</label>
+                        <label>{{ __('cruds.websiteSetting.fields.delivery_system') }}</label>
                         <select class="form-control {{ $errors->has('delivery_system') ? 'is-invalid' : '' }}"
                             name="delivery_system" id="delivery_system">
                             <option value disabled {{ old('delivery_system', null) === null ? 'selected' : '' }}>
-                                {{ trans('global.pleaseSelect') }}</option>
+                                {{ __('global.pleaseSelect') }}</option>
                             @foreach (App\Models\WebsiteSetting::DELIVERY_SYSTEM_SELECT as $key => $label)
                                 <option value="{{ $key }}"
                                     {{ old('delivery_system') === (string) $key ? 'selected' : '' }}>
@@ -279,10 +279,10 @@
                                 {{ $errors->first('delivery_system') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.delivery_system_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.delivery_system_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="designer_id">{{ trans('cruds.websiteSetting.fields.designer') }}</label>
+                        <label for="designer_id">{{ __('cruds.websiteSetting.fields.designer') }}</label>
                         <select class="form-control select2 {{ $errors->has('designer') ? 'is-invalid' : '' }}"
                             name="designer_id" id="designer_id">
                             @foreach ($designers as $id => $entry)
@@ -295,10 +295,10 @@
                                 {{ $errors->first('designer') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.designer_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.designer_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="preparer_id">{{ trans('cruds.websiteSetting.fields.preparer') }}</label>
+                        <label for="preparer_id">{{ __('cruds.websiteSetting.fields.preparer') }}</label>
                         <select class="form-control select2 {{ $errors->has('preparer') ? 'is-invalid' : '' }}"
                             name="preparer_id" id="preparer_id">
                             @foreach ($preparers as $id => $entry)
@@ -311,10 +311,10 @@
                                 {{ $errors->first('preparer') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.preparer_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.preparer_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="manufacturer_id">{{ trans('cruds.websiteSetting.fields.manufacturer') }}</label>
+                        <label for="manufacturer_id">{{ __('cruds.websiteSetting.fields.manufacturer') }}</label>
                         <select class="form-control select2 {{ $errors->has('manufacturer') ? 'is-invalid' : '' }}"
                             name="manufacturer_id" id="manufacturer_id">
                             @foreach ($manufacturers as $id => $entry)
@@ -328,10 +328,10 @@
                                 {{ $errors->first('manufacturer') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.manufacturer_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.manufacturer_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="shipmenter_id">{{ trans('cruds.websiteSetting.fields.shipment') }}</label>
+                        <label for="shipmenter_id">{{ __('cruds.websiteSetting.fields.shipment') }}</label>
                         <select class="form-control select2 {{ $errors->has('shipment') ? 'is-invalid' : '' }}"
                             name="shipmenter_id" id="shipmenter_id">
                             @foreach ($shipments as $id => $entry)
@@ -344,12 +344,12 @@
                                 {{ $errors->first('shipment') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.websiteSetting.fields.shipment_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.shipment_helper') }}</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-danger" type="submit">
-                        {{ trans('global.save') }}
+                        {{ __('global.save') }}
                     </button>
                 </div>
             </form>

@@ -10,27 +10,27 @@
                         <div>
                             <h2>
                                 @if($site_settings->id  == 2)
-                                    {{ trans('frontend.about.ertgal') }}
+                                    {{ __('frontend.about.ertgal') }}
                                 @elseif($site_settings->id  == 3)
-                                    {{ trans('frontend.about.figures') }}
+                                    {{ __('frontend.about.figures') }}
                                 @elseif($site_settings->id  == 4)
-                                    {{ trans('frontend.about.shirti') }}
+                                    {{ __('frontend.about.shirti') }}
                                 @else
-                                    {{ trans('frontend.about.ebtekar') }}
+                                    {{ __('frontend.about.ebtekar') }}
                                 @endif
                             </h2>
                             <ul>
-                                <li><a href="{{route('home')}}">{{ trans('frontend.about.home') }}</a></li>
+                                <li><a href="{{route('home')}}">{{ __('frontend.about.home') }}</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
                                 <li><a href="javascript:void(0)">
                                     @if($site_settings->id  == 2)
-                                        {{ trans('frontend.about.ertgal') }}
+                                        {{ __('frontend.about.ertgal') }}
                                     @elseif($site_settings->id  == 3)
-                                        {{ trans('frontend.about.figures') }}
+                                        {{ __('frontend.about.figures') }}
                                     @elseif($site_settings->id  == 4)
-                                        {{ trans('frontend.about.shirti') }}
+                                        {{ __('frontend.about.shirti') }}
                                     @else
-                                        {{ trans('frontend.about.ebtekar') }}
+                                        {{ __('frontend.about.ebtekar') }}
                                     @endif
                                 </a></li>
                             </ul>

@@ -2,7 +2,7 @@
 @section('content')
     <div class="form-group">
         <a class="btn btn-dark" href="{{ route('admin.receipt-socials.index') }}">
-            {{ trans('global.back_to_list') }}
+            {{ __('global.back_to_list') }}
         </a>
     </div>
 
@@ -10,7 +10,7 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.receipt-social-products.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.receiptSocialProduct.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.receiptSocialProduct.title_singular') }}
                 </a>
             </div>
         </div>
@@ -20,7 +20,7 @@
 
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.receiptSocialProduct.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.receiptSocialProduct.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -32,25 +32,25 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.id') }}
+                            {{ __('cruds.receiptSocialProduct.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.name') }}
+                            {{ __('cruds.receiptSocialProduct.fields.name') }}
                         </th>
                         <th>
                             نوع المنتج
                         </th>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.price') }}
+                            {{ __('cruds.receiptSocialProduct.fields.price') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.commission') }}
+                            {{ __('cruds.receiptSocialProduct.fields.commission') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptSocialProduct.fields.photos') }}
+                            {{ __('cruds.receiptSocialProduct.fields.photos') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.website_setting_id') }}
+                            {{ __('global.extra.website_setting_id') }}
                         </th>
                         <th>
                             &nbsp;
@@ -70,7 +70,7 @@
 
             
             @can('receipt_social_product_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.receipt-social-products.massDestroy') }}",
@@ -83,12 +83,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -152,7 +152,7 @@
                     }, 
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

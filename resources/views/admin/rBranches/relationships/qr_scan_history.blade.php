@@ -26,7 +26,7 @@
                         <div class="form-group col-md-4">
                             <br>
                             <button class="btn btn-success" type="submit">
-                                {{ trans('global.save') }}
+                                {{ __('global.save') }}
                             </button>
                         </div>
                     </div>
@@ -134,11 +134,11 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}') 
+                            alert('{{ __('global.datatables.zero_selected') }}') 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $('#input-ids2').val(ids);
                             $('#print_more_form2').submit();  
                         }

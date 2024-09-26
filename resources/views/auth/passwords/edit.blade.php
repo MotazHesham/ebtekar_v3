@@ -5,7 +5,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                {{ trans('global.my_profile') }}
+                {{ __('global.my_profile') }}
             </div>
 
             <div class="card-body">
@@ -14,7 +14,7 @@
                     <div class="row"> 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="required" for="name">{{ trans('cruds.user.fields.name') }}</label>
+                                <label class="required" for="name">{{ __('cruds.user.fields.name') }}</label>
                                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', auth()->user()->name) }}" required>
                                 @if($errors->has('name'))
                                     <div class="invalid-feedback">
@@ -23,7 +23,7 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label class="required" for="email">{{ trans('cruds.user.fields.email') }}</label>
+                                <label class="required" for="email">{{ __('cruds.user.fields.email') }}</label>
                                 <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="email" name="email" id="email" value="{{ old('email', auth()->user()->email) }}" required>
                                 @if($errors->has('email'))
                                     <div class="invalid-feedback">
@@ -32,7 +32,7 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label class="required" for="phone_number">{{ trans('cruds.user.fields.phone_number') }}</label>
+                                <label class="required" for="phone_number">{{ __('cruds.user.fields.phone_number') }}</label>
                                 <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}" type="text" name="phone_number" id="phone_number" value="{{ old('phone_number', auth()->user()->phone_number) }}" required>
                                 @if($errors->has('phone_number'))
                                     <div class="invalid-feedback">
@@ -43,7 +43,7 @@
                         </div> 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="photo">{{ trans('cruds.user.fields.photo') }}</label>
+                                <label for="photo">{{ __('cruds.user.fields.photo') }}</label>
                                 <div class="needsclick dropzone {{ $errors->has('photo') ? 'is-invalid' : '' }}" id="photo-dropzone">
                                 </div>
                                 @if($errors->has('photo'))
@@ -51,13 +51,13 @@
                                         {{ $errors->first('photo') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.user.fields.photo_helper') }}</span>
+                                <span class="help-block">{{ __('cruds.user.fields.photo_helper') }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-danger" type="submit">
-                            {{ trans('global.save') }}
+                            {{ __('global.save') }}
                         </button>
                     </div>
                 </form>
@@ -67,14 +67,14 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                {{ trans('global.change_password') }}
+                {{ __('global.change_password') }}
             </div>
 
             <div class="card-body">
                 <form method="POST" action="{{ route("profile.password.update") }}">
                     @csrf
                     <div class="form-group">
-                        <label class="required" for="email">New {{ trans('cruds.user.fields.password') }}</label>
+                        <label class="required" for="email">New {{ __('cruds.user.fields.password') }}</label>
                         <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="password" name="password" id="password" required>
                         @if($errors->has('password'))
                             <div class="invalid-feedback">
@@ -83,12 +83,12 @@
                         @endif
                     </div>
                     <div class="form-group">
-                        <label class="required" for="title">Repeat New {{ trans('cruds.user.fields.password') }}</label>
+                        <label class="required" for="title">Repeat New {{ __('cruds.user.fields.password') }}</label>
                         <input class="form-control" type="password" name="password_confirmation" id="password_confirmation" required>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-danger" type="submit">
-                            {{ trans('global.save') }}
+                            {{ __('global.save') }}
                         </button>
                     </div>
                 </form>
@@ -116,10 +116,10 @@
                         @if(auth()->user()->wasla_token == null)
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="email" name="email" class="form-control" placeholder="{{ trans('cruds.user.fields.email') }}" id="email"> 
+                                    <input type="email" name="email" class="form-control" placeholder="{{ __('cruds.user.fields.email') }}" id="email"> 
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" name="password" class="form-control" placeholder="{{ trans('cruds.user.fields.password') }}" id="password"> 
+                                    <input type="password" name="password" class="form-control" placeholder="{{ __('cruds.user.fields.password') }}" id="password"> 
                                 </div>
                                 <div class="form-group">
                                     <input type="submit" value="تسجيل الدخول" class="btn btn-info" name="" id=""> 

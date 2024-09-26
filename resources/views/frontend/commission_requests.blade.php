@@ -8,11 +8,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>   {{ trans('frontend.commission_requests.title') }}  </h2>
+                            <h2>   {{ __('frontend.commission_requests.title') }}  </h2>
                             <ul>
-                                <li><a href="index.html">{{ trans('frontend.about.home') }}</a></li>
+                                <li><a href="index.html">{{ __('frontend.about.home') }}</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="javascript:void(0)">   {{ trans('frontend.commission_requests.title') }}  </a></li>
+                                <li><a href="javascript:void(0)">   {{ __('frontend.commission_requests.title') }}  </a></li>
                             </ul>
                         </div>
                     </div>
@@ -31,17 +31,17 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header"> 
-                                {{ trans('frontend.commission_requests.title') }}
+                                {{ __('frontend.commission_requests.title') }}
                             </div>
                             <div class="card-body">
                                 <table class="table cart-table table-responsive-xs">
                                     <thead>
                                         <tr class="table-head">
-                                            <th scope="col">{{ trans('frontend.commission_requests.date') }} </th>
-                                            <th scope="col"> {{ trans('frontend.commission_requests.payment_method') }} </th>
-                                            <th scope="col">{{ trans('frontend.commission_requests.payment_transfer') }} </th> 
-                                            <th scope="col"> {{ trans('frontend.commission_requests.commission') }} </th>
-                                            <th scope="col">{{ trans('frontend.commission_requests.status') }} </th>
+                                            <th scope="col">{{ __('frontend.commission_requests.date') }} </th>
+                                            <th scope="col"> {{ __('frontend.commission_requests.payment_method') }} </th>
+                                            <th scope="col">{{ __('frontend.commission_requests.payment_transfer') }} </th> 
+                                            <th scope="col"> {{ __('frontend.commission_requests.commission') }} </th>
+                                            <th scope="col">{{ __('frontend.commission_requests.status') }} </th>
                                         </tr>
                                     </thead>
                                     <tbody>

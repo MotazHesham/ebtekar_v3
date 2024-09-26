@@ -8,11 +8,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>{{ trans('frontend.dashboard.profile') }}</h2>
+                            <h2>{{ __('frontend.dashboard.profile') }}</h2>
                             <ul>
-                                <li><a href="{{ route('frontend.dashboard') }}">  {{ trans('frontend.about.dashboard') }} </a></li>
+                                <li><a href="{{ route('frontend.dashboard') }}">  {{ __('frontend.about.dashboard') }} </a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="javascript:void(0)"> {{ trans('frontend.orders.orders') }}  </a></li>
+                                <li><a href="javascript:void(0)"> {{ __('frontend.orders.orders') }}  </a></li>
                             </ul>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                         <div class="card text-white bg-success">
                             <div class="card-body pb-0">
                                 <div class="text-value">{{ $calculate_commission['delivered'] }}</div>
-                                <div>  {{ trans('frontend.orders.delivered') }}
+                                <div>  {{ __('frontend.orders.delivered') }}
                                 </div>
                                 <br />
                             </div>
@@ -46,7 +46,7 @@
                         <div class="card text-white bg-danger">
                             <div class="card-body pb-0">
                                 <div class="text-value">{{ $calculate_commission['requested'] }}</div>
-                                <div> {{ trans('frontend.orders.requested') }}
+                                <div> {{ __('frontend.orders.requested') }}
                                 </div>
                                 <br />
                             </div>
@@ -56,7 +56,7 @@
                         <div class="card text-white bg-info">
                             <div class="card-body pb-0">
                                 <div class="text-value">{{ $calculate_commission['available'] }}</div>
-                                <div>     {{ trans('frontend.orders.available') }}
+                                <div>     {{ __('frontend.orders.available') }}
                                 </div>
                                 <br />
                             </div>
@@ -66,7 +66,7 @@
                         <div class="card text-white bg-warning">
                             <div class="card-body pb-0">
                                 <div class="text-value">{{ $calculate_commission['pending'] }}</div>
-                                <div> {{ trans('frontend.orders.pending') }}
+                                <div> {{ __('frontend.orders.pending') }}
                                 </div>
                                 <br />
                             </div>
@@ -88,7 +88,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="request_commissionLabel">{{ trans('frontend.orders.request_commission') }}</h5>
+                                                <h5 class="modal-title" id="request_commissionLabel">{{ __('frontend.orders.request_commission') }}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
                                             </div>
                                             <div class="modal-body">
@@ -96,7 +96,7 @@
                                                     @csrf
                                                     
                                                     <div class="form-group">
-                                                        <label class=" control-label" for="payment_method">{{ trans('frontend.orders.payment_method') }}
+                                                        <label class=" control-label" for="payment_method">{{ __('frontend.orders.payment_method') }}
                                                         </label> 
                                                         <select class="form-control demo-select2" name="payment_method" required> 
                                                             @foreach(\App\Models\CommissionRequest::PAYMENT_METHOD_SELECT as $key => $entry)
@@ -105,16 +105,16 @@
                                                         </select>  
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class=" control-label" for="transfer_number"> {{ trans('frontend.orders.transfer_number') }}
+                                                        <label class=" control-label" for="transfer_number"> {{ __('frontend.orders.transfer_number') }}
                                                         </label> 
                                                         <input type="text" class="form-control" name="transfer_number" required>  
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class=" control-label" for="payment_method">  {{ trans('frontend.orders.deliver_orders') }} 
+                                                        <label class=" control-label" for="payment_method">  {{ __('frontend.orders.deliver_orders') }} 
                                                         </label> 
                                                         <div style="padding-bottom: 4px">
-                                                            <span class="btn btn-normal btn-sm select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                                                            <span class="btn btn-normal btn-sm deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                                                            <span class="btn btn-normal btn-sm select-all" style="border-radius: 0">{{ __('global.select_all') }}</span>
+                                                            <span class="btn btn-normal btn-sm deselect-all" style="border-radius: 0">{{ __('global.deselect_all') }}</span>
                                                         </div>
                                                         <select name="orders[]" id="" class="form-control select2" multiple  required>
                                                             @foreach(auth()->user()->orders->where('delivery_status','delivered')->whereNotIn('commission_status',['delivered','requested']) as $order) 
@@ -123,7 +123,7 @@
                                                         </select>  
                                                     </div>
                                                     <hr>
-                                                    <button type="submit" class="btn btn-normal" >{{trans('frontend.orders.send_request')}}</button> 
+                                                    <button type="submit" class="btn btn-normal" >{{__('frontend.orders.send_request')}}</button> 
                                                 </form>
                                             </div> 
                                         </div>
@@ -135,14 +135,14 @@
                             <table class="table cart-table table-responsive-xs">
                                 <thead>
                                     <tr class="table-head">
-                                        <th scope="col">{{ trans('frontend.orders.product') }}</th>
-                                        <th scope="col">{{ trans('frontend.orders.description') }}</th>
-                                        <th scope="col">{{ trans('frontend.orders.price') }}</th>
+                                        <th scope="col">{{ __('frontend.orders.product') }}</th>
+                                        <th scope="col">{{ __('frontend.orders.description') }}</th>
+                                        <th scope="col">{{ __('frontend.orders.price') }}</th>
                                         @if(auth()->check() && auth()->user()->user_type == 'seller')
-                                            <th scope="col">   {{ trans('frontend.orders.commission') }}</th>
+                                            <th scope="col">   {{ __('frontend.orders.commission') }}</th>
                                         @endif
-                                        <th scope="col">{{ trans('frontend.orders.details') }}</th>
-                                        <th scope="col">{{ trans('frontend.orders.status') }}</th>
+                                        <th scope="col">{{ __('frontend.orders.details') }}</th>
+                                        <th scope="col">{{ __('frontend.orders.status') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -159,7 +159,7 @@
                                                             alt="product" class="img-fluid  "></a>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('frontend.product',$product->slug)}}"> {{ trans('frontend.orders.order_num') }} <span class="dark-data">{{$orderDetail->order->order_num ?? ''}}</span>
+                                                    <a href="{{ route('frontend.product',$product->slug)}}"> {{ __('frontend.orders.order_num') }} <span class="dark-data">{{$orderDetail->order->order_num ?? ''}}</span>
                                                         <br>{{$product->name ?? ''}}</a>
                                                 </td>
                                                 <td>
@@ -171,7 +171,7 @@
                                                     </td>
                                                 @endif
                                                 <td>
-                                                    <span>{{ trans('frontend.orders.quantity')}}: {{ $orderDetail->quantity }}</span>
+                                                    <span>{{ __('frontend.orders.quantity')}}: {{ $orderDetail->quantity }}</span>
                                                     <br>
                                                     <span> {{ $orderDetail->variation }} </span>
                                                 </td>
@@ -179,9 +179,9 @@
                                                     <div class="responsive-data">
                                                         <b>{{ $orderDetail->total_cost($orderDetail->order->exchange_rate) }} {{ $orderDetail->order->symbol }}</b>
                                                         <br>
-                                                        <span> {{ $orderDetail->variation }} </span> | {{ trans('frontend.orders.quantity')}}: {{ $orderDetail->quantity }}</span>
+                                                        <span> {{ $orderDetail->variation }} </span> | {{ __('frontend.orders.quantity')}}: {{ $orderDetail->quantity }}</span>
                                                     </div>
-                                                    <span class="dark-data">{{ $orderDetail->order->delivery_status ? trans('global.delivery_status.status.' . $orderDetail->order->delivery_status) : '' }}</span>
+                                                    <span class="dark-data">{{ $orderDetail->order->delivery_status ? __('global.delivery_status.status.' . $orderDetail->order->delivery_status) : '' }}</span>
                                                         @if($orderDetail->order->delivery_status == 'delivered') ({{$orderDetail->order->done_time}}) @endif
                                                 </td>
                                             </tr>

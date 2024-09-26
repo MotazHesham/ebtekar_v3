@@ -2,21 +2,21 @@
 @section('content')
     <div class="form-group">
         <a class="btn btn-dark" href="{{ route('admin.receipt-clients.index') }}">
-            {{ trans('global.back_to_list') }}
+            {{ __('global.back_to_list') }}
         </a>
     </div>
     @can('receipt_client_product_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.receipt-client-products.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.receiptClientProduct.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.receiptClientProduct.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.receiptClientProduct.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.receiptClientProduct.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -28,16 +28,16 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.receiptClientProduct.fields.id') }}
+                            {{ __('cruds.receiptClientProduct.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptClientProduct.fields.name') }}
+                            {{ __('cruds.receiptClientProduct.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptClientProduct.fields.price') }}
+                            {{ __('cruds.receiptClientProduct.fields.price') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.website_setting_id') }}
+                            {{ __('global.extra.website_setting_id') }}
                         </th>
                         <th>
                             &nbsp;
@@ -54,7 +54,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('receipt_client_product_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.receipt-client-products.massDestroy') }}",
@@ -67,12 +67,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -122,7 +122,7 @@
                     }, 
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

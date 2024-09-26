@@ -38,8 +38,8 @@
                         <div class="form-group col-md-12">
                             <label for="keys">الأسماء</label>
                             <div style="padding-bottom: 4px">
-                                <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                                <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                                <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ __('global.select_all') }}</span>
+                                <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ __('global.deselect_all') }}</span>
                             </div>
                             <select name="keys[]" id="ajax_names" class="form-control select2" multiple required>
                                 
@@ -63,7 +63,7 @@
                     </div>
                     <div class="form-group">
                         <button class="btn btn-success" type="submit">
-                            {{ trans('global.save') }}
+                            {{ __('global.save') }}
                         </button>
                     </div>
                 </form>
@@ -127,7 +127,7 @@
                                     </button> 
                                 
                                     <a class="btn btn-xs btn-danger" href="{{route('admin.qr-products.destroy',$raw->id)}}" onclick="return confirm('are you sure?')">
-                                        {{ trans('global.delete') }}  
+                                        {{ __('global.delete') }}  
                                     </a>
                                 </td>
 
@@ -194,11 +194,11 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}') 
+                            alert('{{ __('global.datatables.zero_selected') }}') 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $('#input-ids').val(ids);
                             $('#print_more_form').submit();  
                         }

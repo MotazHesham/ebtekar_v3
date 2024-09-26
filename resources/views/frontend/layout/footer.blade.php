@@ -32,43 +32,43 @@
                         </div>
                         <div class="footer-box">
                             <div class="footer-title">
-                                <h5>{{ trans('frontend.footer.profile') }}</h5>
+                                <h5>{{ __('frontend.footer.profile') }}</h5>
                             </div>
                             <div class="footer-contant">
                                 <ul>
-                                    <li><a href="{{ route('home') }}">{{ trans('frontend.footer.home') }}</a></li>
+                                    <li><a href="{{ route('home') }}">{{ __('frontend.footer.home') }}</a></li>
                                     <li>
                                         <a href="{{ route('frontend.about') }}">   
                                             @if($site_settings->id  == 2)
-                                                {{ trans('frontend.about.ertgal') }}
+                                                {{ __('frontend.about.ertgal') }}
                                             @elseif($site_settings->id  == 3)
-                                                {{ trans('frontend.about.figures') }}
+                                                {{ __('frontend.about.figures') }}
                                             @elseif($site_settings->id  == 4)
-                                                {{ trans('frontend.about.shirti') }}
+                                                {{ __('frontend.about.shirti') }}
                                             @else
-                                                {{ trans('frontend.about.ebtekar') }}
+                                                {{ __('frontend.about.ebtekar') }}
                                             @endif
                                         </a>
                                     </li>
-                                    <li><a href="{{ route('frontend.policies','support') }}">{{ trans('frontend.footer.support') }} </a></li>
-                                    <li><a href="{{ route('frontend.policies','return') }}">{{ trans('frontend.footer.returned') }} </a></li>
-                                    <li><a href="{{ route('frontend.policies','terms') }}">{{ trans('frontend.footer.terms') }} </a></li>
-                                    <li><a href="{{ route('frontend.policies','seller') }}">{{ trans('frontend.footer.seller') }} </a></li> 
-                                    <li><a href="{{ route('frontend.policies','privacy') }}">{{ trans('frontend.footer.privacy') }} </a></li> 
+                                    <li><a href="{{ route('frontend.policies','support') }}">{{ __('frontend.footer.support') }} </a></li>
+                                    <li><a href="{{ route('frontend.policies','return') }}">{{ __('frontend.footer.returned') }} </a></li>
+                                    <li><a href="{{ route('frontend.policies','terms') }}">{{ __('frontend.footer.terms') }} </a></li>
+                                    <li><a href="{{ route('frontend.policies','seller') }}">{{ __('frontend.footer.seller') }} </a></li> 
+                                    <li><a href="{{ route('frontend.policies','privacy') }}">{{ __('frontend.footer.privacy') }} </a></li> 
                                 </ul>
                             </div>
                         </div>
                         <div class="footer-box">
                             <div class="footer-title">
-                                <h5> {{ trans('frontend.footer.contact_us') }}  </h5>
+                                <h5> {{ __('frontend.footer.contact_us') }}  </h5>
                             </div>
                             <div class="footer-contant">
                                 <ul class="contact-list">
                                     <li><i class="fa fa-map-marker"></i>
                                         {{ $site_settings->address }}
                                     </li>
-                                    <li><i class="fa fa-phone"></i>{{ trans('frontend.footer.phone') }}: <span> <a class="btn-link" href="tel:{{ $site_settings->phone_number}}">{{ $site_settings->phone_number}}</a> </span></li>
-                                    <li><i class="fa fa-envelope-o"></i> {{ trans('frontend.footer.email') }}: <a class="btn-link" href="mailto:{{ $site_settings->email }}">{{ $site_settings->email }}</a>
+                                    <li><i class="fa fa-phone"></i>{{ __('frontend.footer.phone') }}: <span> <a class="btn-link" href="tel:{{ $site_settings->phone_number}}">{{ $site_settings->phone_number}}</a> </span></li>
+                                    <li><i class="fa fa-envelope-o"></i> {{ __('frontend.footer.email') }}: <a class="btn-link" href="mailto:{{ $site_settings->email }}">{{ $site_settings->email }}</a>
                                     </li>
 
                                 </ul>
@@ -76,7 +76,7 @@
                         </div>
                         <div class="footer-box">
                             <div class="footer-title">
-                                <h5>{{ trans('frontend.footer.subscribe') }} </h5>
+                                <h5>{{ __('frontend.footer.subscribe') }} </h5>
                             </div>
                             <div class="footer-contant">
                                 <div class="newsletter-second">
@@ -85,20 +85,20 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <input type="text" name="name" class="form-control"
-                                                    placeholder="{{ trans('frontend.footer.name') }}">
+                                                    placeholder="{{ __('frontend.footer.name') }}">
                                                 <span class="input-group-text"><i class="ti-user"></i></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <input type="email" name="email" class="form-control"
-                                                    placeholder="{{ trans('frontend.footer.email') }}">
+                                                    placeholder="{{ __('frontend.footer.email') }}">
                                                 <span class="input-group-text"><i class="ti-email"></i></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-solid btn-sm"> 
-                                                {{ trans('frontend.footer.subscribe_now') }}
+                                                {{ __('frontend.footer.subscribe_now') }}
                                             </button>
                                         </div>
                                     </form>

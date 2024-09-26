@@ -45,7 +45,7 @@ class QualityResponsibleController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $qualityResponsible->id]);
         }
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.quality-responsibles.index');
     }
 
@@ -71,7 +71,7 @@ class QualityResponsibleController extends Controller
             $qualityResponsible->photo->delete();
         }
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.quality-responsibles.index');
     }
 
@@ -88,7 +88,7 @@ class QualityResponsibleController extends Controller
 
         $qualityResponsible->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     }

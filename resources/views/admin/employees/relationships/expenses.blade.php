@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label class="required"
-                                for="entry_date">{{ trans('cruds.expense.fields.entry_date') }}</label>
+                                for="entry_date">{{ __('cruds.expense.fields.entry_date') }}</label>
                             <input class="form-control date {{ $errors->has('entry_date') ? 'is-invalid' : '' }}"
                                 type="text" name="entry_date" id="entry_date" value="{{ old('entry_date') }}"
                                 required>
@@ -22,7 +22,7 @@
                                     {{ $errors->first('entry_date') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.expense.fields.entry_date_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.expense.fields.entry_date_helper') }}</span>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="required" for="amount">أجمالي الراتب لشهر {{ date('F') }}</label>
@@ -33,14 +33,14 @@
                                     {{ $errors->first('amount') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.expense.fields.amount_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.expense.fields.amount_helper') }}</span>
                         </div> 
                         <div class="form-group col-md-4">
                             <button class="btn btn-success btn-block" type="submit">
                                 صرف الراتب
                             </button>
                             <button class="btn btn-danger btn-block" type="submit" name="download">
-                                {{ trans('global.download') }}
+                                {{ __('global.download') }}
                             </button>
                         </div>
                     </div> 
@@ -58,16 +58,16 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.expense.fields.id') }}
+                            {{ __('cruds.expense.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.expense.fields.entry_date') }}
+                            {{ __('cruds.expense.fields.entry_date') }}
                         </th>
                         <th>
-                            {{ trans('cruds.employee.fields.salery') }}
+                            {{ __('cruds.employee.fields.salery') }}
                         </th>
                         <th>
-                            {{ trans('cruds.expense.fields.description') }}
+                            {{ __('cruds.expense.fields.description') }}
                         </th>
                         <th>
                             &nbsp;
@@ -95,12 +95,12 @@
                             <td> 
                                 @can('expense_delete')
                                     <form action="{{ route('admin.expenses.destroy', $expense->id) }}"
-                                        method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
+                                        method="POST" onsubmit="return confirm('{{ __('global.areYouSure') }}');"
                                         style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger"
-                                            value="{{ trans('global.delete') }}">
+                                            value="{{ __('global.delete') }}">
                                     </form>
                                 @endcan
                             </td>

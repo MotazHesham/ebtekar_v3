@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.category.title') }}
+        {{ __('global.show') }} {{ __('cruds.category.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-light" href="{{ route('admin.categories.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.category.fields.id') }}
+                            {{ __('cruds.category.fields.id') }}
                         </th>
                         <td>
                             {{ $category->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.category.fields.name') }}
+                            {{ __('cruds.category.fields.name') }}
                         </th>
                         <td>
                             {{ $category->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.category.fields.banner') }}
+                            {{ __('cruds.category.fields.banner') }}
                         </th>
                         <td>
                             @if($category->banner)
@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.category.fields.icon') }}
+                            {{ __('cruds.category.fields.icon') }}
                         </th>
                         <td>
                             @if($category->icon)
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.category.fields.slug') }}
+                            {{ __('cruds.category.fields.slug') }}
                         </th>
                         <td>
                             {{ $category->slug }}
@@ -65,7 +65,7 @@
                     </tr> 
                     <tr>
                         <th>
-                            {{ trans('cruds.category.fields.featured') }}
+                            {{ __('cruds.category.fields.featured') }}
                         </th>
                         <td>
                             <input type="checkbox" disabled="disabled" {{ $category->featured ? 'checked' : '' }}>
@@ -73,7 +73,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.category.fields.meta_title') }}
+                            {{ __('cruds.category.fields.meta_title') }}
                         </th>
                         <td>
                             {{ $category->meta_title }}
@@ -81,7 +81,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.category.fields.meta_description') }}
+                            {{ __('cruds.category.fields.meta_description') }}
                         </th>
                         <td>
                             {{ $category->meta_description }}
@@ -91,7 +91,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-light" href="{{ route('admin.categories.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

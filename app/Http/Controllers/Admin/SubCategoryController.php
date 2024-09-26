@@ -89,7 +89,7 @@ class SubCategoryController extends Controller
     {
         abort_if(Gate::denies('sub_category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.subCategories.create', compact(  'websites'));
     }
@@ -101,7 +101,7 @@ class SubCategoryController extends Controller
         $subCategory = SubCategory::create($validated_request);
 
         Cache::forget('header_nested_categories_'.$subCategory->website_setting_id);
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.sub-categories.index');
     }
 
@@ -109,11 +109,11 @@ class SubCategoryController extends Controller
     {
         abort_if(Gate::denies('sub_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = Category::where('website_setting_id',$subCategory->website_setting_id)->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $categories = Category::where('website_setting_id',$subCategory->website_setting_id)->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $subCategory->load('category');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
         return view('admin.subCategories.edit', compact('categories', 'subCategory','websites'));
     }
@@ -123,7 +123,7 @@ class SubCategoryController extends Controller
         $subCategory->update($request->all());
 
         Cache::forget('header_nested_categories_'.$subCategory->website_setting_id);
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.sub-categories.index');
     }
 
@@ -143,7 +143,7 @@ class SubCategoryController extends Controller
         $subCategory->delete();
 
         Cache::forget('header_nested_categories_'.$subCategory->website_setting_id);
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
         return 1;
     }
 

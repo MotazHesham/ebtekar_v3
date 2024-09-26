@@ -83,7 +83,7 @@ class ReceiptOutgoingController extends Controller
         $receipt->total_cost = $sum; 
         $receipt->save();
 
-        alert(trans('flash.deleted'),'','success'); 
+        alert(__('flash.deleted'),'','success'); 
         return 1;
     }
     public function edit_product(Request $request){
@@ -136,7 +136,7 @@ class ReceiptOutgoingController extends Controller
             $receipt->total_cost = $sum;
             $receipt->save();
 
-            alert(trans('flash.global.success_title'),trans('flash.global.success_body'),'success');
+            alert(__('flash.global.success_title'),__('flash.global.success_body'),'success');
             return redirect()->route('admin.receipt-outgoings.index');
         }
     }
@@ -305,7 +305,7 @@ class ReceiptOutgoingController extends Controller
         }
         
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     } 
@@ -317,7 +317,7 @@ class ReceiptOutgoingController extends Controller
         $receiptOutgoing = ReceiptOutgoing::withTrashed()->find($id);
         $receiptOutgoing->restore();
 
-        alert(trans('flash.restored'),'','success');
+        alert(__('flash.restored'),'','success');
 
         return redirect()->route('admin.receipt-outgoings.index');
     } 

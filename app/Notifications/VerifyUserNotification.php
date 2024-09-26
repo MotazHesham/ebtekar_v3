@@ -33,9 +33,9 @@ class VerifyUserNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->from($this->email,$this->site_name)
             ->greeting('Hello!')
-            ->line(trans('global.verifyYourUser'))
-            ->action(trans('global.clickHereToVerify'), route('userVerification', $this->user->verification_token))
-            ->line(trans('global.thankYouForUsingOurApplication'));
+            ->line(__('global.verifyYourUser'))
+            ->action(__('global.clickHereToVerify'), route('userVerification', $this->user->verification_token))
+            ->line(__('global.thankYouForUsingOurApplication'));
     }
 
     public function toArray($notifiable)

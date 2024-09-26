@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-header">
             <div style="display: flex;justify-content: space-between">
-                <div>{{ trans('global.search') }} {{ trans('global.list') }} {{ trans('cruds.playlist.menu.' . $type) }}
+                <div>{{ __('global.search') }} {{ __('global.list') }} {{ __('cruds.playlist.menu.' . $type) }}
                 </div>
                 <div><a class="btn btn-success btn-rounded" href="{{ route('admin.qr_scanner', $type) }}">Qr Scanner</a>
                 </div> 
@@ -39,7 +39,7 @@
                     <input type="text" class="form-control mb-2 @isset($order_num) isset @endisset"
                         id="order_num" name="order_num"
                         @isset($order_num) value="{{ $order_num }}" @endisset
-                        placeholder="{{ trans('cruds.playlist.fields.order_num') }}">
+                        placeholder="{{ __('cruds.playlist.fields.order_num') }}">
 
                 </div>
                 <div class="col-md-4">
@@ -66,18 +66,18 @@
                     <input type="text" class="form-control mb-2 @isset($description) isset @endisset"
                         id="description" name="description"
                         @isset($description) value="{{ $description }}" @endisset
-                        placeholder="{{ trans('global.extra.description') }}">
+                        placeholder="{{ __('global.extra.description') }}">
                 </div>
                 <div class="col-md-3">
                     <select class="form-control mb-2 @isset($quickly) isset @endisset"
                         name="quickly" id="quickly" onchange="sort_playlist()">
-                        <option value="">{{ trans('global.extra.quickly') }}</option>
+                        <option value="">{{ __('global.extra.quickly') }}</option>
                         <option value="0"
                             @isset($quickly) @if ($quickly == '0') selected @endif @endisset>
-                            {{ trans('global.extra.0_quickly') }}</option>
+                            {{ __('global.extra.0_quickly') }}</option>
                         <option value="1"
                             @isset($quickly) @if ($quickly == '1') selected @endif @endisset>
-                            {{ trans('global.extra.1_quickly') }}</option>
+                            {{ __('global.extra.1_quickly') }}</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -101,12 +101,12 @@
 
             <div class="row justify-content-md-center">
                 <div class="col-md-3">
-                    <input type="submit" value="{{ trans('global.search') }}" name="search"
+                    <input type="submit" value="{{ __('global.search') }}" name="search"
                         class="btn btn-success btn-rounded btn-block">
                 </div>
                 <div class="col-md-3">
                     <a class="btn btn-warning btn-rounded btn-block"
-                        href="{{ route('admin.playlists.index', $type) }}">{{ trans('global.reset') }}</a>
+                        href="{{ route('admin.playlists.index', $type) }}">{{ __('global.reset') }}</a>
                 </div>
             </div>
 

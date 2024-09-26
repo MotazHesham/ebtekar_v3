@@ -4,14 +4,14 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.tasks.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.task.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.task.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.task.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.task.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -23,28 +23,28 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.task.fields.id') }}
+                            {{ __('cruds.task.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.task.fields.name') }}
+                            {{ __('cruds.task.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.task.fields.description') }}
+                            {{ __('cruds.task.fields.description') }}
                         </th>
                         <th>
-                            {{ trans('cruds.task.fields.status') }}
+                            {{ __('cruds.task.fields.status') }}
                         </th>
                         <th>
-                            {{ trans('cruds.task.fields.tag') }}
+                            {{ __('cruds.task.fields.tag') }}
                         </th>
                         <th>
-                            {{ trans('cruds.task.fields.attachment') }}
+                            {{ __('cruds.task.fields.attachment') }}
                         </th>
                         <th>
-                            {{ trans('cruds.task.fields.due_date') }}
+                            {{ __('cruds.task.fields.due_date') }}
                         </th>
                         <th>
-                            {{ trans('cruds.task.fields.assigned_to') }}
+                            {{ __('cruds.task.fields.assigned_to') }}
                         </th>
                         <th>
                             &nbsp;
@@ -77,7 +77,7 @@
                             <td>
                                 @if($task->attachment)
                                     <a href="{{ $task->attachment->getUrl() }}" target="_blank">
-                                        {{ trans('global.view_file') }}
+                                        {{ __('global.view_file') }}
                                     </a>
                                 @endif
                             </td>
@@ -90,21 +90,21 @@
                             <td>
                                 @can('task_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.tasks.show', $task->id) }}">
-                                        {{ trans('global.view') }}
+                                        {{ __('global.view') }}
                                     </a>
                                 @endcan
 
                                 @can('task_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.tasks.edit', $task->id) }}">
-                                        {{ trans('global.edit') }}
+                                        {{ __('global.edit') }}
                                     </a>
                                 @endcan
 
                                 @can('task_delete')
-                                    <form action="{{ route('admin.tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                    <form action="{{ route('admin.tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('{{ __('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ __('global.delete') }}">
                                     </form>
                                 @endcan
 
@@ -127,7 +127,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('task_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.tasks.massDestroy') }}",
@@ -138,12 +138,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',

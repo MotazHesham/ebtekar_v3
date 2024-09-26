@@ -2,7 +2,7 @@
 
     <div class="c-sidebar-brand d-md-down-none">
         <a class="c-sidebar-brand-full h4" >
-            <?php echo trans('panel.site_title'); ?> 
+            <?php echo __('panel.site_title'); ?> 
         </a>
     </div>
 
@@ -13,7 +13,7 @@
                 <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt">
 
                 </i>
-                {{ trans('global.dashboard') }}
+                {{ __('global.dashboard') }}
             </a>
         </li>
 
@@ -25,7 +25,7 @@
                     <i class="fa-fw fas fa-receipt c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.receiptsManagment.title') }}
+                    {{ __('cruds.receiptsManagment.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('receipt_social_access')
@@ -34,7 +34,7 @@
                                 <i class="fa-fw fab fa-facebook-square c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.receiptSocial.title') }}
+                                {{ __('cruds.receiptSocial.title') }}
                             </a>
                         </li>
                     @endcan
@@ -44,7 +44,7 @@
                                 <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.receiptClient.title') }}
+                                {{ __('cruds.receiptClient.title') }}
                             </a>
                         </li>
                     @endcan
@@ -54,7 +54,7 @@
                                 <i class="fa-fw fas fa-align-right c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.receiptBranchManagment.title') }}
+                                {{ __('cruds.receiptBranchManagment.title') }}
                             </a>
                             <ul class="c-sidebar-nav-dropdown-items">
                                 @can('r_client_access')
@@ -63,7 +63,7 @@
                                             <i class="fa-fw far fa-building c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.rClient.title') }}
+                                            {{ __('cruds.rClient.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -73,7 +73,7 @@
                                             <i class="fa-fw fas fa-code-branch c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.rBranch.title') }}
+                                            {{ __('cruds.rBranch.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -83,7 +83,7 @@
                                             <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.receiptBranch.title') }}
+                                            {{ __('cruds.receiptBranch.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -96,7 +96,7 @@
                                 <i class="fa-fw far fa-building c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.receiptCompany.title') }}
+                                {{ __('cruds.receiptCompany.title') }}
                             </a>
                         </li>
                     @endcan
@@ -106,7 +106,7 @@
                                 <i class="fa-fw fab fa-gitter c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.receiptOutgoing.title') }}
+                                {{ __('cruds.receiptOutgoing.title') }}
                             </a>
                         </li>
                     @endcan 
@@ -116,7 +116,7 @@
                                 <i class="fa-fw fas fa-hand-holding-usd c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.receiptPriceView.title') }}
+                                {{ __('cruds.receiptPriceView.title') }}
                             </a>
                         </li>
                     @endcan
@@ -126,7 +126,7 @@
                                 <i class="fa-fw fas fa-ban c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.bannedPhone.title') }}
+                                {{ __('cruds.bannedPhone.title') }}
                             </a>
                         </li>
                     @endcan
@@ -136,7 +136,7 @@
                                 <i class="fa-fw fas fa-table c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.excelFile.title') }}
+                                {{ __('cruds.excelFile.title') }}
                             </a>
                         </li>
                     @endcan
@@ -163,7 +163,7 @@
                     <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.playlist.title') }}
+                    {{ __('cruds.playlist.title') }}
                     @if($playlists_counter_sum) <span class="badge bg-light-gradient text-dark ms-auto">{{ $playlists_counter_sum   }}</span> @endif
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items"> 
@@ -173,7 +173,7 @@
                                 <i class="fa-fw fas fa-pen-nib c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.playlist.menu.design') }} 
+                                {{ __('cruds.playlist.menu.design') }} 
                                 @if($playlists_counter['design']) <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>@endif
                             </a>
                         </li>
@@ -184,7 +184,7 @@
                                 <i class="fa-fw fas fa-building c-sidebar-nav-icon"> 
 
                                 </i>
-                                {{ trans('cruds.playlist.menu.manufacturing') }}
+                                {{ __('cruds.playlist.menu.manufacturing') }}
                                 @if($playlists_counter['manufacturing']) <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> @endif
                             </a>
                         </li>
@@ -195,7 +195,7 @@
                                 <i class="fa-fw fab fa-envira c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.playlist.menu.prepare') }}
+                                {{ __('cruds.playlist.menu.prepare') }}
                                 @if($playlists_counter['prepare']) <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> @endif
                             </a>
                         </li>
@@ -206,7 +206,7 @@
                                 <i class="fa-fw fas fa-truck c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.playlist.menu.shipment') }}
+                                {{ __('cruds.playlist.menu.shipment') }}
                                 @if($playlists_counter['shipment']) <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> @endif
                             </a>
                         </li>
@@ -220,7 +220,7 @@
                     <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.deliveryManagment.title') }}
+                    {{ __('cruds.deliveryManagment.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('delivery_order_access')
@@ -229,7 +229,7 @@
                                 <i class="fa-fw fas fa-truck-loading c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.deliveryOrder.title') }}
+                                {{ __('cruds.deliveryOrder.title') }}
                             </a>
                         </li>
                     @endcan
@@ -239,7 +239,7 @@
                                 <i class="fa-fw fas fa-user-clock c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.deliverMan.title') }}
+                                {{ __('cruds.deliverMan.title') }}
                             </a>
                         </li>
                     @endcan
@@ -254,7 +254,7 @@
                     <i class="fa-fw fas fa-dolly-flatbed c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.productManagment.title') }}
+                    {{ __('cruds.productManagment.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('product_access')
@@ -263,7 +263,7 @@
                                 <i class="fa-fw fab fa-product-hunt c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.product.title') }}
+                                {{ __('cruds.product.title') }}
                             </a>
                         </li>
                     @endcan
@@ -273,7 +273,7 @@
                                 <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.category.title') }}
+                                {{ __('cruds.category.title') }}
                             </a>
                         </li>
                     @endcan
@@ -283,7 +283,7 @@
                                 <i class="fa-fw fas fa-quote-left c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.subCategory.title') }}
+                                {{ __('cruds.subCategory.title') }}
                             </a>
                         </li>
                     @endcan
@@ -293,7 +293,7 @@
                                 <i class="fa-fw fab fa-stack-exchange c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.subSubCategory.title') }}
+                                {{ __('cruds.subSubCategory.title') }}
                             </a>
                         </li>
                     @endcan
@@ -303,7 +303,7 @@
                                 <i class="fa-fw fas fa-asterisk c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.attribute.title') }}
+                                {{ __('cruds.attribute.title') }}
                             </a>
                         </li>
                     @endcan
@@ -313,7 +313,7 @@
                                 <i class="fa-fw fas fa-star-half-alt c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.review.title') }}
+                                {{ __('cruds.review.title') }}
                             </a>
                         </li>
                     @endcan
@@ -327,7 +327,7 @@
                     <i class="fa-fw fas fa-gift c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.order.title') }}
+                    {{ __('cruds.order.title') }}
                     <span class="badge bg-primary-gradient ms-auto">{{\App\Models\Order::where('playlist_status','pending')->count()}}</span>
                 </a>
             </li>
@@ -338,7 +338,7 @@
                     <i class="fa-fw fas fa-pen-nib c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.mockupsManagment.title') }}
+                    {{ __('cruds.mockupsManagment.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('designer_access')
@@ -347,7 +347,7 @@
                                 <i class="fa-fw fas fa-user-edit c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.designer.title') }}
+                                {{ __('cruds.designer.title') }}
                             </a>
                         </li>
                     @endcan
@@ -357,7 +357,7 @@
                                 <i class="fa-fw fas fa-drafting-compass c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.mockup.title') }}
+                                {{ __('cruds.mockup.title') }}
                             </a>
                         </li>
                     @endcan
@@ -367,7 +367,7 @@
                                 <i class="fa-fw fas fa-palette c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.design.title') }}
+                                {{ __('cruds.design.title') }}
                             </a>
                         </li>
                     @endcan
@@ -380,7 +380,7 @@
                     <i class="fa-fw fab fa-500px c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.frontendSetting.title') }}
+                    {{ __('cruds.frontendSetting.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('slider_access')
@@ -389,7 +389,7 @@
                                 <i class="fa-fw far fa-images c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.slider.title') }}
+                                {{ __('cruds.slider.title') }}
                             </a>
                         </li>
                     @endcan
@@ -399,7 +399,7 @@
                                 <i class="fa-fw fas fa-image c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.banner.title') }}
+                                {{ __('cruds.banner.title') }}
                             </a>
                         </li>
                     @endcan
@@ -409,7 +409,7 @@
                                 <i class="fa-fw fas fa-assistive-listening-systems c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.homeCategory.title') }}
+                                {{ __('cruds.homeCategory.title') }}
                             </a>
                         </li>
                     @endcan
@@ -419,7 +419,7 @@
                                 <i class="fa-fw fab fa-quora c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.qualityResponsible.title') }}
+                                {{ __('cruds.qualityResponsible.title') }}
                             </a>
                         </li>
                     @endcan
@@ -434,7 +434,7 @@
                     <i class="fa-fw fas fa-users c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.userManagement.title') }}
+                    {{ __('cruds.userManagement.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items"> 
                     @can('role_access')
@@ -443,7 +443,7 @@
                                 <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.role.title') }}
+                                {{ __('cruds.role.title') }}
                             </a>
                         </li>
                     @endcan
@@ -453,7 +453,7 @@
                                 <i class="fa-fw fas fa-user c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.user.title') }}
+                                {{ __('cruds.user.title') }}
                             </a>
                         </li>
                     @endcan
@@ -463,7 +463,7 @@
                                 <i class="fa-fw fas fa-bell c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.userAlert.title') }}
+                                {{ __('cruds.userAlert.title') }}
                             </a>
                         </li>
                     @endcan
@@ -473,7 +473,7 @@
                                 <i class="fa-fw fas fa-file-invoice-dollar c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.employeeManagmentAccess.title') }}
+                                {{ __('cruds.employeeManagmentAccess.title') }}
                             </a>
                             <ul class="c-sidebar-nav-dropdown-items">
                                 @can('employee_access')
@@ -482,7 +482,7 @@
                                             <i class="fa-fw fas fa-user-astronaut c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.employee.title') }}
+                                            {{ __('cruds.employee.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -492,7 +492,7 @@
                                             <i class="fa-fw fas fa-braille c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.financialCategory.title') }}
+                                            {{ __('cruds.financialCategory.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -502,7 +502,7 @@
                                             <i class="fa-fw fas fa-dollar-sign c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.employeeFinancial.title') }}
+                                            {{ __('cruds.employeeFinancial.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -515,7 +515,7 @@
                                 <i class="fa-fw fas fa-file-alt c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.auditLog.title') }}
+                                {{ __('cruds.auditLog.title') }}
                             </a>
                         </li>
                     @endcan
@@ -568,7 +568,7 @@
                     <i class="fa-fw far fa-user c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.customer.title') }}
+                    {{ __('cruds.customer.title') }}
                     @if(number_format($settings11['total_number'])) <span class="badge bg-success-gradient text-dark ms-auto">{{ number_format($settings11['total_number']) }} جديد</span> @endif
                 </a>
             </li>
@@ -579,7 +579,7 @@
                     <i class="fa-fw fas fa-users-cog c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.sellerManagment.title') }}
+                    {{ __('cruds.sellerManagment.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('seller_access')
@@ -588,7 +588,7 @@
                                 <i class="fa-fw fas fa-users c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.seller.title') }}
+                                {{ __('cruds.seller.title') }}
                             </a>
                         </li>
                     @endcan
@@ -598,7 +598,7 @@
                                 <i class="fa-fw far fa-credit-card c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.commissionRequest.title') }}
+                                {{ __('cruds.commissionRequest.title') }}
                             </a>
                         </li>
                     @endcan
@@ -611,7 +611,7 @@
                     <i class="fa-fw fas fa-list c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.taskManagement.title') }}
+                    {{ __('cruds.taskManagement.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('task_status_access')
@@ -620,7 +620,7 @@
                                 <i class="fa-fw fas fa-server c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.taskStatus.title') }}
+                                {{ __('cruds.taskStatus.title') }}
                             </a>
                         </li>
                     @endcan
@@ -630,7 +630,7 @@
                                 <i class="fa-fw fas fa-server c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.taskTag.title') }}
+                                {{ __('cruds.taskTag.title') }}
                             </a>
                         </li>
                     @endcan
@@ -640,7 +640,7 @@
                                 <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.task.title') }}
+                                {{ __('cruds.task.title') }}
                             </a>
                         </li>
                     @endcan
@@ -650,7 +650,7 @@
                                 <i class="fa-fw fas fa-calendar c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.tasksCalendar.title') }}
+                                {{ __('cruds.tasksCalendar.title') }}
                             </a>
                         </li>
                     @endcan
@@ -666,7 +666,7 @@
                     <i class="fa-fw fas fa-feather-alt c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.material.title') }}
+                    {{ __('cruds.material.title') }}
                 </a>
             </li>
         @endcan
@@ -676,7 +676,7 @@
                     <i class="fa-fw fas fa-money-bill c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.expenseManagement.title') }}
+                    {{ __('cruds.expenseManagement.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('expense_category_access')
@@ -685,7 +685,7 @@
                                 <i class="fa-fw fas fa-list c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.expenseCategory.title') }}
+                                {{ __('cruds.expenseCategory.title') }}
                             </a>
                         </li>
                     @endcan
@@ -695,7 +695,7 @@
                                 <i class="fa-fw fas fa-list c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.incomeCategory.title') }}
+                                {{ __('cruds.incomeCategory.title') }}
                             </a>
                         </li>
                     @endcan
@@ -705,7 +705,7 @@
                                 <i class="fa-fw fas fa-arrow-circle-right c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.expense.title') }}
+                                {{ __('cruds.expense.title') }}
                             </a>
                         </li>
                     @endcan
@@ -715,7 +715,7 @@
                                 <i class="fa-fw fas fa-arrow-circle-right c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.income.title') }}
+                                {{ __('cruds.income.title') }}
                             </a>
                         </li>
                     @endcan
@@ -725,7 +725,7 @@
                                 <i class="fa-fw fas fa-chart-line c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.expenseReport.title') }}
+                                {{ __('cruds.expenseReport.title') }}
                             </a>
                         </li>
                     @endcan
@@ -738,7 +738,7 @@
                     <i class="fa-fw fas fa-cog c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.setting.title') }}
+                    {{ __('cruds.setting.title') }}
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     @can('website_setting_access')
@@ -747,7 +747,7 @@
                                 <i class="fa-fw fas fa-wrench c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.websiteSetting.title') }}
+                                {{ __('cruds.websiteSetting.title') }}
                             </a>
                         </li>
                     @endcan
@@ -757,7 +757,7 @@
                                 <i class="fa-fw fas fa-hand-holding-usd c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.financialAccount.title') }}
+                                {{ __('cruds.financialAccount.title') }}
                             </a>
                         </li>
                     @endcan
@@ -767,7 +767,7 @@
                                 <i class="fa-fw fas fa-globe-americas c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.country.title') }}
+                                {{ __('cruds.country.title') }}
                             </a>
                         </li>
                     @endcan
@@ -777,7 +777,7 @@
                                 <i class="fa-fw fas fa-camera-retro c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.social.title') }}
+                                {{ __('cruds.social.title') }}
                             </a>
                         </li>
                     @endcan
@@ -787,7 +787,7 @@
                                 <i class="fa-fw fas fa-user-secret c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.police.title') }}
+                                {{ __('cruds.police.title') }}
                             </a>
                         </li>
                     @endcan 
@@ -797,7 +797,7 @@
                                 <i class="fa-fw fas fa-question c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.faqManagement.title') }}
+                                {{ __('cruds.faqManagement.title') }}
                             </a>
                             <ul class="c-sidebar-nav-dropdown-items">
                                 @can('faq_category_access')
@@ -806,7 +806,7 @@
                                             <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.faqCategory.title') }}
+                                            {{ __('cruds.faqCategory.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -816,7 +816,7 @@
                                             <i class="fa-fw far fa-question-circle c-sidebar-nav-icon">
 
                                             </i>
-                                            {{ trans('cruds.faqQuestion.title') }}
+                                            {{ __('cruds.faqQuestion.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -829,7 +829,7 @@
                                 <i class="fa-fw fas fa-hand-holding-usd c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.currency.title') }}
+                                {{ __('cruds.currency.title') }}
                             </a>
                         </li>
                     @endcan
@@ -839,7 +839,7 @@
                                 <i class="fa-fw far fa-address-card c-sidebar-nav-icon">
             
                                 </i>
-                                {{ trans('cruds.contactu.title') }}
+                                {{ __('cruds.contactu.title') }}
                             </a>
                         </li>
                     @endcan
@@ -849,7 +849,7 @@
                                 <i class="fa-fw far fa-envelope c-sidebar-nav-icon">
             
                                 </i>
-                                {{ trans('cruds.subscribe.title') }}
+                                {{ __('cruds.subscribe.title') }}
                             </a>
                         </li>
                     @endcan
@@ -861,7 +861,7 @@
                 <i class="c-sidebar-nav-icon fa-fw fas fa-calendar">
 
                 </i>
-                {{ trans('global.systemCalendar') }}
+                {{ __('global.systemCalendar') }}
             </a>
         </li>
         @can('conversation_access')
@@ -870,7 +870,7 @@
                     <i class="fa-fw far fa-comments c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.conversation.title') }}
+                    {{ __('cruds.conversation.title') }}
                     {{-- <span class="badge bg-success-gradient text-dark ms-auto">3</span> --}}
                 </a>
             </li>
@@ -880,7 +880,7 @@
                 <i class="c-sidebar-nav-icon fas fa-fw fa-sign-out-alt">
 
                 </i>
-                {{ trans('global.logout') }}
+                {{ __('global.logout') }}
             </a>
         </li>
     </ul>

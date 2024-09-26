@@ -96,7 +96,7 @@ class SlidersController extends Controller
     {
         abort_if(Gate::denies('slider_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
         
         return view('admin.sliders.create',compact('websites'));
     }
@@ -114,7 +114,7 @@ class SlidersController extends Controller
         }
 
         Cache::forget('home_silders_'.$slider->website_setting_id);
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.sliders.index');
     }
 
@@ -122,7 +122,7 @@ class SlidersController extends Controller
     {
         abort_if(Gate::denies('slider_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
         return view('admin.sliders.edit', compact('slider','websites'));
     }
@@ -143,7 +143,7 @@ class SlidersController extends Controller
         }
 
         Cache::forget('home_silders_'.$slider->website_setting_id);
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.sliders.index');
     }
 
@@ -160,7 +160,7 @@ class SlidersController extends Controller
 
         $slider->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         Cache::forget('home_silders_'.$slider->website_setting_id);
         return 1;

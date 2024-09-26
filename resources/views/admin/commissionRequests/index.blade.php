@@ -2,7 +2,7 @@
 @section('content') 
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.commissionRequest.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.commissionRequest.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -13,25 +13,25 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.commissionRequest.fields.id') }}
+                            {{ __('cruds.commissionRequest.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.commissionRequest.fields.status') }}
+                            {{ __('cruds.commissionRequest.fields.status') }}
                         </th> 
                         <th>
-                            {{ trans('cruds.commissionRequest.fields.payment_method') }}
+                            {{ __('cruds.commissionRequest.fields.payment_method') }}
                         </th>
                         <th>
-                            {{ trans('cruds.commissionRequest.fields.transfer_number') }}
+                            {{ __('cruds.commissionRequest.fields.transfer_number') }}
                         </th> 
                         <th>
-                            {{ trans('cruds.commissionRequest.fields.user') }}
+                            {{ __('cruds.commissionRequest.fields.user') }}
                         </th> 
                         <th>
-                            {{ trans('cruds.commissionRequest.extra.orders') }}
+                            {{ __('cruds.commissionRequest.extra.orders') }}
                         </th> 
                         <th>
-                            {{ trans('cruds.commissionRequest.extra.done') }}
+                            {{ __('cruds.commissionRequest.extra.done') }}
                         </th>
                         <th>
                             &nbsp;
@@ -88,7 +88,7 @@
                     },
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

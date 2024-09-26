@@ -39,14 +39,14 @@
                             <div class="col">
                                 <small class="fw-semibold">{{ $item['created_at'] }}</small>
                                 <div class="text-uppercase text-medium-emphasis small badge badge-light">
-                                    {{ trans('cruds.playlist.fields.created_at') }}
+                                    {{ __('cruds.playlist.fields.created_at') }}
                                 </div>
                             </div>
                             <div class="vr"></div>
                             <div class="col">
                                 <small class="fw-semibold">{{ $item['send_to_playlist_date'] }}</small>
                                 <div class="text-uppercase text-medium-emphasis small badge badge-light">
-                                    {{ trans('cruds.playlist.fields.send_to_playlist_date') }}
+                                    {{ __('cruds.playlist.fields.send_to_playlist_date') }}
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                     @if ($type == 'design')
                         <a target="print-frame" class="btn btn-light  btn-sm rounded-pill" onclick="check_printable('{{ $item['id'] }}','{{ $item['model_type'] }}')"
                             href="{{ route('admin.playlists.print', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
-                            {{ trans('global.print') }}
+                            {{ __('global.print') }}
                         </a>
                     @endif
                     <a class="btn btn-success btn-sm rounded-pill text-white"

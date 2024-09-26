@@ -1,7 +1,7 @@
 
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title" id="AjaxModalLabel">{{ trans('global.extra.add_product') }}  {{ $order_num }}</h5>
+        <h5 class="modal-title" id="AjaxModalLabel">{{ __('global.extra.add_product') }}  {{ $order_num }}</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <input class="form-control" type="number" name="quantity" step="1" min="1" required placeholder="{{ trans('global.extra.quantity') }}" required>
+                        <input class="form-control" type="number" name="quantity" step="1" min="1" required placeholder="{{ __('global.extra.quantity') }}" required>
                     </div>
                 </div>
             </div>

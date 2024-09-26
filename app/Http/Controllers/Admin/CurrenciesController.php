@@ -41,7 +41,7 @@ class CurrenciesController extends Controller
     {
         $currency = Currency::create($request->all());
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.currencies.index');
     }
 
@@ -56,7 +56,7 @@ class CurrenciesController extends Controller
     {
         $currency->update($request->all());
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.currencies.index');
     }
 
@@ -73,7 +73,7 @@ class CurrenciesController extends Controller
 
         $currency->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     }

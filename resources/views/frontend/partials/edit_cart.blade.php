@@ -53,7 +53,7 @@
                 <div class="pro-group">
                     @if ($product->colors != null && !empty(json_decode($product->colors)))
 
-                        <h6 class="product-title">{{ trans('frontend.product.color') }}</h6>
+                        <h6 class="product-title">{{ __('frontend.product.color') }}</h6>
                         <div class="color-selector inline">
                             <ul>
                                 @if (count(json_decode($product->colors)) > 0)
@@ -74,7 +74,7 @@
 
                     @if ($product->special)
                         <input type="hidden" name="variant" id="variant" value="{{ $cart['variation'] }}">
-                        <h5 class="mb-3">{{ trans('frontend.product.printed_photos') }}</h5>
+                        <h5 class="mb-3">{{ __('frontend.product.printed_photos') }}</h5>
                         @if(is_array(json_decode($cart['photos'])) && count(json_decode($cart['photos'])) > 0)
                             @foreach (json_decode($cart['photos']) as $key => $photo)
                                 <div class="row">
@@ -102,22 +102,22 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <input type="text" name="photos_note[]" class="form-control" id="name"
-                                            placeholder="{{ trans('frontend.product.photo_note') }}">
+                                            placeholder="{{ __('frontend.product.photo_note') }}">
                                     </div>
                                 </div>
                             @endif
                         </div>
-                        <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">{{ trans('frontend.product.add_more') }}</button>
+                        <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">{{ __('frontend.product.add_more') }}</button>
 
                         <div class="col-12 mb-3">
-                            <label>{{ trans('frontend.product.description') }}</label>
-                            <textarea class="form-control" name="description" placeholder="{{ trans('frontend.product.description') }}"
+                            <label>{{ __('frontend.product.description') }}</label>
+                            <textarea class="form-control" name="description" placeholder="{{ __('frontend.product.description') }}"
                                 rows="3" required>{{ $cart['description'] }}</textarea>
                         </div>
                     @endif
                 </div>
                 <div class="pro-group">
-                    <h6 class="product-title">{{ trans('frontend.product.quantity') }}</h6>
+                    <h6 class="product-title">{{ __('frontend.product.quantity') }}</h6>
                     <div class="qty-box">
                         <div class="input-group"> 
                             <input class="qty-adj form-control" type="number" value="{{ $cart['quantity'] }}" name="quantity" id="available-quantity-input" min="1" max="{{ $product->current_stock }}"/> 
@@ -129,7 +129,7 @@
         <div class="pro-group mb-0">
             <div class="modal-btn">
                 <button type="submit" class="btn btn-solid btn-sm">
-                    {{ trans('frontend.product.edit_cart') }}
+                    {{ __('frontend.product.edit_cart') }}
                 </button> 
             </div>
         </div>

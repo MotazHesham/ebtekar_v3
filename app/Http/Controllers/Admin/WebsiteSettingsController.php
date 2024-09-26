@@ -40,13 +40,13 @@ class WebsiteSettingsController extends Controller
     {
         abort_if(Gate::denies('website_setting_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $designers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $designers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $preparers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $preparers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $manufacturers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $manufacturers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $shipments = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $shipments = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
         return view('admin.websiteSettings.create', compact('designers', 'manufacturers', 'preparers', 'shipments'));
     }
@@ -84,7 +84,7 @@ class WebsiteSettingsController extends Controller
             }
         }
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.website-settings.index');
     }
 
@@ -93,13 +93,13 @@ class WebsiteSettingsController extends Controller
     {
         abort_if(Gate::denies('website_setting_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $designers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $designers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $preparers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $preparers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $manufacturers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $manufacturers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $shipments = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $shipments = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $websiteSetting->load('designer', 'preparer', 'manufacturer', 'shipment');
 
@@ -138,7 +138,7 @@ class WebsiteSettingsController extends Controller
             }
         }
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.website-settings.index');
     }
 

@@ -67,7 +67,7 @@ class BorrowsController extends Controller
     {
         abort_if(Gate::denies('borrow_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $employees = Employee::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $employees = Employee::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.borrows.create', compact('employees'));
     }
@@ -83,7 +83,7 @@ class BorrowsController extends Controller
     {
         abort_if(Gate::denies('borrow_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $employees = Employee::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $employees = Employee::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $borrow->load('employee');
 

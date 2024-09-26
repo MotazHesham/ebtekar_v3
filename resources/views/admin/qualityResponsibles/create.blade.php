@@ -3,24 +3,24 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.create') }} {{ trans('cruds.qualityResponsible.title_singular') }}
+        {{ __('global.create') }} {{ __('cruds.qualityResponsible.title_singular') }}
     </div>
 
     <div class="card-body">
         <form method="POST" action="{{ route("admin.quality-responsibles.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label class="required" for="name">{{ trans('cruds.qualityResponsible.fields.name') }}</label>
+                <label class="required" for="name">{{ __('cruds.qualityResponsible.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', '') }}" required>
                 @if($errors->has('name'))
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.qualityResponsible.fields.name_helper') }}</span>
+                <span class="help-block">{{ __('cruds.qualityResponsible.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="photo">{{ trans('cruds.qualityResponsible.fields.photo') }}</label>
+                <label class="required" for="photo">{{ __('cruds.qualityResponsible.fields.photo') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('photo') ? 'is-invalid' : '' }}" id="photo-dropzone">
                 </div>
                 @if($errors->has('photo'))
@@ -28,41 +28,41 @@
                         {{ $errors->first('photo') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.qualityResponsible.fields.photo_helper') }}</span>
+                <span class="help-block">{{ __('cruds.qualityResponsible.fields.photo_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="phone_number">{{ trans('cruds.qualityResponsible.fields.phone_number') }}</label>
+                <label class="required" for="phone_number">{{ __('cruds.qualityResponsible.fields.phone_number') }}</label>
                 <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}" type="text" name="phone_number" id="phone_number" value="{{ old('phone_number', '') }}" required>
                 @if($errors->has('phone_number'))
                     <div class="invalid-feedback">
                         {{ $errors->first('phone_number') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.qualityResponsible.fields.phone_number_helper') }}</span>
+                <span class="help-block">{{ __('cruds.qualityResponsible.fields.phone_number_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="wts_phone">{{ trans('cruds.qualityResponsible.fields.wts_phone') }}</label>
+                <label class="required" for="wts_phone">{{ __('cruds.qualityResponsible.fields.wts_phone') }}</label>
                 <input class="form-control {{ $errors->has('wts_phone') ? 'is-invalid' : '' }}" type="text" name="wts_phone" id="wts_phone" value="{{ old('wts_phone', '') }}" required>
                 @if($errors->has('wts_phone'))
                     <div class="invalid-feedback">
                         {{ $errors->first('wts_phone') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.qualityResponsible.fields.wts_phone_helper') }}</span>
+                <span class="help-block">{{ __('cruds.qualityResponsible.fields.wts_phone_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="country_code">{{ trans('cruds.qualityResponsible.fields.country_code') }}</label>
+                <label class="required" for="country_code">{{ __('cruds.qualityResponsible.fields.country_code') }}</label>
                 <input class="form-control {{ $errors->has('country_code') ? 'is-invalid' : '' }}" type="text" name="country_code" id="country_code" value="{{ old('country_code', '') }}" required>
                 @if($errors->has('country_code'))
                     <div class="invalid-feedback">
                         {{ $errors->first('country_code') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.qualityResponsible.fields.country_code_helper') }}</span>
+                <span class="help-block">{{ __('cruds.qualityResponsible.fields.country_code_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

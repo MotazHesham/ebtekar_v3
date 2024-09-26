@@ -5,7 +5,7 @@
         @can('receipt_social_create')
             <div class="col-md-3">
                 <a class="btn btn-success" href="#" data-toggle="modal" data-target="#phoneModal">
-                    {{ trans('global.add') }} {{ trans('cruds.receiptSocial.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.receiptSocial.title_singular') }}
                 </a>
             </div>
         @endcan
@@ -13,28 +13,28 @@
         @can('receipt_social_product_access')
             <div class="col-md-3">
                 <a class="btn btn-info" href="{{ route('admin.receipt-social-products.index') }}">
-                    {{ trans('cruds.receiptSocialProduct.title') }}
+                    {{ __('cruds.receiptSocialProduct.title') }}
                 </a>
             </div>
         @endcan
 
         <div class="col-md-2">
             <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#uploadFedexModal">
-                {{ trans('global.extra.upload_fedex') }}
+                {{ __('global.extra.upload_fedex') }}
             </a>
         </div>
 
         @if(isset($deleted))
             <div class="col-md-2">
                 <a class="btn btn-dark" href="{{ route('admin.receipt-socials.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         @else                        
             @if(Gate::allows('soft_delete'))
                 <div class="col-md-2">
                     <a class="btn btn-danger" href="{{ route('admin.receipt-socials.index',['deleted' => 1]) }}">
-                        {{ trans('global.extra.deleted_receipts') }}
+                        {{ __('global.extra.deleted_receipts') }}
                     </a>
                 </div>
             @endif
@@ -68,7 +68,7 @@
                         </div>
                         <div class="col-4">
                             <label class="control-label">&nbsp;</label><br>
-                            <button class="btn btn-primary" type="button" onclick="products_report()">{{ trans('global.filterDate') }}</button> 
+                            <button class="btn btn-primary" type="button" onclick="products_report()">{{ __('global.filterDate') }}</button> 
                         </div>
                     </div> 
                     <hr>
@@ -99,7 +99,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="required" for="uploaded_file">{{ trans('cruds.excelFile.fields.uploaded_file') }}</label>
+                            <label class="required" for="uploaded_file">{{ __('cruds.excelFile.fields.uploaded_file') }}</label>
                             <div class="needsclick dropzone {{ $errors->has('uploaded_file') ? 'is-invalid' : '' }}" id="uploaded_file-dropzone">
                             </div>
                             @if($errors->has('uploaded_file'))
@@ -107,10 +107,10 @@
                                     {{ $errors->first('uploaded_file') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.excelFile.fields.uploaded_file_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.excelFile.fields.uploaded_file_helper') }}</span>
                         </div>
                         <hr>
-                        <button type="submit" class="btn btn-success">{{ trans('global.continue') }}</button>
+                        <button type="submit" class="btn btn-success">{{ __('global.continue') }}</button>
                     </form>
                 </div>
             </div>
@@ -122,8 +122,8 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="phoneModalLabel">{{ trans('global.add') }}
-                        {{ trans('cruds.receiptSocial.title_singular') }}</h5>
+                    <h5 class="modal-title" id="phoneModalLabel">{{ __('global.add') }}
+                        {{ __('cruds.receiptSocial.title_singular') }}</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -137,7 +137,7 @@
                             @endforeach 
                         </div>
                         <input type="text" name="phone_number" class="form-control" required
-                            placeholder="{{ trans('cruds.receiptSocial.fields.phone_number') }}"
+                            placeholder="{{ __('cruds.receiptSocial.fields.phone_number') }}"
                             onkeyup="searchByPhone(this)">
                         <div id="table-receipts">
                             {{-- ajax call --}}
@@ -153,7 +153,7 @@
             <div class="col-xl-3 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <b>{{ trans('global.statistics') }} {{ trans('cruds.receiptSocial.title') }}</b>
+                        <b>{{ __('global.statistics') }} {{ __('cruds.receiptSocial.title') }}</b>
                         <hr>
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
@@ -228,9 +228,9 @@
 
     <div class="card">
         <div class="card-header">
-            {{ trans('global.list') }} {{ trans('cruds.receiptSocial.title') }} 
+            {{ __('global.list') }} {{ __('cruds.receiptSocial.title') }} 
             @isset($deleted)
-                {{ trans('global.deleted') }}
+                {{ __('global.deleted') }}
             @endisset
         </div>
         <div class="card-body">
@@ -239,25 +239,25 @@
                     <tr>
                         <th>#</th>
                         <th>
-                            {{ trans('global.extra.client') }}
+                            {{ __('global.extra.client') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.dates') }}
+                            {{ __('global.extra.dates') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptSocial.fields.shipping_address') }}
+                            {{ __('cruds.receiptSocial.fields.shipping_address') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptSocial.fields.total_cost') }}
+                            {{ __('cruds.receiptSocial.fields.total_cost') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.statuses') }}
+                            {{ __('global.extra.statuses') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.stages') }}
+                            {{ __('global.extra.stages') }}
                         </th>
                         <th>
-                            {{ trans('cruds.receiptSocial.fields.note') }}
+                            {{ __('cruds.receiptSocial.fields.note') }}
                         </th>
                         <th>
                             &nbsp;
@@ -317,27 +317,27 @@
                             </td>
                             <td>
                                 <span class="badge text-bg-primary text-white mb-1">
-                                    {{ trans('cruds.receiptSocial.fields.created_at') }}
+                                    {{ __('cruds.receiptSocial.fields.created_at') }}
                                     <br> {{ $receipt->created_at }}
                                 </span>
                                 @if($receipt->date_of_receiving_order)
                                     <br>
                                     <span class="badge text-bg-light mb-1">
-                                        {{ trans('cruds.receiptSocial.fields.date_of_receiving_order') }}
+                                        {{ __('cruds.receiptSocial.fields.date_of_receiving_order') }}
                                         <br> {{ $receipt->date_of_receiving_order }}
                                     </span>
                                 @endif
                                 @if($receipt->send_to_delivery_date)
                                     <br>
                                     <span class="badge text-bg-info text-white mb-1">
-                                        {{ trans('cruds.receiptSocial.fields.send_to_delivery_date') }}
+                                        {{ __('cruds.receiptSocial.fields.send_to_delivery_date') }}
                                         <br> {{ $receipt->send_to_delivery_date }}
                                     </span>
                                 @endif
                                 @if($receipt->send_to_playlist_date)
                                     <br>
                                     <span class="badge text-bg-dark text-white mb-1">
-                                        {{ trans('cruds.receiptSocial.fields.send_to_playlist_date') }}
+                                        {{ __('cruds.receiptSocial.fields.send_to_playlist_date') }}
                                         <br> {{ $receipt->send_to_playlist_date }}
                                     </span>
                                 @endif
@@ -352,14 +352,14 @@
                                 <div style="display:flex;justify-content:space-between">
                                     @if($receipt->deposit_type )
                                         <span class="badge rounded-pill text-bg-info text-white  mb-1">
-                                            {{ trans('cruds.receiptSocial.fields.deposit_type') }}
+                                            {{ __('cruds.receiptSocial.fields.deposit_type') }}
                                             <br>
                                             {{ $receipt->deposit_type ? \App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT[$receipt->deposit_type] : '' }}
                                         </span>
                                     @endif
                                     @if($receipt->financial_account )
                                         <span class="badge rounded-pill text-bg-info text-white  mb-1">
-                                            {{ trans('cruds.receiptSocial.fields.financial_account_id') }}
+                                            {{ __('cruds.receiptSocial.fields.financial_account_id') }}
                                             <br>
                                             {{ $receipt->financial_account->account ?? '' }}
                                         </span>
@@ -368,25 +368,25 @@
                                 <div style="display:flex;justify-content:space-between">
                                     @if($receipt->deposit > 0)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
-                                            {{ trans('cruds.receiptSocial.fields.deposit') }}
+                                            {{ __('cruds.receiptSocial.fields.deposit') }}
                                             <br>
                                             {{ dashboard_currency($receipt->deposit) }}
                                         </span>
                                     @endif
                                     @if($receipt->extra_commission > 0)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
-                                            {{ trans('cruds.receiptSocial.fields.extra_commission') }}
+                                            {{ __('cruds.receiptSocial.fields.extra_commission') }}
                                             <br>
                                             {{ dashboard_currency($receipt->extra_commission) }}
                                         </span>
                                     @endif
                                     <span class="badge rounded-pill text-bg-light  mb-1">
-                                        {{ trans('cruds.receiptSocial.fields.shipping_country_cost') }}
+                                        {{ __('cruds.receiptSocial.fields.shipping_country_cost') }}
                                         <br>
                                         {{ dashboard_currency($receipt->shipping_country_cost) }}
                                     </span>
                                     <span class="badge rounded-pill text-bg-light  mb-1">
-                                        {{ trans('cruds.receiptSocial.fields.total_cost') }}
+                                        {{ __('cruds.receiptSocial.fields.total_cost') }}
                                         <br>
                                         {{ dashboard_currency($receipt->total_cost) }}
                                     </span>
@@ -397,7 +397,7 @@
                                     </span>
                                     <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
                                         <span>
-                                            {{ trans('cruds.receiptSocial.fields.supplied') }}
+                                            {{ __('cruds.receiptSocial.fields.supplied') }}
                                         </span>
                                         <br>
                                         <div id="supplied-{{$receipt->id}}">
@@ -422,7 +422,7 @@
                                     <div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;"
                                         class="badge text-bg-light mb-1">
                                         <span>
-                                            {{ trans('cruds.receiptSocial.fields.quickly') }}
+                                            {{ __('cruds.receiptSocial.fields.quickly') }}
                                         </span>
                                         <label class="c-switch c-switch-pill c-switch-success">
                                             <input onchange="update_statuses(this,'quickly')" value="{{ $receipt->id }}"
@@ -434,7 +434,7 @@
                                     <div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;"
                                         class="badge text-bg-light mb-1">
                                         <span>
-                                            {{ trans('cruds.receiptSocial.fields.confirm') }}
+                                            {{ __('cruds.receiptSocial.fields.confirm') }}
                                         </span>
                                         <label class="c-switch c-switch-pill c-switch-success">
                                             <input onchange="update_statuses(this,'confirm')" value="{{ $receipt->id }}"
@@ -447,7 +447,7 @@
                                 <div style="display: flex;justify-content: space-between;">
                                     <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
                                         <span>
-                                            {{ trans('cruds.receiptSocial.fields.returned') }}
+                                            {{ __('cruds.receiptSocial.fields.returned') }}
                                         </span>
                                         <br>
                                         <label class="c-switch c-switch-pill c-switch-success">
@@ -459,7 +459,7 @@
                                     </div>
                                     <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
                                         <span>
-                                            {{ trans('cruds.receiptSocial.fields.done') }}
+                                            {{ __('cruds.receiptSocial.fields.done') }}
                                         </span>
                                         <br>
                                         
@@ -476,12 +476,12 @@
                             </td>
                             <td>
                                 <span
-                                    class="badge text-bg-{{ trans('global.delivery_status.colors.' . $receipt->delivery_status) }} mb-1">
-                                    {{ $receipt->delivery_status ? trans('global.delivery_status.status.' . $receipt->delivery_status) : '' }}
+                                    class="badge text-bg-{{ __('global.delivery_status.colors.' . $receipt->delivery_status) }} mb-1">
+                                    {{ $receipt->delivery_status ? __('global.delivery_status.status.' . $receipt->delivery_status) : '' }}
                                 </span>
                                 <span
-                                    class="badge text-bg-{{ trans('global.payment_status.colors.' . $receipt->payment_status) }} mb-1">
-                                    {{ $receipt->payment_status ? trans('global.payment_status.status.' . $receipt->payment_status) : '' }}
+                                    class="badge text-bg-{{ __('global.payment_status.colors.' . $receipt->payment_status) }} mb-1">
+                                    {{ $receipt->payment_status ? __('global.payment_status.status.' . $receipt->payment_status) : '' }}
                                 </span>
                                 <br> 
                                 @can('hold')
@@ -508,19 +508,19 @@
                                     @endif
                                 @else  
                                     <span onclick="playlist_users('{{$receipt->id}}','social')" 
-                                        class="playlist_status badge text-bg-{{ trans('global.playlist_status.colors.' . $receipt->playlist_status) }} mb-1">
-                                        {{ $receipt->playlist_status ? trans('global.playlist_status.status.' . $receipt->playlist_status) : '' }}
+                                        class="playlist_status badge text-bg-{{ __('global.playlist_status.colors.' . $receipt->playlist_status) }} mb-1">
+                                        {{ $receipt->playlist_status ? __('global.playlist_status.status.' . $receipt->playlist_status) : '' }}
                                     </span>
                                 @endif
                                 <hr>
                                 <span class="badge text-bg-danger text-white mb-1">
-                                    {{ trans('global.extra.created_by') }}
+                                    {{ __('global.extra.created_by') }}
                                     =>
                                     {{ $receipt->staff->name ?? '' }}
                                 </span>
                                 @if($receipt->delivery_man)
                                     <span class="badge text-bg-dark text-white mb-1">
-                                        {{ trans('cruds.receiptSocial.fields.delivery_man_id') }}
+                                        {{ __('cruds.receiptSocial.fields.delivery_man_id') }}
                                         =>
                                         {{ $receipt->delivery_man->name ?? '' }}
                                     </span>
@@ -542,7 +542,7 @@
                                                 @can('receipt_social_view_products')
                                                     <a class="dropdown-item" style="cursor: pointer"
                                                         onclick="view_products('{{ $receipt->id }}')">
-                                                        {{ trans('global.extra.view_products') }}
+                                                        {{ __('global.extra.view_products') }}
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                 @endcan
@@ -551,35 +551,35 @@
                                                     @can('receipt_social_add_product')
                                                         <a class="dropdown-item" style="cursor: pointer"
                                                             onclick="add_product('{{ $receipt->id }}')">
-                                                            {{ trans('global.extra.add_product') }}
+                                                            {{ __('global.extra.add_product') }}
                                                             <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
                                                         </a>
                                                     @endcan
                                                     @can('receipt_social_edit')
                                                         <a class="dropdown-item"
                                                             href="{{ route('admin.receipt-socials.edit', $receipt->id) }}">
-                                                            {{ trans('global.edit') }}
+                                                            {{ __('global.edit') }}
                                                             <i class="far fa-edit" style="color:cornflowerblue"></i>
                                                         </a>
                                                     @endcan
                                                     @can('receipt_social_print')
                                                         <a class="dropdown-item" target="print-frame"
                                                             href="{{ route('admin.receipt-socials.print', $receipt->id) }}">
-                                                            {{ trans('global.print') }}
+                                                            {{ __('global.print') }}
                                                             <i class="fas fa-print" style="color:yellowgreen"></i>
                                                         </a>
                                                     @endcan
                                                     @can('receipt_social_duplicate')
                                                         <a class="dropdown-item"
                                                             href="{{ route('admin.receipt-socials.duplicate', $receipt->id) }}">
-                                                            {{ trans('global.duplicate') }}
+                                                            {{ __('global.duplicate') }}
                                                             <i class="far fa-clone" style="color:blueviolet"></i>
                                                         </a>
                                                     @endcan
                                                     @can('receipt_social_receive_money')
                                                         <a class="dropdown-item" target="print-frame"
                                                             href="{{ route('admin.receipt-socials.receive_money', $receipt->id) }}">
-                                                            {{ trans('global.receive_money') }}
+                                                            {{ __('global.receive_money') }}
                                                             <i class="fas fa-money-bill-wave" style="color:cadetblue"></i>
                                                         </a>
                                                     @endcan
@@ -587,7 +587,7 @@
                                                     @can('receipt_social_restore')
                                                         <a class="dropdown-item"
                                                             href="{{ route('admin.receipt-socials.restore', $receipt->id) }}">
-                                                            {{ trans('global.restore') }}
+                                                            {{ __('global.restore') }}
                                                             <i class="fas fa-undo" style="color:grey"></i>
                                                         </a>  
                                                     @endcan
@@ -596,7 +596,7 @@
                                                     <?php $route = route('admin.receipt-socials.destroy', $receipt->id); ?>
                                                     <a class="dropdown-item"
                                                         href="#" onclick="deleteConfirmation('{{$route}}')">
-                                                        {{ trans('global.delete') }} @isset($deleted) {{ trans('global.permanently') }} @endisset
+                                                        {{ __('global.delete') }} @isset($deleted) {{ __('global.permanently') }} @endisset
                                                         <i class="fas fa-trash-alt" style="color:darkred"></i>
                                                     </a>
                                                 @endcan
@@ -855,7 +855,7 @@
             var photoAdd = '<div class="row">';
             photoAdd += '<div class="col-md-2">';
             photoAdd +=
-                '<button type="button" onclick="delete_this_row(this)" class="btn btn-danger">{{ trans('global.extra.delete_photo') }}</button>';
+                '<button type="button" onclick="delete_this_row(this)" class="btn btn-danger">{{ __('global.extra.delete_photo') }}</button>';
             photoAdd += '</div>';
             photoAdd += '<div class="col-md-6">';
             photoAdd += '<input type="file" name="photos[][photo]" id="photos-' + photo_id +
@@ -866,7 +866,7 @@
             photoAdd += '</div>';
             photoAdd += '<div class="col-md-4">';
             photoAdd +=
-                '<input type="text" name="photos[][note]" class="form-control" placeholder="{{ trans('global.extra.photo_note') }}">';
+                '<input type="text" name="photos[][note]" class="form-control" placeholder="{{ __('global.extra.photo_note') }}">';
             photoAdd += '</div>';
             photoAdd += '</div>';
             $('#product-images').append(photoAdd);

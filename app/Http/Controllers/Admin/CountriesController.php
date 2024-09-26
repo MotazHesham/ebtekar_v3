@@ -100,7 +100,7 @@ class CountriesController extends Controller
     {
         $country = Country::create($request->all());
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.countries.index');
     }
 
@@ -115,7 +115,7 @@ class CountriesController extends Controller
     {
         $country->update($request->all());
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.countries.index');
     }
 
@@ -132,7 +132,7 @@ class CountriesController extends Controller
 
         $country->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     }

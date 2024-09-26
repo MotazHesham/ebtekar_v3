@@ -67,7 +67,7 @@ class AttributesController extends Controller
         $attribute = Attribute::create($request->all());
 
 
-        toast(trans('flash.global.success_title'),'success'); 
+        toast(__('flash.global.success_title'),'success'); 
         return redirect()->route('admin.attributes.index');
     }
 
@@ -82,7 +82,7 @@ class AttributesController extends Controller
     {
         $attribute->update($request->all());
 
-        toast(trans('flash.global.update_title'),'success'); 
+        toast(__('flash.global.update_title'),'success'); 
         return redirect()->route('admin.attributes.index');
     }
 
@@ -98,7 +98,7 @@ class AttributesController extends Controller
         abort_if(Gate::denies('attribute_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $attribute->delete();
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
         return 1;
     }
 

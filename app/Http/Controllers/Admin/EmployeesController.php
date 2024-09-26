@@ -122,7 +122,7 @@ class EmployeesController extends Controller
 
         $employee->load('employeeEmployeeFinancials.financial_category');
         
-        $financial_categories = FinancialCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $financial_categories = FinancialCategory::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.employees.show', compact('employee','financial_categories'));
     }

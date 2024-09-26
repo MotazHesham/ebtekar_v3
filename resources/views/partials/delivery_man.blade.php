@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.receiptSocial.fields.delivery_man_id') }}
+        {{ __('cruds.receiptSocial.fields.delivery_man_id') }}
     </div>
     <div class="card-body">
 
@@ -13,7 +13,7 @@
                 <div class="form-group"> 
                     <div class="col-md-6">
                         <select class="form-control select2" name="delivery_man_id" id="delivery_man_id" required>
-                            <option value="">{{ trans('global.pleaseSelect') }}</option>
+                            <option value="">{{ __('global.pleaseSelect') }}</option>
                             @foreach (\App\Models\User::where('user_type', 'delivery_man')->get() as $delivery_man)
                                 <option value="{{ $delivery_man->id }}"
                                     @if ($row->delivery_man_id == $delivery_man->id) selected @endif>
@@ -23,7 +23,7 @@
                         </select>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-info btn-rounded">{{ trans('global.update') }}</button>
+                <button type="submit" class="btn btn-info btn-rounded">{{ __('global.update') }}</button>
             </form>
         @elseif($site_settings->delivery_system == 'wasla')
             @if ($response['data'] ?? null)
@@ -103,8 +103,8 @@
                         <div class="col-md-6" style="padding:45px">
                             <div>
                                 <span
-                                    class="badge text-bg-{{ trans('global.delivery_status.colors.' . $row->delivery_status) }}">
-                                    {{ $row->delivery_status ? trans('global.delivery_status.status.' . $row->delivery_status) : '' }}
+                                    class="badge text-bg-{{ __('global.delivery_status.colors.' . $row->delivery_status) }}">
+                                    {{ $row->delivery_status ? __('global.delivery_status.status.' . $row->delivery_status) : '' }}
                                 </span>
                                 @if ($row->delivery_status == 'delay')
                                     <span class="badge badge-warning">{{ $row->delay_reason }}</span>

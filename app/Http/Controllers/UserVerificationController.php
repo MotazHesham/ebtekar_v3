@@ -23,7 +23,7 @@ class UserVerificationController extends Controller
         $user->verification_token = null;
         $user->save();
 
-        return redirect()->route('login')->with('message', trans('global.emailVerificationSuccess'));
+        return redirect()->route('login')->with('message', __('global.emailVerificationSuccess'));
     }
 
     public function verify(){

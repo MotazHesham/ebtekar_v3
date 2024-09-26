@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.sub-categories.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.subCategory.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.subCategory.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.subCategory.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.subCategory.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -22,19 +22,19 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.subCategory.fields.id') }}
+                            {{ __('cruds.subCategory.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.subCategory.fields.name') }}
+                            {{ __('cruds.subCategory.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.subCategory.fields.category') }}
+                            {{ __('cruds.subCategory.fields.category') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.website_setting_id') }}
+                            {{ __('global.extra.website_setting_id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.category.fields.published') }}
+                            {{ __('cruds.category.fields.published') }}
                         </th>
                         <th>
                             &nbsp;
@@ -68,7 +68,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('sub_category_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.sub-categories.massDestroy') }}",
@@ -81,12 +81,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -140,7 +140,7 @@
                     }, 
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

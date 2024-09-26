@@ -72,7 +72,7 @@ class RBrancheController extends Controller
     {
         abort_if(Gate::denies('r_branch_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $r_clients = RClient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $r_clients = RClient::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.rBranches.create', compact('r_clients'));
     }
@@ -88,7 +88,7 @@ class RBrancheController extends Controller
     {
         abort_if(Gate::denies('r_branch_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $r_clients = RClient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $r_clients = RClient::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $rBranch->load('r_client');
 

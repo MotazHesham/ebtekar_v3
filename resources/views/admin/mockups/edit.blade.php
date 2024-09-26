@@ -11,7 +11,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="required" for="name">{{ trans('cruds.mockup.fields.name') }}</label>
+                        <label class="required" for="name">{{ __('cruds.mockup.fields.name') }}</label>
                         <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text"
                             name="name" id="name" value="{{ old('name', $mockup->name) }}" required>
                         @if ($errors->has('name'))
@@ -19,10 +19,10 @@
                                 {{ $errors->first('name') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.mockup.fields.name_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.mockup.fields.name_helper') }}</span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="required" for="category_id">{{ trans('cruds.mockup.fields.category') }}</label>
+                        <label class="required" for="category_id">{{ __('cruds.mockup.fields.category') }}</label>
                         <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}"
                             name="category_id" id="category_id" required>
                             @foreach ($categories as $id => $entry)
@@ -36,11 +36,11 @@
                                 {{ $errors->first('category') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.mockup.fields.category_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.mockup.fields.category_helper') }}</span>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="required"
-                            for="sub_category_id">{{ trans('cruds.mockup.fields.sub_category') }}</label>
+                            for="sub_category_id">{{ __('cruds.mockup.fields.sub_category') }}</label>
                         <select class="form-control select2 {{ $errors->has('sub_category') ? 'is-invalid' : '' }}"
                             name="sub_category_id" id="sub_category_id" required>
                             {{-- ajax call --}}
@@ -50,10 +50,10 @@
                                 {{ $errors->first('sub_category') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.mockup.fields.sub_category_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.mockup.fields.sub_category_helper') }}</span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="sub_sub_category_id">{{ trans('cruds.mockup.fields.sub_sub_category') }}</label>
+                        <label for="sub_sub_category_id">{{ __('cruds.mockup.fields.sub_sub_category') }}</label>
                         <select class="form-control select2 {{ $errors->has('sub_sub_category') ? 'is-invalid' : '' }}"
                             name="sub_sub_category_id" id="sub_sub_category_id">
                             {{-- ajax call --}}
@@ -63,7 +63,7 @@
                                 {{ $errors->first('sub_sub_category') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.mockup.fields.sub_sub_category_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.mockup.fields.sub_sub_category_helper') }}</span>
                     </div>
                 </div>
             </div>
@@ -199,12 +199,12 @@
 
             <div class="card-body">
                 <div class="form-group">
-                    <label for="video_provider">{{ trans('cruds.product.fields.video_provider') }}</label>
+                    <label for="video_provider">{{ __('cruds.product.fields.video_provider') }}</label>
                     <select class="form-control {{ $errors->has('video_provider') ? 'is-invalid' : '' }}"
                         name="video_provider" id="video_provider">
                         <option value disabled
                             {{ old('video_provider', $mockup->video_provider) === null ? 'selected' : '' }}>
-                            {{ trans('global.pleaseSelect') }}</option>
+                            {{ __('global.pleaseSelect') }}</option>
                         @foreach (App\Models\Product::VIDEO_PROVIDER_SELECT as $key => $label)
                             <option value="{{ $key }}"
                                 {{ old('video_provider', $mockup->video_provider) === (string) $key ? 'selected' : '' }}>
@@ -217,10 +217,10 @@
                             {{ $errors->first('video_provider') }}
                         </div>
                     @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.video_provider_helper') }}</span>
+                    <span class="help-block">{{ __('cruds.product.fields.video_provider_helper') }}</span>
                 </div>
                 <div class="form-group">
-                    <label for="video_link">{{ trans('cruds.product.fields.video_link') }}</label>
+                    <label for="video_link">{{ __('cruds.product.fields.video_link') }}</label>
                     <input class="form-control {{ $errors->has('video_link') ? 'is-invalid' : '' }}" type="text"
                         name="video_link" id="video_link" value="{{ old('video_link', $mockup->video_link) }}">
                     @if ($errors->has('video_link'))
@@ -228,7 +228,7 @@
                             {{ $errors->first('video_link') }}
                         </div>
                     @endif
-                    <span class="help-block">{{ trans('cruds.product.fields.video_link_helper') }}</span>
+                    <span class="help-block">{{ __('cruds.product.fields.video_link_helper') }}</span>
                 </div>
             </div>
         </div>
@@ -242,7 +242,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="required"
-                                for="purchase_price">{{ trans('cruds.mockup.fields.purchase_price') }}</label>
+                                for="purchase_price">{{ __('cruds.mockup.fields.purchase_price') }}</label>
                             <input class="form-control {{ $errors->has('purchase_price') ? 'is-invalid' : '' }}"
                                 type="number" name="purchase_price" id="purchase_price"
                                 value="{{ old('purchase_price', $mockup->purchase_price) }}" step="0.01" required>
@@ -251,10 +251,10 @@
                                     {{ $errors->first('purchase_price') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.mockup.fields.purchase_price_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.mockup.fields.purchase_price_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label for="colors">{{ trans('cruds.product.fields.colors') }}</label>
+                            <label for="colors">{{ __('cruds.product.fields.colors') }}</label>
                             <select
                                 class="form-control select2 color-var-select {{ $errors->has('colors') ? 'is-invalid' : '' }}"
                                 name="colors[]" id="colors" multiple>
@@ -268,10 +268,10 @@
                                     {{ $errors->first('colors') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.colors_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.colors_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label for="attributes">{{ trans('cruds.product.fields.attributes') }}</label>
+                            <label for="attributes">{{ __('cruds.product.fields.attributes') }}</label>
                             <select class="form-control select2 {{ $errors->has('attributes') ? 'is-invalid' : '' }}"
                                 name="attributes[]" id="attributes" multiple>
                                 @foreach ($attributes as $id => $entry)
@@ -284,7 +284,7 @@
                                     {{ $errors->first('attributes') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.product.fields.attributes_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.product.fields.attributes_helper') }}</span>
                         </div>
                         <div id="attribute_options">
                             @foreach (json_decode($mockup->attribute_options) as $key => $option)
@@ -322,7 +322,7 @@
 
         <div class="card">
             <div class="card-header">
-                <label for="description">{{ trans('cruds.mockup.fields.description') }}</label>
+                <label for="description">{{ __('cruds.mockup.fields.description') }}</label>
             </div>
 
             <div class="card-body">
@@ -334,14 +334,14 @@
                             {{ $errors->first('description') }}
                         </div>
                     @endif
-                    <span class="help-block">{{ trans('cruds.mockup.fields.description_helper') }}</span>
+                    <span class="help-block">{{ __('cruds.mockup.fields.description_helper') }}</span>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
             <button class="btn btn-danger" type="submit">
-                {{ trans('global.save') }}
+                {{ __('global.save') }}
             </button>
         </div>
     </form>

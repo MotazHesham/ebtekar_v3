@@ -1,6 +1,6 @@
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title" id="AjaxModalLabel">{{ trans('global.extra.edit_product') }}</h5>
+        <h5 class="modal-title" id="AjaxModalLabel">{{ __('global.extra.edit_product') }}</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="">{{ trans('global.extra.product') }}</label> 
+                        <label for="">{{ __('global.extra.product') }}</label> 
                         <select class="form-control select2 mb-2" name="product_id" id="product_id" required>
                             <option value="">أختر المنتج</option>
                             @foreach ($products as $product)
@@ -23,16 +23,16 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="">{{ trans('global.extra.quantity') }}</label>
-                        <input class="form-control" type="number" name="quantity" value="{{ $receipt_social_product_pivot->quantity }}" step="1" min="1" placeholder="{{ trans('global.extra.quantity') }}"  title="{{ trans('global.extra.quantity') }}" required>
+                        <label for="">{{ __('global.extra.quantity') }}</label>
+                        <input class="form-control" type="number" name="quantity" value="{{ $receipt_social_product_pivot->quantity }}" step="1" min="1" placeholder="{{ __('global.extra.quantity') }}"  title="{{ __('global.extra.quantity') }}" required>
                     </div>
                 </div>
                 
                 @if(auth()->user()->is_admin)
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="">{{ trans('cruds.receiptSocial.fields.extra_commission') }}</label>
-                            <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ trans('cruds.receiptSocial.fields.extra_commission') }}" title="{{ trans('cruds.receiptSocial.fields.extra_commission') }}" >
+                            <label for="">{{ __('cruds.receiptSocial.fields.extra_commission') }}</label>
+                            <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ __('cruds.receiptSocial.fields.extra_commission') }}" title="{{ __('cruds.receiptSocial.fields.extra_commission') }}" >
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -44,7 +44,7 @@
                 @endif
             </div>
             <div class="form-group">
-                <textarea class="form-control ckeditor" name="description" placeholder="{{ trans('global.extra.description') }}"  cols="30" rows="6">{{ $receipt_social_product_pivot->description }}</textarea>
+                <textarea class="form-control ckeditor" name="description" placeholder="{{ __('global.extra.description') }}"  cols="30" rows="6">{{ $receipt_social_product_pivot->description }}</textarea>
             </div>
             <div class="form-group"> 
                 <label> 
@@ -57,7 +57,7 @@
             </div>
             <div class="form-group"> 
                 <div id="product-images">
-                    <label>{{ trans('cruds.receiptSocialProduct.fields.photos') }}</label>
+                    <label>{{ __('cruds.receiptSocialProduct.fields.photos') }}</label>
                     @if($receipt_social_product_pivot->photos)
                         @foreach (json_decode($receipt_social_product_pivot->photos) as $key => $photo)
                             <div class="row">
@@ -71,7 +71,7 @@
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" value="{{ $photo->note ?? ''}}" name="previous_photos[{{$key}}][note]" class="form-control" placeholder="{{ trans('global.extra.photo_note') }}">
+                                    <input type="text" value="{{ $photo->note ?? ''}}" name="previous_photos[{{$key}}][note]" class="form-control" placeholder="{{ __('global.extra.photo_note') }}">
                                 </div>
                             </div>
                         @endforeach
@@ -84,19 +84,19 @@
                                 </label>
                             </div>
                             <div class="col-md-5">
-                                <input type="text" name="photos[][note]" class="form-control" placeholder="{{ trans('global.extra.photo_note') }}">
+                                <input type="text" name="photos[][note]" class="form-control" placeholder="{{ __('global.extra.photo_note') }}">
                             </div> 
                         </div>
                     @endif
                 </div>
                 <div class="text-right">
-                    <button type="button" class="btn btn-info mb-3" onclick="add_more_slider_image()">{{ trans('global.extra.add_more') }}</button>
+                    <button type="button" class="btn btn-info mb-3" onclick="add_more_slider_image()">{{ __('global.extra.add_more') }}</button>
                 </div> 
             </div>
             <hr>
             
             <div class="form-group"> 
-                <button type="submit" class="btn btn-dark btn-block">{{ trans('global.save') }}</button>
+                <button type="submit" class="btn btn-dark btn-block">{{ __('global.save') }}</button>
             </div>
         </form>
     </div> 

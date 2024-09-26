@@ -4,14 +4,14 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.faq-questions.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.faqQuestion.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.faqQuestion.title_singular') }}
             </a>
         </div>
     </div>
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.faqQuestion.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.faqQuestion.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -23,16 +23,16 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.faqQuestion.fields.id') }}
+                            {{ __('cruds.faqQuestion.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.faqQuestion.fields.category') }}
+                            {{ __('cruds.faqQuestion.fields.category') }}
                         </th>
                         <th>
-                            {{ trans('cruds.faqQuestion.fields.question') }}
+                            {{ __('cruds.faqQuestion.fields.question') }}
                         </th>
                         <th>
-                            {{ trans('cruds.faqQuestion.fields.answer') }}
+                            {{ __('cruds.faqQuestion.fields.answer') }}
                         </th>
                         <th>
                             &nbsp;
@@ -60,20 +60,20 @@
                             <td>
                                 @can('faq_question_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.faq-questions.show', $faqQuestion->id) }}">
-                                        {{ trans('global.view') }}
+                                        {{ __('global.view') }}
                                     </a>
                                 @endcan
 
                                 @can('faq_question_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.faq-questions.edit', $faqQuestion->id) }}">
-                                        {{ trans('global.edit') }}
+                                        {{ __('global.edit') }}
                                     </a>
                                 @endcan
 
                                 @can('faq_question_delete') 
                                     <?php $route = route('admin.faq-questions.destroy', $faqQuestion->id); ?>
                                     <a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('{{$route}}')">
-                                        {{ trans('global.delete') }}  
+                                        {{ __('global.delete') }}  
                                     </a>  
                                 @endcan
 
@@ -96,7 +96,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('faq_question_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.faq-questions.massDestroy') }}",
@@ -107,12 +107,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',

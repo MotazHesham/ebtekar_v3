@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.mockups.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.mockup.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.mockup.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.mockup.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.mockup.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -22,31 +22,31 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.id') }}
+                            {{ __('cruds.mockup.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.name') }}
+                            {{ __('cruds.mockup.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.preview_1') }}
+                            {{ __('cruds.mockup.fields.preview_1') }}
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.purchase_price') }}
+                            {{ __('cruds.mockup.fields.purchase_price') }}
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.colors') }}
+                            {{ __('cruds.mockup.fields.colors') }}
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.attribute_options') }}
+                            {{ __('cruds.mockup.fields.attribute_options') }}
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.category') }}
+                            {{ __('cruds.mockup.fields.category') }}
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.sub_category') }}
+                            {{ __('cruds.mockup.fields.sub_category') }}
                         </th>
                         <th>
-                            {{ trans('cruds.mockup.fields.sub_sub_category') }}
+                            {{ __('cruds.mockup.fields.sub_sub_category') }}
                         </th>
                         <th>
                             &nbsp;
@@ -113,7 +113,7 @@
                     },
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

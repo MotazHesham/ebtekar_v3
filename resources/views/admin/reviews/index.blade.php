@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.review.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.review.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -13,22 +13,22 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.review.fields.id') }}
+                            {{ __('cruds.review.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.review.fields.product') }}
+                            {{ __('cruds.review.fields.product') }}
                         </th>
                         <th>
-                            {{ trans('cruds.review.fields.user') }}
+                            {{ __('cruds.review.fields.user') }}
                         </th>
                         <th>
-                            {{ trans('cruds.review.fields.rating') }}
+                            {{ __('cruds.review.fields.rating') }}
                         </th>
                         <th>
-                            {{ trans('cruds.review.fields.comment') }}
+                            {{ __('cruds.review.fields.comment') }}
                         </th>
                         <th>
-                            {{ trans('cruds.review.fields.published') }}
+                            {{ __('cruds.review.fields.published') }}
                         </th>
                         <th>
                             &nbsp;
@@ -102,7 +102,7 @@
                     },
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

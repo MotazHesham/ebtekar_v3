@@ -163,7 +163,7 @@ class ReceiptBranchController extends Controller
         // store the receipt social id in session so when redirect to the table open the popup to view products after delete
         session()->put('update_receipt_id',$receipt->id);
 
-        toast(trans('flash.deleted'),'success'); 
+        toast(__('flash.deleted'),'success'); 
         return 1;
     }
     public function edit_product(Request $request){
@@ -201,7 +201,7 @@ class ReceiptBranchController extends Controller
             // store the receipt social id in session so when redirect to the table open the popup to view products after edit
             session()->put('update_receipt_id',$receipt->id);
 
-            toast(trans('flash.global.update_title'),'success'); 
+            toast(__('flash.global.update_title'),'success'); 
             return redirect()->back();
         }
     }
@@ -246,7 +246,7 @@ class ReceiptBranchController extends Controller
                 session()->put('update_receipt_id',$receipt->id);
             }
 
-            toast(trans('flash.global.success_title'),'success');
+            toast(__('flash.global.success_title'),'success');
             return redirect()->back();
         }
     }
@@ -414,9 +414,9 @@ class ReceiptBranchController extends Controller
 
         $previous_data = searchByPhone($request->phone_number);
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $rclients = RClient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $rclients = RClient::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $website_setting_id = $request->website_setting_id;
 
@@ -430,7 +430,7 @@ class ReceiptBranchController extends Controller
         // store the receipt social id in session so when redirect to the table open the popup to add products
         session()->put('store_receipt_id',$receiptBranch->id);
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-branches.index');
     }
 
@@ -440,9 +440,9 @@ class ReceiptBranchController extends Controller
 
         $receiptBranch->load('staff');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
 
-        $rclients = RClient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $rclients = RClient::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.receiptBranches.edit', compact('receiptBranch','websites','rclients'));
     }
@@ -451,7 +451,7 @@ class ReceiptBranchController extends Controller
     {
         $receiptBranch->update($request->all());
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.receipt-branches.index');
     }
 
@@ -476,7 +476,7 @@ class ReceiptBranchController extends Controller
         }
         
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     } 
@@ -488,7 +488,7 @@ class ReceiptBranchController extends Controller
         $receiptBranch = ReceiptBranch::withTrashed()->find($id);
         $receiptBranch->restore();
 
-        alert(trans('flash.restored'),'','success');
+        alert(__('flash.restored'),'','success');
 
         return redirect()->route('admin.receipt-branches.index');
     } 

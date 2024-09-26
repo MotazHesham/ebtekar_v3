@@ -9,12 +9,12 @@
                 <div class="col-md-4">
                     <input type="text" class="form-control date mb-2  @isset($from_date) isset @endisset"
                         @isset($from_date) value="{{ request('from_date') }}" @endisset
-                        name="from_date" id="from_date" placeholder="{{ trans('global.extra.from_date') }}">
+                        name="from_date" id="from_date" placeholder="{{ __('global.extra.from_date') }}">
                 </div>
                 <div class="col-md-4">
                     <input type="text" class="form-control date mb-2  @isset($to_date) isset @endisset"
                         @isset($to_date) value="{{ request('to_date') }}" @endisset
-                        name="to_date" id="to_date" placeholder="{{ trans('global.extra.to_date') }}">
+                        name="to_date" id="to_date" placeholder="{{ __('global.extra.to_date') }}">
                 </div>
                 <div class="col-md-4">
                     <select class="form-control @isset($website_setting_id) isset @endisset" style="width: 200px" name="website_setting_id" id="website_setting_id" >
@@ -27,7 +27,7 @@
                     </select>
                 </div> 
                 <div class="col-md-4">
-                    <input type="submit" value="{{ trans('global.download') }}" name="download" class="btn btn-info btn-rounded btn-block">
+                    <input type="submit" value="{{ __('global.download') }}" name="download" class="btn btn-info btn-rounded btn-block">
                 </div> 
             </div> 
         </form> 

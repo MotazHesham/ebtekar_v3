@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.police.title') }}
+        {{ __('global.show') }} {{ __('cruds.police.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.polices.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.police.fields.id') }}
+                            {{ __('cruds.police.fields.id') }}
                         </th>
                         <td>
                             {{ $police->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.police.fields.name') }}
+                            {{ __('cruds.police.fields.name') }}
                         </th>
                         <td>
                             {{ $police->name ? \App\Models\Police::NAME_SELECT[$police->name] : '' }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.police.fields.content') }}
+                            {{ __('cruds.police.fields.content') }}
                         </th>
                         <td>
                             {!! $police->content !!}
@@ -43,7 +43,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.polices.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

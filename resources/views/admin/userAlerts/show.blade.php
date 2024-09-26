@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.userAlert.title') }}
+        {{ __('global.show') }} {{ __('cruds.userAlert.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.user-alerts.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.userAlert.fields.id') }}
+                            {{ __('cruds.userAlert.fields.id') }}
                         </th>
                         <td>
                             {{ $userAlert->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.userAlert.fields.alert_text') }}
+                            {{ __('cruds.userAlert.fields.alert_text') }}
                         </th>
                         <td>
                             {{ $userAlert->alert_text }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.userAlert.fields.alert_link') }}
+                            {{ __('cruds.userAlert.fields.alert_link') }}
                         </th>
                         <td>
                             {{ $userAlert->alert_link }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.userAlert.fields.user') }}
+                            {{ __('cruds.userAlert.fields.user') }}
                         </th>
                         <td>
                             @foreach($userAlert->users as $key => $user)
@@ -51,7 +51,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.userAlert.fields.created_at') }}
+                            {{ __('cruds.userAlert.fields.created_at') }}
                         </th>
                         <td>
                             {{ $userAlert->created_at }}
@@ -61,7 +61,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.user-alerts.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

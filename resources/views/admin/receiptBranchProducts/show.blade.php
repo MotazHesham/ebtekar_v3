@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.receiptBranchProduct.title') }}
+        {{ __('global.show') }} {{ __('cruds.receiptBranchProduct.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.receipt-branch-products.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.id') }}
+                            {{ __('cruds.receiptBranchProduct.fields.id') }}
                         </th>
                         <td>
                             {{ $receiptBranchProduct->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.name') }}
+                            {{ __('cruds.receiptBranchProduct.fields.name') }}
                         </th>
                         <td>
                             {{ $receiptBranchProduct->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.price') }}
+                            {{ __('cruds.receiptBranchProduct.fields.price') }}
                         </th>
                         <td>
                             {{ $receiptBranchProduct->price }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.price_parts') }}
+                            {{ __('cruds.receiptBranchProduct.fields.price_parts') }}
                         </th>
                         <td>
                             {{ $receiptBranchProduct->price_parts }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.price_permissions') }}
+                            {{ __('cruds.receiptBranchProduct.fields.price_permissions') }}
                         </th>
                         <td>
                             {{ $receiptBranchProduct->price_permissions }}
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptBranchProduct.fields.receipts') }}
+                            {{ __('cruds.receiptBranchProduct.fields.receipts') }}
                         </th>
                         <td>
                             @foreach($receiptBranchProduct->receipts as $key => $receipts)
@@ -69,7 +69,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.receipt-branch-products.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

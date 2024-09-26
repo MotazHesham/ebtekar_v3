@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.subscribe.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.subscribe.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -14,16 +14,16 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.subscribe.fields.id') }}
+                        {{ __('cruds.subscribe.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.subscribe.fields.name') }}
+                        {{ __('cruds.subscribe.fields.name') }}
                     </th>
                     <th>
-                        {{ trans('cruds.subscribe.fields.email') }}
+                        {{ __('cruds.subscribe.fields.email') }}
                     </th>
                     <th>
-                        {{ trans('cruds.subscribe.fields.from_website') }}
+                        {{ __('cruds.subscribe.fields.from_website') }}
                     </th>
                     <th>
                         &nbsp;
@@ -43,7 +43,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('subscribe_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.subscribes.massDestroy') }}",
@@ -54,12 +54,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',
@@ -85,7 +85,7 @@
 { data: 'name', name: 'name' },
 { data: 'email', name: 'email' },
 { data: 'from_website', name: 'from_website' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
+{ data: 'actions', name: '{{ __('global.actions') }}' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],

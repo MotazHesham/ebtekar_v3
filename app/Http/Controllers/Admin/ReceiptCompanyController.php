@@ -30,7 +30,7 @@ class ReceiptCompanyController extends Controller
         $receipt->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
         $receipt->delivery_status = 'on_delivery'; 
         $receipt->save();
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-companies.index');
     } 
 
@@ -325,7 +325,7 @@ class ReceiptCompanyController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $receiptCompany->id]);
         }
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-companies.index');
     }
 
@@ -372,7 +372,7 @@ class ReceiptCompanyController extends Controller
             }
         }
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.receipt-companies.index');
     }
 
@@ -402,7 +402,7 @@ class ReceiptCompanyController extends Controller
             $receiptCompany->delete();
         } 
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     } 
@@ -414,7 +414,7 @@ class ReceiptCompanyController extends Controller
         $receiptCompany = ReceiptCompany::withTrashed()->find($id);
         $receiptCompany->restore();
 
-        alert(trans('flash.restored'),'','success');
+        alert(__('flash.restored'),'','success');
 
         return redirect()->route('admin.receipt-companies.index');
     } 

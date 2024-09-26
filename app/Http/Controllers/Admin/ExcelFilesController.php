@@ -54,10 +54,10 @@ class ExcelFilesController extends Controller
                 return $row->type2 ? ExcelFile::TYPE2_SELECT[$row->type2] : '';
             });
             $table->editColumn('uploaded_file', function ($row) {
-                return $row->uploaded_file ? '<a href="' . $row->uploaded_file->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>' : '';
+                return $row->uploaded_file ? '<a href="' . $row->uploaded_file->getUrl() . '" target="_blank">' . __('global.downloadFile') . '</a>' : '';
             });
             $table->editColumn('result_file', function ($row) {
-                return $row->result_file ? '<a href="' . $row->result_file->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>' : '';
+                return $row->result_file ? '<a href="' . $row->result_file->getUrl() . '" target="_blank">' . __('global.downloadFile') . '</a>' : '';
             });
             $table->editColumn('results', function ($row) {
                 $span = '';

@@ -16,8 +16,8 @@
                     <label class="required"
                         for="keys">الأسماء</label> 
                     <div style="padding-bottom: 4px">
-                        <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                        <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                        <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ __('global.select_all') }}</span>
+                        <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ __('global.deselect_all') }}</span>
                     </div>
                     <select name="keys[]" id="keys" class="form-control select2" multiple required >
                         @foreach($qr_product->names as $name)
@@ -43,7 +43,7 @@
                 <div class="form-group col-md-4">
                     <label for=""><br> </label>
                     <button class="btn btn-success btn-block" type="submit" name="update_keys">
-                        {{ trans('global.save') }}
+                        {{ __('global.save') }}
                     </button>
                 </div>
             </div> 

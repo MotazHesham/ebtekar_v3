@@ -163,9 +163,9 @@ class DesignsController extends Controller
     {
         abort_if(Gate::denies('design_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $mockups = Mockup::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $mockups = Mockup::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.designs.create', compact('mockups', 'users'));
     }
@@ -181,9 +181,9 @@ class DesignsController extends Controller
     {
         abort_if(Gate::denies('design_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $mockups = Mockup::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $mockups = Mockup::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $design->load('user', 'mockup');
 

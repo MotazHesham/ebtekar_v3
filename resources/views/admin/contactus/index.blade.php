@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.contactu.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.contactu.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -14,25 +14,25 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.contactu.fields.id') }}
+                        {{ __('cruds.contactu.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.contactu.fields.first_name') }}
+                        {{ __('cruds.contactu.fields.first_name') }}
                     </th>
                     <th>
-                        {{ trans('cruds.contactu.fields.last_name') }}
+                        {{ __('cruds.contactu.fields.last_name') }}
                     </th>
                     <th>
-                        {{ trans('cruds.contactu.fields.email') }}
+                        {{ __('cruds.contactu.fields.email') }}
                     </th>
                     <th>
-                        {{ trans('cruds.contactu.fields.phone_number') }}
+                        {{ __('cruds.contactu.fields.phone_number') }}
                     </th>
                     <th>
-                        {{ trans('cruds.contactu.fields.message') }}
+                        {{ __('cruds.contactu.fields.message') }}
                     </th>
                     <th>
-                        {{ trans('cruds.contactu.fields.from_website') }}
+                        {{ __('cruds.contactu.fields.from_website') }}
                     </th>
                     <th>
                         &nbsp;
@@ -52,7 +52,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('contactu_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.contactus.massDestroy') }}",
@@ -63,12 +63,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',
@@ -97,7 +97,7 @@
 { data: 'phone_number', name: 'phone_number' },
 { data: 'message', name: 'message' },
 { data: 'from_website', name: 'from_website' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
+{ data: 'actions', name: '{{ __('global.actions') }}' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],

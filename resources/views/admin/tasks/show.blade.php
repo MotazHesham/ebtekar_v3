@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.task.title') }}
+        {{ __('global.show') }} {{ __('cruds.task.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.tasks.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.task.fields.id') }}
+                            {{ __('cruds.task.fields.id') }}
                         </th>
                         <td>
                             {{ $task->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.task.fields.name') }}
+                            {{ __('cruds.task.fields.name') }}
                         </th>
                         <td>
                             {{ $task->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.task.fields.description') }}
+                            {{ __('cruds.task.fields.description') }}
                         </th>
                         <td>
                             {{ $task->description }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.task.fields.status') }}
+                            {{ __('cruds.task.fields.status') }}
                         </th>
                         <td>
                             {{ $task->status->name ?? '' }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.task.fields.tag') }}
+                            {{ __('cruds.task.fields.tag') }}
                         </th>
                         <td>
                             @foreach($task->tags as $key => $tag)
@@ -59,19 +59,19 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.task.fields.attachment') }}
+                            {{ __('cruds.task.fields.attachment') }}
                         </th>
                         <td>
                             @if($task->attachment)
                                 <a href="{{ $task->attachment->getUrl() }}" target="_blank">
-                                    {{ trans('global.view_file') }}
+                                    {{ __('global.view_file') }}
                                 </a>
                             @endif
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.task.fields.due_date') }}
+                            {{ __('cruds.task.fields.due_date') }}
                         </th>
                         <td>
                             {{ $task->due_date }}
@@ -79,7 +79,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.task.fields.assigned_to') }}
+                            {{ __('cruds.task.fields.assigned_to') }}
                         </th>
                         <td>
                             {{ $task->assigned_to->name ?? '' }}
@@ -89,7 +89,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.tasks.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

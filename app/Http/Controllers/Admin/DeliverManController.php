@@ -89,7 +89,7 @@ class DeliverManController extends Controller
             'user_id' => $user->id,
         ]);
 
-        toast(trans('flash.global.success_title'),'success'); 
+        toast(__('flash.global.success_title'),'success'); 
         return redirect()->route('admin.deliver-men.index');
     }
 
@@ -112,7 +112,7 @@ class DeliverManController extends Controller
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]); 
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.deliver-men.index');
     }
 
@@ -129,7 +129,7 @@ class DeliverManController extends Controller
 
         $deliverMan->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     }

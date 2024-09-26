@@ -14,7 +14,7 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.userAlert.fields.id') }}
+                            {{ __('cruds.userAlert.fields.id') }}
                         </th>
                         <th>
                             التحويل

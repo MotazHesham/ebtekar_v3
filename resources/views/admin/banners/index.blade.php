@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.banners.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.banner.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.banner.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.banner.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.banner.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -23,22 +23,22 @@
 
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.id') }}
+                                {{ __('cruds.banner.fields.id') }}
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.photo') }}
+                                {{ __('cruds.banner.fields.photo') }}
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.url') }}
+                                {{ __('cruds.banner.fields.url') }}
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.position') }}
+                                {{ __('cruds.banner.fields.position') }}
                             </th>
                             <th>
-                                {{ trans('global.extra.website_setting_id') }}
+                                {{ __('global.extra.website_setting_id') }}
                             </th>
                             <th>
-                                {{ trans('cruds.banner.fields.published') }}
+                                {{ __('cruds.banner.fields.published') }}
                             </th>
                             <th>
                                 &nbsp;
@@ -83,20 +83,20 @@
                                     @can('banner_show')
                                         <a class="btn btn-xs btn-primary"
                                             href="{{ route('admin.banners.show', $banner->id) }}">
-                                            {{ trans('global.view') }}
+                                            {{ __('global.view') }}
                                         </a>
                                     @endcan
 
                                     @can('banner_edit')
                                         <a class="btn btn-xs btn-info" href="{{ route('admin.banners.edit', $banner->id) }}">
-                                            {{ trans('global.edit') }}
+                                            {{ __('global.edit') }}
                                         </a>
                                     @endcan
 
                                     @can('banner_delete')
                                         <?php $route = route('admin.banners.destroy', $banner->id); ?>
                                         <a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('{{$route}}')">
-                                            {{ trans('global.delete') }}  
+                                            {{ __('global.delete') }}  
                                         </a> 
                                     @endcan
 
@@ -131,7 +131,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('banner_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}'
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.banners.massDestroy') }}",
@@ -144,12 +144,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token

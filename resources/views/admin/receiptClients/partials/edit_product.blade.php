@@ -1,6 +1,6 @@
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title" id="AjaxModalLabel">{{ trans('global.extra.edit_product') }}</h5>
+        <h5 class="modal-title" id="AjaxModalLabel">{{ __('global.extra.edit_product') }}</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -20,14 +20,14 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <input class="form-control" type="number" name="quantity" value="{{ $receipt_client_product_pivot->quantity }}" step="1" min="1" placeholder="{{ trans('global.extra.quantity') }}" required>
+                        <input class="form-control" type="number" name="quantity" value="{{ $receipt_client_product_pivot->quantity }}" step="1" min="1" placeholder="{{ __('global.extra.quantity') }}" required>
                     </div>
                 </div>
             </div>
             <hr>
             
             <div class="form-group"> 
-                <button type="submit" class="btn btn-dark btn-block">{{ trans('global.save') }}</button>
+                <button type="submit" class="btn btn-dark btn-block">{{ __('global.save') }}</button>
             </div>
         </form>
     </div> 

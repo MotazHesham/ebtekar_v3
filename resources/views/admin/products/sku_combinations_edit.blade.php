@@ -1,22 +1,22 @@
 @if (count($combinations[0]) > 0)
     <div class="card">
-        <div class="card-header">{{ trans('cruds.product.fields.attribute_options') }}</div>
+        <div class="card-header">{{ __('cruds.product.fields.attribute_options') }}</div>
         <div class="card-body">
 
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <td class="text-center">
-                            <label for="" class="control-label">{{ trans('cruds.product.fields.variant_product') }}</label>
+                            <label for="" class="control-label">{{ __('cruds.product.fields.variant_product') }}</label>
                         </td>
                         <td class="text-center">
-                            <label for="" class="control-label">{{ trans('cruds.product.fields.unit_price') }}</label>
+                            <label for="" class="control-label">{{ __('cruds.product.fields.unit_price') }}</label>
                         </td>
                         <td class="text-center">
-                            <label for="" class="control-label">{{ trans('cruds.product.fields.purchase_price') }}</label>
+                            <label for="" class="control-label">{{ __('cruds.product.fields.purchase_price') }}</label>
                         </td>
                         <td class="text-center">
-                            <label for="" class="control-label">{{ trans('cruds.product.fields.current_stock') }}</label>
+                            <label for="" class="control-label">{{ __('cruds.product.fields.current_stock') }}</label>
                         </td>
                     </tr>
                 </thead>

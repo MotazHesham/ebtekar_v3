@@ -4,12 +4,12 @@
         @csrf
         <div class="card">
             <div class="card-header">
-                {{ trans('global.create') }} {{ trans('cruds.role.title_singular') }}
+                {{ __('global.create') }} {{ __('cruds.role.title_singular') }}
             </div>
 
             <div class="card-body">
                 <div class="form-group">
-                    <label class="required" for="title">{{ trans('cruds.role.fields.title') }}</label>
+                    <label class="required" for="title">{{ __('cruds.role.fields.title') }}</label>
                     <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title"
                         id="title" value="{{ old('title', '') }}" required>
                     @if ($errors->has('title'))
@@ -17,7 +17,7 @@
                             {{ $errors->first('title') }}
                         </div>
                     @endif
-                    <span class="help-block">{{ trans('cruds.role.fields.title_helper') }}</span>
+                    <span class="help-block">{{ __('cruds.role.fields.title_helper') }}</span>
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@
                                 @foreach (\App\Models\Permission::where('parent', 1)->get() as $parent)
                                     <a class="nav-link @if ($loop->first) active @endif"
                                         href="#{{ $parent->id }}" role="tab" data-toggle="tab">
-                                        {{ trans('permissions.' . $parent->title) }}
+                                        {{ __('permissions.' . $parent->title) }}
                                     </a>
                                 @endforeach
                                 <a class="nav-link" href="#general" role="tab" data-toggle="tab">
@@ -47,7 +47,7 @@
                                     <div class="card">
                                         <div style="display: flex;justify-content: flex-start;padding: 20px;">
                                             <label for="p{{ $parent->id }}"
-                                                style="padding: 0px 20px;">{{ trans('permissions.' . $parent->title) }}</label>
+                                                style="padding: 0px 20px;">{{ __('permissions.' . $parent->title) }}</label>
                                             <label class="c-switch c-switch-pill c-switch-success">
                                                 <input name="permissions[]" value="{{ $parent->id }}"
                                                     id="p{{ $parent->id }}" type="checkbox" class="c-switch-input">
@@ -61,7 +61,7 @@
                                                 <div class="card">
                                                     <div class="card-header">
                                                         <div style="display: flex;justify-content:space-between">
-                                                            <div>{{ trans('permissions.type.'.$key) }}</div>
+                                                            <div>{{ __('permissions.type.'.$key) }}</div>
                                                             <div>
                                                                 <button type="button" class="btn btn-success btn-sm btn-pill" onclick="check({{$array}},true)">Check all</button>
                                                                 <button type="button" class="btn btn-outline-warning btn-sm btn-pill" onclick="check({{$array}},false)">UnCheck all</button>
@@ -72,7 +72,7 @@
                                                         @foreach ($array as $raw)
                                                             <div style="display: flex;justify-content: space-evenly">
                                                                 <label
-                                                                    for="{{ $raw->id }}">{{ trans('permissions.' . $raw->title) }}</label>
+                                                                    for="{{ $raw->id }}">{{ __('permissions.' . $raw->title) }}</label>
                                                                 <label class="c-switch c-switch-pill c-switch-success">
                                                                     <input name="permissions[]" value="{{ $raw->id }}"
                                                                         id="{{ $raw->id }}" type="checkbox"
@@ -95,7 +95,7 @@
                                             <div class="card">
                                                 <div class="card-header">
                                                     <div style="display: flex;justify-content:space-between">
-                                                        <div>{{ trans('permissions.type.'.$key) }}</div>
+                                                        <div>{{ __('permissions.type.'.$key) }}</div>
                                                         <div>
                                                             <button type="button" class="btn btn-success btn-sm btn-pill" onclick="check({{$array}},true)">Check all</button>
                                                             <button type="button" class="btn btn-outline-warning btn-sm btn-pill" onclick="check({{$array}},false)">UnCheck all</button>
@@ -105,7 +105,7 @@
                                                 <div class="card-body">
                                                     @foreach ($array as $raw)
                                                         <div style="display: flex;justify-content: space-evenly">
-                                                            <span>{{ trans('permissions.' . $raw->title) }}</span>
+                                                            <span>{{ __('permissions.' . $raw->title) }}</span>
                                                             <label class="c-switch c-switch-pill c-switch-success">
                                                                 <input name="permissions[]" value="{{ $raw->id }}"
                                                                     type="checkbox" class="c-switch-input">
@@ -122,7 +122,7 @@
                                             <div class="card">
                                                 <div class="card-header">
                                                     <div style="display: flex;justify-content:space-between">
-                                                        <div>{{ trans('permissions.type.'.$key) }}</div>
+                                                        <div>{{ __('permissions.type.'.$key) }}</div>
                                                         <div>
                                                             <button type="button" class="btn btn-success btn-sm btn-pill" onclick="check({{$array}},true)">Check all</button>
                                                             <button type="button" class="btn btn-outline-warning btn-sm btn-pill" onclick="check({{$array}},false)">UnCheck all</button>
@@ -133,7 +133,7 @@
                                                     @foreach ($array as $raw)
                                                         <div style="display: flex;justify-content: space-evenly">
                                                             <label
-                                                                for="{{ $raw->id }}">{{ trans('permissions.' . $raw->title) }}</label>
+                                                                for="{{ $raw->id }}">{{ __('permissions.' . $raw->title) }}</label>
                                                             <label class="c-switch c-switch-pill c-switch-success">
                                                                 <input name="permissions[]" value="{{ $raw->id }}"
                                                                     id="{{ $raw->id }}" type="checkbox"
@@ -156,7 +156,7 @@
 
         <div class="form-group">
             <button class="btn btn-danger" type="submit">
-                {{ trans('global.save') }}
+                {{ __('global.save') }}
             </button>
         </div>
 

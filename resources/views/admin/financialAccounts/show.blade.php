@@ -5,21 +5,21 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                {{ trans('global.show') }} {{ trans('cruds.financialAccount.title') }}
+                {{ __('global.show') }} {{ __('cruds.financialAccount.title') }}
             </div>
         
             <div class="card-body">
                 <div class="form-group">
                     <div class="form-group">
                         <a class="btn btn-default" href="{{ route('admin.financial-accounts.index') }}">
-                            {{ trans('global.back_to_list') }}
+                            {{ __('global.back_to_list') }}
                         </a>
                     </div>
                     <table class="table table-bordered table-striped">
                         <tbody>
                             <tr>
                                 <th>
-                                    {{ trans('cruds.financialAccount.fields.id') }}
+                                    {{ __('cruds.financialAccount.fields.id') }}
                                 </th>
                                 <td>
                                     {{ $financialAccount->id }}
@@ -27,7 +27,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    {{ trans('cruds.financialAccount.fields.account') }}
+                                    {{ __('cruds.financialAccount.fields.account') }}
                                 </th>
                                 <td>
                                     {{ $financialAccount->account }}
@@ -43,7 +43,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    {{ trans('cruds.financialAccount.fields.description') }}
+                                    {{ __('cruds.financialAccount.fields.description') }}
                                 </th>
                                 <td>
                                     {{ $financialAccount->description }}
@@ -51,7 +51,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    {{ trans('cruds.financialAccount.fields.active') }}
+                                    {{ __('cruds.financialAccount.fields.active') }}
                                 </th>
                                 <td>
                                     <input type="checkbox" disabled="disabled" {{ $financialAccount->active ? 'checked' : '' }}>
@@ -61,7 +61,7 @@
                     </table>
                     <div class="form-group">
                         <a class="btn btn-default" href="{{ route('admin.financial-accounts.index') }}">
-                            {{ trans('global.back_to_list') }}
+                            {{ __('global.back_to_list') }}
                         </a>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                {{ trans('global.relatedData') }}
+                {{ __('global.relatedData') }}
             </div>
             <ul class="nav nav-tabs" role="tablist" id="relationship-tabs"> 
                 <li class="nav-item ">

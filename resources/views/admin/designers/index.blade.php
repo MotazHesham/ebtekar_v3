@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.designers.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.designer.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.designer.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.designer.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.designer.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -22,25 +22,25 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.designer.fields.id') }}
+                            {{ __('cruds.designer.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.name') }}
+                            {{ __('cruds.user.fields.name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.email') }}
+                            {{ __('cruds.user.fields.email') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.phone_number') }}
+                            {{ __('cruds.user.fields.phone_number') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.address') }}
+                            {{ __('cruds.user.fields.address') }}
                         </th>
                         <th>
-                            {{ trans('cruds.designer.fields.store_name') }}
+                            {{ __('cruds.designer.fields.store_name') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.approved') }}
+                            {{ __('cruds.user.fields.approved') }}
                         </th> 
                         <th>
                             &nbsp;
@@ -72,7 +72,7 @@
         $(function() {
             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
             @can('designer_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.designers.massDestroy') }}",
@@ -85,12 +85,12 @@
                         });
 
                         if (ids.length === 0) {
-                            alert('{{ trans('global.datatables.zero_selected') }}')
+                            alert('{{ __('global.datatables.zero_selected') }}')
 
                             return
                         }
 
-                        if (confirm('{{ trans('global.areYouSure') }}')) {
+                        if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
                                     headers: {
                                         'x-csrf-token': _token
@@ -152,7 +152,7 @@
                     }, 
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

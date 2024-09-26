@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.expense.title') }}
+        {{ __('global.show') }} {{ __('cruds.expense.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.expenses.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.expense.fields.id') }}
+                            {{ __('cruds.expense.fields.id') }}
                         </th>
                         <td>
                             {{ $expense->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.expense.fields.expense_category') }}
+                            {{ __('cruds.expense.fields.expense_category') }}
                         </th>
                         <td>
                             {{ $expense->expense_category->name ?? '' }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.expense.fields.entry_date') }}
+                            {{ __('cruds.expense.fields.entry_date') }}
                         </th>
                         <td>
                             {{ $expense->entry_date }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.expense.fields.amount') }}
+                            {{ __('cruds.expense.fields.amount') }}
                         </th>
                         <td>
                             {{ $expense->amount }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.expense.fields.description') }}
+                            {{ __('cruds.expense.fields.description') }}
                         </th>
                         <td>
                             {{ $expense->description }}
@@ -59,7 +59,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.expenses.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-          {{ trans('global.list') }} {{ trans('cruds.excelFile.title_singular') }} 
+          {{ __('global.list') }} {{ __('cruds.excelFile.title_singular') }} 
         </div>
 
         <div class="card-body">
@@ -13,25 +13,25 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.excelFile.fields.id') }}
+                            {{ __('cruds.excelFile.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.excelFile.fields.type') }}
+                            {{ __('cruds.excelFile.fields.type') }}
                         </th>
                         <th>
-                            {{ trans('cruds.excelFile.fields.type') }}
+                            {{ __('cruds.excelFile.fields.type') }}
                         </th>
                         <th>
-                            {{ trans('cruds.excelFile.fields.uploaded_file') }}
+                            {{ __('cruds.excelFile.fields.uploaded_file') }}
                         </th>
                         <th>
-                            {{ trans('cruds.excelFile.fields.result_file') }}
+                            {{ __('cruds.excelFile.fields.result_file') }}
                         </th>
                         <th>
-                            {{ trans('cruds.excelFile.fields.results') }}
+                            {{ __('cruds.excelFile.fields.results') }}
                         </th>
                         <th>
-                            {{ trans('cruds.excelFile.fields.created_at') }}
+                            {{ __('cruds.excelFile.fields.created_at') }}
                         </th>
                         <th>
                             &nbsp;
@@ -93,7 +93,7 @@
                     },
                     {
                         data: 'actions',
-                        name: '{{ trans('global.actions') }}'
+                        name: '{{ __('global.actions') }}'
                     }
                 ],
                 orderCellsTop: true,

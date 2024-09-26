@@ -4,14 +4,14 @@
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
                 <a class="btn btn-success" href="{{ route('admin.financial-accounts.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.financialAccount.title_singular') }}
+                    {{ __('global.add') }} {{ __('cruds.financialAccount.title_singular') }}
                 </a>
             </div>
         </div>
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.financialAccount.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.financialAccount.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -23,16 +23,16 @@
 
                             </th>
                             <th>
-                                {{ trans('cruds.financialAccount.fields.id') }}
+                                {{ __('cruds.financialAccount.fields.id') }}
                             </th>
                             <th>
-                                {{ trans('cruds.financialAccount.fields.account') }}
+                                {{ __('cruds.financialAccount.fields.account') }}
                             </th>
                             <th>
-                                {{ trans('cruds.financialAccount.fields.description') }}
+                                {{ __('cruds.financialAccount.fields.description') }}
                             </th>
                             <th>
-                                {{ trans('cruds.financialAccount.fields.active') }}
+                                {{ __('cruds.financialAccount.fields.active') }}
                             </th>
                             <th>
                                 &nbsp;
@@ -66,14 +66,14 @@
                                     @can('financial_account_show')
                                         <a class="btn btn-xs btn-primary"
                                             href="{{ route('admin.financial-accounts.show', $financialAccount->id) }}">
-                                            {{ trans('global.view') }}
+                                            {{ __('global.view') }}
                                         </a>
                                     @endcan
 
                                     @can('financial_account_edit')
                                         <a class="btn btn-xs btn-info"
                                             href="{{ route('admin.financial-accounts.edit', $financialAccount->id) }}">
-                                            {{ trans('global.edit') }}
+                                            {{ __('global.edit') }}
                                         </a>
                                     @endcan
 

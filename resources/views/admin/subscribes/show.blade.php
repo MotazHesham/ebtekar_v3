@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.subscribe.title') }}
+        {{ __('global.show') }} {{ __('cruds.subscribe.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.subscribes.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.subscribe.fields.id') }}
+                            {{ __('cruds.subscribe.fields.id') }}
                         </th>
                         <td>
                             {{ $subscribe->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.subscribe.fields.name') }}
+                            {{ __('cruds.subscribe.fields.name') }}
                         </th>
                         <td>
                             {{ $subscribe->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.subscribe.fields.email') }}
+                            {{ __('cruds.subscribe.fields.email') }}
                         </th>
                         <td>
                             {{ $subscribe->email }}
@@ -43,7 +43,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.subscribes.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

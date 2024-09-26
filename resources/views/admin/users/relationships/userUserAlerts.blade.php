@@ -2,7 +2,7 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.user-alerts.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.userAlert.title_singular') }}
+                {{ __('global.add') }} {{ __('cruds.userAlert.title_singular') }}
             </a>
         </div>
     </div>
@@ -10,7 +10,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.userAlert.title_singular') }} {{ trans('global.list') }}
+        {{ __('cruds.userAlert.title_singular') }} {{ __('global.list') }}
     </div>
 
     <div class="card-body">
@@ -22,19 +22,19 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.userAlert.fields.id') }}
+                            {{ __('cruds.userAlert.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.userAlert.fields.alert_text') }}
+                            {{ __('cruds.userAlert.fields.alert_text') }}
                         </th>
                         <th>
-                            {{ trans('cruds.userAlert.fields.alert_link') }}
+                            {{ __('cruds.userAlert.fields.alert_link') }}
                         </th>
                         <th>
-                            {{ trans('cruds.userAlert.fields.user') }}
+                            {{ __('cruds.userAlert.fields.user') }}
                         </th>
                         <th>
-                            {{ trans('cruds.userAlert.fields.created_at') }}
+                            {{ __('cruds.userAlert.fields.created_at') }}
                         </th>
                         <th>
                             &nbsp;
@@ -67,16 +67,16 @@
                             <td>
                                 @can('user_alert_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.user-alerts.show', $userAlert->id) }}">
-                                        {{ trans('global.view') }}
+                                        {{ __('global.view') }}
                                     </a>
                                 @endcan
 
 
                                 @can('user_alert_delete')
-                                    <form action="{{ route('admin.user-alerts.destroy', $userAlert->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                    <form action="{{ route('admin.user-alerts.destroy', $userAlert->id) }}" method="POST" onsubmit="return confirm('{{ __('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ __('global.delete') }}">
                                     </form>
                                 @endcan
 
@@ -96,7 +96,7 @@
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('user_alert_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+  let deleteButtonTrans = '{{ __('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
     url: "{{ route('admin.user-alerts.massDestroy') }}",
@@ -107,12 +107,12 @@
       });
 
       if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+        alert('{{ __('global.datatables.zero_selected') }}')
 
         return
       }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
+      if (confirm('{{ __('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
           method: 'POST',

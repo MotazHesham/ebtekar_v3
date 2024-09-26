@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.category.title_singular') }}
+        {{ __('global.edit') }} {{ __('cruds.category.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -12,17 +12,17 @@
             @csrf
             <input type="hidden" name="id" value="{{$category->id}}">
             <div class="form-group">
-                <label class="required" for="name">{{ trans('cruds.category.fields.name') }}</label>
+                <label class="required" for="name">{{ __('cruds.category.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', $category->name) }}" required>
                 @if($errors->has('name'))
                     <div class="invalid-feedback">
                         {{ $errors->first('name') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.category.fields.name_helper') }}</span>
+                <span class="help-block">{{ __('cruds.category.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="banner">{{ trans('cruds.category.fields.banner') }}</label>
+                <label class="required" for="banner">{{ __('cruds.category.fields.banner') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('banner') ? 'is-invalid' : '' }}" id="banner-dropzone">
                 </div>
                 @if($errors->has('banner'))
@@ -30,10 +30,10 @@
                         {{ $errors->first('banner') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.category.fields.banner_helper') }}</span>
+                <span class="help-block">{{ __('cruds.category.fields.banner_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="icon">{{ trans('cruds.category.fields.icon') }}</label>
+                <label class="required" for="icon">{{ __('cruds.category.fields.icon') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('icon') ? 'is-invalid' : '' }}" id="icon-dropzone">
                 </div>
                 @if($errors->has('icon'))
@@ -41,41 +41,41 @@
                         {{ $errors->first('icon') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.category.fields.icon_helper') }}</span>
+                <span class="help-block">{{ __('cruds.category.fields.icon_helper') }}</span>
             </div> 
             <div class="form-group">
-                <label for="slug">{{ trans('cruds.category.fields.slug') }}</label>
+                <label for="slug">{{ __('cruds.category.fields.slug') }}</label>
                 <input class="form-control {{ $errors->has('slug') ? 'is-invalid' : '' }}" type="text" name="slug" id="slug" value="{{ old('slug', $category->slug) }}">
                 @if($errors->has('slug'))
                     <div class="invalid-feedback">
                         {{ $errors->first('slug') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.category.fields.slug_helper') }}</span>
+                <span class="help-block">{{ __('cruds.category.fields.slug_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="meta_title">{{ trans('cruds.category.fields.meta_title') }}</label>
+                <label for="meta_title">{{ __('cruds.category.fields.meta_title') }}</label>
                 <input class="form-control {{ $errors->has('meta_title') ? 'is-invalid' : '' }}" type="text" name="meta_title" id="meta_title" value="{{ old('meta_title', $category->meta_title) }}">
                 @if($errors->has('meta_title'))
                     <div class="invalid-feedback">
                         {{ $errors->first('meta_title') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.category.fields.meta_title_helper') }}</span>
+                <span class="help-block">{{ __('cruds.category.fields.meta_title_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="meta_description">{{ trans('cruds.category.fields.meta_description') }}</label>
+                <label for="meta_description">{{ __('cruds.category.fields.meta_description') }}</label>
                 <input class="form-control {{ $errors->has('meta_description') ? 'is-invalid' : '' }}" type="text" name="meta_description" id="meta_description" value="{{ old('meta_description', $category->meta_description) }}">
                 @if($errors->has('meta_description'))
                     <div class="invalid-feedback">
                         {{ $errors->first('meta_description') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.category.fields.meta_description_helper') }}</span>
+                <span class="help-block">{{ __('cruds.category.fields.meta_description_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

@@ -3,7 +3,7 @@
 
     <div class="form-group">
         <a class="btn btn-dark" href="{{ route('admin.receipt-socials.index') }}">
-            {{ trans('global.back_to_list') }}
+            {{ __('global.back_to_list') }}
         </a>
     </div>
 
@@ -16,7 +16,7 @@
 
     <div class="card">
         <div class="card-header">
-            {{ trans('global.edit') }} {{ trans('cruds.receiptSocial.title_singular') }}
+            {{ __('global.edit') }} {{ __('cruds.receiptSocial.title_singular') }}
         </div>
 
         <div class="card-body">
@@ -31,7 +31,7 @@
 
                                 <div class="form-group">
                                     <label class="required"
-                                        for="client_name">{{ trans('cruds.receiptSocial.fields.client_name') }}</label>
+                                        for="client_name">{{ __('cruds.receiptSocial.fields.client_name') }}</label>
                                     <input class="form-control {{ $errors->has('client_name') ? 'is-invalid' : '' }}"
                                         type="text" name="client_name" id="client_name"
                                         value="{{ old('client_name', $receiptSocial->client_name) }}" required>
@@ -41,12 +41,12 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.client_name_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.client_name_helper') }}</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="required"
-                                        for="phone_number">{{ trans('cruds.receiptSocial.fields.phone_number') }}</label>
+                                        for="phone_number">{{ __('cruds.receiptSocial.fields.phone_number') }}</label>
                                     <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}"
                                         type="text" name="phone_number" id="phone_number"
                                         value="{{ old('phone_number', $receiptSocial->phone_number) }}" required>
@@ -56,11 +56,11 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.phone_number_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.phone_number_helper') }}</span>
                                 </div>
                                 <div class="form-group">
                                     <label
-                                        for="date_of_receiving_order">{{ trans('cruds.receiptSocial.fields.date_of_receiving_order') }}</label>
+                                        for="date_of_receiving_order">{{ __('cruds.receiptSocial.fields.date_of_receiving_order') }}</label>
                                     <input
                                         class="form-control date {{ $errors->has('date_of_receiving_order') ? 'is-invalid' : '' }}"
                                         type="text" name="date_of_receiving_order" id="date_of_receiving_order"
@@ -71,16 +71,16 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.date_of_receiving_order_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.date_of_receiving_order_helper') }}</span>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="required"
-                                        for="shipping_country_id">{{ trans('cruds.receiptSocial.fields.shipping_country_id') }}</label>
+                                        for="shipping_country_id">{{ __('cruds.receiptSocial.fields.shipping_country_id') }}</label>
                                     <select
                                         class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
                                         name="shipping_country_id" id="shipping_country_id" required> 
-                                        <option  value="">{{ trans('global.pleaseSelect') }}</option>
+                                        <option  value="">{{ __('global.pleaseSelect') }}</option>
                                         @foreach ($shipping_countries as  $country)
                                             <option value="{{ $country->id }}"
                                                 {{ (old('shipping_country_id') ? old('shipping_country_id') : $receiptSocial->shipping_country->id ?? '') == $country->id ? 'selected' : '' }}>
@@ -94,14 +94,14 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.shipping_country_id_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.shipping_country_id_helper') }}</span>
                                 </div>
                                 <div class="form-group" id="deposit_type_div" style="display: none">
-                                    <label class="required">{{ trans('cruds.receiptSocial.fields.deposit_type') }}</label>
+                                    <label class="required">{{ __('cruds.receiptSocial.fields.deposit_type') }}</label>
                                     <select class="form-control {{ $errors->has('deposit_type') ? 'is-invalid' : '' }}"
                                         name="deposit_type" id="deposit_type">
                                         <option value disabled {{ old('deposit_type', null) === null ? 'selected' : '' }}>
-                                            {{ trans('global.pleaseSelect') }}</option>
+                                            {{ __('global.pleaseSelect') }}</option>
                                         @foreach (App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT as $key => $label)
                                             <option value="{{ $key }}"
                                                 {{ old('deposit_type',$receiptSocial->deposit_type) === (string) $key ? 'selected' : '' }}>
@@ -114,16 +114,16 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.deposit_type_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.deposit_type_helper') }}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="required">{{ trans('cruds.receiptSocial.fields.client_type') }}</label>
+                                    <label class="required">{{ __('cruds.receiptSocial.fields.client_type') }}</label>
                                     <select class="form-control {{ $errors->has('client_type') ? 'is-invalid' : '' }}"
                                         name="client_type" id="client_type">
                                         <option value disabled {{ old('client_type', null) === null ? 'selected' : '' }}>
-                                            {{ trans('global.pleaseSelect') }}</option>
+                                            {{ __('global.pleaseSelect') }}</option>
                                         @foreach (App\Models\ReceiptSocial::CLIENT_TYPE_SELECT as $key => $label)
                                             <option value="{{ $key }}"
                                                 {{ old('client_type', $receiptSocial->client_type) === (string) $key ? 'selected' : '' }}>
@@ -136,11 +136,11 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.client_type_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.client_type_helper') }}</span>
                                 </div>
                                 <div class="form-group">
                                     <label
-                                        for="phone_number_2">{{ trans('cruds.receiptSocial.fields.phone_number_2') }}</label>
+                                        for="phone_number_2">{{ __('cruds.receiptSocial.fields.phone_number_2') }}</label>
                                     <input class="form-control {{ $errors->has('phone_number_2') ? 'is-invalid' : '' }}"
                                         type="text" name="phone_number_2" id="phone_number_2"
                                         value="{{ old('phone_number_2', $receiptSocial->phone_number_2) }}">
@@ -150,11 +150,11 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.phone_number_2_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.phone_number_2_helper') }}</span>
                                 </div>
                                 <div class="form-group">
                                     <label
-                                        for="deliver_date">{{ trans('cruds.receiptSocial.fields.deliver_date') }}</label>
+                                        for="deliver_date">{{ __('cruds.receiptSocial.fields.deliver_date') }}</label>
                                     <input
                                         class="form-control date {{ $errors->has('deliver_date') ? 'is-invalid' : '' }}"
                                         type="text" name="deliver_date" id="deliver_date"
@@ -165,10 +165,10 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.deliver_date_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.deliver_date_helper') }}</span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="deposit">{{ trans('cruds.receiptSocial.fields.deposit') }}</label>
+                                    <label for="deposit">{{ __('cruds.receiptSocial.fields.deposit') }}</label>
                                     <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}"
                                         type="number" name="deposit" id="deposit"
                                         value="{{ old('deposit', $receiptSocial->deposit) }}" step="0.01" required onkeyup="change_deposit()">
@@ -178,15 +178,15 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.deposit_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.deposit_helper') }}</span>
                                 </div>
                                 <div class="form-group" id="financial_account_div" style="display: none">
                                     <label class="required"
-                                        for="financial_account_id">{{ trans('cruds.receiptSocial.fields.financial_account_id') }}</label>
+                                        for="financial_account_id">{{ __('cruds.receiptSocial.fields.financial_account_id') }}</label>
                                     <select
                                         class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
                                         name="financial_account_id" id="financial_account_id">
-                                        <option  value="">{{ trans('global.pleaseSelect') }}</option>
+                                        <option  value="">{{ __('global.pleaseSelect') }}</option>
                                         @foreach ($financial_accounts as $raw)
                                             <option value="{{ $raw->id }}"
                                                 {{ old('financial_account_id',$receiptSocial->financial_account_id) == $raw->id ? 'selected' : '' }}>
@@ -200,18 +200,18 @@
                                         </div>
                                     @endif
                                     <span
-                                        class="help-block">{{ trans('cruds.receiptSocial.fields.financial_account_id_helper') }}</span>
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.financial_account_id_helper') }}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="socials">{{ trans('cruds.receiptSocial.fields.socials') }}</label>
+                            <label for="socials">{{ __('cruds.receiptSocial.fields.socials') }}</label>
                             <div style="padding-bottom: 4px">
                                 <span class="btn btn-info btn-xs select-all"
-                                    style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                                    style="border-radius: 0">{{ __('global.select_all') }}</span>
                                 <span class="btn btn-info btn-xs deselect-all"
-                                    style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                                    style="border-radius: 0">{{ __('global.deselect_all') }}</span>
                             </div>
                             <select class="form-control select2 {{ $errors->has('socials') ? 'is-invalid' : '' }}"
                                 name="socials[]" id="socials" multiple>
@@ -226,14 +226,14 @@
                                     {{ $errors->first('socials') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.receiptSocial.fields.socials_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.receiptSocial.fields.socials_helper') }}</span>
                         </div>
                     </div>
                     <div class="col-md-4">
 
                         <div class="form-group">
                             <label class="required"
-                                for="shipping_address">{{ trans('cruds.receiptSocial.fields.shipping_address') }}</label>
+                                for="shipping_address">{{ __('cruds.receiptSocial.fields.shipping_address') }}</label>
                             <textarea class="form-control {{ $errors->has('shipping_address') ? 'is-invalid' : '' }}" name="shipping_address"
                                 id="shipping_address" required rows="6">{{ old('shipping_address', $receiptSocial->shipping_address) }}</textarea>
                             @if ($errors->has('shipping_address'))
@@ -242,11 +242,11 @@
                                 </div>
                             @endif
                             <span
-                                class="help-block">{{ trans('cruds.receiptSocial.fields.shipping_address_helper') }}</span>
+                                class="help-block">{{ __('cruds.receiptSocial.fields.shipping_address_helper') }}</span>
                         </div>
 
                         <div class="form-group">
-                            <label for="note">{{ trans('cruds.receiptSocial.fields.note') }}</label>
+                            <label for="note">{{ __('cruds.receiptSocial.fields.note') }}</label>
                             <textarea class="form-control {{ $errors->has('note') ? 'is-invalid' : '' }}" name="note" id="note"
                                 rows="6">{{ old('note', $receiptSocial->note) }}</textarea>
                             @if ($errors->has('note'))
@@ -254,12 +254,12 @@
                                     {{ $errors->first('note') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.receiptSocial.fields.note_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.receiptSocial.fields.note_helper') }}</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-danger" type="submit">
-                            {{ trans('global.save') }}
+                            {{ __('global.save') }}
                         </button>
                     </div>
             </form>

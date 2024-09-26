@@ -31,7 +31,7 @@ class PolicesController extends Controller
     {
         abort_if(Gate::denies('police_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
         
         return view('admin.polices.create',compact('websites'));
     }
@@ -51,7 +51,7 @@ class PolicesController extends Controller
     {
         abort_if(Gate::denies('police_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.polices.edit', compact('police','websites'));
     }

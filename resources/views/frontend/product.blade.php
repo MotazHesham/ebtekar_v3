@@ -74,11 +74,11 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2>{{ trans('frontend.product.products') }}</h2>
+                            <h2>{{ __('frontend.product.products') }}</h2>
                             <ul>
-                                <li><a href="{{ route('home') }}">{{ trans('frontend.about.home') }}</a></li>
+                                <li><a href="{{ route('home') }}">{{ __('frontend.about.home') }}</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="javascript:void(0)">{{ trans('frontend.product.products') }}</a></li>
+                                <li><a href="javascript:void(0)">{{ __('frontend.product.products') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -130,7 +130,7 @@
                                     @endif
                                     @if (auth()->check() && auth()->user()->user_type == 'seller')
                                         <li id="product-commission-for-variant">
-                                            <div class="text-center"> <small> {{ trans('frontend.product.commission') }}:<b> {{ front_calc_commission_currency($product->unit_price, $product->purchase_price)['as_text'] }} </b> </small> </div>
+                                            <div class="text-center"> <small> {{ __('frontend.product.commission') }}:<b> {{ front_calc_commission_currency($product->unit_price, $product->purchase_price)['as_text'] }} </b> </small> </div>
                                         </li> 
                                     @endif
                                 </ul>
@@ -141,7 +141,7 @@
                                     @php
                                         $count_reviews = $product->reviews()->count()
                                     @endphp
-                                    <a href="#"><span> @if ($count_reviews > 0) ({{ $count_reviews }} {{ trans('frontend.product.reviews') }}) @endif</span></a>
+                                    <a href="#"><span> @if ($count_reviews > 0) ({{ $count_reviews }} {{ __('frontend.product.reviews') }}) @endif</span></a>
                                 </div> 
                             </div>
                             <form id="add-to-cart-form" action="{{ route('frontend.cart.add') }}" method="POST" enctype="multipart/form-data">
@@ -154,31 +154,31 @@
                                         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">{{ trans('frontend.product.custom_product') }}</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">{{ __('frontend.product.custom_product') }}</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body"> 
                                                     @if($product->require_photos)
-                                                        <h5 class="mb-3">{{ trans('frontend.product.printed_photos') }}</h5>
+                                                        <h5 class="mb-3">{{ __('frontend.product.printed_photos') }}</h5>
                                                         <div id="product-images">
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
                                                                     <input type="file" id="photos-1" name="photos[]" class="form-control"> 
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
-                                                                    <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="{{ trans('frontend.product.photo_note') }}" >
+                                                                    <input type="text" name="photos_note[]" class="form-control" id="name" placeholder="{{ __('frontend.product.photo_note') }}" >
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">{{ trans('frontend.product.add_more') }}</button>
+                                                        <button type="button" class="btn btn-warning mb-3" onclick="add_more_slider_image()">{{ __('frontend.product.add_more') }}</button>
                                                     @endif
                                                     <div class="col-12 mb-3">
-                                                        <label>{{ trans('frontend.product.description') }}</label>
+                                                        <label>{{ __('frontend.product.description') }}</label>
                                                         <textarea class="form-control" name="description" placeholder="اكتب هنا الاسم والتفاصيل المراد طباعتها على المنتج" rows="3" required></textarea>
                                                     </div>
                                     
-                                                    <button type="submit" class="btn btn-rounded black-btn me-3">{{ trans('frontend.product.add_to_cart') }}</button> 
+                                                    <button type="submit" class="btn btn-rounded black-btn me-3">{{ __('frontend.product.add_to_cart') }}</button> 
                                                     <button type="submit" name="buy_now" class="btn btn-rounded black-btn me-3">اشتري الان</button> 
                                                 </div>
                                             </div>
@@ -209,7 +209,7 @@
 
                                     @if ($product->colors != null && !empty(json_decode($product->colors)))
 
-                                        <h6 class="product-title">{{ trans('frontend.product.color') }}</h6>
+                                        <h6 class="product-title">{{ __('frontend.product.color') }}</h6>
                                         <div class="color-selector inline">
                                             <ul>
                                                 @if (count(json_decode($product->colors)) > 0)
@@ -228,7 +228,7 @@
                                     @endif
 
 
-                                    <h6 class="product-title">{{ trans('frontend.product.quantity') }}</h6>
+                                    <h6 class="product-title">{{ __('frontend.product.quantity') }}</h6>
                                     <div class="qty-box">
                                         <div class="input-group">
                                             <button class="qty-minus" type="button"></button>
@@ -236,19 +236,19 @@
                                             <button class="qty-plus" type="button"></button>
                                         </div>
                                         &nbsp;&nbsp;
-                                        <b>({{ trans('frontend.product.available') }} <span id="available-quantity-span">{{ $product->current_stock }}</span>)</b>
+                                        <b>({{ __('frontend.product.available') }} <span id="available-quantity-span">{{ $product->current_stock }}</span>)</b>
                                     </div> 
 
                                     <div class="product-buttons">
                                         @if ($product->current_stock > 0)
                                             @if ($product->special)
                                                 <a href=""  data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}" data-name="{{ $product->name }}"
-                                                class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ trans('frontend.product.custom_product') }}</a>
+                                                class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart" data-bs-toggle="modal" data-bs-target="#requist">{{ __('frontend.product.custom_product') }}</a>
                                             @else
                                                 <button type="submit" id="cartEffect" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}" data-name="{{ $product->name }}"
                                                     class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Add to cart">
                                                     <i class="fa fa-shopping-cart"></i>
-                                                    {{ trans('frontend.product.add_to_cart') }}
+                                                    {{ __('frontend.product.add_to_cart') }}
                                                 </button>
                                                 <button type="submit" name="buy_now" id="cartEffect" data-id="{{ $product->id }}" data-category="{{ $product->category->name ?? '' }}" data-price="{{ front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] }}" data-name="{{ $product->name }}"
                                                     class="btn cart-btn btn-normal tooltip-top" data-tippy-content="Buy Now">
@@ -273,7 +273,7 @@
                             </form> 
                             
                             <div class="pro-group">
-                                <h6 class="product-title">{{ trans('frontend.product.product_description') }}</h6>
+                                <h6 class="product-title">{{ __('frontend.product.product_description') }}</h6>
                                 <p>
                                     <?php echo $product->description; ?>
                                 </p>
@@ -281,7 +281,7 @@
 
                             <div class="pro-group pb-0">
                                 @php($en_route_product = route('frontend.en_product', $product->id))
-                                <h6 class="product-title"> <a title="Copy Product Link" href="#" onclick="copy_to_clipboard('{{ $en_route_product }}')"><i class="fa fa-copy"></i></a> {{ trans('frontend.product.share') }}</h6>
+                                <h6 class="product-title"> <a title="Copy Product Link" href="#" onclick="copy_to_clipboard('{{ $en_route_product }}')"><i class="fa fa-copy"></i></a> {{ __('frontend.product.share') }}</h6>
                                 <div style="display: flex;justify-content: space-evenly;">
                                     <div class="fb-share-button"  data-href="{{ route('frontend.product', $product->slug) }}"  data-layout="button_count">
                                     </div>
@@ -307,11 +307,11 @@
                     <div class=" creative-card creative-inner">
                         <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist"> 
                             <li class="nav-item"><a class="nav-link active" id="contact-top-tab" data-bs-toggle="tab"
-                                    href="#top-contact" role="tab" aria-selected="false">{{ trans('frontend.product.video') }}</a>
+                                    href="#top-contact" role="tab" aria-selected="false">{{ __('frontend.product.video') }}</a>
                                 <div class="material-border"></div>
                             </li>
                             <li class="nav-item"><a class="nav-link" id="review-top-tab" data-bs-toggle="tab"
-                                    href="#top-review" role="tab" aria-selected="false">{{ trans('frontend.product.reviews') }}</a>
+                                    href="#top-review" role="tab" aria-selected="false">{{ __('frontend.product.reviews') }}</a>
                                 <div class="material-border"></div>
                             </li>
                         </ul>
@@ -341,7 +341,7 @@
                                             <div class="row g-3">
                                                 <div class="col-md-12">
                                                     <div class="media">
-                                                        <label>{{ trans('frontend.product.rate') }}</label>
+                                                        <label>{{ __('frontend.product.rate') }}</label>
                                                         <div class="media-body ms-3">
                                                             <div class="product">
                                                                 <div class="product-box">
@@ -360,11 +360,11 @@
                                                     </div>
                                                 </div> 
                                                 <div class="col-md-12">
-                                                    <label>{{ trans('frontend.product.comment') }}</label>
-                                                    <textarea class="form-control" placeholder="{{ trans('frontend.product.write_comment') }}" name="comment" rows="6" required></textarea>
+                                                    <label>{{ __('frontend.product.comment') }}</label>
+                                                    <textarea class="form-control" placeholder="{{ __('frontend.product.write_comment') }}" name="comment" rows="6" required></textarea>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <button class="btn btn-normal" type="submit">{{ trans('frontend.product.send') }}</button>
+                                                    <button class="btn btn-normal" type="submit">{{ __('frontend.product.send') }}</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -402,7 +402,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 product-related">
-                    <h2> {{ trans('frontend.product.related_products') }}</h2>
+                    <h2> {{ __('frontend.product.related_products') }}</h2>
                 </div>
             </div>
             <div class="row">
@@ -450,7 +450,7 @@
                                 @endif
                                 @if (auth()->check() && auth()->user()->user_type == 'seller')
                                     <li id="product-commission-for-variant">
-                                        <div class="text-center"> <small> {{ trans('frontend.product.commission') }}:<b>
+                                        <div class="text-center"> <small> {{ __('frontend.product.commission') }}:<b>
                                                     {{ front_calc_commission_currency($product->unit_price, $product->purchase_price)['as_text'] }}
                                                 </b> </small> </div>
                                     </li>

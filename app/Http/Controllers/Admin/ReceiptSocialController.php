@@ -101,7 +101,7 @@ class ReceiptSocialController extends Controller
         $receipt->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
         $receipt->delivery_status = 'on_delivery'; 
         $receipt->save();
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-socials.index');
     }
 
@@ -216,7 +216,7 @@ class ReceiptSocialController extends Controller
         // store the receipt social id in session so when redirect to the table open the popup to view products after delete
         session()->put('update_receipt_id',$receipt->id);
 
-        toast(trans('flash.deleted'),'success'); 
+        toast(__('flash.deleted'),'success'); 
         return 1;
     }
 
@@ -302,7 +302,7 @@ class ReceiptSocialController extends Controller
             // store the receipt social id in session so when redirect to the table open the popup to view products after edit
             session()->put('update_receipt_id',$receipt->id);
 
-            toast(trans('flash.global.update_title'),'success');
+            toast(__('flash.global.update_title'),'success');
             return redirect()->back();
         }
     }
@@ -377,7 +377,7 @@ class ReceiptSocialController extends Controller
                 session()->put('store_receipt_id',null);
                 session()->put('update_receipt_id',$receipt->id);
             }
-            toast(trans('flash.global.success_title'),'success');
+            toast(__('flash.global.success_title'),'success');
             return redirect()->back();
         }
     }
@@ -709,7 +709,7 @@ class ReceiptSocialController extends Controller
         // store the receipt social id in session so when redirect to the table open the popup to add products
         session()->put('store_receipt_id',$receiptSocial->id);
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-socials.index');
     }
 
@@ -747,7 +747,7 @@ class ReceiptSocialController extends Controller
         $receiptSocial->update($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.receipt-socials.index');
     }
 
@@ -777,7 +777,7 @@ class ReceiptSocialController extends Controller
             $receiptSocial->delete();
         } 
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     } 
@@ -789,7 +789,7 @@ class ReceiptSocialController extends Controller
         $receiptSocial = ReceiptSocial::withTrashed()->find($id);
         $receiptSocial->restore();
 
-        alert(trans('flash.restored'),'','success');
+        alert(__('flash.restored'),'','success');
 
         return redirect()->route('admin.receipt-socials.index');
     } 

@@ -5,7 +5,7 @@
 
         <div class="col-md-3">
             <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#uploadFedexModal">
-                {{ trans('global.extra.upload_fedex') }}
+                {{ __('global.extra.upload_fedex') }}
             </a>
         </div>
     </div>
@@ -30,7 +30,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="required" for="uploaded_file">{{ trans('cruds.excelFile.fields.uploaded_file') }}</label>
+                            <label class="required" for="uploaded_file">{{ __('cruds.excelFile.fields.uploaded_file') }}</label>
                             <div class="needsclick dropzone {{ $errors->has('uploaded_file') ? 'is-invalid' : '' }}" id="uploaded_file-dropzone">
                             </div>
                             @if($errors->has('uploaded_file'))
@@ -38,10 +38,10 @@
                                     {{ $errors->first('uploaded_file') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.excelFile.fields.uploaded_file_helper') }}</span>
+                            <span class="help-block">{{ __('cruds.excelFile.fields.uploaded_file_helper') }}</span>
                         </div>
                         <hr>
-                        <button type="submit" class="btn btn-success">{{ trans('global.continue') }}</button>
+                        <button type="submit" class="btn btn-success">{{ __('global.continue') }}</button>
                     </form>
                 </div>
             </div>
@@ -52,7 +52,7 @@
         <div class="col-xl-3 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <b>{{ trans('global.statistics') }} {{ trans('cruds.order.title') }}</b>
+                    <b>{{ __('global.statistics') }} {{ __('cruds.order.title') }}</b>
                     <hr>
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
@@ -126,7 +126,7 @@
 
     <div class="card">
         <div class="card-header">
-            {{ trans('global.list') }} {{ trans('cruds.order.title') }} 
+            {{ __('global.list') }} {{ __('cruds.order.title') }} 
         </div>
 
         <div class="card-body">
@@ -134,25 +134,25 @@
                 <thead>
                     <tr>
                         <th>
-                            {{ trans('global.extra.client') }}
+                            {{ __('global.extra.client') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.dates') }}
+                            {{ __('global.extra.dates') }}
                         </th>
                         <th>
-                            {{ trans('cruds.order.fields.shipping_address') }}
+                            {{ __('cruds.order.fields.shipping_address') }}
                         </th>
                         <th>
-                            {{ trans('cruds.order.fields.total_cost') }}
+                            {{ __('cruds.order.fields.total_cost') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.statuses') }}
+                            {{ __('global.extra.statuses') }}
                         </th>
                         <th>
-                            {{ trans('global.extra.stages') }}
+                            {{ __('global.extra.stages') }}
                         </th>
                         <th>
-                            {{ trans('cruds.order.fields.note') }}
+                            {{ __('cruds.order.fields.note') }}
                         </th>
                         <th>
                             &nbsp;
@@ -192,27 +192,27 @@
                             </td>
                             <td>
                                 <span class="badge text-bg-primary text-white mb-1">
-                                    {{ trans('cruds.order.fields.created_at') }}
+                                    {{ __('cruds.order.fields.created_at') }}
                                     <br> {{ $order->created_at }}
                                 </span>
                                 @if($order->date_of_receiving_order)
                                     <br>
                                     <span class="badge text-bg-light mb-1">
-                                        {{ trans('cruds.order.fields.date_of_receiving_order') }}
+                                        {{ __('cruds.order.fields.date_of_receiving_order') }}
                                         <br> {{ $order->date_of_receiving_order }}
                                     </span>
                                 @endif
                                 @if($order->send_to_delivery_date)
                                     <br>
                                     <span class="badge text-bg-info text-white mb-1">
-                                        {{ trans('cruds.order.fields.send_to_delivery_date') }}
+                                        {{ __('cruds.order.fields.send_to_delivery_date') }}
                                         <br> {{ $order->send_to_delivery_date }}
                                     </span>
                                 @endif
                                 @if($order->send_to_playlist_date)
                                     <br>
                                     <span class="badge text-bg-dark text-white mb-1">
-                                        {{ trans('cruds.order.fields.send_to_playlist_date') }}
+                                        {{ __('cruds.order.fields.send_to_playlist_date') }}
                                         <br> {{ $order->send_to_playlist_date }}
                                     </span>
                                 @endif
@@ -227,14 +227,14 @@
                                 <div style="display:flex;justify-content:space-between">
                                     @if($order->deposit_amount > 0)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
-                                            {{ trans('cruds.order.fields.deposit_amount') }}
+                                            {{ __('cruds.order.fields.deposit_amount') }}
                                             <br>
                                             {{ exchange_rate($order->deposit_amount,$order->exchange_rate) }} {{ $order->symbol }}
                                         </span>
                                     @endif
                                     @if($order->commission > 0)
                                         <span class="badge rounded-pill text-bg-light  mb-1">
-                                            {{ trans('cruds.order.fields.commission') }}
+                                            {{ __('cruds.order.fields.commission') }}
                                             <br>
                                             {{ exchange_rate(($order->commission + $order->extra_commission),$order->exchange_rate) }} {{ $order->symbol }}
                                         </span>
@@ -242,12 +242,12 @@
                                 </div>
                                 <div style="display:flex;justify-content:space-between">
                                     <span class="badge rounded-pill text-bg-light  mb-1">
-                                        {{ trans('cruds.order.fields.shipping_country_cost') }}
+                                        {{ __('cruds.order.fields.shipping_country_cost') }}
                                         <br>
                                         {{ exchange_rate($order->shipping_country_cost,$order->exchange_rate) }} {{ $order->symbol }}
                                     </span>
                                     <span class="badge rounded-pill text-bg-light  mb-1">
-                                        {{ trans('cruds.order.fields.total_cost') }}
+                                        {{ __('cruds.order.fields.total_cost') }}
                                         <br>
                                         {{ exchange_rate($order->total_cost,$order->exchange_rate) }} {{ $order->symbol }}
                                     </span>
@@ -256,7 +256,7 @@
                                 <div style="display:flex;justify-content:center">
                                     @if($order->discount > 0)
                                         <span class="badge rounded-pill text-bg-info  mb-1">
-                                            {{ trans('cruds.order.fields.discount') }}
+                                            {{ __('cruds.order.fields.discount') }}
                                             <br>
                                             {{ exchange_rate($order->discount,$order->exchange_rate) }} {{ $order->symbol }}
                                         </span>
@@ -268,7 +268,7 @@
                                 <div style="display: flex;justify-content: space-between;">
                                     <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
                                         <span>
-                                            {{ trans('cruds.receiptSocial.fields.done') }}
+                                            {{ __('cruds.receiptSocial.fields.done') }}
                                         </span>
                                         <br>
                                         <div id="done-{{$order->id}}">
@@ -289,7 +289,7 @@
                                     </div>
                                     <div class="badge text-bg-light mb-1" style="margin: 0px 3px;">
                                         <span>
-                                            {{ trans('cruds.order.fields.supplied') }}
+                                            {{ __('cruds.order.fields.supplied') }}
                                         </span>
                                         <br>
                                         <div id="supplied-{{$order->id}}">
@@ -315,7 +315,7 @@
                                     <div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;"
                                         class="badge text-bg-light mb-1">
                                         <span>
-                                            {{ trans('cruds.order.fields.quickly') }}
+                                            {{ __('cruds.order.fields.quickly') }}
                                         </span>
                                         <label class="c-switch c-switch-pill c-switch-success">
                                             <input onchange="update_statuses(this,'quickly')" value="{{ $order->id }}"
@@ -327,7 +327,7 @@
                                     <div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;"
                                         class="badge text-bg-light mb-1">
                                         <span>
-                                            {{ trans('cruds.order.fields.calling') }}
+                                            {{ __('cruds.order.fields.calling') }}
                                         </span>
                                         <label class="c-switch c-switch-pill c-switch-success">
                                             <input onchange="update_statuses(this,'calling')" value="{{ $order->id }}"
@@ -340,17 +340,17 @@
                             </td>
                             <td>
                                 <span
-                                    class="badge text-bg-{{ trans('global.payment_type.colors.' . $order->payment_type) }} mb-1">
-                                    {{ $order->payment_type ? trans('global.payment_type.status.' . $order->payment_type) : '' }}
+                                    class="badge text-bg-{{ __('global.payment_type.colors.' . $order->payment_type) }} mb-1">
+                                    {{ $order->payment_type ? __('global.payment_type.status.' . $order->payment_type) : '' }}
                                 </span>
                                 <br>
                                 <span
-                                    class="badge text-bg-{{ trans('global.delivery_status.colors.' . $order->delivery_status) }} mb-1">
-                                    {{ $order->delivery_status ? trans('global.delivery_status.status.' . $order->delivery_status) : '' }}
+                                    class="badge text-bg-{{ __('global.delivery_status.colors.' . $order->delivery_status) }} mb-1">
+                                    {{ $order->delivery_status ? __('global.delivery_status.status.' . $order->delivery_status) : '' }}
                                 </span>
                                 <span
-                                    class="badge text-bg-{{ trans('global.payment_status.colors.' . $order->payment_status) }} mb-1">
-                                    {{ $order->payment_status ? trans('global.payment_status.status.' . $order->payment_status) : '' }}
+                                    class="badge text-bg-{{ __('global.payment_status.colors.' . $order->payment_status) }} mb-1">
+                                    {{ $order->payment_status ? __('global.payment_status.status.' . $order->payment_status) : '' }}
                                 </span>
                                 @can('hold')
                                     <form action="{{ route('admin.orders.update_statuses') }}" method="POST" style="display: inline">
@@ -370,19 +370,19 @@
                                     <button class="btn btn-success btn-sm rounded-pill" onclick="playlist_users('{{$order->id}}','order')">أرسال للديزاينر</button>
                                 @else  
                                     <span onclick="playlist_users('{{$order->id}}','order')" 
-                                        class="playlist_status badge text-bg-{{ trans('global.playlist_status.colors.' . $order->playlist_status) }} mb-1">
-                                        {{ $order->playlist_status ? trans('global.playlist_status.status.' . $order->playlist_status) : '' }}
+                                        class="playlist_status badge text-bg-{{ __('global.playlist_status.colors.' . $order->playlist_status) }} mb-1">
+                                        {{ $order->playlist_status ? __('global.playlist_status.status.' . $order->playlist_status) : '' }}
                                     </span>
                                 @endif
                                 <hr>
                                 <span class="badge text-bg-danger text-white mb-1">
-                                    {{ trans('cruds.order.fields.added_by') }}
+                                    {{ __('cruds.order.fields.added_by') }}
                                     =>
                                     {{ $order->user->name ?? '' }}
                                 </span>
                                 @if($order->delivery_man)
                                     <span class="badge text-bg-dark text-white mb-1">
-                                        {{ trans('cruds.order.fields.delivery_man_id') }}
+                                        {{ __('cruds.order.fields.delivery_man_id') }}
                                         =>
                                         {{ $order->delivery_man->name ?? '' }}
                                     </span>
@@ -395,13 +395,13 @@
                                 @can('order_show')
                                     <a class="btn btn-primary"
                                         href="{{ route('admin.orders.show', $order->id) }}">
-                                        {{ trans('global.view') }} 
+                                        {{ __('global.view') }} 
                                     </a>
                                 @endcan 
                                 @can('order_print')
                                     <a class="btn btn-success" target="_blanc"
                                         href="{{ route('admin.orders.print', $order->id) }}">
-                                        {{ trans('global.print') }} 
+                                        {{ __('global.print') }} 
                                     </a>
                                 @endcan
                                 
@@ -409,7 +409,7 @@
                                     @can('order_edit')
                                         <a class="btn btn-info" 
                                             href="{{ route('admin.orders.edit', $order->id) }}">
-                                            {{ trans('global.edit') }} 
+                                            {{ __('global.edit') }} 
                                         </a>
                                     @endcan
 
@@ -417,7 +417,7 @@
                                         <?php $route = route('admin.orders.destroy', $order->id); ?>
                                         <a class="btn btn-danger"
                                             href="#" onclick="deleteConfirmation('{{$route}}')">
-                                            {{ trans('global.delete') }} 
+                                            {{ __('global.delete') }} 
                                         </a>
                                     @endcan
                                 @endif

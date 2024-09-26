@@ -31,11 +31,13 @@ class ProfileController extends Controller
             'phone_number' => $request->phone_number,
         ]);
 
-        $seller->update([
-            'social_name' => $request->social_name, 
-            'social_link' => $request->social_link, 
-            'qualification' => $request->qualification, 
-        ]);
+        if($seller){
+            $seller->update([
+                'social_name' => $request->social_name, 
+                'social_link' => $request->social_link, 
+                'qualification' => $request->qualification, 
+            ]);
+        }
 
         if ($request->photo != null) { 
             if ($user->photo) {
@@ -59,7 +61,10 @@ class ProfileController extends Controller
         }
 
         $user->save();
-        $seller->save();
+        if($seller){
+            $seller->save();
+        }
+        
 
         toast("تم تعديل البيانات بنجاح","success");
         return redirect()->route('frontend.dashboard');

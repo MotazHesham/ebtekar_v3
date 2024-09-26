@@ -148,7 +148,7 @@ class SellersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $seller->id]);
         }
 
-        toast(trans('flash.global.success_title'),'success'); 
+        toast(__('flash.global.success_title'),'success'); 
         return redirect()->route('admin.sellers.index');
     }
 
@@ -156,7 +156,7 @@ class SellersController extends Controller
     {
         abort_if(Gate::denies('seller_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $users = User::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $seller->load('user');
 
@@ -218,7 +218,7 @@ class SellersController extends Controller
             $seller->identity_front->delete();
         }
 
-        toast(trans('flash.global.update_title'),'success'); 
+        toast(__('flash.global.update_title'),'success'); 
         return redirect()->route('admin.sellers.index');
     }
 
@@ -237,7 +237,7 @@ class SellersController extends Controller
 
         $seller->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
         return 1;
     }
 

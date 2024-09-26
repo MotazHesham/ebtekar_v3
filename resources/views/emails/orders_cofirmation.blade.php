@@ -57,7 +57,7 @@
                 </tr>
                 <tr>
                     <th>{{__('Order status')}}</th>
-                    <th>{{ $order->delivery_status ? trans('global.delivery_status.status.' . $order->delivery_status) : '' }}</th>
+                    <th>{{ $order->delivery_status ? __('global.delivery_status.status.' . $order->delivery_status) : '' }}</th>
                 </tr>
                 <tr>
                     <th>{{__('Shipping address')}}</th>

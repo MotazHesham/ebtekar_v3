@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.receiptClientProduct.title') }}
+        {{ __('global.show') }} {{ __('cruds.receiptClientProduct.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.receipt-client-products.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptClientProduct.fields.id') }}
+                            {{ __('cruds.receiptClientProduct.fields.id') }}
                         </th>
                         <td>
                             {{ $receiptClientProduct->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptClientProduct.fields.name') }}
+                            {{ __('cruds.receiptClientProduct.fields.name') }}
                         </th>
                         <td>
                             {{ $receiptClientProduct->name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptClientProduct.fields.price') }}
+                            {{ __('cruds.receiptClientProduct.fields.price') }}
                         </th>
                         <td>
                             {{ $receiptClientProduct->price }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.receiptClientProduct.fields.receipts') }}
+                            {{ __('cruds.receiptClientProduct.fields.receipts') }}
                         </th>
                         <td>
                             @foreach($receiptClientProduct->receipts as $key => $receipts)
@@ -53,7 +53,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.receipt-client-products.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

@@ -11,9 +11,9 @@
                 <div class="col">
                     <div class="breadcrumb-contain">
                         <div>
-                            <h2> {{ trans('frontend.products.main_categories') }}</h2>
+                            <h2> {{ __('frontend.products.main_categories') }}</h2>
                             <ul>
-                                <li><a href="{{ route('home') }}">{{ trans('frontend.about.home') }} </a></li>
+                                <li><a href="{{ route('home') }}">{{ __('frontend.about.home') }} </a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
                                 <li><a href="javascript:void(0)">{{ $title }}</a></li>
                             </ul>
@@ -43,7 +43,7 @@
                                                         <div class="col-xl-12">
                                                             <div class="filter-main-btn ">
                                                                 <span class="filter-btn ">
-                                                                    <i class="fa fa-filter" aria-hidden="true"></i> {{ trans('frontend.products.filter') }}
+                                                                    <i class="fa fa-filter" aria-hidden="true"></i> {{ __('frontend.products.filter') }}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -52,7 +52,7 @@
                                                         <div class="col-12 position-relative">
                                                             <div class="product-filter-content horizontal-filter-mian ">
                                                                 <div class="horizontal-filter-toggle">
-                                                                    <h4><i data-feather="filter"></i>{{ trans('frontend.products.filter') }} </h4>
+                                                                    <h4><i data-feather="filter"></i>{{ __('frontend.products.filter') }} </h4>
                                                                 </div>
                                                                 <div class="collection-view">
                                                                     <ul>
@@ -78,10 +78,10 @@
                                                                 </div>
                                                                 <div class="product-page-per-view">
                                                                     <select name="pagination" onchange="filter()">
-                                                                        <option value="12" @if($pagination == '12') selected @endif> {{ trans('frontend.products.paginate_12') }} </option>
-                                                                        <option value="24" @if($pagination == '24') selected @endif> {{ trans('frontend.products.paginate_24') }} </option>
-                                                                        <option value="50" @if($pagination == '50') selected @endif> {{ trans('frontend.products.paginate_50') }} </option>
-                                                                        <option value="100" @if($pagination == '100') selected @endif>{{ trans('frontend.products.paginate_100') }}  </option>
+                                                                        <option value="12" @if($pagination == '12') selected @endif> {{ __('frontend.products.paginate_12') }} </option>
+                                                                        <option value="24" @if($pagination == '24') selected @endif> {{ __('frontend.products.paginate_24') }} </option>
+                                                                        <option value="50" @if($pagination == '50') selected @endif> {{ __('frontend.products.paginate_50') }} </option>
+                                                                        <option value="100" @if($pagination == '100') selected @endif>{{ __('frontend.products.paginate_100') }}  </option>
                                                                     </select>
                                                                 </div>
 
@@ -90,12 +90,12 @@
                                                                         <div class="collection-mobile-back">
                                                                             <span class="filter-back">
                                                                                 <i class="fa fa-angle-left" aria-hidden="true"></i>
-                                                                                {{ trans('frontend.products.back')}}
+                                                                                {{ __('frontend.products.back')}}
                                                                             </span>
                                                                         </div>
                                                                         <div class="filter-group">
                                                                             <div class="collection-collapse-block">
-                                                                                <h6 class="collapse-block-title">{{ trans('frontend.products.colors') }} </h6>  
+                                                                                <h6 class="collapse-block-title">{{ __('frontend.products.colors') }} </h6>  
                                                                                 <div class="collection-collapse-block-content">
                                                                                     <div class="color-selector">
                                                                                         <ul> 
@@ -173,19 +173,19 @@
                                                                                         <div class="collection-brand-filter">
                                                                                             <div class="custom-control custom-checkbox  form-check collection-filter-checkbox">
                                                                                                 <input type="radio" class="custom-control-input form-check-input" name="sort_by" onchange="filter()" id="newest" @isset($sort_by) @if($sort_by == 'newest') checked @endif @endisset value="newest">
-                                                                                                <label class="custom-control-label form-check-label" for="newest">{{ trans('frontend.products.newest') }}</label>
+                                                                                                <label class="custom-control-label form-check-label" for="newest">{{ __('frontend.products.newest') }}</label>
                                                                                             </div> 
                                                                                             <div class="custom-control custom-checkbox  form-check collection-filter-checkbox">
                                                                                                 <input type="radio" class="custom-control-input form-check-input" name="sort_by" onchange="filter()" id="oldest" @isset($sort_by) @if($sort_by == 'oldest') checked @endif @endisset value="oldest">
-                                                                                                <label class="custom-control-label form-check-label" for="oldest">{{ trans('frontend.products.oldest') }}</label>
+                                                                                                <label class="custom-control-label form-check-label" for="oldest">{{ __('frontend.products.oldest') }}</label>
                                                                                             </div> 
                                                                                             <div class="custom-control custom-checkbox  form-check collection-filter-checkbox">
                                                                                                 <input type="radio" class="custom-control-input form-check-input" name="sort_by" onchange="filter()" id="price_low" @isset($sort_by) @if($sort_by == 'price_low') checked @endif @endisset value="price_low">
-                                                                                                <label class="custom-control-label form-check-label" for="price_low">{{ trans('frontend.products.price_low') }}   </label>
+                                                                                                <label class="custom-control-label form-check-label" for="price_low">{{ __('frontend.products.price_low') }}   </label>
                                                                                             </div> 
                                                                                             <div class="custom-control custom-checkbox  form-check collection-filter-checkbox">
                                                                                                 <input type="radio" class="custom-control-input form-check-input" name="sort_by" onchange="filter()" id="price_high" @isset($sort_by) @if($sort_by == 'price_high') checked @endif @endisset value="price_high">
-                                                                                                <label class="custom-control-label form-check-label" for="price_high">{{ trans('frontend.products.price_high') }}   </label>
+                                                                                                <label class="custom-control-label form-check-label" for="price_high">{{ __('frontend.products.price_high') }}   </label>
                                                                                             </div> 
                                                                                         </div>
                                                                                     </div>
@@ -194,7 +194,7 @@
                                                                         </div>
 
                                                                     </div>
-                                                                    <a href="javascript:void(0)" class="btn btn-solid btn-sm close-filter"> {{ trans('frontend.products.close') }}</a> 
+                                                                    <a href="javascript:void(0)" class="btn btn-solid btn-sm close-filter"> {{ __('frontend.products.close') }}</a> 
                                                                 </div>
                                                             </div>
                                                         </div>

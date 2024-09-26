@@ -27,7 +27,7 @@ class FaqQuestionController extends Controller
     {
         abort_if(Gate::denies('faq_question_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = FaqCategory::pluck('category', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $categories = FaqCategory::pluck('category', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.faqQuestions.create', compact('categories'));
     }
@@ -36,7 +36,7 @@ class FaqQuestionController extends Controller
     {
         $faqQuestion = FaqQuestion::create($request->all());
 
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.faq-questions.index');
     }
 
@@ -44,7 +44,7 @@ class FaqQuestionController extends Controller
     {
         abort_if(Gate::denies('faq_question_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = FaqCategory::pluck('category', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $categories = FaqCategory::pluck('category', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $faqQuestion->load('category');
 
@@ -55,7 +55,7 @@ class FaqQuestionController extends Controller
     {
         $faqQuestion->update($request->all());
 
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.faq-questions.index');
     }
 
@@ -74,7 +74,7 @@ class FaqQuestionController extends Controller
 
         $faqQuestion->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         return 1;
     }

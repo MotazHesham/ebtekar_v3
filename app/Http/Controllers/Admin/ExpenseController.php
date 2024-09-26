@@ -33,7 +33,7 @@ class ExpenseController extends Controller
     {
         abort_if(Gate::denies('expense_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $expense_categories = ExpenseCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $expense_categories = ExpenseCategory::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         return view('admin.expenses.create', compact('expense_categories'));
     }
@@ -84,7 +84,7 @@ class ExpenseController extends Controller
     {
         abort_if(Gate::denies('expense_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $expense_categories = ExpenseCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $expense_categories = ExpenseCategory::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $expense->load('expense_category');
 

@@ -41,7 +41,7 @@ class BannersController extends Controller
     {
         abort_if(Gate::denies('banner_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
         return view('admin.banners.create',compact('websites'));
     }
 
@@ -58,14 +58,14 @@ class BannersController extends Controller
         }
 
         Cache::forget('home_banners_1_'.$banner->website_setting_id);
-        toast(trans('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.banners.index');
     } 
     public function edit(Banner $banner)
     {
         abort_if(Gate::denies('banner_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
         return view('admin.banners.edit', compact('banner','websites'));
     }
 
@@ -85,7 +85,7 @@ class BannersController extends Controller
         }
 
         Cache::forget('home_banners_1_'.$banner->website_setting_id);
-        toast(trans('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.banners.index');
     }
 
@@ -102,7 +102,7 @@ class BannersController extends Controller
 
         $banner->delete();
 
-        alert(trans('flash.deleted'),'','success');
+        alert(__('flash.deleted'),'','success');
 
         Cache::forget('home_banners_1_'.$banner->website_setting_id);
         return 1;

@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            {{ trans('global.edit') }} {{ trans('cruds.seller.title_singular') }}
+            {{ __('global.edit') }} {{ __('cruds.seller.title_singular') }}
         </div>
 
         <div class="card-body">
@@ -12,7 +12,7 @@
                 <input type="hidden" name="user_id" value="{{ $seller->user->id }}">
                 <div class="row">
                     <div class="form-group col-md-4">
-                        <label class="required" for="name">{{ trans('cruds.user.fields.name') }}</label>
+                        <label class="required" for="name">{{ __('cruds.user.fields.name') }}</label>
                         <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text"
                             name="name" id="name" value="{{ old('name', $seller->user->name) }}" required>
                         @if ($errors->has('name'))
@@ -20,10 +20,10 @@
                                 {{ $errors->first('name') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.user.fields.name_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.user.fields.name_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="required" for="email">{{ trans('cruds.user.fields.email') }}</label>
+                        <label class="required" for="email">{{ __('cruds.user.fields.email') }}</label>
                         <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="email"
                             name="email" id="email" value="{{ old('email', $seller->user->email) }}" required>
                         @if ($errors->has('email'))
@@ -31,10 +31,10 @@
                                 {{ $errors->first('email') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.user.fields.email_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.user.fields.email_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="phone_number">{{ trans('cruds.user.fields.phone_number') }}</label>
+                        <label for="phone_number">{{ __('cruds.user.fields.phone_number') }}</label>
                         <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}" type="text"
                             name="phone_number" id="phone_number"
                             value="{{ old('phone_number', $seller->user->phone_number) }}">
@@ -43,10 +43,10 @@
                                 {{ $errors->first('phone_number') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.user.fields.phone_number_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.user.fields.phone_number_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="address">{{ trans('cruds.user.fields.address') }}</label>
+                        <label for="address">{{ __('cruds.user.fields.address') }}</label>
                         <input class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" type="text"
                             name="address" id="address" value="{{ old('address', $seller->user->address) }}">
                         @if ($errors->has('address'))
@@ -54,10 +54,10 @@
                                 {{ $errors->first('address') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.user.fields.address_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.user.fields.address_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="password">{{ trans('cruds.user.fields.password') }}</label>
+                        <label for="password">{{ __('cruds.user.fields.password') }}</label>
                         <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="password"
                             name="password" id="password">
                         @if ($errors->has('password'))
@@ -65,14 +65,14 @@
                                 {{ $errors->first('password') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.user.fields.password_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.user.fields.password_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="required">{{ trans('cruds.seller.fields.seller_type') }}</label>
+                        <label class="required">{{ __('cruds.seller.fields.seller_type') }}</label>
                         <select class="form-control {{ $errors->has('seller_type') ? 'is-invalid' : '' }}"
                             name="seller_type" id="seller_type" required>
                             <option value disabled {{ old('seller_type', null) === null ? 'selected' : '' }}>
-                                {{ trans('global.pleaseSelect') }}</option>
+                                {{ __('global.pleaseSelect') }}</option>
                             @foreach (App\Models\Seller::SELLER_TYPE_SELECT as $key => $label)
                                 <option value="{{ $key }}"
                                     {{ old('seller_type', $seller->seller_type) === (string) $key ? 'selected' : '' }}>
@@ -84,10 +84,10 @@
                                 {{ $errors->first('seller_type') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.seller_type_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.seller_type_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="discount">{{ trans('cruds.seller.fields.discount') }}</label>
+                        <label for="discount">{{ __('cruds.seller.fields.discount') }}</label>
                         <input class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}" type="number"
                             name="discount" id="discount" value="{{ old('discount', $seller->discount) }}" step="0.01">
                         @if ($errors->has('discount'))
@@ -95,10 +95,10 @@
                                 {{ $errors->first('discount') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.discount_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.discount_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="discount_code">{{ trans('cruds.seller.fields.discount_code') }}</label>
+                        <label for="discount_code">{{ __('cruds.seller.fields.discount_code') }}</label>
                         <input class="form-control {{ $errors->has('discount_code') ? 'is-invalid' : '' }}" type="text"
                             name="discount_code" id="discount_code"
                             value="{{ old('discount_code', $seller->discount_code) }}">
@@ -107,10 +107,10 @@
                                 {{ $errors->first('discount_code') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.discount_code_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.discount_code_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="order_out_website">{{ trans('cruds.seller.fields.order_out_website') }}</label>
+                        <label for="order_out_website">{{ __('cruds.seller.fields.order_out_website') }}</label>
                         <input class="form-control {{ $errors->has('order_out_website') ? 'is-invalid' : '' }}"
                             type="number" name="order_out_website" id="order_out_website"
                             value="{{ old('order_out_website', $seller->order_out_website) }}" step="1">
@@ -119,10 +119,10 @@
                                 {{ $errors->first('order_out_website') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.order_out_website_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.order_out_website_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="qualification">{{ trans('cruds.seller.fields.qualification') }}</label>
+                        <label for="qualification">{{ __('cruds.seller.fields.qualification') }}</label>
                         <input class="form-control {{ $errors->has('qualification') ? 'is-invalid' : '' }}" type="text"
                             name="qualification" id="qualification"
                             value="{{ old('qualification', $seller->qualification) }}">
@@ -131,10 +131,10 @@
                                 {{ $errors->first('qualification') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.qualification_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.qualification_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="required" for="social_name">{{ trans('cruds.seller.fields.social_name') }}</label>
+                        <label class="required" for="social_name">{{ __('cruds.seller.fields.social_name') }}</label>
                         <input class="form-control {{ $errors->has('social_name') ? 'is-invalid' : '' }}" type="text"
                             name="social_name" id="social_name" value="{{ old('social_name', $seller->social_name) }}"
                             required>
@@ -143,10 +143,10 @@
                                 {{ $errors->first('social_name') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.social_name_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.social_name_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="required" for="social_link">{{ trans('cruds.seller.fields.social_link') }}</label>
+                        <label class="required" for="social_link">{{ __('cruds.seller.fields.social_link') }}</label>
                         <input class="form-control {{ $errors->has('social_link') ? 'is-invalid' : '' }}" type="text"
                             name="social_link" id="social_link" value="{{ old('social_link', $seller->social_link) }}"
                             required>
@@ -155,10 +155,10 @@
                                 {{ $errors->first('social_link') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.social_link_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.social_link_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="photo">{{ trans('cruds.user.fields.photo') }}</label>
+                        <label for="photo">{{ __('cruds.user.fields.photo') }}</label>
                         <div class="needsclick dropzone {{ $errors->has('photo') ? 'is-invalid' : '' }}"
                             id="photo-dropzone">
                         </div>
@@ -167,10 +167,10 @@
                                 {{ $errors->first('photo') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.user.fields.photo_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.user.fields.photo_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="identity_back">{{ trans('cruds.seller.fields.identity_back') }}</label>
+                        <label for="identity_back">{{ __('cruds.seller.fields.identity_back') }}</label>
                         <div class="needsclick dropzone {{ $errors->has('identity_back') ? 'is-invalid' : '' }}"
                             id="identity_back-dropzone">
                         </div>
@@ -179,10 +179,10 @@
                                 {{ $errors->first('identity_back') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.identity_back_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.identity_back_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="identity_front">{{ trans('cruds.seller.fields.identity_front') }}</label>
+                        <label for="identity_front">{{ __('cruds.seller.fields.identity_front') }}</label>
                         <div class="needsclick dropzone {{ $errors->has('identity_front') ? 'is-invalid' : '' }}"
                             id="identity_front-dropzone">
                         </div>
@@ -191,12 +191,12 @@
                                 {{ $errors->first('identity_front') }}
                             </div>
                         @endif
-                        <span class="help-block">{{ trans('cruds.seller.fields.identity_front_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.seller.fields.identity_front_helper') }}</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-danger" type="submit">
-                        {{ trans('global.save') }}
+                        {{ __('global.save') }}
                     </button>
                 </div>
             </form>

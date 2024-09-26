@@ -13,7 +13,7 @@
                             <ul>
                                 <li><a href="index.html">الرئيسية</a></li>
                                 <li><i class="fa fa-angle-double-left"></i></li>
-                                <li><a href="javascript:void(0)">{{ trans('global.reset_password') }}</a></li>
+                                <li><a href="javascript:void(0)">{{ __('global.reset_password') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -40,14 +40,14 @@
                             @csrf
                             <div class="form-group">
                                 <label>البريد الالكتروني</label>
-                                <input  id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" required autocomplete="email" autofocus placeholder="{{ trans('global.login_email') }}" value="{{ old('email') }}">
+                                <input  id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" required autocomplete="email" autofocus placeholder="{{ __('global.login_email') }}" value="{{ old('email') }}">
                                 @error('email')
                                     <span class="invalid-feedback" role="alert" >
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div> 
-                            <button type="submit" class="btn btn-normal">{{ trans('global.send_password') }}</button> 
+                            <button type="submit" class="btn btn-normal">{{ __('global.send_password') }}</button> 
                         </form>
 
                         <a href="{{ route('login') }}" class="txt-default pt-3 d-block">تسجيل الدخول </a>

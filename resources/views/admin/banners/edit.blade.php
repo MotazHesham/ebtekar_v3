@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.banner.title_singular') }}
+        {{ __('global.edit') }} {{ __('cruds.banner.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -11,7 +11,7 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label class="required" for="website_setting_id">{{ trans('global.extra.website_setting_id') }}</label>
+                <label class="required" for="website_setting_id">{{ __('global.extra.website_setting_id') }}</label>
                 <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
                     @foreach($websites as $id => $entry)
                         <option value="{{ $id }}" {{ old('website_setting_id',$banner->website_setting_id) == $id ? 'selected' : '' }}>{{ $entry }}</option>
@@ -24,7 +24,7 @@
                 @endif 
             </div>
             <div class="form-group">
-                <label class="required" for="photo">{{ trans('cruds.banner.fields.photo') }}</label>
+                <label class="required" for="photo">{{ __('cruds.banner.fields.photo') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('photo') ? 'is-invalid' : '' }}" id="photo-dropzone">
                 </div>
                 @if($errors->has('photo'))
@@ -32,22 +32,22 @@
                         {{ $errors->first('photo') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.banner.fields.photo_helper') }}</span>
+                <span class="help-block">{{ __('cruds.banner.fields.photo_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="url">{{ trans('cruds.banner.fields.url') }}</label>
+                <label for="url">{{ __('cruds.banner.fields.url') }}</label>
                 <input class="form-control {{ $errors->has('url') ? 'is-invalid' : '' }}" type="text" name="url" id="url" value="{{ old('url', $banner->url) }}">
                 @if($errors->has('url'))
                     <div class="invalid-feedback">
                         {{ $errors->first('url') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.banner.fields.url_helper') }}</span>
+                <span class="help-block">{{ __('cruds.banner.fields.url_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required">{{ trans('cruds.banner.fields.position') }}</label>
+                <label class="required">{{ __('cruds.banner.fields.position') }}</label>
                 <select class="form-control {{ $errors->has('position') ? 'is-invalid' : '' }}" name="position" id="position" required>
-                    <option value disabled {{ old('position', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    <option value disabled {{ old('position', null) === null ? 'selected' : '' }}>{{ __('global.pleaseSelect') }}</option>
                     @foreach(App\Models\Banner::POSITION_SELECT as $key => $label)
                         <option value="{{ $key }}" {{ old('position', $banner->position) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
@@ -57,11 +57,11 @@
                         {{ $errors->first('position') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.banner.fields.position_helper') }}</span>
+                <span class="help-block">{{ __('cruds.banner.fields.position_helper') }}</span>
             </div> 
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
-                    {{ trans('global.save') }}
+                    {{ __('global.save') }}
                 </button>
             </div>
         </form>

@@ -3,21 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.contactu.title') }}
+        {{ __('global.show') }} {{ __('cruds.contactu.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.contactus.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
             <table class="table table-bordered table-striped">
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.contactu.fields.id') }}
+                            {{ __('cruds.contactu.fields.id') }}
                         </th>
                         <td>
                             {{ $contactu->id }}
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.contactu.fields.first_name') }}
+                            {{ __('cruds.contactu.fields.first_name') }}
                         </th>
                         <td>
                             {{ $contactu->first_name }}
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.contactu.fields.last_name') }}
+                            {{ __('cruds.contactu.fields.last_name') }}
                         </th>
                         <td>
                             {{ $contactu->last_name }}
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.contactu.fields.email') }}
+                            {{ __('cruds.contactu.fields.email') }}
                         </th>
                         <td>
                             {{ $contactu->email }}
@@ -49,7 +49,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.contactu.fields.phone_number') }}
+                            {{ __('cruds.contactu.fields.phone_number') }}
                         </th>
                         <td>
                             {{ $contactu->phone_number }}
@@ -57,7 +57,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.contactu.fields.message') }}
+                            {{ __('cruds.contactu.fields.message') }}
                         </th>
                         <td>
                             {{ $contactu->message }}
@@ -67,7 +67,7 @@
             </table>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.contactus.index') }}">
-                    {{ trans('global.back_to_list') }}
+                    {{ __('global.back_to_list') }}
                 </a>
             </div>
         </div>

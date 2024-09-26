@@ -15,7 +15,7 @@
     </div>
     <div class="card">
         <div class="card-header">
-            {{ trans('cruds.currency.title_singular') }} {{ trans('global.list') }}
+            {{ __('cruds.currency.title_singular') }} {{ __('global.list') }}
         </div>
 
         <div class="card-body">
@@ -27,22 +27,22 @@
 
                             </th>
                             <th>
-                                {{ trans('cruds.currency.fields.id') }}
+                                {{ __('cruds.currency.fields.id') }}
                             </th>
                             <th>
-                                {{ trans('cruds.currency.fields.name') }}
+                                {{ __('cruds.currency.fields.name') }}
                             </th>
                             <th>
-                                {{ trans('cruds.currency.fields.symbol') }}
+                                {{ __('cruds.currency.fields.symbol') }}
                             </th>
                             <th>
-                                {{ trans('cruds.currency.fields.exchange_rate') }}
+                                {{ __('cruds.currency.fields.exchange_rate') }}
                             </th>
                             <th>
-                                {{ trans('cruds.currency.fields.status') }}
+                                {{ __('cruds.currency.fields.status') }}
                             </th>
                             <th>
-                                {{ trans('cruds.currency.fields.code') }}
+                                {{ __('cruds.currency.fields.code') }}
                             </th>
                             <th>
                                 &nbsp;
@@ -82,14 +82,14 @@
                                     @can('currency_show')
                                         <a class="btn btn-xs btn-primary"
                                             href="{{ route('admin.currencies.show', $currency->id) }}">
-                                            {{ trans('global.view') }}
+                                            {{ __('global.view') }}
                                         </a>
                                     @endcan
 
                                     @can('currency_edit')
                                         <a class="btn btn-xs btn-info"
                                             href="{{ route('admin.currencies.edit', $currency->id) }}">
-                                            {{ trans('global.edit') }}
+                                            {{ __('global.edit') }}
                                         </a>
                                     @endcan 
 
