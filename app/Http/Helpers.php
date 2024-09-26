@@ -20,32 +20,36 @@ if (!function_exists('validateCart')) {
     {
 
         $cart = session()->get('cart', []); // Retrieve cart from session 
-        foreach ($cart as $item) {
-            $product = Product::find($item['product_id']); 
+        if($cart){
+            if(count($cart) > 0){
+                foreach ($cart as $item) {
+                    $product = Product::find($item['product_id']); 
 
-            if(!$product){
-                $cart = $cart->where('id','!=',$item['id']);
-                session()->put('cart',$cart);  
-                $alert_text = "منتج غير متوفر";
-                $route = 'frontend.payment_select';
-                $return = true;
-            }
+                    if(!$product){
+                        $cart = $cart->where('id','!=',$item['id']);
+                        session()->put('cart',$cart);  
+                        $alert_text = "منتج غير متوفر";
+                        $route = 'frontend.payment_select';
+                        $return = true;
+                    }
 
-            $available_quantity = $product->current_stock;
-            if($product->variant_product == 1 && $item['variation'] != null){ 
-                $product_stock = $product->stocks()->where('variant', $item['variation'])->first();
-                if($product_stock){
-                    $available_quantity = $product_stock->stock;
+                    $available_quantity = $product->current_stock;
+                    if($product->variant_product == 1 && $item['variation'] != null){ 
+                        $product_stock = $product->stocks()->where('variant', $item['variation'])->first();
+                        if($product_stock){
+                            $available_quantity = $product_stock->stock;
+                        }
+                    }
+
+                    if (!$product->published || $available_quantity < $item['quantity']) {
+                        $cart = $cart->where('id','!=',$item['id']);
+                        session()->put('cart',$cart);  
+                        $alert_text = "عذرا المنتج " . $product->name . " غير متوفر حاليا";
+                        $route = 'frontend.payment_select';
+                        $return = true;
+                    }
                 }
-            }
-
-            if (!$product->published || $available_quantity < $item['quantity']) {
-                $cart = $cart->where('id','!=',$item['id']);
-                session()->put('cart',$cart);  
-                $alert_text = "عذرا المنتج " . $product->name . " غير متوفر حاليا";
-                $route = 'frontend.payment_select';
-                $return = true;
-            }
+            } 
         }
         return [ 
             'alert_text' => $alert_text ?? '',
