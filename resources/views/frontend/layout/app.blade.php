@@ -145,12 +145,12 @@
     <!-- footer end -->
 
     @if(app()->isProduction()  && $site_settings->id == 1)
-        <div id="fb-root"></div>
+        {{-- <div id="fb-root"></div> --}}
         <!-- Your customer chat code -->
-        <div class="fb-customerchat"
+        {{-- <div class="fb-customerchat"
             attribution=setup_tool
             page_id="347168479120192">
-        </div>
+        </div> --}}
     @endif
 
 
