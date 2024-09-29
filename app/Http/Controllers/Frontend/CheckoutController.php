@@ -46,7 +46,7 @@ class CheckoutController extends Controller
             DB::beginTransaction();
             $site_settings = get_site_setting();
             
-            if(!session('cart')){
+            if(!session('cart') || count(session('cart')) < 1){
                 alert("قم بأضافة منتجات الي السلة أولا",'','warning');
                 return redirect()->route('home');
             } 
