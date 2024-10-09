@@ -86,11 +86,11 @@
                             {{ $title_send }}
                         </a>
                     @endif
-                    @if ($type == 'design')
-                        <a target="print-frame" class="btn btn-light  btn-sm rounded-pill" onclick="check_printable('{{ $item['id'] }}','{{ $item['model_type'] }}')"
-                            href="{{ route('admin.playlists.print', ['id' => $item['id'], 'model_type' => $item['model_type']]) }}">
+                    @if ($type == 'design')  
+                        <button class="btn btn-light btn-sm rounded-pill"
+                                onclick="check_printable(this,'{{ $item['id'] }}', '{{ $item['model_type'] }}');">
                             {{ __('global.print') }}
-                        </a>
+                        </button>
                     @endif
                     <a class="btn btn-success btn-sm rounded-pill text-white"
                         onclick="show_details('{{ $item['id'] }}','{{ $item['model_type'] }}')"

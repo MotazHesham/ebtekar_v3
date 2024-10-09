@@ -218,16 +218,56 @@
                 $('#manufacturing_items .modal-dialog').html(data);
             }); 
         }
-        function check_printable(id,model_type){
+
+        function check_printable(button,id,model_type){  
+
+            // Store the original button content
+            var originalButtonContent = button.innerHTML;
+
+            // Show spinner inside the button and disable it
+            button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ' + '{{ __('global.print') }}';
+            button.disabled = true;
+
             $.post('{{ route('admin.playlists.check_printable') }}', {
                 _token: '{{ csrf_token() }}',
                 id: id,
                 model_type: model_type, 
             }, function(data) {
-                if (data == 1) { 
-                    showAlert('error', 'تم الطباعة من قبل');
+                if (data == 1) {  
+                    showAlert('error', 'تم الطباعة من قبل'); 
+                    resetButton(button, originalButtonContent); // Reset button state
+                }else{
+                    var url = `{{ route('admin.playlists.print', ['id' => '__ID__', 'model_type' => '__MODEL_TYPE__']) }}`
+                                .replace('__ID__', id)
+                                .replace('__MODEL_TYPE__', model_type);
+
+                    // Create a new hidden iframe or use existing one
+                    var iframe = document.getElementById('print-frame'); 
+
+                    // Open the URL in the iframe
+                    iframe.src = url;
+
+                    // Set an onload event to trigger printing when the iframe's content is loaded
+                    iframe.onload = function() {
+                        iframe.contentWindow.focus();  // Ensure iframe is focused before printing
+                        iframe.contentWindow.print();  // Trigger print dialog for the iframe
+
+                        // Add an event listener for the print completion
+                        iframe.contentWindow.onafterprint = function() {
+                            resetButton(button, originalButtonContent); // Reset button after printing
+                        };
+                    };
                 }
-            }); 
+            }).fail(function() {
+                showAlert('error', 'حدث خطأ ما حاول لاحقا');
+                resetButton(button, originalButtonContent); // Reset button on error
+            });
+        } 
+
+        // Function to reset the button to its original state
+        function resetButton(button, originalContent) {
+            button.innerHTML = originalContent; // Restore original button content
+            button.disabled = false;            // Re-enable button
         }
 
 

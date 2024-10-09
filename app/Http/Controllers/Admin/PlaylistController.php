@@ -252,7 +252,7 @@ class PlaylistController extends Controller
             $print_route = 'admin.orders.print';
         }
         $printed = Printable::where('user_id',Auth::id())->where('printable_id',$id)->where('printable_model',$printable_model)->first();
-        if($printed){ 
+        if($printed && $raw->printing_times > 0){ 
             // alert('تم الطباعة من قبل','','error');
             return 0;
         }else{
