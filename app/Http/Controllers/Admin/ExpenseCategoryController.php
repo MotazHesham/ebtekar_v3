@@ -40,7 +40,7 @@ class ExpenseCategoryController extends Controller
     {
         abort_if(Gate::denies('expense_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if(in_array($expenseCategory->id,[1,2])){
+        if(in_array($expenseCategory->id,[1,2,15])){
             alert("Cant Update This Category",'','error');
             return redirect()->back();
         }
@@ -50,7 +50,7 @@ class ExpenseCategoryController extends Controller
 
     public function update(UpdateExpenseCategoryRequest $request, ExpenseCategory $expenseCategory)
     {
-        if(in_array($expenseCategory->id,[1,2])){
+        if(in_array($expenseCategory->id,[1,2,15])){
             alert("Cant Update This Category",'','error');
             return redirect()->back();
         }

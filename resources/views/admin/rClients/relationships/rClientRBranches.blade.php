@@ -35,10 +35,7 @@
                         </th>
                         <th>
                             {{ __('cruds.rBranch.fields.remaining') }}
-                        </th>
-                        <th>
-                            {{ __('cruds.rBranch.fields.r_client') }}
-                        </th>
+                        </th> 
                         <th>
                             &nbsp;
                         </th>
@@ -64,10 +61,7 @@
                             </td>
                             <td>
                                 {{ $rBranch->remaining ?? '' }}
-                            </td>
-                            <td>
-                                {{ $rBranch->r_client->name ?? '' }}
-                            </td>
+                            </td> 
                             <td>
                                 @can('r_branch_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.r-branches.show', $rBranch->id) }}">

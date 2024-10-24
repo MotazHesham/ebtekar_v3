@@ -22,8 +22,10 @@ class RBrancheController extends Controller
     {
         abort_if(Gate::denies('r_branch_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $type = request('type') ?? 'expense';
+
         if ($request->ajax()) {
-            $query = RBranch::with(['r_client'])->select(sprintf('%s.*', (new RBranch)->table));
+            $query = RBranch::with(['r_client'])->where('type',$type)->select(sprintf('%s.*', (new RBranch)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -65,7 +67,7 @@ class RBrancheController extends Controller
             return $table->make(true);
         }
 
-        return view('admin.rBranches.index');
+        return view('admin.rBranches.index',compact('type'));
     }
 
     public function create()

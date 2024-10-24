@@ -23,6 +23,7 @@ class Expense extends Model
     public const MODEL_TPYE_SELECT = [
         'App\Models\Employee'        => 'Employee',  
         'App\Models\Material'        => 'Material', 
+        'App\Models\ReceiptBranch'        => 'ReceiptBranch', 
     ];
 
 

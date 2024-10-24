@@ -92,6 +92,11 @@ class ReceiptBranch extends Model
         return $this->morphMany(Income::class, 'model');
     }
 
+    public function expenses()
+    {
+        return $this->morphMany(Expense::class, 'model');
+    }
+
     public function website(){
         return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
@@ -110,14 +115,26 @@ class ReceiptBranch extends Model
 	}
 
     public function add_income(){ 
-        Income::create([ 
-            'income_category_id' => 1,
-            'entry_date' => date(config('panel.date_format')),
-            'amount' => $this->calc_total_cost(),
-            'description' => '',
-            'model_id' => $this->id,
-            'model_type' => 'App\Models\ReceiptBranch',
-        ]);
+        if($this->branch->type == 'income'){
+            Income::create([ 
+                'income_category_id' => 1,
+                'entry_date' => date(config('panel.date_format')),
+                'amount' => $this->calc_total_cost(),
+                'description' => '',
+                'model_id' => $this->id,
+                'model_type' => 'App\Models\ReceiptBranch',
+            ]);
+        }else{
+            Expense::create([ 
+                'expense_category_id' => 15,
+                'entry_date' => date(config('panel.date_format')),
+                'amount' => $this->calc_total_cost(),
+                'description' => '',
+                'model_id' => $this->id,
+                'model_type' => 'App\Models\ReceiptBranch',
+            ]);
+
+        }
         return 1;
     }
 

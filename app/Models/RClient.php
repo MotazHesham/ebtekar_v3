@@ -24,8 +24,13 @@ class RClient extends Model
         'seperate' => 'إدارات منفصلة',
         'unified'  => 'إدارة موحدة',
     ];
+    public const TYPE_SELECT = [
+        'income' => 'ارباح',
+        'expense'  => 'مصروفات',
+    ];
 
     protected $fillable = [
+        'type',
         'name',
         'phone_number',
         'remaining',
@@ -48,5 +53,10 @@ class RClient extends Model
     public function incomes()
     {
         return $this->morphMany(Income::class, 'model');
+    }  
+
+    public function expenses()
+    {
+        return $this->morphMany(Expense::class, 'model');
     } 
 }

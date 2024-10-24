@@ -7,11 +7,12 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-        <form method="POST" action="{{ route('admin.incomes.store') }}" enctype="multipart/form-data">
+        @if()
+        <form method="POST" action="{{ $receipt->branch->type == 'income' ? route('admin.incomes.store') : route('admin.expenses.store') }}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="model_id" value="{{ $receipt->id }}">
             <input type="hidden" name="model_type" value="App\Models\ReceiptBranch">
-            <input type="hidden" name="income_category_id" value="1">
+            <input type="hidden" @if($receipt->branch->type == 'income') name="income_category_id" value="1" @else name="expense_category_id"  value="15" @endif >
             <div class="row">
                 <div class="form-group col-md-4">
                     <label class="required" for="entry_date">{{ __('cruds.income.fields.entry_date') }}</label>

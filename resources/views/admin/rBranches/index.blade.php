@@ -1,5 +1,17 @@
 @extends('layouts.admin')
 @section('content')
+    <div class="row text-center"> 
+        <div class="col-md-6">
+            <a class="btn @if($type == 'expense') btn-light @else btn-dark  @endif" href="{{ route('admin.r-branches.index',['type' => 'income']) }}">
+                فروع الارباح
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a class="btn @if($type == 'expense') btn-dark  @else btn-light @endif" href="{{ route('admin.r-branches.index',['type' => 'expense']) }}">
+                فروع المصروفات
+            </a>
+        </div>
+    </div>
     @can('r_branch_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
@@ -99,7 +111,7 @@
                 serverSide: true,
                 retrieve: true,
                 aaSorting: [],
-                ajax: "{{ route('admin.r-branches.index') }}",
+                ajax: "{{ route('admin.r-branches.index',['type' => $type]) }}",
                 columns: [{
                         data: 'placeholder',
                         name: 'placeholder'

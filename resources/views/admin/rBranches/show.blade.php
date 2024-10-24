@@ -103,10 +103,17 @@
                 </ul>
                 <div class="tab-content">
                     @if($rBranch->payment_type == 'parts' && $rBranch->r_client->manage_type == 'seperate')
+                        
                         <div class="tab-pane active" role="tabpanel" id="r_branche_incomes">
-                            @includeIf('admin.rBranches.relationships.incomes', [
-                                'incomes' => $rBranch->incomes,
-                            ])
+                            @if($rBranch->type == 'income')
+                                @includeIf('admin.rBranches.relationships.incomes', [
+                                    'incomes' => $rBranch->incomes,
+                                ])
+                            @else
+                                @includeIf('admin.rBranches.relationships.expenses', [
+                                    'expenses' => $rBranch->expenses,
+                                ])
+                            @endif
                         </div>
                     @endif
                     <div class="tab-pane @if($rBranch->payment_type != 'parts') active @endif" role="tabpanel" id="qr_products">

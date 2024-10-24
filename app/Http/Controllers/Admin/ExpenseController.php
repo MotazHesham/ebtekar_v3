@@ -11,6 +11,9 @@ use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\FinancialCategory;
+use App\Models\RBranch;
+use App\Models\RClient;
+use App\Models\ReceiptBranch;
 use App\Models\WebsiteSetting;
 use Gate;
 use Illuminate\Http\Request;
@@ -72,6 +75,26 @@ class ExpenseController extends Controller
                 Expense::create($validated_request);
 
                 return redirect()->route('admin.employees.show',$request->model_id);
+            }elseif($request->model_type == 'App\Models\ReceiptBranch'){
+                $expenses = Expense::where('model_type','App\Models\ReceiptBranch')->where('model_id',$request->model_id)->get();
+                $total = $expenses ? $expenses->sum('amount') : 0;
+                $receipt = ReceiptBranch::find($request->model_id);
+                $receipt->permission_status = $total >= $receipt->calc_total_cost() ? 'permission_complete' : 'permission_segment';
+                $receipt->save();
+                alert('تم صرف جزء من الأذن','','success');
+                return redirect()->route('admin.receipt-branches.index');
+            }elseif($request->model_type == 'App\Models\RBranch'){
+                $rBranch = RBranch::find($request->model_id);
+                $rBranch->remaining -= $request->amount;
+                $rBranch->save();
+                alert('تم أضافة دفعة بنجاح','','success');
+                return redirect()->route('admin.r-branches.show',$rBranch->id);
+            }elseif($request->model_type == 'App\Models\RClient'){
+                $rClient = RClient::find($request->model_id);
+                $rClient->remaining -= $request->amount;
+                $rClient->save();
+                alert('تم أضافة دفعة بنجاح','','success');
+                return redirect()->route('admin.r-clients.show',$rClient->id);
             }
         }
 

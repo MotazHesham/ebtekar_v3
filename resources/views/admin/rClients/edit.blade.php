@@ -11,6 +11,21 @@
             @method('PUT')
             @csrf
             <div class="form-group">
+                <label class="required">{{ __('cruds.rClient.fields.type') }}</label>
+                <select class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}" name="type" id="type" required>
+                    <option value disabled {{ old('type', null) === null ? 'selected' : '' }}>{{ __('global.pleaseSelect') }}</option>
+                    @foreach(App\Models\RClient::TYPE_SELECT as $key => $label)
+                        <option value="{{ $key }}" {{ old('type', $rClient->type) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('type'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('type') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ __('cruds.rClient.fields.type_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="name">{{ __('cruds.rClient.fields.name') }}</label>
                 <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name" id="name" value="{{ old('name', $rClient->name) }}" required>
                 @if($errors->has('name'))

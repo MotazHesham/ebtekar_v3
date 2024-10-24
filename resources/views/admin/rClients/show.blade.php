@@ -90,9 +90,15 @@
                     @includeIf('admin.rClients.relationships.rClientRBranches', ['rBranches' => $rClient->rClientRBranches])
                 </div>
                 <div class="tab-pane active" role="tabpanel" id="r_client_incomes">
-                    @includeIf('admin.rClients.relationships.incomes', [
-                        'incomes' => $rClient->incomes,
-                    ])
+                    @if($rClient->type == 'income')
+                        @includeIf('admin.rClients.relationships.incomes', [
+                            'incomes' => $rClient->incomes,
+                        ])
+                    @else 
+                        @includeIf('admin.rClients.relationships.expenses', [
+                            'expenses' => $rClient->expenses,
+                        ])
+                    @endif
                 </div>
             </div>
         </div>

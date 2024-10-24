@@ -18,8 +18,10 @@ class RClientsController extends Controller
     {
         abort_if(Gate::denies('r_client_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $type = request('type') ?? 'expense';
+
         if ($request->ajax()) {
-            $query = RClient::query()->select(sprintf('%s.*', (new RClient)->table));
+            $query = RClient::query()->where('type',$type)->select(sprintf('%s.*', (new RClient)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -58,7 +60,7 @@ class RClientsController extends Controller
             return $table->make(true);
         }
 
-        return view('admin.rClients.index');
+        return view('admin.rClients.index',compact('type'));
     }
 
     public function create()

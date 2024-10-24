@@ -20,7 +20,7 @@
         <li class="nav-title">الفواتير</li>
 
         @can('receipts_managment_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/receipt-socials*") ? "c-show" : "" }} {{ request()->is("admin/receipt-social-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-clients*") ? "c-show" : "" }} {{ request()->is("admin/receipt-client-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-companies*") ? "c-show" : "" }} {{ request()->is("admin/banned-phones*") ? "c-show" : "" }}  {{ request()->is("admin/receipt-outgoings*") ? "c-show" : "" }} {{ request()->is("admin/receipt-outgoing-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-price-views*") ? "c-show" : "" }} {{ request()->is("admin/receipt-price-view-products*") ? "c-show" : "" }} {{ request()->is("admin/excel-files*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/receipt-socials*") ? "c-show" : "" }} {{ request()->is("admin/receipt-social-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-clients*") ? "c-show" : "" }} {{ request()->is("admin/receipt-client-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-companies*") ? "c-show" : "" }} {{ request()->is("admin/banned-phones*") ? "c-show" : "" }}  {{ request()->is("admin/receipt-outgoings*") ? "c-show" : "" }} {{ request()->is("admin/receipt-outgoing-products*") ? "c-show" : "" }} {{ request()->is("admin/receipt-price-views*") ? "c-show" : "" }} {{ request()->is("admin/receipt-price-view-products*") ? "c-show" : "" }} {{ request()->is("admin/excel-files*") ? "c-show" : "" }}   {{ request()->is("admin/r-clients*") ? "c-show" : "" }} {{ request()->is("admin/r-branches*") ? "c-show" : "" }} {{ request()->is("admin/receipt-branches*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-receipt c-sidebar-nav-icon">
 
@@ -49,17 +49,17 @@
                         </li>
                     @endcan
                     @can('receipt_branch_managment_access')
-                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/r-clients*") ? "c-show" : "" }} {{ request()->is("admin/r-branches*") ? "c-show" : "" }} {{ request()->is("admin/receipt-branches*") ? "c-show" : "" }}">
+                        <li class="c-sidebar-nav-dropdown  {{ request()->is("admin/r-clients*") ? "c-show" : "" }} {{ request()->is("admin/r-branches*") ? "c-show" : "" }} {{ request()->is("admin/receipt-branches*") ? "c-show" : "" }}">
                             <a class="c-sidebar-nav-dropdown-toggle" href="#">
                                 <i class="fa-fw fas fa-align-right c-sidebar-nav-icon">
 
                                 </i>
-                                {{ __('cruds.receiptBranchManagment.title') }}
+                                {{ __('cruds.receiptBranchManagment.title') }} 
                             </a>
                             <ul class="c-sidebar-nav-dropdown-items">
                                 @can('r_client_access')
                                     <li class="c-sidebar-nav-item">
-                                        <a href="{{ route("admin.r-clients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/r-clients") || request()->is("admin/r-clients/*") ? "c-active" : "" }}">
+                                        <a href="{{ route("admin.r-clients.index",['type' => 'expense']) }}" class="c-sidebar-nav-link {{ request()->is("admin/r-clients") || request()->is("admin/r-clients/*") ? "c-active" : "" }}">
                                             <i class="fa-fw far fa-building c-sidebar-nav-icon">
 
                                             </i>
@@ -69,7 +69,7 @@
                                 @endcan
                                 @can('r_branch_access')
                                     <li class="c-sidebar-nav-item">
-                                        <a href="{{ route("admin.r-branches.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/r-branches") || request()->is("admin/r-branches/*") ? "c-active" : "" }}">
+                                        <a href="{{ route("admin.r-branches.index",['type' => 'expense']) }}" class="c-sidebar-nav-link {{ request()->is("admin/r-branches") || request()->is("admin/r-branches/*") ? "c-active" : "" }}">
                                             <i class="fa-fw fas fa-code-branch c-sidebar-nav-icon">
 
                                             </i>

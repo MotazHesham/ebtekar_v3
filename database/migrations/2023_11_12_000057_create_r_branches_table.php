@@ -10,6 +10,7 @@ class CreateRBranchesTable extends Migration
     {
         Schema::create('r_branches', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('type')->default('expense');
             $table->string('name');
             $table->string('phone_number');
             $table->decimal('remaining', 15, 2)->default(0);

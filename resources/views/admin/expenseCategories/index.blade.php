@@ -46,7 +46,7 @@
                                     {{ $expenseCategory->name ?? '' }}
                                 </td>
                                 <td>
-                                    @if(!in_array($expenseCategory->id,[1,2]))
+                                    @if(!in_array($expenseCategory->id,[1,2,15]))
                                     
                                         @can('expense_category_show')
                                             <a class="btn btn-xs btn-primary"
