@@ -26,6 +26,8 @@ class ReceiptClientObserver
             $str = 'shirti-';
         }elseif($receiptClient->website_setting_id == 5){
             $str = 'martobia-';
+        }elseif($receiptClient->website_setting_id == 6){
+            $str = 'a1-digital-';
         }else{ 
             $str = 'ebtekar-';
         }

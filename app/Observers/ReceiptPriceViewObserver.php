@@ -25,6 +25,8 @@ class ReceiptPriceViewObserver
             $str = 'shirti-';
         }elseif($receiptPriceView->website_setting_id == 5){
             $str = 'martobia-';
+        }elseif($receiptPriceView->website_setting_id == 6){
+            $str = 'a1-digital-';
         }else{ 
             $str = 'ebtekar-';
         }

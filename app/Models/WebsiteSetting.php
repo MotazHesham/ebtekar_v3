@@ -47,6 +47,7 @@ class WebsiteSetting extends Model implements HasMedia
         3   => 'فيجرز',
         4   => 'شيرتي',
         5   => 'مارتوبيا',
+        6   => 'a1 digital',
     ];
 
     protected $fillable = [

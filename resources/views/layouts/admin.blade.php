@@ -60,9 +60,13 @@
         .order_num_ebtekar {
             background: #FBAC00
         }
-
+        
         .order_num_martobia {
             background: #6e1554
+        }
+
+        .order_num_a1_digital {
+            background: #20b127
         }
 
         .playlist_status {

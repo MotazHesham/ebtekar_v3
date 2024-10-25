@@ -27,6 +27,8 @@ class ReceiptBranchObserver
             $str = 'shirti-';
         }elseif($receiptBranch->website_setting_id == 5){
             $str = 'martobia-';
+        }elseif($receiptBranch->website_setting_id == 6){
+            $str = 'a1-digital-';
         }else{ 
             $str = 'ebtekar-';
         }
