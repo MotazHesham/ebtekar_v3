@@ -35,21 +35,21 @@
         rel="stylesheet">
 
     <!-- icons fonts-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/font-awesome.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/themify.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/themify.min.css') }}">
 
     <!--Slick slider css-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/slick.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/slick-theme.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/slick.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/slick-theme.min.css') }}">
 
     <!--Animate css-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/animate.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/animate.min.css') }}">
     <!-- Bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/bootstrap.css') }}"> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}"> 
 
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main.css') }}" media="screen" id="color"> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main.min.css') }}" media="screen" id="color"> 
 
     <link rel="stylesheet" href="{{ asset('dashboard_offline/css/select2.min.css') }}">
     <style>
@@ -325,7 +325,7 @@
     <script src="{{ asset('frontend/assets/js/jquery-3.3.1.min.js') }}"></script>
 
     <!-- slick js-->
-    <script src="{{ asset('frontend/assets/js/slick.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/slick.min.js') }}"></script>
 
 
 
@@ -337,26 +337,26 @@
     <script src="{{ asset('frontend/assets/js/popper.min.js') }}"></script>
 
     <!-- menu js-->
-    <script src="{{ asset('frontend/assets/js/menu.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/menu.min.js') }}"></script>
 
     <!-- father icon -->
     <script src="{{ asset('frontend/assets/js/feather.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/feather-icon.js') }}"></script>
 
     <!-- Bootstrap js-->
-    <script src="{{ asset('frontend/assets/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/bootstrap.min.js') }}"></script>
 
     <!-- Bootstrap js-->
     <script src="{{ asset('frontend/assets/js/bootstrap-notify.min.js') }}"></script>
 
     <!-- Theme js-->
-    <script   src="{{ asset('frontend/assets/js/script.js') }}"></script>
+    <script   src="{{ asset('frontend/assets/js/script.min.js') }}"></script>
     <script   src="{{ asset('frontend/assets/js/modal.js') }}"></script>
 
 
     
     <script src="{{ asset('dashboard_offline/js/select2.full.min.js') }}"></script>
-    <script src="{{ asset('js/dataLayers.js') }}"></script>
+    <script src="{{ asset('js/dataLayers.min.js') }}"></script>
     
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">

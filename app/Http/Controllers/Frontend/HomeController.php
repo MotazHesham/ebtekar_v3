@@ -54,7 +54,7 @@ class HomeController extends Controller
         });
         $best_selling_products = Cache::rememberForever('home_best_selling_products_'.$site_settings->id, function () use ($site_settings) {
             return Product::where('website_setting_id', $site_settings->id)->with('media','category')->where('published', 1)->orderBy('num_of_sale', 'desc')->take(10)->get();
-        });
+        }); 
         return view('frontend.home', compact('sliders', 'new_products', 'home_categories', 'freatured_categories', 'banners_1', 'best_selling_products'));
     }
 
