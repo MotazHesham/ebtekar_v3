@@ -1,2 +1,20 @@
-User-agent: *
-Disallow:
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: BaiduSpider
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: Sogou Spider
+Disallow: /
+
+User-agent: Exabot
+Disallow: /
