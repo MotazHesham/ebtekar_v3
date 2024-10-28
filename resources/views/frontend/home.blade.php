@@ -7,7 +7,7 @@
             @foreach ($sliders as $slider)
                 <a href="{{ $slider->link }}" target="_blanc">
                     <div class="slide-main">
-                        <img loading="lazy" src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid bg-img" alt="ebtekar-slider" style="width: 100%"> 
+                        <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid bg-img" alt="ebtekar-slider" style="width: 100%"> 
                     </div>
                 </a>
             @endforeach
@@ -50,7 +50,7 @@
                                 <div class="category-contain">
                                     <div class="img-wrapper" style="border: 0; background-color: #ff000000;">
                                         <a href="{{ route('frontend.products.category',$home_category->category->slug) }}">
-                                            <img loading="lazy" src="{{ $home_category->category ? $home_category->category->banner->getUrl() : '' }}"
+                                            <img src="{{ $home_category->category ? $home_category->category->banner->getUrl() : '' }}"
                                                 alt="category  " class="">
                                         </a>
                                     </div>
@@ -76,7 +76,7 @@
                     @foreach ($freatured_categories as $key => $freatured_category) 
                         <li @if ($loop->first) class="current" @endif>
                             <a href="tab-featured-{{ $key + 1 }}">
-                                <img loading="lazy" src="{{ $freatured_category->icon ? $freatured_category->icon->getUrl('preview') : '' }}" alt="category"
+                                <img src="{{ $freatured_category->icon ? $freatured_category->icon->getUrl('preview') : '' }}" alt="category"
                                     class="" heigh="30" width="30">
                                     &nbsp;
                                 {{ $freatured_category->name }}
@@ -115,7 +115,7 @@
                     <div class="col-md-6 ">
                         <div class="collection-banner-main banner-12 banner-style3 text-center p-right">
                             <div class="collection-img" >
-                                <img loading="lazy" src="{{ $banner->photo->getUrl() }}" class="img-fluid bg-img " alt="banner">
+                                <img src="{{ $banner->photo->getUrl() }}" class="img-fluid bg-img " alt="banner">
                             </div>
                             <div class="collection-banner-contain  ">
                                 <div>
