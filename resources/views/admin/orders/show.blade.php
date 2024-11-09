@@ -230,20 +230,26 @@
                                             + {{ exchange_rate($order->shipping_country_cost,$order->exchange_rate) }} {{ $order->symbol }}
                                         </td>
                                     </tr>
+                                    @if($order->discount_code != null)
+                                        <tr>
+                                            <td>
+                                                <strong>الخصم :</strong>
+                                            </td>
+                                            <td>
+                                                - {{ exchange_rate($order->calc_discount(),$order->exchange_rate) }} {{ $order->symbol }}
+                                                <br>
+                                                <span class="badge badge-dark">
+                                                    كود الخصم {{ $order->discount_code }} 
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endif
                                     <tr style="background: #34828285">
                                         <td>
                                             <strong>{{ __('cruds.order.fields.total_cost') }} :</strong>
                                         </td>
                                         <td class="text-bold h4">
-                                            = {{ exchange_rate($order->calc_total_for_client(),$order->exchange_rate) }} {{ $order->symbol }}
-                                            @if($order->discount_code != null)
-                                                <br>
-                                                <span class="badge badge-purple">
-                                                    كود الخصم {{ $order->discount_code }}
-                                                    /
-                                                    {{ exchange_rate($order->calc_discount(),$order->exchange_rate) }} {{ $order->symbol }}
-                                                </span>
-                                            @endif
+                                            = {{ exchange_rate($order->calc_total_for_client(),$order->exchange_rate) }} {{ $order->symbol }} 
                                         </td>
                                     </tr>
                                 </tbody>

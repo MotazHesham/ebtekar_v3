@@ -252,9 +252,8 @@ class Order extends Model
 
 	// operations 
 
-	public function calc_discount(){
-		$total = $this->calc_total_cost() / 100;
-		return round( ($total * $this->discount ) , 2);
+	public function calc_discount(){ 
+		return $this->discount;
 	}
 
 	public function calc_total_cost(){

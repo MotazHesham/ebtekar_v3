@@ -203,8 +203,7 @@ class CheckoutController extends Controller
                 if($request->discount_code != null){
                     $seller = Seller::where('discount_code',$request->discount_code)->first();
                     if($seller && $seller->discount > 0){
-                        $discount_cost = $total_cost * ($seller->discount / 100);
-                        $total_cost -= $discount_cost;
+                        $discount_cost = $total_cost * ($seller->discount / 100); 
                         $order->discount = $discount_cost;
                         $order->discount_code = $request->discount_code;
                         $order->social_user_id = $seller->user_id; // it stands for the owner of the discount code

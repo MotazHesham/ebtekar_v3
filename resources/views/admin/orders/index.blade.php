@@ -256,6 +256,7 @@
                                 <div style="display:flex;justify-content:center">
                                     @if($order->discount > 0)
                                         <span class="badge rounded-pill text-bg-info  mb-1">
+                                            <br>
                                             {{ __('cruds.order.fields.discount') }}
                                             <br>
                                             {{ exchange_rate($order->discount,$order->exchange_rate) }} {{ $order->symbol }}
