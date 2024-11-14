@@ -81,18 +81,21 @@ class ExpenseController extends Controller
                 $receipt = ReceiptBranch::find($request->model_id);
                 $receipt->permission_status = $total >= $receipt->calc_total_cost() ? 'permission_complete' : 'permission_segment';
                 $receipt->save();
+                Expense::create($validated_request);
                 alert('تم صرف جزء من الأذن','','success');
                 return redirect()->route('admin.receipt-branches.index');
             }elseif($request->model_type == 'App\Models\RBranch'){
                 $rBranch = RBranch::find($request->model_id);
                 $rBranch->remaining -= $request->amount;
                 $rBranch->save();
+                Expense::create($validated_request);
                 alert('تم أضافة دفعة بنجاح','','success');
                 return redirect()->route('admin.r-branches.show',$rBranch->id);
             }elseif($request->model_type == 'App\Models\RClient'){
                 $rClient = RClient::find($request->model_id);
                 $rClient->remaining -= $request->amount;
                 $rClient->save();
+                Expense::create($validated_request);
                 alert('تم أضافة دفعة بنجاح','','success');
                 return redirect()->route('admin.r-clients.show',$rClient->id);
             }
