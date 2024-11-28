@@ -358,6 +358,8 @@
     <script src="{{ asset('dashboard_offline/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('js/dataLayers.min.js') }}"></script>
     
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>

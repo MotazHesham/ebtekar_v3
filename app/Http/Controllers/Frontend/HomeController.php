@@ -84,6 +84,7 @@ class HomeController extends Controller
             'email' => 'string|required|max:255',
             'phone_number' => 'string|required|max:255',
             'message' => 'string|required|max:255', 
+            'g-recaptcha-response' => 'required',
         ]);
         Contactu::create($request->all());
         alert('Your message sent successfully', '', 'success');

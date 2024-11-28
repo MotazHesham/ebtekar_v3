@@ -71,6 +71,9 @@
                                     <textarea class="form-control" placeholder="     {{ __('frontend.contact_us.message') }}" rows="2" name="message"></textarea>
                                 </div>
                             </div>
+                            
+                            @include('partials.recaptcha')
+                            
                             <div class="col-md-12">
                                 <button class="btn btn-normal" type="submit">  {{ __('frontend.contact_us.submit') }}</button>
                             </div>

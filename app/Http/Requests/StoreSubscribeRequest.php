@@ -26,6 +26,9 @@ class StoreSubscribeRequest extends FormRequest
                 'email',
                 'max:255',
             ],
+            'g-recaptcha-response' =>[ 
+                'required'
+            ],
         ];
     }
 }
