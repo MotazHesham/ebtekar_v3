@@ -38,7 +38,7 @@
                                     {{ __('cruds.rClient.fields.remaining') }}
                                 </th>
                                 <td>
-                                    {{ $rClient->remaining }}
+                                    {{  $rClient->manage_type == 'unified' ? $rClient->remaining : 0 }}
                                 </td>
                             </tr>
                             <tr>
@@ -79,27 +79,31 @@
                         {{ __('cruds.rBranch.title') }}
                     </a>
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link active" href="#r_client_incomes" role="tab" data-toggle="tab">
-                        الدفعات
-                    </a>
-                </li>
+                @if($rClient->manage_type == 'unified')
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="#r_client_incomes" role="tab" data-toggle="tab">
+                            الدفعات
+                        </a>
+                    </li>
+                @endif
             </ul>
             <div class="tab-content">
                 <div class="tab-pane " role="tabpanel" id="r_client_r_branches">
                     @includeIf('admin.rClients.relationships.rClientRBranches', ['rBranches' => $rClient->rClientRBranches])
-                </div>
-                <div class="tab-pane active" role="tabpanel" id="r_client_incomes">
-                    @if($rClient->type == 'income')
-                        @includeIf('admin.rClients.relationships.incomes', [
-                            'incomes' => $rClient->incomes,
-                        ])
-                    @else 
-                        @includeIf('admin.rClients.relationships.expenses', [
-                            'expenses' => $rClient->expenses,
-                        ])
-                    @endif
-                </div>
+                </div> 
+                @if($rClient->manage_type == 'unified')
+                    <div class="tab-pane active" role="tabpanel" id="r_client_incomes">
+                        @if($rClient->type == 'income')
+                            @includeIf('admin.rClients.relationships.incomes', [
+                                'incomes' => $rClient->incomes,
+                            ])
+                        @else 
+                            @includeIf('admin.rClients.relationships.expenses', [
+                                'expenses' => $rClient->expenses,
+                            ])
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
         
