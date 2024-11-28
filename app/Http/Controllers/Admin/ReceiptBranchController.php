@@ -161,7 +161,7 @@ class ReceiptBranchController extends Controller
         $receipt->save();
 
         // store the receipt social id in session so when redirect to the table open the popup to view products after delete
-        session()->put('update_receipt_id',$receipt->id);
+        session()->put('update_receipt_branch_id',$receipt->id);
 
         toast(__('flash.deleted'),'success'); 
         return 1;
@@ -199,7 +199,7 @@ class ReceiptBranchController extends Controller
             $receipt->total_cost = $sum;
             $receipt->save(); 
             // store the receipt social id in session so when redirect to the table open the popup to view products after edit
-            session()->put('update_receipt_id',$receipt->id);
+            session()->put('update_receipt_branch_id',$receipt->id);
 
             toast(__('flash.global.update_title'),'success'); 
             return redirect()->back();
@@ -238,12 +238,12 @@ class ReceiptBranchController extends Controller
             $receipt->save();
 
             if($request->has('add_more')){
-                session()->put('store_receipt_id',$receipt->id);
-                session()->put('update_receipt_id',null);
+                session()->put('store_receipt_branch_id',$receipt->id);
+                session()->put('update_receipt_branch_id',null);
             }
             if($request->has('save_close')){
-                session()->put('store_receipt_id',null);
-                session()->put('update_receipt_id',$receipt->id);
+                session()->put('store_receipt_branch_id',null);
+                session()->put('update_receipt_branch_id',$receipt->id);
             }
 
             toast(__('flash.global.success_title'),'success');
@@ -261,8 +261,8 @@ class ReceiptBranchController extends Controller
         $rBranches = RBranch::pluck('name', 'id');
 
         if($request->has('cancel_popup')){
-            session()->put('store_receipt_id',null);
-            session()->put('update_receipt_id',null);
+            session()->put('store_receipt_branch_id',null);
+            session()->put('update_receipt_branch_id',null);
         }
 
         $phone = null;
@@ -428,7 +428,7 @@ class ReceiptBranchController extends Controller
         $receiptBranch = ReceiptBranch::create($request->all());
 
         // store the receipt social id in session so when redirect to the table open the popup to add products
-        session()->put('store_receipt_id',$receiptBranch->id);
+        session()->put('store_receipt_branch_id',$receiptBranch->id);
 
         toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-branches.index');

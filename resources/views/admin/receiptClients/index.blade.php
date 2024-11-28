@@ -409,11 +409,11 @@
                 return confirm('are you sure?');
             });
             
-            @if(session('store_receipt_id') && session('store_receipt_id') != null)
-                add_product('{{session("store_receipt_id")}}') 
+            @if(session('store_receipt_client_id') && session('store_receipt_client_id') != null)
+                add_product('{{session("store_receipt_client_id")}}') 
             @endif
-            @if(session('update_receipt_id') && session('update_receipt_id') != null)
-                view_products('{{session("update_receipt_id")}}') 
+            @if(session('update_receipt_client_id') && session('update_receipt_client_id') != null)
+                view_products('{{session("update_receipt_client_id")}}') 
             @endif
         });
         

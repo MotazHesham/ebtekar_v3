@@ -766,11 +766,11 @@
     <script>
 
         $(document).ready(function() {
-            @if(session('store_receipt_id') && session('store_receipt_id') != null)
-                add_product('{{session("store_receipt_id")}}') 
+            @if(session('store_receipt_socail_id') && session('store_receipt_socail_id') != null)
+                add_product('{{session("store_receipt_socail_id")}}') 
             @endif
-            @if(session('update_receipt_id') && session('update_receipt_id') != null)
-                view_products('{{session("update_receipt_id")}}') 
+            @if(session('update_receipt_socail_id') && session('update_receipt_socail_id') != null)
+                view_products('{{session("update_receipt_socail_id")}}') 
             @endif
         });
 

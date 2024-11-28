@@ -214,7 +214,7 @@ class ReceiptSocialController extends Controller
 
             
         // store the receipt social id in session so when redirect to the table open the popup to view products after delete
-        session()->put('update_receipt_id',$receipt->id);
+        session()->put('update_receipt_socail_id',$receipt->id);
 
         toast(__('flash.deleted'),'success'); 
         return 1;
@@ -300,7 +300,7 @@ class ReceiptSocialController extends Controller
             $receipt->save(); 
             
             // store the receipt social id in session so when redirect to the table open the popup to view products after edit
-            session()->put('update_receipt_id',$receipt->id);
+            session()->put('update_receipt_socail_id',$receipt->id);
 
             toast(__('flash.global.update_title'),'success');
             return redirect()->back();
@@ -370,12 +370,12 @@ class ReceiptSocialController extends Controller
             }
             $receipt->save();
             if($request->has('add_more')){
-                session()->put('store_receipt_id',$receipt->id);
-                session()->put('update_receipt_id',null);
+                session()->put('store_receipt_socail_id',$receipt->id);
+                session()->put('update_receipt_socail_id',null);
             }
             if($request->has('save_close')){
-                session()->put('store_receipt_id',null);
-                session()->put('update_receipt_id',$receipt->id);
+                session()->put('store_receipt_socail_id',null);
+                session()->put('update_receipt_socail_id',$receipt->id);
             }
             toast(__('flash.global.success_title'),'success');
             return redirect()->back();
@@ -393,8 +393,8 @@ class ReceiptSocialController extends Controller
         $financial_accounts = FinancialAccount::get();
         
         if($request->has('cancel_popup')){
-            session()->put('store_receipt_id',null);
-            session()->put('update_receipt_id',null);
+            session()->put('store_receipt_socail_id',null);
+            session()->put('update_receipt_socail_id',null);
         }
 
         $phone = null;
@@ -707,7 +707,7 @@ class ReceiptSocialController extends Controller
         $receiptSocial->socials()->sync($request->input('socials', []));
 
         // store the receipt social id in session so when redirect to the table open the popup to add products
-        session()->put('store_receipt_id',$receiptSocial->id);
+        session()->put('store_receipt_socail_id',$receiptSocial->id);
 
         toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.receipt-socials.index');
