@@ -96,6 +96,7 @@
                                                 <span class="input-group-text"><i class="ti-email"></i></span>
                                             </div>
                                         </div>
+                                        @include('partials.recaptcha')
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-solid btn-sm"> 
                                                 {{ __('frontend.footer.subscribe_now') }}
