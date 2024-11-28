@@ -48,6 +48,9 @@ class RClientsController extends Controller
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
             });
+            $table->editColumn('remaining', function ($row) {
+                return $row->manage_type == 'unified' ? $row->remaining : 0 ;
+            });
             $table->editColumn('phone_number', function ($row) {
                 return $row->phone_number ? $row->phone_number : '';
             });
