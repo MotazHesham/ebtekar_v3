@@ -92,7 +92,7 @@
                                                 } 
                                             @endphp
                                             <label class="field-label">{{ __('frontend.checkout.country_id') }}</label> 
-                                            <select class="form-control" name="country_id" id="country_id" required>
+                                            <select class="form-control" name="country_id" id="country_id" required >
                                                 <option value="">{{ __('cruds.receiptSocial.fields.shipping_country_id') }}</option> 
                                                 @if($city_exist)
                                                     <option value={{ $city_id }} selected> {{ $city_name}}</option>
@@ -128,11 +128,6 @@
                                             <label class="field-label">{{ __('frontend.checkout.shipping_address') }}</label>
                                             <input type="text" name="shipping_address" value="{{old('shipping_address',auth()->user()->address ?? '')}}" required>
                                         </div>
-                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                            <label class="field-label">   {{ __('frontend.checkout.discount_code') }}</label>
-                                            <input type="text" name="discount_code" value="{{old('discount_code')}}" placeholder="">
-                                        </div>
-
                                         
                                         @guest
                                             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -157,43 +152,14 @@
                                         <div class="title-box">
                                             <div>{{ __('frontend.checkout.products') }} <span>{{ __('frontend.checkout.total') }}</span></div>
                                         </div>
-                                        <ul class="qty">
-                                            @php
-                                                $total = 0;
-                                                $count_cart = session('cart') ? session('cart')->count() : 0;
-                                            @endphp
-                                            @if(session('cart'))
-                                                @foreach(session('cart') as $cartItem)
-                                                    @php
-                                                        $product = \App\Models\Product::find($cartItem['product_id']); 
-                                                        if($product){
-                                                            $prices = product_price_in_cart($cartItem['quantity'],$cartItem['variation'],$product);
-                                                            $total += ($prices['price']['value'] * $cartItem['quantity'] );
-                                                        }
-                                                    @endphp
-                                                    @if($product)
-                                                        <li>
-                                                            {{ $product->name}}
-                                                            (×{{ $cartItem['quantity'] }})
-                                                            <span>
-                                                                {{  ($prices['price']['value'] * $cartItem['quantity'])  }} {{ $prices['price']['symbol'] }}
-                                                                @if(auth()->check() && auth()->user()->user_type == 'seller')
-                                                                    <br>
-                                                                    <small>
-                                                                        {{ __('frontend.checkout.commission') }}:
-                                                                        <b> {{ $prices['commission'] }} {{ $prices['price']['symbol'] }}</b>
-                                                                    </small>
-                                                                @endif
-                                                            </span>
-                                                            
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </ul>
-                                        <ul class="total">
-                                            <li>{{ __('frontend.checkout.total') }} <span class="count">{{  $total  }} {{ $prices['price']['symbol'] }}</span></li>
-                                        </ul>
+                                        <div class="text-center" id="summary-spinner" style="display: none">
+                                            <div class="spinner-border text-warning text-center" style="width: 5rem; height: 5rem;" role="status" >
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                        <div id="checkout-summary">
+                                            @include('frontend.partials.summary',['shipping' => 0, 'discount' => 0,'discount_code' => null,'wrong_disocunt_code' => false])
+                                        </div>
                                     </div>
                                     <div class="payment-box">
                                         <div class="upper-box">
@@ -275,19 +241,28 @@
     <!-- section end -->
 @endsection
 
-@section('scripts')
-    @parent 
-    
+@section('scripts') 
+    @parent
     <script src="{{ asset('dashboard_offline/js/moment.min.js') }}"></script>
     <script src="{{ asset('dashboard_offline/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
+        $(document).ready(function() { 
+            wallet_number(); 
+        });
         
-        $('#checkout-order').on('click',function(){  
-            // fbq('track', 'AddPaymentInfo');
-            // fbq('track', 'Purchase',{currency: '{{ $currency_symbol }}',value: '{{$total}}'});
-            checkoutOrder_dataLayer('{{$total}}','{{$count_cart}}');
+        $('#country_id').on('change',function(){ 
+            var country_id = $('#country_id').val();
+            var discount_code = $('#discount_code').val();
+            $('#summary-spinner').css('display','block');
+            $('#checkout-summary').css('display','none');
+            $.post('{{ route('frontend.checkout.summary') }}', {_token:'{{ csrf_token() }}',country_id:country_id, discount_code:discount_code }, function(data){
+                $('#checkout-summary').html(data);
+                $('#summary-spinner').css('display','none');
+                $('#checkout-summary').css('display','block');
+            });
         })
+
         $('#free_shipping').on('change',function(){ 
             var free_shipping = $('#free_shipping').val();
             if(free_shipping == '1'){
@@ -311,8 +286,6 @@
         function wallet_number(){
             $('#wallet_number').html($('#phone_number').val());
         }
-        $(document).ready(function() {
-            wallet_number();
-        });
+        
     </script>
 @endsection

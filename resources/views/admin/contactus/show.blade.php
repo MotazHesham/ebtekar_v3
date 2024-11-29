@@ -63,6 +63,14 @@
                             {{ $contactu->message }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ __('cruds.contactu.fields.created_at') }}
+                        </th>
+                        <td>
+                            {{ $contactu->created_at }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

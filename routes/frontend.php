@@ -62,6 +62,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
     
     // checkout
     Route::get('payment_select', 'CheckoutController@payment_select')->name('payment_select');
+    Route::post('checkout-summary', 'CheckoutController@checkout_summary')->name('checkout.summary');
     Route::post('checkout', 'CheckoutController@checkout')->name('checkout');
 
     // orders track

@@ -29,8 +29,46 @@ use Nafezly\Payments\Classes\PaymobWalletPayment;
 use Nafezly\Payments\Classes\PaymobPayment;
 class CheckoutController extends Controller
 {
+    public function checkout_summary(Request $request){
+        $discount_code = $request->discount_code;
+        $wrong_disocunt_code = false; 
+        $total_cost = 0;  
+        $discount = 0;
+        $shipping = 0;
+
+        if(session('cart')){
+            foreach(session('cart') as $cartItem){
+                $product = Product::find($cartItem['product_id']); 
+                if($product){
+                    $prices = product_price_in_cart($cartItem['quantity'],$cartItem['variation'],$product);
+                    $total_cost += ($prices['price']['value'] * $cartItem['quantity'] );
+                    $symbol = $prices['price']['symbol'];
+                } 
+            }  
+        }
+        
+        if($request->discount_code != null){
+            $seller = Seller::where('discount_code',$request->discount_code)->first();
+            if(!$seller || $seller->discount < 0){  
+                $wrong_disocunt_code = true;
+            }else{
+                $discount = $total_cost * ($seller->discount / 100);  
+            }
+        }
+        
+        if($request->country_id != null){ 
+            $country = Country::find($request->country_id);
+            $shipping  = $country->cost ?? 0;
+        } 
+
+        return view('frontend.partials.summary',compact('shipping','discount','discount_code','wrong_disocunt_code'));
+    }
+
     public function payment_select(){
-        if(!session('cart')){
+
+        validateCart();
+        
+        if(!session('cart') || count(session('cart')) < 1){
             alert("قم بأضافة منتجات الي السلة أولا",'','warning');
             return redirect()->route('home');
         }
