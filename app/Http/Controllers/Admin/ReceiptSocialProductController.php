@@ -24,7 +24,11 @@ class ReceiptSocialProductController extends Controller
     use MediaUploadingTrait;
 
     public function products_report(Request $request){ 
-        $products = ReceiptSocialProductPivot::whereHas('receipt',function($q){
+        $website_setting_id = $request->website_setting_id; 
+        $products = ReceiptSocialProductPivot::whereHas('receipt',function($q) use($website_setting_id){
+            if($website_setting_id){
+                $q->where('website_setting_id',$website_setting_id);
+            }
             return $q->where('confirm',1);
         })->whereBetween(
             'created_at',

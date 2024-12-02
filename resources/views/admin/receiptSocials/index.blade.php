@@ -66,7 +66,18 @@
                             <input class="form-control date {{ $errors->has('end_date') ? 'is-invalid' : '' }}" type="text"
                                 name="end_date" id="end_date" value="{{ $end_date ?? '' }}" required>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3 form-group">
+                            <label class="control-label" >أختر الموقع</label>
+                            <select class="form-control " style="width: 200px" name="website_setting_id" >
+                                <option value="">أختر الموقع</option>
+                                @foreach ($websites as $id => $entry)
+                                    <option value="{{ $id }}" >
+                                        {{ $entry }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-3">
                             <label class="control-label">&nbsp;</label><br>
                             <button class="btn btn-primary" type="button" onclick="products_report()">{{ __('global.filterDate') }}</button> 
                         </div>
@@ -636,6 +647,7 @@
                 _token: '{{ csrf_token() }}',
                 start_date: $('#start_date').val(),
                 end_date: $('#end_date').val(),
+                website_setting_id: $('#productsReportModal select').val(),
             }, function(data) {
                 $('#products-report-div').html(null); 
                 $('#products-report-div').html(data); 
