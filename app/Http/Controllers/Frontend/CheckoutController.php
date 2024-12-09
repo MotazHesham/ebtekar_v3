@@ -316,8 +316,7 @@ class CheckoutController extends Controller
                 toast("Try Again",'error');
                 return redirect()->route('home');
             }
-        }catch (\Exception $ex){
-            dd($ex);
+        }catch (\Exception $ex){ 
             DB::rollBack(); 
             toast("SomeThing Went Wrong!",'error');
             return redirect()->route('home');

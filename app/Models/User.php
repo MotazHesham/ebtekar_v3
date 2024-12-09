@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendVerificationMail;
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyUserMail;
 use App\Notifications\VerifyUserNotification;
@@ -112,7 +113,7 @@ class User extends Authenticatable implements HasMedia
                 $user->verification_token = $token;
                 $user->save(); 
 
-                Mail::to($user->email)->send(new VerifyUserMail($user,$site_settings));
+                SendVerificationMail::dispatch($user,$site_settings,$user->email);  
             }
         });
     } 
