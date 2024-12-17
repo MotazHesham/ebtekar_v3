@@ -73,7 +73,13 @@ class CartController extends Controller
 
     public function edit(Request $request){
         $product  = Product::findOrFail($request->id);
+        if(!session('cart')){
+            abort(401);
+        }
         $cart = session('cart')->where('id',$request->id)->first();
+        if(!$cart){
+            abort(401);
+        }
         return view('frontend.partials.edit_cart',compact('product','cart'));
     }
 
