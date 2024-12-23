@@ -98,6 +98,7 @@
                     </tbody>
                 </table>
             </div>
+            {{ $expenses->link() }}
         </div>
     </div>
 @endsection

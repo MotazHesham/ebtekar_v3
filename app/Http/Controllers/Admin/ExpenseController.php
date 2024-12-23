@@ -27,7 +27,7 @@ class ExpenseController extends Controller
     {
         abort_if(Gate::denies('expense_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $expenses = Expense::with(['expense_category'])->get();
+        $expenses = Expense::with(['expense_category'])->paginate(25);
 
         return view('admin.expenses.index', compact('expenses'));
     }

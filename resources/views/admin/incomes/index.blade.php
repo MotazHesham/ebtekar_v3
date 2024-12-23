@@ -96,6 +96,7 @@
                     </tbody>
                 </table>
             </div>
+            {{ $incomes->link() }}
         </div>
     </div>
 @endsection
