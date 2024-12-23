@@ -23,7 +23,7 @@ class IncomeController extends Controller
     {
         abort_if(Gate::denies('income_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $incomes = Income::with(['income_category'])->paginate(25);
+        $incomes = Income::with(['income_category'])->orderby('created_at','desc')->paginate(25);
 
         return view('admin.incomes.index', compact('incomes'));
     }
