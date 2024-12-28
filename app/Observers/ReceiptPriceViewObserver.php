@@ -27,6 +27,8 @@ class ReceiptPriceViewObserver
             $str = 'martobia-';
         }elseif($receiptPriceView->website_setting_id == 6){
             $str = 'a1-digital-';
+        }elseif($receiptPriceView->website_setting_id == 7){
+            $str = 'ein-';
         }else{ 
             $str = 'ebtekar-';
         }

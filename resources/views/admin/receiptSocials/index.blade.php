@@ -289,6 +289,7 @@
                                             @elseif($receipt->website_setting_id == 4) order_num_shirti 
                                             @elseif($receipt->website_setting_id == 5) order_num_martobia
                                             @elseif($receipt->website_setting_id == 6) order_num_a1_digital
+                                            @elseif($receipt->website_setting_id == 7) order_num_ein
                                             @else order_num_ebtekar @endif text-white mb-1" 
                                             onclick="show_logs('App\\Models\\ReceiptSocial','{{ $receipt->id }}','receiptSocial')">
                                     @if($receipt->printing_times == 0) 

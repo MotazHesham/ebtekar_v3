@@ -30,6 +30,8 @@ class ReceiptSocialObserver
             $str = 'martobia-';
         }elseif($receiptSocial->website_setting_id == 6){
             $str = 'a1-digital-';
+        }elseif($receiptSocial->website_setting_id == 7){
+            $str = 'ein-';
         }else{ 
             $str = 'ebtekar-';
         }
