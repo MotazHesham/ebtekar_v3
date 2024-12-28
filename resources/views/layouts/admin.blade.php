@@ -69,6 +69,10 @@
             background: #20b127
         }
 
+        .order_num_ein {
+            background: #b1204c
+        }
+
         .playlist_status {
             cursor: pointer;
             font-size: 16px
