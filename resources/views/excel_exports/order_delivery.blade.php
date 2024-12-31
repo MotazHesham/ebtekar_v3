@@ -145,12 +145,12 @@
                     <td>{{$order->order_num}}</td>
                     <td>{{$order->id}}</td>
                     <td>{{$order->client_name}}</td>
-                    <td></td>
                     <td>{{$order->shipping_country ? $order->shipping_country->code : ''}}</td>
+                    <td>Egypt</td>
                     <td>{{$order->phone_number }}</td>
                     <td>{{$order->phone_number_2 }}</td>
-                    <td></td>
                     <td>{{$order->shipping_address}}</td>
+                    <td></td>
                     <td>1</td>
                     <td>DLV</td>
                     <td>{{ $order->calc_total_for_client() }}</td>

@@ -144,12 +144,12 @@
                     <td>{{$receipt->order_num}}</td>
                     <td>{{$receipt->id}}</td>
                     <td>{{$receipt->client_name}}</td>
-                    <td></td>
                     <td>{{$receipt->shipping_country ? $receipt->shipping_country->code : ''}}</td>
+                    <td>Egypt</td>
                     <td>{{$receipt->phone_number }}</td>
                     <td>{{$receipt->phone_number_2 }}</td>
-                    <td></td>
                     <td>{{$receipt->shipping_address}}</td>
+                    <td></td>
                     <td>1</td>
                     <td>DLV</td>
                     <td>{{ $receipt->calc_total_for_client() }}</td>
