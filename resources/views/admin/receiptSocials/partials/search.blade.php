@@ -320,7 +320,10 @@
                     <a class="btn btn-warning btn-rounded btn-block"  href="{{ route('admin.receipt-socials.index') }}">{{ __('global.reset') }}</a>
                 </div>
                 <div class="col-md-3">
-                    <input type="submit" value="{{ __('global.download_for_delivery') }}" name="download_delivery" class="btn btn-dark btn-rounded btn-block">
+                    <div style="display: flex;justify-content:space-evenly"> 
+                        <input type="submit" value="Fedex" name="download_delivery_fedex" class="btn btn-dark btn-rounded">
+                        <input type="submit" value="Smsa" name="download_delivery_smsa" class="btn btn-dark btn-rounded">
+                    </div>
                 </div>
             </div> 
         </form>

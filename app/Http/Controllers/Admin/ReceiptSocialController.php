@@ -594,8 +594,12 @@ class ReceiptSocialController extends Controller
             return Excel::download(new ReceiptSocialExport($receipts->with('receiptsReceiptSocialProducts')->get()), 'social_receipts_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
         }
 
-        if ($request->has('download_delivery')) {
-            return Excel::download(new ReceiptSocialDeliveryExport($receipts->with('receiptsReceiptSocialProducts')->get()), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
+        if ($request->has('download_delivery_fedex')) {
+            return Excel::download(new ReceiptSocialDeliveryExport($receipts->with('receiptsReceiptSocialProducts')->get(),'fedex'), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
+        }
+
+        if ($request->has('download_delivery_smsa')) {
+            return Excel::download(new ReceiptSocialDeliveryExport($receipts->with('receiptsReceiptSocialProducts')->get(),'smsa'), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
         }
 
         if ($request->has('print')) {

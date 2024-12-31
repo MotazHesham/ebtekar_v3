@@ -10,15 +10,18 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class ReceiptSocialDeliveryExport implements FromView, ShouldAutoSize
 {
     protected $receipts;
+    protected $type;
 
-    function __construct($receipts) {
+    function __construct($receipts, $type) {
         $this->receipts = $receipts;
+        $this->type = $type;
     }
 
     public function view(): View
     {
         return view('excel_exports.receipt_social_delivery', [
-            'receipts' => $this->receipts
+            'receipts' => $this->receipts,
+            'type' => $this->type,
         ]);
     }
 }

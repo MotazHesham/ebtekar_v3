@@ -366,10 +366,13 @@ class OrdersController extends Controller
             return Excel::download(new OrdersExport($orders->get()), 'orders.xlsx');
         } 
 
-        if ($request->has('download_delivery')) {
-            return Excel::download(new OrderDeliveryExport($orders->with('orderDetails.product')->get()), 'orders_delivery_(' . $from_date . ')_(' . $to_date . ').xlsx');
+        if ($request->has('download_delivery_fedex')) {
+            return Excel::download(new OrderDeliveryExport($orders->with('orderDetails.product')->get(),'fedex'), 'orders_delivery_(' . $from_date . ')_(' . $to_date . ').xlsx');
         }
 
+        if ($request->has('download_delivery_smsa')) {
+            return Excel::download(new OrderDeliveryExport($orders->with('orderDetails.product')->get(),'smsa'), 'orders_delivery_(' . $from_date . ')_(' . $to_date . ').xlsx');
+        }
         if ($request->has('print')) {
             $orders = $orders->with('orderDetails.product')->get();
             foreach($orders as $order){
