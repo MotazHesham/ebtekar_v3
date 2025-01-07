@@ -9,12 +9,12 @@
         <div class="product-imgbox">
             <div class="product-front">
                 <a href="{{ route('frontend.product', $product->slug) }}">
-                    {{-- <img src="{{ $front_image }}" class="img-fluid" alt="{{ $product->name }}"> --}}
+                    <img src="{{ $front_image }}" class="img-fluid" alt="{{ $product->name }}">
                 </a>
             </div>
             <div class="product-back">
                 <a href="{{ route('frontend.product', $product->slug) }}">
-                    {{-- <img src="{{ $back_image }}" class="img-fluid" alt="{{ $product->name }}"> --}}
+                    <img src="{{ $back_image }}" class="img-fluid" alt="{{ $product->name }}">
                 </a>
             </div>
             <div class="product-icon icon-inline">
