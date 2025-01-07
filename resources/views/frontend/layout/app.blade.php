@@ -49,7 +49,7 @@
 
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main.min.css') }}" media="screen" id="color"> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main.css') }}" media="screen" id="color"> 
 
     <link rel="stylesheet" href="{{ asset('dashboard_offline/css/select2.min.css') }}">
     <style>
