@@ -21,7 +21,7 @@ class CustomersController extends Controller
         abort_if(Gate::denies('customer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Customer::with(['user.website'])->select(sprintf('%s.*', (new Customer)->table))->with('website');
+            $query = Customer::with(['user.website','user.media'])->select(sprintf('%s.*', (new Customer)->table))->with('website');
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');

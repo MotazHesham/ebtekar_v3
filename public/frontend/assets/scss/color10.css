@@ -5596,7 +5596,7 @@ header {
 .layout-5 .media-banner.media-banner-1 {
   background-color: #f2f2f2; }
 
-.tab-product-main .tab-prodcut-contain ul li a {
+.tab-product-main .tab-prodcut-contain ul li span {
   color: #ffffff; }
 
 .media-banner {
@@ -7085,7 +7085,7 @@ ul.sosiyal {
         background-color: #fb6436;
         width: 100%;
         content: ''; }
-      .tab-product-main .tab-prodcut-contain ul li a {
+      .tab-product-main .tab-prodcut-contain ul li span {
         color: #fb6436;
         text-transform: uppercase;
         font-weight: 700;
@@ -7099,7 +7099,7 @@ ul.sosiyal {
       line-height: 1;
       padding: 0;
       transition: all 0.3s ease; }
-      .tab-product-main.tab-second .tab-prodcut-contain ul li a {
+      .tab-product-main.tab-second .tab-prodcut-contain ul li span {
         display: flex;
         align-items: center;
         padding-top: calc(8px + (10 - 8) * ((100vw - 320px) / (1920 - 320)));
@@ -7107,7 +7107,7 @@ ul.sosiyal {
         padding-left: calc(15px + (30 - 15) * ((100vw - 320px) / (1920 - 320)));
         padding-right: calc(15px + (30 - 15) * ((100vw - 320px) / (1920 - 320)));
         transition: all 0.3s ease; }
-        .tab-product-main.tab-second .tab-prodcut-contain ul li a svg {
+        .tab-product-main.tab-second .tab-prodcut-contain ul li span svg {
           width: calc(20px + (35 - 20) * ((100vw - 320px) / (1920 - 320)));
           margin-right: 10px;
           transition: all 0.3s ease; }
@@ -7133,7 +7133,7 @@ ul.sosiyal {
         color: #ffffff; }
       .tab-product-main.tab-four .tab-prodcut-contain ul li.current::before {
         display: none; }
-      .tab-product-main.tab-four .tab-prodcut-contain ul li a {
+      .tab-product-main.tab-four .tab-prodcut-contain ul li span {
         padding-top: calc(8px + (15 - 8) * ((100vw - 320px) / (1920 - 320)));
         padding-bottom: calc(8px + (15 - 8) * ((100vw - 320px) / (1920 - 320)));
         padding-left: calc(12px + (30 - 12) * ((100vw - 320px) / (1920 - 320)));
@@ -16224,7 +16224,7 @@ body.rtl {
   .rtl .tab-product-main.tab-four .tab-prodcut-contain ul li:nth-child(n+2) {
     margin-left: unset;
     margin-right: calc(0px + (15 - 0) * ((100vw - 320px) / (1920 - 320))); }
-  .rtl .tab-product-main.tab-second .tab-prodcut-contain ul li a svg {
+  .rtl .tab-product-main.tab-second .tab-prodcut-contain ul li span svg {
     margin-left: 15px;
     margin-right: unset; }
   .rtl .tab-product-main .tab-prodcut-contain ul li:nth-child(n+2) {
@@ -23020,9 +23020,9 @@ body.dark {
   .dark .sm-vertical .mobile-back {
     color: #e7eaec;
     border-bottom-color: #3c3c3c; }
-  .dark .tab-product-main .tab-prodcut-contain ul li a {
+  .dark .tab-product-main .tab-prodcut-contain ul li span {
     color: #ffffff; }
-  .dark .tab-product-main.tab-second .tab-prodcut-contain ul li a svg {
+  .dark .tab-product-main.tab-second .tab-prodcut-contain ul li span svg {
     fill: #ffffff; }
   .dark .blog .blog-contain .blog-img {
     border: 1px solid #262626; }

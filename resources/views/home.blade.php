@@ -1,4 +1,12 @@
 @extends('layouts.admin')
+@section('styles')
+    <style>
+        .blur{
+            color: transparent;
+            text-shadow: 2px 3px 4px white; 
+        }
+    </style>
+@endsection
 @section('content')
     <div class="content">
         <div class="row">
@@ -9,63 +17,69 @@
                     </div>
                 @endif 
                 <div class="row">
-                    <div class="{{ $settings1['column_class'] }}">
+                    <div class="col-md-3">
                         <div class="card text-white bg-success">
                             <div class="card-body pb-0">
-                                <div class="text-value">{{ number_format($settings1['total_number']) }}</div>
-                                <div>{{ $settings1['chart_title'] }}</div>
+                                <div class="text-value blur" onmouseover="loadNum(this,'customer')">xxxx</div>
+                                <div>{{ __('cruds.customer.title') }}</div>
                                 <br />
                             </div>
                         </div>
                     </div>
-                    <div class="{{ $settings2['column_class'] }}">
+                    <div class="col-md-3">
                         <div class="card text-white bg-danger">
                             <div class="card-body pb-0">
-                                <div class="text-value">{{ number_format($settings2['total_number']) }}</div>
-                                <div>{{ $settings2['chart_title'] }}</div>
+                                <div class="text-value blur" onmouseover="loadNum(this,'product')">xxxx</div>
+                                <div>{{ __('cruds.product.title') }}</div>
                                 <br />
                             </div>
                         </div>
                     </div>
-                    <div class="{{ $settings3['column_class'] }}">
+                    <div class="col-md-3">
                         <div class="card text-white bg-info">
                             <div class="card-body pb-0">
-                                <div class="text-value">{{ number_format($settings3['total_number']) }}</div>
-                                <div>{{ $settings3['chart_title'] }}</div>
+                                <div class="text-value blur" onmouseover="loadNum(this,'order')">xxxx</div>
+                                <div>{{ __('cruds.order.title') }}</div>
                                 <br />
                             </div>
                         </div>
                     </div>
-                    <div class="{{ $settings4['column_class'] }}">
+                    <div class="col-md-3">
                         <div class="card text-white bg-warning">
                             <div class="card-body pb-0">
-                                <div class="text-value">{{ number_format($settings4['total_number']) }}</div>
-                                <div>{{ $settings4['chart_title'] }}</div>
+                                <div class="text-value blur" onmouseover="loadNum(this,'receiptSocial')">xxxx</div>
+                                <div>{{ __('cruds.receiptSocial.title') }}</div>
                                 <br />
                             </div>
                         </div>
                     </div>
-                    <div class="{{ $chart6->options['column_class'] }}">
+                    <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <h5>{!! $chart6->options['chart_title'] !!}</h5>
-                                {!! $chart6->renderHtml() !!}
+                                <div style="display: flex;justify-content:space-between" id="first-chart">
+                                    <h5>{!! __('cruds.order.extra.chart_by_order_type') !!}</h5>
+                                    <button class="btn btn-info" onclick="loadChart(this,'first-chart')">Load Chart</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="{{ $chart5->options['column_class'] }}">
+                    <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <h5>{!! $chart5->options['chart_title'] !!}</h5>
-                                {!! $chart5->renderHtml() !!}
+                                <div style="display: flex;justify-content:space-between" id="second-chart">
+                                    <h5>{!! __('cruds.receiptSocial.extra.chart_by_month') !!}</h5>
+                                    <button class="btn btn-info" onclick="loadChart(this,'second-chart')">Load Chart</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="{{ $chart05->options['column_class'] }}">
+                    <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <h5>{!! $chart05->options['chart_title'] !!}</h5>
-                                {!! $chart05->renderHtml() !!} 
+                                <div style="display: flex;justify-content:space-between" id="third-chart">
+                                    <h5>{!! __('cruds.receiptSocial.extra.chart_by_website') !!}</h5>
+                                    <button class="btn btn-info" onclick="loadChart(this,'third-chart')">Load Chart</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -115,38 +129,38 @@
                     </div> 
                     <div class="col-md-6"> 
                         <div class="row mt-2">
-                            <div class="{{ $settings7['column_class'] }}">
+                            <div class="col-md-6">
                                 <div class="card text-white bg-success">
                                     <div class="card-body pb-0">
-                                        <div class="text-value">{{ number_format($settings7['total_number']) }}</div>
-                                        <div>{{ $settings7['chart_title'] }}</div>
+                                        <div class="text-value blur" onmouseover="loadNum(this,'product')">xxxx</div>
+                                        <div>{{ __('cruds.product.extra.published_products')}}</div>
                                         <br />
                                     </div>
                                 </div>
                             </div>
-                            <div class="{{ $settings07['column_class'] }}">
+                            <div class="col-md-6">
                                 <div class="card text-white bg-primary">
                                     <div class="card-body pb-0">
-                                        <div class="text-value">{{ number_format($settings07['total_number']) }}</div>
-                                        <div>{{ $settings07['chart_title'] }}</div>
+                                        <div class="text-value blur" onmouseover="loadNum(this,'category')">xxxx</div>
+                                        <div>{{ __('cruds.category.title') }}</div>
                                         <br />
                                     </div>
                                 </div>
                             </div>
-                            <div class="{{ $settings8['column_class'] }}">
+                            <div class="col-md-6">
                                 <div class="card text-white bg-danger">
                                     <div class="card-body pb-0">
-                                        <div class="text-value">{{ number_format($settings8['total_number']) }}</div>
-                                        <div>{{ $settings8['chart_title'] }}</div>
+                                        <div class="text-value blur" onmouseover="loadNum(this,'subCategory')">xxxx</div>
+                                        <div>{{ __('cruds.subCategory.title') }}</div>
                                         <br />
                                     </div>
                                 </div>
                             </div>
-                            <div class="{{ $settings9['column_class'] }}">
+                            <div class="col-md-6">
                                 <div class="card text-white bg-dark">
                                     <div class="card-body pb-0">
-                                        <div class="text-value">{{ number_format($settings9['total_number']) }}</div>
-                                        <div>{{ $settings9['chart_title'] }}</div>
+                                        <div class="text-value blur" onmouseover="loadNum(this,'subSubCategory')">xxxx</div>
+                                        <div>{{ __('cruds.subSubCategory.title') }}</div>
                                         <br />
                                     </div>
                                 </div>
@@ -160,5 +174,47 @@
 @endsection
 @section('scripts')
     @parent
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>{!! $chart5->renderJs() !!}{!! $chart6->renderJs() !!} {!! $chart05->renderJs() !!}
+    <script>
+        function loadNum(element,type){
+            // Check if the function has already been executed for this element
+            if ($(element).data('loaded')) {
+                return; // Exit the function if already loaded
+            } 
+
+            // Mark this element as loaded
+            $(element).data('loaded', true);
+
+            $(element).removeClass('blur');
+            $(element).html('<div class="spinner-border spinner-border-sm text-white" role="status"></div>');
+            $.ajax({
+                url: '{{ route('admin.widgets.load_num') }}',
+                type: 'Post',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    type: type
+                },
+                success: function(data){
+                    $(element).html(data); 
+                } 
+            }); 
+        }
+        
+        function loadChart(element,type){  
+            $(element).html('<div class="spinner-border spinner-border-sm text-dark" role="status"></div>');
+
+            $.ajax({
+                url: '{{ route('admin.widgets.load_chart') }}',
+                type: 'Post',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    type: type
+                },
+                success: function(data){ 
+                    $(element).remove();
+                    $('#' + type).after(data); 
+                } 
+            }); 
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script> 
 @endsection

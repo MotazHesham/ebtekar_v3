@@ -21,11 +21,36 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Illuminate\Support\Facades\Auth; 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class PlaylistController extends Controller
 {
+    public function getCounters(){
+        
+        $playlists_counter = ViewPlaylistData::select('playlist_status', DB::raw('COUNT(*) as count'))
+            ->whereIn('playlist_status', ['design', 'manufacturing', 'prepare', 'shipment'])
+            ->groupBy('playlist_status')
+            ->pluck('count', 'playlist_status')
+            ->toArray();
 
+        $playlists_counter = array_merge([
+            'design' => 0,
+            'manufacturing' => 0,
+            'prepare' => 0,
+            'shipment' => 0,
+        ], $playlists_counter);
+
+        $playlists_counter_sum = 
+            (Gate::allows('playlist_design') ? $playlists_counter['design'] : 0) +
+            (Gate::allows('playlist_manufacturing') ? $playlists_counter['manufacturing'] : 0) +
+            (Gate::allows('playlist_prepare') ? $playlists_counter['prepare'] : 0) +
+            (Gate::allows('playlist_shipment') ? $playlists_counter['shipment'] : 0);
+
+        $playlists_counter['total'] = $playlists_counter_sum;
+
+        return response()->json($playlists_counter,200);
+    }
     public function client_review($id , $model_type){   
         if($model_type == 'social'){
             $raw = ReceiptSocial::find($id); 

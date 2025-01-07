@@ -18,7 +18,11 @@ class SetLocale
         }
 
         if (isset($language)) {
-            app()->setLocale($language);
+            if (in_array($language, ['en', 'ar'])) { 
+                app()->setLocale($language);
+            } else {
+                app()->setLocale(config('app.fallback_locale'));
+            } 
         }
 
         return $next($request);

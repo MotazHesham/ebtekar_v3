@@ -6898,7 +6898,7 @@ header {
   background-color: #f2f2f2;
 }
 
-.tab-product-main .tab-prodcut-contain ul li a {
+.tab-product-main .tab-prodcut-contain ul li span {
   color: #ffffff;
 }
 
@@ -8717,7 +8717,7 @@ ul.sosiyal.sosiyal-inverse li:hover {
   width: 100%;
   content: "";
 }
-.tab-product-main .tab-prodcut-contain ul li a {
+.tab-product-main .tab-prodcut-contain ul li span {
   color: #ff6000;
   text-transform: uppercase;
   font-weight: 700;
@@ -8734,7 +8734,7 @@ ul.sosiyal.sosiyal-inverse li:hover {
   padding: 0;
   transition: all 0.3s ease;
 }
-.tab-product-main.tab-second .tab-prodcut-contain ul li a {
+.tab-product-main.tab-second .tab-prodcut-contain ul li span {
   display: flex;
   align-items: center;
   padding-top: calc(8px + 2 * (100vw - 320px) / 1600);
@@ -8743,7 +8743,7 @@ ul.sosiyal.sosiyal-inverse li:hover {
   padding-right: calc(15px + 15 * (100vw - 320px) / 1600);
   transition: all 0.3s ease;
 }
-.tab-product-main.tab-second .tab-prodcut-contain ul li a svg {
+.tab-product-main.tab-second .tab-prodcut-contain ul li span svg {
   width: calc(20px + 15 * (100vw - 320px) / 1600);
   margin-right: 10px;
   transition: all 0.3s ease;
@@ -8779,7 +8779,7 @@ ul.sosiyal.sosiyal-inverse li:hover {
 .tab-product-main.tab-four .tab-prodcut-contain ul li.current::before {
   display: none;
 }
-.tab-product-main.tab-four .tab-prodcut-contain ul li a {
+.tab-product-main.tab-four .tab-prodcut-contain ul li span {
   padding-top: calc(8px + 7 * (100vw - 320px) / 1600);
   padding-bottom: calc(8px + 7 * (100vw - 320px) / 1600);
   padding-left: calc(12px + 18 * (100vw - 320px) / 1600);

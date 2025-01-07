@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('/', 'Frontend\HomeController@index')->name('home');
 
+// Home Sections
+Route::post('sections/new_products', 'Frontend\HomeController@new_products')->name('frontend.sections.new_products');
+Route::post('sections/featured_categories', 'Frontend\HomeController@featured_categories')->name('frontend.sections.featured_categories');
+Route::post('sections/best_selling_products', 'Frontend\HomeController@best_selling_products')->name('frontend.sections.best_selling_products');
+
 // nafzly callback payment
 // Route::get('/payments/verify/{payment?}',[FrontController::class,'payment_verify'])->name('payment-verify');
 

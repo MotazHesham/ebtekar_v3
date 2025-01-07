@@ -6313,7 +6313,7 @@ header {
 .layout-5 .media-banner.media-banner-1 {
   background-color: #f2f2f2; }
 
-.tab-product-main .tab-prodcut-contain ul li a {
+.tab-product-main .tab-prodcut-contain ul li span {
   color: #ffffff; }
 
 .media-banner {
@@ -8014,7 +8014,7 @@ ul.sosiyal {
         background-color: #ff6000;
         width: 100%;
         content: ''; }
-      .tab-product-main .tab-prodcut-contain ul li a {
+      .tab-product-main .tab-prodcut-contain ul li span {
         color: #ff6000;
         text-transform: uppercase;
         font-weight: 700;
@@ -8029,7 +8029,7 @@ ul.sosiyal {
       padding: 0;
       -webkit-transition: all 0.3s ease;
       transition: all 0.3s ease; }
-      .tab-product-main.tab-second .tab-prodcut-contain ul li a {
+      .tab-product-main.tab-second .tab-prodcut-contain ul li span {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -8042,7 +8042,7 @@ ul.sosiyal {
         padding-right: calc(15px + (30 - 15) * ((100vw - 320px) / (1920 - 320)));
         -webkit-transition: all 0.3s ease;
         transition: all 0.3s ease; }
-        .tab-product-main.tab-second .tab-prodcut-contain ul li a svg {
+        .tab-product-main.tab-second .tab-prodcut-contain ul li span svg {
           width: calc(20px + (35 - 20) * ((100vw - 320px) / (1920 - 320)));
           margin-right: 10px;
           -webkit-transition: all 0.3s ease;
@@ -8069,7 +8069,7 @@ ul.sosiyal {
         color: #ffffff; }
       .tab-product-main.tab-four .tab-prodcut-contain ul li.current::before {
         display: none; }
-      .tab-product-main.tab-four .tab-prodcut-contain ul li a {
+      .tab-product-main.tab-four .tab-prodcut-contain ul li span {
         padding-top: calc(8px + (15 - 8) * ((100vw - 320px) / (1920 - 320)));
         padding-bottom: calc(8px + (15 - 8) * ((100vw - 320px) / (1920 - 320)));
         padding-left: calc(12px + (30 - 12) * ((100vw - 320px) / (1920 - 320)));

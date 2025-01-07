@@ -309,13 +309,13 @@ class ReceiptSocialController extends Controller
 
     public function add_product(Request $request){
         if($request->ajax()){
-            $receipt = ReceiptSocial::find($request->id);
+            $receipt = ReceiptSocial::findOrFail($request->id);
             $products = ReceiptSocialProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
             $receipt_id = $request->id;
             $order_num = $receipt->order_num;
             return view('admin.receiptSocials.partials.add_product',compact('products','receipt_id','order_num'));
         }else{  
-            $receipt = ReceiptSocial::find($request->receipt_id);
+            $receipt = ReceiptSocial::findOrFail($request->receipt_id);
             
             if (!auth()->user()->is_admin) {
                 if ($receipt->playlist_status != 'pending'){
@@ -611,11 +611,24 @@ class ReceiptSocialController extends Controller
             return view('admin.receiptSocials.print', compact('receipts'));
         }
         
+        
+        // Clone the query for statistics
+        $statisticsQuery = clone $receipts;
+
+        // Perform all aggregations in a single query
+        $statisticsData = $statisticsQuery->selectRaw('
+                SUM(commission) as total_commission,
+                SUM(extra_commission) as total_extra_commission,
+                SUM(shipping_country_cost) as total_shipping_country_cost,
+                SUM(deposit) as total_deposit,
+                SUM(total_cost) as total_total_cost
+            ')->first();
+        
         $statistics = [
-            'total_commission' => $receipts->sum('commission') + $receipts->sum('extra_commission'),
-            'total_shipping_country_cost' => $receipts->sum('shipping_country_cost'),
-            'total_deposit' => $receipts->sum('deposit'),
-            'total_total_cost' => $receipts->sum('total_cost') + $receipts->sum('extra_commission'),
+            'total_commission' => $statisticsData->total_commission + $statisticsData->total_extra_commission,
+            'total_shipping_country_cost' => $statisticsData->total_shipping_country_cost,
+            'total_deposit' => $statisticsData->total_deposit,
+            'total_total_cost' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission,
         ];
 
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);

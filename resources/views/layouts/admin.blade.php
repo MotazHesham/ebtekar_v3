@@ -350,6 +350,34 @@
 
 
 
+        function playlistCounters(element) {
+            
+            if ($(element).data('loaded')) {
+                return; // Exit the function if already loaded
+            } 
+
+            // Mark this element as loaded
+            $(element).data('loaded', true);
+
+            $('.playlist-counters').each(function() {
+                var $this = $(this); 
+
+                // Replace the content with a spinner
+                $this.html('<div class="spinner-border spinner-border-sm text-dark" role="status"></div>');
+
+            });
+
+            $.post('{{ route('admin.playlists.getCounters') }}', {
+                _token: '{{ csrf_token() }}', 
+            }, function(data) {
+                $('#playlist-counter-design').html(data['design']);
+                $('#playlist-counter-manufacturing').html(data['manufacturing']);
+                $('#playlist-counter-prepare').html(data['prepare']);
+                $('#playlist-counter-shipment').html(data['shipment']); 
+                $('#playlist-counter-total').html(data['total']); 
+            });
+        }
+
         function show_details(id, model_type) {
             $.post('{{ route('admin.playlists.show_details') }}', {
                 _token: '{{ csrf_token() }}',

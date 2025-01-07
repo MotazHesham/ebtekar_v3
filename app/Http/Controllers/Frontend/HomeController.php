@@ -35,27 +35,43 @@ class HomeController extends Controller
         $sliders = Cache::rememberForever('home_silders_'.$site_settings->id, function () use ($site_settings) {
             return Slider::where('website_setting_id', $site_settings->id)->with('media')->where('published', 1)->get();
         });
-        $new_products = Cache::rememberForever('home_new_products_'.$site_settings->id, function () use ($site_settings) {
-            return Product::where('website_setting_id', $site_settings->id)->with('media','category')->where('published', 1)->where('todays_deal', 1)->orderBy('created_at', 'desc')->take(10)->get();
-        });
         $home_categories = Cache::rememberForever('home_categories_'.$site_settings->id, function () use ($site_settings) {
             return HomeCategory::where('website_setting_id', $site_settings->id)->with('category.media')->orderBy('created_at', 'desc')->get();
         });
-        $freatured_categories =  Cache::rememberForever('freatured_categories_'.$site_settings->id, function () use ($site_settings) {
-
-            $categories = Category::where('website_setting_id', $site_settings->id)->where('published', 1)->where('featured', 1)->with(['media','products.media','products.category', 'products' => function ($query) {
-                $query->where('published', 1)->where('featured', 1)->orderBy('created_at', 'desc');
-            }])->orderBy('created_at', 'desc')->get(); 
-            return $categories;
-        });  
 
         $banners_1 = Cache::rememberForever('home_banners_1_'.$site_settings->id, function () use ($site_settings) {
             return Banner::where('website_setting_id', $site_settings->id)->with('media')->where('position', 1)->where('published', 1)->orderBy('updated_at', 'desc')->get()->take(2);
         });
+        $featured_categories  = Category::where('website_setting_id', $site_settings->id)->where('published', 1)->where('featured', 1)->with('media')->get();
+        $first_featured_category_id = $featured_categories[0]->id ?? 0;
+        return view('frontend.home', compact('sliders',  'home_categories', 'banners_1', 'featured_categories','first_featured_category_id'));
+    }
+
+    public function new_products(){
+        $site_settings = get_site_setting();
+        $new_products = Cache::rememberForever('home_new_products_'.$site_settings->id, function () use ($site_settings) {
+            return Product::where('website_setting_id', $site_settings->id)->with('media','category')->where('published', 1)->where('todays_deal', 1)->orderBy('created_at', 'desc')->take(10)->get();
+        });
+        
+        return view('frontend.ajax-load.new-products', compact('new_products'));
+    }
+
+    public function featured_categories(Request $request){ 
+        
+        $products = Product::where('category_id',$request->category_id)
+                            ->where('published', 1)->where('featured', 1)
+                            ->orderBy('created_at', 'desc')->with('category','media')->take(8)->get();
+        
+        return view('frontend.ajax-load.featured-categories', compact('products'));
+    }
+
+    public function best_selling_products(){
+        $site_settings = get_site_setting();
         $best_selling_products = Cache::rememberForever('home_best_selling_products_'.$site_settings->id, function () use ($site_settings) {
             return Product::where('website_setting_id', $site_settings->id)->with('media','category')->where('published', 1)->orderBy('num_of_sale', 'desc')->take(10)->get();
         }); 
-        return view('frontend.home', compact('sliders', 'new_products', 'home_categories', 'freatured_categories', 'banners_1', 'best_selling_products'));
+        
+        return view('frontend.ajax-load.best-selling', compact('best_selling_products'));
     }
 
     public function about()

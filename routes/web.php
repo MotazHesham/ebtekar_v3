@@ -29,8 +29,15 @@ Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProv
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () { 
     
-    Route::get('transfer', 'HomeController@transfer')->name('z');
+    // Gr Generator
+    Route::get('qrs/generator', 'QrGeneratorController@index')->name('qrs.generator');
+    Route::post('qrs/generator', 'QrGeneratorController@generate')->name('qrs.generate');
+
+    
     Route::get('/', 'HomeController@index')->name('home');
+    Route::post('widgets/load_num','HomeController@load_num')->name('widgets.load_num');
+    Route::post('widgets/load_chart','HomeController@load_chart')->name('widgets.load_chart');
+
     Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
     Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');
     Route::post('show_qr_code', 'HomeController@show_qr_code')->name('show_qr_code');
@@ -344,6 +351,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Playlist
     Route::delete('playlists/destroy', 'PlaylistController@massDestroy')->name('playlists.massDestroy');
     Route::get('playlists/client_review/{id}/{model_type}', 'PlaylistController@client_review')->name('playlists.client_review');
+    Route::post('playlists/getCounters', 'PlaylistController@getCounters')->name('playlists.getCounters');
     Route::post('playlists/update_playlist_users', 'PlaylistController@update_playlist_users')->name('playlists.update_playlist_users');
     Route::post('playlists/playlist_users', 'PlaylistController@playlist_users')->name('playlists.playlist_users');
     Route::post('playlists/update_playlist_status', 'PlaylistController@update_playlist_status')->name('playlists.update_playlist_status');

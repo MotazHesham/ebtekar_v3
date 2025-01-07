@@ -143,28 +143,14 @@
                 </ul>
             </li>
         @endcan
-        @can('playlist_access')
-            @php
-                // this is a counter to count the playlist depend on the status (design,manufacturing,prepare,shipment) 
-                $playlists_counter = [
-                    'design' => \App\Models\ViewPlaylistData::where('playlist_status','design')->count(),
-                    'manufacturing' => \App\Models\ViewPlaylistData::where('playlist_status','manufacturing')->count(),
-                    'prepare' => \App\Models\ViewPlaylistData::where('playlist_status','prepare')->count(),
-                    'shipment' => \App\Models\ViewPlaylistData::where('playlist_status','shipment')->count(),
-                ];
-                $playlists_counter_sum = 0; 
-                $playlists_counter_sum += Gate::allows('playlist_design') ? $playlists_counter['design'] : 0; 
-                $playlists_counter_sum += Gate::allows('playlist_manufacturing') ? $playlists_counter['manufacturing'] : 0; 
-                $playlists_counter_sum += Gate::allows('playlist_prepare') ? $playlists_counter['prepare'] : 0; 
-                $playlists_counter_sum += Gate::allows('playlist_shipment') ? $playlists_counter['shipment'] : 0; 
-            @endphp
+        @can('playlist_access') 
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/playlists/*") ? "c-active" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
 
                     </i>
                     {{ __('cruds.playlist.title') }}
-                    @if($playlists_counter_sum) <span class="badge bg-light-gradient text-dark ms-auto">{{ $playlists_counter_sum   }}</span> @endif
+                    <span class="badge bg-light-gradient text-dark ms-auto playlist-counters" id="playlist-counter-total" onmouseover="playlistCounters(this)"><i class="far fa-eye"></i></span>
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items"> 
                     @can('playlist_design')
@@ -174,7 +160,7 @@
 
                                 </i>
                                 {{ __('cruds.playlist.menu.design') }} 
-                                @if($playlists_counter['design']) <span class="badge bg-primary-gradient ms-auto">{{ $playlists_counter['design'] }}</span>@endif
+                                <span class="badge bg-primary-gradient ms-auto playlist-counters" id="playlist-counter-design" onmouseover="playlistCounters(this)"><i class="far fa-eye"></i></span>
                             </a>
                         </li>
                     @endcan
@@ -185,18 +171,18 @@
 
                                 </i>
                                 {{ __('cruds.playlist.menu.manufacturing') }}
-                                @if($playlists_counter['manufacturing']) <span class="badge bg-warning-gradient text-dark ms-auto">{{ $playlists_counter['manufacturing'] }}</span> @endif
+                                <span class="badge bg-warning-gradient text-dark ms-auto playlist-counters" id="playlist-counter-manufacturing" onmouseover="playlistCounters(this)"><i class="far fa-eye"></i></span> 
                             </a>
                         </li>
                     @endcan
                     @can('playlist_prepare')
-                        <li class="c-sidebar-nav-item">
+                        <li class="c-sidebar-nav-item"> 
                             <a href="{{ route("admin.playlists.index",'prepare') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/prepare") ? "c-active" : "" }}">
                                 <i class="fa-fw fab fa-envira c-sidebar-nav-icon">
 
                                 </i>
                                 {{ __('cruds.playlist.menu.prepare') }}
-                                @if($playlists_counter['prepare']) <span class="badge bg-success-gradient  ms-auto">{{ $playlists_counter['prepare'] }}</span> @endif
+                                <span class="badge bg-success-gradient  ms-auto playlist-counters" id="playlist-counter-prepare" onmouseover="playlistCounters(this)"><i class="far fa-eye"></i></span> 
                             </a>
                         </li>
                     @endcan
@@ -207,7 +193,7 @@
 
                                 </i>
                                 {{ __('cruds.playlist.menu.shipment') }}
-                                @if($playlists_counter['shipment']) <span class="badge bg-danger-gradient ms-auto">{{ $playlists_counter['shipment'] }}</span> @endif
+                                <span class="badge bg-danger-gradient ms-auto playlist-counters" id="playlist-counter-shipment" onmouseover="playlistCounters(this)"><i class="far fa-eye"></i></span> 
                             </a>
                         </li>
                     @endcan
@@ -327,8 +313,7 @@
                     <i class="fa-fw fas fa-gift c-sidebar-nav-icon">
 
                     </i>
-                    {{ __('cruds.order.title') }}
-                    <span class="badge bg-primary-gradient ms-auto">{{\App\Models\Order::where('playlist_status','pending')->count()}}</span>
+                    {{ __('cruds.order.title') }} 
                 </a>
             </li>
         @endcan
@@ -522,54 +507,13 @@
                 </ul>
             </li>
         @endcan
-        @can('customer_access')
-            @php 
-                $settings11 = [
-                    'chart_title'           => 'last 7days customers registered',
-                    'chart_type'            => 'number_block',
-                    'report_type'           => 'group_by_date',
-                    'model'                 => 'App\Models\Customer',
-                    'group_by_field'        => 'created_at',
-                    'group_by_period'       => 'day',
-                    'aggregate_function'    => 'count',
-                    'filter_field'          => 'created_at',
-                    'filter_days'           => '7',
-                    'group_by_field_format' => 'd/m/Y H:i:s',
-                    'column_class'          => 'col-md-12',
-                    'entries_number'        => '5',
-                    'translation_key'       => 'customer',
-                ];
-
-                $settings11['total_number'] = 0;
-                if (class_exists($settings11['model'])) {
-                    $settings11['total_number'] = $settings11['model']::when(isset($settings11['filter_field']), function ($query) use ($settings11) {
-                        if (isset($settings11['filter_days'])) {
-                            return $query->where($settings11['filter_field'], '>=',
-                                now()->subDays($settings11['filter_days'])->format('Y-m-d'));
-                        } elseif (isset($settings11['filter_period'])) {
-                            switch ($settings11['filter_period']) {
-                                case 'week': $start = date('Y-m-d', strtotime('last Monday'));
-                                break;
-                                case 'month': $start = date('Y-m') . '-01';
-                                break;
-                                case 'year': $start = date('Y') . '-01-01';
-                                break;
-                            }
-                            if (isset($start)) {
-                                return $query->where($settings11['filter_field'], '>=', $start);
-                            }
-                        }
-                    })
-                        ->{$settings11['aggregate_function'] ?? 'count'}($settings11['aggregate_field'] ?? '*');
-                }
-            @endphp
+        @can('customer_access') 
             <li class="c-sidebar-nav-item">
                 <a href="{{ route("admin.customers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/customers") || request()->is("admin/customers/*") ? "c-active" : "" }}">
                     <i class="fa-fw far fa-user c-sidebar-nav-icon">
 
                     </i>
-                    {{ __('cruds.customer.title') }}
-                    @if(number_format($settings11['total_number'])) <span class="badge bg-success-gradient text-dark ms-auto">{{ number_format($settings11['total_number']) }} جديد</span> @endif
+                    {{ __('cruds.customer.title') }} 
                 </a>
             </li>
         @endcan
@@ -853,6 +797,14 @@
                             </a>
                         </li>
                     @endcan
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.qrs.generator") }}" class="c-sidebar-nav-link {{ request()->is("admin/qrs/generator") || request()->is("admin/qrs/generator/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-qrcode c-sidebar-nav-icon">
+        
+                            </i>
+                            Qr Generator
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endcan

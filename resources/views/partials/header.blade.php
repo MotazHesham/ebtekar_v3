@@ -47,7 +47,7 @@
                     @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    @if (count( $alerts = \Auth::user()->userUserAlerts()->where('type','!=','history')->withPivot('read')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
+                    @if (count( $alerts = \Auth::user()->userUserAlerts()->where('type','!=','history')->withPivot('read')->take(10)->orderBy('id', 'DESC')->get()) > 0)
                         @foreach ($alerts as $alert)
                             <div class="dropdown-item">
                                 <a href="{{ $alert->alert_link ? $alert->alert_link : '#' }}"
@@ -85,13 +85,13 @@
                     <div class="fw-semibold">ShortCuts</div>
                 </div> 
                     <a class="dropdown-item" href="{{ route('admin.customers.index') }}">
-                        Customers <span class="badge badge-danger">{{\App\Models\Customer::count()}}</span>
+                        Customers 
                     </a>
                     <a class="dropdown-item" href="{{ route('admin.subscribes.index') }}">
-                        Subscribers <span class="badge badge-info">{{\App\Models\Subscribe::count()}}</span>
+                        Subscribers 
                     </a>
                     <a class="dropdown-item" href="{{ route('admin.contactus.index') }}">
-                        ContactUs <span class="badge badge-warning">{{\App\Models\Contactu::count()}}</span>
+                        ContactUs 
                     </a>
                 <div class="dropdown-header bg-light py-2 dark:bg-white dark:bg-opacity-10">
                     <div class="fw-semibold">Settings</div>
@@ -176,7 +176,7 @@
                         مراحل التشغيل <a href="{{ route('admin.user-alerts.playlist') }}">عرض الكل</a>
                     </div>
 
-                    @if (count($alerts = \App\Models\UserAlert::where('type', 'playlist')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
+                    @if (count($alerts = \App\Models\UserAlert::select('id','type','alert_text','created_at')->where('type', 'playlist')->orderBy('id', 'DESC')->take(10)->get()) > 0)
                         @foreach ($alerts as $alert)
                             <div class="list-group-item border-start-4 border-start-warning list-group-item-divider">
                                 <div>{{ $alert->alert_text }}</div>
@@ -200,7 +200,7 @@
                     الفواتير اللتي أرسلتها <a href="{{ route('admin.user-alerts.history') }}">عرض الكل</a>
                 </div>
 
-                @if (count($history = \Auth::user()->userUserAlerts()->where('type', 'history')->limit(10)->orderBy('created_at', 'DESC')->get()) > 0)
+                @if (count($history = \Auth::user()->userUserAlerts()->where('type', 'history')->take(10)->orderBy('id', 'DESC')->get()) > 0)
                     @foreach ($history as $alert)
                         <div class="list-group-item border-start-4 border-start-warning list-group-item-divider">
                             <div>{{ $alert->alert_text }}</div>
