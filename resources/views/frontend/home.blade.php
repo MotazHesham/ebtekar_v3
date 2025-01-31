@@ -139,7 +139,7 @@
                 },
                 success: function(data) {
                     $("#new-products-section").html(data);
-
+                    feather.replace(); // Reinitialize Feather icon
                     $(".product-slide-5").slick({
                         arrows: true,
                         dots: false,
@@ -195,6 +195,7 @@
                 },
                 success: function(data) {
                     $("#fetured-categories-section").html(data);
+                    feather.replace(); // Reinitialize Feather icon
                     $(".product-slide-6").slick({
                         arrows: true,
                         dots: false,
@@ -248,6 +249,7 @@
                 },
                 success: function(data) {
                     $("#best-selling-section").html(data);
+                    feather.replace(); // Reinitialize Feather icon
                     $(".product-slide-7").slick({
                         arrows: true,
                         dots: false,
