@@ -228,7 +228,7 @@
                                         <span class="badge rounded-pill text-bg-light  mb-1">
                                             {{ __('cruds.receiptBranch.fields.discount') }}
                                             <br>
-                                            {{ $receipt->discount }}%
+                                            {{ $receipt->discount }}
                                         </span>
                                     @endif
                                 </div>
