@@ -102,7 +102,7 @@ class ReceiptBranch extends Model
     }
 	// operations
 	public function calc_discount(){ 
-		return $this->total_cost - $this->discount;
+        return $this->discount;
 	}
 
 	public function calc_total_cost(){
