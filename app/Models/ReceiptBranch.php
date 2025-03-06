@@ -101,9 +101,8 @@ class ReceiptBranch extends Model
         return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
 	// operations
-	public function calc_discount(){
-		$total = $this->total_cost / 100;
-		return round( ($total * $this->discount ) , 2);
+	public function calc_discount(){ 
+		return $this->total_cost - $this->discount;
 	}
 
 	public function calc_total_cost(){
