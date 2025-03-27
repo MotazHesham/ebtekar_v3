@@ -87,6 +87,12 @@ class HomeController extends Controller
                 'message' => "<div class='alert alert-danger'>".$request->code." Order Not Found</div>"
             ];
         }  
+        if(!$order){ 
+            return [
+                'status' => 0,
+                'message' => "<div class='alert alert-danger'>".$request->code." Order Not Found</div>"
+            ];
+        }
         if($order->hold){
             return [
                 'status' => 0,
