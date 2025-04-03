@@ -6,7 +6,9 @@ use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\BannedPhone;
+use App\Models\Category;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\RBranch;
 use App\Models\RClient;
 use App\Models\ReceiptBranch;
@@ -17,13 +19,70 @@ use App\Models\ReceiptClientProduct;
 use App\Models\ReceiptClientProductPivot;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
+use App\Models\SubCategory;
+use App\Models\SubSubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 
 class HomeController extends Controller
 {    
+
+    public function generateSiteMap(){ 
+        $site_settings = get_site_setting();
+
+        $sitemap = Sitemap::create();
+
+        $sitemap->add(Url::create('/'));
+        $sitemap->add(Url::create('/login'));
+
+        $categories = Category::where('published',1)->get();
+        foreach ($categories as $category) {
+            $sitemap->add(
+                Url::create("/search?category={$category->slug}")
+                    ->setLastModificationDate($category->updated_at)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+                    ->setPriority(0.9)
+            );
+        }
+
+        $subCategories = SubCategory::where('published',1)->get();
+        foreach ($subCategories as $subCategory) {
+            $sitemap->add(
+                Url::create("/search?sub_category={$subCategory->slug}")
+                    ->setLastModificationDate($subCategory->updated_at)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+                    ->setPriority(0.9)
+            );
+        }
+        $subSubCategories = SubSubCategory::where('published',1)->get();
+        foreach ($subSubCategories as $subSubCategory) {
+            $sitemap->add(
+                Url::create("/search?sub_sub_category={$subSubCategory->slug}")
+                    ->setLastModificationDate($subSubCategory->updated_at)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+                    ->setPriority(0.9)
+            );
+        }
+
+        $products = Product::where('published',1)->get();
+        foreach ($products as $product) {
+            $sitemap->add(
+                Url::create("/product/{$product->slug}")
+                    ->setLastModificationDate($product->updated_at)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+                    ->setPriority(0.9)
+            );
+        }
+
+        $sitemap->writeToFile(public_path($site_settings->sitemap_link_seo));
+
+        return 'Sitemap Generated To ' . $site_settings->site_name . ' Successfully'; 
+    }
+
     public function magic_trick(Request $request){
         if($request->has('reset')){ 
             session(['orders' => null]);

@@ -12,7 +12,7 @@
     <meta name="description" content="@yield('meta_description', $site_settings->description_seo)" />
     <meta name="keywords" content="@yield('meta_keywords', $site_settings->keywords_seo)">
     <meta name="author" content="{{ $site_settings->author_seo }}">
-    <meta name="sitemap_link" content="{{ $site_settings->sitemap_link_seo }}"> 
+    <meta name="sitemap_link" content="{{ asset($site_settings->sitemap_link_seo) }}"> 
 
     @yield('meta')
     <!--icons-->

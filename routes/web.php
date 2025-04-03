@@ -35,6 +35,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/generate-sitemap', 'HomeController@generateSiteMap');
     Route::post('widgets/load_num','HomeController@load_num')->name('widgets.load_num');
     Route::post('widgets/load_chart','HomeController@load_chart')->name('widgets.load_chart');
 

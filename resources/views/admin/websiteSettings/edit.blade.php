@@ -10,6 +10,7 @@
                 enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
+                <input type="hidden" name="sitemap_link_seo" value="{{ $websiteSetting->sitemap_link_seo }}" id="">
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="required" for="logo">{{ __('cruds.websiteSetting.fields.logo') }}</label>
@@ -77,17 +78,7 @@
                             </div>
                         @endif
                         <span class="help-block">{{ __('cruds.websiteSetting.fields.author_seo_helper') }}</span>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="required" for="sitemap_link_seo">{{ __('cruds.websiteSetting.fields.sitemap_link_seo') }}</label>
-                        <input class="form-control {{ $errors->has('sitemap_link_seo') ? 'is-invalid' : '' }}" type="text" name="sitemap_link_seo" id="sitemap_link_seo" value="{{ old('sitemap_link_seo', $websiteSetting->sitemap_link_seo) }}" required>
-                        @if($errors->has('sitemap_link_seo'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('sitemap_link_seo') }}
-                            </div>
-                        @endif
-                        <span class="help-block">{{ __('cruds.websiteSetting.fields.sitemap_link_seo_helper') }}</span>
-                    </div>
+                    </div> 
                     <div class="form-group col-md-4">
                         <label class="required" for="description_seo">{{ __('cruds.websiteSetting.fields.description_seo') }}</label>
                         <textarea class="form-control {{ $errors->has('description_seo') ? 'is-invalid' : '' }}" name="description_seo" id="description_seo" required>{{ old('description_seo', $websiteSetting->description_seo) }}</textarea>

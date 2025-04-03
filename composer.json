@@ -23,6 +23,7 @@
         "realrashid/sweet-alert": "^7.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-medialibrary": "^10.7",
+        "spatie/laravel-sitemap": "^7.3",
         "stevebauman/location": "^6.6",
         "yajra/laravel-datatables-oracle": "^10.3"
     },

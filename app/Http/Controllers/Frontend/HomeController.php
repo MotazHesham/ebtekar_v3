@@ -24,6 +24,10 @@ use Stevebauman\Location\Facades\Location;
 
 class HomeController extends Controller
 {
+    public function sitemap(){
+        $site_settings = get_site_setting();
+        return response()->file(public_path($site_settings->sitemap_link_seo));
+    }
     public function webxr($id)
     {
         $product = Product::findOrFail($id);  

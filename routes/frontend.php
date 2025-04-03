@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 
 Route::get('/', 'Frontend\HomeController@index')->name('home');
+Route::get('/sitemap.xml', 'Frontend\HomeController@sitemap')->name('sitemap');
 
 // Home Sections
 Route::post('sections/new_products', 'Frontend\HomeController@new_products')->name('frontend.sections.new_products');
