@@ -39,7 +39,7 @@ class HomeController extends Controller
         $sitemap->add(Url::create('/'));
         $sitemap->add(Url::create('/login'));
 
-        $categories = Category::where('published',1)->get();
+        $categories = Category::where('website_setting_id',$site_settings->id)->where('published',1)->get();
         foreach ($categories as $category) {
             $sitemap->add(
                 Url::create("/search?category={$category->slug}")
@@ -49,7 +49,7 @@ class HomeController extends Controller
             );
         }
 
-        $subCategories = SubCategory::where('published',1)->get();
+        $subCategories = SubCategory::where('website_setting_id',$site_settings->id)->where('published',1)->get();
         foreach ($subCategories as $subCategory) {
             $sitemap->add(
                 Url::create("/search?sub_category={$subCategory->slug}")
@@ -58,7 +58,7 @@ class HomeController extends Controller
                     ->setPriority(0.9)
             );
         }
-        $subSubCategories = SubSubCategory::where('published',1)->get();
+        $subSubCategories = SubSubCategory::where('website_setting_id',$site_settings->id)->where('published',1)->get();
         foreach ($subSubCategories as $subSubCategory) {
             $sitemap->add(
                 Url::create("/search?sub_sub_category={$subSubCategory->slug}")
@@ -68,7 +68,7 @@ class HomeController extends Controller
             );
         }
 
-        $products = Product::where('published',1)->get();
+        $products = Product::where('website_setting_id',$site_settings->id)->where('published',1)->get();
         foreach ($products as $product) {
             $sitemap->add(
                 Url::create("/product/{$product->slug}")
