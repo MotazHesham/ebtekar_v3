@@ -83,7 +83,7 @@ class ProductController extends Controller
             
             $facebookPixel = view('facebook.Events', [
                 'eventData' => $contentData, 
-            ]) ;
+            ])->render();
         }
 
         $reviews = Review::with('user')->where('product_id',$product->id)->where('published',1)->get();
