@@ -1,3 +1,7 @@
+
+@php 
+    $site_settings = get_site_setting();
+@endphp
 <ul class="qty">
     @php
         $total = 0; 

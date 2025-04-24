@@ -35,7 +35,6 @@ class CheckoutController extends Controller
         $total_cost = 0;  
         $discount = 0;
         $shipping = 0;
-        $site_settings = get_site_setting();
 
         if(session('cart')){
             foreach(session('cart') as $cartItem){
@@ -62,7 +61,7 @@ class CheckoutController extends Controller
             $shipping  = $country->cost ?? 0;
         } 
 
-        return view('frontend.partials.summary',compact('shipping','discount','discount_code','wrong_disocunt_code','site_settings'));
+        return view('frontend.partials.summary',compact('shipping','discount','discount_code','wrong_disocunt_code'));
     }
 
     public function payment_select(){
