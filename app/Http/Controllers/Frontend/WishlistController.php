@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendFacebookEventJob;
 use App\Models\Product;
 use App\Models\Wishlist;
 use App\Services\FacebookService;
@@ -24,8 +25,7 @@ class WishlistController extends Controller
             'user_id' => Auth::id()
         ]);
         
-        if($site_settings->fb_pixel_id){
-            $facebookService = new FacebookService($site_settings);
+        if($site_settings->fb_pixel_id){ 
             $contentData = [
                 'event' => 'AddToWishlist',
                 'content_name' => $product->name,
@@ -35,8 +35,9 @@ class WishlistController extends Controller
                 'currency' => 'EGP',
                 'content_category' => $product->category->name ?? null
             ];
-            session()->flash('eventData', $contentData);
-            $facebookService->sendEventFromController( $contentData); 
+            session()->flash('eventData', $contentData); 
+            $userData = getUserDataForConersionApi();
+            SendFacebookEventJob::dispatch($contentData, $site_settings->id,$userData,'all');  
         }
         toast('Product Added To Wishlist','success');
         return redirect()->back();

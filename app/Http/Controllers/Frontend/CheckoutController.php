@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\PayMobController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Requests\Frontend\CheckoutOrder;
+use App\Jobs\SendFacebookEventJob;
 use App\Jobs\SendOrderConfirmationMail;
 use App\Jobs\SendOrderConfirmationSMS;
 use App\Jobs\SendPushNotification;
@@ -75,8 +76,7 @@ class CheckoutController extends Controller
         }
 
         $eventData  = null;
-        if($site_settings->fb_pixel_id){
-            $facebookService = new FacebookService($site_settings);
+        if($site_settings->fb_pixel_id){ 
             $price = 0;
             $numOfItems = 0;
             $productsIds = [];
@@ -96,7 +96,8 @@ class CheckoutController extends Controller
                 'num_items' => (int) $numOfItems
             ];
 
-            $facebookService->sendEventFromController( $eventData); 
+            $userData = getUserDataForConersionApi();
+            SendFacebookEventJob::dispatch($eventData, $site_settings->id,$userData,'all');   
         }
         $countries = Country::where('status',1)->where('website',1)->get()->groupBy('type'); 
         $currency_symbol =  session("currency")->symbol ?? 'EGP';
@@ -290,8 +291,7 @@ class CheckoutController extends Controller
 
                 $currenct_exchange_rate = Cache::get('currency_rates')[$order->symbol];
                 
-                if($site_settings->fb_pixel_id){
-                    $facebookService = new FacebookService($site_settings);
+                if($site_settings->fb_pixel_id){ 
             
                     $eventData = [
                         'event' => 'Purchase',
@@ -300,9 +300,9 @@ class CheckoutController extends Controller
                         'value' => (float)$total_cost,
                         'currency' => 'EGP', 
                         'num_items' => (int) $numOfItems
-                    ];
-
-                    $facebookService->sendEventFromController( $eventData); 
+                    ]; 
+                    $userData = getUserDataForConersionApi();
+                    SendFacebookEventJob::dispatch($eventData, $site_settings->id,$userData,'all'); 
                 }
 
                 if($request->payment_option == 'cash_on_delivery'){

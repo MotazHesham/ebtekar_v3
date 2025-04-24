@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendFacebookEventJob;
 use App\Models\Cart;
 use App\Models\Product;
-use App\Models\ProductStock;
-use App\Services\FacebookService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ProductStock; 
+use Illuminate\Http\Request; 
 
 class CartController extends Controller
 {
@@ -63,8 +62,7 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
-        if($site_settings->fb_pixel_id){
-            $facebookService = new FacebookService($site_settings);
+        if($site_settings->fb_pixel_id){ 
             $contentData = [
                 'event' => 'AddToCart',
                 'content_name' => $product->name,
@@ -75,9 +73,9 @@ class CartController extends Controller
                 'content_category' => $product->category->name ?? null,
                 'num_items' => (int) $request->quantity
             ];
-
             session()->flash('eventData', $contentData);
-            $facebookService->sendEventFromController( $contentData); 
+            $userData = getUserDataForConersionApi();
+            SendFacebookEventJob::dispatch($contentData, $site_settings->id,$userData,'all'); 
         }
         toast('Success added to cart','success');
         

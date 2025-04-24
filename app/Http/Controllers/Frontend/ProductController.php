@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendFacebookEventJob;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
@@ -59,9 +60,7 @@ class ProductController extends Controller
 
         
         $eventData  = null;
-        if($site_settings->fb_pixel_id){
-            // Send ViewContent event to Conversion API
-            $facebookService = new FacebookService($site_settings);
+        if($site_settings->fb_pixel_id){ 
             $eventData = [
                 'event' => 'ViewContent',
                 'content_name' => $product->name,
@@ -72,7 +71,8 @@ class ProductController extends Controller
                 'content_category' => $product->category->name ?? null,
             ];
 
-            $facebookService->sendEventFromController( $eventData); 
+            $userData = getUserDataForConersionApi();
+            SendFacebookEventJob::dispatch($eventData, $site_settings->id,$userData,'all');  
         }
 
         $reviews = Review::with('user')->where('product_id',$product->id)->where('published',1)->get();
@@ -313,8 +313,11 @@ class ProductController extends Controller
 
         
         if($site_settings->fb_pixel_id){
-            $facebookService = new FacebookService($site_settings);  
-            $facebookService->sendEventSearch( $search); 
+            $contentData = [
+                'search_string' => $search
+            ];
+            $userData = getUserDataForConersionApi();
+            SendFacebookEventJob::dispatch($contentData, $site_settings->id,$userData,'search'); 
         }
 
         return view('frontend.products',compact('products','title','category','sub_category','sub_sub_category','search','meta_title','meta_description','attributes','selected_attributes','sort_by','all_colors','selected_colors','pagination'));

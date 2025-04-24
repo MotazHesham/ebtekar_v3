@@ -32,16 +32,16 @@ class FacebookService
         Api::init(null, null, $this->accessToken);
     }
 
-    public function sendEventFromController($contentData, $extraUserData = null)
+    public function sendEventFromServer($contentData, $userData)
     { 
-        $event = $this->createEvent($contentData['event'], $extraUserData, $contentData);
+        $event = $this->createEvent($contentData['event'], $userData, $contentData);
         $this->sendEvent($event,$contentData['event']);
     } 
 
-    public function sendEventPageView()
+    public function sendEventPageView($userData)
     { 
         // Create UserData with enhanced matching parameters
-        $userDataObj = $this->getUserData();  
+        $userDataObj = $this->prepareUserData( $userData);  
 
         // Create Event
         $event =  (new Event())
@@ -53,13 +53,13 @@ class FacebookService
         $this->sendEvent($event,'PageView');
     }
 
-    public function sendEventSearch($search)
+    public function sendEventSearch($contentData, $userData)
     { 
         // Create UserData with enhanced matching parameters
-        $userDataObj = $this->getUserData(); 
+        $userDataObj = $this->prepareUserData( $userData); 
         
         // Create CustomData
-        $customData = (new CustomData())->setSearchString($search);
+        $customData = (new CustomData())->setSearchString($contentData['search_string'] ?? null);
         // Create Event
         $event =  (new Event())
                     ->setEventName('Search')
@@ -71,10 +71,10 @@ class FacebookService
         $this->sendEvent($event,'Search');
     }
 
-    protected function createEvent($eventName, $extraUserData, $contentData)
+    protected function createEvent($eventName, $userData, $contentData)
     {  
         // Create UserData with enhanced matching parameters
-        $userDataObj = $this->getUserData(); 
+        $userDataObj = $this->prepareUserData($userData); 
 
         // Validate content_ids is an array of strings
         if (isset($contentData['content_ids'])) {
@@ -117,54 +117,20 @@ class FacebookService
         }
     }
 
-    protected function getUserData()
-    {
-        $userData = [
-            'fbp' => request()->cookie('_fbp'),
-            'fbc' => request()->cookie('_fbc'),
-        ];
-
-        if(auth()->check()){ 
-            $user = User::find(auth()->id());
-            $userData['external_id'] =  $user->id;
-            $userData['email'] =  $user->hashedEmail();
-            $userData['phone'] =  $user->hashedPhone();
-            $userData['firstName'] =  $user->hashedFirstName();
-            $userData['lastName'] =  $user->hashedLastName();
-        }
-
+    protected function prepareUserData($userData)
+    { 
         $userDataObj =(new UserData())
-            ->setClientIpAddress(request()->ip())
-            ->setClientUserAgent(request()->userAgent())
-            ->setFbp($this->getFbpFromCookie())
-            ->setFbc($this->getFbcFromCookie())
+            ->setClientIpAddress($userData['ip'] ?? null)
+            ->setClientUserAgent($userData['userAgent'] ?? null)
+            ->setFbp($userData['fbp'] ?? null)
+            ->setFbc($userData['fbc'] ?? null)
             ->setExternalId($userData['external_id'] ?? null)
             ->setEmail($userData['email'] ?? null)
             ->setPhone($userData['phone'] ?? null)
             ->setFirstName($userData['firstName'] ?? null)
-            ->setLastName($userData['lastName'] ?? null)
-            ->setCountryCode($extraUserData['country'] ?? null)
-            ->setCity($extraUserData['city'] ?? null)
-            ->setState($extraUserData['state'] ?? null);
+            ->setLastName($userData['lastName'] ?? null);
         return $userDataObj;
-    }
-
-    /**
-     * Get Facebook Browser ID from cookie with fallback
-     */
-    protected function getFbpFromCookie($default = null)
-    {
-        return Cookie::get('_fbp') ?? $default;
-    }
-
-    /**
-     * Get Facebook Click ID from cookie with fallback
-     */
-    protected function getFbcFromCookie($default = null)
-    {
-        return Cookie::get('_fbc') ?? $default;
     } 
-
     protected function validateValue($value)
     {
         return is_numeric($value) ? (float)$value : null;

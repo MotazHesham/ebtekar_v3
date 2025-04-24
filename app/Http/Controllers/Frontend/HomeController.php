@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendFacebookEventJob;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Contactu;
@@ -31,9 +32,9 @@ class HomeController extends Controller
     }
     public function pageViewEvent(){ 
         $site_settings = get_site_setting();
-        if($site_settings->fb_pixel_id){
-            $facebookService = new FacebookService($site_settings);  
-            $facebookService->sendEventPageView(); 
+        if($site_settings->fb_pixel_id){ 
+            $userData = getUserDataForConersionApi();
+            SendFacebookEventJob::dispatch([], $site_settings->id,$userData,'pageview');  
         }
         return response()->json(null,200);
     }

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
+use App\Models\User;
 use App\Models\WebsiteSetting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -429,6 +430,27 @@ if (!function_exists('searchByPhone')) {
 
             // 3. Return null if no FBC available
             return $fbc ?? null;
+        }
+    }  
+    if (!function_exists('getUserDataForConersionApi')) {
+        function getUserDataForConersionApi()
+        {  
+            $userData = [
+                'ip' => request()->ip(),
+                'userAgent' => request()->userAgent(),
+                'fbp' => getFbp(),
+                'fbc' => getFbc(),
+            ];
+
+            if(auth()->check()){ 
+                $user = User::find(auth()->id());
+                $userData['external_id'] =  $user->id;
+                $userData['email'] =  $user->hashedEmail();
+                $userData['phone'] =  $user->hashedPhone();
+                $userData['firstName'] =  $user->hashedFirstName();
+                $userData['lastName'] =  $user->hashedLastName();
+            }
+            return $userData;
         }
     }  
 
