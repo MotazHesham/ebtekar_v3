@@ -69,9 +69,9 @@ class ProductController extends Controller
             ];
             $contentData = [
                 'content_name' => $product->name,
-                'content_ids' => [$product->id],
-                'content_type' => 'product',
-                'value' => $product->unit_price,
+                'content_ids' => [(string)$product->id],
+                'content_type' => 'product', 
+                'value' => is_numeric($product->unit_price) ? (float)$product->unit_price : 0,
                 'currency' => 'EGP',
                 'content_category' => $product->category->name ?? null,
             ];
