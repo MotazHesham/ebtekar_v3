@@ -562,6 +562,12 @@
         } 
     </script>
 
+    @if(isset($facebookPixel))
+        {!! $facebookPixel !!}
+    @elseif(session('facebookPixel'))
+        {!! session('facebookPixel') !!}
+    @endif
+    
     @yield('scripts')
 </body>
 

@@ -30,14 +30,20 @@ class FacebookService
         Api::init(null, null, $this->accessToken);
     }
 
-    public function sendEventFromController($contentData)
+    public function sendEventFromController($contentData, $extraUserData = null)
     {
         
+
+        $event = $this->createEvent($contentData['event'], $extraUserData, $contentData);
+        $this->sendEvent($event,$contentData['event']);
+    } 
+
+    protected function createEvent($eventName, $extraUserData, $contentData)
+    {  
         $userData = [
             'fbp' => request()->cookie('_fbp'),
             'fbc' => request()->cookie('_fbc'),
         ];
-
         if(auth()->check()){ 
             $user = auth()->user();
             $userData['external_id'] =  $user->id;
@@ -47,12 +53,6 @@ class FacebookService
             $userData['lastName'] =  $user->hashedLastName();
         }
 
-        $event = $this->createEvent($contentData['event'], $userData, $contentData);
-        $this->sendEvent($event,$contentData['event']);
-    } 
-
-    protected function createEvent($eventName, $userData, $contentData)
-    {
         // Create UserData with enhanced matching parameters
         $userDataObj = (new UserData())
             ->setClientIpAddress(request()->ip())
@@ -63,7 +63,10 @@ class FacebookService
             ->setEmail($userData['email'] ?? null)
             ->setPhone($userData['phone'] ?? null)
             ->setFirstName($userData['firstName'] ?? null)
-            ->setLastName($userData['lastName'] ?? null);
+            ->setLastName($userData['lastName'] ?? null)
+            ->setCountryCode($extraUserData['country'] ?? null)
+            ->setCity($extraUserData['city'] ?? null)
+            ->setState($extraUserData['state'] ?? null);
 
         // Validate content_ids is an array of strings
         if (isset($contentData['content_ids'])) {
@@ -77,7 +80,8 @@ class FacebookService
             ->setContentType($contentData['content_type'] ?? null) 
             ->setContentCategory($contentData['content_category'] ?? null)
             ->setValue($this->validateValue($contentData['value'] ?? null))
-            ->setCurrency($this->validateCurrency($contentData['currency'] ?? 'USD'));
+            ->setCurrency($this->validateCurrency($contentData['currency'] ?? 'EGP'))
+            ->setNumItems($contentData['num_items'] ?? null);
 
         // Create Event
         return (new Event())

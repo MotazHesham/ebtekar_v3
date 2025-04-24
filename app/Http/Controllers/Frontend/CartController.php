@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\ProductStock;
+use App\Services\FacebookService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,6 +19,7 @@ class CartController extends Controller
 
     public function add(Request $request){
         
+        $site_settings = get_site_setting();
         $product = Product::findOrFail($request->id); 
         $data = array(); 
         $data['id'] = $product->id . '-' . $request->variant;
@@ -61,12 +63,33 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
+        $facebookPixel = null;
+        if($site_settings->id == 2){
+            // Send ViewContent event to Conversion API
+            $facebookService = new FacebookService();
+            $contentData = [
+                'event' => 'AddToCart',
+                'content_name' => $product->name,
+                'content_ids' => [(string)$product->id],
+                'content_type' => 'product', 
+                'value' => is_numeric($product->unit_price) ? (float)$product->unit_price : 0,
+                'currency' => 'EGP',
+                'content_category' => $product->category->name ?? null,
+                'num_items' => (int) $request->quantity
+            ];
+
+            $facebookService->sendEventFromController( $contentData);
+            
+            $facebookPixel = view('facebook.Events', [
+                'eventData' => $contentData, 
+            ])->render();
+        }
         toast('Success added to cart','success');
         
         if($request->has('buy_now')){
-            return redirect()->route('frontend.payment_select');
+            return redirect()->route('frontend.payment_select')->with(['facebookPixel' => $facebookPixel]);
         }else{
-            return redirect()->back()->with(['open_cart'=>true]);
+            return redirect()->back()->with(['open_cart'=>true , 'facebookPixel' => $facebookPixel]);
         }
     }
 

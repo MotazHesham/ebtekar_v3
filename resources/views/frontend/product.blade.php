@@ -468,9 +468,6 @@
 
 @section('scripts')
     @parent
-    @if(isset($facebookPixel))
-        {!! $facebookPixel !!}
-    @endif
     <script type="text/javascript">
         $(document).ready(function() {
 
