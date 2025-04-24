@@ -480,12 +480,7 @@
 
             $('#add-to-cart-form input').on('change', function() {
                 getVariantPrice();
-            });
-
-            // fbq('track', 'ViewContent', {
-            //     content_name: '{{ $product->name }}',
-            //     content_category: '{{ $product->category->name }}'
-            // });
+            }); 
 
             @if(app()->isProduction() && $site_settings->tag_manager ) 
                 dataLayer.push({
@@ -506,6 +501,11 @@
                         }
                     }
                 })
+            @endif
+
+            
+            @if(isset($eventData))
+                metaPixelEvent(@json($eventData));
             @endif
         });
 

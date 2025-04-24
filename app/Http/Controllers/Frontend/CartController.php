@@ -63,9 +63,7 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
-        $facebookPixel = null;
         if($site_settings->id == 2){
-            // Send ViewContent event to Conversion API
             $facebookService = new FacebookService();
             $contentData = [
                 'event' => 'AddToCart',
@@ -78,18 +76,14 @@ class CartController extends Controller
                 'num_items' => (int) $request->quantity
             ];
 
-            $facebookService->sendEventFromController( $contentData);
-            
-            $facebookPixel = view('facebook.Events', [
-                'eventData' => $contentData, 
-            ])->render();
+            $facebookService->sendEventFromController( $contentData); 
         }
         toast('Success added to cart','success');
         
         if($request->has('buy_now')){
-            return redirect()->route('frontend.payment_select')->with(['facebookPixel' => $facebookPixel]);
+            return redirect()->route('frontend.payment_select');
         }else{
-            return redirect()->back()->with(['open_cart'=>true , 'facebookPixel' => $facebookPixel]);
+            return redirect()->back()->with(['open_cart'=>true]);
         }
     }
 

@@ -386,8 +386,7 @@
                 const name = $(this).data('name');
                 const price = $(this).data('price');
                 const category = $(this).data('category');
-                const id = $(this).data('id');
-                // fbq('track', 'AddToCart', {name: name , value: price , currency: '{{ $currency_symbol }}'}); 
+                const id = $(this).data('id'); 
                 addToCartDataLayer(id,name,category,price);
             })
                 
@@ -395,8 +394,7 @@
                 const name = $(this).data('name');
                 const price = $(this).data('price');
                 const category = $(this).data('category');
-                const id = $(this).data('id');
-                // fbq('track', 'AddToCart', {name: name , value: price, currency: '{{ $currency_symbol }}'});
+                const id = $(this).data('id'); 
                 addToCartDataLayer(id,name,category,price);
             })
             
@@ -404,18 +402,69 @@
                 const name = $(this).data('name'); 
                 const price = $(this).data('price');
                 const category = $(this).data('category');
-                const id = $(this).data('id');
-                // fbq('track', 'AddToWishlist', {name: $(this).data('name')});
+                const id = $(this).data('id'); 
                 wishListDataLayer(id,name,category,price);
             })
-            // $('.initiate-checkout').on('click',function(){  
-            //     fbq('track', 'InitiateCheckout');
-            // })
-            @if(isset($search))
-                // fbq('track', 'Search', {search_string: '{{$search}}'});
+            
+            @if(isset($search)) 
                 search_dataLayer('{{$search}}')
             @endif
         @endif
+        
+        @if(isset($search))  
+            metaPixelEvent({ 
+                search_string: '{{$search}}', 
+            });
+        @endif
+        $('.add-cartnoty').on('click',function(){ 
+            const name = $(this).data('name');
+            const price = $(this).data('price');
+            const category = $(this).data('category');
+            const id = $(this).data('id');  
+            metaPixelEvent({
+                event: 'AddToCart',
+                content_name: name,
+                content_type: 'product',
+                content_ids: [id], 
+                content_category: category,
+                value: price,
+                currency: 'EGP',
+                num_items: 1,
+            });
+        })
+            
+        $('.cart-btn').on('click',function(){ 
+            const name = $(this).data('name');
+            const price = $(this).data('price');
+            const category = $(this).data('category');
+            const id = $(this).data('id'); 
+            metaPixelEvent({
+                event: 'AddToCart',
+                content_name: name,
+                content_type: 'product',
+                content_ids: [id], 
+                content_category: category,
+                value: price,
+                currency: 'EGP',
+                num_items: 1,
+            });
+        })
+        
+        $('.add-to-wish').on('click',function(){  
+            const name = $(this).data('name'); 
+            const price = $(this).data('price');
+            const category = $(this).data('category');
+            const id = $(this).data('id'); 
+            metaPixelEvent({
+                event: 'AddToWishlist',
+                content_name: name,
+                content_type: 'product',
+                content_ids: [id], 
+                content_category: category,
+                value: price,
+                currency: 'EGP',
+            });
+        })
         function dismiss(){
             $('#dismiss').remove();
         } 
@@ -560,14 +609,48 @@
                 }
             });
         } 
-    </script>
-
-    @if(isset($facebookPixel))
-        {!! $facebookPixel !!}
-    @elseif(session('facebookPixel'))
-        {!! session('facebookPixel') !!}
-    @endif
+    </script> 
     
+    <script>
+        function metaPixelEvent(eventData){ 
+            // Ensure eventData is properly parsed if coming as JSON string
+            const data = typeof eventData === 'string' ? JSON.parse(eventData) : eventData;
+            
+            const finalEventData = { 
+                value: data.value || 0,
+                currency: data.currency || 'EGP'
+            };
+            
+            if (data.content_name) {
+                finalEventData.content_name = data.content_name;
+            } 
+            if (data.content_ids) {
+                finalEventData.content_ids = Array.isArray(data.content_ids) ? data.content_ids : [data.content_ids];
+            } 
+            if (data.content_type) {
+                finalEventData.content_type = data.content_type;
+            } 
+            if (data.content_category) {
+                finalEventData.content_category = data.content_category;
+            } 
+            if (data.num_items) {
+                finalEventData.num_items = data.num_items;
+            } 
+            if (data.search_string) {
+                finalEventData.search_string = data.search_string;
+            } 
+
+            if (typeof fbq !== 'undefined') {
+                fbq('track', data.event, finalEventData);
+                console.log('FB Pixel event tracked:', {
+                    event: data.event,
+                    data: finalEventData
+                });
+            } else {
+                console.warn('Facebook Pixel not loaded');
+            } 
+        }
+    </script>
     @yield('scripts')
 </body>
 

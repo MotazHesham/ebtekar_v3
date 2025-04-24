@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use FacebookAds\Api;
 use FacebookAds\Object\ServerSide\ActionSource;
 use FacebookAds\Object\ServerSide\CustomData;
@@ -31,48 +32,38 @@ class FacebookService
     }
 
     public function sendEventFromController($contentData, $extraUserData = null)
-    {
-        
-
+    { 
         $event = $this->createEvent($contentData['event'], $extraUserData, $contentData);
         $this->sendEvent($event,$contentData['event']);
     } 
 
+    public function sendEventSearch($search)
+    { 
+        // Create UserData with enhanced matching parameters
+        $userDataObj = $this->getUserData(); 
+        
+        // Create CustomData
+        $customData = (new CustomData())->setSearchString($search);
+        // Create Event
+        $event =  (new Event())
+                    ->setEventName('Search')
+                    ->setEventTime(time())
+                    ->setEventSourceUrl(request()->fullUrl())
+                    ->setUserData($userDataObj)
+                    ->setCustomData($customData)
+                    ->setActionSource(ActionSource::WEBSITE);
+        $this->sendEvent($event,'Search');
+    }
+
     protected function createEvent($eventName, $extraUserData, $contentData)
     {  
-        $userData = [
-            'fbp' => request()->cookie('_fbp'),
-            'fbc' => request()->cookie('_fbc'),
-        ];
-        if(auth()->check()){ 
-            $user = auth()->user();
-            $userData['external_id'] =  $user->id;
-            $userData['email'] =  $user->hashedEmail();
-            $userData['phone'] =  $user->hashedPhone();
-            $userData['firstName'] =  $user->hashedFirstName();
-            $userData['lastName'] =  $user->hashedLastName();
-        }
-
         // Create UserData with enhanced matching parameters
-        $userDataObj = (new UserData())
-            ->setClientIpAddress(request()->ip())
-            ->setClientUserAgent(request()->userAgent())
-            ->setFbp($this->getFbpFromCookie())
-            ->setFbc($this->getFbcFromCookie())
-            ->setExternalId($userData['external_id'] ?? null)
-            ->setEmail($userData['email'] ?? null)
-            ->setPhone($userData['phone'] ?? null)
-            ->setFirstName($userData['firstName'] ?? null)
-            ->setLastName($userData['lastName'] ?? null)
-            ->setCountryCode($extraUserData['country'] ?? null)
-            ->setCity($extraUserData['city'] ?? null)
-            ->setState($extraUserData['state'] ?? null);
+        $userDataObj = $this->getUserData(); 
 
         // Validate content_ids is an array of strings
         if (isset($contentData['content_ids'])) {
             $contentData['content_ids'] = array_map('strval', (array)$contentData['content_ids']);
         }
-
         // Create CustomData
         $customData = (new CustomData())
             ->setContentName($contentData['content_name'] ?? null)
@@ -108,6 +99,38 @@ class FacebookService
         } catch (\Exception $e) {
             Log::error('Facebook CAPI Failed: eventName => ' . $eventName, ['error' => $e]);
         }
+    }
+
+    protected function getUserData()
+    {
+        $userData = [
+            'fbp' => request()->cookie('_fbp'),
+            'fbc' => request()->cookie('_fbc'),
+        ];
+
+        if(auth()->check()){ 
+            $user = User::find(auth()->id());
+            $userData['external_id'] =  $user->id;
+            $userData['email'] =  $user->hashedEmail();
+            $userData['phone'] =  $user->hashedPhone();
+            $userData['firstName'] =  $user->hashedFirstName();
+            $userData['lastName'] =  $user->hashedLastName();
+        }
+
+        $userDataObj =(new UserData())
+            ->setClientIpAddress(request()->ip())
+            ->setClientUserAgent(request()->userAgent())
+            ->setFbp($this->getFbpFromCookie())
+            ->setFbc($this->getFbcFromCookie())
+            ->setExternalId($userData['external_id'] ?? null)
+            ->setEmail($userData['email'] ?? null)
+            ->setPhone($userData['phone'] ?? null)
+            ->setFirstName($userData['firstName'] ?? null)
+            ->setLastName($userData['lastName'] ?? null)
+            ->setCountryCode($extraUserData['country'] ?? null)
+            ->setCity($extraUserData['city'] ?? null)
+            ->setState($extraUserData['state'] ?? null);
+        return $userDataObj;
     }
 
     /**

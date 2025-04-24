@@ -20,6 +20,7 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 use App\Models\UserAlert;
+use App\Services\FacebookService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -64,8 +65,8 @@ class CheckoutController extends Controller
         return view('frontend.partials.summary',compact('shipping','discount','discount_code','wrong_disocunt_code'));
     }
 
-    public function payment_select(){
-
+    public function payment_select(){ 
+        $site_settings = get_site_setting();
         validateCart();
         
         if(!session('cart') || count(session('cart')) < 1){
@@ -73,14 +74,37 @@ class CheckoutController extends Controller
             return redirect()->route('home');
         }
 
+        $eventData  = null;
+        if($site_settings->id == 2){
+            $facebookService = new FacebookService();
+            $price = 0;
+            $numOfItems = 0;
+            $productsIds = [];
+            foreach (session('cart') as $key => $cartItem){
+                $product = Product::find($cartItem['product_id']); 
+                $price += $product->unit_price;
+                $productsIds[] = (string) $product->id;
+                $numOfItems = $cartItem['quantity'];
+            }
+    
+            $eventData = [
+                'event' => 'InitiateCheckout',
+                'content_ids' => $productsIds,
+                'content_type' => 'product', 
+                'value' => (float)$price,
+                'currency' => 'EGP', 
+                'num_items' => (int) $numOfItems
+            ];
+
+            $facebookService->sendEventFromController( $eventData); 
+        }
         $countries = Country::where('status',1)->where('website',1)->get()->groupBy('type'); 
         $currency_symbol =  session("currency")->symbol ?? 'EGP';
-        return view('frontend.checkout',compact('countries','currency_symbol'));
+        return view('frontend.checkout',compact('countries','currency_symbol','eventData'));
     } 
 
     public function checkout(CheckoutOrder $request){  
         try{
-
             DB::beginTransaction();
             $site_settings = get_site_setting();
             
@@ -186,8 +210,12 @@ class CheckoutController extends Controller
                 $total_commission = 0;
                 $total_cost = 0;
                 $order_items = [];
+                $numOfItems = 0;
+                $productsIds = []; 
 
-                foreach(session('cart') as $cartItem){
+                foreach(session('cart') as $cartItem){ 
+                    $numOfItems += $cartItem['quantity'];
+                    $productsIds[] = (string) $cartItem['product_id'];
 
                     // increse number of sales in product
                     $product = Product::findOrFail($cartItem['product_id']);
@@ -261,6 +289,21 @@ class CheckoutController extends Controller
                 }
 
                 $currenct_exchange_rate = Cache::get('currency_rates')[$order->symbol];
+                
+                if($site_settings->id == 2){
+                    $facebookService = new FacebookService();
+            
+                    $eventData = [
+                        'event' => 'Purchase',
+                        'content_ids' => $productsIds,
+                        'content_type' => 'product', 
+                        'value' => (float)$total_cost,
+                        'currency' => 'EGP', 
+                        'num_items' => (int) $numOfItems
+                    ];
+
+                    $facebookService->sendEventFromController( $eventData); 
+                }
 
                 if($request->payment_option == 'cash_on_delivery'){
                     if($this->checkout_done($order->id,'unpaid')){

@@ -51,7 +51,6 @@ class ProductController extends Controller
 
     public function product($slug){   
         $site_settings = get_site_setting();
-        $facebookPixel  = null;
 
         $product  = Product::where('website_setting_id',$site_settings->id)->where('slug', $slug)->where('published',1)->first();
         if(!$product){
@@ -59,10 +58,11 @@ class ProductController extends Controller
         }
 
         
+        $eventData  = null;
         if($site_settings->id == 2){
             // Send ViewContent event to Conversion API
             $facebookService = new FacebookService();
-            $contentData = [
+            $eventData = [
                 'event' => 'ViewContent',
                 'content_name' => $product->name,
                 'content_ids' => [(string)$product->id],
@@ -72,18 +72,14 @@ class ProductController extends Controller
                 'content_category' => $product->category->name ?? null,
             ];
 
-            $facebookService->sendEventFromController( $contentData);
-            
-            $facebookPixel = view('facebook.Events', [
-                'eventData' => $contentData, 
-            ])->render();
+            $facebookService->sendEventFromController( $eventData); 
         }
 
         $reviews = Review::with('user')->where('product_id',$product->id)->where('published',1)->get();
         $related_products = Product::with('category')->where('sub_category_id', $product->sub_category_id)->where('id', '!=', $product->id)->where('published', '1')->take(10)->get();
     
 
-        return view('frontend.product',compact('product','reviews','related_products','facebookPixel'));
+        return view('frontend.product',compact('product','reviews','related_products','eventData'));
     }
 
     public function quick_view(Request $request){
@@ -314,6 +310,12 @@ class ProductController extends Controller
             $pagination = 12;
         }
         $products = $products->orderBy('created_at','desc')->paginate($pagination);
+
+        
+        if($site_settings->id == 2){
+            $facebookService = new FacebookService();  
+            $facebookService->sendEventSearch( $search); 
+        }
 
         return view('frontend.products',compact('products','title','category','sub_category','sub_sub_category','search','meta_title','meta_description','attributes','selected_attributes','sort_by','all_colors','selected_colors','pagination'));
     } 

@@ -249,6 +249,10 @@
     <script>
         $(document).ready(function() { 
             wallet_number(); 
+            
+            @if(isset($eventData))
+                metaPixelEvent(@json($eventData));
+            @endif
         });
         
         $('#country_id').on('change',function(){ 

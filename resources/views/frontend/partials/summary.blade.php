@@ -83,5 +83,16 @@
                 checkoutOrder_dataLayer('{{$total}}','{{$count_cart}}');
             })
         @endif
+        $('#checkout-order').on('click',function(){    
+            const cartProductIds = @json(session('cart') ? session('cart')->pluck('product_id') : []);
+            metaPixelEvent({
+                event: 'Purchase',
+                content_type: 'product', 
+                content_ids: cartProductIds,  
+                value: '{{$total}}',
+                currency: 'EGP',
+                num_items: '{{$count_cart}}',
+            });
+        })
     </script>
 @endsection
