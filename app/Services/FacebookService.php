@@ -64,7 +64,7 @@ class FacebookService
             ->setContentName($contentData['content_name'] ?? null)
             ->setContentIds($contentData['content_ids'] ?? null)
             ->setContentType($contentData['content_type'] ?? null) 
-            ->setContentCategory($this->validateContentCategory($contentData['content_category'] ?? null))
+            ->setContentCategory($contentData['content_category'] ?? null)
             ->setValue($this->validateValue($contentData['value'] ?? null))
             ->setCurrency($this->validateCurrency($contentData['currency'] ?? 'USD'));
 
@@ -131,13 +131,5 @@ class FacebookService
     protected function validateCurrency($currency)
     {
         return strlen($currency) === 3 ? $currency : 'USD';
-    }
-    protected function validateContentCategory($category)
-    { 
-        // Ensure it's a string and not too long
-        $category = substr((string)$category, 0, 100);
-        
-        // Remove any invalid characters
-        return preg_replace('/[^\w\s>]/', '', $category);
-    }
+    } 
 }
