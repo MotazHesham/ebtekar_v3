@@ -90,7 +90,7 @@ class ProductController extends Controller
         $related_products = Product::with('category')->where('sub_category_id', $product->sub_category_id)->where('id', '!=', $product->id)->where('published', '1')->take(10)->get();
     
 
-        return view('frontend.product',compact('product','reviews','related_products'));
+        return view('frontend.product',compact('product','reviews','related_products','facebookPixel'));
     }
 
     public function quick_view(Request $request){
