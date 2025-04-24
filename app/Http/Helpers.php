@@ -411,6 +411,8 @@ if (!function_exists('searchByPhone')) {
     if (!function_exists('getFbc')) {
         function getFbc()
         { 
+            $fbc = null;
+            
             // 1. Check for existing cookie
             if (request()->cookie('_fbc')) {
                 $fbc = request()->cookie('_fbc');
