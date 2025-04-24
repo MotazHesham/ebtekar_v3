@@ -576,6 +576,15 @@
         </script>
     @endif
     <script>
+        document.addEventListener('DOMContentLoaded', function () { 
+            // pageview from server
+            $.get('/pageview/event', function (res) {
+                // Optionally show a message
+                console.log('PageView Called From Server');
+            });
+        });
+    </script>
+    <script>
         function metaPixelEvent(eventData){ 
             // Ensure eventData is properly parsed if coming as JSON string
             const data = typeof eventData === 'string' ? JSON.parse(eventData) : eventData;

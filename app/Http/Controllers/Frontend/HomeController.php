@@ -15,6 +15,7 @@ use App\Models\ReceiptProduct;
 use App\Models\Slider;
 use App\Models\User;
 use App\Models\WebsiteSetting;
+use App\Services\FacebookService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,14 @@ class HomeController extends Controller
     public function sitemap(){
         $site_settings = get_site_setting();
         return response()->file(public_path($site_settings->sitemap_link_seo));
+    }
+    public function pageViewEvent(){ 
+        $site_settings = get_site_setting();
+        if($site_settings->id == 2){
+            $facebookService = new FacebookService();  
+            $facebookService->sendEventPageView(); 
+        }
+        return response()->json(null,200);
     }
     public function webxr($id)
     {
