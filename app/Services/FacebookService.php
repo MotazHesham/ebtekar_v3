@@ -30,8 +30,23 @@ class FacebookService
         Api::init(null, null, $this->accessToken);
     }
 
-    public function sendEventFromController($userData, $contentData)
+    public function sendEventFromController($contentData)
     {
+        
+        $userData = [
+            'fbp' => request()->cookie('_fbp'),
+            'fbc' => request()->cookie('_fbc'),
+        ];
+
+        if(auth()->check()){ 
+            $user = auth()->user();
+            $userData['external_id'] =  $user->id;
+            $userData['email'] =  $user->hashedEmail();
+            $userData['phone'] =  $user->hashedPhone();
+            $userData['firstName'] =  $user->hashedFirstName();
+            $userData['lastName'] =  $user->hashedLastName();
+        }
+
         $event = $this->createEvent($contentData['event'], $userData, $contentData);
         $this->sendEvent($event,$contentData['event']);
     } 
@@ -42,11 +57,13 @@ class FacebookService
         $userDataObj = (new UserData())
             ->setClientIpAddress(request()->ip())
             ->setClientUserAgent(request()->userAgent())
-            ->setFbp($this->validateFbp($this->getFbpFromCookie($userData['fbp'] ?? null)))
-            ->setFbc($this->validateFbc($this->getFbcFromCookie($userData['fbc'] ?? null)))
+            ->setFbp($this->getFbpFromCookie())
+            ->setFbc($this->getFbcFromCookie())
             ->setExternalId($userData['external_id'] ?? null)
             ->setEmail($userData['email'] ?? null)
-            ->setPhone($userData['phone'] ?? null);
+            ->setPhone($userData['phone'] ?? null)
+            ->setFirstName($userData['firstName'] ?? null)
+            ->setLastName($userData['lastName'] ?? null);
 
         // Validate content_ids is an array of strings
         if (isset($contentData['content_ids'])) {
@@ -103,18 +120,7 @@ class FacebookService
     protected function getFbcFromCookie($default = null)
     {
         return Cookie::get('_fbc') ?? $default;
-    }
-    
-    // Add these validation methods
-    protected function validateFbp($fbp)
-    {
-        return $fbp && preg_match('/^fb\.\d+\.\d+\.\d+$/', $fbp) ? $fbp : null;
-    }
-
-    protected function validateFbc($fbc)
-    {
-        return $fbc && preg_match('/^fb\.\d+\.\d+\.\d+$/', $fbc) ? $fbc : null;
-    }
+    } 
 
     protected function validateValue($value)
     {

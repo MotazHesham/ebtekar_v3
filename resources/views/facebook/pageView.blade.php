@@ -13,11 +13,18 @@
     // Initialize Pixel with enhanced parameters
     fbq('init', '{{ $pixelId }}', {
         @if(auth()->check())
-        external_id: '{{ auth()->id() }}',
+            external_id: '{{ auth()->id() }}',
+            em: '{{ auth()->user()->hashedEmail() }}',
+            ph: '{{ auth()->user()->hashedPhone() }}',
+            fn: '{{ auth()->user()->hashedFirstName() }}',
+            ln: '{{ auth()->user()->hashedLastName() }}',
         @endif
-        em: '{{ auth()->check() ? hash("sha256", auth()->user()->email) : "" }}',
-        ph: '{{ auth()->check() && auth()->user()->phone ? hash("sha256", auth()->user()->phone) : "" }}'
-    }, {agent: '{{ $fbp }}'});
+    }, {
+        agent: "{{ $fbp }}",
+        @if(isset($fbc))
+            fbc: "{{ $fbc }}"
+        @endif
+    });
     
     // Track PageView immediately
     fbq('track', 'PageView');  

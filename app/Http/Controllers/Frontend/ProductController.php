@@ -62,13 +62,6 @@ class ProductController extends Controller
         if($site_settings->id == 2){
             // Send ViewContent event to Conversion API
             $facebookService = new FacebookService();
-            $userData = [
-                'fbp' => request()->cookie('_fbp'),
-                'fbc' => request()->cookie('_fbc'),
-                'external_id' => auth()->check() ? auth()->id() : null,
-                'email' => auth()->check() ? hash('sha256', auth()->user()->email) : null,
-                'phone' => auth()->check() ? hash('sha256', auth()->user()->phone_number) : null,
-            ];
             $contentData = [
                 'event' => 'ViewContent',
                 'content_name' => $product->name,
@@ -79,7 +72,7 @@ class ProductController extends Controller
                 'content_category' => $product->category->name ?? null,
             ];
 
-            $facebookService->sendEventFromController($userData, $contentData);
+            $facebookService->sendEventFromController( $contentData);
             
             $facebookPixel = view('facebook.Events', [
                 'eventData' => $contentData, 

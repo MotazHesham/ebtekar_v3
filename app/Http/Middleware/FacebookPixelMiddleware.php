@@ -33,11 +33,40 @@ class FacebookPixelMiddleware
     {
         $pixelId = config('facebook.pixel_id');
         
-        $fbp = $request->cookie('_fbp');
+        // Generate or retrieve fbp cookie (corrected format)
+        $fbp = $request->cookie('_fbp') ?? 'fb.1.' . time() . '.' . uniqid();
+
+        // Generate or retrieve fbc cookie
+        $fbc = $this->getOrCreateFbc($request);
+        
+        // Set cookies
+        if (!$request->cookie('_fbp')) {
+            cookie()->queue('_fbp', $fbp, 60 * 24 * 90); // 90 days
+        }
+        if (!$request->cookie('_fbc') && $fbc) {
+            cookie()->queue('_fbc', $fbc, 60 * 24 * 90); // 90 days
+        }
 
         return view('facebook.pageView', [
             'pixelId' => $pixelId,
-            'fbp' => $fbp
+            'fbp' => $fbp,
+            'fbc' => $fbc,
         ])->render();
     } 
+    
+    protected function getOrCreateFbc($request)
+    {
+        // 1. Check for existing cookie
+        if ($request->cookie('_fbc')) {
+            return $request->cookie('_fbc');
+        }
+        
+        // 2. Check for fbclid parameter (from Facebook ads)
+        if ($fbclid = $request->input('fbclid')) {
+            return 'fb.1.' . time() . '.' . $fbclid;
+        }
+        
+        // 3. Return null if no FBC available
+        return null;
+    }
 }

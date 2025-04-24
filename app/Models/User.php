@@ -240,4 +240,39 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
     }
+
+    public function hashedFirstName()
+    {
+        $Name = explode(' ',$this->name);
+        if(isset($Name[0])){
+            return strtolower(trim(hash("sha256", $Name[0])));
+        }else{
+            return null;
+        }
+    }
+    public function hashedLastName()
+    {
+        $Name = explode(' ',$this->name);
+        if(isset($Name[1])){
+            return strtolower(trim(hash("sha256", $Name[1])));
+        }else{
+            return null;
+        }
+    }
+    public function hashedEmail()
+    { 
+        if($this->email){
+            return strtolower(trim(hash("sha256", $this->email)));
+        }else{
+            return null;
+        }
+    }
+    public function hashedPhone()
+    { 
+        if($this->phone_number){
+            return hash('sha256', preg_replace('/\D/', '', $this->phone_number));
+        }else{
+            return null;
+        }
+    }
 }
