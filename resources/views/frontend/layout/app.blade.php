@@ -410,61 +410,7 @@
                 search_dataLayer('{{$search}}')
             @endif
         @endif
-        
-        @if(isset($search))  
-            metaPixelEvent({ 
-                search_string: '{{$search}}', 
-            });
-        @endif
-        $('.add-cartnoty').on('click',function(){ 
-            const name = $(this).data('name');
-            const price = $(this).data('price');
-            const category = $(this).data('category');
-            const id = $(this).data('id');  
-            metaPixelEvent({
-                event: 'AddToCart',
-                content_name: name,
-                content_type: 'product',
-                content_ids: [id], 
-                content_category: category,
-                value: price,
-                currency: 'EGP',
-                num_items: 1,
-            });
-        })
-            
-        $('.cart-btn').on('click',function(){ 
-            const name = $(this).data('name');
-            const price = $(this).data('price');
-            const category = $(this).data('category');
-            const id = $(this).data('id'); 
-            metaPixelEvent({
-                event: 'AddToCart',
-                content_name: name,
-                content_type: 'product',
-                content_ids: [id], 
-                content_category: category,
-                value: price,
-                currency: 'EGP',
-                num_items: 1,
-            });
-        })
-        
-        $('.add-to-wish').on('click',function(){  
-            const name = $(this).data('name'); 
-            const price = $(this).data('price');
-            const category = $(this).data('category');
-            const id = $(this).data('id'); 
-            // metaPixelEvent({
-            //     event: 'AddToWishlist',
-            //     content_name: name,
-            //     content_type: 'product',
-            //     content_ids: [id], 
-            //     content_category: category,
-            //     value: price,
-            //     currency: 'EGP',
-            // });
-        })
+
         function dismiss(){
             $('#dismiss').remove();
         } 
@@ -610,6 +556,15 @@
             });
         } 
     </script> 
+    <script>
+        
+        @if(request('search'))  
+            metaPixelEvent({ 
+                search_string: '{{$search}}', 
+                event: 'Search'
+            });
+        @endif 
+    </script>
     @if(session('eventData'))
         <script>
             document.addEventListener('DOMContentLoaded', function () {

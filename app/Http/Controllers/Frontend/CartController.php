@@ -76,6 +76,7 @@ class CartController extends Controller
                 'num_items' => (int) $request->quantity
             ];
 
+            session()->flash('eventData', $contentData);
             $facebookService->sendEventFromController( $contentData); 
         }
         toast('Success added to cart','success');
