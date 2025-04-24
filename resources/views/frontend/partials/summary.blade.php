@@ -74,9 +74,10 @@
                 $('#checkout-summary').css('display','block');
             });
         } 
-
-        $('#checkout-order').on('click',function(){   
-            checkoutOrder_dataLayer('{{$total}}','{{$count_cart}}');
-        })
+        @if(app()->isProduction() && $site_settings->tag_manager) 
+            $('#checkout-order').on('click',function(){   
+                checkoutOrder_dataLayer('{{$total}}','{{$count_cart}}');
+            })
+        @endif
     </script>
 @endsection

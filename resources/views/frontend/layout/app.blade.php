@@ -380,39 +380,41 @@
             });
         })
 
-        $('.add-cartnoty').on('click',function(){ 
-            const name = $(this).data('name');
-            const price = $(this).data('price');
-            const category = $(this).data('category');
-            const id = $(this).data('id');
-            // fbq('track', 'AddToCart', {name: name , value: price , currency: '{{ $currency_symbol }}'}); 
-            addToCartDataLayer(id,name,category,price);
-        })
-            
-        $('.cart-btn').on('click',function(){ 
-            const name = $(this).data('name');
-            const price = $(this).data('price');
-            const category = $(this).data('category');
-            const id = $(this).data('id');
-            // fbq('track', 'AddToCart', {name: name , value: price, currency: '{{ $currency_symbol }}'});
-            addToCartDataLayer(id,name,category,price);
-        })
-        
-        $('.add-to-wish').on('click',function(){  
-            const name = $(this).data('name'); 
-            const price = $(this).data('price');
-            const category = $(this).data('category');
-            const id = $(this).data('id');
-            // fbq('track', 'AddToWishlist', {name: $(this).data('name')});
-            wishListDataLayer(id,name,category,price);
-        })
-        // $('.initiate-checkout').on('click',function(){  
-        //     fbq('track', 'InitiateCheckout');
-        // })
 
-        @if(isset($search))
-            // fbq('track', 'Search', {search_string: '{{$search}}'});
-            search_dataLayer('{{$search}}')
+        @if(app()->isProduction() && $site_settings->tag_manager ) 
+            $('.add-cartnoty').on('click',function(){ 
+                const name = $(this).data('name');
+                const price = $(this).data('price');
+                const category = $(this).data('category');
+                const id = $(this).data('id');
+                // fbq('track', 'AddToCart', {name: name , value: price , currency: '{{ $currency_symbol }}'}); 
+                addToCartDataLayer(id,name,category,price);
+            })
+                
+            $('.cart-btn').on('click',function(){ 
+                const name = $(this).data('name');
+                const price = $(this).data('price');
+                const category = $(this).data('category');
+                const id = $(this).data('id');
+                // fbq('track', 'AddToCart', {name: name , value: price, currency: '{{ $currency_symbol }}'});
+                addToCartDataLayer(id,name,category,price);
+            })
+            
+            $('.add-to-wish').on('click',function(){  
+                const name = $(this).data('name'); 
+                const price = $(this).data('price');
+                const category = $(this).data('category');
+                const id = $(this).data('id');
+                // fbq('track', 'AddToWishlist', {name: $(this).data('name')});
+                wishListDataLayer(id,name,category,price);
+            })
+            // $('.initiate-checkout').on('click',function(){  
+            //     fbq('track', 'InitiateCheckout');
+            // })
+            @if(isset($search))
+                // fbq('track', 'Search', {search_string: '{{$search}}'});
+                search_dataLayer('{{$search}}')
+            @endif
         @endif
         function dismiss(){
             $('#dismiss').remove();

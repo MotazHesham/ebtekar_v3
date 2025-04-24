@@ -74,9 +74,6 @@
                                 <option value="created_at"
                                     @isset($date_type) @if ($date_type == 'created_at') selected @endif @endisset>
                                     {{ __('تاريخ الأضافة') }}</option>
-                                <option value="send_to_playlist_date"
-                                    @isset($date_type) @if ($date_type == 'send_to_playlist_date') selected @endif @endisset>
-                                    {{ __('تاريخ المرحلة') }}</option>
                                 <option value="date_of_receiving_order"
                                     @isset($date_type) @if ($date_type == 'date_of_receiving_order') selected @endif @endisset>
                                     {{ __('تاريخ استلام الطلب') }}</option>

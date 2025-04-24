@@ -487,24 +487,26 @@
             //     content_category: '{{ $product->category->name }}'
             // });
 
-            dataLayer.push({
-                ecommerce: null
-            });
+            @if(app()->isProduction() && $site_settings->tag_manager ) 
+                dataLayer.push({
+                    ecommerce: null
+                });
 
-            dataLayer.push({
-                'event': 'view_item',
-                'ecommerce': {
-                    currencyCode: 'EGP',
-                    detail: {
-                        products: [{
-                            id: "{{ $product->id }}",
-                            name: "{{ $product->name }}",
-                            category: "{{ $product->category->name ?? '' }}",
-                            price: "{{ front_calc_product_currency($product->unit_price, $product->weight)['value'] }}",
-                        }]
+                dataLayer.push({
+                    'event': 'view_item',
+                    'ecommerce': {
+                        currencyCode: 'EGP',
+                        detail: {
+                            products: [{
+                                id: "{{ $product->id }}",
+                                name: "{{ $product->name }}",
+                                category: "{{ $product->category->name ?? '' }}",
+                                price: "{{ front_calc_product_currency($product->unit_price, $product->weight)['value'] }}",
+                            }]
+                        }
                     }
-                }
-            })
+                })
+            @endif
         });
 
         function copy_to_clipboard(text) {

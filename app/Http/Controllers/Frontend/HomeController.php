@@ -34,7 +34,7 @@ class HomeController extends Controller
         return view('frontend.partials.webxr',compact('product'));    
     }
     public function index()
-    {   
+    {    
         $site_settings = get_site_setting();
         $sliders = Cache::rememberForever('home_silders_'.$site_settings->id, function () use ($site_settings) {
             return Slider::where('website_setting_id', $site_settings->id)->with('media')->where('published', 1)->get();

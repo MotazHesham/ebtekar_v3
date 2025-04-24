@@ -71,7 +71,10 @@
 <li>
     <div class="buttons">
         <a href="{{ route('frontend.cart') }}" class="btn btn-solid btn-sm">{{ __('frontend.cart.show_cart') }}</a>
-        <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm " onclick="initiate_checkout_dataLayer('{{$total ?? 0}}','{{$count_cart}}')">{{ __('frontend.cart.payment_direct') }}</a>
+        <a href="{{ route('frontend.payment_select') }}" class="btn btn-solid btn-sm " 
+            @if(app()->isProduction() && $site_settings->tag_manager) 
+                onclick="initiate_checkout_dataLayer('{{$total ?? 0}}','{{$count_cart}}')"
+            @endif>{{ __('frontend.cart.payment_direct') }}</a>
     </div>
 </li>
 </ul>

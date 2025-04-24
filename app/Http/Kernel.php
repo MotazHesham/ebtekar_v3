@@ -45,6 +45,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\ApprovalMiddleware::class,
             \App\Http\Middleware\VerificationMiddleware::class,
             \App\Http\Middleware\SetCurrency::class,
+            \App\Http\Middleware\FacebookPixelMiddleware::class,
         ],
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,

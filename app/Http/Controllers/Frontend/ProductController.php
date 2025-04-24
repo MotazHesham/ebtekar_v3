@@ -9,11 +9,10 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Models\Search;
 use App\Models\SubCategory;
-use App\Models\SubSubCategory;
-use App\Models\WebsiteSetting;
+use App\Models\SubSubCategory; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Spatie\GoogleTagManager\GoogleTagManager;
+use Illuminate\Support\Facades\Auth; 
+use App\Services\FacebookService;
 
 class ProductController extends Controller
 {
@@ -56,6 +55,30 @@ class ProductController extends Controller
         if(!$product){
             abort(404);
         }
+        
+        
+        if($site_settings->id == 2){
+            // Send ViewContent event to Conversion API
+            $facebookService = new FacebookService();
+            $userData = [
+                'fbp' => request()->cookie('_fbp'),
+                'fbc' => request()->cookie('_fbc'),
+                'external_id' => auth()->check() ? auth()->id() : null,
+                'email' => auth()->check() ? hash('sha256', auth()->user()->email) : null,
+                'phone' => auth()->check() ? hash('sha256', auth()->user()->phone_number) : null,
+            ];
+            $contentData = [
+                'content_name' => $product->name,
+                'content_ids' => [$product->id],
+                'content_type' => 'product',
+                'value' => $product->unit_price,
+                'currency' => 'EGP',
+                'content_category' => $product->category->name ?? null,
+            ];
+
+            $facebookService->sendViewContentEvent($userData, $contentData);
+        }
+
         $reviews = Review::with('user')->where('product_id',$product->id)->where('published',1)->get();
         $related_products = Product::with('category')->where('sub_category_id', $product->sub_category_id)->where('id', '!=', $product->id)->where('published', '1')->take(10)->get();
         return view('frontend.product',compact('product','reviews','related_products'));

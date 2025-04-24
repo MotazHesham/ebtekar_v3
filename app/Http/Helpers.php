@@ -76,35 +76,38 @@ if (!function_exists('dashboard_currency')) {
 if (!function_exists('setCurrencyRate')) {
     function setCurrencyRate()
     {
-        Cache::remember('currency_rates', 21600, function () {  // 6 hours
-            $response = Http::get('https://api.currencyfreaks.com/v2.0/rates/latest?apikey='.config('app.currencyfreaks_api_key').'&symbols=EGP,SAR,KWD,AED'); 
-            if ($response->successful()) {
-                $jsonData = $response->json(); 
-    
-                // Extract the base currency and rates
-                $baseCurrency = $jsonData['base'];
-                $rates = $jsonData['rates'];
-    
-                // Convert the base currency to EGP
-                if ($baseCurrency !== 'EGP') {
-                    $newRates = [];
-                    foreach ($rates as $currency => $rate) {
-                        $newRates[$currency] =  round($rates['EGP'] / $rate,2);
+        if(app()->isProduction()){
+            Cache::remember('currency_rates', 21600, function () {  // 6 hours
+                $response = Http::get('https://api.currencyfreaks.com/v2.0/rates/latest?apikey='.config('app.currencyfreaks_api_key').'&symbols=EGP,SAR,KWD,AED'); 
+                if ($response->successful()) {
+                    $jsonData = $response->json(); 
+        
+                    // Extract the base currency and rates
+                    $baseCurrency = $jsonData['base'];
+                    $rates = $jsonData['rates'];
+        
+                    // Convert the base currency to EGP
+                    if ($baseCurrency !== 'EGP') {
+                        $newRates = [];
+                        foreach ($rates as $currency => $rate) {
+                            $newRates[$currency] =  round($rates['EGP'] / $rate,2);
+                        }
+                        $rates = $newRates;
                     }
-                    $rates = $newRates;
+        
+                    return $rates;
+        
+                } else { 
+                    return [
+                        'AED' => 13,
+                        'SAR' => 13,
+                        'KWD' => 160,
+                        'EGP' => 1
+                    ];
                 }
-    
-                return $rates;
-    
-            } else { 
-                return [
-                    'AED' => 13,
-                    'SAR' => 13,
-                    'KWD' => 160,
-                    'EGP' => 1
-                ];
-            }
-        });    
+            });    
+                
+        }
     }
 }
 

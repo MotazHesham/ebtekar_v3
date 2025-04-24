@@ -1,4 +1,5 @@
 <?php
 
-Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
-});
+use Illuminate\Support\Facades\Route;
+
+Route::post('/track-event', [App\Http\Controllers\TrackingController::class, 'trackEvent']);
