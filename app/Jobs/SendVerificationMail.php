@@ -21,12 +21,10 @@ class SendVerificationMail implements ShouldQueue
 
     /**
      * Create a new job instance.
-     */
-    private $email; 
+     */ 
 
-    public function __construct(public User $user,public WebsiteSetting $site_settings,$email)
-    { 
-        $this->email = $email;
+    public function __construct(public User $user,public WebsiteSetting $site_settings,public string $email)
+    {  
     }
 
     /**
