@@ -81,7 +81,7 @@ class ProductController extends Controller
 
             $facebookService->sendEventFromController($userData, $contentData);
             
-            $facebookPixel = view('facebook.pixel.Events', [
+            $facebookPixel = view('facebook.Events', [
                 'eventData' => $contentData, 
             ]) ;
         }
