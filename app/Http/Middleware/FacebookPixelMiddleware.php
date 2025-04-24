@@ -33,13 +33,7 @@ class FacebookPixelMiddleware
     {
         $pixelId = config('facebook.pixel_id');
         
-        // Generate or retrieve fbp cookie
-        $fbp = $request->cookie('_fbp') ?? 'fbp.' . time() . '.' . uniqid();
-        
-        // Set cookie if not exists
-        if (!$request->cookie('_fbp')) {
-            cookie()->queue('_fbp', $fbp, 60 * 24 * 90);
-        }
+        $fbp = $request->cookie('_fbp');
 
         return view('facebook.pageView', [
             'pixelId' => $pixelId,
