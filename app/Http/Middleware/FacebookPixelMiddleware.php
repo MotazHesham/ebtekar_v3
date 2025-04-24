@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\FacebookService;
 use Closure;
 
 class FacebookPixelMiddleware
@@ -26,6 +27,10 @@ class FacebookPixelMiddleware
             }
         }
 
+        if($site_settings->id == 2){
+            $facebookService = new FacebookService();  
+            $facebookService->sendEventPageView(); 
+        }
         return $response;
     }
 

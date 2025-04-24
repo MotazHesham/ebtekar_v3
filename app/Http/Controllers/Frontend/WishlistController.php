@@ -35,7 +35,7 @@ class WishlistController extends Controller
                 'currency' => 'EGP',
                 'content_category' => $product->category->name ?? null
             ];
-
+            session()->flash('eventData', $contentData);
             $facebookService->sendEventFromController( $contentData); 
         }
         toast('Product Added To Wishlist','success');

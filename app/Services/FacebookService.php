@@ -37,6 +37,21 @@ class FacebookService
         $this->sendEvent($event,$contentData['event']);
     } 
 
+    public function sendEventPageView()
+    { 
+        // Create UserData with enhanced matching parameters
+        $userDataObj = $this->getUserData();  
+
+        // Create Event
+        $event =  (new Event())
+                    ->setEventName('PageView')
+                    ->setEventTime(time())
+                    ->setEventSourceUrl(request()->fullUrl())
+                    ->setUserData($userDataObj) 
+                    ->setActionSource(ActionSource::WEBSITE);
+        $this->sendEvent($event,'PageView');
+    }
+
     public function sendEventSearch($search)
     { 
         // Create UserData with enhanced matching parameters

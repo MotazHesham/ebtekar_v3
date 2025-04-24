@@ -455,15 +455,15 @@
             const price = $(this).data('price');
             const category = $(this).data('category');
             const id = $(this).data('id'); 
-            metaPixelEvent({
-                event: 'AddToWishlist',
-                content_name: name,
-                content_type: 'product',
-                content_ids: [id], 
-                content_category: category,
-                value: price,
-                currency: 'EGP',
-            });
+            // metaPixelEvent({
+            //     event: 'AddToWishlist',
+            //     content_name: name,
+            //     content_type: 'product',
+            //     content_ids: [id], 
+            //     content_category: category,
+            //     value: price,
+            //     currency: 'EGP',
+            // });
         })
         function dismiss(){
             $('#dismiss').remove();
@@ -610,16 +610,20 @@
             });
         } 
     </script> 
-    
+    @if(session('eventData'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const eventData = @json(session('eventData')); 
+                metaPixelEvent(eventData); 
+            });
+        </script>
+    @endif
     <script>
         function metaPixelEvent(eventData){ 
             // Ensure eventData is properly parsed if coming as JSON string
             const data = typeof eventData === 'string' ? JSON.parse(eventData) : eventData;
             
-            const finalEventData = { 
-                value: data.value || 0,
-                currency: data.currency || 'EGP'
-            };
+            const finalEventData = {};
             
             if (data.content_name) {
                 finalEventData.content_name = data.content_name;
@@ -638,6 +642,12 @@
             } 
             if (data.search_string) {
                 finalEventData.search_string = data.search_string;
+            } 
+            if (data.currency) {
+                finalEventData.currency = data.currency;
+            } 
+            if (data.value) {
+                finalEventData.value = data.value;
             } 
 
             if (typeof fbq !== 'undefined') {
