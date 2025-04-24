@@ -30,13 +30,13 @@ class FacebookService
     public function sendEventFromJs($eventName, $userData, $contentData)
     {
         $event = $this->createEvent($eventName, $userData, $contentData);
-        $this->sendEvent($event);
+        $this->sendEvent($event,$eventName);
     }
 
     public function sendViewContentEvent($userData, $contentData)
     {
         $event = $this->createEvent('ViewContent', $userData, $contentData);
-        $this->sendEvent($event);
+        $this->sendEvent($event,'ViewContent');
     }
 
     protected function createEvent($eventName, $userData, $contentData)
@@ -70,7 +70,7 @@ class FacebookService
             ->setActionSource(ActionSource::WEBSITE);
     }
 
-    protected function sendEvent($event)
+    protected function sendEvent($event, $eventName)
     {
         $events = [$event];
         $request = (new EventRequest($this->pixelId))
@@ -82,9 +82,9 @@ class FacebookService
 
         try {
             $response = $request->execute();
-            Log::info('Facebook Conversion API response:', (array)$response);
+            Log::info('Facebook Conversion API response: eventName => ' . $eventName, (array)$response);
         } catch (\Exception $e) {
-            Log::error('Facebook Conversion API error:', ['error' => $e->getMessage()]);
+            Log::error('Facebook Conversion API error:: eventName => ' . $eventName, ['error' => $e]);
         }
     }
 
