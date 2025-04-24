@@ -6,7 +6,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const eventData = {
                 content_name: '{{ $eventData['content_name'] }}',
-                content_ids: '{{$eventData['content_ids']}}',
+                content_ids: {!! json_encode($eventData['content_ids']) !!},
                 content_type: '{{ $eventData['content_type'] }}',
                 @if(isset($eventData['content_category']))
                 content_category: '{{ $eventData['content_category'] }}',

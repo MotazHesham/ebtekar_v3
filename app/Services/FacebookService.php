@@ -83,8 +83,7 @@ class FacebookService
         }
 
         try {
-            $response = $request->execute();
-            Log::info('Facebook CAPI Success: eventName => ' . $eventName, (array)$response);
+            $request->execute(); 
         } catch (\Exception $e) {
             Log::error('Facebook CAPI Failed: eventName => ' . $eventName, ['error' => $e]);
         }
