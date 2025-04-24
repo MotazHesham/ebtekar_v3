@@ -41,23 +41,9 @@ class FacebookPixelMiddleware
             cookie()->queue('_fbp', $fbp, 60 * 24 * 90);
         }
 
-        return view('facebook.pixel', [
+        return view('facebook.pageView', [
             'pixelId' => $pixelId,
-            'fbp' => $fbp,
-            'eventData' => $this->getEventData($request)
+            'fbp' => $fbp
         ])->render();
-    }
-
-    protected function getEventData($request)
-    {
-        // Customize this based on your page/content
-        return [
-            'event' => 'ViewContent',
-            'content_name' => 'Product Page', // Example
-            'content_ids' => [$request->route('id')], // Example
-            'content_type' => 'product',
-            'value' => 0, // Set appropriate value if needed
-            'currency' => 'USD'
-        ];
-    }
+    } 
 }

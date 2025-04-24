@@ -51,11 +51,13 @@ class ProductController extends Controller
 
     public function product($slug){   
         $site_settings = get_site_setting();
+        $facebookPixel  = null;
+
         $product  = Product::where('website_setting_id',$site_settings->id)->where('slug', $slug)->where('published',1)->first();
         if(!$product){
             abort(404);
         }
-        
+
         
         if($site_settings->id == 2){
             // Send ViewContent event to Conversion API
@@ -68,6 +70,7 @@ class ProductController extends Controller
                 'phone' => auth()->check() ? hash('sha256', auth()->user()->phone_number) : null,
             ];
             $contentData = [
+                'event' => 'ViewContent',
                 'content_name' => $product->name,
                 'content_ids' => [(string)$product->id],
                 'content_type' => 'product', 
@@ -76,11 +79,17 @@ class ProductController extends Controller
                 'content_category' => $product->category->name ?? null,
             ];
 
-            $facebookService->sendViewContentEvent($userData, $contentData);
+            $facebookService->sendEventFromController($userData, $contentData);
+            
+            $facebookPixel = view('facebook.pixel.Events', [
+                'eventData' => $contentData, 
+            ]) ;
         }
 
         $reviews = Review::with('user')->where('product_id',$product->id)->where('published',1)->get();
         $related_products = Product::with('category')->where('sub_category_id', $product->sub_category_id)->where('id', '!=', $product->id)->where('published', '1')->take(10)->get();
+    
+
         return view('frontend.product',compact('product','reviews','related_products'));
     }
 

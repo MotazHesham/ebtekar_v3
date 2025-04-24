@@ -469,6 +469,9 @@
 @section('scripts')
     @parent
     <script type="text/javascript">
+        @if(isset($facebookPixel))
+            {!! $facebookPixel !!}
+        @endif
         $(document).ready(function() {
 
             $('.color-selector ul li > label').on('click', function(e) {

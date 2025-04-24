@@ -30,17 +30,11 @@ class FacebookService
         Api::init(null, null, $this->accessToken);
     }
 
-    public function sendEventFromJs($eventName, $userData, $contentData)
+    public function sendEventFromController($userData, $contentData)
     {
-        $event = $this->createEvent($eventName, $userData, $contentData);
-        $this->sendEvent($event,$eventName);
-    }
-
-    public function sendViewContentEvent($userData, $contentData)
-    {
-        $event = $this->createEvent('ViewContent', $userData, $contentData);
-        $this->sendEvent($event,'ViewContent');
-    }
+        $event = $this->createEvent($contentData['event'], $userData, $contentData);
+        $this->sendEvent($event,$contentData['event']);
+    } 
 
     protected function createEvent($eventName, $userData, $contentData)
     {
