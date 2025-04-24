@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\WebsiteSetting;
 use FacebookAds\Api;
 use FacebookAds\Object\ServerSide\ActionSource;
 use FacebookAds\Object\ServerSide\CustomData;
@@ -18,14 +19,14 @@ class FacebookService
     protected $accessToken;
     protected $testEventCode;
 
-    public function __construct()
+    public function __construct(WebsiteSetting $siteSetting)
     {
-        $this->pixelId = config('facebook.pixel_id');
-        $this->accessToken = config('facebook.access_token');
+        $this->pixelId = $siteSetting->fb_pixel_id;
+        $this->accessToken = $siteSetting->fb_access_token;
         if (empty($this->pixelId) || empty($this->accessToken)) {
             throw new \RuntimeException('Facebook Pixel ID or Access Token not configured');
         }
-        $this->testEventCode = config('facebook.test_event_code');
+        $this->testEventCode = $siteSetting->fb_test_code;
 
         // Initialize the Facebook SDK
         Api::init(null, null, $this->accessToken);

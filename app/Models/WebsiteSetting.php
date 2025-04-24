@@ -73,6 +73,8 @@ class WebsiteSetting extends Model implements HasMedia
         'youtube',
         'tag_manager',
         'fb_pixel_id',
+        'fb_access_token',
+        'fb_test_code',
         'google_plus',
         'welcome_message',
         'video_instructions',

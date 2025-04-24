@@ -39,6 +39,8 @@ return new class extends Migration
             $table->string('employee_password')->nullable();
             $table->string('tag_manager')->nullable();
             $table->string('fb_pixel_id')->nullable();
+            $table->string('fb_access_token',2000)->nullable();
+            $table->string('fb_test_code')->nullable();
             $table->unsignedBigInteger('designer_id')->nullable();
             $table->foreign('designer_id', 'designer_fk_8581724')->references('id')->on('users');
             $table->unsignedBigInteger('preparer_id')->nullable();

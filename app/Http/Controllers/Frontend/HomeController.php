@@ -31,8 +31,8 @@ class HomeController extends Controller
     }
     public function pageViewEvent(){ 
         $site_settings = get_site_setting();
-        if($site_settings->id == 2){
-            $facebookService = new FacebookService();  
+        if($site_settings->fb_pixel_id){
+            $facebookService = new FacebookService($site_settings);  
             $facebookService->sendEventPageView(); 
         }
         return response()->json(null,200);

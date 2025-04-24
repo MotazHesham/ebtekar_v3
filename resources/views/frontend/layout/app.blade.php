@@ -82,26 +82,14 @@
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','{{ $site_settings->tag_manager }}');</script>
-        <!-- End Google Tag Manager -->
-        
-        <!-- Facebook Pixel Code -->
-        <script>
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '{{$site_settings->fb_pixel_id}}');
-            // fbq('track', 'PageView');
-        </script>
-        <noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id={{$site_settings->fb_pixel_id}}&ev=PageView&noscript=1"
-        /></noscript>
-        <!-- End Facebook Pixel Code -->
-            
+        <!-- End Google Tag Manager --> 
+    @endif
+
+    @if(app()->isProduction() && $site_settings->fb_pixel_id ) 
+        @include('facebook.init',['pixelId' => $site_settings->fb_pixel_id])
+    @endif
+
+    @if(app()->isProduction() && $site_settings->id == 1) 
         <script>
             !function (w, d, t) {
             w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++
@@ -378,38 +366,7 @@
                     $('#mobile-search-input').focus(); // to pop up the keyboad on mobile
                 }, 100); 
             });
-        })
-
-
-        @if(app()->isProduction() && $site_settings->tag_manager ) 
-            $('.add-cartnoty').on('click',function(){ 
-                const name = $(this).data('name');
-                const price = $(this).data('price');
-                const category = $(this).data('category');
-                const id = $(this).data('id'); 
-                addToCartDataLayer(id,name,category,price);
-            })
-                
-            $('.cart-btn').on('click',function(){ 
-                const name = $(this).data('name');
-                const price = $(this).data('price');
-                const category = $(this).data('category');
-                const id = $(this).data('id'); 
-                addToCartDataLayer(id,name,category,price);
-            })
-            
-            $('.add-to-wish').on('click',function(){  
-                const name = $(this).data('name'); 
-                const price = $(this).data('price');
-                const category = $(this).data('category');
-                const id = $(this).data('id'); 
-                wishListDataLayer(id,name,category,price);
-            })
-            
-            @if(isset($search)) 
-                search_dataLayer('{{$search}}')
-            @endif
-        @endif
+        }) 
 
         function dismiss(){
             $('#dismiss').remove();
@@ -574,18 +531,17 @@
                 metaPixelEvent(eventData); 
             });
         </script>
-    @endif
+    @endif 
     <script>
         document.addEventListener('DOMContentLoaded', function () { 
             // pageview from server
-            $.get('/pageview/event', function (res) {
-                // Optionally show a message
-                console.log('PageView Called From Server');
+            $.get('/pageview/event', function (res) { 
             });
         });
-    </script>
-    <script>
         function metaPixelEvent(eventData){ 
+            @if(!$site_settings->fb_pixel_id)
+                return;
+            @endif
             // Ensure eventData is properly parsed if coming as JSON string
             const data = typeof eventData === 'string' ? JSON.parse(eventData) : eventData;
             

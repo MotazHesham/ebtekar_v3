@@ -59,9 +59,9 @@ class ProductController extends Controller
 
         
         $eventData  = null;
-        if($site_settings->id == 2){
+        if($site_settings->fb_pixel_id){
             // Send ViewContent event to Conversion API
-            $facebookService = new FacebookService();
+            $facebookService = new FacebookService($site_settings);
             $eventData = [
                 'event' => 'ViewContent',
                 'content_name' => $product->name,
@@ -312,8 +312,8 @@ class ProductController extends Controller
         $products = $products->orderBy('created_at','desc')->paginate($pagination);
 
         
-        if($site_settings->id == 2){
-            $facebookService = new FacebookService();  
+        if($site_settings->fb_pixel_id){
+            $facebookService = new FacebookService($site_settings);  
             $facebookService->sendEventSearch( $search); 
         }
 

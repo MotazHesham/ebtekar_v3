@@ -20,9 +20,9 @@
             ln: '{{ auth()->user()->hashedLastName() }}',
         @endif
     }, {
-        agent: "{{ $fbp }}",
-        @if(isset($fbc))
-            fbc: "{{ $fbc }}"
+        agent: "{{ getFbp() }}",
+        @if(getFbc())
+            fbc: "{{ getFbc() }}"
         @endif
     });
     

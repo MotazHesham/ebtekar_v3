@@ -24,8 +24,8 @@ class WishlistController extends Controller
             'user_id' => Auth::id()
         ]);
         
-        if($site_settings->id == 2){
-            $facebookService = new FacebookService();
+        if($site_settings->fb_pixel_id){
+            $facebookService = new FacebookService($site_settings);
             $contentData = [
                 'event' => 'AddToWishlist',
                 'content_name' => $product->name,

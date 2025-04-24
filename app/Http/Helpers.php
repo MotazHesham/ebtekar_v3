@@ -396,4 +396,38 @@ if (!function_exists('searchByPhone')) {
             'shipping_country_id' => isset($raw->shipping_country_id) ? $raw->shipping_country_id : null,
         ];
     }
+
+    if (!function_exists('getFbp')) {
+        function getFbp()
+        {
+            $fbp = request()->cookie('_fbp') ?? 'fb.1.' . time() . '.' . uniqid();
+            
+            // Set cookies
+            if (!request()->cookie('_fbp')) {
+                cookie()->queue('_fbp', $fbp, 60 * 24 * 90); // 90 days
+            }
+        }
+    }
+    if (!function_exists('getFbc')) {
+        function getFbc()
+        { 
+            // 1. Check for existing cookie
+            if (request()->cookie('_fbc')) {
+                $fbc = request()->cookie('_fbc');
+            }
+            
+            // 2. Check for fbclid parameter (from Facebook ads)
+            if ($fbclid = request()->input('fbclid')) {
+                $fbc = 'fb.1.' . time() . '.' . $fbclid;
+            }
+            
+            if (!request()->cookie('_fbc') && $fbc) {
+                cookie()->queue('_fbc', $fbc, 60 * 24 * 90); // 90 days
+            }
+
+            // 3. Return null if no FBC available
+            return $fbc ?? null;
+        }
+    }  
+
 }

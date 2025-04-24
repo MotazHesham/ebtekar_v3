@@ -75,8 +75,8 @@ class CheckoutController extends Controller
         }
 
         $eventData  = null;
-        if($site_settings->id == 2){
-            $facebookService = new FacebookService();
+        if($site_settings->fb_pixel_id){
+            $facebookService = new FacebookService($site_settings);
             $price = 0;
             $numOfItems = 0;
             $productsIds = [];
@@ -176,7 +176,7 @@ class CheckoutController extends Controller
                 $order->symbol = $currency->symbol;
                 $order->exchange_rate = $currency->exchange_rate;
 
-                if($site_settings->id == 2){
+                if($site_settings->fb_pixel_id){
                     $str = 'ertgal-';
                 }elseif($site_settings->id == 3){
                     $str = 'figures-';
@@ -290,8 +290,8 @@ class CheckoutController extends Controller
 
                 $currenct_exchange_rate = Cache::get('currency_rates')[$order->symbol];
                 
-                if($site_settings->id == 2){
-                    $facebookService = new FacebookService();
+                if($site_settings->fb_pixel_id){
+                    $facebookService = new FacebookService($site_settings);
             
                     $eventData = [
                         'event' => 'Purchase',
