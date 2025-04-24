@@ -133,9 +133,7 @@ class FacebookService
         return strlen($currency) === 3 ? $currency : 'USD';
     }
     protected function validateContentCategory($category)
-    {
-        if (empty($category)) return null;
-        
+    { 
         // Ensure it's a string and not too long
         $category = substr((string)$category, 0, 100);
         
