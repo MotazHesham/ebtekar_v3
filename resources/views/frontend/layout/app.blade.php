@@ -559,9 +559,11 @@
     <script>
         
         @if(request('search'))  
-            metaPixelEvent({ 
-                search_string: '{{$search}}', 
-                event: 'Search'
+            document.addEventListener('DOMContentLoaded', function () {
+                metaPixelEvent({ 
+                    search_string: '{{$search}}', 
+                    event: 'Search'
+                });
             });
         @endif 
     </script>
