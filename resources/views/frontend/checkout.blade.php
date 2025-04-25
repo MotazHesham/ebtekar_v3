@@ -44,6 +44,7 @@
                     @endif
                     <form method="POST" action="{{ route('frontend.checkout') }}">
                         @csrf
+                        <input type="hidden" name="event_id" value="{{ $purchaseEventId }}" id="">
                         <div class="row">
                             <div class="col-lg-6 col-sm-12 col-xs-12">
                                 <div class="checkout-title">
@@ -227,7 +228,7 @@
                                             </div>
                                         </div>
                                         <div class="text-right">
-                                            <button type="submit" class="btn-normal btn" id="checkout-order">{{ __('frontend.checkout.pay') }}</button>
+                                            <button type="submit" class="btn-normal btn" id="checkout-order" data-event_id="{{$purchaseEventId}}">{{ __('frontend.checkout.pay') }}</button>
                                         </div>
                                     </div>
                                 </div>

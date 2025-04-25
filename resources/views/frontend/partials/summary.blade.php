@@ -83,6 +83,7 @@
             const cartProductIds = @json(session('cart') ? session('cart')->pluck('product_id') : []);
             metaPixelEvent({
                 event: 'Purchase',
+                event_id: $(this).data('event_id'),
                 content_type: 'product', 
                 content_ids: cartProductIds,  
                 value: '{{$total}}',

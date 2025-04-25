@@ -68,6 +68,7 @@ class CheckoutController extends Controller
 
     public function payment_select(){ 
         $site_settings = get_site_setting();
+        $purchaseEventId = uniqid('fb_p_', true);
         validateCart();
         
         if(!session('cart') || count(session('cart')) < 1){
@@ -89,6 +90,7 @@ class CheckoutController extends Controller
     
             $eventData = [
                 'event' => 'InitiateCheckout',
+                'event_id' => uniqid('fb_', true),
                 'content_ids' => $productsIds,
                 'content_type' => 'product', 
                 'value' => (float)$price,
@@ -101,7 +103,7 @@ class CheckoutController extends Controller
         }
         $countries = Country::where('status',1)->where('website',1)->get()->groupBy('type'); 
         $currency_symbol =  session("currency")->symbol ?? 'EGP';
-        return view('frontend.checkout',compact('countries','currency_symbol','eventData'));
+        return view('frontend.checkout',compact('countries','currency_symbol','eventData','purchaseEventId'));
     } 
 
     public function checkout(CheckoutOrder $request){  
@@ -295,6 +297,7 @@ class CheckoutController extends Controller
             
                     $eventData = [
                         'event' => 'Purchase',
+                        'event_id' => $request->event_id ?? null,
                         'content_ids' => $productsIds,
                         'content_type' => 'product', 
                         'value' => (float)$total_cost,

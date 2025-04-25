@@ -60,9 +60,15 @@ class FacebookService
         
         // Create CustomData
         $customData = (new CustomData())->setSearchString($contentData['search_string'] ?? null);
+
+        
+        // Generate a unique Event ID (you can customize this)
+        $eventId = $contentData['event_id'] ?? uniqid('fb_', true);
+
         // Create Event
         $event =  (new Event())
                     ->setEventName('Search')
+                    ->setEventId($eventId)
                     ->setEventTime(time())
                     ->setEventSourceUrl(request()->fullUrl())
                     ->setUserData($userDataObj)
@@ -90,9 +96,13 @@ class FacebookService
             ->setCurrency($this->validateCurrency($contentData['currency'] ?? 'EGP'))
             ->setNumItems($contentData['num_items'] ?? null);
 
+        // Generate a unique Event ID (you can customize this)
+        $eventId = $contentData['event_id'] ?? uniqid('fb_', true);
+
         // Create Event
         return (new Event())
             ->setEventName($eventName)
+            ->setEventId($eventId)
             ->setEventTime(time())
             ->setEventSourceUrl(request()->fullUrl())
             ->setUserData($userDataObj)

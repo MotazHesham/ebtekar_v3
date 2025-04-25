@@ -63,6 +63,7 @@ class ProductController extends Controller
         if($site_settings->fb_pixel_id){ 
             $eventData = [
                 'event' => 'ViewContent',
+                'event_id' => uniqid('fb_', true),
                 'content_name' => $product->name,
                 'content_ids' => [(string)$product->id],
                 'content_type' => 'product', 
@@ -314,7 +315,8 @@ class ProductController extends Controller
         
         if($site_settings->fb_pixel_id){
             $contentData = [
-                'search_string' => $search
+                'search_string' => $search,
+                'event_id' => uniqid('fb_', true),
             ];
             $userData = getUserDataForConersionApi();
             SendFacebookEventJob::dispatch($contentData, $site_settings->id,$userData,'search'); 

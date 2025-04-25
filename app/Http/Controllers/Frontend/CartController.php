@@ -65,6 +65,7 @@ class CartController extends Controller
         if($site_settings->fb_pixel_id){ 
             $contentData = [
                 'event' => 'AddToCart',
+                'event_id' => uniqid('fb_', true),
                 'content_name' => $product->name,
                 'content_ids' => [(string)$product->id],
                 'content_type' => 'product', 
