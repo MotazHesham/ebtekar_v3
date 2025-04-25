@@ -459,6 +459,7 @@ if (!function_exists('searchByPhone')) {
                 $userData['lastName'] =  hashedForConversionApi($data['lastName']); 
             }
 
+            $countryCode = Session::get('country_code') ?? null;
             if($data){
                 $countryCode = $data['countryCode'] ?? Session::get('country_code');
                 $userData['city'] = $data['city'] ? hash('sha256',strtolower(trim($data['city']))) : null;
