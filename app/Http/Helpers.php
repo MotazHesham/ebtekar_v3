@@ -433,7 +433,7 @@ if (!function_exists('searchByPhone')) {
         }
     }  
     if (!function_exists('getUserDataForConersionApi')) {
-        function getUserDataForConersionApi()
+        function getUserDataForConersionApi($user = null,$data = null)
         {  
             $userData = [
                 'ip' => request()->ip(),
@@ -444,14 +444,34 @@ if (!function_exists('searchByPhone')) {
 
             if(auth()->check()){ 
                 $user = User::find(auth()->id());
+            }
+            if($user){
                 $userData['external_id'] =  $user->id;
                 $userData['email'] =  $user->hashedEmail();
                 $userData['phone'] =  $user->hashedPhone();
                 $userData['firstName'] =  $user->hashedFirstName();
-                $userData['lastName'] =  $user->hashedLastName();
+                $userData['lastName'] =  $user->hashedLastName(); 
+            }elseif($data){
+                $userData['external_id'] =  $data['external_id'];
+                $userData['email'] =  hashedForConversionApi($data['email']);
+                $userData['phone'] =  hash('sha256', preg_replace('/\D/', '', $data['phone']));
+                $userData['firstName'] =  hashedForConversionApi($data['firstName']);
+                $userData['lastName'] =  hashedForConversionApi($data['lastName']); 
             }
+
+            if($data){
+                $countryCode = $data['countryCode'] ?? Session::get('country_code');
+                $userData['city'] = $data['city'] ? hash('sha256',strtolower(trim($data['city']))) : null;
+            }
+            $userData['countryCode'] = $countryCode ? hashedForConversionApi($countryCode) : null;
+
             return $userData;
         }
-    }  
-
+    }   
+    if (!function_exists('hashedForConversionApi')) {
+        function hashedForConversionApi($text = null)
+        {  
+            return $text ? hash("sha256",strtolower(trim( $text))) : null;
+        }
+    }
 }

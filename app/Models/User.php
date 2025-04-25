@@ -245,7 +245,7 @@ class User extends Authenticatable implements HasMedia
     {
         $Name = explode(' ',$this->name);
         if(isset($Name[0])){
-            return strtolower(trim(hash("sha256", $Name[0])));
+            return hashedForConversionApi($Name[0]); 
         }else{
             return null;
         }
@@ -254,7 +254,7 @@ class User extends Authenticatable implements HasMedia
     {
         $Name = explode(' ',$this->name);
         if(isset($Name[1])){
-            return strtolower(trim(hash("sha256", $Name[1])));
+            return hashedForConversionApi($Name[1]); 
         }else{
             return null;
         }
@@ -262,7 +262,7 @@ class User extends Authenticatable implements HasMedia
     public function hashedEmail()
     { 
         if($this->email){
-            return strtolower(trim(hash("sha256", $this->email)));
+            return hashedForConversionApi($this->email); 
         }else{
             return null;
         }

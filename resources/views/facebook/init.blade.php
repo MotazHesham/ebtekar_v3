@@ -1,3 +1,18 @@
+@php
+    $advancedMatching = auth()->check() ? [
+        'external_id' => auth()->id(),
+        'em' => auth()->user()->hashedEmail(),
+        'ph' => auth()->user()->hashedPhone(),
+        'fn' => auth()->user()->hashedFirstName(),
+        'ln' => auth()->user()->hashedLastName(),
+        'country' => hashedForConversionApi(session("country_code",'EG')),
+    ] : [];
+
+    $options = ['agent' => getFbp()];
+    if (getFbc()) {
+        $options['fbc'] = getFbc();
+    }
+@endphp
 <!-- Facebook Pixel Code -->
 <script>
     // Load Facebook Pixel asynchronously
@@ -11,21 +26,9 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     
     // Initialize Pixel with enhanced parameters
-    fbq('init', '{{ $pixelId }}', {
-        @if(auth()->check())
-            external_id: '{{ auth()->id() }}',
-            em: '{{ auth()->user()->hashedEmail() }}',
-            ph: '{{ auth()->user()->hashedPhone() }}',
-            fn: '{{ auth()->user()->hashedFirstName() }}',
-            ln: '{{ auth()->user()->hashedLastName() }}',
-        @endif
-    }, {
-        agent: "{{ getFbp() }}",
-        @if(getFbc())
-            fbc: "{{ getFbc() }}"
-        @endif
-    });
     
+    fbq('init', '{{ $pixelId }}', @json($advancedMatching), @json($options)); 
+
     // Track PageView immediately
     fbq('track', 'PageView');  
 </script>

@@ -301,7 +301,30 @@ class CheckoutController extends Controller
                         'currency' => 'EGP', 
                         'num_items' => (int) $numOfItems
                     ]; 
-                    $userData = getUserDataForConersionApi();
+                    $countryCode = null;
+                    $city = null;
+                    if($country->type == 'cities'){
+                        $countryCode = $country->code;
+                    }else{
+                        $countryCode = 'EG';
+                        $city =  transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $country->name);
+                    }
+                    if($user){
+                        $userData = getUserDataForConersionApi($user,[
+                            'countryCode' => $countryCode,
+                            'city' => $city,
+                        ]);
+                    }else{
+                        $userData = getUserDataForConersionApi(null,[
+                            'external_id' => rand(0,9999),
+                            'email' => $request->email,
+                            'phone' => $request->phone_number,
+                            'firstName' => $request->first_name,
+                            'lastName' => $request->last_name,
+                            'countryCode' => $countryCode,
+                            'city' => $city,
+                        ]); 
+                    }
                     SendFacebookEventJob::dispatch($eventData, $site_settings->id,$userData,'all'); 
                 }
 
