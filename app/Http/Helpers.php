@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Str;
 
 if (!function_exists('validateCart')) {
     function validateCart()
@@ -446,13 +447,13 @@ if (!function_exists('searchByPhone')) {
                 $user = User::find(auth()->id());
             }
             if($user){
-                $userData['external_id'] =  (string)$user->id;
+                $userData['external_id'] =  getHashedExternalIdForCAPI();
                 $userData['email'] =  $user->hashedEmail();
                 $userData['phone'] =  $user->hashedPhone();
                 $userData['firstName'] =  $user->hashedFirstName();
                 $userData['lastName'] =  $user->hashedLastName(); 
             }elseif($data){
-                $userData['external_id'] =  (string)$data['external_id'];
+                $userData['external_id'] =  getHashedExternalIdForCAPI();
                 $userData['email'] =  hashedForConversionApi($data['email']);
                 $userData['phone'] =  hash('sha256', preg_replace('/\D/', '', $data['phone']));
                 $userData['firstName'] =  hashedForConversionApi($data['firstName']);
@@ -479,34 +480,30 @@ if (!function_exists('searchByPhone')) {
     if (!function_exists('getHashedStateForCAPI')) {
         function getHashedStateForCAPI()
         {  
-            $state = Session::get('state_by_ip','Cairo');
-            if($state){
-                return hashedForConversionApi($state);
-            }else{
-                return null;
-            }
+            $state = Session::get('state_by_ip','Cairo'); 
+            return $state ? hashedForConversionApi($state) : null; 
         }
     }
     if (!function_exists('getHashedCityForCAPI')) {
         function getHashedCityForCAPI()
         {  
-            $city = Session::get('city_by_ip','Cairo');
-            if($city){
-                return hashedForConversionApi($city);
-            }else{
-                return null;
-            }
+            $city = Session::get('city_by_ip','Cairo'); 
+            return $city ?  hashedForConversionApi($city) : null; 
         }
     }
     if (!function_exists('getHashedCountryForCAPI')) {
         function getHashedCountryForCAPI()
         {  
-            $country = Session::get('country_code','EG');
-            if($country){
-                return hashedForConversionApi($country);
-            }else{
-                return null;
-            }
+            $country = Session::get('country_code','EG'); 
+            return $country ? hashedForConversionApi($country) : null; 
+        }
+    }
+    if (!function_exists('getHashedExternalIdForCAPI')) {
+        function getHashedExternalIdForCAPI()
+        {  
+            $external_id = auth()->check() ? auth()->id() : Session::get('external_id', 'rand_ext_' . Str::random(8));
+    
+            return $external_id ? hashedForConversionApi($external_id) : null;
         }
     }
 

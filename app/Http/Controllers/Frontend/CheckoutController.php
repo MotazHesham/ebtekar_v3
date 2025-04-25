@@ -320,8 +320,7 @@ class CheckoutController extends Controller
                             'city' => $city,
                         ]);
                     }else{
-                        $userData = getUserDataForConersionApi(null,[
-                            'external_id' => rand(0,9999),
+                        $userData = getUserDataForConersionApi(null,[ 
                             'email' => $request->email,
                             'phone' => $request->phone_number,
                             'firstName' => $request->first_name,

@@ -1,14 +1,19 @@
 @php
-    $advancedMatching = auth()->check() ? [
-        'external_id' => (string)auth()->id(),
-        'em' => auth()->user()->hashedEmail(),
-        'ph' => auth()->user()->hashedPhone(),
-        'fn' => auth()->user()->hashedFirstName(),
-        'ln' => auth()->user()->hashedLastName(),
+    $advancedMatching = [
+        'external_id' => getHashedExternalIdForCAPI(),
         'country' => getHashedCountryForCAPI(),
         'st' => getHashedStateForCAPI(),
         'ct' => getHashedCityForCAPI(),
-    ] : [];
+    ];
+
+    if (auth()->check()) {
+        $advancedMatching = array_merge($advancedMatching, [
+            'em' => auth()->user()->hashedEmail(),
+            'ph' => auth()->user()->hashedPhone(),
+            'fn' => auth()->user()->hashedFirstName(),
+            'ln' => auth()->user()->hashedLastName(),
+        ]);
+    }
 
     $options = ['agent' => getFbp()];
     if (getFbc()) {
