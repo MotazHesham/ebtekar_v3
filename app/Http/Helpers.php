@@ -446,27 +446,26 @@ if (!function_exists('searchByPhone')) {
                 $user = User::find(auth()->id());
             }
             if($user){
-                $userData['external_id'] =  $user->id;
+                $userData['external_id'] =  (string)$user->id;
                 $userData['email'] =  $user->hashedEmail();
                 $userData['phone'] =  $user->hashedPhone();
                 $userData['firstName'] =  $user->hashedFirstName();
                 $userData['lastName'] =  $user->hashedLastName(); 
             }elseif($data){
-                $userData['external_id'] =  $data['external_id'];
+                $userData['external_id'] =  (string)$data['external_id'];
                 $userData['email'] =  hashedForConversionApi($data['email']);
                 $userData['phone'] =  hash('sha256', preg_replace('/\D/', '', $data['phone']));
                 $userData['firstName'] =  hashedForConversionApi($data['firstName']);
                 $userData['lastName'] =  hashedForConversionApi($data['lastName']); 
             }
 
-            $countryCode = Session::get('country_code') ?? null;
             $userData['city'] = getHashedCityForCAPI();
             $userData['state'] = getHashedStateForCAPI();
+            $userData['countryCode'] = getHashedCountryForCAPI();
             if($data){
-                $countryCode = $data['countryCode'] ?? Session::get('country_code');
-                $userData['city'] = $data['city'] ? hash('sha256',strtolower(trim($data['city']))) : null;
+                $userData['countryCode'] = $data['countryCode'] ? hashedForConversionApi($data['countryCode']) : $userData['countryCode'];
+                $userData['city'] = $data['city'] ? hash('sha256',strtolower(trim($data['city']))) : $userData['city'];
             }
-            $userData['countryCode'] = $countryCode ? hashedForConversionApi($countryCode) : null;
             
             return $userData;
         }
@@ -494,6 +493,17 @@ if (!function_exists('searchByPhone')) {
             $city = Session::get('city_by_ip','Cairo');
             if($city){
                 return hashedForConversionApi($city);
+            }else{
+                return null;
+            }
+        }
+    }
+    if (!function_exists('getHashedCountryForCAPI')) {
+        function getHashedCountryForCAPI()
+        {  
+            $country = Session::get('country_code','EG');
+            if($country){
+                return hashedForConversionApi($country);
             }else{
                 return null;
             }

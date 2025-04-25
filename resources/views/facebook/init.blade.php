@@ -1,11 +1,11 @@
 @php
     $advancedMatching = auth()->check() ? [
-        'external_id' => auth()->id(),
+        'external_id' => (string)auth()->id(),
         'em' => auth()->user()->hashedEmail(),
         'ph' => auth()->user()->hashedPhone(),
         'fn' => auth()->user()->hashedFirstName(),
         'ln' => auth()->user()->hashedLastName(),
-        'country' => hashedForConversionApi(session("country_code",'EG')),
+        'country' => getHashedCountryForCAPI(),
         'st' => getHashedStateForCAPI(),
         'ct' => getHashedCityForCAPI(),
     ] : [];
