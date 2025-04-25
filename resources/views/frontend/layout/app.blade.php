@@ -561,7 +561,7 @@
                 finalEventData.value = data.value;
             } 
             if (data.event_id) {
-                finalEventData.eventID = data.event_id;
+                finalEventData.event_id = data.event_id;
             } 
             
             if (typeof fbq !== 'undefined') {
