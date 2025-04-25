@@ -94,8 +94,9 @@ class CheckoutController extends Controller
                 'content_ids' => $productsIds,
                 'content_type' => 'product', 
                 'value' => (float)$price,
-                'currency' => 'EGP', 
-                'num_items' => (int) $numOfItems
+                'currency' => 'egp', 
+                'num_items' => (int) $numOfItems,
+                'event_source_url' => url()->current(),
             ];
 
             $userData = getUserDataForConersionApi();
@@ -301,8 +302,9 @@ class CheckoutController extends Controller
                         'content_ids' => $productsIds,
                         'content_type' => 'product', 
                         'value' => (float)$total_cost,
-                        'currency' => 'EGP', 
-                        'num_items' => (int) $numOfItems
+                        'currency' => 'egp', 
+                        'num_items' => (int) $numOfItems,
+                        'event_source_url' => url()->current(),
                     ]; 
                     $countryCode = null;
                     $city = null;

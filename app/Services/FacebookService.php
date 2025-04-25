@@ -38,7 +38,7 @@ class FacebookService
         $this->sendEvent($event,$contentData['event']);
     } 
 
-    public function sendEventPageView($userData)
+    public function sendEventPageView($contentData,$userData)
     { 
         // Create UserData with enhanced matching parameters
         $userDataObj = $this->prepareUserData( $userData);  
@@ -47,6 +47,7 @@ class FacebookService
         $event =  (new Event())
                     ->setEventName('PageView')
                     ->setEventTime(time())
+                    ->setEventSourceUrl($contentData['event_source_url'] ?? request()->fullUrl())
                     ->setEventSourceUrl(request()->fullUrl())
                     ->setUserData($userDataObj) 
                     ->setActionSource(ActionSource::WEBSITE);
@@ -70,7 +71,7 @@ class FacebookService
                     ->setEventName('Search')
                     ->setEventId($eventId)
                     ->setEventTime(time())
-                    ->setEventSourceUrl(request()->fullUrl())
+                    ->setEventSourceUrl($contentData['event_source_url'] ?? request()->fullUrl())
                     ->setUserData($userDataObj)
                     ->setCustomData($customData)
                     ->setActionSource(ActionSource::WEBSITE);
@@ -104,7 +105,7 @@ class FacebookService
             ->setEventName($eventName)
             ->setEventId($eventId)
             ->setEventTime(time())
-            ->setEventSourceUrl(request()->fullUrl())
+            ->setEventSourceUrl($contentData['event_source_url'] ?? request()->fullUrl())
             ->setUserData($userDataObj)
             ->setCustomData($customData)
             ->setActionSource(ActionSource::WEBSITE);

@@ -34,7 +34,7 @@ class HomeController extends Controller
         $site_settings = get_site_setting();
         if($site_settings->fb_pixel_id){ 
             $userData = getUserDataForConersionApi();
-            SendFacebookEventJob::dispatch([], $site_settings->id,$userData,'pageview');  
+            SendFacebookEventJob::dispatch(['event_source_url' => url()->current()], $site_settings->id,$userData,'pageview');  
         }
         return response()->json(null,200);
     }

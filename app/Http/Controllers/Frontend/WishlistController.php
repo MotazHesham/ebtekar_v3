@@ -33,8 +33,9 @@ class WishlistController extends Controller
                 'content_ids' => [(string)$product->id],
                 'content_type' => 'product', 
                 'value' => is_numeric($product->unit_price) ? (float)$product->unit_price : 0,
-                'currency' => 'EGP',
-                'content_category' => $product->category->name ?? null
+                'currency' => 'egp',
+                'content_category' => $product->category->name ?? null,
+                'event_source_url' => url()->current(),
             ];
             session()->flash('eventData', $contentData); 
             $userData = getUserDataForConersionApi();

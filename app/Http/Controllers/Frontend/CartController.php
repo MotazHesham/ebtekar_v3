@@ -70,9 +70,10 @@ class CartController extends Controller
                 'content_ids' => [(string)$product->id],
                 'content_type' => 'product', 
                 'value' => is_numeric($product->unit_price) ? (float)$product->unit_price : 0,
-                'currency' => 'EGP',
+                'currency' => 'egp',
                 'content_category' => $product->category->name ?? null,
-                'num_items' => (int) $request->quantity
+                'num_items' => (int) $request->quantity,
+                'event_source_url' => url()->current(),
             ];
             session()->flash('eventData', $contentData);
             $userData = getUserDataForConersionApi();

@@ -45,7 +45,7 @@ class SendFacebookEventJob implements ShouldQueue
         }elseif($this->eventType == 'search'){  
             $facebookService->sendEventSearch( $this->contentData,$this->userData); 
         }elseif($this->eventType == 'pageview'){
-            $facebookService->sendEventPageView( $this->userData);  
+            $facebookService->sendEventPageView( $this->contentData,$this->userData);  
         }
     }
 }

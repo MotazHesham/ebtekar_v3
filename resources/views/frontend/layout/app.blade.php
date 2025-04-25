@@ -559,13 +559,10 @@
             } 
             if (data.value) {
                 finalEventData.value = data.value;
-            } 
-            if (data.event_id) {
-                finalEventData.eventId = data.event_id;
-            } 
+            }  
             
             if (typeof fbq !== 'undefined') {
-                fbq('track', data.event, finalEventData);
+                fbq('track', data.event, finalEventData, {eventID: data.event_id});
                 console.log('FB Pixel event tracked:', {
                     event: data.event,
                     data: finalEventData
