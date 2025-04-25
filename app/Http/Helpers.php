@@ -408,6 +408,8 @@ if (!function_exists('searchByPhone')) {
             if (!request()->cookie('_fbp')) {
                 cookie()->queue('_fbp', $fbp, 60 * 24 * 90); // 90 days
             }
+
+            return $fbp;
         }
     }
     if (!function_exists('getFbc')) {
