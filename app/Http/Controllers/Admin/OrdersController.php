@@ -29,6 +29,36 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrdersController extends Controller
 {
+    public function abondoned(Request $request){ 
+        
+        $phone = null;
+        $client_name = null;
+        $order_num = null; 
+
+
+        $orders = Order::with(['orderDetails','shipping_country','user','delivery_man'])
+                        ->withoutGlobalScope('completed')
+                        ->where('completed',0); 
+
+        if ($request->client_name != null){
+            $orders = $orders->where('client_name', 'like', '%'.$request->client_name.'%');
+            $client_name = $request->client_name;
+        }
+        if ($request->order_num != null){
+            $orders = $orders->where('order_num', 'like', '%'.$request->order_num.'%');
+            $order_num = $request->order_num;
+        } 
+        if ($request->phone != null){
+            global $phone;
+            $phone = $request->phone;
+            $orders = $orders->where(function ($query) {
+                                    $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                            ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                });
+        } 
+        $orders = $orders->orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.orders.abandoned', compact('orders','phone','order_num','client_name')); 
+    }
     public function upload_fedex(Request $request){
 
         $now_time = time();
@@ -441,10 +471,11 @@ class OrdersController extends Controller
         return redirect()->route('admin.orders.index');
     }
 
-    public function show(Order $order)
+    public function show($id)
     {
         abort_if(Gate::denies('order_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $order = Order::withoutGlobalScope('completed')->findOrFail($id);
         $order->load('user','orderDetails.product', 'shipping_country', 'designer', 'preparer', 'manufacturer', 'shipmenter', 'delivery_man');
 
         $site_settings = get_site_setting(); 

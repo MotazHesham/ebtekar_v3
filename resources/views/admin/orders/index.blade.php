@@ -8,6 +8,15 @@
                 {{ __('global.extra.upload_fedex') }}
             </a>
         </div>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-danger" href="{{ route('admin.orders.abondoned')}}">
+                Abandoned Checkout
+            </a>
+        </div>
     </div>
     
 
