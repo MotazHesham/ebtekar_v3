@@ -315,6 +315,7 @@ class ProductController extends Controller
         $eventData = null;
         if($site_settings->fb_pixel_id){
             $eventData = [
+                'event' => 'Search',
                 'search_string' => $search,
                 'event_id' => uniqid('fb_', true),
             ];
