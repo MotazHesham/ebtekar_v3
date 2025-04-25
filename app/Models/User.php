@@ -256,7 +256,7 @@ class User extends Authenticatable implements HasMedia
         if(isset($Name[1])){
             return hashedForConversionApi($Name[1]); 
         }else{
-            return null;
+            return hashedForConversionApi('LN');
         }
     }
     public function hashedEmail()

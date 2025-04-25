@@ -141,7 +141,8 @@ class FacebookService
             ->setFirstName($userData['firstName'] ?? null)
             ->setLastName($userData['lastName'] ?? null)
             ->setCountryCode($userData['countryCode'] ?? null)
-            ->setCity($userData['city'] ?? null);
+            ->setCity($userData['city'] ?? null)
+            ->setState($userData['state'] ?? null);
         return $userDataObj;
     } 
     protected function validateValue($value)

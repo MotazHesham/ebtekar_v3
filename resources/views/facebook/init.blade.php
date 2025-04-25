@@ -6,6 +6,7 @@
         'fn' => auth()->user()->hashedFirstName(),
         'ln' => auth()->user()->hashedLastName(),
         'country' => hashedForConversionApi(session("country_code",'EG')),
+        'st' => getHashedStateForCAPI(),
     ] : [];
 
     $options = ['agent' => getFbp()];
