@@ -312,16 +312,16 @@ class ProductController extends Controller
         }
         $products = $products->orderBy('created_at','desc')->paginate($pagination);
 
-        
+        $eventData = null;
         if($site_settings->fb_pixel_id){
-            $contentData = [
+            $eventData = [
                 'search_string' => $search,
                 'event_id' => uniqid('fb_', true),
             ];
             $userData = getUserDataForConersionApi();
-            SendFacebookEventJob::dispatch($contentData, $site_settings->id,$userData,'search'); 
+            SendFacebookEventJob::dispatch($eventData, $site_settings->id,$userData,'search'); 
         }
 
-        return view('frontend.products',compact('products','title','category','sub_category','sub_sub_category','search','meta_title','meta_description','attributes','selected_attributes','sort_by','all_colors','selected_colors','pagination'));
+        return view('frontend.products',compact('products','title','eventData','category','sub_category','sub_sub_category','search','meta_title','meta_description','attributes','selected_attributes','sort_by','all_colors','selected_colors','pagination'));
     } 
 }

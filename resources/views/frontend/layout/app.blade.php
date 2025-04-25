@@ -513,17 +513,6 @@
             });
         } 
     </script> 
-    <script>
-        
-        @if(request('search'))  
-            document.addEventListener('DOMContentLoaded', function () {
-                metaPixelEvent({ 
-                    search_string: '{{$search}}', 
-                    event: 'Search'
-                });
-            });
-        @endif 
-    </script>
     @if(session('eventData'))
         <script>
             document.addEventListener('DOMContentLoaded', function () {

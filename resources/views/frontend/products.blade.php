@@ -264,4 +264,12 @@
             $('#search-form').submit();
         }
     </script>
+    <script>
+        
+        @if(isset($eventData))
+            document.addEventListener('DOMContentLoaded', function () { 
+                metaPixelEvent(@json($eventData)); 
+            });
+        @endif 
+    </script>
 @endsection
