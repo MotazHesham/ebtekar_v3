@@ -460,12 +460,13 @@ if (!function_exists('searchByPhone')) {
             }
 
             $countryCode = Session::get('country_code') ?? null;
+            $userData['city'] = getHashedCityForCAPI();
+            $userData['state'] = getHashedStateForCAPI();
             if($data){
                 $countryCode = $data['countryCode'] ?? Session::get('country_code');
                 $userData['city'] = $data['city'] ? hash('sha256',strtolower(trim($data['city']))) : null;
             }
             $userData['countryCode'] = $countryCode ? hashedForConversionApi($countryCode) : null;
-            $userData['state'] = getHashedStateForCAPI();
             
             return $userData;
         }
@@ -482,6 +483,17 @@ if (!function_exists('searchByPhone')) {
             $state = Session::get('state_by_ip','Cairo');
             if($state){
                 return hashedForConversionApi($state);
+            }else{
+                return null;
+            }
+        }
+    }
+    if (!function_exists('getHashedCityForCAPI')) {
+        function getHashedCityForCAPI()
+        {  
+            $city = Session::get('city_by_ip','Cairo');
+            if($city){
+                return hashedForConversionApi($city);
             }else{
                 return null;
             }

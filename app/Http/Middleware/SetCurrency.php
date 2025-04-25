@@ -32,12 +32,14 @@ class SetCurrency
             // Set default values if no info found
             $country_code = $user_info_by_ip->countryCode ?? 'EG'; 
             $state = $user_info_by_ip->regionName ?? 'Cairo'; 
+            $city = $user_info_by_ip->cityName ?? 'Cairo'; 
 
             // Store country and state in session
             Session::put('country_code', $country_code);
             Session::put('state_by_ip', $state);
+            Session::put('city_by_ip', $city);
         } 
-        
+
         // Get the country code from the session (default to 'EG' if not set)
         $country_code = Session::get('country_code', 'EG'); 
 
