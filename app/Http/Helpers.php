@@ -406,9 +406,10 @@ if (!function_exists('searchByPhone')) {
             if ($fbp = request()->cookie('_fbp')) {
                 return $fbp;
             }
-    
+            
+
             // 2. Generate new FBP if doesn't exist
-            $fbp = 'fb.1.' . time() . '.' . bin2hex(random_bytes(6)); // More reliable than uniqid()
+            $fbp = 'fb.1.' . getSafeEventTime() . '.' . bin2hex(random_bytes(6)); // More reliable than uniqid()
             
             // Set cookie with proper attributes
             cookie()->queue(
@@ -432,13 +433,9 @@ if (!function_exists('searchByPhone')) {
             }
             
             // 2. Check for fbclid parameter
-            if ($fbclid = request()->input('fbclid')) {
-                $timestamp = time(); // Current UNIX timestamp
+            if ($fbclid = request()->input('fbclid')) { 
                 
-                // Validate timestamp isn't in future (just in case)
-                $timestamp = min($timestamp, time());
-                
-                $fbc = 'fb.1.' . $timestamp . '.' . $fbclid;
+                $fbc = 'fb.1.' . getSafeEventTime() . '.' . $fbclid;
                 
                 // Set cookie with proper attributes
                 cookie()->queue(
@@ -527,6 +524,12 @@ if (!function_exists('searchByPhone')) {
             $external_id = auth()->check() ? auth()->id() : Session::get('external_id', 'rand_ext_' . Str::random(8));
     
             return $external_id ? hashedForConversionApi($external_id) : null;
+        }
+    }
+    if (!function_exists('getSafeEventTime')) {
+        function getSafeEventTime()
+        {  
+            return time() - 5;
         }
     }
 
