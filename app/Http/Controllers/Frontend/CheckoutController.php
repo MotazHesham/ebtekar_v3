@@ -180,7 +180,7 @@ class CheckoutController extends Controller
                 $order->symbol = $currency->symbol;
                 $order->exchange_rate = $currency->exchange_rate;
 
-                if($site_settings->fb_pixel_id){
+                if($site_settings->id == 2){
                     $str = 'ertgal-';
                 }elseif($site_settings->id == 3){
                     $str = 'figures-';
