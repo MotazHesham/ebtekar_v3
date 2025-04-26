@@ -402,39 +402,60 @@ if (!function_exists('searchByPhone')) {
     if (!function_exists('getFbp')) {
         function getFbp()
         {
-            $fbp = request()->cookie('_fbp') ?? 'fb.1.' . time() . '.' . uniqid();
-            
-            // Set cookies
-            if (!request()->cookie('_fbp')) {
-                cookie()->queue('_fbp', $fbp, 60 * 24 * 90); // 90 days
+            // 1. Try to get existing cookie first
+            if ($fbp = request()->cookie('_fbp')) {
+                return $fbp;
             }
-
+    
+            // 2. Generate new FBP if doesn't exist
+            $fbp = 'fb.1.' . time() . '.' . bin2hex(random_bytes(6)); // More reliable than uniqid()
+            
+            // Set cookie with proper attributes
+            cookie()->queue(
+                name: '_fbp',
+                value: $fbp,
+                minutes: 60 * 24 * 90, // 90 days
+                secure: true,           // Required for HTTPS
+                httpOnly: true,         // Better security
+                sameSite: 'Lax'         // Recommended for tracking cookies
+            );
+    
             return $fbp;
         }
     }
     if (!function_exists('getFbc')) {
         function getFbc()
-        { 
-            $fbc = null;
-            
-            // 1. Check for existing cookie
-            if (request()->cookie('_fbc')) {
-                $fbc = request()->cookie('_fbc');
+        {
+            // 1. Check for existing cookie first
+            if ($fbc = request()->cookie('_fbc')) {
+                return $fbc;
             }
             
-            // 2. Check for fbclid parameter (from Facebook ads)
+            // 2. Check for fbclid parameter
             if ($fbclid = request()->input('fbclid')) {
-                $fbc = 'fb.1.' . time() . '.' . $fbclid;
+                $timestamp = time(); // Current UNIX timestamp
+                
+                // Validate timestamp isn't in future (just in case)
+                $timestamp = min($timestamp, time());
+                
+                $fbc = 'fb.1.' . $timestamp . '.' . $fbclid;
+                
+                // Set cookie with proper attributes
+                cookie()->queue(
+                    name: '_fbc',
+                    value: $fbc,
+                    minutes: 60 * 24 * 90, // 90 days
+                    secure: true, // For HTTPS
+                    httpOnly: true,
+                    sameSite: 'Lax'
+                );
+                
+                return $fbc;
             }
             
-            if (!request()->cookie('_fbc') && $fbc) {
-                cookie()->queue('_fbc', $fbc, 60 * 24 * 90); // 90 days
-            }
-
-            // 3. Return null if no FBC available
-            return $fbc ?? null;
+            return null;
         }
-    }  
+    }
     if (!function_exists('getUserDataForConersionApi')) {
         function getUserDataForConersionApi($user = null,$data = null)
         {  
