@@ -48,7 +48,7 @@
     Dropzone.options.photoDropzone = {
     url: '{{ route('admin.socials.storeMedia') }}',
     maxFilesize: 2, // MB
-    acceptedFiles: '.jpeg,.jpg,.png,.gif',
+    acceptedFiles: '.jpeg,.jpg,.png,.gif,.webp',
     maxFiles: 1,
     addRemoveLinks: true,
     headers: {

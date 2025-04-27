@@ -30,10 +30,12 @@
   $('.slide-1 ').slick({
     autoplay: true,
     autoplaySpeed: 2500,
+    lazyLoad: 'ondemand', // Use Slick's built-in lazy loading
   });
   $('.slide-1-section').slick({
     dots: false,
     infinite: false,
+    lazyLoad: 'ondemand', // Use Slick's built-in lazy loading
     speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,

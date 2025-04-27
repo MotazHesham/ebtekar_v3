@@ -615,7 +615,7 @@
         Dropzone.options.photosDropzone = {
             url: '{{ route('admin.products.storeMedia') }}',
             maxFilesize: 4, // MB
-            acceptedFiles: '.jpeg,.jpg,.png,.gif',
+            acceptedFiles: '.jpeg,.jpg,.png,.gif,.webp',
             addRemoveLinks: true,
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}"

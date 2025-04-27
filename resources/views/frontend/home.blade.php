@@ -7,8 +7,8 @@
             @foreach ($sliders as $slider)
                 <a href="{{ $slider->link }}" target="_blanc">
                     <div class="slide-main">
-                        <img src="{{ $slider->photo->getUrl('preview2') }}" class="img-fluid bg-img" alt="ebtekar-slider"
-                            style="width: 100%">
+                        <img src="{{ $slider->photo->getUrl() }}" class="img-fluid bg-img" alt="ebtekar-slider"
+                            style="width: 100%" onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
                     </div>
                 </a>
             @endforeach
@@ -42,7 +42,7 @@
                                     <div class="img-wrapper" style="border: 0; background-color: #ff000000;">
                                         <a href="{{ route('frontend.products.category', $home_category->category->slug) }}">
                                             <img src="{{ $home_category->category ? $home_category->category->banner->getUrl() : '' }}"
-                                                alt="category  " class="">
+                                                alt="category  " class=""  onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
                                         </a>
                                     </div>
                                     <a href="{{ route('frontend.products.category', $home_category->category->slug) }}"
@@ -67,7 +67,7 @@
                         <li> 
                             <span onclick="getfeturedProducts('{{$freatured_category->id}}')" style="cursor: pointer"> 
                                 <img src="{{ $freatured_category->icon ? $freatured_category->icon->getUrl('preview') : '' }}" alt="category"
-                                class="" heigh="30" width="30">
+                                class="" heigh="30" width="30"  onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
                                 &nbsp;
                                 {{ $freatured_category->name }} 
                             </span>

@@ -92,7 +92,7 @@
     Dropzone.options.bannerDropzone = {
     url: '{{ route('admin.categories.storeMedia') }}',
     maxFilesize: 2, // MB
-    acceptedFiles: '.jpeg,.jpg,.png,.gif',
+    acceptedFiles: '.jpeg,.jpg,.png,.gif,.webp',
     maxFiles: 1,
     addRemoveLinks: true,
     headers: {
@@ -147,7 +147,7 @@
     Dropzone.options.iconDropzone = {
     url: '{{ route('admin.categories.storeMedia') }}',
     maxFilesize: 2, // MB
-    acceptedFiles: '.jpeg,.jpg,.png,.gif',
+    acceptedFiles: '.jpeg,.jpg,.png,.gif,.webp',
     maxFiles: 1,
     addRemoveLinks: true,
     headers: {
