@@ -11,7 +11,7 @@
                             <div class="footer-contant">
                                 <div class="footer-logo">
                                     <a href="{{ route('home') }}">
-                                        <img src="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" class="img-fluid"
+                                        <img loading="lazy" src="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" class="img-fluid"
                                             alt="logo" style="height: 115px">
                                     </a>
                                 </div>

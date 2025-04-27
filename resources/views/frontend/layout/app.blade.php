@@ -34,7 +34,12 @@
 
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main-new.min.css') }}" media="screen" id="color"> 
+    
+    @if(isset($home_css))
+        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main-home.min.css') }}" media="screen" id="color"> 
+    @else 
+        <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main-new.min.css') }}" media="screen" id="color"> 
+    @endif
 
     <link rel="stylesheet" href="{{ asset('dashboard_offline/css/select2.min.css') }}">
     <style>

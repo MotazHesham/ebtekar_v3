@@ -60,7 +60,8 @@ class HomeController extends Controller
         $first_featured_category_id = $featured_categories[0]->id ?? 0;
         
         $disable_subscribe = true;
-        return view('frontend.home', compact('sliders','disable_subscribe',  'home_categories', 'banners_1', 'featured_categories','first_featured_category_id'));
+        $home_css = true;
+        return view('frontend.home', compact('sliders','disable_subscribe','home_css',  'home_categories', 'banners_1', 'featured_categories','first_featured_category_id'));
     }
 
     public function new_products(){
