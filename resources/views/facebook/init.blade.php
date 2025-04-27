@@ -15,7 +15,14 @@
         ]);
     }
 
-    $options = ['agent' => getFbp()];
+    $options = [
+        'agent' => getFbp(),
+        'debug' => config('app.debug'), // Enable debug in local/staging
+        'cookie' => [
+            'domain' => '.' . parse_url(str_replace('public','',config('app.url')), PHP_URL_HOST), // Root domain cookie
+            'sameSite' => 'Lax' // Compliant with modern browsers
+        ]
+    ];
     if (getFbc()) {
         $options['fbc'] = getFbc();
     }
@@ -81,9 +88,10 @@
                 data: finalEventData
             });
         } else {
-            console.warn('Facebook Pixel not loaded');
+            // Queue event if pixel not loaded yet
+            fbq.queue.push(['track', data.event, finalEventData, {eventID: data.event_id}]);
         } 
-    };
+    }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
 </script>
 
 <!-- Noscript fallback -->
