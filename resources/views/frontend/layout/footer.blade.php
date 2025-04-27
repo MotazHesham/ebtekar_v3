@@ -74,38 +74,43 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="footer-box">
-                            <div class="footer-title">
-                                <h5>{{ __('frontend.footer.subscribe') }} </h5>
-                            </div>
-                            <div class="footer-contant">
-                                <div class="newsletter-second">
-                                    <form action="{{ route('frontend.subscribe') }}" method="POST">
-                                        @csrf
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input type="text" name="name" class="form-control"
-                                                    placeholder="{{ __('frontend.footer.name') }}">
-                                                <span class="input-group-text"><i class="ti-user"></i></span>
+                        @if(!isset($disable_subscribe))
+    
+                            <script src="https://www.google.com/recaptcha/api.js"></script>
+                            
+                            <div class="footer-box">
+                                <div class="footer-title">
+                                    <h5>{{ __('frontend.footer.subscribe') }} </h5>
+                                </div>
+                                <div class="footer-contant">
+                                    <div class="newsletter-second">
+                                        <form action="{{ route('frontend.subscribe') }}" method="POST">
+                                            @csrf
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input type="text" name="name" class="form-control"
+                                                        placeholder="{{ __('frontend.footer.name') }}">
+                                                    <span class="input-group-text"><i class="ti-user"></i></span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input type="email" name="email" class="form-control"
-                                                    placeholder="{{ __('frontend.footer.email') }}">
-                                                <span class="input-group-text"><i class="ti-email"></i></span>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input type="email" name="email" class="form-control"
+                                                        placeholder="{{ __('frontend.footer.email') }}">
+                                                    <span class="input-group-text"><i class="ti-email"></i></span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        @include('partials.recaptcha')
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-solid btn-sm"> 
-                                                {{ __('frontend.footer.subscribe_now') }}
-                                            </button>
-                                        </div>
-                                    </form>
+                                            @include('partials.recaptcha')
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-solid btn-sm"> 
+                                                    {{ __('frontend.footer.subscribe_now') }}
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

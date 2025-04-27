@@ -58,7 +58,9 @@ class HomeController extends Controller
         });
         $featured_categories  = Category::where('website_setting_id', $site_settings->id)->where('published', 1)->where('featured', 1)->with('media')->get();
         $first_featured_category_id = $featured_categories[0]->id ?? 0;
-        return view('frontend.home', compact('sliders',  'home_categories', 'banners_1', 'featured_categories','first_featured_category_id'));
+        
+        $disable_subscribe = true;
+        return view('frontend.home', compact('sliders','disable_subscribe',  'home_categories', 'banners_1', 'featured_categories','first_featured_category_id'));
     }
 
     public function new_products(){
