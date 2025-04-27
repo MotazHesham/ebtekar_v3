@@ -17,22 +17,7 @@
     @yield('meta')
     <!--icons-->
     <link rel="icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon">
-
-    <!--Google font-->
-    <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+    <link rel="shortcut icon" href="{{ $site_settings->logo ? $site_settings->logo->getUrl() : '' }}" type="image/x-icon"> 
 
     <!-- icons fonts-->
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/font-awesome.min.css') }}">
@@ -49,7 +34,7 @@
 
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main.css') }}" media="screen" id="color"> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main.min.css') }}" media="screen" id="color"> 
 
     <link rel="stylesheet" href="{{ asset('dashboard_offline/css/select2.min.css') }}">
     <style>
@@ -115,7 +100,7 @@
     <!-- loader start -->
     <div class="loader-wrapper">
         <div>
-            <img src="{{  $site_settings->logo ? $site_settings->logo->getUrl('thumb') : '' }}" alt="loader">
+            <img loading="lazy" src="{{  $site_settings->logo ? $site_settings->logo->getUrl('thumb') : '' }}" alt="loader">
         </div>
     </div>
     <!-- loader end -->

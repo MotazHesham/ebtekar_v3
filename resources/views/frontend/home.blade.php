@@ -1,5 +1,10 @@
 @extends('frontend.layout.app')
-
+@section('styles') 
+    @php
+        $firstSliderImage = $sliders->first() && $sliders->first()->photo ? $sliders->first()->photo->getUrl() : null;
+    @endphp
+    <link rel="preload" as="image" href="{{ $firstSliderImage }}" fetchpriority="high">
+@endsection
 @section('content')
     <!--home slider start-->
     <section class="furniture-slide" style="direction: ltr;">
@@ -7,8 +12,8 @@
             @foreach ($sliders as $slider)
                 <a href="{{ $slider->link }}" target="_blanc">
                     <div class="slide-main">
-                        <img src="{{ $slider->photo->getUrl() }}" class="img-fluid bg-img" alt="ebtekar-slider"
-                            style="width: 100%" onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
+                        <img src="{{ $slider->photo->getUrl() }}" class="img-fluid bg-img" alt="ebtekar-slider" 
+                            style="width: 100%" width="1200" height="600" onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
                     </div>
                 </a>
             @endforeach
@@ -41,7 +46,7 @@
                                 <div class="category-contain">
                                     <div class="img-wrapper" style="border: 0; background-color: #ff000000;">
                                         <a href="{{ route('frontend.products.category', $home_category->category->slug) }}">
-                                            <img src="{{ $home_category->category ? $home_category->category->banner->getUrl() : '' }}"
+                                            <img loading="lazy"  src="{{ $home_category->category ? $home_category->category->banner->getUrl() : '' }}"
                                                 alt="category  " class=""  onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
                                         </a>
                                     </div>
@@ -66,7 +71,7 @@
                     @foreach ($featured_categories as $key => $freatured_category) 
                         <li> 
                             <span onclick="getfeturedProducts('{{$freatured_category->id}}')" style="cursor: pointer"> 
-                                <img src="{{ $freatured_category->icon ? $freatured_category->icon->getUrl('preview') : '' }}" alt="category"
+                                <img loading="lazy"  src="{{ $freatured_category->icon ? $freatured_category->icon->getUrl('preview') : '' }}" alt="category"
                                 class="" heigh="30" width="30"  onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
                                 &nbsp;
                                 {{ $freatured_category->name }} 
@@ -91,7 +96,7 @@
                     <div class="col-md-6 ">
                         <div class="collection-banner-main banner-12 banner-style3 text-center p-right">
                             <div class="collection-img">
-                                <img src="{{ $banner->photo->getUrl() }}" class="img-fluid bg-img " alt="banner">
+                                <img loading="lazy"  src="{{ $banner->photo->getUrl() }}" class="img-fluid bg-img " alt="banner">
                             </div>
                             <div class="collection-banner-contain  ">
                                 <div>
