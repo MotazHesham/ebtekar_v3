@@ -34,7 +34,7 @@
 
     <!-- Theme css --> 
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/'. $site_settings->css_file_name) }}" media="screen" id="color"> 
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main.min.css') }}" media="screen" id="color"> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/assets/css/color-main-new.min.css') }}" media="screen" id="color"> 
 
     <link rel="stylesheet" href="{{ asset('dashboard_offline/css/select2.min.css') }}">
     <style>
@@ -62,11 +62,11 @@
 
     @if(app()->isProduction() && $site_settings->tag_manager ) 
         <!-- Google Tag Manager -->
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        {{-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','{{ $site_settings->tag_manager }}');</script>
+            })(window,document,'script','dataLayer','{{ $site_settings->tag_manager }}');</script> --}}
         <!-- End Google Tag Manager --> 
     @endif
 
@@ -92,8 +92,8 @@
     
     @if(app()->isProduction() && $site_settings->tag_manager ) 
         <!-- Google Tag Manager (noscript) -->
-            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $site_settings->tag_manager }}"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+            {{-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $site_settings->tag_manager }}"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> --}}
         <!-- End Google Tag Manager (noscript) -->
     @endif
 

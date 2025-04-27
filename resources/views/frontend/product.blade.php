@@ -37,6 +37,122 @@
     <meta property="og:site_name" content="{{ $site_settings->site_name }}" />
     <meta property="og:price:amount" content="{{ $product->calc_price_as_text() }}" /> 
 @endsection  
+
+@section('styles')
+    <style>
+        
+.product-slick img,
+.rtl-product-slick img,
+.product-right-slick img,
+.rtl-product-right-slick img {
+  width: 100%; }
+
+.product-slick .slick-prev,
+.product-slick .slick-next,
+.rtl-product-slick .slick-prev,
+.rtl-product-slick .slick-next,
+.product-right-slick .slick-prev,
+.product-right-slick .slick-next,
+.rtl-product-right-slick .slick-prev,
+.rtl-product-right-slick .slick-next {
+  opacity: 0;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  margin-top: -10px; }
+  .product-slick .slick-prev:before,
+  .product-slick .slick-next:before,
+  .rtl-product-slick .slick-prev:before,
+  .rtl-product-slick .slick-next:before,
+  .product-right-slick .slick-prev:before,
+  .product-right-slick .slick-next:before,
+  .rtl-product-right-slick .slick-prev:before,
+  .rtl-product-right-slick .slick-next:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    opacity: 1;
+    color: black;
+    background-color: #ffffff;
+    border-radius: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
+
+.product-slick .slick-next,
+.rtl-product-slick .slick-next,
+.product-right-slick .slick-next,
+.rtl-product-right-slick .slick-next {
+  right: 1px; }
+  .product-slick .slick-next:before,
+  .rtl-product-slick .slick-next:before,
+  .product-right-slick .slick-next:before,
+  .rtl-product-right-slick .slick-next:before {
+    content: "\f105"; }
+
+.product-slick .slick-prev,
+.rtl-product-slick .slick-prev,
+.product-right-slick .slick-prev,
+.rtl-product-right-slick .slick-prev {
+  left: 1px;
+  z-index: 1; }
+  .product-slick .slick-prev:before,
+  .rtl-product-slick .slick-prev:before,
+  .product-right-slick .slick-prev:before,
+  .rtl-product-right-slick .slick-prev:before {
+    content: "\f104"; }
+
+.product-slick .slick-slide > div,
+.rtl-product-slick .slick-slide > div,
+.product-right-slick .slick-slide > div,
+.rtl-product-right-slick .slick-slide > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 15px; }
+
+.product-slick:hover .slick-prev,
+.product-slick:hover .slick-next,
+.rtl-product-slick:hover .slick-prev,
+.rtl-product-slick:hover .slick-next,
+.product-right-slick:hover .slick-prev,
+.product-right-slick:hover .slick-next,
+.rtl-product-right-slick:hover .slick-prev,
+.rtl-product-right-slick:hover .slick-next {
+  opacity: 1;
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease; }
+  .product-slick:hover .slick-prev:before,
+  .product-slick:hover .slick-next:before,
+  .rtl-product-slick:hover .slick-prev:before,
+  .rtl-product-slick:hover .slick-next:before,
+  .product-right-slick:hover .slick-prev:before,
+  .product-right-slick:hover .slick-next:before,
+  .rtl-product-right-slick:hover .slick-prev:before,
+  .rtl-product-right-slick:hover .slick-next:before {
+    opacity: 1; }
+
+.product-slick:hover .slick-next,
+.rtl-product-slick:hover .slick-next,
+.product-right-slick:hover .slick-next,
+.rtl-product-right-slick:hover .slick-next {
+  right: 20px; }
+
+.product-slick:hover .slick-prev,
+.rtl-product-slick:hover .slick-prev,
+.product-right-slick:hover .slick-prev,
+.rtl-product-right-slick:hover .slick-prev {
+  left: 20px; }
+    </style>
+@endsection
 @section('content') 
 
     {{-- this is for share product in facebook --}}
@@ -97,7 +213,7 @@
                         <div class="product-slick no-arrow"> 
                             @foreach ($product->photos as $key => $media)
                                 <div><img src="{{ $media->getUrl() }}" alt="{{ $product->name }}"
-                                        class="img-fluid  image_zoom_cls-{{ $key }}"></div>
+                                        class="img-fluid  image_zoom_cls-{{ $key }}"  onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';"></div>
                             @endforeach 
                         </div>
                         <div class="row">
@@ -105,7 +221,7 @@
                                 <div class="slider-nav"> 
                                     @foreach ($product->photos as $key => $media)
                                         <div><img src="{{ $media->getUrl('preview') }}" alt="{{ $product->name }}"
-                                                class="img-fluid  image_zoom_cls-{{ $key }}"></div>
+                                                class="img-fluid  image_zoom_cls-{{ $key }}"  onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';"></div>
                                     @endforeach 
                                 </div>
                             </div>
