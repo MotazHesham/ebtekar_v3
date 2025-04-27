@@ -298,7 +298,7 @@
     <script src="{{ asset('frontend/assets/js/jquery-3.3.1.min.js') }}"></script>
 
     <!-- slick js-->
-    <script src="{{ asset('frontend/assets/js/slick.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/slick.min.js') }}" defer></script>
 
 
 
@@ -323,7 +323,7 @@
     <script src="{{ asset('frontend/assets/js/bootstrap-notify.min.js') }}"></script>
 
     <!-- Theme js-->
-    <script   src="{{ asset('frontend/assets/js/script.min.js') }}"></script>
+    <script   src="{{ asset('frontend/assets/js/script.min.js') }}" defer></script>
     <script   src="{{ asset('frontend/assets/js/modal.js') }}"></script>
 
 
