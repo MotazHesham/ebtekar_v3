@@ -9,12 +9,12 @@
         <div class="product-imgbox">
             <div class="product-front">
                 <a href="{{ route('frontend.product', $product->slug) }}">
-                    <img src="{{ $front_image }}" class="img-fluid" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
+                    <img @if(isset($lazyloading)) loading="lazy" @endif src="{{ $front_image }}" class="img-fluid" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
                 </a>
             </div>
             <div class="product-back">
                 <a href="{{ route('frontend.product', $product->slug) }}">
-                    <img src="{{ $back_image }}" class="img-fluid" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
+                    <img @if(isset($lazyloading)) loading="lazy" @endif src="{{ $back_image }}" class="img-fluid" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';">
                 </a>
             </div>
             <div class="product-icon icon-inline">

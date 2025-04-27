@@ -6,7 +6,7 @@
             <div class="col pr-0">
                 <div class="product-slide-7 product-m no-arrow">
                     @foreach ($best_selling_products as $product) 
-                        @include('frontend.partials.single-product',['product' => $product, 'preview' => 'preview2'])
+                        @include('frontend.partials.single-product',['product' => $product, 'preview' => 'preview2','lazyloading' => true])
                     @endforeach
                 </div>
             </div>
