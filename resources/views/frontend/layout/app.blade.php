@@ -103,11 +103,11 @@
     @endif
 
     <!-- loader start -->
-    <div class="loader-wrapper">
+    {{-- <div class="loader-wrapper">
         <div>
             <img loading="lazy" src="{{  $site_settings->logo ? $site_settings->logo->getUrl('thumb') : '' }}" alt="loader">
         </div>
-    </div>
+    </div> --}}
     <!-- loader end -->
 
 
