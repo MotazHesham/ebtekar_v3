@@ -495,7 +495,66 @@
                 }
             });
         } 
-    </script>  
+    </script> 
+    @if(session('eventData'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const eventData = @json(session('eventData')); 
+                metaPixelEvent(eventData); 
+            });
+        </script>
+    @endif 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () { 
+            // pageview from server
+            $.get('/pageview/event', function (res) { 
+            });
+        });
+        function metaPixelEvent(eventData){ 
+            @if(!$site_settings->fb_pixel_id)
+                return;
+            @endif
+            // Ensure eventData is properly parsed if coming as JSON string
+            const data = typeof eventData === 'string' ? JSON.parse(eventData) : eventData;
+            
+            const finalEventData = {};
+            
+            if (data.content_name) {
+                finalEventData.content_name = data.content_name;
+            } 
+            if (data.content_ids) {
+                finalEventData.content_ids = Array.isArray(data.content_ids) ? data.content_ids : [data.content_ids];
+            } 
+            if (data.content_type) {
+                finalEventData.content_type = data.content_type;
+            } 
+            if (data.content_category) {
+                finalEventData.content_category = data.content_category;
+            } 
+            if (data.num_items) {
+                finalEventData.num_items = data.num_items;
+            } 
+            if (data.search_string) {
+                finalEventData.search_string = data.search_string;
+            } 
+            if (data.currency) {
+                finalEventData.currency = data.currency;
+            } 
+            if (data.value) {
+                finalEventData.value = data.value;
+            }  
+            
+            if (typeof fbq !== 'undefined') {
+                fbq('track', data.event, finalEventData, {eventID: data.event_id});
+                console.log('FB Pixel event tracked:', {
+                    event: data.event,
+                    data: finalEventData
+                });
+            } else {
+                console.warn('Facebook Pixel not loaded');
+            } 
+        }
+    </script>
     @yield('scripts')
 </body>
 
