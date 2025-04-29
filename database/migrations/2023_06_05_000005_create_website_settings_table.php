@@ -38,6 +38,7 @@ return new class extends Migration
             $table->string('delivery_system')->nullable();
             $table->string('employee_password')->nullable();
             $table->string('tag_manager')->nullable();
+            $table->string('google_analytics')->nullable();
             $table->string('fb_pixel_id')->nullable();
             $table->string('fb_access_token',2000)->nullable();
             $table->string('fb_test_code')->nullable();

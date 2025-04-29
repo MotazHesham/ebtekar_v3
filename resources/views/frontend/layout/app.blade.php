@@ -74,6 +74,17 @@
             })(window,document,'script','dataLayer','{{ $site_settings->tag_manager }}');</script> --}}
         <!-- End Google Tag Manager --> 
     @endif
+    @if(app()->isProduction() && $site_settings->google_analytics ) 
+        <!-- Google tag (gtag.js)  Google analytics-->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{$site_settings->google_analytics}}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '{{$site_settings->google_analytics}}');
+        </script> 
+    @endif
 
     @if(app()->isProduction() && $site_settings->fb_pixel_id ) 
         @include('facebook.init',['pixelId' => $site_settings->fb_pixel_id])
