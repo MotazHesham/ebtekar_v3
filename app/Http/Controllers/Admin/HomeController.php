@@ -22,6 +22,7 @@ use App\Models\ReceiptSocial;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
 use App\Models\User;
+use App\Models\ViewPlaylistData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -280,7 +281,7 @@ class HomeController extends Controller
         }else{
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$request->code." الطلب في مرحلة مختلفة</div>"
+                'message' => "<div class='alert alert-danger'>".$request->code." الطلب في مرحلة مختلفة ".ViewPlaylistData::PLAYLIST_STATUS_SELECT[$order->playlist_status]."</div>"
             ];
         }
 

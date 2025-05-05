@@ -11,6 +11,14 @@ class ViewPlaylistData extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const PLAYLIST_STATUS_SELECT = [
+        'design'     => 'الديزاين',
+        'manufacturing'        => 'التصنيع',
+        'prepare' => 'التجهيز',
+        'shipment'        => 'الارسال للشحن',
+        'finish'       => 'التوصيل',
+    ];
+
     public $table = "view_playlist_data";
     
     public function getCreatedAtAttribute($value)
