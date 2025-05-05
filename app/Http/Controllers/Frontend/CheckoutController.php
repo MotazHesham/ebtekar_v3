@@ -185,7 +185,7 @@ class CheckoutController extends Controller
                 }elseif($site_settings->id == 3){
                     $str = 'figures-';
                 }elseif($site_settings->id == 4){
-                    $str = 'shirti-';
+                    $str = 'novi-';
                 }else{ 
                     $str = 'ebtekar-';
                 } 

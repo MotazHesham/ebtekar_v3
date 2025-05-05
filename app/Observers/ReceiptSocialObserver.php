@@ -25,7 +25,7 @@ class ReceiptSocialObserver
         }elseif($receiptSocial->website_setting_id == 3){
             $str = 'figures-';
         }elseif($receiptSocial->website_setting_id == 4){
-            $str = 'shirti-';
+            $str = 'novi-';
         }elseif($receiptSocial->website_setting_id == 5){
             $str = 'martobia-';
         }elseif($receiptSocial->website_setting_id == 6){
