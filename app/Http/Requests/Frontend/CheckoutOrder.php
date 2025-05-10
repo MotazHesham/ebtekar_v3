@@ -41,6 +41,10 @@ class CheckoutOrder extends FormRequest
                 config('panel.phone_number_validation'), 
                 'nullable',
             ],
+            'wallet_phone' => [
+                config('panel.phone_number_validation'), 
+                'nullable',
+            ],
             'shipping_address' => [
                 'required',
             ],

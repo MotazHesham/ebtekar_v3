@@ -147,6 +147,10 @@
                             <label for="extra_commission">{{ __('cruds.order.extra.extra_commission') }}</label>
                             <input class="form-control" type="number" name="extra_commission" id="extra_commission" value="{{ $orderDetail->extra_commission }}"> 
                         </div>
+                        <div class="form-group col-md-4">
+                            <label for="variation">{{ __('cruds.order.extra.variation') }}</label>
+                            <input class="form-control" type="text" name="variation" id="variation" value="{{ $orderDetail->variation }}"> 
+                        </div>
                     </div>
                 </div>
             </div>

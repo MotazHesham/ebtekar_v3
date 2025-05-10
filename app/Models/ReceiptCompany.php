@@ -28,8 +28,8 @@ class ReceiptCompany extends Model implements HasMedia
     ];
 
     public const CLIENT_TYPE_SELECT = [
-        'individual' => 'Individual',
-        'corporate'  => 'Corporate',
+        'individual' => 'فردي',
+        'corporate'  => 'شركة',
     ];
 
     public static $searchable = [

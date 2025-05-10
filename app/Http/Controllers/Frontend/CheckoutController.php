@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Nafezly\Payments\Classes\PaymobWalletPayment;
 use Nafezly\Payments\Classes\PaymobPayment;
@@ -371,7 +372,7 @@ class CheckoutController extends Controller
                         $user_first_name = $request->first_name, 
                         $user_last_name = $request->last_name, 
                         $user_email = $user->email ?? $request->first_name . '@temp.test', 
-                        $user_phone = $request->phone_number, 
+                        $user_phone = $request->wallet_phone, 
                         $source = null
                     ); 
                     $order->update(['paymob_orderid' => $response['payment_id']]); // save paymob order id for later usage. 
@@ -388,6 +389,8 @@ class CheckoutController extends Controller
             }
         }catch (\Exception $ex){ 
             DB::rollBack(); 
+            //log the error
+            Log::error($ex);
             toast("SomeThing Went Wrong!",'error');
             return redirect()->route('home');
         }

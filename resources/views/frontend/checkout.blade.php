@@ -75,11 +75,16 @@
                                         </div> 
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label class="field-label">{{ __('frontend.checkout.phone_number') }}</label>
-                                            <input type="text" name="phone_number" value="{{old('phone_number',auth()->user()->phone_number ?? '')}}" placeholder="" required id="phone_number" onkeyup="wallet_number()">
+                                            <input type="text" name="phone_number" value="{{old('phone_number',auth()->user()->phone_number ?? '')}}" placeholder="" required id="phone_number">
                                         </div>
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label class="field-label">   {{ __('frontend.checkout.phone_number_2') }}</label>
                                             <input type="text" name="phone_number_2" value="{{old('phone_number_2')}}" placeholder="">
+                                        </div>
+                                        <div class="form-group col-md-6 col-sm-6 col-xs-12" id="wallet_phone_group" @if(old('payment_option') != 'wallet') style="display: none;" @endif>
+                                            <label class="field-label">{{ __('frontend.checkout.wallet_phone') }}</label>
+                                            <input type="text" name="wallet_phone" value="{{old('wallet_phone')}}" placeholder="" id="wallet_phone">
+                                            <div class="invalid-feedback" id="wallet_phone_error"></div>
                                         </div>
                                         <div class="form-group col-md-12 col-sm-12 col-xs-12"> 
                                             @php
@@ -219,8 +224,7 @@
                                                     <li>
                                                         <div class="radio-option">
                                                             <input type="radio" name="payment_option" id="payment-3" value="wallet"  @if(old('payment_option') == 'wallet') checked @endif>
-                                                            <label for="payment-3">   {{ __('frontend.checkout.wallet') }}</label>
-                                                            (<span id="wallet_number"></span>)
+                                                            <label for="payment-3">   {{ __('frontend.checkout.wallet') }}</label> 
                                                         </div>
                                                     </li> 
 
@@ -239,7 +243,8 @@
             </div>
         </div>
     </section>
-    <!-- section end -->
+    <!-- section end --> 
+
 @endsection
 
 @section('scripts') 
@@ -248,12 +253,50 @@
     <script src="{{ asset('dashboard_offline/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
-        $(document).ready(function() { 
-            wallet_number(); 
+        $(document).ready(function() {  
             
             @if(isset($eventData))
                 metaPixelEvent(@json($eventData));
             @endif
+
+            // Handle wallet payment selection
+            $('input[name="payment_option"]').on('change', function() {
+                if ($(this).val() === 'wallet') {
+                    $('#wallet_phone_group').show();
+                    $('#wallet_phone').prop('required', true);
+                } else {
+                    $('#wallet_phone_group').hide();
+                    $('#wallet_phone').prop('required', false);
+                }
+            });
+
+            // Form submission validation
+            $('form').on('submit', function(e) {
+                if ($('input[name="payment_option"]:checked').val() === 'wallet') {
+                    var walletPhone = $('#wallet_phone').val();
+                    var phoneRegex = /(01)[0-9]{9}/;
+                    
+                    if (!walletPhone) {
+                        e.preventDefault();
+                        $('#wallet_phone_error').text('{{ __("frontend.checkout.please_enter_phone") }}');
+                        $('#wallet_phone').addClass('is-invalid');
+                        return false;
+                    }
+                    
+                    if (!phoneRegex.test(walletPhone) || walletPhone.length !== 11) {
+                        e.preventDefault();
+                        $('#wallet_phone_error').text('{{ __("frontend.checkout.invalid_phone") }}');
+                        $('#wallet_phone').addClass('is-invalid');
+                        return false;
+                    }
+                }
+            });
+
+            // Clear validation on input
+            $('#wallet_phone').on('input', function() {
+                $(this).removeClass('is-invalid');
+                $('#wallet_phone_error').text('');
+            });
         });
         
         $('#country_id').on('change',function(){ 
@@ -287,10 +330,7 @@
                 $('#password').css('display','none');
                 $('#email').css('display','none');
             }
-        }
-        function wallet_number(){
-            $('#wallet_number').html($('#phone_number').val());
-        }
+        } 
         
     </script>
 @endsection

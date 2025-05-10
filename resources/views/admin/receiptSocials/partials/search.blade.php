@@ -151,10 +151,10 @@
                                 <option value="">{{ __('cruds.receiptSocial.fields.client_type') }}</option>
                                 <option value="individual"
                                     @isset($client_type) @if ($client_type == 'individual') selected @endif @endisset>
-                                    Individual</option>
+                                    فردي</option>
                                 <option value="corporate"
                                     @isset($client_type) @if ($client_type == 'corporate') selected @endif @endisset>
-                                    Corporate</option>
+                                    شركة</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -168,15 +168,30 @@
                         </div>
                     </div>
 
-                    <select class="form-control mb-2 @isset($delivery_status) isset @endisset" name="delivery_status" id="delivery_status" onchange="sort_receipt_social()">
-                        <option value="">{{ __('cruds.receiptSocial.fields.delivery_status') }}</option> 
-                        @foreach(__('global.delivery_status.status') as $key => $status)
-                            <option value="{{ $key }}" @isset($delivery_status) @if ($delivery_status == $key) selected @endif @endisset>
-                                {{ $status }}
-                            </option>
-                        @endforeach
-                    </select> 
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($delivery_status) isset @endisset" name="delivery_status" id="delivery_status" onchange="sort_receipt_social()">
+                                <option value="">{{ __('cruds.receiptSocial.fields.delivery_status') }}</option> 
+                                @foreach(__('global.delivery_status.status') as $key => $status)
+                                    <option value="{{ $key }}" @isset($delivery_status) @if ($delivery_status == $key) selected @endif @endisset>
+                                        {{ $status }}
+                                    </option>
+                                @endforeach
+                            </select> 
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($product_type) isset @endisset" name="product_type" id="product_type" onchange="sort_receipt_social()">
+                                <option value="">نوع المنتج</option>
+                                <option value="1" @isset($product_type) @if ($product_type == '1') selected @endif @endisset>
+                                    منتج سيزون
+                                </option>
+                                <option value="0" @isset($product_type) @if ($product_type == '0') selected @endif @endisset>
+                                    منتج غير سيزون
+                                </option>
+                            </select> 
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <select class="form-control mb-2 @isset($payment_status) isset @endisset" name="payment_status" id="payment_status" onchange="sort_receipt_social()">

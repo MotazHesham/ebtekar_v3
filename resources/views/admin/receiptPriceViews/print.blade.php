@@ -86,6 +86,21 @@
         @endphp
         <div style="page-break-after: always;">
             <div style="background: #eceff4;padding: 1.5rem;">
+                <table style="position: absolute;top:50px;left:150px" class="text-center">
+                    <tr>
+                        <td class="gry-color small">{{ $site_settings->address }}</td>
+                        <td class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td class="gry-color small">Email: {{ $site_settings->email }}</td>
+                    </tr>
+                    <tr>
+                        <td class="gry-color small">Phone: {{ $site_settings->phone_number }}</td>
+                    </tr>
+                    <tr>
+                        <td class="gry-color">{{ $receipt->created_at }}</td>
+                    </tr>
+                </table> 
                 <table>
                     <tr>
                         <td> 

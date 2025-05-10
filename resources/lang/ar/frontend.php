@@ -4,6 +4,7 @@ return [
     'home' => [
         'new_products' => 'المنتجات الجديدة',
         'most_selling' =>'الأكثر مبيعا',
+        'customer_reviews' => 'تقييمات العملاء',
     ],
     'app' => [ 
         'favorites' =>' المفضلة',
@@ -92,6 +93,11 @@ return [
         'paymob' => 'بطاقة إئتمان',
         'wallet' => 'محفظة ألكترونية',
         'pay' => 'أتمام عملية الشراء',
+        'wallet_phone' => 'رقم تليفون المحفظة',
+        'close' => 'إغلاق',
+        'confirm' => 'تأكيد',
+        'please_enter_phone' => 'الرجاء إدخال رقم تليفون المحفظة',
+        'invalid_phone' => 'الرجاء إدخال رقم تليفون صحيح (يجب أن يبدأ بـ 01 ويتكون من 11 رقم)',
     ],
     'commission_requests' => [
         'title' => 'طلبات السحب',

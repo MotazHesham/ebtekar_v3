@@ -25,7 +25,7 @@
     <meta name="twitter:creator"
         content="@author_handle">
     <meta name="twitter:image" content="{{ $meta_image }}">
-    <meta name="twitter:data1" content="{{ $product->calc_price_as_text() }}">
+    <meta name="twitter:data1" content="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}">
     <meta name="twitter:label1" content="Price">
 
     <!-- Open Graph data -->
@@ -35,7 +35,7 @@
     <meta property="og:image" content="{{ $meta_image }}" />
     <meta property="og:description" content="{{ $product->meta_description }}" />
     <meta property="og:site_name" content="{{ $site_settings->site_name }}" />
-    <meta property="og:price:amount" content="{{ $product->calc_price_as_text() }}" /> 
+    <meta property="og:price:amount" content="{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}" /> 
 @endsection  
 
 @section('styles')
@@ -213,7 +213,7 @@
                         <div class="product-slick no-arrow"> 
                             @foreach ($product->photos as $key => $media)
                                 <div><img src="{{ $media->getUrl() }}" alt="{{ $product->name }}"
-                                        class="img-fluid  image_zoom_cls-{{ $key }}"  onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';"></div>
+                                        class="img-fluid image_zoom_cls-{{ $key }} product-image" data-full-image="{{ $media->getUrl() }}"  onerror="this.onerror=null;this.src='{{ asset('placeholder.jpg') }}';"></div>
                             @endforeach 
                         </div>
                         <div class="row">
@@ -291,7 +291,7 @@
                                                     @endif
                                                     <div class="col-12 mb-3">
                                                         <label>{{ __('frontend.product.description') }}</label>
-                                                        <textarea class="form-control" name="description" placeholder="اكتب هنا الاسم والتفاصيل المراد طباعتها على المنتج" rows="3" required></textarea>
+                                                        <textarea class="form-control" name="description" placeholder="اكتب هنا الاسم والتفاصيل المراد طباعتها على المنتج" rows="3" required></textarea>
                                                     </div>
                                     
                                                     <button type="submit" class="btn btn-rounded black-btn me-3">{{ __('frontend.product.add_to_cart') }}</button> 
@@ -580,6 +580,22 @@
             </div>
         </div>
     </div>
+
+    <!-- Add image popup modal -->
+    <div class="modal fade" id="imagePopup" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-0">
+                    <div id="zoom-container">
+                        <img src="" id="popupImage" class="img-fluid" alt="Full size image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -602,6 +618,39 @@
             @if(isset($eventData))
                 metaPixelEvent(@json($eventData));
             @endif
+
+            // Image popup functionality with zoom
+            $('.product-image').on('click', function() {
+                var fullImage = $(this).data('full-image');
+                $('#popupImage').attr('src', fullImage);
+                $('#imagePopup').modal('show');
+                
+                // Initialize zoom after modal is shown
+                $('#imagePopup').on('shown.bs.modal', function () {
+                    $('#zoom-container').zoom({
+                        touch: false,
+                        magnify: 2,
+                        onZoomIn: function() {
+                            $('#zoom-container').css('cursor', 'zoom-out');
+                        },
+                        onZoomOut: function() {
+                            $('#zoom-container').css('cursor', 'zoom-in');
+                        }
+                    });
+                });
+
+                // Destroy zoom when modal is hidden
+                $('#imagePopup').on('hidden.bs.modal', function () {
+                    $('#zoom-container').trigger('zoom.destroy');
+                });
+            });
+
+            // Close modal on escape key
+            $(document).keydown(function(e) {
+                if (e.keyCode === 27) { // ESC key
+                    $('#imagePopup').modal('hide');
+                }
+            });
         });
 
         function copy_to_clipboard(text) {
@@ -646,4 +695,57 @@
             $('#user_rate').val(rate);
         }
     </script>
+
+    <!-- Add popup and zoom styles -->
+    <style>
+        .product-slick {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .product-slick img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        #imagePopup .modal-content {
+            background-color: transparent;
+            border: none;
+        }
+        #imagePopup .modal-header {
+            border: none;
+            position: absolute;
+            right: 0;
+            z-index: 1;
+        }
+        #imagePopup .modal-header .btn-close {
+            background-color: white;
+            opacity: 0.8;
+        }
+        #imagePopup .modal-body {
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        #zoom-container {
+            position: relative;
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+        #popupImage {
+            max-height: 90vh;
+            width: auto;
+            margin: 0 auto;
+            display: block;
+        }
+        .zoomImg {
+            background-color: #fff;
+            z-index: 999;
+        }
+        @media (max-width: 768px) {
+            #popupImage {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+    </style>
 @endsection

@@ -33,8 +33,8 @@ class ReceiptSocial extends Model
     ];
 
     public const CLIENT_TYPE_SELECT = [
-        'individual' => 'Individual',
-        'corporate'  => 'Corporate',
+        'individual' => 'فردي',
+        'corporate'  => 'شركة',
     ];
 
     protected $dates = [
@@ -85,6 +85,7 @@ class ReceiptSocial extends Model
         'is_seasoned',
         'client_review',
         'hold',
+        'hold_reason',
         'printing_times', 
         'shipping_country_cost', 
         'shipping_address',

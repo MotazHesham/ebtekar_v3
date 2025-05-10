@@ -156,7 +156,7 @@ class HomeController extends Controller
         if($order->hold){
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$order->order_num." Order Is Hold</div>"
+                'message' => "<div class='alert alert-danger'>".$request->code." Order Is Hold - Reason: ".($order->hold_reason ?? "No Reason") ."</div>"
             ];
         }
 
@@ -198,10 +198,10 @@ class HomeController extends Controller
                     'message' => "<div class='alert alert-danger'>".$order->order_num." Not Authenticated</div>"
                 ];
             }
-        }else{
+        }else{ 
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$order->order_num." الطلب في مرحلة مختلفة</div>"
+                'message' => "<div class='alert alert-danger'>".$order->order_num." الطلب في مرحلة مختلفة ".ViewPlaylistData::PLAYLIST_STATUS_SELECT[$order->playlist_status]."</div>"
             ];
         }
 
@@ -236,7 +236,7 @@ class HomeController extends Controller
         if($order->hold){
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$request->code." Order Is Hold</div>"
+                'message' => "<div class='alert alert-danger'>".$request->code." Order Is Hold - Reason: ".($order->hold_reason ?? "No Reason") ."</div>"
             ];
         }
 

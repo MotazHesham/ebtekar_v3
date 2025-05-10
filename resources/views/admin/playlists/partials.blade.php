@@ -57,6 +57,7 @@
                             <div class="container-scrollable"><?php echo $item['note']; ?></div>
                         </div>
                         <div class="col-md-8">
+                            <span class="badge badge-dark text-white mb-1">{{ $item['client_type'] == 'individual' ? 'فردي' : 'شركة' }}</span>
                             <span class="badge badge-light text-dark mb-1">{{ __('Description') }}</span>
                             <div class="container-scrollable"> 
                                 {!! strip_tags($item['description'], '<p><br>')  !!}
@@ -78,17 +79,17 @@
                     @endif
                     @if (auth()->user()->is_admin || $authenticated == auth()->user()->id || Gate::allows('transfer_receipts'))
                         <a class="btn btn-danger btn-sm rounded-pill text-white"
-                            onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">
+                            onclick="if(confirm('هل أنت متأكد من الإرجاع؟')) change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">
                             {{ $title_back }}
                         </a>
                         <a class="btn btn-warning btn-sm rounded-pill text-white"
-                            onclick="change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send')">
+                            onclick="if(confirm('هل أنت متأكد من الإرسال؟')) change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $next_type }}','send')">
                             {{ $title_send }}
                         </a>
                     @endif
                     @if ($type == 'design')  
-                        <button class="btn btn-light btn-sm rounded-pill"
-                                onclick="check_printable(this,'{{ $item['id'] }}', '{{ $item['model_type'] }}');">
+                        <button class="btn btn-light btn-sm rounded-pill" 
+                                onclick="if(confirm('هل أنت متأكد من الطباعة؟')) check_printable(this,'{{ $item['id'] }}', '{{ $item['model_type'] }}');">
                             {{ __('global.print') }}
                         </button>
                     @endif

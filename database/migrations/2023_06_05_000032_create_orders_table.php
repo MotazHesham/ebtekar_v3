@@ -30,7 +30,9 @@ class CreateOrdersTable extends Migration
             $table->boolean('supplied')->default(0);
             $table->boolean('client_review')->default(0);
             $table->boolean('done')->default(0);
+            $table->boolean('returned')->default(0);
             $table->boolean('hold')->default(0);
+            $table->string('hold_reason')->nullable();
             $table->datetime('done_time')->nullable();
             $table->datetime('send_to_delivery_date')->nullable();
             $table->datetime('send_to_playlist_date')->nullable();

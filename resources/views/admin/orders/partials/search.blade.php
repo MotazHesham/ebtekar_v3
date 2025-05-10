@@ -130,14 +130,27 @@
                         </div>
                     </div>
 
-                    <select class="form-control mb-2 @isset($delivery_status) isset @endisset" name="delivery_status" id="delivery_status" onchange="sort_orders()">
-                        <option value="">{{ __('cruds.order.fields.delivery_status') }}</option> 
-                        @foreach(__('global.delivery_status.status') as $key => $status)
-                            <option value="{{ $key }}" @isset($delivery_status) @if ($delivery_status == $key) selected @endif @endisset>
-                                {{ $status }}
-                            </option>
-                        @endforeach
-                    </select> 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($delivery_status) isset @endisset" name="delivery_status" id="delivery_status" onchange="sort_orders()">
+                                <option value="">{{ __('cruds.order.fields.delivery_status') }}</option> 
+                                @foreach(__('global.delivery_status.status') as $key => $status)
+                                    <option value="{{ $key }}" @isset($delivery_status) @if ($delivery_status == $key) selected @endif @endisset>
+                                        {{ $status }}
+                                    </option>
+                                @endforeach
+                            </select> 
+                        </div>
+                        <div class="col-md-6"> 
+                            <select class="form-control mb-2 @isset($returned) isset @endisset" name="returned" id="returned" onchange="sort_orders()">
+                                <option value="">الاسترجاع</option>
+                                <option value="1" @isset($returned) @if ($returned == '1') selected @endif @endisset>
+                                    مرتجع</option>
+                                <option value="0" @isset($returned) @if ($returned == '0') selected @endif @endisset>
+                                    غير مرتجع</option>
+                            </select>   
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <select class="form-control mb-2 @isset($payment_status) isset @endisset" name="payment_status" id="payment_status" onchange="sort_orders()">

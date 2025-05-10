@@ -21,6 +21,7 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 use App\Models\WebsiteSetting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -29,6 +30,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrdersController extends Controller
 {
+    public function products_report(Request $request){ 
+        $website_setting_id = $request->website_setting_id; 
+        $products = OrderDetail::whereHas('order',function($q) use($website_setting_id, $request){
+            if($website_setting_id){
+                $q->where('website_setting_id',$website_setting_id);
+            }
+            return $q->where('calling', 1)
+                    ->whereBetween('created_at', [
+                    Carbon::createFromFormat(config('panel.date_format') . ' H:i:s', $request->start_date . ' 00:00:00')->format('Y-m-d H:i:s'),
+                    Carbon::createFromFormat(config('panel.date_format') . ' H:i:s', $request->end_date . ' 23:59:59')->format('Y-m-d H:i:s'),
+            ]);
+        })->selectRaw('sum(quantity) as quantity,sum(total_cost) as total_cost,product_id,products.name as title')
+        ->join('products', 'products.id', '=', 'order_details.product_id')
+        ->groupBy('product_id')->get();
+
+        return view('admin.orders.partials.products-report',compact('products'));
+    }
     public function abondoned(Request $request){ 
         
         $phone = null;
@@ -136,6 +154,9 @@ class OrdersController extends Controller
             $status = '3';
             $order->add_income();
         } 
+        if($request->hold_reason){
+            $order->hold_reason = $request->hold_reason;
+        }
         $order->save(); 
         if($request->ajax()){
             return [
@@ -256,6 +277,7 @@ class OrdersController extends Controller
         $date_type = null;
         $description = null;
         $website_setting_id = null;
+        $returned = null;
 
 
         $orders = Order::with(['orderDetails','shipping_country','user','delivery_man']);
@@ -325,6 +347,10 @@ class OrdersController extends Controller
         if ($request->quickly != null) {
             $quickly = $request->quickly;
             $orders = $orders->where('quickly',$quickly);
+        }
+        if ($request->returned != null) {
+            $returned = $request->returned;
+            $orders = $orders->where('returned',$returned);
         }
 
         if ($request->client_name != null){
@@ -421,7 +447,7 @@ class OrdersController extends Controller
         $orders = $orders->orderBy('created_at', 'desc')->paginate(15);
         return view('admin.orders.index', compact('statistics','users','orders','country_id','quickly','delivery_man_id','website_setting_id','websites',
                                             'payment_status','delivery_status','calling', 'playlist_status','sent_to_delivery','date_type','payment_type',
-                                            'client_name','phone' ,'order_num', 'countries','delivery_mans','exclude', 'include', 'from_date',
+                                            'client_name','phone' ,'order_num', 'countries','delivery_mans','exclude', 'include', 'from_date','returned',
                                             'user_id','from' , 'to','commission_status','sent_to_wasla','order_type','to_date','description'));
     }
 
@@ -506,7 +532,7 @@ class OrdersController extends Controller
 
     public function add_order_detail(Request $request){
         $order = Order::findOrfail($request->id);
-        $products = Product::where('website_setting_id',$order->website_setting_id)->get();
+        $products = Product::with('stocks')->where('website_setting_id',$order->website_setting_id)->get();
         return view('admin.orders.partials.add_order_detail', compact('order','products'));
     }
     public function store_order_detail(Request $request){
@@ -520,7 +546,7 @@ class OrdersController extends Controller
         $orderDetail->total_cost = ($request->price * $request->quantity);
         $orderDetail->product_id = $request->product_id;
         $orderDetail->order_id = $request->order_id;
-
+        $orderDetail->variation = $request->variation;
         $photos = array();  
         if($request->hasFile('photos')){
             foreach ($request->photos as $key => $photo) {
@@ -560,7 +586,7 @@ class OrdersController extends Controller
         $orderDetail->quantity = $request->quantity;
         $orderDetail->total_cost = $request->quantity * ($request->price + $orderDetail->weight);
         $orderDetail->description = $request->description;
-        
+        $orderDetail->variation = $request->variation;
         $photos = array();  
         if($request->has('previous_photos')){
             foreach ($request->previous_photos as $key => $prev) {

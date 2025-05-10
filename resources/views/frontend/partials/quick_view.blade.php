@@ -16,8 +16,8 @@
                 </h2>
                 <ul class="pro-price">
                     @if($product->discount > 0)
-                        <li>{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
-                        <li><span>{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}</span></li>
+                        <li>{{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['as_text']}}</li>
+                        <li><span>{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</span></li>
                     @else
                         <li>{{ front_calc_product_currency($product->unit_price,$product->weight)['as_text']}}</li>
                     @endif

@@ -35,14 +35,14 @@
         <div class="card-body">
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <input type="text" class="form-control mb-2 @isset($order_num) isset @endisset"
                         id="order_num" name="order_num"
                         @isset($order_num) value="{{ $order_num }}" @endisset
                         placeholder="{{ __('cruds.playlist.fields.order_num') }}">
 
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <select class="form-control mb-2 @isset($staff_id) isset @endisset select2"
                         name="staff_id" id="staff_id" onchange="sort_playlist()">
                         <option value="">أختر الموظف</option>
@@ -54,11 +54,23 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <select class="form-control mb-2 @isset($view) isset @endisset" name="view"
                         id="view" onchange="sort_playlist()">
                         <option value="all" @if ($view == 'all') selected @endif>all</option>
                         <option value="by_date" @if ($view == 'by_date') selected @endif>By Date</option>
+                    </select>
+
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control mb-2 @isset($client_type) isset @endisset" name="client_type" id="client_type" onchange="sort_playlist()">
+                        <option value="">{{ __('cruds.receiptSocial.fields.client_type') }}</option>
+                        <option value="individual"
+                            @isset($client_type) @if ($client_type == 'individual') selected @endif @endisset>
+                            فردي</option>
+                        <option value="corporate"
+                            @isset($client_type) @if ($client_type == 'corporate') selected @endif @endisset>
+                            شركة</option>
                     </select>
 
                 </div>

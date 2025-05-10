@@ -105,6 +105,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('receipt-socials/add_product', 'ReceiptSocialController@add_product')->name('receipt-socials.add_product');
     Route::post('receipt-socials/edit_product', 'ReceiptSocialController@edit_product')->name('receipt-socials.edit_product');
     Route::delete('receipt-socials/destroy', 'ReceiptSocialController@massDestroy')->name('receipt-socials.massDestroy');
+    Route::get('receipt-socials/customer-report', 'ReceiptSocialController@customerReport')->name('receipt-socials.customer-report');
+    Route::get('receipt-socials/customer-chart', 'ReceiptSocialController@customerChart')->name('receipt-socials.customer-chart');
     Route::resource('receipt-socials', 'ReceiptSocialController');
 
     // Receipt Social Product
@@ -264,6 +266,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('conversations', 'ConversationsController');
 
     // Orders  
+    Route::post('orders/products_report', 'OrdersController@products_report')->name('orders.products_report');
     Route::post('orders/send_to_wasla', 'OrdersController@send_to_wasla')->name('orders.send_to_wasla');
     Route::post('orders/update_delivery_man', 'OrdersController@update_delivery_man')->name('orders.update_delivery_man');
     Route::delete('orders/destroy_product/{id}', 'OrdersController@destroy_product')->name('orders.destroy_product');
@@ -465,6 +468,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
+
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Profile

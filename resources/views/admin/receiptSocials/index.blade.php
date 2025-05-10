@@ -228,10 +228,30 @@
                             </div>
                             <!-- /.col-->
                         </div>
+                        <hr>
+                        <p>العملاء الذين اشتروا أكثر من طلب واحد</p>
+                        <a href="{{ route('admin.receipt-socials.customer-report') }}" class="btn btn-dark">Excel</a>
+                        <button class="btn btn-primary" onclick="showCustomerChart()">رسم بياني</button> 
+                    </div>
+                </div>
+            </div> 
+        @endif
+
+        <!-- Customer Chart Modal -->
+        <div class="modal fade" id="customerChartModal" tabindex="-1" aria-labelledby="customerChartModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="customerChartModalLabel">توزيع العملاء حسب عدد الطلبات</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <canvas id="customerChart"></canvas>
                     </div>
                 </div>
             </div>
-        @endif
+        </div>
+
         <div class="@if(Gate::allows('statistics_receipts')) col-xl-9 @else col-xl-12 @endif col-md-12">
             @include('admin.receiptSocials.partials.search')
         </div>
@@ -498,16 +518,25 @@
                                 </span>
                                 <br> 
                                 @can('hold')
-                                    <form action="{{ route('admin.receipt-socials.update_statuses') }}" method="POST" style="display: inline">
+                                    <form action="{{ route('admin.receipt-socials.update_statuses') }}" method="POST" style="display: inline" id="hold-form-{{ $receipt->id }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $receipt->id }}">
                                         <input type="hidden" name="type" value="hold">
+                                        <input type="hidden" name="hold_reason" id="hold-reason-{{ $receipt->id }}" value="{{ $receipt->hold_reason }}">
                                         @if($receipt->hold == 0)
                                             <input type="hidden" name="status" value="1">
-                                            <button type="submit" class="btn btn-dark btn-sm rounded-pill">Hold </button>
+                                            <button type="button" class="btn btn-dark btn-sm rounded-pill" onclick="showHoldModal('{{ $receipt->id }}','{{ $receipt->hold_reason }}')">Hold</button>
                                         @else 
                                             <input type="hidden" name="status" value="0">
-                                            <button type="submit" class="btn btn-warning btn-sm rounded-pill">UnHold </button> 
+                                            <button type="submit" class="btn btn-warning btn-sm rounded-pill">UnHold</button> 
+                                            @if($receipt->hold_reason)
+                                                <span class="badge bg-info text-white" style="cursor: pointer" 
+                                                    data-toggle="tooltip" 
+                                                    data-placement="top" 
+                                                    title="{{ $receipt->hold_reason }}">
+                                                    <i class="fas fa-info-circle"></i> Hold Reason
+                                                </span>
+                                            @endif
                                         @endif
                                     </form>
                                 @endcan
@@ -567,7 +596,7 @@
                                                             {{ __('global.extra.add_product') }}
                                                             <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
                                                         </a>
-                                                    @endcan
+                                                    @endcan 
                                                     @can('receipt_social_edit')
                                                         <a class="dropdown-item"
                                                             href="{{ route('admin.receipt-socials.edit', $receipt->id) }}">
@@ -630,6 +659,28 @@
             </table>
             <div>
                 {{ $receipts->appends(request()->input())->links() }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Hold Reason Modal -->
+    <div class="modal fade" id="holdReasonModal" tabindex="-1" aria-labelledby="holdReasonModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="holdReasonModalLabel">Hold Reason</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="holdReason">Please enter reason for hold:</label>
+                        <textarea class="form-control" id="holdReason" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitHoldForm()">Submit</button>
+                </div>
             </div>
         </div>
     </div>
@@ -924,5 +975,117 @@
                     });
             });
         }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let customerChart = null; // Declare chart variable in global scope
+
+        function showCustomerChart() {
+            $('#customerChartModal').modal('show');
+            
+            $.ajax({
+                url: '{{ route("admin.receipt-socials.customer-chart") }}',
+                type: 'GET',
+                success: function(data) {
+                    const ctx = document.getElementById('customerChart').getContext('2d');
+                    
+                    // Destroy existing chart if it exists
+                    if (customerChart instanceof Chart) {
+                        customerChart.destroy();
+                    }
+                    
+                    customerChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'عدد العملاء',
+                                data: data.values,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.5)',
+                                    'rgba(54, 162, 235, 0.5)',
+                                    'rgba(255, 206, 86, 0.5)',
+                                    'rgba(75, 192, 192, 0.5)',
+                                    'rgba(153, 102, 255, 0.5)',
+                                    'rgba(255, 159, 64, 0.5)',
+                                    'rgba(199, 199, 199, 0.5)',
+                                    'rgba(83, 102, 255, 0.5)',
+                                    'rgba(40, 159, 64, 0.5)',
+                                    'rgba(210, 199, 199, 0.5)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(199, 199, 199, 1)',
+                                    'rgba(83, 102, 255, 1)',
+                                    'rgba(40, 159, 64, 1)',
+                                    'rgba(210, 199, 199, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'توزيع العملاء حسب عدد الطلبات'
+                                },
+                                legend: {
+                                    position: 'right',
+                                    labels: {
+                                        font: {
+                                            size: 14
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.raw || 0;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = Math.round((value / total) * 100);
+                                            return `${label}: ${value} عميل (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+    <script>
+        let currentReceiptId = null;
+
+        function showHoldModal(receiptId, existingReason) {
+            currentReceiptId = receiptId; 
+            $('#holdReason').val(existingReason);
+            $('#holdReasonModal').modal('show');
+        }
+
+        function submitHoldForm() {
+            const reason = $('#holdReason').val();
+            if (!reason.trim()) {
+                alert('Please enter a reason for hold');
+                return;
+            }
+            
+            $(`#hold-reason-${currentReceiptId}`).val(reason);
+            $(`#hold-form-${currentReceiptId}`).submit();
+            $('#holdReasonModal').modal('hide');
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 @endsection

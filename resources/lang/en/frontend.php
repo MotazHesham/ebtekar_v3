@@ -4,6 +4,7 @@ return [
     'home' => [
         'new_products' => 'New Products',
         'most_selling' =>'Best Selling',
+        'customer_reviews' => 'Customer Reviews',
     ],
     'app' => [ 
         'favorites' =>' Favorites',
@@ -92,6 +93,11 @@ return [
         'paymob' => 'Credit Card',
         'wallet' => 'By Wallet',
         'pay' => 'Order',
+        'wallet_phone' => 'Wallet Phone Number',
+        'close' => 'Close',
+        'confirm' => 'Confirm',
+        'please_enter_phone' => 'Please enter your wallet phone number',
+        'invalid_phone' => 'Please enter a valid phone number (must start with 01 and be 11 digits)',
     ],
     'commission_requests' => [
         'title' => 'Commission Requests',

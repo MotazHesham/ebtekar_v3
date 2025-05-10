@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\ReceiptSocialDeliveryExport;
 use App\Exports\ReceiptSocialExport;
 use App\Exports\ReceiptSocialResultsExport;
+use App\Exports\CustomerReportExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WaslaController;
 use App\Http\Requests\MassDestroyReceiptSocialRequest;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response; 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ReceiptSocialController extends Controller
 {
@@ -134,6 +136,10 @@ class ReceiptSocialController extends Controller
             $status = '2';
             $receipt->add_income();
         } 
+        if($request->type == 'hold'){
+            $receipt->hold_reason = $request->hold_reason;
+        }
+
         $receipt->save();
         if($request->ajax()){
             return [
@@ -427,6 +433,7 @@ class ReceiptSocialController extends Controller
         $total_cost = null;
         $financial_account_id = null;
         $website_setting_id = null;
+        $product_type = null;
 
         $enable_multiple_form_submit = true;
 
@@ -455,6 +462,20 @@ class ReceiptSocialController extends Controller
                 $receipts = $receipts->whereNull('send_to_delivery_date');
             }
         }
+
+        if ($request->product_type != null) {
+            $product_type = $request->product_type;
+            if($product_type == 1){
+                $receipts = $receipts->whereHas('receiptsReceiptSocialProducts.products', function($query) {
+                    $query->where('product_type', 'season');
+                });
+            }else{
+                $receipts = $receipts->whereHas('receiptsReceiptSocialProducts.products', function($query) {
+                    $query->where('product_type', '!=', 'season')->orWhereNull('product_type');
+                });
+            }
+        }
+
         if ($request->social_id != null) {
             $social_id = $request->social_id;
             $GLOBALS['social_id'] = $social_id;
@@ -636,7 +657,7 @@ class ReceiptSocialController extends Controller
         return view('admin.receiptSocials.index', compact(
             'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
-            'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts',
+            'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id',
         ));
@@ -810,4 +831,40 @@ class ReceiptSocialController extends Controller
 
         return redirect()->route('admin.receipt-socials.index');
     } 
+
+    public function customerReport()
+    {
+        return Excel::download(new CustomerReportExport(), 'customer_report.xlsx');
+    }
+
+    public function customerChart()
+    {
+        // Get all receipts and group by phone number to count orders per customer
+        $customerOrders = ReceiptSocial::select('phone_number', DB::raw('count(*) as order_count'))
+            ->whereNotNull('phone_number')
+            ->groupBy('phone_number')
+            ->having('order_count', '>', 1)
+            ->get()
+            ->groupBy('order_count')
+            ->map(function($group) {
+                return $group->count();
+            });
+
+        // Prepare data for chart
+        $labels = [];
+        $values = [];
+        
+        // Sort by order count
+        $customerOrders = $customerOrders->sortKeys();
+        
+        foreach($customerOrders as $orderCount => $customerCount) {
+            $labels[] = $orderCount . ' طلبات';
+            $values[] = $customerCount;
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'values' => $values
+        ]);
+    }
 }

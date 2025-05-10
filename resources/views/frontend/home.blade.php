@@ -4,6 +4,55 @@
         $firstSliderImage = $sliders->first() && $sliders->first()->photo ? $sliders->first()->photo->getUrl() : null;
     @endphp
     <link rel="preload" as="image" href="{{ $firstSliderImage }}" fetchpriority="high">
+    <style>
+        .google-reviews {
+            background-color: #f8f9fa;
+            padding: 40px 0;
+        }
+        .review-item {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .reviewer-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .reviewer-info h5 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .stars {
+            color: #ffc107;
+            margin: 5px 0;
+        }
+        .review-date {
+            color: #6c757d;
+            font-size: 12px;
+        }
+        .review-text {
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .reviews-slider .slick-dots {
+            bottom: -30px;
+        }
+        .reviews-slider .slick-dots li button:before {
+            font-size: 10px;
+        }
+    </style>
 @endsection
 @section('content')
     <!--home slider start-->
@@ -126,6 +175,26 @@
         <div class="spinner-border spinner-border-sm text-dark" role="status"></div>
     </div>
     <!-- product section end -->
+
+    <!-- google reviews start -->
+    {{-- <section class="google-reviews section-pb-space">
+        <div class="container">
+            <div class="title8">
+                <h4>{{ __('frontend.home.customer_reviews') }}</h4>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div id="google-reviews-container" class="reviews-slider">
+                        <!-- Reviews will be loaded here via JavaScript -->
+                        <div class="text-center">
+                            <div class="spinner-border spinner-border-sm text-dark" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> --}}
+    <!-- google reviews end -->
 @endsection
 
 @section('scripts')
@@ -134,7 +203,76 @@
             new_products();
             best_selling();
             getfeturedProducts("{{$first_featured_category_id}}");
+            loadGoogleReviews();
         })
+
+        function loadGoogleReviews() {
+            // Replace YOUR_PLACE_ID with your actual Google Place ID
+            const placeId = 'YOUR_PLACE_ID';
+            const apiKey = 'YOUR_GOOGLE_API_KEY';
+            
+            $.ajax({
+                url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews&key=${apiKey}`,
+                method: 'GET',
+                success: function(response) {
+                    if (response.result && response.result.reviews) {
+                        const reviews = response.result.reviews;
+                        let reviewsHtml = '';
+                        
+                        reviews.forEach(review => {
+                            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                            const date = new Date(review.time * 1000).toLocaleDateString();
+                            
+                            reviewsHtml += `
+                                <div class="review-item">
+                                    <div class="review-header">
+                                        <img src="${review.profile_photo_url}" alt="${review.author_name}" class="reviewer-photo">
+                                        <div class="reviewer-info">
+                                            <h5>${review.author_name}</h5>
+                                            <div class="stars">${stars}</div>
+                                            <span class="review-date">${date}</span>
+                                        </div>
+                                    </div>
+                                    <p class="review-text">${review.text}</p>
+                                </div>
+                            `;
+                        });
+                        
+                        $('#google-reviews-container').html(reviewsHtml);
+                        
+                        // Initialize slick slider for reviews
+                        $('.reviews-slider').slick({
+                            dots: true,
+                            infinite: true,
+                            speed: 300,
+                            slidesToShow: 3,
+                            slidesToScroll: 1,
+                            responsive: [
+                                {
+                                    breakpoint: 991,
+                                    settings: {
+                                        slidesToShow: 2,
+                                        slidesToScroll: 1
+                                    }
+                                },
+                                {
+                                    breakpoint: 576,
+                                    settings: {
+                                        slidesToShow: 1,
+                                        slidesToScroll: 1
+                                    }
+                                }
+                            ]
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.error('Error loading Google Reviews:', error);
+                    $('#google-reviews-container').html('<p class="text-center">Unable to load reviews at this time.</p>');
+                }
+            });
+        }
+
         function new_products() {
             $.ajax({
                 type: 'POST',

@@ -32,7 +32,24 @@
                     <label class="required" for="product_id">{{ __('cruds.product.fields.name') }}</label> 
                     <select class="form-control select2 " name="product_id" id="product_id" required>
                         @foreach($products as $product)
-                            <option value="{{ $product->id }}" data-price="{{$product->unit_price}}"><span>{{ $product->name }}</span> -  <b>({{ $product->unit_price }})</b></option>
+                            @if($product->variant_product)
+                                <optgroup label="{{ $product->name }}">
+                                    @foreach($product->stocks as $stock)
+                                    <option value="{{ $product->id }}" 
+                                            data-variation="{{ $stock->variant }}"
+                                            data-price="{{front_calc_product_currency($product->calc_discount($stock->unit_price),$product->weight)['value']}}">
+                                        <span> -- {{ $product->name }} - ({{ $stock->variant }})</span>
+                                        - <b>({{ front_calc_product_currency($product->calc_discount($stock->unit_price),$product->weight)['value'] }})</b>
+                                    </option>
+                                    @endforeach
+                                </optgroup>
+                            @else
+                                <option value="{{ $product->id }}" 
+                                        data-price="{{front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value']}}">
+                                    <span>{{ $product->name }}</span>
+                                    - <b>({{ front_calc_product_currency($product->calc_discount($product->unit_price),$product->weight)['value'] }})</b>
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -45,8 +62,12 @@
                     <input class="form-control" type="number" name="quantity" id="quantity" required min="1" > 
                 </div>
                 <div class="form-group col-md-4">
-                    <label class="required">{{ __('cruds.order.extra.extra_commission') }}</label>
+                    <label >{{ __('cruds.order.extra.extra_commission') }}</label>
                     <input class="form-control" type="number" name="extra_commission" id="extra_commission" > 
+                </div>
+                <div class="form-group col-md-4">
+                    <label >{{ __('cruds.order.extra.variation') }}</label>
+                    <input class="form-control" type="text" name="variation" id="variation" > 
                 </div>
             </div>
             <div class="form-group">
@@ -65,6 +86,8 @@
     $('#product_id').on('change',function(){
         let price = $(this).find(':selected').attr('data-price');
         $("#price").val(price);
+        let variation = $(this).find(':selected').attr('data-variation');
+        $("#variation").val(variation);
     });
 
     

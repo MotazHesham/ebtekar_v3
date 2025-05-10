@@ -9,13 +9,61 @@
             </a>
         </div>
         <div class="col-md-3">
-        </div>
+        </div> 
         <div class="col-md-3">
+            <a class="btn btn-info" href="#" data-toggle="modal" data-target="#productsReportModal">
+                تقارير المنتجات
+            </a>
         </div>
         <div class="col-md-3">
             <a class="btn btn-danger" href="{{ route('admin.orders.abondoned')}}">
                 Abandoned Checkout
             </a>
+        </div>
+    </div>
+
+    <!-- Products Report Modal -->
+    <div class="modal fade" id="productsReportModal" tabindex="-1" aria-labelledby="productsReportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productsReportModalLabel"> </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    <div class="row">
+                        <div class="col-3 form-group">
+                            <label class="control-label" for="start_date">بداية التاريخ</label>
+                            <input class="form-control date {{ $errors->has('start_date') ? 'is-invalid' : '' }}" type="text"
+                                name="start_date" id="start_date" value="{{ $start_date ?? '' }}" required>
+                        </div>
+                        <div class="col-3 form-group">
+                            <label class="control-label" for="end_date">نهاية التاريخ</label>
+                            <input class="form-control date {{ $errors->has('end_date') ? 'is-invalid' : '' }}" type="text"
+                                name="end_date" id="end_date" value="{{ $end_date ?? '' }}" required>
+                        </div>
+                        <div class="col-3 form-group">
+                            <label class="control-label" >أختر الموقع</label>
+                            <select class="form-control " style="width: 200px" name="website_setting_id" >
+                                <option value="">أختر الموقع</option>
+                                @foreach ($websites as $id => $entry)
+                                    <option value="{{ $id }}" >
+                                        {{ $entry }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <label class="control-label">&nbsp;</label><br>
+                            <button class="btn btn-primary" type="button" onclick="products_report()">{{ __('global.filterDate') }}</button> 
+                        </div>
+                    </div> 
+                    <hr>
+                    <div id="products-report-div">
+                        {{-- ajax request --}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -346,6 +394,18 @@
                                             <span class="c-switch-slider"></span>
                                         </label>
                                     </div>
+                                    <div style="display: flex;justify-content: space-between;flex-direction:column;margin: 0px 3px;"
+                                        class="badge text-bg-light mb-1">
+                                        <span>
+                                            مرتجع
+                                        </span>
+                                        <label class="c-switch c-switch-pill c-switch-success">
+                                            <input onchange="update_statuses(this,'returned')" value="{{ $order->id }}"
+                                                type="checkbox" class="c-switch-input"
+                                                {{ $order->returned ? 'checked' : null }}>
+                                            <span class="c-switch-slider"></span>
+                                        </label>
+                                    </div>
                                 </div> 
                             </td>
                             <td>
@@ -363,16 +423,25 @@
                                     {{ $order->payment_status ? __('global.payment_status.status.' . $order->payment_status) : '' }}
                                 </span>
                                 @can('hold')
-                                    <form action="{{ route('admin.orders.update_statuses') }}" method="POST" style="display: inline">
+                                    <form action="{{ route('admin.orders.update_statuses') }}" method="POST" style="display: inline" id="hold-form-{{ $order->id }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $order->id }}">
                                         <input type="hidden" name="type" value="hold">
+                                        <input type="hidden" name="hold_reason" id="hold-reason-{{ $order->id }}" value="{{ $order->hold_reason }}">
                                         @if($order->hold == 0)
-                                            <input type="hidden" name="status" value="1">
-                                            <button type="submit" class="btn btn-dark btn-sm rounded-pill">Hold </button>
+                                            <input type="hidden" name="status" value="1"> 
+                                            <button type="button" class="btn btn-dark btn-sm rounded-pill" onclick="showHoldModal('{{ $order->id }}','{{ $order->hold_reason }}')">Hold</button>
                                         @else 
                                             <input type="hidden" name="status" value="0">
-                                            <button type="submit" class="btn btn-warning btn-sm rounded-pill">UnHold </button> 
+                                            <button type="submit" class="btn btn-warning btn-sm rounded-pill">UnHold </button>
+                                            @if($order->hold_reason)
+                                                <span class="badge bg-info text-white" style="cursor: pointer" 
+                                                    data-toggle="tooltip" 
+                                                    data-placement="top" 
+                                                    title="{{ $order->hold_reason }}">
+                                                    <i class="fas fa-info-circle"></i> Hold Reason
+                                                </span>
+                                            @endif 
                                         @endif
                                     </form>
                                 @endcan
@@ -447,6 +516,28 @@
             </div>
         </div>
     </div>
+    
+    <!-- Hold Reason Modal -->
+    <div class="modal fade" id="holdReasonModal" tabindex="-1" aria-labelledby="holdReasonModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="holdReasonModalLabel">Hold Reason</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="holdReason">Please enter reason for hold:</label>
+                        <textarea class="form-control" id="holdReason" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitHoldForm()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('scripts')
     @parent
@@ -493,6 +584,19 @@
         }
     </script>
     <script> 
+    
+        function products_report(){
+            $.post('{{ route('admin.orders.products_report') }}', {
+                _token: '{{ csrf_token() }}',
+                start_date: $('#start_date').val(),
+                end_date: $('#end_date').val(),
+                website_setting_id: $('#productsReportModal select').val(),
+            }, function(data) {
+                $('#products-report-div').html(null); 
+                $('#products-report-div').html(data); 
+            });
+        }
+
         function sort_orders(el) {
             $('#sort_orders').submit();
         }
@@ -517,5 +621,32 @@
                 }
             });
         }
+    </script>
+    
+    <script>
+        let currentReceiptId = null;
+
+        function showHoldModal(receiptId, existingReason) {
+            currentReceiptId = receiptId; 
+            $('#holdReason').val(existingReason);
+            $('#holdReasonModal').modal('show');
+        }
+
+        function submitHoldForm() {
+            const reason = $('#holdReason').val();
+            if (!reason.trim()) {
+                alert('Please enter a reason for hold');
+                return;
+            }
+            
+            $(`#hold-reason-${currentReceiptId}`).val(reason);
+            $(`#hold-form-${currentReceiptId}`).submit();
+            $('#holdReasonModal').modal('hide');
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 @endsection
