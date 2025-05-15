@@ -140,6 +140,9 @@
                     <a class="btn btn-warning btn-rounded btn-block"
                         href="{{ route('admin.products.index') }}">{{ __('global.reset') }}</a>
                 </div>
+                <div class="col-md-3">
+                    <input type="submit" value="{{ __('global.download') }}" name="download" class="btn btn-info btn-rounded btn-block">
+                </div>
             </div>
         </div>
     </form>

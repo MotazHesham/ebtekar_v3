@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ProductsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyProductRequest;
@@ -24,6 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductsController extends Controller
 {
@@ -173,35 +175,39 @@ class ProductsController extends Controller
         $featured = $request->featured != null ? $request->featured : null; 
         $todays_deal = $request->todays_deal != null ? $request->todays_deal : null; 
 
+        $query = Product::with(['user', 'category', 'sub_category', 'sub_sub_category', 'design','website']);
+        if($website_setting_id != null){
+            $query = $query->where('website_setting_id',$website_setting_id);
+        }
+        if($category_id != null){
+            $query = $query->where('category_id',$category_id);
+        }
+        if($sub_category_id != null){
+            $query = $query->where('sub_category_id',$sub_category_id);
+        }
+        if($sub_sub_category_id != null){
+            $query = $query->where('sub_sub_category_id',$sub_sub_category_id);
+        }
+        if($weight != null){
+            $query = $query->where('weight',$weight);
+        }
+        if($flash_deal != null){
+            $query = $query->where('flash_deal',$flash_deal);
+        }
+        if($published != null){
+            $query = $query->where('published',$published);
+        }
+        if($featured != null){
+            $query = $query->where('featured',$featured);
+        }
+        if($todays_deal != null){
+            $query = $query->where('todays_deal',$todays_deal);
+        }
+        if($request->has('download')){
+            $query = $query->get();
+            return Excel::download(new ProductsExport($query), 'products.xlsx');
+        }
         if ($request->ajax()) {
-            $query = Product::with(['user', 'category', 'sub_category', 'sub_sub_category', 'design','website']);
-            if($website_setting_id != null){
-                $query = $query->where('website_setting_id',$website_setting_id);
-            }
-            if($category_id != null){
-                $query = $query->where('category_id',$category_id);
-            }
-            if($sub_category_id != null){
-                $query = $query->where('sub_category_id',$sub_category_id);
-            }
-            if($sub_sub_category_id != null){
-                $query = $query->where('sub_sub_category_id',$sub_sub_category_id);
-            }
-            if($weight != null){
-                $query = $query->where('weight',$weight);
-            }
-            if($flash_deal != null){
-                $query = $query->where('flash_deal',$flash_deal);
-            }
-            if($published != null){
-                $query = $query->where('published',$published);
-            }
-            if($featured != null){
-                $query = $query->where('featured',$featured);
-            }
-            if($todays_deal != null){
-                $query = $query->where('todays_deal',$todays_deal);
-            }
             $query = $query->select(sprintf('%s.*', (new Product)->table));
             $table = Datatables::of($query);
 

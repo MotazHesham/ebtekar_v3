@@ -45,7 +45,7 @@ class WebsiteSetting extends Model implements HasMedia
         1 => 'ابتكار',
         2   => 'ارتجال',
         3   => 'فيجرز',
-        4   => 'شيرتي',
+        4   => 'novi',
         5   => 'مارتوبيا',
         6   => 'a1 digital',
         7   => 'Ein',
