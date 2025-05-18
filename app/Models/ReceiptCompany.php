@@ -105,6 +105,8 @@ class ReceiptCompany extends Model implements HasMedia
         'shipmenter_id',
         'delivery_man_id',
         'shipping_country_id',
+        'shopify_id',
+        'shopify_order_num',
         'created_at',
         'updated_at',
         'deleted_at',

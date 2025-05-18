@@ -49,9 +49,6 @@
                 weight
             </th> 
             <th>
-                images
-            </th> 
-            <th>
                 video_provider
             </th> 
             <th>
@@ -62,6 +59,9 @@
             </th> 
             <th>
                 meta_description
+            </th> 
+            <th>
+                images
             </th> 
         </tr>
     </thead> 
@@ -85,15 +85,15 @@
                 <td>{{ $product->current_stock }}</td> 
                 <td>{{ $product->slug }}</td>
                 <td>{{ $product->weight }}</td>
-                <td>
-                    @foreach($product->photos as $image)
-                        {{ $image->getUrl() }},
-                    @endforeach
-                </td>
                 <td>{{ $product->video_provider }}</td> 
                 <td>{{ $product->video_link }}</td> 
                 <td>{{ $product->meta_title }}</td> 
                 <td>{{ $product->meta_description }}</td> 
+                @foreach($product->photos as $image)
+                    <td>
+                            {{ $image->getUrl() }} 
+                    </td>
+                @endforeach
             </tr>
         @endforeach  
     </tbody>

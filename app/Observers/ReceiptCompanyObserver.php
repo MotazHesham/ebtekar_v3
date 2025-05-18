@@ -21,11 +21,13 @@ class ReceiptCompanyObserver
         $receiptComapny->order_num = 'receipt-company#' . ($order_num + 1);
 
         // Assign the Creator Of The Receipt
-        $receiptComapny->staff_id = Auth::id();  
+        $receiptComapny->staff_id = Auth::check() ? Auth::id() : null;  
 
         // Get The Cost of the Shipping Country
-        $country = Country::findOrFail($receiptComapny->shipping_country_id); 
-        $receiptComapny->shipping_country_cost = $country->cost;  
+        if($receiptComapny->shipping_country_id){
+            $country = Country::findOrFail($receiptComapny->shipping_country_id); 
+            $receiptComapny->shipping_country_cost = $country->cost;  
+        }
 
     }
 

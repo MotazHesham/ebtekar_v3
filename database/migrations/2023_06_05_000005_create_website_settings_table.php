@@ -42,6 +42,12 @@ return new class extends Migration
             $table->string('fb_pixel_id')->nullable();
             $table->string('fb_access_token',2000)->nullable();
             $table->string('fb_test_code')->nullable();
+            
+            $table->string('shopify_api_key')->nullable(); 
+            $table->string('shopify_access_token')->nullable();
+            $table->string('shopify_api_secret')->nullable();
+            $table->string('shopify_webhook_sign')->nullable();
+            $table->boolean('shopify_integration_status')->default(0);
             $table->unsignedBigInteger('designer_id')->nullable();
             $table->foreign('designer_id', 'designer_fk_8581724')->references('id')->on('users');
             $table->unsignedBigInteger('preparer_id')->nullable();

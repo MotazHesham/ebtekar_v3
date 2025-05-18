@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\WebsiteSetting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Str;
@@ -311,7 +312,7 @@ if (!function_exists('exchange_rate')) {
         }
         return round($value / $exchange_rate,2); 
     }
-}
+} 
 
 if (!function_exists('get_currency_info')) {
     function get_currency_info($value,$weight)

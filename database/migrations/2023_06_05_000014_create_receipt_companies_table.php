@@ -38,6 +38,8 @@ class CreateReceiptCompaniesTable extends Migration
             $table->string('delivery_status')->default('pending');
             $table->string('payment_status')->default('unpaid');
             $table->string('playlist_status')->default('pending');
+            $table->string('shopify_id')->nullable();
+            $table->string('shopify_order_num')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

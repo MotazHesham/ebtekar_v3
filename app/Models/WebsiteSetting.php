@@ -76,6 +76,12 @@ class WebsiteSetting extends Model implements HasMedia
         'fb_pixel_id',
         'fb_access_token',
         'fb_test_code',
+        'shopify_api_key',
+        'shopify_access_token',
+        'shopify_api_secret',
+        'shopify_webhook_sign',
+        'shopify_integration_status',
+        
         'google_plus',
         'welcome_message',
         'video_instructions',

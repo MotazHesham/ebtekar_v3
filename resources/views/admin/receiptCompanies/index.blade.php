@@ -176,6 +176,11 @@
                                     @endif
                                     {{ $receipt->order_num ?? '' }}
                                 </span>
+                                @if($receipt->shopify_id)
+                                    <span class="badge rounded-pill text-bg-success text-white">
+                                        Shopify Order #{{ $receipt->shopify_order_num }}
+                                    </span>
+                                @endif
                                 <div style="display:flex;justify-content:space-between">
                                     <div>
                                         <b>{{ $receipt->client_name ?? '' }}</b>
