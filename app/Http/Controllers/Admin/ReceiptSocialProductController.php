@@ -96,7 +96,12 @@ class ReceiptSocialProductController extends Controller
                 return $row->id ? $row->id : '';
             });
             $table->editColumn('name', function ($row) {
-                return $row->name ? $row->name : '';
+                $name = $row->name ? $row->name : '';
+                if($row->shopify_id){
+                    $name .= ' <span class="badge rounded-pill text-bg-success text-white">
+                    Shopify id #'.$row->shopify_id.'</span>';
+                }
+                return $name;
             });
             $table->editColumn('product_type', function ($row) {
                 return $row->product_type ? ReceiptSocialProduct::PRODUCT_TYPE_SELECT[$row->product_type] : '';
@@ -123,7 +128,7 @@ class ReceiptSocialProductController extends Controller
                 return $row->website->site_name ?? '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'photos','website_site_name']);
+            $table->rawColumns(['actions', 'placeholder', 'photos','website_site_name','name']);
 
             return $table->make(true);
         }
