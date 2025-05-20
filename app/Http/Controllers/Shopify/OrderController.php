@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Shopify;
 
 use App\Http\Controllers\Controller;
 use App\Models\ReceiptCompany;
+use App\Models\ReceiptSocial;
+use App\Models\ReceiptSocialProduct;
+use App\Models\ReceiptSocialProductPivot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -45,8 +48,7 @@ class OrderController extends Controller
             $shopify_order_num = $request->order_number;
             $products = $request->line_items;
             $shipping_address = $request->shipping_address; 
-            $shipping_cost= $request->current_shipping_price_set['shop_money']['amount'];
-            $subtotal = $request->current_subtotal_price;
+            $shipping_cost= $request->current_shipping_price_set['shop_money']['amount']; 
             $total = $request->current_total_price;
 
             $customer_name = $shipping_address['name']; 
@@ -54,27 +56,58 @@ class OrderController extends Controller
             $customer_address = $shipping_address['address1'] . ', ' . $shipping_address['address2'] . ', ' . $shipping_address['city'] . ', ' . $shipping_address['province'] . ', ' . $shipping_address['country'] . ', ' . $shipping_address['zip'];
 
 
-            $description = '';
-            foreach($products as $product) {
-                $description .= "<p>Product: " . $product['name'] . "<br>";
-                $description .= "Price: " . $product['price'] . "<br>";
-                $description .= "Quantity: " . $product['quantity'] . "<br><br></p>";
-            }
 
-            $receiptCompany = ReceiptCompany::where('shopify_id', $shopify_id)->first();
-            if(!$receiptCompany){
-                $receiptCompany = new ReceiptCompany();
-                $receiptCompany->shopify_id = $shopify_id;
-                $receiptCompany->shopify_order_num = $shopify_order_num;
+            $receiptSocial = ReceiptSocial::where('shopify_id', $shopify_id)->first();
+            if(!$receiptSocial){
+                $receiptSocial = new ReceiptSocial();
+                $receiptSocial->shopify_id = $shopify_id;
+                $receiptSocial->shopify_order_num = $shopify_order_num;
+                $receiptSocial->website_setting_id = $site_settings->id;
             } 
-            $receiptCompany->client_name = $customer_name;
-            $receiptCompany->client_type = 'individual';
-            $receiptCompany->phone_number = $customer_phone;  
-            $receiptCompany->total_cost = $total; 
-            $receiptCompany->shipping_country_cost = $shipping_cost;
-            $receiptCompany->shipping_address = $customer_address; 
-            $receiptCompany->description = $description;
-            $receiptCompany->save();
+            $receiptSocial->client_name = $customer_name;
+            $receiptSocial->client_type = 'individual';
+            $receiptSocial->phone_number = $customer_phone;  
+            $receiptSocial->total_cost = $total - $shipping_cost; 
+            $receiptSocial->shipping_country_cost = $shipping_cost;
+            $receiptSocial->shipping_address = $customer_address;  
+            $receiptSocial->save();
+            
+            foreach($products as $product) {
+                $receiptSocialProduct = ReceiptSocialProduct::updateOrCreate(
+                    [
+                        'website_setting_id' => $site_settings->id,
+                        'shopify_id' => $product['product_id'], 
+                    ],
+                    [
+                        'name' => $product['name'],
+                        'price' => $product['price'], 
+                    ]
+                );
+                $itemProperties = $product['properties'];
+                $propertiesString = '';
+                if (!empty($itemProperties)) {
+                    $propertiesArray = [];
+                    foreach ($itemProperties as $property) {
+                        $propertiesArray[] = $property['name'] . ': ' . $property['value'];
+                    }
+                    $propertiesString = implode(' | ', $propertiesArray);
+                }
+
+                ReceiptSocialProductPivot::updateOrCreate(
+                    [
+                        'shopify_id' => $product['admin_graphql_api_id'],
+                    ],
+                    [
+                        'receipt_social_id' => $receiptSocial->id,
+                        'receipt_social_product_id' => $receiptSocialProduct->id,
+                        'title' => $product['name'],
+                        'description' => $propertiesString,
+                        'quantity' => $product['quantity'],
+                        'price' => $product['price'],
+                        'total_cost' => $product['price'] * $product['quantity'],
+                    ]
+                );
+            }
             $logger->debug('shopify:', ['success' => 'Success Shopify WebHook Order Created']); 
             return response()->json(null,200);
         } catch (\Exception $e) {

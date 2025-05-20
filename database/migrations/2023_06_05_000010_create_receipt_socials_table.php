@@ -48,6 +48,8 @@ class CreateReceiptSocialsTable extends Migration
             $table->foreign('website_setting_id', 'website_setting_fk_8698748')->references('id')->on('website_settings');
             $table->unsignedBigInteger('financial_account_id')->nullable();
             $table->foreign('financial_account_id', 'financial_account_fk_8690008')->references('id')->on('financial_accounts');
+            $table->string('shopify_id')->nullable();
+            $table->string('shopify_order_num')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

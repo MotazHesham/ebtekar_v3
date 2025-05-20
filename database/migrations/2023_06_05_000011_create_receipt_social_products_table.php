@@ -14,6 +14,7 @@ class CreateReceiptSocialProductsTable extends Migration
             $table->string('name');
             $table->decimal('price', 15, 2);
             $table->decimal('commission', 15, 2)->nullable(); 
+            $table->string('shopify_id')->nullable();
             $table->unsignedBigInteger('website_setting_id')->nullable();
             $table->foreign('website_setting_id', 'website_setting_fk_89976438')->references('id')->on('website_settings');
             $table->timestamps();

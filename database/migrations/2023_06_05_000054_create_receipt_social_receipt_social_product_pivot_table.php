@@ -23,6 +23,7 @@ class CreateReceiptSocialReceiptSocialProductPivotTable extends Migration
             $table->foreign('receipt_social_product_id', 'receipt_social_product_id_fk_8581563')->references('id')->on('receipt_social_products')->onDelete('cascade');
             $table->unsignedBigInteger('receipt_social_id');
             $table->foreign('receipt_social_id', 'receipt_social_id_fk_8581563')->references('id')->on('receipt_socials')->onDelete('cascade');
+            $table->string('shopify_id')->nullable();
             $table->timestamps();
         });
     }

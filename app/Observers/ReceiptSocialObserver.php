@@ -38,11 +38,13 @@ class ReceiptSocialObserver
         $receiptSocial->order_num = $str . 'social#' . ($order_num + 1);
 
         // Assign the Creator Of The Receipt
-        $receiptSocial->staff_id = Auth::id(); 
+        $receiptSocial->staff_id = Auth::check() ? Auth::id() : null;  
 
         // Get The Cost of the Shipping Country
-        $country = Country::findOrFail($receiptSocial->shipping_country_id); 
-        $receiptSocial->shipping_country_cost = $country->cost; 
+        if($receiptSocial->shipping_country_id){
+            $country = Country::findOrFail($receiptSocial->shipping_country_id); 
+            $receiptSocial->shipping_country_cost = $country->cost; 
+        }
     }
 
     public function updating(ReceiptSocial $receiptSocial){ 

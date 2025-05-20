@@ -110,6 +110,8 @@ class ReceiptSocial extends Model
         'shipping_country_id',
         'website_setting_id',
         'financial_account_id',
+        'shopify_id',
+        'shopify_order_num',
         'created_at',
         'updated_at',
         'deleted_at',

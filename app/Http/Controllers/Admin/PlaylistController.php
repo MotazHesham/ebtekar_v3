@@ -77,6 +77,9 @@ class PlaylistController extends Controller
         $model_type = $request->model_type;
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->where('email', '!=', 'wezaa@gmail.com')->get();
         $site_settings = WebsiteSetting::where('id',$raw->website_setting_id)->first();
+        if(!$site_settings){
+            $site_settings = WebsiteSetting::where('id',1)->first();
+        }
         return view('partials.playlist_users',compact('raw','staffs','site_settings','id','model_type'));
     }
 
