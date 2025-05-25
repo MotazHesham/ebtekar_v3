@@ -30,7 +30,7 @@
                         </span>
                     @endif
                 </td>
-                <td>{{ $product->products && $product->products->product_type == 'season' ? 'منتج سيزون' : 'منتج غير سيزون' }}</td>
+                <td>{{ $product->products && $product->products->product_type == 'season' ? 'منتج سيزون' : 'منتج عادي' }}</td>
                 <td>{{ $product->quantity}}</td> 
                 <td>{{ $product->total_cost}}</td> 
             </tr> 

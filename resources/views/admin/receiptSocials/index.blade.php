@@ -67,8 +67,20 @@
                                 name="end_date" id="end_date" value="{{ $end_date ?? '' }}" required>
                         </div>
                         <div class="col-3 form-group">
+                            <label class="control-label" >نوع الطلب</label>
+                            <select class="form-control mb-2 @isset($product_type) isset @endisset" name="product_type" id="product_type___">
+                                <option value="">نوع الطلب</option>
+                                <option value="1" @isset($product_type) @if ($product_type == 'season') selected @endif @endisset>
+                                    منتج سيزون
+                                </option>
+                                <option value="0" @isset($product_type) @if ($product_type == '0') selected @endif @endisset>
+                                    منتج غير سيزون
+                                </option>
+                            </select> 
+                        </div>
+                        <div class="col-3 form-group">
                             <label class="control-label" >أختر الموقع</label>
-                            <select class="form-control " style="width: 200px" name="website_setting_id" >
+                            <select class="form-control " style="width: 200px" name="website_setting_id" id="website_setting_id__" onchange="sort_receipt_social()">
                                 <option value="">أختر الموقع</option>
                                 @foreach ($websites as $id => $entry)
                                     <option value="{{ $id }}" >
@@ -704,7 +716,8 @@
                 _token: '{{ csrf_token() }}',
                 start_date: $('#start_date').val(),
                 end_date: $('#end_date').val(),
-                website_setting_id: $('#productsReportModal select').val(),
+                website_setting_id: $('#product_type___').val(),
+                product_type: $('#website_setting_id__').val(),
             }, function(data) {
                 $('#products-report-div').html(null); 
                 $('#products-report-div').html(data); 

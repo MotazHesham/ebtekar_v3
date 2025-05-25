@@ -30,7 +30,21 @@ class ReceiptSocialProductController extends Controller
                 $q->where('website_setting_id',$website_setting_id);
             }
             return $q->where('confirm',1);
-        })->whereBetween(
+        });
+        
+        if($request->product_type != null){
+            if($request->product_type == '1'){
+                $products = $products->whereHas('products',function($q){
+                    $q->where('product_type','!=','season');
+                });
+            }elseif($request->product_type == '0'){
+                $products = $products->whereHas('products',function($q){
+                    $q->where('product_type','season');
+                });
+            }
+        }
+
+        $products = $products->whereBetween(
             'created_at',
             [
                 Carbon::createFromFormat(config('panel.date_format') . ' H:i:s', $request->start_date . ' 00:00:00')->format('Y-m-d H:i:s'),
