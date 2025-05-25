@@ -67,9 +67,9 @@
                                 name="end_date" id="end_date" value="{{ $end_date ?? '' }}" required>
                         </div>
                         <div class="col-3 form-group">
-                            <label class="control-label" >نوع الطلب</label>
+                            <label class="control-label" >نوع المنتج</label>
                             <select class="form-control mb-2 @isset($product_type) isset @endisset" name="product_type" id="product_type___">
-                                <option value="">نوع الطلب</option>
+                                <option value="">نوع المنتج</option>
                                 <option value="1" @isset($product_type) @if ($product_type == 'season') selected @endif @endisset>
                                     منتج سيزون
                                 </option>
@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-3 form-group">
                             <label class="control-label" >أختر الموقع</label>
-                            <select class="form-control " style="width: 200px" name="website_setting_id" id="website_setting_id__" onchange="sort_receipt_social()">
+                            <select class="form-control " style="width: 200px" name="website_setting_id" id="website_setting_id__">
                                 <option value="">أختر الموقع</option>
                                 @foreach ($websites as $id => $entry)
                                     <option value="{{ $id }}" >
