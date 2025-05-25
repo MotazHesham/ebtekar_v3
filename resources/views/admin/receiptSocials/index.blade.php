@@ -70,10 +70,10 @@
                             <label class="control-label" >نوع المنتج</label>
                             <select class="form-control mb-2 @isset($product_type) isset @endisset" name="product_type" id="product_type___">
                                 <option value="">نوع المنتج</option>
-                                <option value="1" @isset($product_type) @if ($product_type == 'season') selected @endif @endisset>
+                                <option value="1">
                                     منتج سيزون
                                 </option>
-                                <option value="0" @isset($product_type) @if ($product_type == '0') selected @endif @endisset>
+                                <option value="0">
                                     منتج غير سيزون
                                 </option>
                             </select> 
