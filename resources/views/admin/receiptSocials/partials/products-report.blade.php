@@ -5,6 +5,7 @@
             <th scope="col">#</th>
             <th scope="col">id</th>
             <th scope="col">المنتج</th>
+            <th scope="col">منتج سيزون</th>
             <th scope="col">الكمية المطلوبة</th> 
             <th scope="col">الاجمالي</th> 
         </tr>
@@ -22,7 +23,14 @@
             <tr>
                 <th scope="row"></th>
                 <td>{{ $key + 1 }}</td>
-                <td>{{ $product->title }}</td>
+                <td>{{ $product->title }} 
+                    @if($product->products && $product->products->shopify_id)
+                        <span class="badge rounded-pill text-bg-success text-white">
+                            Shopify id #{{ $product->products->shopify_id }}
+                        </span>
+                    @endif
+                </td>
+                <td>{{ $product->products && $product->products->product_type == 'season' ? 'منتج سيزون' : 'منتج غير سيزون' }}</td>
                 <td>{{ $product->quantity}}</td> 
                 <td>{{ $product->total_cost}}</td> 
             </tr> 

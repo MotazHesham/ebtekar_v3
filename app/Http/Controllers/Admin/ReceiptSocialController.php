@@ -434,7 +434,7 @@ class ReceiptSocialController extends Controller
         $financial_account_id = null;
         $website_setting_id = null;
         $product_type = null;
-
+        $isShopify = null;
         $enable_multiple_form_submit = true;
 
         if(request('deleted')){ 
@@ -452,6 +452,14 @@ class ReceiptSocialController extends Controller
         if ($request->country_id != null) {
             $country_id = $request->country_id;
             $receipts = $receipts->where('shipping_country_id', $country_id);
+        }
+        if ($request->isShopify != null) {
+            $isShopify = $request->isShopify;
+            if($isShopify == 1){
+                $receipts = $receipts->whereNotNull('shopify_id');
+            }else{
+                $receipts = $receipts->whereNull('shopify_id');
+            }
         }
 
         if ($request->sent_to_delivery != null) {
@@ -658,7 +666,7 @@ class ReceiptSocialController extends Controller
             'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
-            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied',
+            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id',
         ));
     }
