@@ -39,6 +39,7 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
             <td>الاجمالي: {{ $quantity }} </td>
             <td>الاجمالي: {{ $total }} </td>
         </tr>

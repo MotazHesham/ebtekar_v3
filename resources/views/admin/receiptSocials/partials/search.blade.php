@@ -9,8 +9,8 @@
                     <input type="number" class="form-control mb-2 @isset($total_cost) isset @endisset" id="total_cost" name="total_cost"
                         @isset($total_cost) value="{{ $total_cost }}" @endisset placeholder="....... سعر الاوردر اكثر من">  
                 </div>
-                <select class="form-control mb-2 @isset($isShopify) isset @endisset" name="isShopify" id="isShopify" onchange="sort_receipt_social()">
-                    <option value="">{{ __('طلب شوبيفاي') }}</option>
+                <select class="form-control mb-2 @isset($isShopify) isset @endisset" style="width: 200px"  name="isShopify" id="isShopify" onchange="sort_receipt_social()">
+                    <option value="">تحديد نوع الطلب</option>
                     <option value="1" @isset($isShopify) @if ($isShopify == '1') selected @endif @endisset>
                         طلب شوبيفاي
                     </option>
