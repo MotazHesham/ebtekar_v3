@@ -33,14 +33,14 @@ class ReceiptSocialProductController extends Controller
         });
         
         if($request->product_type != null){
-            if($request->product_type == '1'){
-                $products = $products->whereHas('products',function($q){
-                    $q->where('product_type','!=','season');
-                });
-                
-            }elseif($request->product_type == '0'){
+            if($request->product_type == 1){
                 $products = $products->whereHas('products',function($q){
                     $q->where('product_type','season');
+                });
+                
+            }elseif($request->product_type == 0){
+                $products = $products->whereHas('products',function($q){
+                    $q->whereNull('product_type');
                 });
             }
         }
