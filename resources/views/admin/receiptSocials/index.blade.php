@@ -716,8 +716,8 @@
                 _token: '{{ csrf_token() }}',
                 start_date: $('#start_date').val(),
                 end_date: $('#end_date').val(),
-                website_setting_id: $('#product_type___').val(),
-                product_type: $('#website_setting_id__').val(),
+                website_setting_id: $('#website_setting_id__').val(),
+                product_type: $('#product_type___').val(),
             }, function(data) {
                 $('#products-report-div').html(null); 
                 $('#products-report-div').html(data); 

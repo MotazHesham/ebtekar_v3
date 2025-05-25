@@ -37,6 +37,7 @@ class ReceiptSocialProductController extends Controller
                 $products = $products->whereHas('products',function($q){
                     $q->where('product_type','!=','season');
                 });
+                
             }elseif($request->product_type == '0'){
                 $products = $products->whereHas('products',function($q){
                     $q->where('product_type','season');
