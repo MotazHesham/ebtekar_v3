@@ -77,9 +77,9 @@ class OrderController extends Controller
                     [
                         'website_setting_id' => $site_settings->id,
                         'shopify_id' => $product['product_id'], 
+                        'name' => $product['name'],
                     ],
                     [
-                        'name' => $product['name'],
                         'price' => $product['price'], 
                     ]
                 );
