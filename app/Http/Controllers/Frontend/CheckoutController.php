@@ -158,12 +158,11 @@ class CheckoutController extends Controller
             
             if ($request->payment_option != null) {
 
-                if($user && $user->user_type == 'seller'){
-                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','seller')->where('website_setting_id',$site_settings->id)->latest()->first()->order_num ?? 0;
-                }else{
-                    $code_z = Order::withoutGlobalScope('completed')->where('order_type','customer')->where('website_setting_id',$site_settings->id)->latest()->first()->order_num ?? 0;
-                }
-                $last_order_code = intval(str_replace('#','',strrchr($code_z,"#")));
+                if($user && $user->user_type == 'seller'){ 
+                    $order_num = generateOrderNumber('seller#',$site_settings->id);
+                }else{ 
+                    $order_num = generateOrderNumber('customer#',$site_settings->id);
+                } 
 
 
                 $order = new Order;
@@ -180,16 +179,7 @@ class CheckoutController extends Controller
                 $order->payment_type = $request->payment_option;
                 $order->symbol = $currency->symbol;
                 $order->exchange_rate = $currency->exchange_rate;
-
-                if($site_settings->id == 2){
-                    $str = 'ertgal-';
-                }elseif($site_settings->id == 3){
-                    $str = 'figures-';
-                }elseif($site_settings->id == 4){
-                    $str = 'novi-';
-                }else{ 
-                    $str = 'ebtekar-';
-                } 
+                
 
                 if($user && $user->user_type == 'seller'){
                     $order->client_name = $request->first_name . ' ' . $request->last_name;
@@ -202,11 +192,11 @@ class CheckoutController extends Controller
                     $order->free_shipping_reason = $request->free_shipping_reason;
                     $order->total_cost_by_seller = $request->total_cost_by_seller;
                     $order->order_type = 'seller';
-                    $order->order_num = $str . 'seller#' . ($last_order_code + 1);
+                    $order->order_num = $order_num;
                 }else{
                     $order->client_name = $request->first_name . ' ' . $request->last_name;
                     $order->order_type = 'customer';
-                    $order->order_num = $str . 'customer#' . ($last_order_code + 1);
+                    $order->order_num = $order_num;
                 }
 
 

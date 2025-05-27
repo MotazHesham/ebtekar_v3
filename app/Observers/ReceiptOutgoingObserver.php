@@ -9,16 +9,8 @@ use Illuminate\Support\Facades\DB;
 class ReceiptOutgoingObserver
 {
     
-    public function creating(ReceiptOutgoing $receiptOutgoing){
-    
-        // Getting next Order Num
-        $last_receipt_outgoing = ReceiptOutgoing::latest()->first();
-        if ($last_receipt_outgoing) {
-            $order_num = $last_receipt_outgoing->order_num ? intval(str_replace('#', '', strrchr($last_receipt_outgoing->order_num, "#"))) : 0;
-        } else {
-            $order_num = 0;
-        }
-        $receiptOutgoing->order_num = 'receipt-outgoings#' . ($order_num + 1);
+    public function creating(ReceiptOutgoing $receiptOutgoing){ 
+        $receiptOutgoing->order_num = generateOrderNumber('receipt-outgoings#');
 
         // Assign the Creator Of The Receipt
         $receiptOutgoing->staff_id = Auth::id(); 

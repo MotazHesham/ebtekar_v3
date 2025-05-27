@@ -9,17 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class ReceiptCompanyObserver
 {
-    public function creating(ReceiptCompany $receiptComapny){
-        
-        // Getting next Order Num
-        $last_receipt_comapny = ReceiptCompany::latest()->first();
-        if ($last_receipt_comapny) {
-            $order_num = $last_receipt_comapny->order_num ? intval(str_replace('#', '', strrchr($last_receipt_comapny->order_num, "#"))) : 0;
-        } else {
-            $order_num = 0;
-        }
-        $receiptComapny->order_num = 'receipt-company#' . ($order_num + 1);
-
+    public function creating(ReceiptCompany $receiptComapny){ 
+        $receiptComapny->order_num = generateOrderNumber('receipt-company#');
         // Assign the Creator Of The Receipt
         $receiptComapny->staff_id = Auth::check() ? Auth::id() : null;  
 

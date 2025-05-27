@@ -4,38 +4,14 @@ namespace App\Observers;
 
 use App\Models\Country;
 use App\Models\ReceiptSocial;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth; 
 
 
 class ReceiptSocialObserver
 {
     public function creating(ReceiptSocial $receiptSocial){
         
-        // Getting next Order Num
-        $last_receipt_social = ReceiptSocial::where('website_setting_id',$receiptSocial->website_setting_id)->latest()->first();
-        
-        if ($last_receipt_social) {
-            $order_num = $last_receipt_social->order_num ? intval(str_replace('#', '', strrchr($last_receipt_social->order_num, "#"))) : 0;
-        } else {
-            $order_num = 0;
-        } 
-        if($receiptSocial->website_setting_id == 2){
-            $str = 'ertgal-';
-        }elseif($receiptSocial->website_setting_id == 3){
-            $str = 'figures-';
-        }elseif($receiptSocial->website_setting_id == 4){
-            $str = 'novi-';
-        }elseif($receiptSocial->website_setting_id == 5){
-            $str = 'martobia-';
-        }elseif($receiptSocial->website_setting_id == 6){
-            $str = 'a1-digital-';
-        }elseif($receiptSocial->website_setting_id == 7){
-            $str = 'ein-';
-        }else{ 
-            $str = 'ebtekar-';
-        }
-        $receiptSocial->order_num = $str . 'social#' . ($order_num + 1);
+        $receiptSocial->order_num = generateOrderNumber('social#',$receiptSocial->website_setting_id);
 
         // Assign the Creator Of The Receipt
         $receiptSocial->staff_id = Auth::check() ? Auth::id() : null;  

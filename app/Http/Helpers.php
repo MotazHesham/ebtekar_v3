@@ -12,6 +12,7 @@ use App\Models\ReceiptSocial;
 use App\Models\User;
 use App\Models\WebsiteSetting;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -110,6 +111,15 @@ if (!function_exists('setCurrencyRate')) {
                 }
             });    
                 
+        }else{
+            Cache::remember('currency_rates', 21600, function () {  // 6 hours
+                return [
+                    'AED' => 13,
+                    'SAR' => 13,
+                    'KWD' => 160,
+                    'EGP' => 1
+                ];
+            });    
         }
     }
 }
@@ -337,6 +347,60 @@ if (!function_exists('get_currency_info')) {
         } 
     }
 }   
+
+if (!function_exists('getWebsiteSettingPrefix')) {
+    function getWebsiteSettingPrefix($id)
+    {
+        if($id == 2){
+            $str = 'ertgal-';
+        }elseif($id == 3){
+            $str = 'figures-';
+        }elseif($id == 4){
+            $str = 'novi-';
+        }elseif($id == 5){
+            $str = 'martobia-';
+        }elseif($id == 6){
+            $str = 'a1-digital-';
+        }elseif($id == 7){
+            $str = 'ein-';
+        }else{ 
+            $str = 'ebtekar-';
+        }
+        return $str;
+    }
+}
+
+if (!function_exists('generateOrderNumber')) {
+    function generateOrderNumber($type,$website_setting_id = null)
+    {
+        $prefix = $website_setting_id ? getWebsiteSettingPrefix($website_setting_id) : null;
+        return DB::transaction(function () use ($type,$prefix) {
+            // This locks only the selected row(s) matching the where condition
+            // lockForUpdate() acquires a row-level lock on the rows that match the query
+            $counter = DB::table('order_number_counters')
+                ->where('type', $type)
+                ->where('prefix', $prefix)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$counter) { 
+                DB::table('order_number_counters')->insert([
+                    'type' => $type,
+                    'last_number' => 1,
+                ]);
+                $newNumber = 1;
+            } else {
+                $newNumber = $counter->last_number + 1;
+                DB::table('order_number_counters')
+                    ->where('type', $type)
+                    ->where('prefix', $prefix)
+                    ->update(['last_number' => $newNumber]);
+            }
+
+            return $prefix . $type . $newNumber;
+        });
+    }
+}
 
 if (!function_exists('combinations')) {
     function combinations($arrays)
