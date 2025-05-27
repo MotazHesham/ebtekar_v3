@@ -116,7 +116,8 @@ class ReceiptSocialProductController extends Controller
                     $name .= ' <span class="badge rounded-pill text-bg-success text-white">
                     Shopify id #'.$row->shopify_id.'</span>';
                 }
-                return $name;
+                $log = '<span class="badge rounded-pill text-bg-info text-white" style="cursor: pointer;" onclick="show_logs(\'App\\\Models\\\ReceiptSocialProduct\','.$row->id.',\'receiptSocialProduct\')">log</span>';
+                return $log . $name;
             });
             $table->editColumn('product_type', function ($row) {
                 return $row->product_type ? ReceiptSocialProduct::PRODUCT_TYPE_SELECT[$row->product_type] : '';

@@ -320,6 +320,8 @@ return [
             'deleted_at_helper' => ' ',
             'receipts'          => 'الفواتير',
             'receipts_helper'   => ' ',
+            'website_setting_id'=> 'website_setting_id',
+            'shopify_id'=> 'shopify_id',
         ],
     ],
     'receiptClient' => [
