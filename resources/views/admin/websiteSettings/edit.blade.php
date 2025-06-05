@@ -134,6 +134,28 @@
                         <span class="help-block">{{ __('cruds.websiteSetting.fields.email_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
+                        <label for="shopify_webhook_sign">Shopify Webhook Sign</label>
+                        <input class="form-control {{ $errors->has('shopify_webhook_sign') ? 'is-invalid' : '' }}" type="text"
+                            name="shopify_webhook_sign" id="shopify_webhook_sign" value="{{ old('shopify_webhook_sign', $websiteSetting->shopify_webhook_sign) }}">
+                        @if ($errors->has('shopify_webhook_sign'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('shopify_webhook_sign') }}
+                            </div>
+                        @endif 
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="shopify_integration_status">Shopify Integration Status</label>
+                        <select name="shopify_integration_status" id="shopify_integration_status" class="form-control {{ $errors->has('shopify_integration_status') ? 'is-invalid' : '' }}">
+                            <option value="1" {{ old('shopify_integration_status', $websiteSetting->shopify_integration_status) == 1 ? 'selected' : '' }}>Enabled</option>
+                            <option value="0" {{ old('shopify_integration_status', $websiteSetting->shopify_integration_status) == 0 ? 'selected' : '' }}>Disabled</option>
+                        </select>
+                        @if ($errors->has('shopify_integration_status'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('shopify_integration_status') }}
+                            </div>
+                        @endif
+                    </div>
+                    <div class="form-group col-md-4">
                         <label for="facebook">{{ __('cruds.websiteSetting.fields.facebook') }}</label>
                         <input class="form-control {{ $errors->has('facebook') ? 'is-invalid' : '' }}" type="text"
                             name="facebook" id="facebook" value="{{ old('facebook', $websiteSetting->facebook) }}">

@@ -7,12 +7,13 @@ use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
 use App\Models\ReceiptSocialProduct;
 use App\Models\ReceiptSocialProductPivot;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
-    public function createOrUpdate(Request $request)
+    public function createOrUpdate(Request $request, $website_setting_id)
     {  
         $logger = Log::build([
             'driver' => 'single',
@@ -22,7 +23,7 @@ class OrderController extends Controller
         $logger->debug('shopify:', $request->toArray());
         
         try { 
-            $site_settings = get_site_setting();
+            $site_settings = WebsiteSetting::findOrFail($website_setting_id);
 
             // Validation
                 $hmac = request()->header('x-shopify-hmac-sha256');
@@ -36,8 +37,7 @@ class OrderController extends Controller
                     $logger->debug('shopify:', ['error' => 'Invalid webhook signature']);
                     return response()->json(['error' => 'Invalid webhook signature'], 422);
                 }
-            // ----------
-            
+            // ---------- 
 
             if(!$site_settings->shopify_integration_status){
                 $logger->debug('shopify:', ['error' => 'Shopify Integration is not enabled']);
