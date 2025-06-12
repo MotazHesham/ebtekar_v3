@@ -108,6 +108,15 @@
                         <option value="0" @if ($is_seasoned == '0') selected @endif>منتجات خارج السيزون</option> 
                     </select>
                 </div>
+                <div class="col-md-3">
+                    <select class="form-control mb-2 @isset($zone_id) isset @endisset"
+                        name="zone_id" id="zone_id" onchange="sort_playlist()">
+                        <option value="">select zone</option>
+                        @foreach ($zones as $zone)
+                            <option value="{{ $zone->id }}" @if ($zone_id == $zone->id) selected @endif>{{ $zone->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
 

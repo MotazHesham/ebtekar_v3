@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Country;
 use App\Models\ReceiptBranch;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptOutgoing;
 use App\Models\ReceiptPriceView;
 use App\Models\ReceiptSocial;
+use App\Observers\CountryObserver;
 use App\Observers\ReceiptClientObserver;
 use App\Observers\ReceiptCompanyObserver;
 use App\Observers\ReceiptOutgoingObserver;
@@ -43,6 +45,7 @@ class EventServiceProvider extends ServiceProvider
         ReceiptOutgoing::observe(ReceiptOutgoingObserver::class);
         ReceiptCompany::observe(ReceiptCompanyObserver::class);
         ReceiptPriceView::observe(ReceiptPriceViewObserver::class);
+        Country::observe(CountryObserver::class);
     }
 
     /**

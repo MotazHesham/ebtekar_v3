@@ -57,6 +57,7 @@
                             <div class="container-scrollable"><?php echo $item['note']; ?></div>
                         </div>
                         <div class="col-md-8">
+                            <span class="badge badge-success text-white mb-1">{{ $item['shipping_country_id'] ? getCountryNameById($item['shipping_country_id']) : '' }}</span>
                             <span class="badge badge-dark text-white mb-1">{{ $item['client_type'] == 'individual' ? 'فردي' : 'شركة' }}</span>
                             <span class="badge badge-light text-dark mb-1">{{ __('Description') }}</span>
                             <div class="container-scrollable"> 

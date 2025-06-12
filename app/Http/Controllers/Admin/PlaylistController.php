@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserAlert;
 use App\Models\ViewPlaylistData;
 use App\Models\WebsiteSetting;
+use App\Models\Zone;
 use App\Support\Collection; 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response; 
@@ -317,9 +318,11 @@ class PlaylistController extends Controller
 
         $staffs = User::whereIn('user_type',['staff','seller'])->get();
         
+        $zones = Zone::all();
         $type = $request->type;  
         $playlists = ViewPlaylistData::orderBy('send_to_playlist_date','desc')->where('playlist_status',$type); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
+
         
         $order_num = null;
         $user_id = null;
@@ -330,6 +333,7 @@ class PlaylistController extends Controller
         $client_review = null;
         $is_seasoned = null;
         $client_type = null;
+        $zone_id = null;
         $view = 'all';
 
         if( $request->view != null){
@@ -364,6 +368,12 @@ class PlaylistController extends Controller
             $website_setting_id = $request->website_setting_id;
             $playlists = $playlists->where('website_setting_id',$request->website_setting_id); 
         }
+        if( $request->zone_id != null){
+            $zone_id = $request->zone_id;
+            $zone = Zone::find($request->zone_id);
+            $countryIds = $zone->countries->pluck('id')->toArray();
+            $playlists = $playlists->whereIn('shipping_country_id',$countryIds); 
+        }
         if ($request->order_num != null){
             $order_num = $request->order_num;
             $playlists = $playlists->where('order_num', 'like', '%'.$request->order_num.'%'); 
@@ -384,7 +394,7 @@ class PlaylistController extends Controller
             $dates = null;
         } 
         // return $dates;
-        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','is_seasoned','quickly','website_setting_id','description','to_date','websites','client_type'));
+        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','is_seasoned','quickly','website_setting_id','description','to_date','websites','client_type','zones','zone_id'));
 
     } 
 }

@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateCountryRequest;
 use App\Models\Country; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -99,7 +100,7 @@ class CountriesController extends Controller
     public function store(StoreCountryRequest $request)
     {
         $country = Country::create($request->all());
-
+        
         toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.countries.index');
     }
@@ -113,8 +114,8 @@ class CountriesController extends Controller
 
     public function update(UpdateCountryRequest $request, Country $country)
     {
-        $country->update($request->all());
-
+        $country->update($request->all()); 
+        
         toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.countries.index');
     }

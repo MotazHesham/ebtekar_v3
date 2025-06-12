@@ -2,6 +2,7 @@
 
 //returns combinations of customer choice options array
 
+use App\Models\Country;
 use App\Models\Currency; 
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -74,6 +75,16 @@ if (!function_exists('dashboard_currency')) {
     function dashboard_currency($value)
     {
         return $value . ' EGP';
+    }
+}
+
+if (!function_exists('getCountryNameById')) {
+    function getCountryNameById($id)
+    {
+        $countries = Cache::remember('countries', 60*24, function() {
+            return Country::pluck('name', 'id');
+        });
+        return $countries[$id] ?? '';
     }
 }
 
