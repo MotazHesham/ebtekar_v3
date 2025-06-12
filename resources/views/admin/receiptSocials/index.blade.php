@@ -217,7 +217,7 @@
                                         </div>
                                         <div>
                                             <div class="fs-6 fw-semibold text-info">{{ dashboard_currency(round($statistics['total_total_cost'])) }}</div>
-                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">مجموع
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">مجموع بالعربون
                                             </div>
                                         </div>
                                     </div>
@@ -227,12 +227,42 @@
                             <div class="col-md-6 col-sm-12">
                                 <div class="card">
                                     <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
-                                        <div class="bg-danger text-white p-3 me-3">
+                                        <div class="bg-info text-white p-3 me-3">
+                                            <i class="far fa-money-bill-alt"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fs-6 fw-semibold text-info">{{ dashboard_currency(round($statistics['total_total_cost_without_deposit'])) }}</div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">مجموع بدون العربون
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                            <!-- /.col-->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
+                                        <div class="bg-warning text-white p-3 me-3">
                                             <i class="fas fa-hand-holding-usd"></i>
                                         </div>
                                         <div>
-                                            <div class="fs-6 fw-semibold text-danger">{{ dashboard_currency(round($statistics['total_commission'])) }}</div>
-                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">نسبة الربح
+                                            <div class="fs-6 fw-semibold text-warning">{{ dashboard_currency(round($statistics['total_shipping_country_cost'])) }}</div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">اجمالي الشحن
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.col-->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body p-3 d-flex align-items-center" style="box-shadow: 1px 2px 10px #8080803d;border-radius: 9px;">
+                                        <div class="bg-success text-white p-3 me-3">
+                                            <i class="fas fa-hand-holding-usd"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fs-6 fw-semibold text-success">{{ dashboard_currency(round($statistics['total_grand_total'])) }}</div>
+                                            <div class="text-medium-emphasis text-uppercase fw-semibold small">المجموع
                                             </div>
                                         </div>
                                     </div>
