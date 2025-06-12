@@ -73,6 +73,27 @@
                                     <span
                                         class="help-block">{{ __('cruds.receiptSocial.fields.date_of_receiving_order_helper') }}</span>
                                 </div>
+                                <div class="form-group">
+                                    <label 
+                                        for="discount_type">{{ __('cruds.receiptSocial.fields.discount_type') }}</label>
+                                    <select class="form-control {{ $errors->has('discount_type') ? 'is-invalid' : '' }}"
+                                        name="discount_type" id="discount_type"  >
+                                        <option value disabled {{ old('discount_type', null) === null ? 'selected' : '' }}>
+                                            {{ __('global.pleaseSelect') }}</option>
+                                        @foreach (App\Models\ReceiptSocial::DISCOUNT_TYPE_SELECT as $key => $label)
+                                            <option value="{{ $key }}"
+                                                {{ old('discount_type',$receiptSocial->discount_type) === (string) $key ? 'selected' : '' }}>
+                                                {{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('discount_type'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('discount_type') }}
+                                        </div>
+                                    @endif
+                                    <span
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.discount_type_helper') }}</span>
+                                </div>
 
                                 <div class="form-group">
                                     <label class="required"
@@ -166,6 +187,19 @@
                                     @endif
                                     <span
                                         class="help-block">{{ __('cruds.receiptSocial.fields.deliver_date_helper') }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label 
+                                        for="discount">{{ __('cruds.receiptSocial.fields.discount') }}</label>
+                                    <input class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}"
+                                        type="number" name="discount" id="discount" value="{{ old('discount',$receiptSocial->discount) }}"
+                                        step="0.01"  >
+                                    @if ($errors->has('discount'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('discount') }}
+                                        </div>
+                                    @endif
+                                    <span class="help-block">{{ __('cruds.receiptSocial.fields.discount_helper') }}</span>
                                 </div>
                                 <div class="form-group">
                                     <label for="deposit">{{ __('cruds.receiptSocial.fields.deposit') }}</label>

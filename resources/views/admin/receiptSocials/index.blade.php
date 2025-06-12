@@ -460,6 +460,13 @@
                                             {{ dashboard_currency($receipt->extra_commission) }}
                                         </span>
                                     @endif
+                                    @if($receipt->discounted_amount > 0)
+                                        <span class="badge rounded-pill text-bg-light  mb-1">
+                                            {{ __('cruds.receiptSocial.fields.discount') }}
+                                            <br>
+                                            {{ dashboard_currency($receipt->discounted_amount) }}
+                                        </span>
+                                    @endif
                                     <span class="badge rounded-pill text-bg-light  mb-1">
                                         {{ __('cruds.receiptSocial.fields.shipping_country_cost') }}
                                         <br>

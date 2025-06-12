@@ -228,6 +228,8 @@ return [
             'deposit_type_helper'                 => ' ',
             'discount'                       => 'التخفيض',
             'discount_helper'                => ' ',
+            'discount_type'                  => 'نوع التخفيض',
+            'discount_type_helper'           => ' ',
             'commission'                     => 'نسبة الربح',
             'commission_helper'              => ' ',
             'extra_commission'               => 'نسبة ربح زيادة',

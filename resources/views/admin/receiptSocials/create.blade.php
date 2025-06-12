@@ -16,19 +16,24 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="row">
-                            <div class="col-md-12"> 
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="required" for="website_setting_id">{{ __('global.extra.website_setting_id') }}</label>
-                                    <select class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}" name="website_setting_id" id="website_setting_id" required>
-                                        @foreach($websites as $id => $entry)
-                                            <option value="{{ $id }}" {{ old('website_setting_id',$website_setting_id) == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                    <label class="required"
+                                        for="website_setting_id">{{ __('global.extra.website_setting_id') }}</label>
+                                    <select
+                                        class="form-control select2 {{ $errors->has('website_setting_id') ? 'is-invalid' : '' }}"
+                                        name="website_setting_id" id="website_setting_id" required>
+                                        @foreach ($websites as $id => $entry)
+                                            <option value="{{ $id }}"
+                                                {{ old('website_setting_id', $website_setting_id) == $id ? 'selected' : '' }}>
+                                                {{ $entry }}</option>
                                         @endforeach
                                     </select>
-                                    @if($errors->has('website_setting_id'))
+                                    @if ($errors->has('website_setting_id'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('website_setting_id') }}
                                         </div>
-                                    @endif 
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -53,7 +58,8 @@
                                         for="phone_number">{{ __('cruds.receiptSocial.fields.phone_number') }}</label>
                                     <input class="form-control {{ $errors->has('phone_number') ? 'is-invalid' : '' }}"
                                         type="text" name="phone_number" id="phone_number"
-                                        value="{{ old('phone_number', $previous_data['phone_number'] ?? request('phone_number')) }}" required>
+                                        value="{{ old('phone_number', $previous_data['phone_number'] ?? request('phone_number')) }}"
+                                        required>
                                     @if ($errors->has('phone_number'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('phone_number') }}
@@ -78,15 +84,35 @@
                                     <span
                                         class="help-block">{{ __('cruds.receiptSocial.fields.date_of_receiving_order_helper') }}</span>
                                 </div>
-
+                                <div class="form-group">
+                                    <label 
+                                        for="discount_type">{{ __('cruds.receiptSocial.fields.discount_type') }}</label>
+                                    <select class="form-control {{ $errors->has('discount_type') ? 'is-invalid' : '' }}"
+                                        name="discount_type" id="discount_type"  >
+                                        <option value disabled {{ old('discount_type', null) === null ? 'selected' : '' }}>
+                                            {{ __('global.pleaseSelect') }}</option>
+                                        @foreach (App\Models\ReceiptSocial::DISCOUNT_TYPE_SELECT as $key => $label)
+                                            <option value="{{ $key }}"
+                                                {{ old('discount_type') === (string) $key ? 'selected' : '' }}>
+                                                {{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('discount_type'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('discount_type') }}
+                                        </div>
+                                    @endif
+                                    <span
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.discount_type_helper') }}</span>
+                                </div>
                                 <div class="form-group">
                                     <label class="required"
                                         for="shipping_country_id">{{ __('cruds.receiptSocial.fields.shipping_country_id') }}</label>
                                     <select
                                         class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
                                         name="shipping_country_id" id="shipping_country_id" required>
-                                        <option  value="">{{ __('global.pleaseSelect') }}</option>
-                                        @foreach ($shipping_countries as  $country)
+                                        <option value="">{{ __('global.pleaseSelect') }}</option>
+                                        @foreach ($shipping_countries as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ old('shipping_country_id', $previous_data['shipping_country_id']) == $country->id ? 'selected' : '' }}>
                                                 {{ $country->name }} - {{ $country->cost }}
@@ -161,9 +187,9 @@
                                         class="help-block">{{ __('cruds.receiptSocial.fields.phone_number_2_helper') }}</span>
                                 </div>
                                 <div class="form-group">
-                                    <label
-                                        for="deliver_date">{{ __('cruds.receiptSocial.fields.deliver_date') }}</label>
-                                    <input class="form-control date {{ $errors->has('deliver_date') ? 'is-invalid' : '' }}"
+                                    <label for="deliver_date">{{ __('cruds.receiptSocial.fields.deliver_date') }}</label>
+                                    <input
+                                        class="form-control date {{ $errors->has('deliver_date') ? 'is-invalid' : '' }}"
                                         type="text" name="deliver_date" id="deliver_date"
                                         value="{{ old('deliver_date') }}">
                                     @if ($errors->has('deliver_date'))
@@ -176,7 +202,21 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="deposit" class="required">{{ __('cruds.receiptSocial.fields.deposit') }}</label>
+                                    <label 
+                                        for="discount">{{ __('cruds.receiptSocial.fields.discount') }}</label>
+                                    <input class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}"
+                                        type="number" name="discount" id="discount" value="{{ old('discount') }}"
+                                        step="0.01"  >
+                                    @if ($errors->has('discount'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('discount') }}
+                                        </div>
+                                    @endif
+                                    <span class="help-block">{{ __('cruds.receiptSocial.fields.discount_helper') }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="deposit"
+                                        class="required">{{ __('cruds.receiptSocial.fields.deposit') }}</label>
                                     <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}"
                                         type="number" name="deposit" id="deposit" value="{{ old('deposit') }}"
                                         step="0.01" required onkeyup="change_deposit()">
@@ -185,8 +225,7 @@
                                             {{ $errors->first('deposit') }}
                                         </div>
                                     @endif
-                                    <span
-                                        class="help-block">{{ __('cruds.receiptSocial.fields.deposit_helper') }}</span>
+                                    <span class="help-block">{{ __('cruds.receiptSocial.fields.deposit_helper') }}</span>
                                 </div>
                                 <div class="form-group" id="financial_account_div" style="display: none">
                                     <label class="required"
@@ -194,13 +233,13 @@
                                     <select
                                         class="form-control select2 {{ $errors->has('shipping_country') ? 'is-invalid' : '' }}"
                                         name="financial_account_id" id="financial_account_id" required>
-                                        <option  value="">{{ __('global.pleaseSelect') }}</option>
+                                        <option value="">{{ __('global.pleaseSelect') }}</option>
                                         @foreach ($financial_accounts as $raw)
                                             <option value="{{ $raw->id }}"
                                                 {{ old('financial_account_id') == $raw->id ? 'selected' : '' }}>
                                                 {{ $raw->account }} - {{ $raw->description }}
                                             </option>
-                                        @endforeach 
+                                        @endforeach
                                     </select>
                                     @if ($errors->has('financial_account_id'))
                                         <div class="invalid-feedback">
@@ -274,21 +313,21 @@
 @endsection
 
 @section('scripts')
-    @parent 
+    @parent
     <script>
-        function change_deposit(){
+        function change_deposit() {
             var deposit = document.getElementById("deposit").value;
-            if(deposit > 0){
+            if (deposit > 0) {
                 console.log(deposit);
                 $('#deposit_type').prop('required', true);
                 $('#financial_account_id').prop('required', true);
-                $('#deposit_type_div').css('display','block');
-                $('#financial_account_div').css('display','block');
-            }else{
+                $('#deposit_type_div').css('display', 'block');
+                $('#financial_account_div').css('display', 'block');
+            } else {
                 $('#deposit_type').prop('required', false);
                 $('#financial_account_id').prop('required', false);
-                $('#deposit_type_div').css('display','none');
-                $('#financial_account_div').css('display','none');
+                $('#deposit_type_div').css('display', 'none');
+                $('#financial_account_div').css('display', 'none');
             }
         }
     </script>

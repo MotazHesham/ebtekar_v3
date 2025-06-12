@@ -26,6 +26,10 @@ class ReceiptSocial extends Model
         'unpaid' => 'unPaid',
         'paid'   => 'Paid',
     ];
+    public const DISCOUNT_TYPE_SELECT = [
+        'percentage' => 'نسبة',
+        'fixed'   => 'قيمة',
+    ];
     public const DEPOSIT_TYPE_SELECT = [
         'cash' => 'كاش',
         'wallet'   => 'محفظة ألكترونية',
@@ -72,10 +76,12 @@ class ReceiptSocial extends Model
         'client_type',
         'phone_number',
         'phone_number_2',
-        'deposit',
+        'discount_type',
         'discount',
+        'discounted_amount',
+        'deposit',
         'commission',
-        'extra_commission',
+        'extra_commission', 
         'total_cost',
         'done',
         'quickly',
@@ -232,20 +238,28 @@ class ReceiptSocial extends Model
     }
 	// operations 
 
+    public function calc_discount(){
+        if($this->discount_type == 'percentage'){
+            return $this->total_cost * $this->discount / 100;
+        }else{
+            return $this->discount;
+        }
+    }
+
 	public function calc_total_cost(){
-		return $this->total_cost + $this->extra_commission;
+		return $this->total_cost + $this->extra_commission - $this->discounted_amount;
 	}
 
 	public function calc_total_for_delivery(){
-		return $this->total_cost + $this->extra_commission  - $this->deposit;
+		return $this->total_cost + $this->extra_commission  - $this->deposit - $this->discounted_amount;
 	}
 
 	public function calc_total(){
-		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost;
+		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost - $this->discounted_amount;
 	}
 
 	public function calc_total_for_client(){
-		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost  - $this->deposit;
+		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost  - $this->deposit - $this->discounted_amount;
 	}
 
     

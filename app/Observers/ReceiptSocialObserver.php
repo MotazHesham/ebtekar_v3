@@ -21,9 +21,11 @@ class ReceiptSocialObserver
             $country = Country::findOrFail($receiptSocial->shipping_country_id); 
             $receiptSocial->shipping_country_cost = $country->cost; 
         }
+        $receiptSocial->discounted_amount = $receiptSocial->discount_type ? $receiptSocial->calc_discount() : 0;
     }
 
     public function updating(ReceiptSocial $receiptSocial){  
+        $receiptSocial->discounted_amount = $receiptSocial->discount_type ? $receiptSocial->calc_discount() : 0;
     }
 
     /**

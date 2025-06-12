@@ -59,6 +59,12 @@ class StoreReceiptSocialRequest extends FormRequest
                 'required',
                 'integer',
             ], 
+            'discount_type' => [
+                'required_with:discount',
+            ],
+            'discount' => [
+                'required_with:discount_type',
+            ],
         ];
     }
 }

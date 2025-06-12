@@ -650,15 +650,16 @@ class ReceiptSocialController extends Controller
                 SUM(extra_commission) as total_extra_commission,
                 SUM(shipping_country_cost) as total_shipping_country_cost,
                 SUM(deposit) as total_deposit,
-                SUM(total_cost) as total_total_cost
+                SUM(total_cost) as total_total_cost,
+                SUM(discounted_amount) as total_discounted_amount
             ')->first();
         
         $statistics = [
-            'total_total_cost_without_deposit' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_deposit,
+            'total_total_cost_without_deposit' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_deposit - $statisticsData->total_discounted_amount,
             'total_shipping_country_cost' => $statisticsData->total_shipping_country_cost,
             'total_deposit' => $statisticsData->total_deposit,
-            'total_total_cost' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission,
-            'total_grand_total' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_deposit + $statisticsData->total_shipping_country_cost,
+            'total_total_cost' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_discounted_amount,
+            'total_grand_total' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_deposit + $statisticsData->total_shipping_country_cost - $statisticsData->total_discounted_amount,
         ];
 
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);

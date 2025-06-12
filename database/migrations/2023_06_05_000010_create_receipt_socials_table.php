@@ -15,8 +15,10 @@ class CreateReceiptSocialsTable extends Migration
             $table->string('client_type');
             $table->string('phone_number');
             $table->string('phone_number_2')->nullable();
-            $table->decimal('deposit', 15, 2)->nullable();
+            $table->string('discount_type')->nullable();
             $table->decimal('discount', 15, 2)->nullable();
+            $table->decimal('discounted_amount', 15, 2)->nullable();
+            $table->decimal('deposit', 15, 2)->nullable();
             $table->decimal('commission', 15, 2)->nullable();
             $table->decimal('extra_commission', 15, 2)->nullable();
             $table->decimal('total_cost', 15, 2)->nullable();
