@@ -308,6 +308,10 @@
                         <button class="btn btn-danger" type="submit">
                             {{ __('global.save') }}
                         </button>
+                        <button class="btn btn-dark" type="submit" name="refresh">
+                            حفظ و الرجوع لنفس الصفحة
+                        </button>
+
                     </div>
             </form>
         </div>

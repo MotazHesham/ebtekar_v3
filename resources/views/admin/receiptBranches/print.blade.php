@@ -149,6 +149,12 @@
                                 <td class="text-right currency">{{ dashboard_currency($product->total_cost) }} </td>
                             </tr> 
                         @endforeach
+                        <tr>
+                            <td></td>
+                            <td>أجمالي الكمية : {{ $receipt->receiptsReceiptBranchProducts->sum('quantity') }} </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
             </div> 

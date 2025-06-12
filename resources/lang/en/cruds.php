@@ -751,6 +751,21 @@ return [
             'code_cost_helper'  => ' ',
         ],
     ],
+    'zone' => [
+        'title'          => 'Zones',
+        'title_singular' => 'Zone',
+        'fields'         => [
+            'id'                => 'ID',
+            'id_helper'         => ' ',
+            'name'              => 'Name',
+            'name_helper'       => ' ',
+            'delivery_cost'     => 'Delivery Cost',
+            'delivery_cost_helper' => ' ',
+            'created_at'        => 'Created At',
+            'created_at_helper' => ' ',
+            'updated_at'        => 'Updated At',
+        ],
+    ],
     'social' => [
         'title'          => 'سوشيال',
         'title_singular' => 'موقع سوشيال',

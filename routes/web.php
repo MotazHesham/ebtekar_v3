@@ -203,11 +203,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::resource('employee-financials', 'EmployeeFinancialController');
     });
 
-    
+    // Zones
+    Route::delete('zones/destroy', 'ZoneController@massDestroy')->name('zones.massDestroy');
+    Route::resource('zones', 'ZoneController');
+
     // Countries
     Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
     Route::post('countries/update_statuses', 'CountriesController@update_statuses')->name('countries.update_statuses');
     Route::resource('countries', 'CountriesController');
+
+
 
     // Socials
     Route::delete('socials/destroy', 'SocialsController@massDestroy')->name('socials.massDestroy');

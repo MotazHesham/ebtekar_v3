@@ -796,6 +796,11 @@ class ReceiptSocialController extends Controller
         $receiptSocial->socials()->sync($request->input('socials', []));
 
         toast(__('flash.global.update_title'),'success');
+        
+        if($request->has('refresh')){
+            return redirect()->route('admin.receipt-socials.edit', $receiptSocial->id);
+        }
+
         return redirect()->route('admin.receipt-socials.index');
     }
 

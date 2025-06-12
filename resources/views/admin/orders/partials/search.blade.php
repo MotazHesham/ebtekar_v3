@@ -58,6 +58,31 @@
                             </select>  
                         </div>
                     </div>
+                    <div class="row">
+                        
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($done) isset @endisset" name="done" id="done" onchange="sort_orders()">
+                                <option value="">التسليم</option>
+                                <option value="1" @isset($done) @if ($done == '1') selected @endif @endisset>
+                                    تم التسليم
+                                </option>
+                                <option value="0" @isset($done) @if ($done == '0') selected @endif @endisset>
+                                    لم يتم التسليم
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control mb-2 @isset($supplied) isset @endisset" name="supplied" id="supplied" onchange="sort_orders()">
+                                <option value="">التوريد</option>
+                                <option value="1" @isset($supplied) @if ($supplied == '1') selected @endif @endisset>
+                                    تم التوريد
+                                </option>
+                                <option value="0" @isset($supplied) @if ($supplied == '0') selected @endif @endisset>
+                                    لم يتم التوريد
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div> 
                 <div class="col-md-3">
                     <input type="text" class="form-control mb-2 @isset($phone) isset @endisset" id="phone" name="phone"

@@ -714,6 +714,14 @@
                                 {{ __('cruds.country.title') }}
                             </a>
                         </li>
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.zones.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/zones") || request()->is("admin/zones/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-globe-americas c-sidebar-nav-icon">
+
+                                </i>
+                                {{ __('cruds.zone.title') }}
+                            </a>
+                        </li>
                     @endcan
                     @can('social_access')
                         <li class="c-sidebar-nav-item">

@@ -278,7 +278,8 @@ class OrdersController extends Controller
         $description = null;
         $website_setting_id = null;
         $returned = null;
-
+        $done = null;
+        $supplied = null;
 
         $orders = Order::with(['orderDetails','shipping_country','user','delivery_man']);
 
@@ -371,6 +372,14 @@ class OrdersController extends Controller
             $delivery_man_id = $request->delivery_man_id;
             $orders = $orders->where('delivery_man_id',$request->delivery_man_id);
         }
+        if ($request->done != null) {
+            $done = $request->done;
+            $orders = $orders->where('done',$done);
+        }
+        if ($request->supplied != null) {
+            $supplied = $request->supplied;
+            $orders = $orders->where('supplied',$supplied);
+        }
 
         if ($request->phone != null){
             global $phone;
@@ -448,7 +457,7 @@ class OrdersController extends Controller
         return view('admin.orders.index', compact('statistics','users','orders','country_id','quickly','delivery_man_id','website_setting_id','websites',
                                             'payment_status','delivery_status','calling', 'playlist_status','sent_to_delivery','date_type','payment_type',
                                             'client_name','phone' ,'order_num', 'countries','delivery_mans','exclude', 'include', 'from_date','returned',
-                                            'user_id','from' , 'to','commission_status','sent_to_wasla','order_type','to_date','description'));
+                                            'user_id','from' , 'to','commission_status','sent_to_wasla','order_type','to_date','description','done','supplied'));
     }
 
     public function create()
