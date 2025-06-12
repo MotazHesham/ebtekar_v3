@@ -230,6 +230,19 @@
                         </div>
                     </div>
                     <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="shipping_country_cost">{{ __('cruds.receiptSocial.fields.shipping_country_cost') }}</label>
+                            <input class="form-control {{ $errors->has('shipping_country_cost') ? 'is-invalid' : '' }}"
+                                type="number" name="shipping_country_cost" id="shipping_country_cost"
+                                value="{{ old('shipping_country_cost', $receiptSocial->shipping_country_cost) }}" step="0.01" required onkeyup="change_shipping_country_cost()">
+                            @if ($errors->has('shipping_country_cost'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('shipping_country_cost') }}
+                                </div>
+                            @endif
+                            <span
+                                class="help-block">{{ __('cruds.receiptSocial.fields.shipping_country_cost_helper') }}</span>
+                        </div>
 
                         <div class="form-group">
                             <label class="required"
