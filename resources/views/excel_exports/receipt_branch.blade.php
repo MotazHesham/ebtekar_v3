@@ -12,6 +12,9 @@
                 رقم الهاتف
             </th> 
             <th>
+                الوصف
+            </th> 
+            <th>
                 العربون
             </th> 
             <th>
@@ -44,6 +47,14 @@
                 <td>{{ $receipt->order_num }}</td>
                 <td>{{ $receipt->client_name }}</td> 
                 <td>{{ $receipt->phone_number }}</td> 
+                <td>
+                    @foreach($receipt->receiptsReceiptBranchProducts as $product)
+                        <?php echo nl2br($product->description ?? '') ?>
+                        ({{ $product->quantity }}x{{ $product->price }} = {{ $product->total_cost }})
+                        <br>
+                        <br>
+                    @endforeach
+                </td> 
                 <td>{{ $receipt->deposit }}</td> 
                 <td>{{ $receipt->discount }}%</td> 
                 <td>{{ $receipt->total_cost }}</td> 

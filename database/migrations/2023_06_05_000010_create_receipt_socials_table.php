@@ -27,6 +27,7 @@ class CreateReceiptSocialsTable extends Migration
             $table->boolean('confirm')->default(0)->nullable();
             $table->boolean('returned')->default(0)->nullable();
             $table->boolean('supplied')->default(0)->nullable();
+            $table->boolean('active_editing')->default(0)->nullable();
             $table->boolean('is_seasoned')->default(0)->nullable();
             $table->boolean('client_review')->default(0)->nullable();
             $table->boolean('hold')->default(0)->nullable();

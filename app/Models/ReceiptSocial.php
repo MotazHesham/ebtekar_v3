@@ -88,6 +88,7 @@ class ReceiptSocial extends Model
         'confirm',
         'returned',
         'supplied',
+        'active_editing',
         'is_seasoned',
         'client_review',
         'hold',

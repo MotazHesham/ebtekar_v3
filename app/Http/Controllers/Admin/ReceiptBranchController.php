@@ -392,7 +392,7 @@ class ReceiptBranchController extends Controller
         }
         
         if($request->has('download')){
-            return Excel::download(new ReceiptBranchExport($receipts->get()), 'branch_receipts_('.$from.')_('.$to.')_('. $request->client_name .').xlsx');
+            return Excel::download(new ReceiptBranchExport($receipts->with('receiptsReceiptBranchProducts')->get()), 'branch_receipts_('.$from.')_('.$to.')_('. $request->client_name .').xlsx');
         }
         
         $statistics = [  
