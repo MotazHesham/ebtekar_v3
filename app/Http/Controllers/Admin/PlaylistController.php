@@ -101,7 +101,7 @@ class PlaylistController extends Controller
 
         if ($old_status == 'pending') {
             $raw->send_to_playlist_date = date(config('panel.date_format') . ' ' . config('panel.time_format')); 
-            if($raw->website_setting_id == 5 || $raw->website_setting_id == 4){
+            if($raw->website_setting_id == 5){
                 $raw->playlist_status = 'prepare';
             }else{
                 $raw->playlist_status = 'design'; 
