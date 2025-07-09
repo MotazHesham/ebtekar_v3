@@ -362,22 +362,12 @@ if (!function_exists('get_currency_info')) {
 if (!function_exists('getWebsiteSettingPrefix')) {
     function getWebsiteSettingPrefix($id)
     {
-        if($id == 2){
-            $str = 'ertgal-';
-        }elseif($id == 3){
-            $str = 'figures-';
-        }elseif($id == 4){
-            $str = 'novi-';
-        }elseif($id == 5){
-            $str = 'martobia-';
-        }elseif($id == 6){
-            $str = 'a1-digital-';
-        }elseif($id == 7){
-            $str = 'ein-';
-        }else{ 
-            $str = 'ebtekar-';
-        }
-        return $str;
+        $website_setting = WebsiteSetting::find($id);
+        if($website_setting){
+            return $website_setting->order_num_prefix . '-';
+        }else{
+            return 'ebtekar-';
+        } 
     }
 }
 

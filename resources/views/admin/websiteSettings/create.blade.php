@@ -263,6 +263,38 @@
                             class="help-block">{{ __('cruds.websiteSetting.fields.video_instructions_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
+                        <label for="order_num_prefix">{{ __('cruds.websiteSetting.fields.order_num_prefix') }}</label>
+                        <input class="form-control {{ $errors->has('order_num_prefix') ? 'is-invalid' : '' }}"
+                            type="text" name="order_num_prefix" id="order_num_prefix"
+                            value="{{ old('order_num_prefix') }}">
+                        @if ($errors->has('order_num_prefix'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('order_num_prefix') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.order_num_prefix_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="playlist_status">{{ __('cruds.websiteSetting.fields.playlist_status') }}</label>
+                        <select class="form-control {{ $errors->has('playlist_status') ? 'is-invalid' : '' }}"
+                            name="playlist_status" id="playlist_status">
+                            @foreach (__('global.playlist_status.status') as $key => $status)
+                                @if (!$loop->first)
+                                    <option value="{{ $key }}"
+                                        {{ old('playlist_status') == $key ? 'selected' : '' }}>
+                                        {{ $status }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                        @if ($errors->has('playlist_status'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('playlist_status') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.playlist_status_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-4">
                         <label>{{ __('cruds.websiteSetting.fields.delivery_system') }}</label>
                         <select class="form-control {{ $errors->has('delivery_system') ? 'is-invalid' : '' }}"
                             name="delivery_system" id="delivery_system">

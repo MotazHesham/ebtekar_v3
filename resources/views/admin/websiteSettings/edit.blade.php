@@ -50,8 +50,8 @@
                     <div class="form-group col-md-4">
                         <label class="required" for="domains">{{ __('cruds.websiteSetting.fields.domains') }}</label>
                         <input class="form-control {{ $errors->has('domains') ? 'is-invalid' : '' }}" type="text"
-                            name="domains[]" id="domains" value="{{ $websiteSetting->domains }}"   placeholder="add domains (example.com)..." data-role="tagsinput"
-                            required>
+                            name="domains[]" id="domains" value="{{ $websiteSetting->domains }}"
+                            placeholder="add domains (example.com)..." data-role="tagsinput" required>
                         @if ($errors->has('domains'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('domains') }}
@@ -60,9 +60,12 @@
                         <span class="help-block">{{ __('cruds.websiteSetting.fields.domains_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="required" for="keywords_seo">{{ __('cruds.websiteSetting.fields.keywords_seo') }}</label>
-                        <input class="form-control {{ $errors->has('keywords_seo') ? 'is-invalid' : '' }}" type="text" name="keywords_seo[]" id="keywords_seo" value="{{ $websiteSetting->keywords_seo }}"  placeholder="add tags ..." data-role="tagsinput" required>
-                        @if($errors->has('keywords_seo'))
+                        <label class="required"
+                            for="keywords_seo">{{ __('cruds.websiteSetting.fields.keywords_seo') }}</label>
+                        <input class="form-control {{ $errors->has('keywords_seo') ? 'is-invalid' : '' }}" type="text"
+                            name="keywords_seo[]" id="keywords_seo" value="{{ $websiteSetting->keywords_seo }}"
+                            placeholder="add tags ..." data-role="tagsinput" required>
+                        @if ($errors->has('keywords_seo'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('keywords_seo') }}
                             </div>
@@ -71,18 +74,22 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label class="required" for="author_seo">{{ __('cruds.websiteSetting.fields.author_seo') }}</label>
-                        <input class="form-control {{ $errors->has('author_seo') ? 'is-invalid' : '' }}" type="text" name="author_seo" id="author_seo" value="{{ old('author_seo', $websiteSetting->author_seo) }}" required>
-                        @if($errors->has('author_seo'))
+                        <input class="form-control {{ $errors->has('author_seo') ? 'is-invalid' : '' }}" type="text"
+                            name="author_seo" id="author_seo" value="{{ old('author_seo', $websiteSetting->author_seo) }}"
+                            required>
+                        @if ($errors->has('author_seo'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('author_seo') }}
                             </div>
                         @endif
                         <span class="help-block">{{ __('cruds.websiteSetting.fields.author_seo_helper') }}</span>
-                    </div> 
+                    </div>
                     <div class="form-group col-md-4">
-                        <label class="required" for="description_seo">{{ __('cruds.websiteSetting.fields.description_seo') }}</label>
-                        <textarea class="form-control {{ $errors->has('description_seo') ? 'is-invalid' : '' }}" name="description_seo" id="description_seo" required>{{ old('description_seo', $websiteSetting->description_seo) }}</textarea>
-                        @if($errors->has('description_seo'))
+                        <label class="required"
+                            for="description_seo">{{ __('cruds.websiteSetting.fields.description_seo') }}</label>
+                        <textarea class="form-control {{ $errors->has('description_seo') ? 'is-invalid' : '' }}" name="description_seo"
+                            id="description_seo" required>{{ old('description_seo', $websiteSetting->description_seo) }}</textarea>
+                        @if ($errors->has('description_seo'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('description_seo') }}
                             </div>
@@ -135,19 +142,25 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label for="shopify_webhook_sign">Shopify Webhook Sign</label>
-                        <input class="form-control {{ $errors->has('shopify_webhook_sign') ? 'is-invalid' : '' }}" type="text"
-                            name="shopify_webhook_sign" id="shopify_webhook_sign" value="{{ old('shopify_webhook_sign', $websiteSetting->shopify_webhook_sign) }}">
+                        <input class="form-control {{ $errors->has('shopify_webhook_sign') ? 'is-invalid' : '' }}"
+                            type="text" name="shopify_webhook_sign" id="shopify_webhook_sign"
+                            value="{{ old('shopify_webhook_sign', $websiteSetting->shopify_webhook_sign) }}">
                         @if ($errors->has('shopify_webhook_sign'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('shopify_webhook_sign') }}
                             </div>
-                        @endif 
+                        @endif
                     </div>
                     <div class="form-group col-md-4">
                         <label for="shopify_integration_status">Shopify Integration Status</label>
-                        <select name="shopify_integration_status" id="shopify_integration_status" class="form-control {{ $errors->has('shopify_integration_status') ? 'is-invalid' : '' }}">
-                            <option value="1" {{ old('shopify_integration_status', $websiteSetting->shopify_integration_status) == 1 ? 'selected' : '' }}>Enabled</option>
-                            <option value="0" {{ old('shopify_integration_status', $websiteSetting->shopify_integration_status) == 0 ? 'selected' : '' }}>Disabled</option>
+                        <select name="shopify_integration_status" id="shopify_integration_status"
+                            class="form-control {{ $errors->has('shopify_integration_status') ? 'is-invalid' : '' }}">
+                            <option value="1"
+                                {{ old('shopify_integration_status', $websiteSetting->shopify_integration_status) == 1 ? 'selected' : '' }}>
+                                Enabled</option>
+                            <option value="0"
+                                {{ old('shopify_integration_status', $websiteSetting->shopify_integration_status) == 0 ? 'selected' : '' }}>
+                                Disabled</option>
                         </select>
                         @if ($errors->has('shopify_integration_status'))
                             <div class="invalid-feedback">
@@ -266,8 +279,39 @@
                                 {{ $errors->first('video_instructions') }}
                             </div>
                         @endif
-                        <span
-                            class="help-block">{{ __('cruds.websiteSetting.fields.video_instructions_helper') }}</span>
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.video_instructions_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="order_num_prefix">{{ __('cruds.websiteSetting.fields.order_num_prefix') }}</label>
+                        <input class="form-control {{ $errors->has('order_num_prefix') ? 'is-invalid' : '' }}"
+                            type="text" name="order_num_prefix" id="order_num_prefix"
+                            value="{{ old('order_num_prefix', $websiteSetting->order_num_prefix) }}">
+                        @if ($errors->has('order_num_prefix'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('order_num_prefix') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.order_num_prefix_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="playlist_status">{{ __('cruds.websiteSetting.fields.playlist_status') }}</label>
+                        <select class="form-control {{ $errors->has('playlist_status') ? 'is-invalid' : '' }}"
+                            name="playlist_status" id="playlist_status">
+                            @foreach (__('global.playlist_status.status') as $key => $status)
+                                @if (!$loop->first)
+                                    <option value="{{ $key }}"
+                                        {{ old('playlist_status', $websiteSetting->playlist_status) == $key ? 'selected' : '' }}>
+                                        {{ $status }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                        @if ($errors->has('playlist_status'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('playlist_status') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.playlist_status_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label>{{ __('cruds.websiteSetting.fields.delivery_system') }}</label>

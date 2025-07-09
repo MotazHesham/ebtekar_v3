@@ -81,7 +81,8 @@ class WebsiteSetting extends Model implements HasMedia
         'shopify_api_secret',
         'shopify_webhook_sign',
         'shopify_integration_status',
-        
+        'order_num_prefix',
+        'playlist_status',
         'google_plus',
         'welcome_message',
         'video_instructions',
