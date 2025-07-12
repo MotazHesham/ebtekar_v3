@@ -387,6 +387,7 @@ if (!function_exists('generateOrderNumber')) {
             if (!$counter) { 
                 DB::table('order_number_counters')->insert([
                     'type' => $type,
+                    'prefix' => $prefix,
                     'last_number' => 1,
                 ]);
                 $newNumber = 1;
