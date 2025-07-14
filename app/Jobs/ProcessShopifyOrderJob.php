@@ -67,47 +67,49 @@ class ProcessShopifyOrderJob implements ShouldQueue
 
             $updatedOrCreatedProducts = [];
             foreach ($products as $product) {
-                $receiptSocialProduct = ReceiptSocialProduct::updateOrCreate(
-                    [
-                        'website_setting_id' => $this->siteSettings->id,
-                        'shopify_id' => $product['product_id'],
-                        'name' => $product['name'],
-                    ],
-                    [
-                        'price' => $product['price'],
-                    ]
-                );
+                if ($product['current_quantity'] > 0) {
+                    $receiptSocialProduct = ReceiptSocialProduct::updateOrCreate(
+                        [
+                            'website_setting_id' => $this->siteSettings->id,
+                            'shopify_id' => $product['product_id'],
+                            'name' => $product['name'],
+                        ],
+                        [
+                            'price' => $product['price'],
+                        ]
+                    );
 
-                $updatedOrCreatedProducts[] = $product['admin_graphql_api_id'];
+                    $updatedOrCreatedProducts[] = $product['admin_graphql_api_id'];
 
-                $receiptSocialProductPivot = ReceiptSocialProductPivot::updateOrCreate(
-                    [
-                        'receipt_social_id' => $receiptSocial->id,
-                        'shopify_id' => $product['admin_graphql_api_id'],
-                    ],
-                    [
-                        'receipt_social_product_id' => $receiptSocialProduct->id,
-                        'title' => $product['name'], 
-                        'quantity' => $product['quantity'],
-                        'price' => $product['price'],
-                        'total_cost' => $product['price'] * $product['quantity'], 
-                    ]
-                ); 
-                
-                if($is_new_order || $receiptSocialProductPivot->photos == null){ 
-                    $itemProperties = $product['properties']; 
-                    $photos = null;
-                    if (!empty($itemProperties)) {
-                        foreach ($itemProperties as $property) {
-                            if (filter_var($property['value'], FILTER_VALIDATE_URL)) {
-                                $photos[0]['photo'] = $property['value'];
-                            }else{
-                                $photos[0]['note'] = $property['value'];
+                    $receiptSocialProductPivot = ReceiptSocialProductPivot::updateOrCreate(
+                        [
+                            'receipt_social_id' => $receiptSocial->id,
+                            'shopify_id' => $product['admin_graphql_api_id'],
+                        ],
+                        [
+                            'receipt_social_product_id' => $receiptSocialProduct->id,
+                            'title' => $product['name'],
+                            'quantity' => $product['quantity'],
+                            'price' => $product['price'],
+                            'total_cost' => $product['price'] * $product['quantity'],
+                        ]
+                    );
+
+                    if ($is_new_order || $receiptSocialProductPivot->photos == null) {
+                        $itemProperties = $product['properties'];
+                        $photos = null;
+                        if (!empty($itemProperties)) {
+                            foreach ($itemProperties as $property) {
+                                if (filter_var($property['value'], FILTER_VALIDATE_URL)) {
+                                    $photos[0]['photo'] = $property['value'];
+                                } else {
+                                    $photos[0]['note'] = $property['value'];
+                                }
                             }
-                        } 
+                        }
+                        $receiptSocialProductPivot->photos = $photos ? json_encode($photos, JSON_UNESCAPED_SLASHES) : null;
+                        $receiptSocialProductPivot->save();
                     }
-                    $receiptSocialProductPivot->photos = $photos ? json_encode($photos,JSON_UNESCAPED_SLASHES) : null;
-                    $receiptSocialProductPivot->save();
                 }
             }
 
@@ -119,10 +121,10 @@ class ProcessShopifyOrderJob implements ShouldQueue
                 $receiptSocialProduct->delete();
             }
 
-            $logger->debug('shopify:', ['success' => 'Success Shopify WebHook Order Created']);
+            $logger->debug('shopify:', ['success' => 'Success Shopify WebHook Order ' . ($is_new_order ? 'Created' : 'Updated') . ' ' . $shopify_order_num]);
         } catch (\Exception $e) {
             $logger->debug('shopify:', ['error' => 'Error Dispatch Shopify Order: ' . $e->getMessage()]);
             throw $e;
         }
     }
-} 
+}
