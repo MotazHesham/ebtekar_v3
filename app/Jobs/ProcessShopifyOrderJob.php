@@ -100,9 +100,9 @@ class ProcessShopifyOrderJob implements ShouldQueue
                     if (!empty($itemProperties)) {
                         foreach ($itemProperties as $property) {
                             if (filter_var($property['value'], FILTER_VALIDATE_URL)) {
-                                $photos['photo'] = $property['value'];
+                                $photos[0]['photo'] = $property['value'];
                             }else{
-                                $photos['note'] = $property['value'];
+                                $photos[0]['note'] = $property['value'];
                             }
                         } 
                     }
