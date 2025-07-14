@@ -79,7 +79,7 @@ class OrderController extends Controller
                 return response()->json(['error' => 'Shopify Integration is not enabled'], 422);
             }
 
-            $shopify_id = $request->admin_graphql_api_id;
+            $shopify_id = 'gid://shopify/Order/' . $request->id;
             $receiptSocial = ReceiptSocial::where('shopify_id', $shopify_id)->where('website_setting_id', $site_settings->id)->first();
             if ($receiptSocial) {
                 $receiptSocial->delete();
