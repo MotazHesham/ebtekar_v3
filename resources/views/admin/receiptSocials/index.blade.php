@@ -274,6 +274,7 @@
                         <p>العملاء الذين اشتروا أكثر من طلب واحد</p>
                         <a href="{{ route('admin.receipt-socials.customer-report') }}" class="btn btn-dark">Excel</a>
                         <button class="btn btn-primary" onclick="showCustomerChart()">رسم بياني</button> 
+                        <a href="{{ route('admin.receipt-socials.index',['new_design' => true]) }}" class="btn btn-danger">New Design</a>
                     </div>
                 </div>
             </div> 

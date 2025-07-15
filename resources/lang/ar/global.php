@@ -339,6 +339,8 @@ return [
     'accept'                  => 'قبول',
     
     'extra'          => [
+        'total_records' => 'المجموع',
+        'per_page' => 'الصفحة',
         'deleted_receipts' => 'الفواتير المحذوفة',
         'product' => 'المنتج',
         'dates' => 'التواريخ',

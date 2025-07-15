@@ -397,6 +397,7 @@ class ReceiptSocialController extends Controller
         $countries = Country::where('status',1)->get()->groupBy('type'); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
         $financial_accounts = FinancialAccount::get();
+        $receiptSocialProducts = ReceiptSocialProduct::all();
         
         if($request->has('cancel_popup')){
             session()->put('store_receipt_socail_id',null);
@@ -436,6 +437,8 @@ class ReceiptSocialController extends Controller
         $product_type = null;
         $isShopify = null;
         $enable_multiple_form_submit = true;
+        $general_search = null;
+        $selectedProducts = null;
 
         if(request('deleted')){ 
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -443,6 +446,22 @@ class ReceiptSocialController extends Controller
             $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts')->onlyTrashed(); 
         }else{
             $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts'); 
+        }
+        if($request->general_search != null){
+            $general_search = $request->general_search;
+            $receipts = $receipts->where(function ($query) use ($general_search) {
+                $query->where('order_num', 'like', '%' . $general_search . '%')
+                    ->orWhere('phone_number', 'like', '%' . $general_search . '%')
+                    ->orWhere('phone_number_2', 'like', '%' . $general_search . '%')
+                    ->orWhere('client_name', 'like', '%' . $general_search . '%'); 
+            });
+        }
+
+        if ($request->selectedProducts != null) {
+            $selectedProducts = $request->selectedProducts;
+            $receipts = $receipts->whereHas('receiptsReceiptSocialProducts', function ($query) use ($selectedProducts) {
+                $query->whereIn('receipt_social_product_id', $selectedProducts);
+            });
         }
 
         if ($request->client_type != null) {
@@ -664,12 +683,20 @@ class ReceiptSocialController extends Controller
 
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
 
+        if($request->has('new_design')){
+            return view('admin.receiptSocials.index_modern', compact('countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
+            'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
+            'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
+            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify',
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts'));
+        }
+
         return view('admin.receiptSocials.index', compact(
             'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id',
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts'
         ));
     }
 
