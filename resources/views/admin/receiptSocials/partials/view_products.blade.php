@@ -66,9 +66,11 @@
                             @if($product->photos)
                                 @foreach(json_decode($product->photos) as $photo)
                                     <div>
-                                        <a href="{{ asset($photo->photo) }}" target="_blanc">
-                                            <img src="{{ asset($photo->photo) }}" width="50" height="50" alt="">
-                                        </a>
+                                        @if($photo->photo && $photo->photo != '')
+                                            <a href="{{ asset($photo->photo) }}" target="_blanc">
+                                                <img src="{{ asset($photo->photo) }}" width="50" height="50" alt="">
+                                            </a>
+                                        @endif
                                         <span>{{ $photo->note }}</span>
                                     </div>
                                 @endforeach
