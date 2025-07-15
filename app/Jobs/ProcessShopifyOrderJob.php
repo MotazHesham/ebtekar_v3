@@ -97,7 +97,8 @@ class ProcessShopifyOrderJob implements ShouldQueue
 
                     if ($is_new_order || $receiptSocialProductPivot->photos == null) {
                         $itemProperties = $product['properties'];
-                        $photos = null;
+                        $photos[0]['photo'] = null;
+                        $photos[0]['note'] = null;
                         if (!empty($itemProperties)) {
                             foreach ($itemProperties as $property) {
                                 if (filter_var($property['value'], FILTER_VALIDATE_URL)) {
