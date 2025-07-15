@@ -137,19 +137,6 @@
                             </select>
                         </div>
                         <div class="filter-item">
-                            <label>{{ __('global.extra.quickly') }}</label>
-                            <select class="form-control @isset($quickly) isset @endisset"
-                                name="quickly" id="quickly">
-                                <option value="">{{ __('global.extra.quickly') }}</option>
-                                <option value="0"
-                                    @isset($quickly) @if ($quickly == '0') selected @endif @endisset>
-                                    {{ __('global.extra.0_quickly') }}</option>
-                                <option value="1"
-                                    @isset($quickly) @if ($quickly == '1') selected @endif @endisset>
-                                    {{ __('global.extra.1_quickly') }}</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
                             <label>نوع المنتج</label>
                             <select class="form-control @isset($product_type) isset @endisset"
                                 name="product_type" id="product_type">
@@ -205,6 +192,19 @@
                                 <option value="0"
                                     @isset($done) @if ($done == '0') selected @endif @endisset>
                                     لم يتم التسليم</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>{{ __('global.extra.quickly') }}</label>
+                            <select class="form-control @isset($quickly) isset @endisset"
+                                name="quickly" id="quickly">
+                                <option value="">{{ __('global.extra.quickly') }}</option>
+                                <option value="0"
+                                    @isset($quickly) @if ($quickly == '0') selected @endif @endisset>
+                                    {{ __('global.extra.0_quickly') }}</option>
+                                <option value="1"
+                                    @isset($quickly) @if ($quickly == '1') selected @endif @endisset>
+                                    {{ __('global.extra.1_quickly') }}</option>
                             </select>
                         </div>
                         <div class="filter-item">

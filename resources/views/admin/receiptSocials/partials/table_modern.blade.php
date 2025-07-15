@@ -492,7 +492,7 @@
                                 </label>
                             </div>
                             <div class="status-item">
-                                <span class="status-label">سريع</span>
+                                <span class="status-label">عاجل</span>
                                 <label class="c-switch c-switch-pill c-switch-success">
                                     <input onchange="update_statuses(this,'quickly')" value="{{ $receipt->id }}"
                                         type="checkbox" class="c-switch-input"
@@ -579,6 +579,11 @@
                                 class="playlist_status badge text-bg-{{ __('global.playlist_status.colors.' . $receipt->playlist_status) }}">
                                 <i class="fas fa-play-circle me-1"></i>
                                 {{ $receipt->playlist_status ? __('global.playlist_status.status.' . $receipt->playlist_status) : '' }}
+                            </span>
+                        @endif
+                        @if($receipt->staff)    
+                            <span class="client-type"> 
+                                {{ $receipt->staff->name ?? '' }}
                             </span>
                         @endif
                     </div>
