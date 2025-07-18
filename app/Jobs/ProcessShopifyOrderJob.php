@@ -94,21 +94,26 @@ class ProcessShopifyOrderJob implements ShouldQueue
                             'total_cost' => $product['price'] * $product['quantity'],
                         ]
                     );
+                    $propertiesString = '';
 
                     if ($is_new_order || $receiptSocialProductPivot->photos == null) {
                         $itemProperties = $product['properties'];
-                        $photos[0]['photo'] = null;
-                        $photos[0]['note'] = null;
+                        $propertiesArray = [];
+                        $photos = [];
                         if (!empty($itemProperties)) {
+                            $photos[0]['photo'] = null;
+                            $photos[0]['note'] = null;
                             foreach ($itemProperties as $property) {
                                 if (filter_var($property['value'], FILTER_VALIDATE_URL)) {
                                     $photos[0]['photo'] = $property['value'];
                                 } else {
-                                    $photos[0]['note'] = $property['value'];
+                                    $propertiesArray[] = $property['name'] . ': ' . $property['value'];
                                 }
                             }
+                            $propertiesString = implode(' | ', $propertiesArray);
                         }
                         $receiptSocialProductPivot->photos = $photos ? json_encode($photos, JSON_UNESCAPED_SLASHES) : null;
+                        $receiptSocialProductPivot->description = $propertiesString;
                         $receiptSocialProductPivot->save();
                     }
                 }
