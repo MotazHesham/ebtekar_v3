@@ -42,21 +42,23 @@
                             {{ $product->total_cost ? dashboard_currency($product->total_cost): '' }}
                         </td>
                         <td> 
-                            <div style="display: flex;justify-content: space-evenly">
-                                @can('receipt_branch_edit_product')
-                                    <a class="btn btn-info text-white" onclick="edit_product('{{$product->id}}')"> 
-                                        <i class="far fa-edit"></i>
-                                    </a> 
-                                @endcan 
+                            @if(!$receipt->done)
+                                <div style="display: flex;justify-content: space-evenly">
+                                    @can('receipt_branch_edit_product')
+                                        <a class="btn btn-info text-white" onclick="edit_product('{{$product->id}}')"> 
+                                            <i class="far fa-edit"></i>
+                                        </a> 
+                                    @endcan 
 
-                                @can('receipt_branch_delete_product')
-                                    <?php $route = route('admin.receipt-branches.destroy_product', $product->id); ?>
-                                    <a class="btn btn-danger"
-                                        href="#" onclick="deleteConfirmation('{{$route}}')"> 
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a> 
-                                @endcan 
-                            </div>
+                                    @can('receipt_branch_delete_product')
+                                        <?php $route = route('admin.receipt-branches.destroy_product', $product->id); ?>
+                                        <a class="btn btn-danger"
+                                            href="#" onclick="deleteConfirmation('{{$route}}')"> 
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a> 
+                                    @endcan 
+                                </div>
+                            @endif
                         </td> 
                     </tr>
                 @empty
