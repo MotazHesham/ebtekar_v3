@@ -59,9 +59,21 @@
                                 <h3 style="color: #8b304f;text-align: center;">{{$receipt_product->title}} ({{$receipt_product->quantity}})</h3>
                                 <div style="font-size:20px"><?php echo $receipt_product->description; ?></div>
                                 <div> 
-                                    @foreach ($receipt_product->products->photos as $key => $media)
-                                        <a href="{{ $media->getUrl() }}" target="_blank"><img width="150" height="150" src={{ $media->getUrl()  }}/></a>
-                                    @endforeach  
+                                    @if($receipt_product->products)
+                                        <div>
+                                            @foreach ($receipt_product->products->photos as $key => $media)
+                                                <a href="{{ $media->getUrl() }}" target="_blank"><img width="150" height="150" src={{ $media->getUrl()  }}/></a>
+                                            @endforeach  
+                                            
+                                            @if($receipt_product->products->shopify_images && count(json_decode($receipt_product->products->shopify_images)) > 0)
+                                                @foreach(json_decode($receipt_product->products->shopify_images) as $key => $shopify_image)
+                                                    <a href="{{ $shopify_image }}" target="_blank" style="display: inline-block">
+                                                        <img src="{{ $shopify_image }}" style="width: 100px; height: 100px;">
+                                                    </a>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    @endif
                                     <div>
                                         @if($receipt_product->photos)
                                             @foreach(json_decode($receipt_product->photos) as $key => $photo)
@@ -78,13 +90,6 @@
                                                         <a href="{{ asset($photo->photo) }}" download="{{$raw->order_num}}_{{$key}}_{{$photo->note}}" class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
                                                     </div>
                                                 </div>
-                                            @endforeach
-                                        @endif
-                                        @if($receipt_product->shopify_images && count(json_decode($receipt_product->shopify_images)) > 0)
-                                            @foreach(json_decode($receipt_product->shopify_images) as $key => $shopify_image)
-                                                <a href="{{ $shopify_image }}" target="_blank" style="display: inline-block">
-                                                    <img src="{{ $shopify_image }}" style="width: 100px; height: 100px;">
-                                                </a>
                                             @endforeach
                                         @endif
                                     </div> 
