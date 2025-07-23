@@ -47,6 +47,7 @@ return new class extends Migration
             $table->string('playlist_status')->nullable(); 
             $table->string('shopify_api_key')->nullable(); 
             $table->string('shopify_access_token')->nullable();
+            $table->string('shopify_domain')->nullable();
             $table->string('shopify_api_secret')->nullable();
             $table->string('shopify_webhook_sign')->nullable();
             $table->boolean('shopify_integration_status')->default(0);
