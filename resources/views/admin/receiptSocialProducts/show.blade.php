@@ -61,6 +61,20 @@
                     </tr>
                     <tr>
                         <th>
+                            Shopify Images
+                        </th>
+                        <td>
+                            @if($receiptSocialProduct->shopify_images && count(json_decode($receiptSocialProduct->shopify_images)) > 0)
+                                @foreach(json_decode($receiptSocialProduct->shopify_images) as $key => $shopify_image)
+                                    <a href="{{ $shopify_image }}" target="_blank" style="display: inline-block">
+                                        <img src="{{ $shopify_image }}" style="width: 100px; height: 100px;">
+                                    </a>
+                                @endforeach
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ __('cruds.receiptSocialProduct.fields.receipts') }}
                         </th>
                         <td>

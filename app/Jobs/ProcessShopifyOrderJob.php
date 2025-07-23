@@ -64,7 +64,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
             $receiptSocial->shipping_country_cost = $shipping_cost;
             $receiptSocial->shipping_address = $customer_address;
             $receiptSocial->save();
-
+            
             $updatedOrCreatedProducts = [];
             foreach ($products as $product) {
                 if ($product['current_quantity'] > 0) {
