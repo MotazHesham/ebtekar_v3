@@ -72,14 +72,15 @@ class ProcessShopifyOrderJob implements ShouldQueue
                         [
                             'website_setting_id' => $this->siteSettings->id,
                             'name' => $product['name'],
+                            'shopify_id' =>$product['product_id'],
                         ],
                         [
-                            'shopify_id' =>(string) $product['product_id'],
+                            'shopify_product_id' => (string)$product['product_id'],
                             'shopify_variant_id' => (string)$product['variant_id'],
                             'price' => $product['price'],
                         ]
                     );
-                    
+
                     if($this->siteSettings->shopify_access_token){
                         VairantShopifyMediaJob::dispatch($receiptSocialProduct, $this->siteSettings);
                     }
