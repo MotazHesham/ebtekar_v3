@@ -79,13 +79,13 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-                                            @if($receipt_product->shopify_images && count(json_decode($receipt_product->shopify_images)) > 0)
-                                                @foreach(json_decode($receipt_product->shopify_images) as $key => $shopify_image)
-                                                    <a href="{{ $shopify_image }}" target="_blank" style="display: inline-block">
-                                                        <img src="{{ $shopify_image }}" style="width: 100px; height: 100px;">
-                                                    </a>
-                                                @endforeach
-                                            @endif
+                                        @endif
+                                        @if($receipt_product->shopify_images && count(json_decode($receipt_product->shopify_images)) > 0)
+                                            @foreach(json_decode($receipt_product->shopify_images) as $key => $shopify_image)
+                                                <a href="{{ $shopify_image }}" target="_blank" style="display: inline-block">
+                                                    <img src="{{ $shopify_image }}" style="width: 100px; height: 100px;">
+                                                </a>
+                                            @endforeach
                                         @endif
                                     </div> 
                                     <br>
