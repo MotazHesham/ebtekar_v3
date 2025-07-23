@@ -81,11 +81,7 @@ class VairantShopifyMediaJob implements ShouldQueue
 
                 if (isset($data['data']['productVariant'])) {
                     $variantData = $data['data']['productVariant'];
-                    $this->processVariantData($variantData);
-                    Log::info('Shopify variant data Media processed', [
-                        'variant_id' => $variantId,
-                        'product_id' => $this->receiptSocialProduct->id
-                    ]);
+                    $this->processVariantData($variantData); 
                 } else {
                     Log::error('No variant data found in Shopify response', [
                         'response' => $data,
