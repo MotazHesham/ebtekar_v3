@@ -81,7 +81,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
                     );
 
                     if($this->siteSettings->shopify_access_token){
-                        VairantShopifyMediaJob::dispatch($receiptSocialProduct, $this->siteSettings);
+                        // VairantShopifyMediaJob::dispatch($receiptSocialProduct, $this->siteSettings);
                     }
 
                     $updatedOrCreatedProducts[] = $product['admin_graphql_api_id'];
