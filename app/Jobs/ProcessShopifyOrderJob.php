@@ -71,17 +71,17 @@ class ProcessShopifyOrderJob implements ShouldQueue
                     $receiptSocialProduct = ReceiptSocialProduct::updateOrCreate(
                         [
                             'website_setting_id' => $this->siteSettings->id,
-                            'shopify_id' => $product['product_id'],
                             'name' => $product['name'],
                         ],
                         [
+                            'shopify_id' =>(string) $product['product_id'],
+                            'shopify_variant_id' => (string)$product['variant_id'],
                             'price' => $product['price'],
-                            'shopify_variant_id' => $product['variant_id'],
                         ]
                     );
-
+                    
                     if($this->siteSettings->shopify_access_token){
-                        // VairantShopifyMediaJob::dispatch($receiptSocialProduct, $this->siteSettings);
+                        VairantShopifyMediaJob::dispatch($receiptSocialProduct, $this->siteSettings);
                     }
 
                     $updatedOrCreatedProducts[] = $product['admin_graphql_api_id'];

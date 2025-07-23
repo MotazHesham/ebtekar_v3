@@ -82,6 +82,10 @@ class VairantShopifyMediaJob implements ShouldQueue
                 if (isset($data['data']['productVariant'])) {
                     $variantData = $data['data']['productVariant'];
                     $this->processVariantData($variantData);
+                    Log::info('Shopify variant data Media processed', [
+                        'variant_id' => $variantId,
+                        'product_id' => $this->receiptSocialProduct->id
+                    ]);
                 } else {
                     Log::error('No variant data found in Shopify response', [
                         'response' => $data,
@@ -148,8 +152,7 @@ class VairantShopifyMediaJob implements ShouldQueue
         }
 
         // Update the product with image data
-        $this->receiptSocialProduct->update([
-            'shopify_images' => json_encode($shopifyImages),
-        ]);
+        $this->receiptSocialProduct->shopify_images = json_encode($shopifyImages);
+        $this->receiptSocialProduct->save();
     }
 }
