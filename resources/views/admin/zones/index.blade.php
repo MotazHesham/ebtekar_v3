@@ -29,6 +29,9 @@
                             {{ trans('cruds.zone.fields.delivery_cost') }}
                         </th>
                         <th>
+                            {{ trans('cruds.zone.fields.delivery_cost_offer') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.zone.fields.countries') }}
                         </th>
                         <th>
@@ -50,6 +53,9 @@
                             </td>
                             <td>
                                 {{ $zone->delivery_cost ?? '' }}
+                            </td>
+                            <td>
+                                {{ $zone->delivery_cost_offer ?? '' }}
                             </td>
                             <td>
                                 @foreach($zone->countries as $key => $country)

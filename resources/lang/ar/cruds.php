@@ -770,6 +770,8 @@ return [
             'countries_helper'  => ' ',
             'delivery_cost'     => 'Delivery Cost',
             'delivery_cost_helper' => ' ',
+            'delivery_cost_offer' => 'Delivery Cost Offer',
+            'delivery_cost_offer_helper' => ' ',
             'created_at'        => 'Created At',
             'created_at_helper' => ' ',
             'updated_at'        => 'Updated At',

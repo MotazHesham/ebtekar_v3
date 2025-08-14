@@ -114,6 +114,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('receipt-social-products/media', 'ReceiptSocialProductController@storeMedia')->name('receipt-social-products.storeMedia');
     Route::post('receipt-social-products/ckmedia', 'ReceiptSocialProductController@storeCKEditorImages')->name('receipt-social-products.storeCKEditorImages');
     Route::post('receipt-social-products/products_report', 'ReceiptSocialProductController@products_report')->name('receipt-social-products.products_report');
+    Route::post('receipt-social-products/update_statuses', 'ReceiptSocialProductController@update_statuses')->name('receipt-social-products.update_statuses');
     Route::resource('receipt-social-products', 'ReceiptSocialProductController');
 
     // Receipt Client

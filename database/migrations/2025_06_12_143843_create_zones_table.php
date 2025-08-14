@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->decimal('delivery_cost', 10, 2); 
+            $table->decimal('delivery_cost_offer', 10, 2)->nullable(); 
             $table->timestamps();
         });
     }

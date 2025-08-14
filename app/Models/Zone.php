@@ -21,6 +21,7 @@ class Zone extends Model
     protected $fillable = [
         'name',
         'delivery_cost',
+        'delivery_cost_offer',
         'created_at',
         'updated_at', 
     ];

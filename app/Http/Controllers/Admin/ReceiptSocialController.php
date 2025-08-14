@@ -22,6 +22,7 @@ use App\Models\ReceiptSocialProductPivot;
 use App\Models\Social;
 use App\Models\User;
 use App\Models\WebsiteSetting;
+use App\Models\Zone;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -373,6 +374,15 @@ class ReceiptSocialController extends Controller
             $receipt->extra_commission = $sum3;
             if(!$receipt->is_seasoned){
                 $receipt->is_seasoned = $product->product_type == 'season' ? 1 : 0;
+            }
+
+            if($product->has_shipping_offer){ 
+                $zone = Zone::whereHas('countries',function($q) use($receipt){
+                    $q->where('country_id',$receipt->shipping_country_id);
+                })->first();
+                if($zone){
+                    $receipt->shipping_country_cost = $zone->delivery_cost_offer;
+                }
             }
             $receipt->save();
             if($request->has('add_more')){

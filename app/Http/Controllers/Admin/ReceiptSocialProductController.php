@@ -21,7 +21,15 @@ use Carbon\Carbon;
 
 class ReceiptSocialProductController extends Controller
 {
-    use MediaUploadingTrait;
+    use MediaUploadingTrait; 
+
+    public function update_statuses(Request $request){ 
+        $type = $request->type;
+        $receiptSocialProduct = ReceiptSocialProduct::findOrFail($request->id);
+        $receiptSocialProduct->$type = $request->status; 
+        $receiptSocialProduct->save();
+        return 1;
+    }
 
     public function products_report(Request $request){ 
         $website_setting_id = $request->website_setting_id; 
@@ -127,6 +135,13 @@ class ReceiptSocialProductController extends Controller
             });
             $table->editColumn('commission', function ($row) {
                 return $row->commission ? $row->commission : '';
+            }); 
+            $table->editColumn('has_shipping_offer', function ($row) {
+                return '
+                <label class="c-switch c-switch-pill c-switch-success">
+                    <input onchange="update_statuses(this,\'has_shipping_offer\')" value="' . $row->id . '" type="checkbox" class="c-switch-input" '. ($row->has_shipping_offer ? "checked" : null) .'>
+                    <span class="c-switch-slider"></span>
+                </label>';
             });
             $table->editColumn('photos', function ($row) {
                 if (! $row->photos) {
@@ -144,7 +159,7 @@ class ReceiptSocialProductController extends Controller
                 return $row->website->site_name ?? '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'photos','website_site_name','name']);
+            $table->rawColumns(['actions', 'placeholder', 'photos','website_site_name','name','has_shipping_offer']);
 
             return $table->make(true);
         }

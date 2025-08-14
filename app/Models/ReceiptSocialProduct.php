@@ -45,6 +45,7 @@ class ReceiptSocialProduct extends Model implements HasMedia
         'shopify_variant_id',
         'website_setting_id',
         'shopify_images',
+        'has_shipping_offer',
         'created_at',
         'updated_at',
         'deleted_at',

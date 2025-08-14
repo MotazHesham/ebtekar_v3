@@ -18,6 +18,7 @@ class CreateReceiptSocialProductsTable extends Migration
             $table->string('shopify_product_id')->nullable();
             $table->string('shopify_variant_id')->nullable();
             $table->text('shopify_images')->nullable();
+            $table->tinyInteger('has_shipping_offer')->default(0);
             $table->unsignedBigInteger('website_setting_id')->nullable();
             $table->foreign('website_setting_id', 'website_setting_fk_89976438')->references('id')->on('website_settings');
             $table->timestamps();

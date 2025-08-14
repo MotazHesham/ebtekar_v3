@@ -30,6 +30,16 @@
                 <span class="help-block">{{ trans('cruds.zone.fields.delivery_cost_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="delivery_cost_offer">{{ trans('cruds.zone.fields.delivery_cost_offer') }}</label>
+                <input class="form-control {{ $errors->has('delivery_cost_offer') ? 'is-invalid' : '' }}" type="number" name="delivery_cost_offer" id="delivery_cost_offer" value="{{ old('delivery_cost_offer', '') }}" required>
+                @if($errors->has('delivery_cost_offer'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('delivery_cost_offer') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.zone.fields.delivery_cost_offer_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="countries">{{ trans('cruds.zone.fields.countries') }}</label>
                 <select class="form-control select2 {{ $errors->has('countries') ? 'is-invalid' : '' }}" name="countries[]" id="countries" multiple>
                     @foreach($countries as $id => $country)
