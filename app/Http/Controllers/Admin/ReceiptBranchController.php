@@ -484,12 +484,12 @@ class ReceiptBranchController extends Controller
         abort_if(Gate::denies('receipt_branch_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $receiptBranch = ReceiptBranch::withTrashed()->find($id); 
-        if($receiptBranch->done){
-            toast('لا يمكن حذف الفاتورة بعد الإنتهاء من الفاتورة','error');
-            return redirect()->back();
-        }
+        // if($receiptBranch->done){
+        //     toast('لا يمكن حذف الفاتورة بعد الإنتهاء من الفاتورة','error');
+        //     return redirect()->back();
+        // }
         if($receiptBranch->deleted_at != null){
-            $receiptBranch->forceDelete();
+            // $receiptBranch->forceDelete();
         }else{
             $receiptBranch->delete();
         }
