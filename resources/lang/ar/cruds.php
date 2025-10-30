@@ -399,6 +399,8 @@ return [
             'deposit_helper'                 => ' ',
             'discount'                       => 'التخفيض',
             'discount_helper'                => ' ',
+            'discount_type'                  => 'نوع التخفيض',
+            'discount_type_helper'           => ' ',
             'note'                           => 'ملاحظة',
             'note_helper'                    => ' ',
             'total_cost'                     => 'المجموع',

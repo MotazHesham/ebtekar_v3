@@ -422,6 +422,13 @@
                                         <br> {{ $receipt->send_to_playlist_date }}
                                     </span>
                                 @endif
+                                @if($receipt->done_time)
+                                    <br>
+                                    <span class="badge text-bg-success text-white mb-1">
+                                        {{ __('cruds.receiptSocial.fields.done_time') }}
+                                        <br> {{ $receipt->done_time }}
+                                    </span>
+                                @endif
                             </td>
                             <td>
                                 <span class="badge rounded-pill text-bg-warning  mb-1">

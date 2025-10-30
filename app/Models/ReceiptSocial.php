@@ -89,6 +89,7 @@ class ReceiptSocial extends Model
         'returned',
         'supplied',
         'active_editing',
+        'returned_to_design',
         'is_seasoned',
         'client_review',
         'hold',

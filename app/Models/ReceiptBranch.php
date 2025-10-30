@@ -43,6 +43,7 @@ class ReceiptBranch extends Model
         'phone_number',
         'deposit',
         'discount',
+        'discount_type',
         'note',
         'total_cost',
         'done',
@@ -102,7 +103,11 @@ class ReceiptBranch extends Model
     }
 	// operations
 	public function calc_discount(){ 
-        return $this->discount;
+        if($this->discount_type == 'percentage'){
+            return $this->total_cost * $this->discount / 100;
+        }else{
+            return $this->discount;
+        }
 	}
 
 	public function calc_total_cost(){
@@ -135,6 +140,35 @@ class ReceiptBranch extends Model
 
         }
         return 1;
+    }
+
+    public function update_income(){
+        if($this->branch->type == 'income'){
+            $income = Income::where('model_id', $this->id)->where('model_type', 'App\Models\ReceiptBranch')->first();
+            $income->amount = $this->calc_total_cost();
+            $income->save(); 
+        }else{
+            $expense = Expense::where('model_id', $this->id)->where('model_type', 'App\Models\ReceiptBranch')->first();
+            $expense->amount = $this->calc_total_cost();
+            $expense->save();
+
+        }
+        return 1;
+    }
+
+    public function update_total_cost($oldTotalCost){
+        $difference = $this->calc_total_cost() - $oldTotalCost;
+        if($this->branch->payment_type == 'cash'){ 
+            $this->update_income();
+        }elseif($this->branch->payment_type == 'parts'){ 
+            if($this->branch->r_client->manage_type == 'seperate'){ 
+                $this->branch->remaining += $difference; 
+                $this->branch->save(); 
+            }elseif($this->branch->r_client->manage_type == 'unified'){ 
+                $this->branch->r_client->remaining += $difference;
+                $this->branch->r_client->save(); 
+            }
+        } 
     }
 
     public function price_type(){ 

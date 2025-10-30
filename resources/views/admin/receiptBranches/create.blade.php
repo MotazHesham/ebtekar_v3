@@ -51,7 +51,7 @@
                         </div>
                     @endif 
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="date_of_receiving_order">{{ __('cruds.receiptBranch.fields.date_of_receiving_order') }}</label>
                     <input class="form-control date {{ $errors->has('date_of_receiving_order') ? 'is-invalid' : '' }}" type="text" name="date_of_receiving_order" id="date_of_receiving_order" value="{{ old('date_of_receiving_order') }}">
                     @if($errors->has('date_of_receiving_order'))
@@ -61,7 +61,7 @@
                     @endif
                     <span class="help-block">{{ __('cruds.receiptBranch.fields.date_of_receiving_order_helper') }}</span>
                 </div>  
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="deposit">{{ __('cruds.receiptBranch.fields.deposit') }}</label>
                     <input class="form-control {{ $errors->has('deposit') ? 'is-invalid' : '' }}" type="number" name="deposit" id="deposit" value="{{ old('deposit') }}" step="0.01" required>
                     @if($errors->has('deposit'))
@@ -71,7 +71,22 @@
                     @endif
                     <span class="help-block">{{ __('cruds.receiptBranch.fields.deposit_helper') }}</span>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
+                    <label for="discount_type">{{ __('cruds.receiptBranch.fields.discount_type') }}</label>
+                    <select class="form-control select2 {{ $errors->has('discount_type') ? 'is-invalid' : '' }}" name="discount_type" id="discount_type" required>
+                        <option value disabled {{ old('discount_type', null) === null ? 'selected' : '' }}>
+                            {{ __('global.pleaseSelect') }}</option>
+                        <option value="percentage">نسبة  </option>
+                        <option value="fixed">قيمة  </option>
+                    </select>
+                    @if($errors->has('discount_type'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('discount_type') }}
+                        </div>
+                    @endif
+                    <span class="help-block">{{ __('cruds.receiptBranch.fields.discount_type_helper') }}</span>
+                </div>
+                <div class="form-group col-md-3">
                     <label for="discount">{{ __('cruds.receiptBranch.fields.discount') }}</label>
                     <input class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}" type="number" name="discount" id="discount" value="{{ old('discount', '') }}" step="0.01">
                     @if($errors->has('discount'))

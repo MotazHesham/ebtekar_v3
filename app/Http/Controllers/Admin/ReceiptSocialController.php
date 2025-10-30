@@ -131,6 +131,10 @@ class ReceiptSocialController extends Controller
             $receipt->quickly = 0;
             $receipt->delivery_status = $type == 'done' ? 'delivered' : 'cancel';
             $receipt->payment_status = $type == 'done' ? 'paid' : 'unpaid';
+
+            if($type == 'done'){
+                $receipt->done_time = date(config('panel.date_format') . ' ' . config('panel.time_format'));
+            }
         }
         
         if (($type == 'supplied') && $request->status == 1) {

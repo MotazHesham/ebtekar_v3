@@ -149,9 +149,7 @@ class ReceiptBranchController extends Controller
     {
         $receipt_branch_product_pivot = ReceiptBranchProductPivot::find($id);
         $receipt = ReceiptBranch::find($receipt_branch_product_pivot->receipt_branch_id); 
-        if($receipt->done){
-            return 0;
-        }
+        $oldTotalCost = $receipt->total_cost;
 
         $receipt_branch_product_pivot->delete();
 
@@ -162,6 +160,13 @@ class ReceiptBranchController extends Controller
         }
         $receipt->total_cost = $sum; 
         $receipt->save();
+
+        if($receipt->done){
+            $receipt->is_updated_after_done = 1;
+            $receipt->save();
+
+            $receipt->update_total_cost($oldTotalCost);
+        }
 
         // store the receipt social id in session so when redirect to the table open the popup to view products after delete
         session()->put('update_receipt_branch_id',$receipt->id);
@@ -180,10 +185,7 @@ class ReceiptBranchController extends Controller
 
             $receipt_product_pivot = ReceiptBranchProductPivot::find($request->receipt_product_pivot_id);
             $receipt = ReceiptBranch::find($receipt_product_pivot->receipt_branch_id);
-            if($receipt->done){
-                toast('لا يمكن تعديل المنتجات بعد الإنتهاء من الفاتورة','error');
-                return redirect()->back();
-            }
+            $oldTotalCost = $receipt->total_cost;
             $price_type = $receipt->price_type();
             
             $product = ReceiptBranchProduct::findOrFail($request->product_id); 
@@ -205,6 +207,13 @@ class ReceiptBranchController extends Controller
             // update the main receipt with new costing after calculation of its products
             $receipt->total_cost = $sum;
             $receipt->save(); 
+
+            
+            if($receipt->done){
+                $receipt->is_updated_after_done = 1;
+                $receipt->save();
+                $receipt->update_total_cost($oldTotalCost);
+            }
             // store the receipt social id in session so when redirect to the table open the popup to view products after edit
             session()->put('update_receipt_branch_id',$receipt->id);
 
@@ -223,10 +232,8 @@ class ReceiptBranchController extends Controller
             return view('admin.receiptBranches.partials.add_product',compact('products','receipt_id','order_num','price_type'));
         }else{
             $receipt = ReceiptBranch::find($request->receipt_id);  
-            if($receipt->done){
-                toast('لا يمكن إضافة منتجات بعد الإنتهاء من الفاتورة','error');
-                return redirect()->back();
-            }
+            $oldTotalCost = $receipt->total_cost;
+            
             $price_type = $receipt->price_type();
 
             $product = ReceiptBranchProduct::findOrFail($request->product_id);
@@ -247,6 +254,12 @@ class ReceiptBranchController extends Controller
             }
             $receipt->total_cost = $sum;
             $receipt->save();
+
+            if($receipt->done){
+                $receipt->is_updated_after_done = 1;
+                $receipt->save();
+                $receipt->update_total_cost($oldTotalCost);
+            }
 
             if($request->has('add_more')){
                 session()->put('store_receipt_branch_id',$receipt->id);
@@ -460,11 +473,11 @@ class ReceiptBranchController extends Controller
 
     public function update(UpdateReceiptBranchRequest $request, ReceiptBranch $receiptBranch)
     {
-        if($receiptBranch->done){
-            toast('لا يمكن تعديل الفاتورة بعد الإنتهاء من الفاتورة','error');
-            return redirect()->back();
-        }
         $receiptBranch->update($request->all());
+        if($receiptBranch->done){ 
+            $receiptBranch->is_updated_after_done = 1;
+            $receiptBranch->save();
+        }
 
         toast(__('flash.global.update_title'),'success');
         return redirect()->route('admin.receipt-branches.index');

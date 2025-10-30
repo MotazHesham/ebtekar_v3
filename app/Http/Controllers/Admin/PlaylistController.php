@@ -109,7 +109,8 @@ class PlaylistController extends Controller
         $raw->designer_id = $request->designer_id;
         $raw->manufacturer_id = $request->manufacturer_id;
         $raw->preparer_id = $request->preparer_id;
-        $raw->shipmenter_id = $request->shipmenter_id;
+        $raw->shipmenter_id = $request->shipmenter_id; 
+        $raw->returned_to_design += 1;  // increment the returned to design count
         $raw->save();
 
         if ($old_status == 'pending') {
@@ -157,6 +158,9 @@ class PlaylistController extends Controller
 
         $raw->send_to_playlist_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
         $raw->playlist_status = $request->status;
+        if($request->status == 'design' && $request->model_type == 'social'){ 
+            $raw->returned_to_design += 1; 
+        }
         $raw->save();  
 
         $auth_id = 0;

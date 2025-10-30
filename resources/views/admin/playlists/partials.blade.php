@@ -23,12 +23,15 @@
                     @elseif ($item['shipping_country_id'] == 20) background:#7c42c9;
                     @elseif ($item['quickly'] == 1)background-image: linear-gradient(#9f1b2e,#1a1313);@endif">
 
-                {{ $item['order_num'] }}
+                {{ $item['order_num'] }} 
                 @if ($item['client_review'])
                     <span class="pull-right badge badge-warning">مرسل للمراجعة</span>
                 @endif
                 @if ($item['printing_times'] == 0)
                     <span class="pull-right badge badge-info">{{ __('New') }}</span>
+                @endif
+                @if($type == 'design' && $item['returned_to_design'] > 1)
+                    <span class="pull-right badge badge-danger">تم الإرجاع {{ $item['returned_to_design'] - 1 }} مرة</span>
                 @endif
             </div>
             {{-- order info --}}

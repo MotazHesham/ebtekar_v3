@@ -311,6 +311,9 @@
                         <option value="date_of_receiving_order"
                             @isset($date_type) @if ($date_type == 'date_of_receiving_order') selected @endif @endisset>
                             {{ __('تاريخ استلام الطلب') }}</option>
+                        <option value="done_time"
+                            @isset($date_type) @if ($date_type == 'done_time') selected @endif @endisset>
+                            {{ __('تاريخ التسليم') }}</option>
                     </select>
                 </div>
                 <div class="col-md-4">

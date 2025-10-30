@@ -228,7 +228,7 @@
                                         <span class="badge rounded-pill text-bg-light  mb-1">
                                             {{ __('cruds.receiptBranch.fields.discount') }}
                                             <br>
-                                            {{ $receipt->discount }}
+                                            {{ $receipt->discount_type == 'percentage' ? $receipt->discount . '%' : dashboard_currency($receipt->discount) }}
                                         </span>
                                     @endif
                                 </div>
@@ -277,6 +277,11 @@
                                                 @endif
                                             @endif
                                         </div>
+                                        @if($receipt->is_updated_after_done)
+                                            <span class="badge rounded-pill text-bg-danger text-white mb-1">
+                                                تم التعديل بعد التسليم
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div id="payment-{{$receipt->id}}">
@@ -315,23 +320,21 @@
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             @endcan
-                                            @if(!isset($deleted))
-                                                @if(!$receipt->done)
-                                                    @can('receipt_branch_add_product')
-                                                        <a class="dropdown-item" style="cursor: pointer"
-                                                            onclick="add_product('{{ $receipt->id }}')">
-                                                            {{ __('global.extra.add_product') }}
-                                                            <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
-                                                        </a>
-                                                    @endcan
-                                                    @can('receipt_branch_edit')
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('admin.receipt-branches.edit', $receipt->id) }}">
-                                                            {{ __('global.edit') }}
-                                                            <i class="far fa-edit" style="color:cornflowerblue"></i>
-                                                        </a>
-                                                    @endcan
-                                                @endif
+                                            @if(!isset($deleted)) 
+                                                @can('receipt_branch_add_product')
+                                                    <a class="dropdown-item" style="cursor: pointer"
+                                                        onclick="add_product('{{ $receipt->id }}')">
+                                                        {{ __('global.extra.add_product') }}
+                                                        <i class="fas fa-plus-circle" style="color:lightseagreen"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('receipt_branch_edit')
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('admin.receipt-branches.edit', $receipt->id) }}">
+                                                        {{ __('global.edit') }}
+                                                        <i class="far fa-edit" style="color:cornflowerblue"></i>
+                                                    </a>
+                                                @endcan 
                                                 @can('receipt_branch_print')
                                                     <a class="dropdown-item" target="print-frame"
                                                         href="{{ route('admin.receipt-branches.print', $receipt->id) }}">
