@@ -337,7 +337,15 @@ return [
     'pay'                  => 'دفع',
     'refused'                  => 'رفض',
     'accept'                  => 'قبول',
-    
+    'followups'                       => 'المتابعات',
+    'saving'                         => 'جاري الحفظ',
+    'deleting'                       => 'جاري الحذف',
+    'loading'                         => 'جاري التحميل',
+    'saved_successfully'              => 'تم الحفظ بنجاح',
+    'failed_to_load'                  => 'فشل في تحميل البيانات',
+    'something_went_wrong'            => 'حدث خطأ ما',
+    'updated_successfully'            => 'تم التعديل بنجاح',
+    'deleted_successfully'            => 'تم الحذف بنجاح',
     'extra'          => [
         'total_records' => 'المجموع',
         'per_page' => 'الصفحة',

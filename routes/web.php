@@ -109,6 +109,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('receipt-socials/customer-chart', 'ReceiptSocialController@customerChart')->name('receipt-socials.customer-chart');
     Route::resource('receipt-socials', 'ReceiptSocialController');
 
+    // Receipt Social Followups
+    Route::post('receipt-social-followups/index', 'ReceiptSocialFollowupsController@index')->name('receipt-social-followups.index');
+    Route::post('receipt-social-followups/store', 'ReceiptSocialFollowupsController@store')->name('receipt-social-followups.store');
+    Route::get('receipt-social-followups/{followup}/edit', 'ReceiptSocialFollowupsController@edit')->name('receipt-social-followups.edit');
+    Route::post('receipt-social-followups/{followup}/update', 'ReceiptSocialFollowupsController@update')->name('receipt-social-followups.update');
+    Route::delete('receipt-social-followups/{followup}', 'ReceiptSocialFollowupsController@destroy')->name('receipt-social-followups.destroy');
+
     // Receipt Social Product
     Route::delete('receipt-social-products/destroy', 'ReceiptSocialProductController@massDestroy')->name('receipt-social-products.massDestroy');
     Route::post('receipt-social-products/media', 'ReceiptSocialProductController@storeMedia')->name('receipt-social-products.storeMedia');

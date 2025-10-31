@@ -43,6 +43,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
             $shipping_address = $this->orderData['shipping_address'];
             $shipping_cost = $this->orderData['current_shipping_price_set']['shop_money']['amount'];
             $total = $this->orderData['current_total_price'];
+            $discount = $this->orderData['current_total_discounts'] ?? 0;
 
             $customer_name = $shipping_address['name'];
             $customer_phone = $shipping_address['phone'];
@@ -60,6 +61,9 @@ class ProcessShopifyOrderJob implements ShouldQueue
             $receiptSocial->client_name = $customer_name;
             $receiptSocial->client_type = 'individual';
             $receiptSocial->phone_number = $customer_phone;
+            $receiptSocial->discount = $discount;
+            $receiptSocial->discounted_amount = $discount;
+            $receiptSocial->discount_type = 'fixed';
             $receiptSocial->total_cost = $total - $shipping_cost;
             $receiptSocial->shipping_country_cost = $shipping_cost;
             $receiptSocial->shipping_address = $customer_address;

@@ -646,6 +646,11 @@
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                 @endcan
+                                            <a class="dropdown-item" style="cursor: pointer"
+                                                onclick="open_followups('{{ $receipt->id }}')">
+                                                {{ __('global.followups') }}
+                                                <i class="far fa-comments" style="color:darkslateblue"></i>
+                                            </a>
                                             @if(!$receipt->hold || auth()->user()->is_admin)
                                                 @if(!isset($deleted))
                                                     @can('receipt_social_add_product')
@@ -721,6 +726,21 @@
         </div>
     </div>
 
+    <!-- Followups Modal -->
+    <div class="modal fade" id="followups-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('global.followups') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Followups Modal -->
+
     <!-- Hold Reason Modal -->
     <div class="modal fade" id="holdReasonModal" tabindex="-1" aria-labelledby="holdReasonModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -774,6 +794,22 @@
                 $('#AjaxModal .modal-dialog').html(null);
                 $('#AjaxModal').modal('show');
                 $('#AjaxModal .modal-dialog').html(data); 
+            });
+        }
+    </script>
+    <script>
+        function open_followups(receipt_id){
+            $('#followups-modal').modal('show');
+            load_followups(receipt_id);
+        }
+        function load_followups(receipt_id){
+            $.post({
+                url: '{{ route('admin.receipt-social-followups.index') }}',
+                data: {receipt_social_id: receipt_id},
+                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                success: function(html){
+                    $('#followups-modal .modal-body').html(html);
+                }
             });
         }
     </script>

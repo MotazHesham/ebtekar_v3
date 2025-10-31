@@ -240,6 +240,11 @@ class ReceiptSocial extends Model
     }
 	// operations 
 
+    public function followups()
+    {
+        return $this->hasMany(ReceiptSocialFollowup::class, 'receipt_social_id');
+    }
+
     public function calc_discount(){
         if($this->discount_type == 'percentage'){
             return $this->total_cost * $this->discount / 100;
