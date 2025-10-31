@@ -457,9 +457,9 @@ class ReceiptSocialController extends Controller
         if(request('deleted')){ 
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
             $deleted = 1;
-            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts')->onlyTrashed(); 
+            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts')->withCount('followups')->onlyTrashed(); 
         }else{
-            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts'); 
+            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts')->withCount('followups'); 
         }
         if($request->general_search != null){
             $general_search = $request->general_search;

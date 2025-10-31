@@ -498,9 +498,14 @@
     </script>
     <script>
         function searchByPhone(e) {
+            // sanitize: remove spaces and leading country code +20 or 0020
+            var raw = e.value || '';
+            var phone = raw.replace(/\s+/g, '').replace(/^\+2/, '');
+            // reflect sanitized value back to the input
+            e.value = phone;
             $.post('{{ route('admin.search_by_phone') }}', {
                 _token: '{{ csrf_token() }}',
-                phone: e.value
+                phone: phone
             }, function(data) {
                 $('#phoneModal #table-receipts').html(data);
             });

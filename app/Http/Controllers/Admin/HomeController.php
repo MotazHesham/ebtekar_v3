@@ -26,6 +26,7 @@ use App\Models\ViewPlaylistData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
@@ -209,9 +210,18 @@ class HomeController extends Controller
         $playlistcontroller = new PlaylistController();
         $array = ['model_type' => $model_type,'id' => $order->id , 'status' => $next_type , 'condition' => 'send'];
         $array0 = new \Illuminate\Http\Request($array);
+        $status = $playlistcontroller->update_playlist_status($array0);
+        if($status == 1){
+            $message = "<div class='alert alert-success'>".$order->order_num." تم الأرسال <a class='btn btn-success btn-sm rounded-pill text-white'
+                        onclick='show_details(" . $order->id . ",\"" . $model_type . "\")' title='" . __('Order Details') . "'>
+                        أظهارالصور
+                    </a></div>";
+        }else{
+            $message = "<div class='alert alert-danger'>".$order->order_num." لم يتم الطباعة بعد</div>";
+        }
         return [
-            'status' => $playlistcontroller->update_playlist_status($array0),
-            'message' => "<div class='alert alert-success'>".$order->order_num." تم الأرسال</div>"
+            'status' => $status,
+            'message' => $message
         ];
     }
     public function qr_output(Request $request){
@@ -309,26 +319,56 @@ class HomeController extends Controller
                                             $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
                                                     ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
                                         })->count();
+        $last_receipt_social = ReceiptSocial::where(function ($query) {
+                                            $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                                    ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                        })->latest('created_at')->first();
         $receipt_company = ReceiptCompany::where(function ($query) {
                                             $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
                                                     ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
                                         })->count();
+        $last_receipt_company = ReceiptCompany::where(function ($query) {
+                                            $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                                    ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                        })->latest('created_at')->first();
 
         $receipt_client = ReceiptClient::where('phone_number', 'like', '%'.$phone.'%')->count();
+        $last_receipt_client = ReceiptClient::where('phone_number', 'like', '%'.$phone.'%')->latest('created_at')->first();
         $customers_orders = Order::where('order_type','customer')->where(function ($query) {
                                                                         $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
                                                                                 ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
                                                                     })->count();
+        $last_customer_order = Order::where('order_type','customer')->where(function ($query) {
+                                                                        $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                                                                ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                                                    })->latest('created_at')->first();
         $sellers_orders = Order::where('order_type','seller')->where(function ($query) {
                                                                         $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
                                                                                 ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
                                                                     })->count();
+        $last_seller_order = Order::where('order_type','seller')->where(function ($query) {
+                                                                        $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
+                                                                                ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
+                                                                    })->latest('created_at')->first();
 
         $banned_phones = BannedPhone::where('phone',$phone)->first();
         if($receipt_social > 0 || $receipt_company > 0 || $receipt_client > 0 || $customers_orders > 0 || $sellers_orders > 0 || $banned_phones > 0 ){
             $are_you_sure = true;
         }
-        return view('partials.search_phone',compact('receipt_social','receipt_company','receipt_client','customers_orders','sellers_orders','banned_phones','are_you_sure'));
+        return view('partials.search_phone',compact(
+            'receipt_social',
+            'receipt_company',
+            'receipt_client',
+            'customers_orders',
+            'sellers_orders',
+            'banned_phones',
+            'are_you_sure',
+            'last_receipt_social',
+            'last_receipt_company',
+            'last_receipt_client',
+            'last_customer_order',
+            'last_seller_order'
+        ));
     }
 
     public function load_num(Request $request){

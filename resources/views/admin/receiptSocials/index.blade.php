@@ -604,7 +604,7 @@
                                 @endcan
                                 @if($receipt->playlist_status == 'pending')
                                     @if($receipt->receipts_receipt_social_products_count  > 0) 
-                                        <button class="btn btn-danger btn-sm rounded-pill" onclick="playlist_users('{{$receipt->id}}','social')">أرسال لمراحل التشغيل</button>  
+                                        <button class="btn btn-success btn-sm rounded-pill" onclick="playlist_users('{{$receipt->id}}','social')">أرسال لمراحل التشغيل</button>  
                                     @endif
                                 @else  
                                     <span onclick="playlist_users('{{$receipt->id}}','social')" 
@@ -649,7 +649,15 @@
                                             <a class="dropdown-item" style="cursor: pointer"
                                                 onclick="open_followups('{{ $receipt->id }}')">
                                                 {{ __('global.followups') }}
-                                                <i class="far fa-comments" style="color:darkslateblue"></i>
+                                                <span style="position:relative; display:inline-block; margin-left:4px;">
+                                                    <i class="far fa-comments" style="color:darkslateblue"></i>
+                                                    @if($receipt->followups_count > 0)
+                                                        <span class="badge"
+                                                            style="position:absolute; top:-6px; right:-8px; background:#b31262; color:#fff; border-radius:10px; font-size:10px; line-height:1; padding:2px 5px;">
+                                                            {{ $receipt->followups_count }}
+                                                        </span>
+                                                    @endif
+                                                </span>
                                             </a>
                                             @if(!$receipt->hold || auth()->user()->is_admin)
                                                 @if(!isset($deleted))
