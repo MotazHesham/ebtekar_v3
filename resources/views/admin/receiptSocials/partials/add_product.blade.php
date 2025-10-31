@@ -34,7 +34,7 @@
             </div>
             <div class="form-group"> 
                 <label>PDF</label>
-                <input type="file" class="form-control" name="pdf">
+                <input type="file" class="form-control" name="pdf[]" multiple>
             </div>
             <div class="form-group"> 
                 <div id="product-images">

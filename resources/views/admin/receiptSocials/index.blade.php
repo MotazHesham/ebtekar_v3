@@ -56,17 +56,17 @@
                 </div>
                 <div class="modal-body"> 
                     <div class="row">
-                        <div class="col-3 form-group">
+                        <div class="col-4 form-group">
                             <label class="control-label" for="start_date">بداية التاريخ</label>
                             <input class="form-control date {{ $errors->has('start_date') ? 'is-invalid' : '' }}" type="text"
                                 name="start_date" id="start_date" value="{{ $start_date ?? '' }}" required>
                         </div>
-                        <div class="col-3 form-group">
+                        <div class="col-4 form-group">
                             <label class="control-label" for="end_date">نهاية التاريخ</label>
                             <input class="form-control date {{ $errors->has('end_date') ? 'is-invalid' : '' }}" type="text"
                                 name="end_date" id="end_date" value="{{ $end_date ?? '' }}" required>
                         </div>
-                        <div class="col-3 form-group">
+                        <div class="col-4 form-group">
                             <label class="control-label" >نوع المنتج</label>
                             <select class="form-control mb-2 @isset($product_type) isset @endisset" name="product_type" id="product_type___">
                                 <option value="">نوع المنتج</option>
@@ -78,7 +78,7 @@
                                 </option>
                             </select> 
                         </div>
-                        <div class="col-3 form-group">
+                        <div class="col-4 form-group">
                             <label class="control-label" >أختر الموقع</label>
                             <select class="form-control " style="width: 200px" name="website_setting_id" id="website_setting_id__">
                                 <option value="">أختر الموقع</option>
@@ -87,6 +87,17 @@
                                         {{ $entry }}
                                     </option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="col-4 form-group">
+                            <label class="control-label" >ترتيب حسب</label>
+                            <select class="form-control mb-2 @isset($sort_by) isset @endisset" name="sort_by" id="sort_by_"> 
+                                <option value="quantity">
+                                    الكمية المطلوبة
+                                </option>
+                                <option value="total_cost">
+                                    الاجمالي
+                                </option>
                             </select>
                         </div>
                         <div class="col-3">
@@ -787,6 +798,7 @@
                 end_date: $('#end_date').val(),
                 website_setting_id: $('#website_setting_id__').val(),
                 product_type: $('#product_type___').val(),
+                sort_by: $('#sort_by_').val(),
             }, function(data) {
                 $('#products-report-div').html(null); 
                 $('#products-report-div').html(data); 

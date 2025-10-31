@@ -18,7 +18,7 @@
                                     {{ $product->name }} - {{ $product->price }}
                                 </option>
                             @endforeach
-                        </select>
+                        </select>   
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -50,10 +50,18 @@
                 <label> 
                     <span>PDF</span> 
                     @if($receipt_social_product_pivot->pdf)
-                        <a href="{{ asset($receipt_social_product_pivot->pdf) }}" target="_blanc" class="btn btn-info">show pdf</a>
+                        @foreach (json_decode($receipt_social_product_pivot->pdf) as $pdf)
+                            <div class="d-flex align-items-center mb-2">
+                                <a href="{{ asset($pdf) }}" target="_blanc" class="btn btn-info mr-2">show pdf {{ $loop->iteration }}</a>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="remove_pdfs[]" value="{{ $pdf }}" id="remove-pdf-{{ $loop->iteration }}">
+                                    <label class="form-check-label" for="remove-pdf-{{ $loop->iteration }}">{{ __('global.delete') }}</label>
+                                </div>
+                            </div>
+                        @endforeach
                     @endif 
                 </label>
-                <input type="file" class="form-control" name="pdf">
+                <input type="file" class="form-control" name="pdf[]" multiple>
             </div>
             <div class="form-group"> 
                 <div id="product-images">

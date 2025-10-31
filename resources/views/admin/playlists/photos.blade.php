@@ -94,8 +94,10 @@
                                         @endif
                                     </div> 
                                     <br>
-                                    @if($receipt_product->pdf)
-                                        <a href="{{ asset($receipt_product->pdf) }}" target="_blanc" class="btn btn-info">show pdf</a>
+                                    @if($receipt_product->pdf)  
+                                        @foreach (json_decode($receipt_product->pdf) as $pdf)
+                                            <a href="{{ asset($pdf) }}" target="_blanc" class="btn btn-info">show pdf {{ $loop->iteration }}</a> 
+                                        @endforeach
                                     @endif
                                 </div>
                             @else

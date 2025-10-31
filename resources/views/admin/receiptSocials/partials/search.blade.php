@@ -293,6 +293,16 @@
                                 <input type="text" class="form-control @isset($include) isset @endisset" name="include" placeholder="أضافة رقم أوردر" data-role="tagsinput" @isset($include)  value="{{ $include }}" @endisset>
                             </div>
                         </div>
+                        <div class="col-md-12"> 
+                            <select class="form-control mb-2 @isset($zone_id) isset @endisset" name="zone_id" id="zone_id" onchange="sort_receipt_social()">
+                                <option value="">Select Zone</option> 
+                                @foreach($zones as $raw)
+                                    <option value="{{ $raw->id }}" @isset($zone_id) @if ($zone_id == $raw->id) selected @endif @endisset>
+                                        {{ $raw->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div> 
 
                 </div>

@@ -33,7 +33,7 @@ class ReceiptSocialProductController extends Controller
 
     public function products_report(Request $request){ 
         $website_setting_id = $request->website_setting_id; 
-        $products = ReceiptSocialProductPivot::whereHas('receipt',function($q) use($website_setting_id){
+        $products = ReceiptSocialProductPivot::with('products')->whereHas('receipt',function($q) use($website_setting_id){
             if($website_setting_id){
                 $q->where('website_setting_id',$website_setting_id);
             }
@@ -59,7 +59,9 @@ class ReceiptSocialProductController extends Controller
                 Carbon::createFromFormat(config('panel.date_format') . ' H:i:s', $request->start_date . ' 00:00:00')->format('Y-m-d H:i:s'),
                 Carbon::createFromFormat(config('panel.date_format') . ' H:i:s', $request->end_date . ' 23:59:59')->format('Y-m-d H:i:s')
             ]
-        )->selectRaw('sum(quantity) as quantity,sum(total_cost) as total_cost,receipt_social_product_id,title')->groupBy('receipt_social_product_id')->get();
+        )->selectRaw('sum(quantity) as quantity,sum(total_cost) as total_cost,receipt_social_product_id,title') 
+        ->orderBy($request->sort_by, 'asc')
+        ->groupBy('receipt_social_product_id')->get();
 
         return view('admin.receiptSocials.partials.products-report',compact('products'));
     }

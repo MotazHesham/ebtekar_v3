@@ -266,9 +266,36 @@ class ReceiptSocialController extends Controller
             }
             $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
 
-            if ($request->hasFile('pdf')) {
-                $receipt_product_pivot->pdf= $request->pdf->store('uploads/receipt_social/pdf');
+            // Prepare existing PDFs
+            $existingPdfs = [];
+            if (!empty($receipt_product_pivot->pdf)) {
+                $existingPdfs = json_decode($receipt_product_pivot->pdf, true) ?: [];
             }
+
+            // Remove selected PDFs
+            if ($request->has('remove_pdfs')) {
+                $toRemove = (array) $request->input('remove_pdfs');
+                $existingPdfs = array_values(array_filter($existingPdfs, function ($pdfPath) use ($toRemove) {
+                    return !in_array($pdfPath, $toRemove);
+                }));
+                foreach ($toRemove as $pdfPath) {
+                    if (Storage::exists($pdfPath)) {
+                        Storage::delete($pdfPath);
+                    }
+                }
+            }
+
+            // Append newly uploaded PDFs
+            if ($request->hasFile('pdf')) {
+                foreach ($request->file('pdf') as $pdf_raw) {
+                    if ($pdf_raw) {
+                        $existingPdfs[] = $pdf_raw->store('uploads/receipt_social/pdf');
+                    }
+                }
+            }
+
+            // Persist PDFs array (or null if empty)
+            $receipt_product_pivot->pdf = !empty($existingPdfs) ? json_encode($existingPdfs) : null;
 
             if ($request->has('previous_photos')) {
                 $photos = $request->previous_photos;
@@ -348,7 +375,11 @@ class ReceiptSocialController extends Controller
             $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
 
             if ($request->hasFile('pdf')) {
-                $receipt_product_pivot->pdf = $request->pdf->store('uploads/receipt_social/pdf'); 
+                $pdfs = array();
+                foreach ($request->pdf as $key => $pdf_raw) {
+                    $pdfs[] = $pdf_raw->store('uploads/receipt_social/pdf');
+                }
+                $receipt_product_pivot->pdf = json_encode($pdfs);
             }
 
             $photos = array();
@@ -412,6 +443,7 @@ class ReceiptSocialController extends Controller
         $websites = WebsiteSetting::pluck('site_name', 'id');
         $financial_accounts = FinancialAccount::get();
         $receiptSocialProducts = ReceiptSocialProduct::all();
+        $zones = Zone::all();
         
         if($request->has('cancel_popup')){
             session()->put('store_receipt_socail_id',null);
@@ -453,6 +485,7 @@ class ReceiptSocialController extends Controller
         $enable_multiple_form_submit = true;
         $general_search = null;
         $selectedProducts = null;
+        $zone_id = null;
 
         if(request('deleted')){ 
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -485,6 +518,11 @@ class ReceiptSocialController extends Controller
         if ($request->country_id != null) {
             $country_id = $request->country_id;
             $receipts = $receipts->where('shipping_country_id', $country_id);
+        }
+        if ($request->zone_id != null) {
+            $zone_id = $request->zone_id;
+            $zone = Zone::with('countries')->find($zone_id);
+            $receipts = $receipts->whereIn('shipping_country_id', $zone->countries->pluck('id'));
         }
         if ($request->isShopify != null) {
             $isShopify = $request->isShopify;
@@ -701,7 +739,7 @@ class ReceiptSocialController extends Controller
             return view('admin.receiptSocials.index_modern', compact('countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
-            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify',
+            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts'));
         }
 
@@ -709,7 +747,7 @@ class ReceiptSocialController extends Controller
             'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
-            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify',
+            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts'
         ));
     }
