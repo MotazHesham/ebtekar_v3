@@ -39,6 +39,7 @@ class ReceiptSocialProduct extends Model implements HasMedia
         'product_type',
         'name',
         'price',
+        'quantity',
         'commission',
         'shopify_id',
         'shopify_product_id',

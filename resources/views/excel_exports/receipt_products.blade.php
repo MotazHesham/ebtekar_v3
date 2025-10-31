@@ -54,13 +54,13 @@
 
                     @php
                         $sum += $receipt_social_product->total_cost;
-                        $qnt += $receipt_social_product->quantity;
+                        $qnt += $receipt_social_product->quantity * $row->quantity;
                     @endphp
                     <tr>
                         <td>{{ $receipt_social_product->receipt->order_num ?? 'not-found' }} - تم التسليم</td>
                         <td>{{ $receipt_social_product->receipt->client_name ?? 'not-found' }}</td>
                         <td>{{ $receipt_social_product->receipt->phone_number ?? 'not-found' }}</td>
-                        <td>{{ $receipt_social_product->quantity }}</td>
+                        <td>{{ $receipt_social_product->quantity * $row->quantity }}</td>
                         <td>{{ $receipt_social_product->total_cost }}</td>
                         <td>{{ $receipt_social_product->created_at }}</td>
                     </tr>
@@ -81,13 +81,13 @@
 
                     @php
                         $sum2 += $receipt_social_product->total_cost;
-                        $qnt2 += $receipt_social_product->quantity;
+                        $qnt2 += $receipt_social_product->quantity * $row->quantity;
                     @endphp
                     <tr>
                         <td>{{ $receipt_social_product->receipt->order_num ?? 'not-found' }} - لم يتم التسليم</td>
                         <td>{{ $receipt_social_product->receipt->client_name ?? 'not-found' }}</td>
                         <td>{{ $receipt_social_product->receipt->phone_number ?? 'not-found' }}</td>
-                        <td>{{ $receipt_social_product->quantity }}</td>
+                        <td>{{ $receipt_social_product->quantity * $row->quantity }}</td>
                         <td>{{ $receipt_social_product->total_cost }}</td>
                         <td>{{ $receipt_social_product->created_at }}</td>
                     </tr>

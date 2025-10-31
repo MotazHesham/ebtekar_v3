@@ -38,6 +38,9 @@
                             {{ __('cruds.receiptSocialProduct.fields.name') }}
                         </th>
                         <th>
+                            الكمية
+                        </th>
+                        <th>
                             نوع المنتج
                         </th>
                         <th>
@@ -146,6 +149,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'quantity',
+                        name: 'quantity'
                     },
                     {
                         data: 'product_type',

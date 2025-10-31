@@ -8,6 +8,7 @@
             <th scope="col">منتج سيزون</th>
             <th scope="col">الكمية المطلوبة</th> 
             <th scope="col">الاجمالي</th> 
+            <th></th>
         </tr>
     </thead>
     <tbody> 
@@ -17,8 +18,9 @@
         @endphp
         @foreach ($products as $key => $product)
             @php
+                $quantity_product = $product->products->quantity ?? 1;
                 $total += $product->total_cost;
-                $quantity += $product->quantity;
+                $quantity += $product->quantity * $quantity_product;
             @endphp
             <tr>
                 <th scope="row"></th>
@@ -31,21 +33,18 @@
                     @endif
                 </td>
                 <td>{{ $product->products && $product->products->product_type == 'season' ? 'منتج سيزون' : 'منتج عادي' }}</td>
-                <td>{{ $product->quantity}}</td> 
+                <td>{{ $product->quantity * $quantity_product}}</td> 
                 <td>{{ $product->total_cost}}</td> 
+                <td></td>
             </tr> 
         @endforeach 
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>الاجمالي: {{ $quantity }} </td>
-            <td>الاجمالي: {{ $total }} </td>
-        </tr>
     </tbody>
 </table>
 
+<div style="display: flex; justify-content: space-between; align-items: center;" class="mt-3"> 
+    <p style="margin: 0; font-size: 26px; font-weight: bold;">الكمية: {{ $quantity }} </p>
+    <p style="margin: 0; font-size: 26px; font-weight: bold;">الاجمالي: {{ $total }} ج.م</p>
+</div>
 
 <script>
     $(function() {

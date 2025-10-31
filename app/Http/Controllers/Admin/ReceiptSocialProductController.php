@@ -80,7 +80,14 @@ class ReceiptSocialProductController extends Controller
                     $Q->where('name','like','%'.$GLOBALS['search'].'%')->orWhere('price','like','%'.$GLOBALS['search'].'%');
                 })->orderBy('created_at','desc');
             }
-            
+
+            if ($request->quantity != null){  
+                if($request->quantity == 'more_than_1'){
+                    $products = $products->where('quantity','>',1);
+                }else{
+                    $products = $products->where('quantity',$request->quantity);
+                }
+            }
             if ($request->website_setting_id != null){  
                 $products = $products->where('website_setting_id',$request->website_setting_id);
             }
