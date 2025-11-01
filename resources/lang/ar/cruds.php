@@ -742,6 +742,8 @@ return [
             'id_helper'         => ' ',
             'name'              => 'الأسم',
             'name_helper'       => ' ',
+            'shopify_name'      => 'أسم Shopify',
+            'shopify_name_helper' => ' ',
             'cost'              => 'السعر',
             'cost_helper'       => ' ',
             'code'              => 'الكود',

@@ -29,6 +29,7 @@ class Country extends Model
 
     protected $fillable = [
         'name',
+        'shopify_name',
         'cost',
         'code',
         'code_cost',

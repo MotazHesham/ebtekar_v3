@@ -33,6 +33,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ __('cruds.country.fields.shopify_name') }}
+                        </th>
+                        <td>
+                            {{ $country->shopify_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ __('cruds.country.fields.cost') }}
                         </th>
                         <td>

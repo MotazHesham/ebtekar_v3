@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Country;
 use App\Models\ReceiptSocial;
 use App\Models\ReceiptSocialProduct;
 use App\Models\ReceiptSocialProductPivot;
@@ -50,6 +51,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
             $customer_address = $shipping_address['address1'] . ', ' . $shipping_address['address2'] . ', ' . $shipping_address['city'] . ', ' . $shipping_address['province'] . ', ' . $shipping_address['country'] . ', ' . $shipping_address['zip'];
 
             $receiptSocial = ReceiptSocial::where('shopify_id', $shopify_id)->where('website_setting_id', $this->siteSettings->id)->first();
+            $country = Country::where('shopify_name', $shipping_address['country'])->first();
             $is_new_order = false;
             if (!$receiptSocial) {
                 $receiptSocial = new ReceiptSocial();
@@ -65,6 +67,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
             $receiptSocial->discounted_amount = $discount;
             $receiptSocial->discount_type = 'fixed';
             $receiptSocial->total_cost = $total - $shipping_cost;
+            $receiptSocial->shipping_country_id = $country->id;
             $receiptSocial->shipping_country_cost = $shipping_cost;
             $receiptSocial->shipping_address = $customer_address;
             $receiptSocial->save();

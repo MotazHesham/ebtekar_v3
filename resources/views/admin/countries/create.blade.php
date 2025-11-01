@@ -20,6 +20,16 @@
                 <span class="help-block">{{ __('cruds.country.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="shopify_name">{{ __('cruds.country.fields.shopify_name') }}</label>
+                <input class="form-control {{ $errors->has('shopify_name') ? 'is-invalid' : '' }}" type="text" name="shopify_name" id="shopify_name" value="{{ old('shopify_name', '') }}"  >
+                @if($errors->has('shopify_name'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('shopify_name') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ __('cruds.country.fields.shopify_name_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="cost">{{ __('cruds.country.fields.cost') }}</label>
                 <input class="form-control {{ $errors->has('cost') ? 'is-invalid' : '' }}" type="number" name="cost" id="cost" value="{{ old('cost', '') }}" step="0.01" required>
                 @if($errors->has('cost'))

@@ -28,6 +28,9 @@
                             {{ __('cruds.country.fields.name') }}
                         </th>
                         <th>
+                            {{ __('cruds.country.fields.shopify_name') }}
+                        </th>
+                        <th>
                             {{ __('cruds.country.fields.cost') }}
                         </th>
                         <th>
@@ -134,6 +137,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'shopify_name',
+                        name: 'shopify_name'
                     },
                     {
                         data: 'cost',
