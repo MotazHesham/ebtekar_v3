@@ -2,7 +2,7 @@
     @isset($deleted)
         <input type="hidden" name="deleted" value="1">
     @endisset
-    <input type="hidden" name="new_design" value="{{ request('new_design') }}">
+    
     <!-- Modern Floating Search Bar -->
     <div class="modern-search-container">
         <!-- Quick Search Bar -->
@@ -29,7 +29,7 @@
         </div>
 
         <!-- Advanced Filters Panel -->
-        <div class="advanced-filters-panel" id="advancedFiltersPanel">
+        <div class="advanced-filters-panel show" id="advancedFiltersPanel">
 
             <!-- Filter Tabs -->
             <div class="filter-tabs">
@@ -272,6 +272,32 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="filter-item">
+                            <label>Hold</label>
+                            <select class="form-control @isset($isHold) isset @endisset"
+                                name="isHold" id="isHold">
+                                <option value="">Select Hold</option>
+                                <option value="1"
+                                    @isset($isHold) @if ($isHold == '1') selected @endif @endisset>
+                                    Hold</option>
+                                <option value="0"
+                                    @isset($isHold) @if ($isHold == '0') selected @endif @endisset>
+                                    Not Hold</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>Has Followup</label>
+                            <select class="form-control @isset($has_followup) isset @endisset"
+                                name="has_followup" id="has_followup">
+                                <option value="">Select Has Followup</option>
+                                <option value="1"
+                                    @isset($has_followup) @if ($has_followup == '1') selected @endif @endisset>
+                                    Has Followup</option>
+                                <option value="0"
+                                    @isset($has_followup) @if ($has_followup == '0') selected @endif @endisset>
+                                    No Followup</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -333,6 +359,9 @@
                                 <option value="date_of_receiving_order"
                                     @isset($date_type) @if ($date_type == 'date_of_receiving_order') selected @endif @endisset>
                                     {{ __('تاريخ استلام الطلب') }}</option>
+                                <option value="done_time"
+                                    @isset($date_type) @if ($date_type == 'done_time') selected @endif @endisset>
+                                    {{ __('تاريخ التسليم') }}</option>
                             </select>
                         </div>
                         <div class="filter-item">
@@ -402,6 +431,17 @@
                                         @endforeach
                                     </optgroup>
                                 @endif
+                            </select>
+                        </div>
+                        <div class="filter-item"> 
+                            <label>Zone</label>
+                            <select class="form-control mb-2 @isset($zone_id) isset @endisset" name="zone_id" id="zone_id">
+                                <option value="">Select Zone</option> 
+                                @foreach($zones as $raw)
+                                    <option value="{{ $raw->id }}" @isset($zone_id) @if ($zone_id == $raw->id) selected @endif @endisset>
+                                        {{ $raw->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="filter-item">

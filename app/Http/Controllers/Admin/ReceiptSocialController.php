@@ -487,6 +487,7 @@ class ReceiptSocialController extends Controller
         $general_search = null;
         $selectedProducts = null;
         $zone_id = null;
+        $has_followup = null;
 
         if(request('deleted')){ 
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -515,6 +516,14 @@ class ReceiptSocialController extends Controller
         if ($request->client_type != null) {
             $receipts = $receipts->where('client_type', $request->client_type);
             $client_type = $request->client_type;
+        }
+        if ($request->has_followup != null) {
+            $has_followup = $request->has_followup;
+            if($has_followup == 1){
+                $receipts = $receipts->whereHas('followups');
+            }else{
+                $receipts = $receipts->whereDoesntHave('followups');
+            }
         }
         if ($request->country_id != null) {
             $country_id = $request->country_id;
@@ -743,9 +752,9 @@ class ReceiptSocialController extends Controller
         if($request->has('new_design')){
             return view('admin.receiptSocials.index_modern', compact('countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
-            'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
+            'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type', 
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts'));
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup'));
         }
 
         return view('admin.receiptSocials.index', compact(
@@ -753,7 +762,7 @@ class ReceiptSocialController extends Controller
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts'
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup'
         ));
     }
 
