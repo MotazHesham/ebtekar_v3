@@ -900,7 +900,7 @@ class ReceiptSocialController extends Controller
             return redirect()->route('admin.receipt-socials.edit', $receiptSocial->id);
         }
 
-        return redirect()->route('admin.receipt-socials.index');
+        return redirect()->back();
     }
 
     public function show(ReceiptSocial $receiptSocial)
