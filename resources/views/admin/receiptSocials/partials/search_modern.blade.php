@@ -69,6 +69,14 @@
                                 placeholder="رقم الأوردر">
                         </div>
                         <div class="filter-item">
+                            <label>Shopify Order Num</label>
+                            <input type="text"
+                                class="form-control @isset($shopify_order_num) isset @endisset" id="shopify_order_num"
+                                name="shopify_order_num"
+                                @isset($shopify_order_num) value="{{ $shopify_order_num }}" @endisset
+                                placeholder="رقم أوردر Shopify">
+                        </div>
+                        <div class="filter-item">
                             <label>{{ __('cruds.receiptSocial.fields.client_name') }}</label>
                             <input type="text"
                                 class="form-control @isset($client_name) isset @endisset"

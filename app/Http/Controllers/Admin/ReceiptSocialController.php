@@ -488,6 +488,7 @@ class ReceiptSocialController extends Controller
         $selectedProducts = null;
         $zone_id = null;
         $has_followup = null;
+        $shopify_order_num = null;
 
         if(request('deleted')){ 
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -502,10 +503,15 @@ class ReceiptSocialController extends Controller
                 $query->where('order_num', 'like', '%' . $general_search . '%')
                     ->orWhere('phone_number', 'like', '%' . $general_search . '%')
                     ->orWhere('phone_number_2', 'like', '%' . $general_search . '%')
-                    ->orWhere('client_name', 'like', '%' . $general_search . '%'); 
+                    ->orWhere('client_name', 'like', '%' . $general_search . '%')
+                    ->orWhere('shopify_order_num', 'like', '%' . $general_search . '%'); 
             });
         }
 
+        if ($request->shopify_order_num != null) {
+            $shopify_order_num = $request->shopify_order_num;
+            $receipts = $receipts->where('shopify_order_num', 'like', '%' . $shopify_order_num . '%');
+        }
         if ($request->selectedProducts != null) {
             $selectedProducts = $request->selectedProducts;
             $receipts = $receipts->whereHas('receiptsReceiptSocialProducts', function ($query) use ($selectedProducts) {
@@ -754,7 +760,7 @@ class ReceiptSocialController extends Controller
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type', 
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup'));
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup','shopify_order_num'));
         }
 
         return view('admin.receiptSocials.index', compact(
@@ -762,7 +768,7 @@ class ReceiptSocialController extends Controller
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup'
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup','shopify_order_num'
         ));
     }
 
