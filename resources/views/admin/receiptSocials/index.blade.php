@@ -184,7 +184,7 @@
 
     <div class="row">
         @if(Gate::allows('statistics_receipts'))
-            <div class="col-xl-3 col-md-12">
+            {{-- <div class="col-xl-3 col-md-12">
                 <div class="card">
                     <div class="card-body">
                         <b>{{ __('global.statistics') }} {{ __('cruds.receiptSocial.title') }}</b>
@@ -288,7 +288,7 @@
                         <a href="{{ route('admin.receipt-socials.index',['new_design' => true]) }}" class="btn btn-danger">New Design</a>
                     </div>
                 </div>
-            </div> 
+            </div>  --}}
         @endif
 
         <!-- Customer Chart Modal -->
@@ -306,8 +306,9 @@
             </div>
         </div>
 
-        <div class="@if(Gate::allows('statistics_receipts')) col-xl-9 @else col-xl-12 @endif col-md-12">
-            @include('admin.receiptSocials.partials.search')
+        <div class=" col-md-12">
+            @include('admin.receiptSocials.partials.statistics_modern')
+            @include('admin.receiptSocials.partials.search_modern')
         </div>
     </div>
 

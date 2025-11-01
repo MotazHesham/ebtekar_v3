@@ -473,10 +473,12 @@ class ReceiptBranchController extends Controller
 
     public function update(UpdateReceiptBranchRequest $request, ReceiptBranch $receiptBranch)
     {
+        $oldTotalCost = $receiptBranch->total_cost;
         $receiptBranch->update($request->all());
         if($receiptBranch->done){ 
             $receiptBranch->is_updated_after_done = 1;
             $receiptBranch->save();
+            $receiptBranch->update_total_cost($oldTotalCost);
         }
 
         toast(__('flash.global.update_title'),'success');
