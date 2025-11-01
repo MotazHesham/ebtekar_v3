@@ -131,10 +131,10 @@ class PlaylistController extends Controller
                 SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index', 'design'),$site_settings);  // job for sending push notification
             }
             alert('تم الأرسال','','success');
-            return redirect()->route($route);
+            return redirect()->back();
         }else{
             alert('تم التعديل','','success');
-            return redirect()->route($route);
+            return redirect()->back();
         }
     }
 

@@ -46,7 +46,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
             $discount = $this->orderData['current_total_discounts'] ?? 0;
 
             $customer_name = $shipping_address['name'];
-            $customer_phone = $shipping_address['phone'];
+            $customer_phone = str_replace('+', '', $shipping_address['phone']);
             $customer_address = $shipping_address['address1'] . ', ' . $shipping_address['address2'] . ', ' . $shipping_address['city'] . ', ' . $shipping_address['province'] . ', ' . $shipping_address['country'] . ', ' . $shipping_address['zip'];
 
             $receiptSocial = ReceiptSocial::where('shopify_id', $shopify_id)->where('website_setting_id', $this->siteSettings->id)->first();
