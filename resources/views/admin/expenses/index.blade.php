@@ -15,89 +15,33 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive">
-                <table class=" table table-bordered table-striped table-hover datatable datatable-Expense">
-                    <thead>
-                        <tr>
-                            <th width="10">
+            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-Expense">
+                <thead>
+                    <tr>
+                        <th width="10">
 
-                            </th>
-                            <th>
-                                {{ __('cruds.expense.fields.id') }}
-                            </th>
-                            <th>
-                                {{ __('cruds.expense.fields.expense_category') }}
-                            </th>
-                            <th>
-                                {{ __('cruds.expense.fields.entry_date') }}
-                            </th>
-                            <th>
-                                {{ __('cruds.expense.fields.amount') }}
-                            </th>
-                            <th>
-                                {{ __('cruds.expense.fields.description') }}
-                            </th>
-                            <th>
-                                &nbsp;
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($expenses as $key => $expense)
-                            <tr data-entry-id="{{ $expense->id }}">
-                                <td>
-
-                                </td>
-                                <td>
-                                    {{ $expense->id ?? '' }}
-                                </td>
-                                <td>
-                                    {{ $expense->expense_category->name ?? '' }}
-                                </td>
-                                <td>
-                                    {{ $expense->entry_date ?? '' }}
-                                </td>
-                                <td>
-                                    {{ $expense->amount ?? '' }}
-                                </td>
-                                <td>
-                                    {!! $expense->description ?? '' !!}
-                                </td>
-                                <td>
-                                    @if (!$expense->model_type)
-                                        @can('expense_show')
-                                            <a class="btn btn-xs btn-primary"
-                                                href="{{ route('admin.expenses.show', $expense->id) }}">
-                                                {{ __('global.view') }}
-                                            </a>
-                                        @endcan
-
-                                        @can('expense_edit')
-                                            <a class="btn btn-xs btn-info"
-                                                href="{{ route('admin.expenses.edit', $expense->id) }}">
-                                                {{ __('global.edit') }}
-                                            </a>
-                                        @endcan
-
-                                        @can('expense_delete')
-                                            <form action="{{ route('admin.expenses.destroy', $expense->id) }}" method="POST"
-                                                onsubmit="return confirm('{{ __('global.areYouSure') }}');"
-                                                style="display: inline-block;">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="submit" class="btn btn-xs btn-danger"
-                                                    value="{{ __('global.delete') }}">
-                                            </form>
-                                        @endcan
-                                    @endif
-
-                                </td>
-
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                        </th>
+                        <th>
+                            {{ __('cruds.expense.fields.id') }}
+                        </th>
+                        <th>
+                            {{ __('cruds.expense.fields.expense_category') }}
+                        </th>
+                        <th>
+                            {{ __('cruds.expense.fields.entry_date') }}
+                        </th>
+                        <th>
+                            {{ __('cruds.expense.fields.amount') }}
+                        </th>
+                        <th>
+                            {{ __('cruds.expense.fields.description') }}
+                        </th>
+                        <th>
+                            &nbsp;
+                        </th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 @endsection
@@ -105,22 +49,95 @@
     @parent
     <script>
         $(function() {
-            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons) 
-            $.extend(true, $.fn.dataTable.defaults, {
+            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+            @can('expense_delete')
+                let deleteButtonTrans = '{{ __('global.datatables.delete') }}';
+                let deleteButton = {
+                    text: deleteButtonTrans,
+                    url: "{{ route('admin.expenses.massDestroy') }}",
+                    className: 'btn-danger',
+                    action: function(e, dt, node, config) {
+                        var ids = $.map(dt.rows({
+                            selected: true
+                        }).data(), function(entry) {
+                            return entry.id
+                        });
+
+                        if (ids.length === 0) {
+                            alert('{{ __('global.datatables.zero_selected') }}')
+
+                            return
+                        }
+
+                        if (confirm('{{ __('global.areYouSure') }}')) {
+                            $.ajax({
+                                    headers: {
+                                        'x-csrf-token': _token
+                                    },
+                                    method: 'POST',
+                                    url: config.url,
+                                    data: {
+                                        ids: ids,
+                                        _method: 'DELETE'
+                                    }
+                                })
+                                .done(function() {
+                                    location.reload()
+                                })
+                        }
+                    }
+                }
+                dtButtons.push(deleteButton)
+            @endcan
+
+            let dtOverrideGlobals = {
+                buttons: dtButtons,
+                processing: true,
+                serverSide: true,
+                retrieve: true,
+                aaSorting: [],
+                ajax: "{{ route('admin.expenses.index') }}",
+                columns: [{
+                        data: 'placeholder',
+                        name: 'placeholder'
+                    },
+                    {
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'expense_category_name',
+                        name: 'expense_category_name'
+                    },
+                    {
+                        data: 'entry_date',
+                        name: 'entry_date'
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount'
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
+                    {
+                        data: 'actions',
+                        name: '{{ __('global.actions') }}'
+                    }
+                ],
                 orderCellsTop: true,
                 order: [
                     [1, 'desc']
                 ],
-                pageLength: 100,
-            });
-            let table = $('.datatable-Expense:not(.ajaxTable)').DataTable({
-                buttons: dtButtons
-            })
+                pageLength: 10,
+            };
+            let table = $('.datatable-Expense').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();
             });
 
-        })
+        });
     </script>
 @endsection
