@@ -47,6 +47,9 @@
                             {{ __('cruds.receiptSocialProduct.fields.price') }}
                         </th>
                         <th>
+                            {{ __('cruds.receiptSocialProduct.fields.box_price') }}
+                        </th>
+                        <th>
                             {{ __('cruds.receiptSocialProduct.fields.commission') }}
                         </th>
                         <th>
@@ -161,6 +164,10 @@
                     {
                         data: 'price',
                         name: 'price'
+                    },
+                    {
+                        data: 'box_price',
+                        name: 'box_price'
                     },
                     {
                         data: 'commission',

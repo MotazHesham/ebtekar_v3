@@ -310,6 +310,8 @@ return [
             'name_helper'       => ' ',
             'price'             => 'السعر',
             'price_helper'      => ' ',
+            'box_price'         => 'السعر للبوكس',
+            'box_price_helper'  => ' ',
             'commission'        => 'نسبة الربح',
             'commission_helper' => ' ',
             'photos'            => 'الصور',

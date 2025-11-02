@@ -19,6 +19,7 @@ use App\Models\GeneralSetting;
 use App\Models\ReceiptSocial; 
 use App\Models\ReceiptSocialProduct;
 use App\Models\ReceiptSocialProductPivot;
+use App\Models\ReceiptSocialBoxDetail;
 use App\Models\Social;
 use App\Models\User;
 use App\Models\WebsiteSetting;
@@ -233,7 +234,7 @@ class ReceiptSocialController extends Controller
 
     public function edit_product(Request $request){
         if($request->ajax()){
-            $receipt_social_product_pivot = ReceiptSocialProductPivot::find($request->id); 
+            $receipt_social_product_pivot = ReceiptSocialProductPivot::with('boxDetails.product')->find($request->id); 
             $receipt = ReceiptSocial::find($receipt_social_product_pivot->receipt_social_id);
             $products = ReceiptSocialProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get(); 
             return view('admin.receiptSocials.partials.edit_product',compact('receipt_social_product_pivot','products'));
@@ -248,23 +249,80 @@ class ReceiptSocialController extends Controller
                     return redirect()->back();
                 }
             }
-            $product = ReceiptSocialProduct::findOrFail($request->product_id); 
-
-            $receipt_product_pivot->receipt_social_product_id = $request->product_id;
-            $receipt_product_pivot->title = $product->name;
-            $receipt_product_pivot->description = $request->description;
-            if (!auth()->user()->is_admin) {
-                $receipt_product_pivot->price = $product->price;
-                $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
-            }else{
-                $receipt_product_pivot->price = $request->price;
-                $receipt_product_pivot->total_cost = ($request->quantity * $request->price);
+            
+            $type = $request->type ?? $receipt_product_pivot->type ?? 'single';
+            $receipt_product_pivot->type = $type;
+            
+            if ($type == 'single') {
+                $product = ReceiptSocialProduct::findOrFail($request->product_id); 
+                $receipt_product_pivot->receipt_social_product_id = $request->product_id;
+                $receipt_product_pivot->title = $product->name;
+                $receipt_product_pivot->description = $request->description;
+                if (!auth()->user()->is_admin) {
+                    $receipt_product_pivot->price = $product->price;
+                    $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
+                }else{
+                    $receipt_product_pivot->price = $request->price;
+                    $receipt_product_pivot->total_cost = ($request->quantity * $request->price);
+                }
+                $receipt_product_pivot->quantity = $request->quantity;
+                if($request->extra_commission != null){ 
+                    $receipt_product_pivot->extra_commission = $request->extra_commission;
+                }
+                $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
+                $product_for_season = $product;
+                
+                // Delete box details if switching from box to single
+                $receipt_product_pivot->boxDetails()->delete();
+            } else {
+                // Box type - ONE pivot record, all products go to ReceiptSocialBoxDetail
+                // Box pivot does NOT reference a single product - it's a container
+                $receipt_product_pivot->receipt_social_product_id = null;
+                $receipt_product_pivot->title = $request->box_title ?? 'بوكس';
+                $receipt_product_pivot->description = $request->description;
+                $receipt_product_pivot->quantity = $request->quantity ?? 1;
+                
+                // Calculate totals from box details ONLY
+                $total_box_cost = 0;
+                $total_box_quantity = 0;
+                $total_box_commission = 0;
+                
+                if ($request->has('box_products') && is_array($request->box_products)) {
+                    foreach ($request->box_products as $boxProduct) {
+                        if (!empty($boxProduct['product_id']) && !empty($boxProduct['quantity'])) {
+                            $boxProd = ReceiptSocialProduct::findOrFail($boxProduct['product_id']);
+                            $boxQuantity = (int)$boxProduct['quantity'];
+                            // Use box_price if provided, otherwise fall back to regular price
+                            $boxPrice = $boxProduct['price'] ?? ($boxProd->box_price ?? $boxProd->price);
+                            $boxTotal = $boxQuantity * $boxPrice;
+                            
+                            $total_box_cost += $boxTotal;
+                            $total_box_commission += ($boxQuantity * ($boxProd->commission ?? 0));
+                            $total_box_quantity += $boxQuantity;
+                            if (!isset($product_for_season)) {
+                                $product_for_season = $boxProd;
+                            }
+                        }
+                    }
+                }
+                
+                // Set pivot totals based on calculated box details
+                if (!auth()->user()->is_admin) {
+                    $receipt_product_pivot->price = $total_box_cost > 0 ? $total_box_cost : 0;
+                    $receipt_product_pivot->total_cost =  $total_box_cost ;
+                    $receipt_product_pivot->commission =  $total_box_commission ;
+                } else {
+                    // Admin can override price
+                    $receipt_product_pivot->price = $request->price ?? ($total_box_cost > 0 ? $total_box_cost : 0);
+                    $receipt_product_pivot->total_cost = ($request->price ?? $total_box_cost) ;
+                    $receipt_product_pivot->commission =  $total_box_commission ;
+                }
+                
+                if($request->extra_commission != null){ 
+                    $receipt_product_pivot->extra_commission = $request->extra_commission;
+                }
+                $receipt_product_pivot->quantity = $total_box_quantity;
             }
-            $receipt_product_pivot->quantity = $request->quantity;
-            if($request->extra_commission != null){ 
-                $receipt_product_pivot->extra_commission = $request->extra_commission;
-            }
-            $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
 
             // Prepare existing PDFs
             $existingPdfs = [];
@@ -316,6 +374,34 @@ class ReceiptSocialController extends Controller
             $receipt_product_pivot->photos = json_encode($photos);   
 
             $receipt_product_pivot->save();
+            
+            // Update box details if type is box - ALL products go to ReceiptSocialBoxDetail
+            if ($type == 'box') {
+                // Delete existing box details
+                $receipt_product_pivot->boxDetails()->delete();
+                
+                // Save new box details - each selected product goes here
+                if ($request->has('box_products') && is_array($request->box_products)) {
+                    foreach ($request->box_products as $boxProduct) {
+                        if (!empty($boxProduct['product_id']) && !empty($boxProduct['quantity'])) {
+                            $boxProd = ReceiptSocialProduct::findOrFail($boxProduct['product_id']);
+                            $boxQuantity = (int)$boxProduct['quantity'];
+                            // Use box_price if provided, otherwise fall back to regular price
+                            $boxPrice = $boxProduct['price'] ?? ($boxProd->box_price ?? $boxProd->price);
+                            $boxTotal = $boxQuantity * $boxPrice;
+                            
+                            // Store each product in ReceiptSocialBoxDetail
+                            $boxDetail = new ReceiptSocialBoxDetail();
+                            $boxDetail->receipt_social_product_pivot_id = $receipt_product_pivot->id;
+                            $boxDetail->receipt_social_product_id = $boxProduct['product_id'];
+                            $boxDetail->quantity = $boxQuantity;
+                            $boxDetail->price = $boxPrice;
+                            $boxDetail->total_cost = $boxTotal;
+                            $boxDetail->save();
+                        }
+                    }
+                }
+            }
 
             // calculate the costing of products in receipt
             $all_receipt_product_pivot = ReceiptSocialProductPivot::where('receipt_social_id', $receipt->id)->get();
@@ -332,8 +418,8 @@ class ReceiptSocialController extends Controller
             $receipt->total_cost = $sum;
             $receipt->commission = $sum2;
             $receipt->extra_commission = $sum3;
-            if(!$receipt->is_seasoned){
-                $receipt->is_seasoned = $product->product_type == 'season' ? 1 : 0;
+            if(!$receipt->is_seasoned && isset($product_for_season)){
+                $receipt->is_seasoned = $product_for_season->product_type == 'season' ? 1 : 0;
             }
             $receipt->save(); 
             
@@ -362,17 +448,68 @@ class ReceiptSocialController extends Controller
                 }
             }
 
-            $product = ReceiptSocialProduct::findOrFail($request->product_id);
+            $box_title = '';
 
+            $type = $request->type ?? 'single';
             $receipt_product_pivot = new ReceiptSocialProductPivot(); 
             $receipt_product_pivot->receipt_social_id = $request->receipt_id;
-            $receipt_product_pivot->receipt_social_product_id = $request->product_id;
-            $receipt_product_pivot->title = $product->name;
-            $receipt_product_pivot->description = $request->description;
-            $receipt_product_pivot->price = $product->price;
-            $receipt_product_pivot->quantity = $request->quantity;
-            $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
-            $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
+            $receipt_product_pivot->type = $type;
+            
+            if ($type == 'single') {
+                $product = ReceiptSocialProduct::findOrFail($request->product_id);
+                $receipt_product_pivot->receipt_social_product_id = $request->product_id;
+                $receipt_product_pivot->title = $product->name;
+                $receipt_product_pivot->description = $request->description;
+                $receipt_product_pivot->price = $product->price;
+                $receipt_product_pivot->quantity = $request->quantity;
+                $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
+                $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
+                
+                $product_for_season = $product;
+            } else {
+                // Box type - ONE pivot record, all products go to ReceiptSocialBoxDetail
+                // Box pivot does NOT reference a single product - it's a container
+                $receipt_product_pivot->receipt_social_product_id = null;
+                $receipt_product_pivot->title = 'بوكس';
+                $receipt_product_pivot->description = $request->description;
+                
+                // Calculate totals from box details ONLY
+                $total_box_cost = 0;
+                $total_quantity = 0;
+                $total_box_commission = 0;
+                
+                if ($request->has('box_products') && is_array($request->box_products)) {
+                    $boxProducts = $request->box_products;
+                    $lastBox = end($boxProducts); 
+                    foreach ($request->box_products as $boxProduct) {
+                        if (!empty($boxProduct['product_id']) && !empty($boxProduct['quantity'])) {
+                            $boxProd = ReceiptSocialProduct::findOrFail($boxProduct['product_id']);
+                            // Check if current one is last
+                            $isLast = ($boxProduct === $lastBox);
+                            $box_title .= $boxProd->name . ( $isLast ? '' : ' + ' );
+                            $boxQuantity = (int)$boxProduct['quantity'];
+                            $total_quantity += $boxQuantity;
+                            // Use box_price if provided, otherwise fall back to regular price
+                            $boxPrice = $boxProduct['price'] ?? ($boxProd->box_price ?? $boxProd->price);
+                            $boxTotal = $boxQuantity * $boxPrice;
+                            
+                            $total_box_cost += $boxTotal;
+                            $total_box_commission += ($boxQuantity * ($boxProd->commission ?? 0));
+                            
+                            if (!isset($product_for_season)) {
+                                $product_for_season = $boxProd;
+                            }
+                        }
+                    }
+                }
+                
+                // Set pivot totals based on calculated box details
+                $receipt_product_pivot->quantity = $total_quantity;
+                $receipt_product_pivot->price = $total_box_cost;
+                $receipt_product_pivot->total_cost = $total_box_cost;
+                $receipt_product_pivot->commission = $total_box_commission;
+                $receipt_product_pivot->title = $box_title;
+            }
 
             if ($request->hasFile('pdf')) {
                 $pdfs = array();
@@ -393,7 +530,30 @@ class ReceiptSocialController extends Controller
                 }
                 $receipt_product_pivot->photos = json_encode($photos);
             }  
+
             $receipt_product_pivot->save();
+            
+            // Save box details if type is box - ALL products go to ReceiptSocialBoxDetail
+            if ($type == 'box' && $request->has('box_products') && is_array($request->box_products)) {
+                foreach ($request->box_products as $boxProduct) {
+                    if (!empty($boxProduct['product_id']) && !empty($boxProduct['quantity'])) {
+                        $boxProd = ReceiptSocialProduct::findOrFail($boxProduct['product_id']);
+                        $boxQuantity = (int)$boxProduct['quantity'];
+                        // Use box_price if provided, otherwise fall back to regular price
+                        $boxPrice = $boxProduct['price'] ?? ($boxProd->box_price ?? $boxProd->price);
+                        $boxTotal = $boxQuantity * $boxPrice;
+                        
+                        // Store each product in ReceiptSocialBoxDetail
+                        $boxDetail = new ReceiptSocialBoxDetail();
+                        $boxDetail->receipt_social_product_pivot_id = $receipt_product_pivot->id;
+                        $boxDetail->receipt_social_product_id = $boxProduct['product_id'];
+                        $boxDetail->quantity = $boxQuantity;
+                        $boxDetail->price = $boxPrice;
+                        $boxDetail->total_cost = $boxTotal;
+                        $boxDetail->save();
+                    }
+                }
+            }
             
             $receipt_products = ReceiptSocialProductPivot::where('receipt_social_id', $request->receipt_id)->get();
             $sum = 0;
@@ -407,11 +567,11 @@ class ReceiptSocialController extends Controller
             $receipt->total_cost = $sum;
             $receipt->commission = $sum2;
             $receipt->extra_commission = $sum3;
-            if(!$receipt->is_seasoned){
-                $receipt->is_seasoned = $product->product_type == 'season' ? 1 : 0;
+            if(!$receipt->is_seasoned && isset($product_for_season)){
+                $receipt->is_seasoned = $product_for_season->product_type == 'season' ? 1 : 0;
             }
 
-            if($product->has_shipping_offer){ 
+            if(isset($product_for_season) && $product_for_season->has_shipping_offer){ 
                 $zone = Zone::whereHas('countries',function($q) use($receipt){
                     $q->where('country_id',$receipt->shipping_country_id);
                 })->first();
@@ -880,7 +1040,9 @@ class ReceiptSocialController extends Controller
             $response = '';
         } 
 
-        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response','financial_accounts'));
+        $query_string = request()->query_string; 
+
+        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response','financial_accounts','query_string'));
     }
 
     public function update(UpdateReceiptSocialRequest $request, ReceiptSocial $receiptSocial)
@@ -899,8 +1061,7 @@ class ReceiptSocialController extends Controller
         if($request->has('refresh')){
             return redirect()->route('admin.receipt-socials.edit', $receiptSocial->id);
         }
-
-        return redirect()->back();
+        return redirect()->route('admin.receipt-socials.index', $request->query_string);
     }
 
     public function show(ReceiptSocial $receiptSocial)

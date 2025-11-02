@@ -695,7 +695,7 @@
                                                         </a>
                                                     @endcan
                                                     @can('receipt_social_duplicate')
-                                                        <a class="dropdown-item"
+                                                        <a class="dropdown-item" onclick="return confirm('Are you sure you want to duplicate this receipt?')"
                                                             href="{{ route('admin.receipt-socials.duplicate', $receipt->id) }}">
                                                             {{ __('global.duplicate') }}
                                                             <i class="far fa-clone" style="color:blueviolet"></i>

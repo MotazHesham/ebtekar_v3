@@ -63,6 +63,15 @@
                     <span class="help-block">{{ __('cruds.receiptSocialProduct.fields.price_helper') }}</span>
                 </div>
                 <div class="form-group col-md-4">
+                    <label for="box_price">{{ __('cruds.receiptSocialProduct.fields.box_price') }}</label>
+                    <input class="form-control {{ $errors->has('box_price') ? 'is-invalid' : '' }}" type="number" name="box_price" id="box_price" value="{{ old('box_price', $receiptSocialProduct->box_price) }}" step="0.01" required>
+                    @if($errors->has('box_price'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('box_price') }}
+                        </div>
+                    @endif
+                </div>
+                <div class="form-group col-md-4">
                     <label for="quantity">{{ __('cruds.receiptSocialProduct.fields.quantity') }}</label>
                     <input class="form-control {{ $errors->has('quantity') ? 'is-invalid' : '' }}" type="number" name="quantity" id="quantity" value="{{ old('quantity', $receiptSocialProduct->quantity) }}" step="1" required>
                     @if($errors->has('quantity'))

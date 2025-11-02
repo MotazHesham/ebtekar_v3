@@ -22,7 +22,13 @@ class ReceiptSocialProductPivot extends Model
         'updated_at', 
     ];
 
+    public const TYPE_SELECT = [
+        'single' => 'فردي',
+        'box' => 'بوكس',
+    ];
+
     protected $fillable = [
+        'type',
         'title',
         'description',
         'quantity',
@@ -52,5 +58,10 @@ class ReceiptSocialProductPivot extends Model
     public function products()
     {
         return $this->belongsTo(ReceiptSocialProduct::class,'receipt_social_product_id')->withTrashed();
+    }
+
+    public function boxDetails()
+    {
+        return $this->hasMany(ReceiptSocialBoxDetail::class, 'receipt_social_product_pivot_id');
     }
 }

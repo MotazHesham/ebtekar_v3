@@ -24,6 +24,7 @@
                 enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
+                <input type="hidden" name="query_string" value="{{ $query_string }}">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="row">
