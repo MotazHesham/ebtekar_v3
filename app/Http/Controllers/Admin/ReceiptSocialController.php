@@ -1038,11 +1038,9 @@ class ReceiptSocialController extends Controller
             $response = $waslaController->countries();
         }else{
             $response = '';
-        } 
+        }  
 
-        $query_string = request()->query_string; 
-
-        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response','financial_accounts','query_string'));
+        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response','financial_accounts'));
     }
 
     public function update(UpdateReceiptSocialRequest $request, ReceiptSocial $receiptSocial)
@@ -1061,7 +1059,7 @@ class ReceiptSocialController extends Controller
         if($request->has('refresh')){
             return redirect()->route('admin.receipt-socials.edit', $receiptSocial->id);
         }
-        return redirect()->route('admin.receipt-socials.index', $request->query_string);
+        return redirect()->route('admin.receipt-socials.index');
     }
 
     public function show(ReceiptSocial $receiptSocial)
