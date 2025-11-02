@@ -85,10 +85,9 @@
                                         class="help-block">{{ __('cruds.receiptSocial.fields.date_of_receiving_order_helper') }}</span>
                                 </div>
                                 <div class="form-group">
-                                    <label 
-                                        for="discount_type">{{ __('cruds.receiptSocial.fields.discount_type') }}</label>
+                                    <label for="discount_type">{{ __('cruds.receiptSocial.fields.discount_type') }}</label>
                                     <select class="form-control {{ $errors->has('discount_type') ? 'is-invalid' : '' }}"
-                                        name="discount_type" id="discount_type"  >
+                                        name="discount_type" id="discount_type">
                                         <option value disabled {{ old('discount_type', null) === null ? 'selected' : '' }}>
                                             {{ __('global.pleaseSelect') }}</option>
                                         @foreach (App\Models\ReceiptSocial::DISCOUNT_TYPE_SELECT as $key => $label)
@@ -188,8 +187,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="deliver_date">{{ __('cruds.receiptSocial.fields.deliver_date') }}</label>
-                                    <input
-                                        class="form-control date {{ $errors->has('deliver_date') ? 'is-invalid' : '' }}"
+                                    <input class="form-control date {{ $errors->has('deliver_date') ? 'is-invalid' : '' }}"
                                         type="text" name="deliver_date" id="deliver_date"
                                         value="{{ old('deliver_date') }}">
                                     @if ($errors->has('deliver_date'))
@@ -202,11 +200,10 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label 
-                                        for="discount">{{ __('cruds.receiptSocial.fields.discount') }}</label>
+                                    <label for="discount">{{ __('cruds.receiptSocial.fields.discount') }}</label>
                                     <input class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}"
                                         type="number" name="discount" id="discount" value="{{ old('discount') }}"
-                                        step="0.01"  >
+                                        step="0.01">
                                     @if ($errors->has('discount'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('discount') }}
@@ -249,6 +246,41 @@
                                     <span
                                         class="help-block">{{ __('cruds.receiptSocial.fields.financial_account_id_helper') }}</span>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label
+                                        for="hold_in_playlist_status">{{ __('cruds.receiptSocial.fields.hold_in_playlist_status') }}</label>
+                                    <select
+                                        class="form-control {{ $errors->has('hold_in_playlist_status') ? 'is-invalid' : '' }}"
+                                        name="hold_in_playlist_status" id="hold_in_playlist_status">
+                                        <option value="">{{ __('global.pleaseSelect') }}</option>
+                                        @foreach (App\Models\ReceiptSocial::HOLD_IN_PLAYLIST_STATUS_SELECT as $key => $label)
+                                            <option value="{{ $key }}" {{ old('hold_in_playlist_status') == $key ? 'selected' : '' }}>{{ __('global.playlist_status.status.' . $key) }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('hold_in_playlist_status'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('hold_in_playlist_status') }}
+                                        </div>
+                                    @endif
+                                    <span
+                                        class="help-block">{{ __('cruds.receiptSocial.fields.hold_in_playlist_status_helper') }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hold_reason">{{ __('cruds.receiptSocial.fields.hold_reason') }}</label>
+                                    <textarea class="form-control {{ $errors->has('hold_reason') ? 'is-invalid' : '' }}" name="hold_reason" id="hold_reason" rows="3">{{ old('hold_reason') }}</textarea>
+                                </div>
+                                @if ($errors->has('hold_reason'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('hold_reason') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ __('cruds.receiptSocial.fields.hold_reason_helper') }}</span>
                             </div>
                         </div>
                         <div class="form-group">

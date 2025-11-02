@@ -157,6 +157,19 @@
                                     منتج غير سيزون</option>
                             </select>
                         </div>
+                        <div class="filter-item">
+                            <label>{{ __('cruds.receiptSocial.fields.confirm') }}</label>
+                            <select class="form-control @isset($confirm) isset @endisset"
+                                name="confirm" id="confirm">
+                                <option value="">{{ __('cruds.receiptSocial.fields.confirm') }}</option>
+                                <option value="0"
+                                    @isset($confirm) @if ($confirm == '0') selected @endif @endisset>
+                                    لم يتم التأكيد</option>
+                                <option value="1"
+                                    @isset($confirm) @if ($confirm == '1') selected @endif @endisset>
+                                    تم التأكيد</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -174,19 +187,6 @@
                                 <option value="1"
                                     @isset($sent_to_delivery) @if ($sent_to_delivery == '1') selected @endif @endisset>
                                     تم الأرسال</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <label>{{ __('cruds.receiptSocial.fields.confirm') }}</label>
-                            <select class="form-control @isset($confirm) isset @endisset"
-                                name="confirm" id="confirm">
-                                <option value="">{{ __('cruds.receiptSocial.fields.confirm') }}</option>
-                                <option value="0"
-                                    @isset($confirm) @if ($confirm == '0') selected @endif @endisset>
-                                    لم يتم التأكيد</option>
-                                <option value="1"
-                                    @isset($confirm) @if ($confirm == '1') selected @endif @endisset>
-                                    تم التأكيد</option>
                             </select>
                         </div>
                         <div class="filter-item">

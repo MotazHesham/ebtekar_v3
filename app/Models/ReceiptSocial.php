@@ -70,10 +70,19 @@ class ReceiptSocial extends Model
         'finish'        => 'Finish',
     ];
 
+    public const HOLD_IN_PLAYLIST_STATUS_SELECT = [ 
+        'design'        => 'Design',
+        'manufacturing' => 'Manufacturing',
+        'prepare'       => 'Prepare',
+        'shipment'      => 'Shipment',
+        'finish'        => 'Finish',
+    ];
+
     protected $fillable = [
         'order_num',
         'client_name',
         'client_type',
+        'hold_in_playlist_status',
         'phone_number',
         'phone_number_2',
         'discount_type',

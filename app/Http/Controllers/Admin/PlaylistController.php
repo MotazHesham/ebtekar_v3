@@ -106,6 +106,9 @@ class PlaylistController extends Controller
             $raw->playlist_status = $website_setting->playlist_status ? $website_setting->playlist_status : 'design';
         }
 
+        if($request->model_type == 'social' && $raw->hold_in_playlist_status == 'design' ){
+            $raw->hold = 1;
+        }
         $raw->designer_id = $request->designer_id;
         $raw->manufacturer_id = $request->manufacturer_id;
         $raw->preparer_id = $request->preparer_id;
@@ -161,6 +164,9 @@ class PlaylistController extends Controller
         if($request->status == 'design' && $request->model_type == 'social'){ 
             $raw->returned_to_design += 1; 
         }
+        if($request->model_type == 'social' && $raw->hold_in_playlist_status == $request->status ){
+            $raw->hold = 1;
+        }
         $raw->save();  
 
         $auth_id = 0;
@@ -182,6 +188,7 @@ class PlaylistController extends Controller
         }elseif($raw->playlist_status == 'pending'){
             $to_playlist = 'الي الشركة';
         }
+
 
         $site_settings = get_site_setting();
         // sending to the playlist users notification

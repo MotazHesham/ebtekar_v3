@@ -94,7 +94,7 @@
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label>المنتج</label>
-                                                <select class="form-control select2 box-product-select" name="box_products[{{ $boxIndex }}][product_id]" required>
+                                                <select class="form-control select2 box-product-select" name="box_products[{{ $boxIndex }}][product_id]">
                                                     <option value="">أختر المنتج</option>
                                                     @foreach ($products as $product)
                                                         <option value="{{ $product->id }}" data-price="{{ $product->box_price }}" @if($boxDetail->receipt_social_product_id == $product->id) selected @endif>
@@ -107,13 +107,13 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>الكمية</label>
-                                                <input class="form-control" type="number" name="box_products[{{ $boxIndex }}][quantity]" step="1" min="1" value="{{ $boxDetail->quantity }}" required>
+                                                <input class="form-control" type="number" name="box_products[{{ $boxIndex }}][quantity]" step="1" min="1" value="{{ $boxDetail->quantity }}">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>السعر</label>
-                                                <input class="form-control box-price-input" type="number" name="box_products[{{ $boxIndex }}][price]" step="0.01" min="0" value="{{ $boxDetail->price }}" required>
+                                                <input class="form-control box-price-input" type="number" name="box_products[{{ $boxIndex }}][price]" step="0.01" min="0" value="{{ $boxDetail->price }}">
                                             </div>
                                         </div>
                                         @php
@@ -134,7 +134,7 @@
                                     <div class="col-md-5">
                                         <div class="form-group">
                                             <label>المنتج</label>
-                                            <select class="form-control select2 box-product-select" name="box_products[0][product_id]" required>
+                                            <select class="form-control select2 box-product-select" name="box_products[0][product_id]">
                                                 <option value="">أختر المنتج</option>
                                                 @foreach ($products as $product)
                                                     <option value="{{ $product->id }}" data-price="{{ $product->price }}">
@@ -147,13 +147,13 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>الكمية</label>
-                                            <input class="form-control" type="number" name="box_products[0][quantity]" step="1" min="1" value="1" required>
+                                            <input class="form-control" type="number" name="box_products[0][quantity]" step="1" min="1" value="1">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>السعر</label>
-                                            <input class="form-control box-price-input" type="number" name="box_products[0][price]" step="0.01" min="0" required>
+                                            <input class="form-control box-price-input" type="number" name="box_products[0][price]" step="0.01" min="0">
                                         </div>
                                     </div>
                                     <div class="col-md-1">
