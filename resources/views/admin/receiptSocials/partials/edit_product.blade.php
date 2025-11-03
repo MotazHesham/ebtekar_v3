@@ -7,98 +7,126 @@
         <form action="{{ route('admin.receipt-socials.edit_product') }}" method="POST" enctype="multipart/form-data">
             @csrf   
             <input type="hidden" name="receipt_product_pivot_id" value="{{ $receipt_social_product_pivot->id }}">
-            <div class="row">
-                <div class="col-md-12">
+            <input type="hidden" name="type" value="{{ $receipt_social_product_pivot->type }}"> 
+
+            @if($receipt_social_product_pivot->type == 'single')
+                <!-- Single Product Section -->
+                <div id="single_product_section" >
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">{{ __('global.extra.product') }}</label> 
+                                <select class="form-control select2 mb-2" name="product_id" id="product_id"  >
+                                    <option value="">أختر المنتج</option>
+                                    @foreach ($products as $product)
+                                        <option value="{{ $product->id }}" data-price="{{ $product->price }}" @if($receipt_social_product_pivot->receipt_social_product_id == $product->id) selected @endif>
+                                            {{ $product->name }} - {{ $product->price }}
+                                        </option>
+                                    @endforeach
+                                </select>   
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">{{ __('global.extra.quantity') }}</label>
+                                <input class="form-control" type="number" name="quantity" value="{{ $receipt_social_product_pivot->quantity }}" step="1" min="1" placeholder="{{ __('global.extra.quantity') }}"  title="{{ __('global.extra.quantity') }}" required>
+                            </div>
+                        </div>
+                        
+                        @if(auth()->user()->is_admin)
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">{{ __('cruds.receiptSocial.fields.extra_commission') }}</label>
+                                    <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ __('cruds.receiptSocial.fields.extra_commission') }}" title="{{ __('cruds.receiptSocial.fields.extra_commission') }}" >
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">السعر</label>
+                                    <input class="form-control" type="number" name="price" value="{{ $receipt_social_product_pivot->price }}" step="0.1" min="0"  >
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            
+            @else
+                <!-- Box Product Section -->
+                <div id="box_product_section" >
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="box_title">عنوان البوكس (اختياري)</label>
+                                <input class="form-control" type="text" name="box_title" value="{{ $receipt_social_product_pivot->title }}" placeholder="عنوان البوكس">
+                            </div>
+                        </div> 
+                        @if(auth()->user()->is_admin)
+                            <div class="col-md-3"> 
+                                <div class="form-group">
+                                    <label for="">{{ __('cruds.receiptSocial.fields.extra_commission') }}</label>
+                                    <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ __('cruds.receiptSocial.fields.extra_commission') }}" title="{{ __('cruds.receiptSocial.fields.extra_commission') }}" >
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                     <div class="form-group">
-                        <label for="type">النوع</label>
-                        <select class="form-control" name="type" id="product_type_select" required>
-                            <option value="single" @if($receipt_social_product_pivot->type == 'single' || !$receipt_social_product_pivot->type) selected @endif>فردي</option>
-                            <option value="box" @if($receipt_social_product_pivot->type == 'box') selected @endif>بوكس</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Single Product Section -->
-            <div id="single_product_section" style="display: {{ $receipt_social_product_pivot->type == 'box' ? 'none' : 'block' }};">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="">{{ __('global.extra.product') }}</label> 
-                            <select class="form-control select2 mb-2" name="product_id" id="product_id"  >
-                                <option value="">أختر المنتج</option>
-                                @foreach ($products as $product)
-                                    <option value="{{ $product->id }}" data-price="{{ $product->price }}" @if($receipt_social_product_pivot->receipt_social_product_id == $product->id) selected @endif>
-                                        {{ $product->name }} - {{ $product->price }}
-                                    </option>
+                        <label>منتجات البوكس</label>
+                        <div id="box_products_container">
+                            @php
+                                $boxIndex = 0;
+                            @endphp
+                            @if($receipt_social_product_pivot->type == 'box' && $receipt_social_product_pivot->boxDetails && $receipt_social_product_pivot->boxDetails->count() > 0)
+                                @foreach($receipt_social_product_pivot->boxDetails as $boxDetail)
+                                    <div class="box-product-row mb-3 p-3 border">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>المنتج</label>
+                                                    <select class="form-control select2 box-product-select" name="box_products[{{ $boxIndex }}][product_id]">
+                                                        <option value="">أختر المنتج</option>
+                                                        @foreach ($products as $product)
+                                                            <option value="{{ $product->id }}" data-price="{{ $product->box_price }}" @if($boxDetail->receipt_social_product_id == $product->id) selected @endif>
+                                                                {{ $product->name }} - {{ $product->box_price }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>الكمية</label>
+                                                    <input class="form-control" type="number" name="box_products[{{ $boxIndex }}][quantity]" step="1" min="1" value="{{ $boxDetail->quantity }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>السعر</label>
+                                                    <input class="form-control box-price-input" type="number" name="box_products[{{ $boxIndex }}][price]" step="0.01" min="0" value="{{ $boxDetail->price }}">
+                                                </div>
+                                            </div>
+                                            @php
+                                                $boxIndex++;
+                                            @endphp
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <label>&nbsp;</label>
+                                                    <button type="button" class="btn btn-danger btn-block remove-box-product" onclick="removeBoxProduct(this)">حذف</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
-                            </select>   
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="">{{ __('global.extra.quantity') }}</label>
-                            <input class="form-control" type="number" name="quantity" value="{{ $receipt_social_product_pivot->quantity }}" step="1" min="1" placeholder="{{ __('global.extra.quantity') }}"  title="{{ __('global.extra.quantity') }}" required>
-                        </div>
-                    </div>
-                    
-                    @if(auth()->user()->is_admin)
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="">{{ __('cruds.receiptSocial.fields.extra_commission') }}</label>
-                                <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ __('cruds.receiptSocial.fields.extra_commission') }}" title="{{ __('cruds.receiptSocial.fields.extra_commission') }}" >
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="">السعر</label>
-                                <input class="form-control" type="number" name="price" value="{{ $receipt_social_product_pivot->price }}" step="0.1" min="0"  >
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </div>
-            
-            <!-- Box Product Section -->
-            <div id="box_product_section" style="display: {{ $receipt_social_product_pivot->type == 'box' ? 'block' : 'none' }};">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="box_title">عنوان البوكس (اختياري)</label>
-                            <input class="form-control" type="text" name="box_title" value="{{ $receipt_social_product_pivot->title }}" placeholder="عنوان البوكس">
-                        </div>
-                    </div> 
-                    @if(auth()->user()->is_admin)
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="">السعر</label>
-                                <input class="form-control" type="number" name="price" value="{{ $receipt_social_product_pivot->price }}" step="0.1" min="0"  >
-                            </div>
-                            <div class="form-group">
-                                <label for="">{{ __('cruds.receiptSocial.fields.extra_commission') }}</label>
-                                <input class="form-control" type="number" name="extra_commission" value="{{ $receipt_social_product_pivot->extra_commission }}" step="0.1" min="0" placeholder="{{ __('cruds.receiptSocial.fields.extra_commission') }}" title="{{ __('cruds.receiptSocial.fields.extra_commission') }}" >
-                            </div>
-                        </div>
-                    @endif
-                </div>
-                <div class="form-group">
-                    <label>منتجات البوكس</label>
-                    <div id="box_products_container">
-                        @php
-                            $boxIndex = 0;
-                        @endphp
-                        @if($receipt_social_product_pivot->type == 'box' && $receipt_social_product_pivot->boxDetails && $receipt_social_product_pivot->boxDetails->count() > 0)
-                            @foreach($receipt_social_product_pivot->boxDetails as $boxDetail)
+                            @else
                                 <div class="box-product-row mb-3 p-3 border">
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label>المنتج</label>
-                                                <select class="form-control select2 box-product-select" name="box_products[{{ $boxIndex }}][product_id]">
+                                                <select class="form-control select2 box-product-select" name="box_products[0][product_id]">
                                                     <option value="">أختر المنتج</option>
                                                     @foreach ($products as $product)
-                                                        <option value="{{ $product->id }}" data-price="{{ $product->box_price }}" @if($boxDetail->receipt_social_product_id == $product->id) selected @endif>
-                                                            {{ $product->name }} - {{ $product->box_price }}
+                                                        <option value="{{ $product->id }}" data-price="{{ $product->price }}">
+                                                            {{ $product->name }} - {{ $product->price }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -107,18 +135,15 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>الكمية</label>
-                                                <input class="form-control" type="number" name="box_products[{{ $boxIndex }}][quantity]" step="1" min="1" value="{{ $boxDetail->quantity }}">
+                                                <input class="form-control" type="number" name="box_products[0][quantity]" step="1" min="1" value="1">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>السعر</label>
-                                                <input class="form-control box-price-input" type="number" name="box_products[{{ $boxIndex }}][price]" step="0.01" min="0" value="{{ $boxDetail->price }}">
+                                                <input class="form-control box-price-input" type="number" name="box_products[0][price]" step="0.01" min="0">
                                             </div>
                                         </div>
-                                        @php
-                                            $boxIndex++;
-                                        @endphp
                                         <div class="col-md-1">
                                             <div class="form-group">
                                                 <label>&nbsp;</label>
@@ -127,48 +152,12 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="box-product-row mb-3 p-3 border">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <label>المنتج</label>
-                                            <select class="form-control select2 box-product-select" name="box_products[0][product_id]">
-                                                <option value="">أختر المنتج</option>
-                                                @foreach ($products as $product)
-                                                    <option value="{{ $product->id }}" data-price="{{ $product->price }}">
-                                                        {{ $product->name }} - {{ $product->price }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>الكمية</label>
-                                            <input class="form-control" type="number" name="box_products[0][quantity]" step="1" min="1" value="1">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>السعر</label>
-                                            <input class="form-control box-price-input" type="number" name="box_products[0][price]" step="0.01" min="0">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="form-group">
-                                            <label>&nbsp;</label>
-                                            <button type="button" class="btn btn-danger btn-block remove-box-product" onclick="removeBoxProduct(this)">حذف</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
+                        <button type="button" class="btn btn-info" onclick="addBoxProduct()">إضافة منتج للبوكس</button>
                     </div>
-                    <button type="button" class="btn btn-info" onclick="addBoxProduct()">إضافة منتج للبوكس</button>
                 </div>
-            </div>
+            @endif
             <div class="form-group">
                 <textarea class="form-control ckeditor" name="description" placeholder="{{ __('global.extra.description') }}"  cols="30" rows="6">{{ $receipt_social_product_pivot->description }}</textarea>
             </div>

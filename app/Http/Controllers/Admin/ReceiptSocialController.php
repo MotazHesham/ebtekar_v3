@@ -261,7 +261,7 @@ class ReceiptSocialController extends Controller
                 if (!auth()->user()->is_admin) {
                     $receipt_product_pivot->price = $product->price;
                     $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
-                }else{
+                }else{ 
                     $receipt_product_pivot->price = $request->price;
                     $receipt_product_pivot->total_cost = ($request->quantity * $request->price);
                 }
@@ -313,8 +313,8 @@ class ReceiptSocialController extends Controller
                     $receipt_product_pivot->commission =  $total_box_commission ;
                 } else {
                     // Admin can override price
-                    $receipt_product_pivot->price = $request->price ?? ($total_box_cost > 0 ? $total_box_cost : 0);
-                    $receipt_product_pivot->total_cost = ($request->price ?? $total_box_cost) ;
+                    $receipt_product_pivot->price = $total_box_cost > 0 ? $total_box_cost : 0;
+                    $receipt_product_pivot->total_cost =  $total_box_cost ;
                     $receipt_product_pivot->commission =  $total_box_commission ;
                 }
                 
