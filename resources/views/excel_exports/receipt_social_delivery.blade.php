@@ -118,7 +118,7 @@
                 $description = '';
                 foreach($receipt->receiptsReceiptSocialProducts as $key => $product){
                     $description .= $product->title . " - [" . $product->quantity . "]";
-                    $description .= '<br> --------- <br>';
+                    $description .= "\n---------\n";
                 }
             @endphp
 
@@ -135,7 +135,7 @@
                     <td>{{ $receipt->calc_total_for_client() }}</td>
                     <td>1</td>
                     <td>1</td>
-                    <td><?php echo nl2br($description ?? ''); ?></td>
+                    <td>{!! nl2br(e($description ?? '')) !!}</td>
                     <td>قابل للكسر</td>
                     <td>cod</td>
                 </tr>
@@ -153,7 +153,7 @@
                     <td>1</td>
                     <td>DLV</td>
                     <td>{{ $receipt->calc_total_for_client() }}</td>
-                    <td><?php echo nl2br($description ?? ''); ?></td>
+                    <td>{!! nl2br(e($description ?? '')) !!}</td>
                     <td>1</td>
                     <td>EGP</td> 
                     <td>0</td>
