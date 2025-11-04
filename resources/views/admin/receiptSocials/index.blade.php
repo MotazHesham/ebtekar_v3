@@ -681,7 +681,7 @@
                                                         </a>
                                                     @endcan 
                                                     @can('receipt_social_edit')
-                                                        <a class="dropdown-item" target="_blank"
+                                                        <a class="dropdown-item" 
                                                             href="{{ route('admin.receipt-socials.edit', $receipt->id) }}">
                                                             {{ __('global.edit') }}
                                                             <i class="far fa-edit" style="color:cornflowerblue"></i>
