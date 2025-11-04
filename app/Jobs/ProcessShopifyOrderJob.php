@@ -66,7 +66,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
             $receiptSocial->discount = $discount;
             $receiptSocial->discounted_amount = $discount;
             $receiptSocial->discount_type = 'fixed';
-            $receiptSocial->total_cost = $total - $shipping_cost;
+            $receiptSocial->total_cost = $total - $shipping_cost + $discount;
             $receiptSocial->shipping_country_id = $country ? $country->id : null;
             $receiptSocial->shipping_country_cost = $shipping_cost;
             $receiptSocial->shipping_address = $customer_address;
