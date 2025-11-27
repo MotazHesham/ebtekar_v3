@@ -910,7 +910,7 @@ class ReceiptSocialController extends Controller
             'total_shipping_country_cost' => $statisticsData->total_shipping_country_cost,
             'total_deposit' => $statisticsData->total_deposit,
             'total_total_cost' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_discounted_amount,
-            'total_grand_total' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_deposit + $statisticsData->total_shipping_country_cost - $statisticsData->total_discounted_amount,
+            'total_grand_total' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_discounted_amount - $statisticsData->total_shipping_country_cost,
         ];
 
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
