@@ -1,4 +1,7 @@
 <?php
 
-Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
-});
+
+use App\Http\Controllers\FedexController;
+use Illuminate\Support\Facades\Route;
+
+Route::any('fedex-webhook',[FedexController::class,'webhook'])->name('fedex.webhook');
