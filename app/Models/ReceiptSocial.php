@@ -76,10 +76,13 @@ class ReceiptSocial extends Model
         'prepare'       => 'Prepare',
         'shipment'      => 'Shipment',
         'finish'        => 'Finish',
-    ];
+    ]; 
 
     protected $fillable = [
         'order_num',
+        'tracking_number',
+        'status_code',
+        'status_description',
         'client_name',
         'client_type',
         'hold_in_playlist_status',

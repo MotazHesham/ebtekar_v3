@@ -11,6 +11,9 @@ class CreateReceiptSocialsTable extends Migration
         Schema::create('receipt_socials', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('order_num')->nullable();
+            $table->string('tracking_number')->nullable();
+            $table->string('status_code')->nullable();
+            $table->string('status_description')->nullable();
             $table->string('client_name');
             $table->string('client_type');
             $table->string('phone_number');

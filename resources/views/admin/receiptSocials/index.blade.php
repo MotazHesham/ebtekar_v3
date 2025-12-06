@@ -407,6 +407,18 @@
                                         Shopify Order #{{ $receipt->shopify_order_num }}
                                     </span>
                                 @endif
+                                @if($receipt->tracking_number)
+                                    <span class="badge rounded-pill text-bg-info text-white">
+                                        {{ __('cruds.receiptSocial.fields.tracking_number') }}
+                                        <br> {{ $receipt->tracking_number }}
+                                    </span>
+                                @endif 
+                                @if($receipt->status_description)
+                                    <span class="badge rounded-pill text-bg-info text-white">
+                                        {{ __('cruds.receiptSocial.fields.status_description') }}
+                                        <br> {{ $receipt->status_description }}
+                                    </span>
+                                @endif
                             </td>
                             <td>
                                 <span class="badge text-bg-primary text-white mb-1">
