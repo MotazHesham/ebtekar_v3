@@ -649,6 +649,7 @@ class ReceiptSocialController extends Controller
         $zone_id = null;
         $has_followup = null;
         $shopify_order_num = null;
+        $status_code = null;
 
         if(request('deleted')){ 
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -690,6 +691,14 @@ class ReceiptSocialController extends Controller
             }else{
                 $receipts = $receipts->whereDoesntHave('followups');
             }
+        }
+        if ($request->status_code != null) {
+            $status_code = $request->status_code;
+            if($status_code == 'other'){
+                $receipts = $receipts->whereNotIn('status_code', ['OFD', 'POD', 'AH']);
+            }else{
+                $receipts = $receipts->where('status_code', $status_code);
+            } 
         }
         if ($request->country_id != null) {
             $country_id = $request->country_id;
@@ -920,7 +929,7 @@ class ReceiptSocialController extends Controller
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type', 
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup','shopify_order_num'));
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup','shopify_order_num','status_code'));
         }
 
         return view('admin.receiptSocials.index', compact(
@@ -928,7 +937,7 @@ class ReceiptSocialController extends Controller
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup','shopify_order_num'
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup','shopify_order_num','status_code'
         ));
     }
 

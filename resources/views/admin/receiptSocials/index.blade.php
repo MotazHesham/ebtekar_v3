@@ -409,13 +409,13 @@
                                 @endif
                                 @if($receipt->tracking_number)
                                     <span class="badge rounded-pill text-bg-info text-white">
-                                        {{ __('cruds.receiptSocial.fields.tracking_number') }}
+                                        رقم التتبع
                                         <br> {{ $receipt->tracking_number }}
                                     </span>
                                 @endif 
                                 @if($receipt->status_description)
                                     <span class="badge rounded-pill text-bg-info text-white">
-                                        {{ __('cruds.receiptSocial.fields.status_description') }}
+                                        حالة التتبع
                                         <br> {{ $receipt->status_description }}
                                     </span>
                                 @endif

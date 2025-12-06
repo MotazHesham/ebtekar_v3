@@ -77,6 +77,12 @@ class ReceiptSocial extends Model
         'shipment'      => 'Shipment',
         'finish'        => 'Finish',
     ]; 
+    public const STATUS_CODE_SELECT = [ 
+        'OFD'        => 'Out for Delivery',  
+        'POD'       => 'Delivered',
+        'AH'        => 'At Hub',
+        'other'     => 'Other',
+    ];
 
     protected $fillable = [
         'order_num',

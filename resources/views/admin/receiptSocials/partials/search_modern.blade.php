@@ -306,6 +306,19 @@
                                     No Followup</option>
                             </select>
                         </div>
+                        <div class="filter-item">
+                            <label>حالة التتبع</label>
+                            <select class="form-control @isset($status_code) isset @endisset"
+                                name="status_code" id="status_code">
+                                <option value="">حالة التتبع</option>
+                                @foreach (\App\Models\ReceiptSocial::STATUS_CODE_SELECT as $key => $status)
+                                    <option value="{{ $key }}"
+                                        @isset($status_code) @if ($status_code == $key) selected @endif @endisset>
+                                        {{ $status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
 
