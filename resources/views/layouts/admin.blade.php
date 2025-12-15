@@ -102,6 +102,11 @@
             border: 1px red double;
         }
 
+        .quickly_return {
+            background: linear-gradient(283deg, #8d8df3 0%, #ffffff 57%);
+            border: 1px #b2b98d double;
+        }
+
         .returned {
             background: linear-gradient(283deg, #ecf38d 0%, #ffffff 57%);
             border: 1px #b2b98d double;
@@ -380,6 +385,17 @@
 
         function show_details(id, model_type) {
             $.post('{{ route('admin.playlists.show_details') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                model_type: model_type
+            }, function(data) {
+                $('#AjaxModal .modal-dialog').html(null);
+                $('#AjaxModal').modal('show');
+                $('#AjaxModal .modal-dialog').html(data);
+            });
+        }
+        function show_history(id, model_type) {
+            $.post('{{ route('admin.playlists.history') }}', {
                 _token: '{{ csrf_token() }}',
                 id: id,
                 model_type: model_type

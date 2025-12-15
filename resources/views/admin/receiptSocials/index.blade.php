@@ -352,7 +352,7 @@
                 </thead>
                 <tbody>
                     @forelse ($receipts as $key => $receipt)
-                        <tr data-entry-id="{{ $receipt->id }}" class=" @if($receipt->quickly) quickly @elseif($receipt->returned) returned @elseif($receipt->done) done @endif">
+                        <tr data-entry-id="{{ $receipt->id }}" class=" @if($receipt->quickly) quickly @elseif($receipt->quickly_return) quickly_return @elseif($receipt->returned) returned @elseif($receipt->done) done @endif">
                             <td>
                                 <br>{{ ($key+1) + ($receipts->currentPage() - 1)*$receipts->perPage() }}
                                 <i class="fas fa-qrcode" onclick="show_qr_code('{{$receipt->order_num}}','s-{{$receipt->id}}')" style="cursor: pointer"></i>

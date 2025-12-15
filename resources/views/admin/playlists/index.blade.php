@@ -272,12 +272,21 @@
 
 
         function change_status(id, model_type, type, condition) {
+            var reason = null;
+            if (condition === 'back') {
+                reason = prompt('أدخل سبب الإرجاع (اختياري، إضغط إلغاء للإلغاء)');
+                if (reason === null) {
+                    // user cancelled the prompt → do not send request
+                    return;
+                }
+            }
             $.post('{{ route('admin.playlists.update_playlist_status') }}', {
                 _token: '{{ csrf_token() }}',
                 id: id,
                 model_type: model_type,
                 status: type,
-                condition: condition
+                condition: condition,
+                reason: reason
             }, function(data) {
                 if (data == 1) {
                     location.reload();

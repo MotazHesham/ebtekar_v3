@@ -102,6 +102,11 @@
                         title="{{ __('Order Details') }}">
                         أظهارالصور
                     </a>
+                    <a class="btn btn-primary btn-sm rounded-pill text-white"
+                        onclick="show_history('{{ $item['id'] }}','{{ $item['model_type'] }}')"
+                        title="سجل حركة الفاتورة في البلاي ليست">
+                        سجل الحالة
+                    </a>
                 @endif
             </div>
         </div>

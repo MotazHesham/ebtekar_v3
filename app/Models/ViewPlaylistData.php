@@ -12,6 +12,7 @@ class ViewPlaylistData extends Model
     use HasFactory, SoftDeletes;
 
     public const PLAYLIST_STATUS_SELECT = [
+        'pending'    => 'قيد الإنتظار',
         'design'     => 'الديزاين',
         'manufacturing'        => 'التصنيع',
         'prepare' => 'التجهيز',

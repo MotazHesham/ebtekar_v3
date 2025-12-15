@@ -319,6 +319,19 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="filter-item">
+                            <label>مرتجع من الديزاين</label>
+                            <select class="form-control @isset($quickly_return) isset @endisset"
+                                name="quickly_return" id="quickly_return">
+                                <option value="">مرتجع من الديزاين</option>
+                                <option value="1"
+                                    @isset($quickly_return) @if ($quickly_return == '1') selected @endif @endisset>
+                                    نعم</option>
+                                <option value="0"
+                                    @isset($quickly_return) @if ($quickly_return == '0') selected @endif @endisset>
+                                    لا</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 

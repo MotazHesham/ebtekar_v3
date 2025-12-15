@@ -17,6 +17,7 @@ use App\Models\UserAlert;
 use App\Models\ViewPlaylistData;
 use App\Models\WebsiteSetting;
 use App\Models\Zone;
+use App\Models\PlaylistHistory;
 use App\Support\Collection; 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response; 
@@ -81,7 +82,12 @@ class PlaylistController extends Controller
         if(!$site_settings){
             $site_settings = WebsiteSetting::where('id',1)->first();
         }
-        return view('partials.playlist_users',compact('raw','staffs','site_settings','id','model_type'));
+        $histories = PlaylistHistory::with('user')
+            ->where('model_type', $request->model_type)
+            ->where('model_id', $request->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        return view('partials.playlist_users',compact('raw','staffs','site_settings','id','model_type','histories'));
     }
 
     public function update_playlist_users(Request $request)
@@ -114,9 +120,22 @@ class PlaylistController extends Controller
         $raw->preparer_id = $request->preparer_id;
         $raw->shipmenter_id = $request->shipmenter_id; 
         $raw->returned_to_design += 1;  // increment the returned to design count
+        if($request->model_type == 'social' && $old_status == 'pending'){
+            $raw->quickly_return = 0;
+        }
         $raw->save();
 
         if ($old_status == 'pending') {
+            // store history of playlist flow
+            PlaylistHistory::create([
+                'model_type'  => $request->model_type,
+                'model_id'    => $raw->id,
+                'from_status' => $old_status,
+                'to_status'   => 'design',
+                'is_return'   => false,
+                'reason'      => null,
+                'user_id'     => Auth::id(),
+            ]);
             $body = 'فاتورة جديدة';   
             $userAlert = UserAlert::create([
                 'alert_text' => $raw->order_num . ' ' . $body,
@@ -143,7 +162,6 @@ class PlaylistController extends Controller
 
     public function update_playlist_status(Request $request)
     {
-        
         if($request->model_type == 'social'){
             $raw = ReceiptSocial::find($request->id);
             $route = route('admin.receipt-socials.index'); 
@@ -154,6 +172,8 @@ class PlaylistController extends Controller
             $raw = Order::find($request->id);
             $route = route('admin.orders.index'); 
         }  
+
+        $old_status = $raw->playlist_status;
 
         if($raw->printing_times == 0 && $raw->playlist_status == 'design' && $request->condition == 'send'){  
             return 0; // should printing the receipt first
@@ -168,6 +188,27 @@ class PlaylistController extends Controller
             $raw->hold = 1;
         }
         $raw->save();  
+
+        // store history of playlist flow
+        PlaylistHistory::create([
+            'model_type'  => $request->model_type,
+            'model_id'    => $raw->id,
+            'from_status' => $old_status,
+            'to_status'   => $request->status,
+            'is_return'   => $request->condition == 'back',
+            'reason'      => $request->reason ?? null,
+            'user_id'     => Auth::id(),
+        ]);
+
+        if($request->condition == 'back' && $request->status == 'pending' && $request->model_type == 'social'){
+            $raw->quickly_return = 1;
+            $raw->save();
+        }
+
+        if($request->condition == 'send' && $request->status == 'design' && $request->model_type == 'social'){
+            $raw->quickly_return = 0;
+            $raw->save();
+        }
 
         $auth_id = 0;
         $to_playlist = '';  
@@ -244,6 +285,17 @@ class PlaylistController extends Controller
         ]);
         $userAlert_2->users()->sync([Auth::id()]);
         return 1;
+    }
+
+    public function history(Request $request)
+    {
+        $histories = PlaylistHistory::with('user')
+            ->where('model_type', $request->model_type)
+            ->where('model_id', $request->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return view('admin.playlists.history', compact('histories'));
     }
 
     public function show_details(Request $request){
