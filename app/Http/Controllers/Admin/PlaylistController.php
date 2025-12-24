@@ -381,7 +381,7 @@ class PlaylistController extends Controller
         
         $zones = Zone::all();
         $type = $request->type;  
-        $playlists = ViewPlaylistData::orderBy('send_to_playlist_date','desc')->where('playlist_status',$type); 
+        $playlists = ViewPlaylistData::orderBy('client_review','desc')->orderBy('send_to_playlist_date','desc')->where('playlist_status',$type); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
 
         

@@ -301,6 +301,10 @@ return [
             'socials_helper'                 => ' ',
             'send_to_delivery_date'          => 'وقت الأرسال للشحن',
             'send_to_delivery_date_helper'   => ' ',
+            'client_review'                   => 'مراجعة العميل',
+            'client_review_helper'            => ' ',
+            'client_review_comment'          => 'تعليق مراجعة العميل',
+            'client_review_comment_helper'   => ' ',
         ],
     ],
     'receiptSocialProduct' => [

@@ -33,6 +33,7 @@ class CreateReceiptSocialsTable extends Migration
             $table->boolean('active_editing')->default(0)->nullable();
             $table->boolean('is_seasoned')->default(0)->nullable();
             $table->boolean('client_review')->default(0)->nullable();
+            $table->text('client_review_comment')->nullable();
             $table->boolean('hold')->default(0)->nullable();
             $table->longText('hold_reason')->nullable();
             $table->integer('printing_times')->nullable(); 

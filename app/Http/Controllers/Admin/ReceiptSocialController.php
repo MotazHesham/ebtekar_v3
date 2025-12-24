@@ -126,7 +126,25 @@ class ReceiptSocialController extends Controller
     public function update_statuses(Request $request){ 
         $type = $request->type;
         $receipt = ReceiptSocial::findOrFail($request->id);
-        $receipt->$type = $request->status;
+        
+        // Special handling for hold type when hold_in_playlist_status is set
+        if($request->type == 'hold' && $request->has('hold_in_playlist_status') && $request->hold_in_playlist_status && $request->status == 1){
+            // Hold on playlist status - don't set hold = 1 immediately
+            // It will be set automatically when playlist status reaches hold_in_playlist_status
+            $receipt->hold_in_playlist_status = $request->hold_in_playlist_status;
+            $receipt->hold_reason = $request->hold_reason;
+            $receipt->hold = 0; // Don't hold immediately
+        } else {
+            // Normal status update
+            $receipt->$type = $request->status;
+            
+            if($request->type == 'hold'){
+                $receipt->hold_reason = $request->hold_reason;
+                // Hold now or UnHold - clear hold_in_playlist_status
+                $receipt->hold_in_playlist_status = null;
+            }
+        }
+        
         $status = '1';
         if (in_array($request->type,['done','returned']) && $request->status == 1) {
             $receipt->quickly = 0;
@@ -141,9 +159,6 @@ class ReceiptSocialController extends Controller
         if (($type == 'supplied') && $request->status == 1) {
             $status = '2';
             $receipt->add_income();
-        } 
-        if($request->type == 'hold'){
-            $receipt->hold_reason = $request->hold_reason;
         }
 
         $receipt->save();
@@ -156,6 +171,17 @@ class ReceiptSocialController extends Controller
         }else{
             return redirect()->back();
         }
+    }
+
+    public function update_client_review_comment(Request $request){
+        $receipt = ReceiptSocial::findOrFail($request->id);
+        $receipt->client_review_comment = $request->client_review_comment;
+        $receipt->save();
+        
+        return response()->json([
+            'success' => true,
+            'message' => __('flash.global.update_title')
+        ]);
     }
 
     public function duplicate($id){
@@ -931,7 +957,7 @@ class ReceiptSocialController extends Controller
             'total_grand_total' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_discounted_amount - $statisticsData->total_shipping_country_cost,
         ];
 
-        $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('quickly_return', 'desc')->orderBy('created_at', 'desc')->paginate(15);
+        $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('quickly_return', 'desc')->orderBy('client_review', 'desc')->orderBy('created_at', 'desc')->paginate(15);
 
         if($request->has('new_design')){
             return view('admin.receiptSocials.index_modern', compact('countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',

@@ -106,6 +106,10 @@
             background: linear-gradient(283deg, #8d8df3 0%, #ffffff 57%);
             border: 1px #b2b98d double;
         }
+        .client_review {
+            background: linear-gradient(283deg, #81e3ef 0%, #ffffff 57%);
+            border: 1px #81e3ef double;
+        }
 
         .returned {
             background: linear-gradient(283deg, #ecf38d 0%, #ffffff 57%);

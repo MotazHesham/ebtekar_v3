@@ -111,6 +111,7 @@ class ReceiptSocial extends Model
         'returned_to_design',
         'is_seasoned',
         'client_review',
+        'client_review_comment',
         'hold',
         'hold_reason',
         'printing_times', 

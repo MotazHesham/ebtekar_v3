@@ -352,7 +352,7 @@
                 </thead>
                 <tbody>
                     @forelse ($receipts as $key => $receipt)
-                        <tr data-entry-id="{{ $receipt->id }}" class=" @if($receipt->quickly) quickly @elseif($receipt->quickly_return) quickly_return @elseif($receipt->returned) returned @elseif($receipt->done) done @endif">
+                        <tr data-entry-id="{{ $receipt->id }}" class=" @if($receipt->quickly) quickly @elseif($receipt->quickly_return) quickly_return @elseif($receipt->returned) returned @elseif($receipt->done) done @elseif($receipt->client_review) client_review @endif">
                             <td>
                                 <br>{{ ($key+1) + ($receipts->currentPage() - 1)*$receipts->perPage() }}
                                 <i class="fas fa-qrcode" onclick="show_qr_code('{{$receipt->order_num}}','s-{{$receipt->id}}')" style="cursor: pointer"></i>
@@ -609,9 +609,18 @@
                                         <input type="hidden" name="id" value="{{ $receipt->id }}">
                                         <input type="hidden" name="type" value="hold">
                                         <input type="hidden" name="hold_reason" id="hold-reason-{{ $receipt->id }}" value="{{ $receipt->hold_reason }}">
+                                        <input type="hidden" name="hold_in_playlist_status" id="hold-in-playlist-status-{{ $receipt->id }}" value="{{ $receipt->hold_in_playlist_status }}">
                                         @if($receipt->hold == 0)
                                             <input type="hidden" name="status" value="1">
-                                            <button type="button" class="btn btn-dark btn-sm rounded-pill" onclick="showHoldModal('{{ $receipt->id }}','{{ $receipt->hold_reason }}')">Hold</button>
+                                            <button type="button" class="btn btn-dark btn-sm rounded-pill" onclick="showHoldModal({{ $receipt->id }}, {{ json_encode($receipt->hold_reason) }}, {{ json_encode($receipt->hold_in_playlist_status) }})">Hold</button>
+                                            @if($receipt->hold_in_playlist_status)
+                                                <span class="badge bg-secondary text-white" style="cursor: pointer" 
+                                                    data-toggle="tooltip" 
+                                                    data-placement="top" 
+                                                    title="{{ __('cruds.receiptSocial.fields.hold_in_playlist_status') }}: {{ __('global.playlist_status.status.' . $receipt->hold_in_playlist_status) }}">
+                                                    <i class="fas fa-clock"></i> Hold on {{ __('global.playlist_status.status.' . $receipt->hold_in_playlist_status) }}
+                                                </span>
+                                            @endif
                                         @else 
                                             <input type="hidden" name="status" value="0">
                                             <button type="submit" class="btn btn-warning btn-sm rounded-pill">UnHold</button> 
@@ -621,6 +630,14 @@
                                                     data-placement="top" 
                                                     title="{{ $receipt->hold_reason }}">
                                                     <i class="fas fa-info-circle"></i> Hold Reason
+                                                </span>
+                                            @endif
+                                            @if($receipt->hold_in_playlist_status)
+                                                <span class="badge bg-secondary text-white" style="cursor: pointer" 
+                                                    data-toggle="tooltip" 
+                                                    data-placement="top" 
+                                                    title="{{ __('cruds.receiptSocial.fields.hold_in_playlist_status') }}: {{ __('global.playlist_status.status.' . $receipt->hold_in_playlist_status) }}">
+                                                    <i class="fas fa-clock"></i> Hold on {{ __('global.playlist_status.status.' . $receipt->hold_in_playlist_status) }}
                                                 </span>
                                             @endif
                                         @endif
@@ -635,6 +652,16 @@
                                         class="playlist_status badge text-bg-{{ __('global.playlist_status.colors.' . $receipt->playlist_status) }} mb-1">
                                         {{ $receipt->playlist_status ? __('global.playlist_status.status.' . $receipt->playlist_status) : '' }}
                                     </span>
+                                @endif
+                                @if($receipt->client_review)
+                                    <span class="badge text-bg-info text-white mb-1" style="cursor: pointer;" onclick="showClientReviewModal({{ $receipt->id }}, {{ json_encode($receipt->client_review_comment) }})">
+                                        {{ __('cruds.receiptSocial.fields.client_review') }}
+                                    </span>
+                                    @if($receipt->client_review_comment)
+                                        <span class="badge text-bg-secondary text-dark mb-1" style="display: block; margin-top: 5px; cursor: pointer;" onclick="showClientReviewModal({{ $receipt->id }}, {{ json_encode($receipt->client_review_comment) }})">
+                                            {{ __('cruds.receiptSocial.fields.client_review_comment') }}: {{ $receipt->client_review_comment }}
+                                        </span>
+                                    @endif
                                 @endif
                                 <hr>
                                 <span class="badge text-bg-danger text-white mb-1">
@@ -778,18 +805,65 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="holdReasonModalLabel">Hold Reason</h5>
+                    <h5 class="modal-title" id="holdReasonModalLabel">Hold Options</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="holdReason">Please enter reason for hold:</label>
+                        <label>نوع التعليق:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="holdType" id="holdNow" value="now" checked onchange="toggleHoldType()">
+                            <label class="form-check-label" for="holdNow">
+                                تعليق الأن
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="holdType" id="holdOnPlaylist" value="playlist" onchange="toggleHoldType()">
+                            <label class="form-check-label" for="holdOnPlaylist">
+                                تعليق في مرحلة
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="playlistStatusGroup" style="display: none;">
+                        <label for="holdInPlaylistStatus">{{ __('cruds.receiptSocial.fields.hold_in_playlist_status') }}</label>
+                        <select class="form-control" name="hold_in_playlist_status" id="holdInPlaylistStatus">
+                            <option value="">{{ __('global.pleaseSelect') }}</option>
+                            @foreach (App\Models\ReceiptSocial::HOLD_IN_PLAYLIST_STATUS_SELECT as $key => $label)
+                                <option value="{{ $key }}">{{ __('global.playlist_status.status.' . $key) }}</option>
+                            @endforeach
+                        </select>
+                        <span class="help-block">{{ __('cruds.receiptSocial.fields.hold_in_playlist_status_helper') }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="holdReason">سبب التعليق:</label>
                         <textarea class="form-control" id="holdReason" rows="3" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="submitHoldForm()">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" onclick="submitHoldForm()">تأكيد</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Review Comment Modal -->
+    <div class="modal fade" id="clientReviewModal" tabindex="-1" aria-labelledby="clientReviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clientReviewModalLabel">{{ __('cruds.receiptSocial.fields.client_review_comment') }}</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="clientReviewComment">{{ __('cruds.receiptSocial.fields.client_review_comment') }}:</label>
+                        <textarea class="form-control" id="clientReviewComment" rows="5" placeholder="{{ __('cruds.receiptSocial.fields.client_review_comment_helper') }}"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" onclick="submitClientReviewComment()">حفظ</button>
                 </div>
             </div>
         </div>
@@ -1193,10 +1267,34 @@
     <script>
         let currentReceiptId = null;
 
-        function showHoldModal(receiptId, existingReason) {
+        function showHoldModal(receiptId, existingReason, existingHoldInPlaylistStatus) {
             currentReceiptId = receiptId; 
-            $('#holdReason').val(existingReason);
+            $('#holdReason').val(existingReason || '');
+            $('#holdInPlaylistStatus').val(existingHoldInPlaylistStatus || '');
+            
+            // Set the hold type based on existing hold_in_playlist_status
+            if (existingHoldInPlaylistStatus) {
+                $('#holdOnPlaylist').prop('checked', true);
+                $('#holdNow').prop('checked', false);
+            } else {
+                $('#holdNow').prop('checked', true);
+                $('#holdOnPlaylist').prop('checked', false);
+            }
+            
+            toggleHoldType();
             $('#holdReasonModal').modal('show');
+        }
+
+        function toggleHoldType() {
+            const holdType = $('input[name="holdType"]:checked').val();
+            if (holdType === 'playlist') {
+                $('#playlistStatusGroup').show();
+                $('#holdInPlaylistStatus').prop('required', true);
+            } else {
+                $('#playlistStatusGroup').hide();
+                $('#holdInPlaylistStatus').prop('required', false);
+                $('#holdInPlaylistStatus').val('');
+            }
         }
 
         function submitHoldForm() {
@@ -1206,9 +1304,49 @@
                 return;
             }
             
+            const holdType = $('input[name="holdType"]:checked').val();
+            const holdInPlaylistStatus = $('#holdInPlaylistStatus').val();
+            
+            if (holdType === 'playlist' && !holdInPlaylistStatus) {
+                alert('Please select a playlist status');
+                return;
+            }
+            
             $(`#hold-reason-${currentReceiptId}`).val(reason);
+            if (holdType === 'playlist') {
+                $(`#hold-in-playlist-status-${currentReceiptId}`).val(holdInPlaylistStatus);
+            } else {
+                $(`#hold-in-playlist-status-${currentReceiptId}`).val('');
+            }
             $(`#hold-form-${currentReceiptId}`).submit();
             $('#holdReasonModal').modal('hide');
+        }
+
+        let currentClientReviewReceiptId = null;
+
+        function showClientReviewModal(receiptId, existingComment) {
+            currentClientReviewReceiptId = receiptId;
+            $('#clientReviewComment').val(existingComment || '');
+            $('#clientReviewModal').modal('show');
+        }
+
+        function submitClientReviewComment() {
+            const comment = $('#clientReviewComment').val();
+            
+            $.post('{{ route('admin.receipt-socials.update_client_review_comment') }}', {
+                _token: '{{ csrf_token() }}',
+                id: currentClientReviewReceiptId,
+                client_review_comment: comment
+            }, function(data) {
+                if (data.success) {
+                    $('#clientReviewModal').modal('hide');
+                    location.reload();
+                } else {
+                    alert(data.message || 'حدث خطأ أثناء الحفظ');
+                }
+            }).fail(function() {
+                alert('حدث خطأ أثناء الحفظ');
+            });
         }
     </script>
     <script>

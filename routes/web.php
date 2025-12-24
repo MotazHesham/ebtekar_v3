@@ -101,6 +101,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('receipt-socials/send_to_wasla', 'ReceiptSocialController@send_to_wasla')->name('receipt-socials.send_to_wasla');
     Route::post('receipt-socials/update_delivery_man', 'ReceiptSocialController@update_delivery_man')->name('receipt-socials.update_delivery_man');
     Route::post('receipt-socials/update_statuses', 'ReceiptSocialController@update_statuses')->name('receipt-socials.update_statuses');
+    Route::post('receipt-socials/update_client_review_comment', 'ReceiptSocialController@update_client_review_comment')->name('receipt-socials.update_client_review_comment');
     Route::post('receipt-socials/view_products', 'ReceiptSocialController@view_products')->name('receipt-socials.view_products');
     Route::post('receipt-socials/add_product', 'ReceiptSocialController@add_product')->name('receipt-socials.add_product');
     Route::post('receipt-socials/edit_product', 'ReceiptSocialController@edit_product')->name('receipt-socials.edit_product');
