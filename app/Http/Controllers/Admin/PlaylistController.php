@@ -187,6 +187,9 @@ class PlaylistController extends Controller
         if($request->model_type == 'social' && $raw->hold_in_playlist_status == $request->status ){
             $raw->hold = 1;
         }
+        if($request->model_type == 'social' && $request->status == 'manufacturing'){
+            $raw->client_review = 0;
+        }
         $raw->save();  
 
         // store history of playlist flow

@@ -20,7 +20,7 @@
             <div class=" order-card-left-side text-center mb-3"
                 style="color: white;margin-bottom:20px;padding: 31px 0;font-size: 20px;
                     @if ($item['quickly'] == 1 && $item['shipping_country_id'] == 20)  background-image: linear-gradient(270deg,#9f1b2e,black,#7C42C9); 
-                    @elseif ($item['client_review']) background-image: linear-gradient(90deg,#6de4a4,#4e54c8);
+                    @elseif ($item['client_review'] && $type == 'design') background-image: linear-gradient(90deg,#6de4a4,#4e54c8);
                     @elseif ($item['shipping_country_id'] == 20) background:#7c42c9;
                     @elseif ($item['quickly'] == 1)background-image: linear-gradient(#9f1b2e,#1a1313);@endif">
 
@@ -35,8 +35,10 @@
                     <span class="pull-right badge badge-danger">تم الإرجاع {{ $item['returned_to_design'] - 1 }} مرة</span>
                 @endif
             </div>
-            @if($item['client_review'] && isset($item['client_review_comment']) && $item['client_review_comment'])
-                <span class="pull-right badge badge-secondary text-dark">{{ $item['client_review_comment'] }}</span>
+            @if($type == 'design')
+                @if($item['client_review'] && isset($item['client_review_comment']) && $item['client_review_comment'])
+                    <span class="pull-right badge badge-secondary text-dark">{{ $item['client_review_comment'] }}</span>
+                @endif
             @endif
             {{-- order info --}}
             <div class="row">
