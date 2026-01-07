@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PushNotificationController; 
-use App\Jobs\SendPushNotification; 
+use App\Jobs\SendPushNotification;
+use App\Jobs\SendReceiptToEgyptExpressJob;
+use App\DTOs\Factories\EgyptExpressAirwayBillDTOFactory;
+use App\Models\EgyptExpressAirwayBill;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Printable;
@@ -25,6 +28,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class PlaylistController extends Controller
 {
@@ -124,6 +128,11 @@ class PlaylistController extends Controller
             $raw->quickly_return = 0;
         }
         $raw->save();
+
+        // Create airway bill if it doesn't exist and shipmenter is assigned
+        if ($raw->playlist_status == 'design') {
+            $this->createAirwayBillIfNotExists($raw, $request->model_type);
+        }
 
         if ($old_status == 'pending') {
             // store history of playlist flow
@@ -460,5 +469,53 @@ class PlaylistController extends Controller
         // return $dates;
         return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','is_seasoned','quickly','website_setting_id','description','to_date','websites','client_type','zones','zone_id'));
 
-    } 
+    }
+
+    /**
+     * Create airway bill if it doesn't exist
+     *
+     * @param mixed $model (ReceiptSocial, ReceiptCompany, or Order)
+     * @param string $modelType
+     * @return void
+     */
+    protected function createAirwayBillIfNotExists($model, $modelType)
+    {
+        // Determine the model class name
+        $modelClass = get_class($model);
+        
+        // Check if airway bill already exists for this model
+        $existingAirwayBill = EgyptExpressAirwayBill::where('model_type', $modelClass)
+            ->where('model_id', $model->id)
+            ->where('is_successful', true)
+            ->first();
+
+        if ($existingAirwayBill) {
+            // Airway bill already exists and was successful
+            return;
+        }
+
+        try {
+            // Create DTO based on model type
+            $dto = null;
+            if ($modelType == 'social' && $model instanceof ReceiptSocial) {
+                $dto = EgyptExpressAirwayBillDTOFactory::fromReceiptSocial($model);
+            } elseif ($modelType == 'company' && $model instanceof ReceiptCompany) {
+                $dto = EgyptExpressAirwayBillDTOFactory::fromReceiptCompany($model);
+            } elseif ($modelType == 'order' && $model instanceof Order) {
+                $dto = EgyptExpressAirwayBillDTOFactory::fromOrder($model);
+            }
+
+            // Dispatch job to create airway bill if DTO was created
+            if ($dto && $dto->isValid()) {
+                SendReceiptToEgyptExpressJob::dispatchSync($dto);
+            }
+        } catch (\Exception $e) {
+            // Log error but don't break the flow
+            Log::error('Failed to create airway bill in PlaylistController', [
+                'model_type' => $modelType,
+                'model_id' => $model->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
 }

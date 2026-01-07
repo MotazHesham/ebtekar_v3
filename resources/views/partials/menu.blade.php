@@ -232,6 +232,14 @@
                 </ul>
             </li>
         @endcan
+        <li class="c-sidebar-nav-item">
+            <a href="{{ route("admin.egyptexpress-airway-bills.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/egyptexpress-airway-bills") || request()->is("admin/egyptexpress-airway-bills/*") ? "c-active" : "" }}">
+                <i class="fa-fw fas fa-shipping-fast c-sidebar-nav-icon">
+
+                </i>
+                {{ __('cruds.egyptexpressAirwayBill.title') }}
+            </a>
+        </li>
 
         <li class="nav-title">الموقع</li>
         @can('product_managment_access')

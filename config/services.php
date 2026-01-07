@@ -42,4 +42,21 @@ return [
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect'      => env('APP_URL').'/social-login/facebook/callback',
     ],
+
+    'egyptexpress' => [
+        'base_url' => env('EGYPTEXPRESS_BASE_URL', ''),
+        'username' => env('EGYPTEXPRESS_USERNAME', ''),
+        'password' => env('EGYPTEXPRESS_PASSWORD', ''),
+        'account_no' => env('EGYPTEXPRESS_ACCOUNT_NO', ''),
+        'sender' => [
+            'address1' => env('EGYPTEXPRESS_SENDER_ADDRESS1', ''),
+            'address2' => env('EGYPTEXPRESS_SENDER_ADDRESS2', ''),
+            'city' => env('EGYPTEXPRESS_SENDER_CITY', ''),
+            'company' => env('EGYPTEXPRESS_SENDER_COMPANY', ''),
+            'contact_person' => env('EGYPTEXPRESS_SENDER_CONTACT', ''),
+            'email' => env('EGYPTEXPRESS_SENDER_EMAIL', ''),
+            'mobile' => env('EGYPTEXPRESS_SENDER_MOBILE', ''),
+            'phone' => env('EGYPTEXPRESS_SENDER_PHONE', ''),
+        ],
+    ],
 ];

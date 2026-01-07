@@ -67,6 +67,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 
+    // EgyptExpress Airway Bills
+    Route::resource('egyptexpress-airway-bills', 'EgyptExpressAirwayBillController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
+
     // Task Status
     Route::delete('task-statuses/destroy', 'TaskStatusController@massDestroy')->name('task-statuses.massDestroy');
     Route::resource('task-statuses', 'TaskStatusController');
