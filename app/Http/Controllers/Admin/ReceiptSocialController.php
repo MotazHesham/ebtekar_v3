@@ -13,6 +13,7 @@ use App\Http\Requests\StoreReceiptSocialRequest;
 use App\Http\Requests\UpdateReceiptSocialRequest;
 use App\Imports\ReceiptSocialImport;
 use App\Models\Country;
+use App\Models\EgyptExpressAirwayBill;
 use App\Models\ExcelFile;
 use App\Models\FinancialAccount;
 use App\Models\GeneralSetting;
@@ -1182,6 +1183,46 @@ class ReceiptSocialController extends Controller
         return response()->json([
             'labels' => $labels,
             'values' => $values
+        ]);
+    }
+
+    public function getAirwayBillPdf(Request $request, $id)
+    {
+        $receipt = ReceiptSocial::findOrFail($id);
+        
+        // Find the airway bill for this receipt
+        $airwayBill = EgyptExpressAirwayBill::where('model_type', ReceiptSocial::class)
+            ->where('model_id', $receipt->id)
+            ->where('is_successful', true)
+            ->whereNotNull('airwaybillpdf')
+            ->latest()
+            ->first();
+
+        if (!$airwayBill || !$airwayBill->airwaybillpdf) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Airway bill PDF not found for this receipt'
+            ], 404);
+        }
+
+        $pdfPath = $airwayBill->airwaybillpdf;
+        
+        // Check if file exists
+        if (!file_exists($pdfPath)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'PDF file not found on server'
+            ], 404);
+        }
+
+        // Return the PDF file for download
+        if ($request->has('download')) {
+            return response()->download($pdfPath, 'airwaybill-' . ($airwayBill->airway_bill_number ?? $receipt->id) . '.pdf');
+        }
+
+        // Return PDF for viewing/printing
+        return response()->file($pdfPath, [
+            'Content-Type' => 'application/pdf',
         ]);
     }
 }

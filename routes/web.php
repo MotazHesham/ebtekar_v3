@@ -111,6 +111,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('receipt-socials/destroy', 'ReceiptSocialController@massDestroy')->name('receipt-socials.massDestroy');
     Route::get('receipt-socials/customer-report', 'ReceiptSocialController@customerReport')->name('receipt-socials.customer-report');
     Route::get('receipt-socials/customer-chart', 'ReceiptSocialController@customerChart')->name('receipt-socials.customer-chart');
+    Route::get('receipt-socials/airwaybill-pdf/{id}', 'ReceiptSocialController@getAirwayBillPdf')->name('receipt-socials.airwaybill-pdf');
     Route::resource('receipt-socials', 'ReceiptSocialController');
 
     // Receipt Social Followups
@@ -382,6 +383,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('playlists/required_items', 'PlaylistController@required_items')->name('playlists.required_items');
     Route::post('playlists/history', 'PlaylistController@history')->name('playlists.history');
     Route::get('playlists/print/{id}/{model_type}', 'PlaylistController@print')->name('playlists.print');
+    Route::get('playlists/airwaybill-pdf/{id}/{model_type}', 'PlaylistController@getAirwayBillPdf')->name('playlists.airwaybill-pdf');
     Route::get('playlists/{type}', 'PlaylistController@index')->name('playlists.index');
 
     // Faq Category

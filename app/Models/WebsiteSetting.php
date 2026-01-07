@@ -89,6 +89,7 @@ class WebsiteSetting extends Model implements HasMedia
         'video_instructions',
         'delivery_system',
         'borrow_password',
+        'shipping_integration',
         'designer_id',
         'preparer_id',
         'manufacturer_id',

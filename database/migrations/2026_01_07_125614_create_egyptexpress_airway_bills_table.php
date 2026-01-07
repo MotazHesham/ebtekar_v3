@@ -53,6 +53,7 @@ return new class extends Migration
             $table->boolean('is_successful')->default(false);
             $table->text('error_message')->nullable();
             $table->integer('http_status_code')->nullable();
+            $table->longText('airwaybillpdf')->nullable();
             
             $table->timestamps();
             $table->softDeletes();

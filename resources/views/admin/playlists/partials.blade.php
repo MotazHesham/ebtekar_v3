@@ -113,6 +113,16 @@
                         title="سجل حركة الفاتورة في البلاي ليست">
                         سجل الحالة
                     </a>
+                    <a class="btn btn-danger btn-sm rounded-pill text-white"
+                        onclick="getAirwayBillPdf('{{ $item['id'] }}', '{{ $item['model_type'] }}')"
+                        title="Airway Bill PDF">
+                        <i class="fas fa-file-pdf"></i> Airway Bill
+                    </a>
+                    <a class="btn btn-info btn-sm rounded-pill text-white"
+                        onclick="downloadAirwayBillPdf('{{ $item['id'] }}', '{{ $item['model_type'] }}')"
+                        title="Download Airway Bill">
+                        <i class="fas fa-download"></i> Download
+                    </a>
                 @endif
             </div>
         </div>

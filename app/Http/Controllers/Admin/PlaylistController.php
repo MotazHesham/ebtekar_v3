@@ -130,7 +130,7 @@ class PlaylistController extends Controller
         $raw->save();
 
         // Create airway bill if it doesn't exist and shipmenter is assigned
-        if ($raw->playlist_status == 'design') {
+        if ($raw->playlist_status == 'design' && $website_setting->shipping_integration) {
             $this->createAirwayBillIfNotExists($raw, $request->model_type);
         }
 
@@ -507,7 +507,7 @@ class PlaylistController extends Controller
 
             // Dispatch job to create airway bill if DTO was created
             if ($dto && $dto->isValid()) {
-                SendReceiptToEgyptExpressJob::dispatchSync($dto);
+                SendReceiptToEgyptExpressJob::dispatch($dto);
             }
         } catch (\Exception $e) {
             // Log error but don't break the flow
@@ -517,5 +517,60 @@ class PlaylistController extends Controller
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function getAirwayBillPdf(Request $request, $id, $modelType)
+    {
+        // Map model type to model class
+        $modelClassMap = [
+            'social' => ReceiptSocial::class,
+            'company' => ReceiptCompany::class,
+            'order' => Order::class,
+        ];
+
+        if (!isset($modelClassMap[$modelType])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid model type'
+            ], 400);
+        }
+
+        $modelClass = $modelClassMap[$modelType];
+        $model = $modelClass::findOrFail($id);
+        
+        // Find the airway bill for this model
+        $airwayBill = EgyptExpressAirwayBill::where('model_type', $modelClass)
+            ->where('model_id', $model->id)
+            ->where('is_successful', true)
+            ->whereNotNull('airwaybillpdf')
+            ->latest()
+            ->first();
+
+        if (!$airwayBill || !$airwayBill->airwaybillpdf) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Airway bill PDF not found for this order'
+            ], 404);
+        }
+
+        $pdfPath = $airwayBill->airwaybillpdf;
+        
+        // Check if file exists
+        if (!file_exists($pdfPath)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'PDF file not found on server'
+            ], 404);
+        }
+
+        // Return the PDF file for download
+        if ($request->has('download')) {
+            return response()->download($pdfPath, 'airwaybill-' . ($airwayBill->airway_bill_number ?? $model->id) . '.pdf');
+        }
+
+        // Return PDF for viewing/printing
+        return response()->file($pdfPath, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

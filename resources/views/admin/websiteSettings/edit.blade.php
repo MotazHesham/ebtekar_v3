@@ -417,6 +417,23 @@
                         @endif
                         <span class="help-block">{{ __('cruds.websiteSetting.fields.shipment_helper') }}</span>
                     </div>
+                    <div class="form-group col-md-4">
+                        <label for="shipping_integration">Shipping Integration Status</label>   
+                        <select name="shipping_integration" id="shipping_integration"
+                            class="form-control {{ $errors->has('shipping_integration') ? 'is-invalid' : '' }}">
+                            <option value="1"
+                                {{ old('shipping_integration', $websiteSetting->shipping_integration) == 1 ? 'selected' : '' }}>
+                                Enabled</option>
+                            <option value="0"
+                                {{ old('shipping_integration', $websiteSetting->shipping_integration) == 0 ? 'selected' : '' }}>
+                                Disabled</option>
+                        </select>
+                        @if ($errors->has('shipping_integration'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('shipping_integration') }}
+                            </div>
+                        @endif
+                    </div>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-danger" type="submit">

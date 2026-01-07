@@ -6,6 +6,7 @@ use App\DTOs\EgyptExpressAirwayBillDTO;
 use App\Models\EgyptExpressAirwayBill;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class EgyptExpressService
 {
@@ -84,12 +85,43 @@ class EgyptExpressService
                 // Save successful airway bill record
                 $airwayBill = $this->saveAirwayBill($dto, $payload, $responseData, true, null, $response->status());
 
+                // Get airway bill number from response
+                $airwayBillNumber = $responseData['AirWayBillNumber'] 
+                    ?? $responseData['airway_bill_number'] 
+                    ?? $responseData['AirwayBillNumber'] 
+                    ?? null;
+
+                // Fetch PDF format if airway bill number is available 
+                $pdfBase64 = null;
+                if ($airwayBillNumber) {
+                    try {
+                        $pdfResponse = $this->getAirwayBillPDFFormat($airwayBillNumber);
+                        if ($pdfResponse['success']) { 
+                            $pdfBase64 = $pdfResponse['pdf_base64'];
+                            $pdfContent = base64_decode($pdfBase64);
+                            $relativePath = 'airwaybills/shipment-' . $airwayBillNumber . '.pdf';
+                            Storage::disk('local')->put($relativePath, $pdfContent);
+                            $airwayBill->update([
+                                'airwaybillpdf' => storage_path('app/' . $relativePath),
+                            ]);
+                        }
+                    } catch (\Exception $pdfException) {
+                        // Log PDF fetch error but don't fail the whole operation
+                        $logger->warning('egyptexpress:', [
+                            'action' => 'GetAirwayBillPDFFormat',
+                            'airway_bill_number' => $airwayBillNumber,
+                            'error' => $pdfException->getMessage(),
+                        ]);
+                    }
+                }
+
                 $logger->debug('egyptexpress:', [
                     'action' => 'CreateAirwayBill',
                     'model_id' => $dto->modelId,
                     'model_type' => $dto->modelType,
                     'order_num' => $dto->orderNum,
                     'airway_bill_id' => $airwayBill->id,
+                    'airway_bill_number' => $airwayBillNumber,
                     'response' => $responseData,
                     'status' => 'success',
                 ]);
@@ -97,7 +129,7 @@ class EgyptExpressService
                 return [
                     'success' => true,
                     'data' => $responseData,
-                    'airway_bill_id' => $airwayBill->id,
+                    'airway_bill_id' => $airwayBill->id, 
                 ];
             } else {
                 // Save failed airway bill record
@@ -232,6 +264,98 @@ class EgyptExpressService
         ]);
     }
 
+
+    /**
+     * Get airway bill PDF format
+     *
+     * @param string $airwayBillNumber
+     * @return array
+     */
+    public function getAirwayBillPDFFormat(string $airwayBillNumber): array
+    {
+        $logger = Log::build([
+            'driver' => 'daily',
+            'path' => storage_path('logs/egyptexpress.log'),
+            'level' => 'debug',
+        ]);
+
+        try {
+            $payload = [
+                'AccountNo' => $this->accountNo,
+                'AirwayBillNumber' => $airwayBillNumber,
+                'Country' => 'Egypt',
+                'Password' => $this->password,
+                'UserName' => $this->username,
+            ];
+
+            $logger->debug('egyptexpress:', [
+                'action' => 'GetAirwayBillPDFFormat',
+                'airway_bill_number' => $airwayBillNumber,
+                'payload' => $payload,
+            ]);
+
+            $response = Http::timeout(30)
+                ->post("{$this->baseUrl}/AirwayBillPDFFormat", $payload);
+
+            $responseData = $response->json();
+
+            // Check both HTTP status and API response code
+            $apiCode = $responseData['Code'] ?? $responseData['code'] ?? null;
+            $isApiSuccess = $apiCode !== null ? ($apiCode >= 0) : true;
+            $isHttpSuccess = $response->successful();
+            $isSuccess = $isHttpSuccess && $isApiSuccess;
+
+            if ($isSuccess) {
+                $logger->debug('egyptexpress:', [
+                    'action' => 'GetAirwayBillPDFFormat',
+                    'airway_bill_number' => $airwayBillNumber,
+                    'status' => 'success',
+                    'has_pdf' => !empty($responseData['ReportDoc'] ?? $responseData['report_doc'] ?? null),
+                ]);
+
+                return [
+                    'success' => true,
+                    'data' => $responseData,
+                    'pdf_base64' => $responseData['ReportDoc'] ?? $responseData['report_doc'] ?? null,
+                ];
+            } else {
+                $errorMessage = $responseData['Description'] 
+                    ?? $responseData['description'] 
+                    ?? $responseData['message'] 
+                    ?? $responseData['Message']
+                    ?? 'Unknown error';
+
+                $logger->error('egyptexpress:', [
+                    'action' => 'GetAirwayBillPDFFormat',
+                    'airway_bill_number' => $airwayBillNumber,
+                    'status_code' => $response->status(),
+                    'api_code' => $apiCode,
+                    'response' => $responseData,
+                    'status' => 'failed',
+                ]);
+
+                return [
+                    'success' => false,
+                    'error' => $errorMessage,
+                    'status_code' => $response->status(),
+                    'api_code' => $apiCode,
+                    'data' => $responseData,
+                ];
+            }
+        } catch (\Exception $e) {
+            $logger->error('egyptexpress:', [
+                'action' => 'GetAirwayBillPDFFormat',
+                'airway_bill_number' => $airwayBillNumber,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return [
+                'success' => false,
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
 
     // TODO: Add more methods for other endpoints as needed
     // Example:

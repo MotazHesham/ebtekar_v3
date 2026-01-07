@@ -747,6 +747,16 @@
                                                             <i class="fas fa-money-bill-wave" style="color:cadetblue"></i>
                                                         </a>
                                                     @endcan
+                                                    <a class="dropdown-item" style="cursor: pointer"
+                                                        onclick="getAirwayBillPdf('{{ $receipt->id }}')">
+                                                        Airway Bill PDF 
+                                                        <i class="fas fa-file-pdf" style="color:red"></i>
+                                                    </a>
+                                                    <a class="dropdown-item" style="cursor: pointer"
+                                                        onclick="downloadAirwayBillPdf('{{ $receipt->id }}')">
+                                                        Download Airway Bill 
+                                                        <i class="fas fa-download" style="color:blue"></i>
+                                                    </a>
                                                 @else  
                                                     @can('receipt_social_restore')
                                                         <a class="dropdown-item"
@@ -1347,6 +1357,18 @@
             }).fail(function() {
                 alert('حدث خطأ أثناء الحفظ');
             });
+        }
+
+        function getAirwayBillPdf(receiptId) {
+            // Open PDF in new window for viewing/printing
+            const pdfUrl = '{{ route("admin.receipt-socials.airwaybill-pdf", ":id") }}'.replace(':id', receiptId);
+            window.open(pdfUrl, '_blank');
+        }
+        
+        function downloadAirwayBillPdf(receiptId) {
+            // Download PDF directly
+            const downloadUrl = '{{ route("admin.receipt-socials.airwaybill-pdf", ":id") }}?download=1'.replace(':id', receiptId);
+            window.location.href = downloadUrl;
         }
     </script>
     <script>

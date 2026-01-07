@@ -42,6 +42,7 @@ class EgyptExpressAirwayBill extends Model
         'invoice_currency',
         'request_payload',
         'response_data',
+        'airwaybillpdf',
         'is_successful',
         'error_message',
         'http_status_code',

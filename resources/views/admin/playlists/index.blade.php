@@ -301,5 +301,21 @@
         $('.playlist-dates').on('click', function() {
             $(this).toggleClass('date_selected');
         })
+
+        function getAirwayBillPdf(id, modelType) {
+            // Open PDF in new window for viewing/printing
+            const pdfUrl = '{{ route("admin.playlists.airwaybill-pdf", [":id", ":model_type"]) }}'
+                .replace(':id', id)
+                .replace(':model_type', modelType);
+            window.open(pdfUrl, '_blank');
+        }
+        
+        function downloadAirwayBillPdf(id, modelType) {
+            // Download PDF directly
+            const downloadUrl = '{{ route("admin.playlists.airwaybill-pdf", [":id", ":model_type"]) }}?download=1'
+                .replace(':id', id)
+                .replace(':model_type', modelType);
+            window.location.href = downloadUrl;
+        }
     </script>
 @endsection
