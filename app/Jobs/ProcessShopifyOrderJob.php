@@ -88,7 +88,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
                         ]
                     );
 
-                    if($this->siteSettings->shopify_access_token){
+                    if($this->siteSettings->shopify_access_token && $receiptSocialProduct->wasRecentlyCreated){
                         VairantShopifyMediaJob::dispatch($receiptSocialProduct, $this->siteSettings);
                     }
 
@@ -125,7 +125,7 @@ class ProcessShopifyOrderJob implements ShouldQueue
                             }
                             $propertiesString = implode(' | ', $propertiesArray);
                         }
-                        $receiptSocialProductPivot->photos = $photos ? json_encode($photos, JSON_UNESCAPED_SLASHES) : null;
+                        $receiptSocialProductPivot->photos = $photos && count($photos) > 0 ? json_encode($photos, JSON_UNESCAPED_SLASHES) : null;
                         $receiptSocialProductPivot->description = $propertiesString;
                         $receiptSocialProductPivot->save();
                     }

@@ -143,9 +143,11 @@ class VairantShopifyMediaJob implements ShouldQueue
             $shopifyImages[] = $variantImage['originalSrc'];
         } 
 
-        // foreach ($productImages as $image) {
-        //     $shopifyImages[] = $image['originalSrc'];
-        // }
+        if(!$variantImage){
+            foreach ($productImages as $image) {
+                $shopifyImages[] = $image['originalSrc'];
+            }
+        }
 
         // Update the product with image data
         $this->receiptSocialProduct->shopify_images = json_encode($shopifyImages);
