@@ -466,19 +466,7 @@ class PlaylistController extends Controller
                 $playlists = $playlists->where(function($query){
                     $query->whereNull('designer_id')->orWhere('designer_id',auth()->user()->id);
                 });
-            }elseif($type == 'manufacturing'){
-                $playlists = $playlists->where(function($query){
-                    $query->whereNull('manufacturer_id')->orWhere('manufacturer_id',auth()->user()->id);
-                });
-            }elseif($type == 'prepare'){
-                $playlists = $playlists->where(function($query){
-                    $query->whereNull('preparer_id')->orWhere('preparer_id',auth()->user()->id);
-                });
-            }elseif($type == 'shipment'){
-                $playlists = $playlists->where(function($query){
-                    $query->whereNull('shipmenter_id')->orWhere('shipmenter_id',auth()->user()->id);
-                });
-            }
+            } 
         }
         
         $order_num = null;
