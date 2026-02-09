@@ -86,7 +86,7 @@ class PlaylistController extends Controller
         if(!$site_settings){
             $site_settings = WebsiteSetting::where('id',1)->first();
         }
-        $histories = PlaylistHistory::with('user')
+        $histories = PlaylistHistory::with(['user', 'assignedToUser'])
             ->where('model_type', $request->model_type)
             ->where('model_id', $request->id)
             ->orderBy('created_at', 'asc')
@@ -119,10 +119,69 @@ class PlaylistController extends Controller
         if($request->model_type == 'social' && $raw->hold_in_playlist_status == 'design' ){
             $raw->hold = 1;
         }
-        $raw->designer_id = $request->designer_id;
-        $raw->manufacturer_id = $request->manufacturer_id;
-        $raw->preparer_id = $request->preparer_id;
-        $raw->shipmenter_id = $request->shipmenter_id; 
+        
+        // Track assignment changes
+        if($request->designer_id && $request->designer_id != $raw->designer_id){
+            PlaylistHistory::create([
+                'model_type' => $request->model_type,
+                'model_id' => $raw->id,
+                'action_type' => 'assignment',
+                'from_status' => $raw->playlist_status,
+                'to_status' => $raw->playlist_status,
+                'is_return' => false,
+                'reason' => null,
+                'user_id' => Auth::id(),
+                'assigned_to_user_id' => $request->designer_id,
+                'assignment_type' => 'designer',
+            ]);
+        }
+        if($request->manufacturer_id && $request->manufacturer_id != $raw->manufacturer_id){
+            PlaylistHistory::create([
+                'model_type' => $request->model_type,
+                'model_id' => $raw->id,
+                'action_type' => 'assignment',
+                'from_status' => $raw->playlist_status,
+                'to_status' => $raw->playlist_status,
+                'is_return' => false,
+                'reason' => null,
+                'user_id' => Auth::id(),
+                'assigned_to_user_id' => $request->manufacturer_id,
+                'assignment_type' => 'manufacturer',
+            ]);
+        }
+        if($request->preparer_id && $request->preparer_id != $raw->preparer_id){
+            PlaylistHistory::create([
+                'model_type' => $request->model_type,
+                'model_id' => $raw->id,
+                'action_type' => 'assignment',
+                'from_status' => $raw->playlist_status,
+                'to_status' => $raw->playlist_status,
+                'is_return' => false,
+                'reason' => null,
+                'user_id' => Auth::id(),
+                'assigned_to_user_id' => $request->preparer_id,
+                'assignment_type' => 'preparer',
+            ]);
+        }
+        if($request->shipmenter_id && $request->shipmenter_id != $raw->shipmenter_id){
+            PlaylistHistory::create([
+                'model_type' => $request->model_type,
+                'model_id' => $raw->id,
+                'action_type' => 'assignment',
+                'from_status' => $raw->playlist_status,
+                'to_status' => $raw->playlist_status,
+                'is_return' => false,
+                'reason' => null,
+                'user_id' => Auth::id(),
+                'assigned_to_user_id' => $request->shipmenter_id,
+                'assignment_type' => 'shipmenter',
+            ]);
+        }
+        
+        $raw->designer_id = $request->designer_id ?? null;
+        $raw->manufacturer_id = $request->manufacturer_id ?? null;
+        $raw->preparer_id = $request->preparer_id ?? null;
+        $raw->shipmenter_id = $request->shipmenter_id ?? null; 
         $raw->returned_to_design += 1;  // increment the returned to design count
         if($request->model_type == 'social' && $old_status == 'pending'){
             $raw->quickly_return = 0;
@@ -139,6 +198,7 @@ class PlaylistController extends Controller
             PlaylistHistory::create([
                 'model_type'  => $request->model_type,
                 'model_id'    => $raw->id,
+                'action_type' => 'status_change',
                 'from_status' => $old_status,
                 'to_status'   => 'design',
                 'is_return'   => false,
@@ -152,15 +212,17 @@ class PlaylistController extends Controller
                 'data' => $raw->id . '&' . $request->model_type,
                 'type' => 'private', 
             ]);
-            $userAlert->users()->sync([$request->designer_id]);
-
-            $user = User::find($request->designer_id);
-            if ($user->device_token != null) {
-                $tokens = array();
-                array_push($tokens, $user->device_token); 
-                $site_settings = get_site_setting();
-                SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index', 'design'),$site_settings);  // job for sending push notification
+            if($request->designer_id){
+                $userAlert->users()->sync([$request->designer_id]);
+                $user = User::find($request->designer_id);
+                if ($user->device_token != null) {
+                    $tokens = array();
+                    array_push($tokens, $user->device_token); 
+                    $site_settings = get_site_setting();
+                    SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index', 'design'),$site_settings);  // job for sending push notification
+                }
             }
+
             alert('تم الأرسال','','success');
             return redirect()->back();
         }else{
@@ -205,6 +267,7 @@ class PlaylistController extends Controller
         PlaylistHistory::create([
             'model_type'  => $request->model_type,
             'model_id'    => $raw->id,
+            'action_type' => 'status_change',
             'from_status' => $old_status,
             'to_status'   => $request->status,
             'is_return'   => $request->condition == 'back',
@@ -301,7 +364,7 @@ class PlaylistController extends Controller
 
     public function history(Request $request)
     {
-        $histories = PlaylistHistory::with('user')
+        $histories = PlaylistHistory::with(['user', 'assignedToUser'])
             ->where('model_type', $request->model_type)
             ->where('model_id', $request->id)
             ->orderBy('created_at', 'asc')
@@ -390,12 +453,33 @@ class PlaylistController extends Controller
         abort_if(Gate::denies('playlist_'.$request->type), Response::HTTP_FORBIDDEN, '403 Forbidden');  
 
         $staffs = User::whereIn('user_type',['staff','seller'])->get();
+
+        $staffs_array = $staffs->pluck('name', 'id')->toArray();
         
         $zones = Zone::all();
         $type = $request->type;  
         $playlists = ViewPlaylistData::orderBy('client_review','desc')->orderBy('send_to_playlist_date','desc')->where('playlist_status',$type); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
 
+        if(!auth()->user()->is_admin){
+            if($type == 'design'){
+                $playlists = $playlists->where(function($query){
+                    $query->whereNull('designer_id')->orWhere('designer_id',auth()->user()->id);
+                });
+            }elseif($type == 'manufacturing'){
+                $playlists = $playlists->where(function($query){
+                    $query->whereNull('manufacturer_id')->orWhere('manufacturer_id',auth()->user()->id);
+                });
+            }elseif($type == 'prepare'){
+                $playlists = $playlists->where(function($query){
+                    $query->whereNull('preparer_id')->orWhere('preparer_id',auth()->user()->id);
+                });
+            }elseif($type == 'shipment'){
+                $playlists = $playlists->where(function($query){
+                    $query->whereNull('shipmenter_id')->orWhere('shipmenter_id',auth()->user()->id);
+                });
+            }
+        }
         
         $order_num = null;
         $user_id = null;
@@ -407,6 +491,10 @@ class PlaylistController extends Controller
         $is_seasoned = null;
         $client_type = null;
         $zone_id = null;
+        $designer_id = null;
+        $manufacturer_id = null;
+        $preparer_id = null;
+        $shipmenter_id = null;
         $view = 'all';
 
         if( $request->view != null){
@@ -447,6 +535,22 @@ class PlaylistController extends Controller
             $countryIds = $zone->countries->pluck('id')->toArray();
             $playlists = $playlists->whereIn('shipping_country_id',$countryIds); 
         }
+        if( $request->designer_id != null){
+            $designer_id = $request->designer_id;
+            $playlists = $playlists->where('designer_id',$request->designer_id); 
+        }
+        if( $request->manufacturer_id != null){
+            $manufacturer_id = $request->manufacturer_id;
+            $playlists = $playlists->where('manufacturer_id',$request->manufacturer_id); 
+        }
+        if( $request->preparer_id != null){
+            $preparer_id = $request->preparer_id;
+            $playlists = $playlists->where('preparer_id',$request->preparer_id); 
+        }
+        if( $request->shipmenter_id != null){
+            $shipmenter_id = $request->shipmenter_id;
+            $playlists = $playlists->where('shipmenter_id',$request->shipmenter_id); 
+        }
         if ($request->order_num != null){
             $order_num = $request->order_num;
             $playlists = $playlists->where('order_num', 'like', '%'.$request->order_num.'%'); 
@@ -466,8 +570,9 @@ class PlaylistController extends Controller
             $playlists = $playlists->paginate(15);
             $dates = null;
         } 
-        // return $dates;
-        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','is_seasoned','quickly','website_setting_id','description','to_date','websites','client_type','zones','zone_id'));
+        // return $dates; 
+        return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','is_seasoned','quickly','website_setting_id',
+        'description','to_date','websites','client_type','zones','zone_id','designer_id','manufacturer_id','preparer_id','shipmenter_id','staffs_array'));
 
     }
 
@@ -572,5 +677,67 @@ class PlaylistController extends Controller
         return response()->file($pdfPath, [
             'Content-Type' => 'application/pdf',
         ]);
+    }
+
+    public function assign_to_me(Request $request)
+    {
+        $model = null;
+        if($request->model_type == 'social'){
+            $model = ReceiptSocial::find($request->id);
+        }elseif($request->model_type == 'company'){
+            $model = ReceiptCompany::find($request->id);
+        }elseif($request->model_type == 'order'){
+            $model = Order::find($request->id);
+        }
+
+        $assignmentType = null;
+        $oldAssignedUserId = null;
+
+        if($request->type == 'design'){
+            if($model->designer_id){
+                return response()->json(['success' => false, 'message' => 'الفاتورة معينة مسبقا لديزاينر آخر'], 400);
+            }
+            $oldAssignedUserId = $model->designer_id;
+            $model->designer_id = Auth::id();
+            $assignmentType = 'designer';
+        }elseif($request->type == 'manufacturing'){
+            if($model->manufacturer_id){
+                return response()->json(['success' => false, 'message' => 'الفاتورة معينة مسبقا لمصنع آخر'], 400);
+            }
+            $oldAssignedUserId = $model->manufacturer_id;
+            $model->manufacturer_id = Auth::id();
+            $assignmentType = 'manufacturer';
+        }elseif($request->type == 'prepare'){
+            if($model->preparer_id){
+                return response()->json(['success' => false, 'message' => 'الفاتورة معينة مسبقا لمجهز آخر'], 400);
+            }
+            $oldAssignedUserId = $model->preparer_id;
+            $model->preparer_id = Auth::id();
+            $assignmentType = 'preparer';
+        }elseif($request->type == 'shipment'){
+            if($model->shipmenter_id){
+                return response()->json(['success' => false, 'message' => 'الفاتورة معينة مسبقا لشاحن آخر'], 400);
+            }
+            $oldAssignedUserId = $model->shipmenter_id;
+            $model->shipmenter_id = Auth::id();
+            $assignmentType = 'shipmenter';
+        }
+        $model->save();
+
+        // Store assignment history
+        PlaylistHistory::create([
+            'model_type' => $request->model_type,
+            'model_id' => $model->id,
+            'action_type' => 'assignment',
+            'from_status' => $model->playlist_status,
+            'to_status' => $model->playlist_status, // Status doesn't change on assignment
+            'is_return' => false,
+            'reason' => null,
+            'user_id' => Auth::id(), // Who made the assignment
+            'assigned_to_user_id' => Auth::id(), // Who was assigned (self-assignment)
+            'assignment_type' => $assignmentType,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'تم التعيين بنجاح'], 200);
     }
 }

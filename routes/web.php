@@ -384,6 +384,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('playlists/history', 'PlaylistController@history')->name('playlists.history');
     Route::get('playlists/print/{id}/{model_type}', 'PlaylistController@print')->name('playlists.print');
     Route::get('playlists/airwaybill-pdf/{id}/{model_type}', 'PlaylistController@getAirwayBillPdf')->name('playlists.airwaybill-pdf');
+    Route::post('playlists/assign_to_me', 'PlaylistController@assign_to_me')->name('playlists.assign_to_me');
     Route::get('playlists/{type}', 'PlaylistController@index')->name('playlists.index');
 
     // Faq Category

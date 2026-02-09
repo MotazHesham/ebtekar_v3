@@ -13,13 +13,14 @@
             padding: 15px;
             border-radius: 14px;
             box-shadow: 2px 1px 19px #48484863;
-            direction: ltr
+            direction: ltr;
         }
 
         .order-card-left-side {
             background-image: linear-gradient(#348282, #3580b3);
             border-radius: 14px;
             padding: 15px;
+            position: relative;
         }
 
         .order-card:hover {
@@ -81,6 +82,23 @@
         .date_selected:active {
             background-color: #9b4c4c !important;
             color: white !important;
+        }
+
+        .assigned-badge-corner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: fit-content;  
+            background: #0a2e55;  
+            overflow: hidden;
+            border-radius: 9px; 
+        }
+
+        .assigned-badge-corner span {  
+            color: white;
+            font-size: 15px;
+            font-weight: bold;  
+            padding: 1px 14px;
         }
     </style>
 @endsection
@@ -252,6 +270,7 @@
                         iframe.contentWindow.focus();  // Ensure iframe is focused before printing
                         iframe.contentWindow.print();  // Trigger print dialog for the iframe
 
+                        downloadAirwayBillPdf(id, model_type);
                         // Add an event listener for the print completion
                         iframe.contentWindow.onafterprint = function() {
                             resetButton(button, originalButtonContent); // Reset button after printing
@@ -316,6 +335,22 @@
                 .replace(':id', id)
                 .replace(':model_type', modelType);
             window.location.href = downloadUrl;
+        }
+
+        function assign_to_me(id, model_type, type) {
+            $.post('{{ route('admin.playlists.assign_to_me') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                model_type: model_type,
+                type: type,
+            }, function(data) {
+                if (data.success) {
+                    showAlert('success', data.message);
+                    location.reload();
+                }else{
+                    showAlert('error', data.message);
+                }
+            });
         }
     </script>
 @endsection

@@ -16,11 +16,14 @@ class PlaylistHistory extends Model
     protected $fillable = [
         'model_type',
         'model_id',
+        'action_type',
         'from_status',
         'to_status',
         'is_return',
         'reason',
         'user_id',
+        'assigned_to_user_id',
+        'assignment_type',
         'created_at',
         'updated_at',
     ];
@@ -47,6 +50,11 @@ class PlaylistHistory extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function assignedToUser()
+    {
+        return $this->belongsTo(User::class, 'assigned_to_user_id');
     }
 }
 

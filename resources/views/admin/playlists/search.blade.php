@@ -117,6 +117,32 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="col-md-3">
+                    @php
+                        $input_name = null;
+                        $label_name = null;
+                        if($type == 'design'){
+                            $input_name = 'designer_id';
+                            $label_name = 'الديزاينر';
+                        }elseif($type == 'manufacturing'){
+                            $input_name = 'manufacturer_id';
+                            $label_name = 'المصنع';
+                        }elseif($type == 'prepare'){
+                            $input_name = 'preparer_id';
+                            $label_name = 'المجهز';
+                        }elseif($type == 'shipment'){
+                            $input_name = 'shipmenter_id';
+                            $label_name = 'المرسل للشحن';
+                        }
+                    @endphp
+                    <select class="form-control mb-2 @isset(request()->$input_name) isset @endisset"
+                        name="{{ $input_name }}" id="{{ $input_name }}" onchange="sort_playlist()">
+                        <option value="">أختر {{ $label_name }}</option>
+                        @foreach ($staffs as $staff)
+                            <option value="{{ $staff->id }}" @if (request()->$input_name == $staff->id) selected @endif>{{ $staff->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
 

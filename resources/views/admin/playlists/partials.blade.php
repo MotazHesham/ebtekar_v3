@@ -1,5 +1,7 @@
 @foreach ($playlists as $key => $item)
     @php
+        
+        $assigned_to = null;
         if ($type == 'design') {
             $authenticated = $item['designer_id'];
         } elseif ($type == 'manufacturing') {
@@ -8,21 +10,36 @@
             $authenticated = $item['preparer_id'];
         } elseif ($type == 'shipment') {
             $authenticated = $item['shipmenter_id'];
-        }
-        
+        } 
+        $assigned_to = $authenticated ? $staffs_array[$authenticated] : null; 
     @endphp
-
+    
     {{-- order card --}}
     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
         <div class="card order-card" data-id="{{ $item['id'] }}" id="order-card-{{ $item['id'] }}"
             style="margin-bottom:30px"> 
             {{-- code --}}
-            <div class=" order-card-left-side text-center mb-3"
+            <div class="order-card-left-side text-center mb-3"
                 style="color: white;margin-bottom:20px;padding: 31px 0;font-size: 20px;
                     @if ($item['quickly'] == 1 && $item['shipping_country_id'] == 20)  background-image: linear-gradient(270deg,#9f1b2e,black,#7C42C9); 
                     @elseif ($item['client_review'] && $type == 'design') background-image: linear-gradient(90deg,#6de4a4,#4e54c8);
                     @elseif ($item['shipping_country_id'] == 20) background:#7c42c9;
                     @elseif ($item['quickly'] == 1)background-image: linear-gradient(#9f1b2e,#1a1313);@endif">
+                
+                @if($assigned_to)
+                    @if(auth()->user()->is_admin)
+                        <div class="assigned-badge-corner">
+                            <span title="{{ $assigned_to }}">{{ $assigned_to }}</span>
+                        </div> 
+                    @endif
+                @else 
+                    <div class="assigned-badge-corner" style="z-index: 10;">
+                        <button class="btn btn-dark btn-sm  text-white" onclick="assign_to_me('{{ $item['id'] }}' , '{{ $item['model_type'] }}','{{ $type }}')">
+                            {{ __('Assign to me') }}
+                            <i class="fas fa-user-plus"></i>
+                        </button>
+                    </div> 
+                @endif
 
                 {{ $item['order_num'] }} 
                 @if ($item['client_review'])
@@ -67,7 +84,7 @@
                         </div>
                         <div class="col-md-8">
                             <span class="badge badge-success text-white mb-1">{{ $item['shipping_country_id'] ? getCountryNameById($item['shipping_country_id']) : '' }}</span>
-                            <span class="badge badge-dark text-white mb-1">{{ $item['client_type'] == 'individual' ? 'فردي' : 'شركة' }}</span>
+                            <span class="badge badge-dark text-white mb-1">{{ $item['client_type'] == 'individual' ? 'فردي' : 'شركة' }}</span> 
                             <span class="badge badge-light text-dark mb-1">{{ __('Description') }}</span>
                             <div class="container-scrollable"> 
                                 {!! strip_tags($item['description'], '<p><br>')  !!}
