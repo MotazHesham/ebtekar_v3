@@ -189,7 +189,7 @@ class PlaylistController extends Controller
         $raw->save();
 
         // Create airway bill if it doesn't exist and shipmenter is assigned
-        if ($raw->playlist_status == 'design' && $website_setting->shipping_integration) {
+        if ($old_status == 'pending' && $raw->playlist_status == 'design' && $website_setting->shipping_integration) {
             $this->createAirwayBill($raw, $request->model_type);
         }
 
