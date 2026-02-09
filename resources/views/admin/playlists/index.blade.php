@@ -270,7 +270,7 @@
                         iframe.contentWindow.focus();  // Ensure iframe is focused before printing
                         iframe.contentWindow.print();  // Trigger print dialog for the iframe
 
-                        downloadAirwayBillPdf(id, model_type);
+                        getAirwayBillPdf(id, model_type);
                         // Add an event listener for the print completion
                         iframe.contentWindow.onafterprint = function() {
                             resetButton(button, originalButtonContent); // Reset button after printing
