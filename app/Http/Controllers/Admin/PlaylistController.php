@@ -190,7 +190,7 @@ class PlaylistController extends Controller
 
         // Create airway bill if it doesn't exist and shipmenter is assigned
         if ($raw->playlist_status == 'design' && $website_setting->shipping_integration) {
-            $this->createAirwayBillIfNotExists($raw, $request->model_type);
+            $this->createAirwayBill($raw, $request->model_type);
         }
 
         if ($old_status == 'pending') {
@@ -576,14 +576,13 @@ class PlaylistController extends Controller
 
     }
 
-    /**
-     * Create airway bill if it doesn't exist
+    /** 
      *
      * @param mixed $model (ReceiptSocial, ReceiptCompany, or Order)
      * @param string $modelType
      * @return void
      */
-    protected function createAirwayBillIfNotExists($model, $modelType)
+    protected function createAirwayBill($model, $modelType)
     {
         // Determine the model class name
         $modelClass = get_class($model);
@@ -594,10 +593,10 @@ class PlaylistController extends Controller
             ->where('is_successful', true)
             ->first();
 
-        if ($existingAirwayBill) {
-            // Airway bill already exists and was successful
-            return;
-        }
+        // if ($existingAirwayBill) {
+        //     // Airway bill already exists and was successful
+        //     return;
+        // }
 
         try {
             // Create DTO based on model type
