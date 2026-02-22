@@ -2,6 +2,8 @@
 
 //returns combinations of customer choice options array
 
+use App\Models\AdsAccountDetail;
+use App\Models\AdsAccountHistory;
 use App\Models\Country;
 use App\Models\Currency; 
 use App\Models\Order;
@@ -20,6 +22,81 @@ use Illuminate\Support\Facades\Session;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Str;
 
+if (!function_exists('getAdHistoryByUtm')) {
+    function getAdHistoryByUtm($platform, $utmDetails, $orderDate)
+    {
+        if ($platform == 'shopify') { 
+        }
+    }
+}
+if (!function_exists('getAdHistoryForOrganicOrders')) {
+    function getAdHistoryForOrganicOrders($adAccount, $orderFrom, $orderDate)
+    {  
+
+        // Campaign
+        $campaign = AdsAccountDetail::where('ad_account_id', $adAccount->id)
+            ->where('type', 'campaign')
+            ->where('utm_key', $orderFrom)
+            ->first();
+        if(!$campaign){
+            $campaign = AdsAccountDetail::create([
+                'ad_account_id' => $adAccount->id,
+                'name' => $orderFrom,
+                'utm_key' => $orderFrom,
+                'type' => 'campaign',
+            ]);
+        }
+
+        // Ad Set
+        $adSet = AdsAccountDetail::where('parent_id', $campaign->id)
+            ->where('type', 'ad_set')
+            ->where('utm_key', 'organic')
+            ->first();
+        if(!$adSet){
+            $adSet = AdsAccountDetail::create([
+                'parent_id' => $campaign->id,
+                'ad_account_id' => $adAccount->id,
+                'name' => 'organic',
+                'utm_key' => 'organic',
+                'type' => 'ad_set',
+            ]);
+        }
+
+        // Ad
+        $ad = AdsAccountDetail::where('parent_id', $adSet->id)
+            ->where('utm_key', 'organic')
+            ->where('type', 'ad')
+            ->first();
+        if(!$ad){
+            $ad = AdsAccountDetail::create([
+                'parent_id' => $adSet->id,
+                'ad_account_id' => $adAccount->id,
+                'utm_key' => 'organic',
+                'name' => 'organic',
+                'type' => 'ad',
+            ]);
+        }
+
+        $adHistory = AdsAccountHistory::where('ad_account_detail_id', $ad->id)
+            ->whereDate('date', $orderDate)
+            ->first();
+        if(!$adHistory){
+            $adHistory = AdsAccountHistory::create([
+                'ad_account_detail_id' => $ad->id,
+                'date' => $orderDate,
+            ]);
+        } 
+
+        return $adHistory; 
+    }
+} 
+
+if (!function_exists('format_price')) {
+    function format_price($price)
+    {
+        return number_format($price, 2);
+    }
+}
 if (!function_exists('validateCart')) {
     function validateCart()
     {

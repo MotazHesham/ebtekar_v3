@@ -1,6 +1,18 @@
 <?php
 
 return [
+    'adsManagment' => [
+        'title'          => 'إدارة الإعلانات',
+        'title_singular' => 'إدارة الإعلانات',
+    ],
+    'adsAccount' => [
+        'title'          => 'الحسابات',
+        'title_singular' => 'الحساب',
+    ],
+    'adsPaymentRequest' => [
+        'title'          => 'التحويلات',
+        'title_singular' => 'التحويل',
+    ],
     'userManagement' => [
         'title'          => 'إدارة المستخدمين',
         'title_singular' => 'إدارة المستخدمين',

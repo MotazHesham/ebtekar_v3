@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AdsAccountsController;
+use App\Http\Controllers\Admin\AdsHistoryController;
+use App\Http\Controllers\Admin\AdsPaymentRequestController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdsAccountDetailController;
 
 Route::get('/home', function () {
     if (session('status')) {
@@ -489,7 +493,33 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
-
+    
+    // Ads
+    Route::get('/ads/accounts', [AdsAccountsController::class, 'index'])->name('ads.accounts.index');
+    Route::get('/ads/accounts/create', [AdsAccountsController::class, 'create'])->name('ads.accounts.create');
+    Route::post('/ads/accounts', [AdsAccountsController::class, 'store'])->name('ads.accounts.store');
+    Route::get('/ads/accounts/destroy/{account}', [AdsAccountsController::class, 'destroy'])->name('ads.accounts.destroy');
+    Route::get('/ads/assign-campaign', [AdsAccountDetailController::class, 'assignIndex'])->name('ads.accounts.assign-campaign');
+    Route::post('/ads/accounts/assign-detail', [AdsAccountDetailController::class, 'assignToAccount'])->name('ads.accounts.assign-detail');
+    Route::get('/ads/details/create-standalone', [AdsAccountDetailController::class, 'createStandalone'])->name('ads.accounts.details.create-standalone');
+    Route::post('/ads/details/store-standalone', [AdsAccountDetailController::class, 'storeStandalone'])->name('ads.accounts.details.store-standalone');
+    Route::get('/ads/accounts/{account}/details/create', [AdsAccountDetailController::class, 'create'])->name('ads.accounts.details.create');
+    Route::post('/ads/accounts/{account}/details', [AdsAccountDetailController::class, 'store'])->name('ads.accounts.details.store');
+    Route::get('/ads/accounts/{account}/details/{detail}/edit', [AdsAccountDetailController::class, 'edit'])->name('ads.accounts.details.edit');
+    Route::put('/ads/accounts/{account}/details/{detail}', [AdsAccountDetailController::class, 'update'])->name('ads.accounts.details.update');
+    Route::get('/ads/accounts/{account}/details/destroy/{detail}', [AdsAccountDetailController::class, 'destroy'])->name('ads.accounts.details.destroy');
+    Route::get('/ads/accounts/{account}/details/{detail}/history', [AdsHistoryController::class, 'index'])->name('ads.accounts.details.history');
+    Route::get('/ads/accounts/{account}/details/{detail}/history/create', [AdsHistoryController::class, 'create'])->name('ads.accounts.details.history.create');
+    Route::post('/ads/accounts/{account}/details/{detail}/history', [AdsHistoryController::class, 'store'])->name('ads.accounts.details.history.store');
+    Route::get('/ads/accounts/{account}/details/{detail}/history/{history}/edit', [AdsHistoryController::class, 'edit'])->name('ads.accounts.details.history.edit');
+    Route::put('/ads/accounts/{account}/details/{detail}/history/{history}', [AdsHistoryController::class, 'update'])->name('ads.accounts.details.history.update');
+    Route::get('/ads/accounts/{account}/roas-breakdown', [AdsAccountsController::class, 'roasBreakdown'])->name('ads.accounts.roas_breakdown');
+    Route::get('/ads/accounts/{account}/products', [AdsAccountsController::class, 'roasProducts'])->name('ads.accounts.products');
+    Route::get('/ads/payment-requests', [AdsPaymentRequestController::class, 'index'])->name('ads.payment_requests.index');
+    Route::get('/ads/payment-requests/create', [AdsPaymentRequestController::class, 'create'])->name('ads.payment_requests.create');
+    Route::post('/ads/payment-requests', [AdsPaymentRequestController::class, 'store'])->name('ads.payment_requests.store');
+    Route::post('/ads/payment-requests/{paymentRequest}/pay', [AdsPaymentRequestController::class, 'pay'])->name('ads.payment_requests.pay');
+    Route::post('/ads/payment-requests/transfer', [AdsPaymentRequestController::class, 'transfer'])->name('ads.payment_requests.transfer');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Profile

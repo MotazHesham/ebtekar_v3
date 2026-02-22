@@ -17,6 +17,33 @@
             </a>
         </li>
 
+        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/ads/accounts*") ? "c-show" : "" }} {{ request()->is("admin/ads/payment-requests*") ? "c-show" : "" }}">
+            <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
+
+                </i>
+                {{ __('cruds.adsManagment.title') }}
+            </a>
+            <ul class="c-sidebar-nav-dropdown-items"> 
+                <li class="c-sidebar-nav-item">
+                    <a href="{{ route("admin.ads.accounts.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/ads/accounts") || request()->is("admin/ads/accounts/*") ? "c-active" : "" }}">
+                        <i class="fa-fw fas fa-truck-loading c-sidebar-nav-icon">
+
+                        </i>
+                        {{ __('cruds.adsAccount.title') }}
+                    </a>
+                </li> 
+                <li class="c-sidebar-nav-item">
+                    <a href="{{ route("admin.ads.payment_requests.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/ads/payment-requests") || request()->is("admin/ads/payment-requests/*") ? "c-active" : "" }}">
+                        <i class="fa-fw fas fa-user-clock c-sidebar-nav-icon">
+
+                        </i>
+                        {{ __('cruds.adsPaymentRequest.title') }}
+                    </a>
+                </li> 
+            </ul>
+        </li>
+            
         <li class="nav-title">الفواتير</li>
 
         @can('receipts_managment_access')

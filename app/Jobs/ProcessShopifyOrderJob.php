@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\AdsAccount;
 use App\Models\Country;
 use App\Models\ReceiptSocial;
 use App\Models\ReceiptSocialProduct;
@@ -60,6 +61,21 @@ class ProcessShopifyOrderJob implements ShouldQueue
                 $receiptSocial->website_setting_id = $this->siteSettings->id;
                 $is_new_order = true;
             }
+            if(isset($this->orderData['landing_site']) 
+                && $this->orderData['landing_site'] != '' 
+                && $this->orderData['landing_site'] != '/en'
+                && $this->orderData['landing_site'] != '/ar'
+                && $this->orderData['landing_site'] != '/'
+                ) {
+                $receiptSocial->utm_details = $this->orderData['landing_site'] ?? '';
+            } 
+            if($receiptSocial->utm_details){
+                $adHistory = getAdHistoryByUtm('shopify',$receiptSocial->utm_details, date('Y-m-d'));
+            }else{
+                $adAccount = AdsAccount::find(1); 
+                $adHistory = getAdHistoryForOrganicOrders($adAccount, 'shopify', date('Y-m-d'));
+            }
+            $receiptSocial->ad_history_id = $adHistory->id ?? null;
             $receiptSocial->client_name = $customer_name;
             $receiptSocial->client_type = 'individual';
             $receiptSocial->phone_number = $customer_phone;
