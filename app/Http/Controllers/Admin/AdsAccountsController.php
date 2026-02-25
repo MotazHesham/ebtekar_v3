@@ -35,15 +35,15 @@ class AdsAccountsController extends Controller
         $chartData = collect();
         $revenueBreakdown = [
             'pending' => 0,
-            'shipped' => 0,
+            'confirmed' => 0,
             'delivered' => 0,
-            'cancelled' => 0,
+            'returned' => 0,
         ];
         $roasBreakdown = [
             'pending' => 0,
-            'shipped' => 0,
+            'confirmed' => 0,
             'delivered' => 0,
-            'cancelled' => 0,
+            'returned' => 0,
         ];
 
         if (!Schema::hasTable('ads_accounts')) {
@@ -170,15 +170,15 @@ class AdsAccountsController extends Controller
         $chartData = collect();
         $revenueBreakdown = [
             'pending' => 0,
-            'shipped' => 0,
+            'confirmed' => 0,
             'delivered' => 0,
-            'cancelled' => 0,
+            'returned' => 0,
         ];
         $roasBreakdown = [
             'pending' => 0,
-            'shipped' => 0,
+            'confirmed' => 0,
             'delivered' => 0,
-            'cancelled' => 0,
+            'returned' => 0,
         ];
 
         if ($accountId) {
@@ -204,14 +204,14 @@ class AdsAccountsController extends Controller
                 ->get(['id', 'sales']);
             $totalRevenue = (float) $accountHistoryWithSales->sum(fn ($h) => $h->getRevenueFromSales() ?? 0);
             
-            // Calculate revenue breakdown by status
+            // Calculate revenue breakdown by status (Receipt Social: pending, confirmed, delivered, returned)
             foreach ($accountHistoryWithSales as $h) {
                 $breakdown = $h->getSalesBreakdownByStatus();
                 if ($breakdown) {
                     $revenueBreakdown['pending'] += $breakdown['pending'];
-                    $revenueBreakdown['shipped'] += $breakdown['shipped'];
+                    $revenueBreakdown['confirmed'] += $breakdown['confirmed'];
                     $revenueBreakdown['delivered'] += $breakdown['delivered'];
-                    $revenueBreakdown['cancelled'] += $breakdown['cancelled'];
+                    $revenueBreakdown['returned'] += $breakdown['returned'];
                 }
             }
             
@@ -220,9 +220,9 @@ class AdsAccountsController extends Controller
             // Calculate ROAS breakdown by status (status_revenue / total_spent)
             if ($totalSpent > 0) {
                 $roasBreakdown['pending'] = $revenueBreakdown['pending'] / $totalSpent;
-                $roasBreakdown['shipped'] = $revenueBreakdown['shipped'] / $totalSpent;
+                $roasBreakdown['confirmed'] = $revenueBreakdown['confirmed'] / $totalSpent;
                 $roasBreakdown['delivered'] = $revenueBreakdown['delivered'] / $totalSpent;
-                $roasBreakdown['cancelled'] = $revenueBreakdown['cancelled'] / $totalSpent;
+                $roasBreakdown['returned'] = $revenueBreakdown['returned'] / $totalSpent;
             }
 
             $chartQuery = AdsAccountHistory::query()
@@ -247,14 +247,14 @@ class AdsAccountsController extends Controller
             $allHistoryInRange = $allHistoryInRange->get(['id', 'sales']);
             $totalRevenue = (float) $allHistoryInRange->sum(fn ($h) => $h->getRevenueFromSales() ?? 0);
             
-            // Calculate revenue breakdown by status
+            // Calculate revenue breakdown by status (Receipt Social: pending, confirmed, delivered, returned)
             foreach ($allHistoryInRange as $h) {
                 $breakdown = $h->getSalesBreakdownByStatus();
                 if ($breakdown) {
                     $revenueBreakdown['pending'] += $breakdown['pending'];
-                    $revenueBreakdown['shipped'] += $breakdown['shipped'];
+                    $revenueBreakdown['confirmed'] += $breakdown['confirmed'];
                     $revenueBreakdown['delivered'] += $breakdown['delivered'];
-                    $revenueBreakdown['cancelled'] += $breakdown['cancelled'];
+                    $revenueBreakdown['returned'] += $breakdown['returned'];
                 }
             }
             
@@ -263,9 +263,9 @@ class AdsAccountsController extends Controller
             // Calculate ROAS breakdown by status (status_revenue / total_spent)
             if ($totalSpent > 0) {
                 $roasBreakdown['pending'] = $revenueBreakdown['pending'] / $totalSpent;
-                $roasBreakdown['shipped'] = $revenueBreakdown['shipped'] / $totalSpent;
+                $roasBreakdown['confirmed'] = $revenueBreakdown['confirmed'] / $totalSpent;
                 $roasBreakdown['delivered'] = $revenueBreakdown['delivered'] / $totalSpent;
-                $roasBreakdown['cancelled'] = $revenueBreakdown['cancelled'] / $totalSpent;
+                $roasBreakdown['returned'] = $revenueBreakdown['returned'] / $totalSpent;
             }
 
             $chartQuery = AdsAccountHistory::query()
@@ -485,9 +485,9 @@ class AdsAccountsController extends Controller
                 $account->revenue_sum = 0;
                 $account->orders_count = 0;
                 $account->status_pending = 0;
-                $account->status_shipped = 0;
+                $account->status_confirmed = 0;
                 $account->status_delivered = 0;
-                $account->status_cancelled = 0;
+                $account->status_returned = 0;
             });
             return;
         }
@@ -518,24 +518,24 @@ class AdsAccountsController extends Controller
             $revenue = 0;
             $ordersCount = 0;
             $pendingCount = 0;
-            $shippedCount = 0;
+            $confirmedCount = 0;
             $deliveredCount = 0;
-            $cancelledCount = 0;
+            $returnedCount = 0;
             foreach ($historyItems as $historyItem) {
                 $revenue += (float) ($historyItem->getRevenueFromSales() ?? 0);
                 $ordersCount += (int) ($historyItem->getOrdersCountFromSales() ?? 0);
                 $counts = $historyItem->getStatusCountsFromSales();
                 $pendingCount += $counts['pending'];
-                $shippedCount += $counts['shipped'];
+                $confirmedCount += $counts['confirmed'];
                 $deliveredCount += $counts['delivered'];
-                $cancelledCount += $counts['cancelled'];
+                $returnedCount += $counts['returned'];
             }
             $account->revenue_sum = (float) $revenue;
             $account->orders_count = (int) $ordersCount;
             $account->status_pending = $pendingCount;
-            $account->status_shipped = $shippedCount;
+            $account->status_confirmed = $confirmedCount;
             $account->status_delivered = $deliveredCount;
-            $account->status_cancelled = $cancelledCount;
+            $account->status_returned = $returnedCount;
         }
     }
 
@@ -669,74 +669,73 @@ class AdsAccountsController extends Controller
             $attributedRevenue = (float) $historyWithSales->sum(fn ($h) => $h->getRevenueFromSales() ?? 0);
             $totalCombinedOrders = (int) $historyWithSales->sum(fn ($h) => $h->getTotalCombinedOrdersFromSales());
             $totalRevenueWithoutShipping = 0;
-            $pendingRevenue = $shippedRevenue = $deliveredRevenue = $cancelledRevenue = 0;
-            $pendingRevenueWithoutShipping = $shippedRevenueWithoutShipping = $deliveredRevenueWithoutShipping = $cancelledRevenueWithoutShipping = 0;
-            $pendingCount = $shippedCount = $deliveredCount = $cancelledCount = 0;
-            
+            $pendingRevenue = $confirmedRevenue = $deliveredRevenue = $returnedRevenue = 0;
+            $pendingRevenueWithoutShipping = $confirmedRevenueWithoutShipping = $deliveredRevenueWithoutShipping = $returnedRevenueWithoutShipping = 0;
+            $pendingCount = $confirmedCount = $deliveredCount = $returnedCount = 0;
+
             foreach ($historyWithSales as $h) {
                 $breakdown = $h->getSalesBreakdownByStatus();
                 if ($breakdown) {
                     $pendingRevenue += $breakdown['pending'];
-                    $shippedRevenue += $breakdown['shipped'];
+                    $confirmedRevenue += $breakdown['confirmed'];
                     $deliveredRevenue += $breakdown['delivered'];
-                    $cancelledRevenue += $breakdown['cancelled'];
+                    $returnedRevenue += $breakdown['returned'];
                 }
-                
+
                 $statusCounts = $h->getStatusCountsFromSales();
                 $pendingCount += $statusCounts['pending'];
-                $shippedCount += $statusCounts['shipped'];
+                $confirmedCount += $statusCounts['confirmed'];
                 $deliveredCount += $statusCounts['delivered'];
-                $cancelledCount += $statusCounts['cancelled'];
-                
+                $returnedCount += $statusCounts['returned'];
+
                 // Access sales directly (it's cast as array in the model)
                 $sales = $h->sales;
                 if (is_array($sales)) {
                     $totalRevenueWithoutShipping += (float) ($sales['total_orders_sales_without_shipping'] ?? 0);
                     $pendingRevenueWithoutShipping += (float) ($sales['pending_total_sales_without_shipping'] ?? 0);
-                    $shippedRevenueWithoutShipping += (float) ($sales['shipped_total_sales_without_shipping'] ?? 0);
+                    $confirmedRevenueWithoutShipping += (float) ($sales['confirmed_total_sales_without_shipping'] ?? 0);
                     $deliveredRevenueWithoutShipping += (float) ($sales['delivered_total_sales_without_shipping'] ?? 0);
-                    $cancelledRevenueWithoutShipping += (float) ($sales['cancelled_total_sales_without_shipping'] ?? 0);
+                    $returnedRevenueWithoutShipping += (float) ($sales['returned_total_sales_without_shipping'] ?? 0);
                 } elseif (is_string($sales)) {
-                    // Handle legacy double-encoded data
                     $decoded = json_decode($sales, true);
                     if (is_array($decoded)) {
                         $totalRevenueWithoutShipping += (float) ($decoded['total_orders_sales_without_shipping'] ?? 0);
                         $pendingRevenueWithoutShipping += (float) ($decoded['pending_total_sales_without_shipping'] ?? 0);
-                        $shippedRevenueWithoutShipping += (float) ($decoded['shipped_total_sales_without_shipping'] ?? 0);
+                        $confirmedRevenueWithoutShipping += (float) ($decoded['confirmed_total_sales_without_shipping'] ?? 0);
                         $deliveredRevenueWithoutShipping += (float) ($decoded['delivered_total_sales_without_shipping'] ?? 0);
-                        $cancelledRevenueWithoutShipping += (float) ($decoded['cancelled_total_sales_without_shipping'] ?? 0);
+                        $returnedRevenueWithoutShipping += (float) ($decoded['returned_total_sales_without_shipping'] ?? 0);
                     }
                 }
             }
-            // ROAS per status = status_revenue / total_spent (same denominator for all)
+            // ROAS per status (Receipt Social: pending, confirmed, delivered, returned)
             $statusRevenues = [
                 [
-                    'key' => 'pending', 
-                    'label' => 'Pending', 
+                    'key' => 'pending',
+                    'label' => 'Pending',
                     'revenue' => $pendingRevenue,
                     'revenue_without_shipping' => $pendingRevenueWithoutShipping,
                     'orders_count' => $pendingCount
                 ],
                 [
-                    'key' => 'shipped', 
-                    'label' => 'Shipped', 
-                    'revenue' => $shippedRevenue,
-                    'revenue_without_shipping' => $shippedRevenueWithoutShipping,
-                    'orders_count' => $shippedCount
+                    'key' => 'confirmed',
+                    'label' => 'Confirmed',
+                    'revenue' => $confirmedRevenue,
+                    'revenue_without_shipping' => $confirmedRevenueWithoutShipping,
+                    'orders_count' => $confirmedCount
                 ],
                 [
-                    'key' => 'delivered', 
-                    'label' => 'Delivered', 
+                    'key' => 'delivered',
+                    'label' => 'Delivered',
                     'revenue' => $deliveredRevenue,
                     'revenue_without_shipping' => $deliveredRevenueWithoutShipping,
                     'orders_count' => $deliveredCount
                 ],
                 [
-                    'key' => 'cancelled', 
-                    'label' => 'Cancelled', 
-                    'revenue' => $cancelledRevenue,
-                    'revenue_without_shipping' => $cancelledRevenueWithoutShipping,
-                    'orders_count' => $cancelledCount
+                    'key' => 'returned',
+                    'label' => 'Returned',
+                    'revenue' => $returnedRevenue,
+                    'revenue_without_shipping' => $returnedRevenueWithoutShipping,
+                    'orders_count' => $returnedCount
                 ],
             ];
             foreach ($statusRevenues as $sr) {

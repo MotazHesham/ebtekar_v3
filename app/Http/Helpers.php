@@ -29,6 +29,23 @@ if (!function_exists('getAdHistoryByUtm')) {
         }
     }
 }
+if (!function_exists('getAdHistoryForMessagesOrders')) {
+    function getAdHistoryForMessagesOrders($ad, $orderDate)
+    {   
+        $adHistory = AdsAccountHistory::where('ad_account_detail_id', $ad->id)
+            ->whereDate('date', $orderDate)
+            ->first();
+        if(!$adHistory){
+            $adHistory = AdsAccountHistory::create([
+                'ad_account_detail_id' => $ad->id,
+                'date' => $orderDate,
+            ]);
+        } 
+
+        return $adHistory; 
+    }
+} 
+
 if (!function_exists('getAdHistoryForOrganicOrders')) {
     function getAdHistoryForOrganicOrders($adAccount, $orderFrom, $orderDate)
     {  

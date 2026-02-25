@@ -140,6 +140,8 @@ class ReceiptSocial extends Model
         'financial_account_id',
         'shopify_id',
         'shopify_order_num',
+        'ad_history_id',
+        'utm_details',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -208,6 +210,11 @@ class ReceiptSocial extends Model
     public function receiptsReceiptSocialProducts()
     {
         return $this->hasMany(ReceiptSocialProductPivot::class,'receipt_social_id');
+    }
+
+    public function ad_history()
+    {
+        return $this->belongsTo(AdsAccountHistory::class, 'ad_history_id')->withTrashed();
     }
 
     public function staff()

@@ -12,6 +12,10 @@ use App\Http\Requests\MassDestroyReceiptSocialRequest;
 use App\Http\Requests\StoreReceiptSocialRequest;
 use App\Http\Requests\UpdateReceiptSocialRequest;
 use App\Imports\ReceiptSocialImport;
+use App\Jobs\RecalculateAdsAccountHistory;
+use App\Models\AdsAccount;
+use App\Models\AdsAccountDetail;
+use App\Models\AdsAccountHistory;
 use App\Models\Country;
 use App\Models\EgyptExpressAirwayBill;
 use App\Models\ExcelFile;
@@ -33,6 +37,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response; 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReceiptSocialController extends Controller
 {
@@ -163,6 +168,14 @@ class ReceiptSocialController extends Controller
         }
 
         $receipt->save();
+
+        if (in_array($request->type,['done','returned','confirm'])){
+            $adHistory = AdsAccountHistory::find($receipt->ad_history_id);
+            if($adHistory){
+                RecalculateAdsAccountHistory::dispatch($adHistory); 
+            }
+        }
+
         if($request->ajax()){
             return [
                 'status' => $status,
@@ -1049,14 +1062,30 @@ class ReceiptSocialController extends Controller
         $website_setting_id = $request->website_setting_id;
 
         $websites = WebsiteSetting::pluck('site_name', 'id');
+
+        $adAccounts = AdsAccount::where('type','messages')->get();
+
+        $adAccountDetails = AdsAccountDetail::with('parentRecursive')->whereIn('ad_account_id', $adAccounts->pluck('id'))->where('type','ad')->get();
         
-        return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data' , 'websites','website_setting_id','financial_accounts'));
+        return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data' , 'websites','website_setting_id','financial_accounts' , 'adAccountDetails'));
     }
 
     public function store(StoreReceiptSocialRequest $request)
-    { 
+    {  
         $receiptSocial = ReceiptSocial::create($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
+
+        if($request->ad_id && $request->ad_id != ''){
+            $adAccountDetail = AdsAccountDetail::findOrFail($request->ad_id);
+            $adHistory = getAdHistoryForMessagesOrders($adAccountDetail, date('Y-m-d')); 
+        }else{
+            $adAccount = AdsAccount::find(1);
+            $adHistory = getAdHistoryForOrganicOrders($adAccount, 'receipt-social', date('Y-m-d')); 
+        }
+        $receiptSocial->ad_history_id = $adHistory->id;
+        $receiptSocial->save();
+
+        RecalculateAdsAccountHistory::dispatch($adHistory);
 
         // store the receipt social id in session so when redirect to the table open the popup to add products
         session()->put('store_receipt_socail_id',$receiptSocial->id);

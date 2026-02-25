@@ -1045,11 +1045,11 @@
                     @php
                         $breakdown = $revenueBreakdown ?? [
                             'pending' => 0,
-                            'shipped' => 0,
+                            'confirmed' => 0,
                             'delivered' => 0,
-                            'cancelled' => 0,
+                            'returned' => 0,
                         ];
-                        $totalBreakdown = ($breakdown['delivered'] ?? 0) + ($breakdown['pending'] ?? 0) + ($breakdown['shipped'] ?? 0) + ($breakdown['cancelled'] ?? 0);
+                        $totalBreakdown = ($breakdown['delivered'] ?? 0) + ($breakdown['pending'] ?? 0) + ($breakdown['confirmed'] ?? 0) + ($breakdown['returned'] ?? 0);
                     @endphp
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
                         <div style="display: flex; flex-direction: column; gap: 6px; padding: 14px; background: rgba(34,197,94,0.06); border-radius: 12px; border: 1px solid rgba(34,197,94,0.15);">
@@ -1075,21 +1075,21 @@
                         <div style="display: flex; flex-direction: column; gap: 6px; padding: 14px; background: rgba(59,130,246,0.06); border-radius: 12px; border: 1px solid rgba(59,130,246,0.15);">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <div style="width: 8px; height: 8px; border-radius: 50%; background: rgba(59,130,246,0.4);"></div>
-                                <span style="font-size: 11px; font-weight: 500; color: rgba(59,130,246,0.8); text-transform: uppercase; letter-spacing: 0.5px;">{{ trans('Shipped') }}</span>
+                                <span style="font-size: 11px; font-weight: 500; color: rgba(59,130,246,0.8); text-transform: uppercase; letter-spacing: 0.5px;">{{ trans('Confirmed') }}</span>
                             </div>
-                            <div style="font-size: 18px; font-weight: 700; color: rgba(59,130,246,0.95);">{{ format_price($breakdown['shipped'] ?? 0) }}</div>
+                            <div style="font-size: 18px; font-weight: 700; color: rgba(59,130,246,0.95);">{{ format_price($breakdown['confirmed'] ?? 0) }}</div>
                             @if($totalBreakdown > 0)
-                                <div style="font-size: 11px; color: var(--muted); font-weight: 400;">{{ number_format((($breakdown['shipped'] ?? 0) / $totalBreakdown) * 100, 1) }}% {{ trans('of total') }}</div>
+                                <div style="font-size: 11px; color: var(--muted); font-weight: 400;">{{ number_format((($breakdown['confirmed'] ?? 0) / $totalBreakdown) * 100, 1) }}% {{ trans('of total') }}</div>
                             @endif
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 6px; padding: 14px; background: rgba(239,68,68,0.06); border-radius: 12px; border: 1px solid rgba(239,68,68,0.15);">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <div style="width: 8px; height: 8px; border-radius: 50%; background: rgba(239,68,68,0.4);"></div>
-                                <span style="font-size: 11px; font-weight: 500; color: rgba(239,68,68,0.8); text-transform: uppercase; letter-spacing: 0.5px;">{{ trans('Canceled') }}</span>
+                                <span style="font-size: 11px; font-weight: 500; color: rgba(239,68,68,0.8); text-transform: uppercase; letter-spacing: 0.5px;">{{ trans('Returned') }}</span>
                             </div>
-                            <div style="font-size: 18px; font-weight: 700; color: rgba(239,68,68,0.95);">{{ format_price($breakdown['cancelled'] ?? 0) }}</div>
+                            <div style="font-size: 18px; font-weight: 700; color: rgba(239,68,68,0.95);">{{ format_price($breakdown['returned'] ?? 0) }}</div>
                             @if($totalBreakdown > 0)
-                                <div style="font-size: 11px; color: var(--muted); font-weight: 400;">{{ number_format((($breakdown['cancelled'] ?? 0) / $totalBreakdown) * 100, 1) }}% {{ trans('of total') }}</div>
+                                <div style="font-size: 11px; color: var(--muted); font-weight: 400;">{{ number_format((($breakdown['returned'] ?? 0) / $totalBreakdown) * 100, 1) }}% {{ trans('of total') }}</div>
                             @endif
                         </div>
                     </div>
@@ -1103,9 +1103,9 @@
                     @php
                         $roasBreakdownData = $roasBreakdown ?? [
                             'pending' => 0,
-                            'shipped' => 0,
+                            'confirmed' => 0,
                             'delivered' => 0,
-                            'cancelled' => 0,
+                            'returned' => 0,
                         ];
                     @endphp
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
@@ -1126,16 +1126,16 @@
                         <div style="display: flex; flex-direction: column; gap: 6px; padding: 14px; background: rgba(59,130,246,0.06); border-radius: 12px; border: 1px solid rgba(59,130,246,0.15);">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <div style="width: 8px; height: 8px; border-radius: 50%; background: rgba(59,130,246,0.4);"></div>
-                                <span style="font-size: 11px; font-weight: 500; color: rgba(59,130,246,0.8); text-transform: uppercase; letter-spacing: 0.5px;">{{ trans('Shipped') }}</span>
+                                <span style="font-size: 11px; font-weight: 500; color: rgba(59,130,246,0.8); text-transform: uppercase; letter-spacing: 0.5px;">{{ trans('Confirmed') }}</span>
                             </div>
-                            <div style="font-size: 18px; font-weight: 700; color: rgba(59,130,246,0.95);">{{ number_format($roasBreakdownData['shipped'] ?? 0, 2) }}</div>
+                            <div style="font-size: 18px; font-weight: 700; color: rgba(59,130,246,0.95);">{{ number_format($roasBreakdownData['confirmed'] ?? 0, 2) }}</div>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 6px; padding: 14px; background: rgba(239,68,68,0.06); border-radius: 12px; border: 1px solid rgba(239,68,68,0.15);">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <div style="width: 8px; height: 8px; border-radius: 50%; background: rgba(239,68,68,0.4);"></div>
-                                <span style="font-size: 11px; font-weight: 500; color: rgba(239,68,68,0.8); text-transform: uppercase; letter-spacing: 0.5px;">{{ trans('Canceled') }}</span>
+                                <span style="font-size: 11px; font-weight: 500; color: rgba(239,68,68,0.8); text-transform: uppercase; letter-spacing: 0.5px;">{{ trans('Returned') }}</span>
                             </div>
-                            <div style="font-size: 18px; font-weight: 700; color: rgba(239,68,68,0.95);">{{ number_format($roasBreakdownData['cancelled'] ?? 0, 2) }}</div>
+                            <div style="font-size: 18px; font-weight: 700; color: rgba(239,68,68,0.95);">{{ number_format($roasBreakdownData['returned'] ?? 0, 2) }}</div>
                         </div>
                     </div>
                 </div>
@@ -1334,17 +1334,17 @@
                             $balance = (float) ($account->balance ?? 0);
 
                             $p = (int) ($account->status_pending ?? 0);
-                            $s = (int) ($account->status_shipped ?? 0);
+                            $conf = (int) ($account->status_confirmed ?? 0);
                             $d = (int) ($account->status_delivered ?? 0);
-                            $c = (int) ($account->status_cancelled ?? 0);
-                            $statusTotal = $p + $s + $d + $c;
+                            $r = (int) ($account->status_returned ?? 0);
+                            $statusTotal = $p + $conf + $d + $r;
                             $statusSegments = [];
                             if ($statusTotal > 0) {
                                 $statusSegments = [
                                     ['pct' => round(100 * $p / $statusTotal, 1), 'color' => '#f59e0b', 'label' => trans('Pending')],
-                                    ['pct' => round(100 * $s / $statusTotal, 1), 'color' => '#3b82f6', 'label' => trans('Shipped')],
+                                    ['pct' => round(100 * $conf / $statusTotal, 1), 'color' => '#3b82f6', 'label' => trans('Confirmed')],
                                     ['pct' => round(100 * $d / $statusTotal, 1), 'color' => '#22c55e', 'label' => trans('Delivered')],
-                                    ['pct' => round(100 * $c / $statusTotal, 1), 'color' => '#ef4444', 'label' => trans('Cancelled')],
+                                    ['pct' => round(100 * $r / $statusTotal, 1), 'color' => '#ef4444', 'label' => trans('Returned')],
                                 ];
                                 $statusSegments = array_filter($statusSegments, fn($seg) => $seg['pct'] > 0);
                             }
@@ -1386,7 +1386,7 @@
                                         @endif
                                     </div>
                                     @if(!empty($statusSegments))
-                                        <span style="color:var(--muted2); font-size:11px; white-space:nowrap;">{{ $p }} / {{ $s }} / {{ $d }} / {{ $c }}</span>
+                                        <span style="color:var(--muted2); font-size:11px; white-space:nowrap;">{{ $p }} / {{ $conf }} / {{ $d }} / {{ $r }}</span>
                                     @else
                                         <span style="color:var(--muted2); font-size:12px;">—</span>
                                     @endif
@@ -1939,12 +1939,9 @@
         function getStatusColor(status) {
             const colors = {
                 'delivered': '#22c55e',
-                'shipped': '#3b82f6',
-                'confirmed': '#f59e0b',
-                'processing': '#f59e0b',
-                'pending': '#a855f7',
-                'awaiting_confirmation': '#a855f7',
-                'cancelled': '#ef4444',
+                'confirmed': '#3b82f6',
+                'pending': '#f59e0b',
+                'returned': '#ef4444',
             };
             return colors[status] || '#6b7280';
         }

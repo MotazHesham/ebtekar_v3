@@ -84,26 +84,27 @@ class AdsAccountHistory extends Model
     }
 
     /**
-     * Order count by status from sales JSON (pending_count, shipped_count, delivered_count, cancelled_count).
+     * Order count by status from sales JSON (Receipt Social: pending, confirmed, delivered, returned).
      * Uses getSalesArray() so double-encoded sales are decoded correctly.
      */
     public function getStatusCountsFromSales(): array
     {
         $sales = $this->getSalesArray();
         if ($sales === null) {
-            return ['pending' => 0, 'shipped' => 0, 'delivered' => 0, 'cancelled' => 0];
+            return ['pending' => 0, 'confirmed' => 0, 'delivered' => 0, 'returned' => 0];
         }
         return [
             'pending' => (int) ($sales['pending_count'] ?? 0),
-            'shipped' => (int) ($sales['shipped_count'] ?? 0),
+            'confirmed' => (int) ($sales['confirmed_count'] ?? 0),
             'delivered' => (int) ($sales['delivered_count'] ?? 0),
-            'cancelled' => (int) ($sales['cancelled_count'] ?? 0),
+            'returned' => (int) ($sales['returned_count'] ?? 0),
         ];
     }
 
     /**
-     * Status breakdown from sales JSON: [ 'pending' => revenue, 'shipped' => ..., 'delivered' => ..., 'cancelled' => ... ].
-     * Pending = pending + awaiting_confirmation + confirmed. Returns null if sales not set.
+     * Status breakdown from sales JSON: [ 'pending' => revenue, 'confirmed' => ..., 'delivered' => ..., 'returned' => ... ].
+     * Receipt Social: total_sales = total_cost + shipping_country_cost, total_sales_without_shipping = total_cost.
+     * Returns null if sales not set.
      */
     public function getSalesBreakdownByStatus(): ?array
     {
@@ -112,14 +113,14 @@ class AdsAccountHistory extends Model
             return null;
         }
         $pending = (float) ($sales['pending_total_sales'] ?? 0);
-        $shipped = (float) ($sales['shipped_total_sales'] ?? 0);
+        $confirmed = (float) ($sales['confirmed_total_sales'] ?? 0);
         $delivered = (float) ($sales['delivered_total_sales'] ?? 0);
-        $cancelled = (float) ($sales['cancelled_total_sales'] ?? 0);
+        $returned = (float) ($sales['returned_total_sales'] ?? 0);
         return [
             'pending' => $pending,
-            'shipped' => $shipped,
+            'confirmed' => $confirmed,
             'delivered' => $delivered,
-            'cancelled' => $cancelled,
+            'returned' => $returned,
         ];
     }
 }

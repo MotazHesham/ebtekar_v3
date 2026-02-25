@@ -2,8 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\CombinedOrder;
-use App\Models\Order;
+use App\Models\ReceiptSocial;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,32 +25,24 @@ class RecalculateAdsAccountHistory implements ShouldQueue
     {
         $adHistory = $this->adHistory;
 
-        // Count combined orders without loading them
-        $totalCombinedOrders = CombinedOrder::where('ad_history_id', $adHistory->id)->count();
+        // ReceiptSocial status: pending (confirm=0 done=0 returned=0), confirmed (confirm=1 done=0 return=0),
+        // delivered (done=1), returned (returned=1). total_sales = total_cost + shipping_country_cost, total_sales_without_shipping = total_cost.
+        $statusCase = "CASE
+            WHEN receipt_socials.returned = 1 THEN 'returned'
+            WHEN receipt_socials.done = 1 THEN 'delivered'
+            WHEN receipt_socials.confirm = 1 THEN 'confirmed'
+            ELSE 'pending'
+        END";
 
-        // Aggregate orders by status in SQL
-        $orderStats = Order::query()
+        $orderStats = ReceiptSocial::query()
             ->selectRaw("
-                orders.order_status,
+                {$statusCase} as order_status,
                 COUNT(*) as count,
-                SUM(
-                    orders.grand_total -
-                    COALESCE((
-                        SELECT SUM(shipping_cost)
-                        FROM order_details
-                        WHERE order_details.order_id = orders.id
-                    ), 0)
-                ) as total_sales_without_shipping,
-                SUM(
-                    orders.grand_total
-                ) as total_sales
+                SUM(COALESCE(receipt_socials.total_cost, 0)) as total_sales_without_shipping,
+                SUM(COALESCE(receipt_socials.total_cost, 0) + COALESCE(receipt_socials.shipping_country_cost, 0)) as total_sales
             ")
-            ->whereIn('orders.combined_order_id', function ($q) use ($adHistory) {
-                $q->select('id')
-                    ->from('combined_orders')
-                    ->where('ad_history_id', $adHistory->id);
-            })
-            ->groupBy('orders.order_status')
+            ->where('receipt_socials.ad_history_id', $adHistory->id)
+            ->groupBy(DB::raw($statusCase))
             ->get()
             ->keyBy('order_status');
 
@@ -62,47 +53,30 @@ class RecalculateAdsAccountHistory implements ShouldQueue
 
         $sales = [];
 
-        $sales['total_combined_orders'] = $totalCombinedOrders;
+        $sales['total_orders'] = $orderStats->sum('count');
+        $sales['total_orders_sales'] = $orderStats->sum('total_sales');
+        $sales['total_orders_sales_without_shipping'] = $orderStats->sum('total_sales_without_shipping');
 
-        $sales['total_orders'] =
-            $orderStats->sum('count');
+        // Pending: confirm=0, done=0, returned=0
+        $sales['pending_count'] = $stat('pending', 'count');
+        $sales['pending_total_sales'] = $stat('pending', 'total_sales');
+        $sales['pending_total_sales_without_shipping'] = $stat('pending', 'total_sales_without_shipping');
 
-        $sales['total_orders_sales'] =
-            $orderStats->sum('total_sales');
+        // Confirmed: confirm=1, done=0, returned=0
+        $sales['confirmed_count'] = $stat('confirmed', 'count');
+        $sales['confirmed_total_sales'] = $stat('confirmed', 'total_sales');
+        $sales['confirmed_total_sales_without_shipping'] = $stat('confirmed', 'total_sales_without_shipping');
 
-        $sales['total_orders_sales_without_shipping'] =
-            $orderStats->sum('total_sales_without_shipping');
-
-        // Pending group
-        $sales['pending_count'] =
-            $stat('pending', 'count') +
-            $stat('awaiting_confirmation', 'count');
-
-        $sales['pending_total_sales'] =
-            $stat('pending', 'total_sales') +
-            $stat('awaiting_confirmation', 'total_sales');
-
-        $sales['pending_total_sales_without_shipping'] =
-            $stat('pending', 'total_sales_without_shipping') +
-            $stat('awaiting_confirmation', 'total_sales_without_shipping');
-
-        // Other statuses
-        $sales['shipped_count'] = $stat('shipped', 'count') +
-            $stat('confirmed', 'count');
-        $sales['shipped_total_sales'] = $stat('shipped', 'total_sales') +
-            $stat('confirmed', 'total_sales');
-        $sales['shipped_total_sales_without_shipping'] = $stat('shipped', 'total_sales_without_shipping') +
-            $stat('confirmed', 'total_sales_without_shipping');
-
+        // Delivered: done=1
         $sales['delivered_count'] = $stat('delivered', 'count');
         $sales['delivered_total_sales'] = $stat('delivered', 'total_sales');
         $sales['delivered_total_sales_without_shipping'] = $stat('delivered', 'total_sales_without_shipping');
 
-        $sales['cancelled_count'] = $stat('cancelled', 'count');
-        $sales['cancelled_total_sales'] = $stat('cancelled', 'total_sales');
-        $sales['cancelled_total_sales_without_shipping'] = $stat('cancelled', 'total_sales_without_shipping');
-
-        // Assign array; Laravel's 'array' cast will encode once when saving
+        // Returned: returned=1
+        $sales['returned_count'] = $stat('returned', 'count');
+        $sales['returned_total_sales'] = $stat('returned', 'total_sales');
+        $sales['returned_total_sales_without_shipping'] = $stat('returned', 'total_sales_without_shipping'); 
+        
         $adHistory->sales = $sales;
         $adHistory->save();
     }

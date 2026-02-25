@@ -18,6 +18,28 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label class="required" for="ad_id">Ad</label>
+                                    <select class="form-control select2 {{ $errors->has('ad_id') ? 'is-invalid' : '' }}"
+                                        name="ad_id" id="ad_id">
+                                        <option value="">{{ __('global.pleaseSelect') }}</option>
+                                        @foreach ($adAccountDetails as $entry)
+                                            <option value="{{ $entry->id }}" {{ old('ad_id') == $entry->id || $loop->first ? 'selected' : '' }}>
+                                                {{ $entry->name }} - 
+                                                @foreach ($entry->getAllParents() as $parent)
+                                                ({{ $parent->name }} {{ $parent->type}}) @if (!$loop->last) - @endif
+                                                @endforeach 
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('ad_id'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('ad_id') }}
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <label class="required"
                                         for="website_setting_id">{{ __('global.extra.website_setting_id') }}</label>
                                     <select

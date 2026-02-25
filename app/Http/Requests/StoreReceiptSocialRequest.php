@@ -17,6 +17,9 @@ class StoreReceiptSocialRequest extends FormRequest
     public function rules()
     {
         return [
+            'ad_id' => [ 
+                'nullable',
+            ],
             'client_name' => [
                 'string',
                 'required',

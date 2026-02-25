@@ -13,6 +13,24 @@ class AdsAccountDetail extends Model
     public function adsAccount()
     {
         return $this->belongsTo(AdsAccount::class, 'ad_account_id');
+    } 
+    
+    public function getAllParents()
+    {
+        $parents = collect();
+        $parent = $this->parent;
+    
+        while ($parent) {
+            $parents->push($parent);
+            $parent = $parent->parent;
+        }
+    
+        return $parents;
+    }
+
+    public function parentRecursive()
+    {
+        return $this->parent()->with('parentRecursive');
     }
 
     public function parent()
