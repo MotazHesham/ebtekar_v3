@@ -134,6 +134,7 @@ class ReceiptSocial extends Model
         'preparer_id',
         'manufacturer_id',
         'shipmenter_id',
+        'reviewer_id',
         'delivery_man_id',
         'shipping_country_id',
         'website_setting_id',
@@ -240,6 +241,11 @@ class ReceiptSocial extends Model
     public function shipmenter()
     {
         return $this->belongsTo(User::class, 'shipmenter_id')->withTrashed();
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewer_id')->withTrashed();
     }
 
     public function delivery_man()

@@ -35,7 +35,7 @@ class PlaylistController extends Controller
     public function getCounters(){
         
         $playlists_counter = ViewPlaylistData::select('playlist_status', DB::raw('COUNT(*) as count'))
-            ->whereIn('playlist_status', ['design', 'manufacturing', 'prepare', 'shipment'])
+            ->whereIn('playlist_status', ['design', 'manufacturing', 'prepare', 'review', 'shipment'])
             ->groupBy('playlist_status')
             ->pluck('count', 'playlist_status')
             ->toArray();
@@ -44,6 +44,7 @@ class PlaylistController extends Controller
             'design' => 0,
             'manufacturing' => 0,
             'prepare' => 0,
+            'review' => 0,
             'shipment' => 0,
         ], $playlists_counter);
 
@@ -51,6 +52,7 @@ class PlaylistController extends Controller
             (Gate::allows('playlist_design') ? $playlists_counter['design'] : 0) +
             (Gate::allows('playlist_manufacturing') ? $playlists_counter['manufacturing'] : 0) +
             (Gate::allows('playlist_prepare') ? $playlists_counter['prepare'] : 0) +
+            (Gate::allows('playlist_review') ? $playlists_counter['review'] : 0) +
             (Gate::allows('playlist_shipment') ? $playlists_counter['shipment'] : 0);
 
         $playlists_counter['total'] = $playlists_counter_sum;
@@ -482,6 +484,7 @@ class PlaylistController extends Controller
         $designer_id = null;
         $manufacturer_id = null;
         $preparer_id = null;
+        $reviewer_id = null;
         $shipmenter_id = null;
         $view = 'all';
 
@@ -539,6 +542,10 @@ class PlaylistController extends Controller
             $shipmenter_id = $request->shipmenter_id;
             $playlists = $playlists->where('shipmenter_id',$request->shipmenter_id); 
         }
+        if( $request->reviewer_id != null){
+            $reviewer_id = $request->reviewer_id;
+            $playlists = $playlists->where('reviewer_id',$request->reviewer_id); 
+        }
         if ($request->order_num != null){
             $order_num = $request->order_num;
             $playlists = $playlists->where('order_num', 'like', '%'.$request->order_num.'%'); 
@@ -560,7 +567,7 @@ class PlaylistController extends Controller
         } 
         // return $dates; 
         return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','is_seasoned','quickly','website_setting_id',
-        'description','to_date','websites','client_type','zones','zone_id','designer_id','manufacturer_id','preparer_id','shipmenter_id','staffs_array'));
+        'description','to_date','websites','client_type','zones','zone_id','designer_id','manufacturer_id','preparer_id','shipmenter_id','reviewer_id','staffs_array'));
 
     }
 
@@ -701,7 +708,14 @@ class PlaylistController extends Controller
             $oldAssignedUserId = $model->preparer_id;
             $model->preparer_id = Auth::id();
             $assignmentType = 'preparer';
-        }elseif($request->type == 'shipment'){
+        } elseif($request->type == 'review'){
+            if($model->reviewer_id){
+                return response()->json(['success' => false, 'message' => 'الفاتورة معينة مسبقا لمراجع آخر'], 400);
+            }
+            $oldAssignedUserId = $model->reviewer_id;
+            $model->reviewer_id = Auth::id();
+            $assignmentType = 'reviewer';
+        } elseif($request->type == 'shipment'){
             if($model->shipmenter_id){
                 return response()->json(['success' => false, 'message' => 'الفاتورة معينة مسبقا لشاحن آخر'], 400);
             }

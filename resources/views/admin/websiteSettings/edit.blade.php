@@ -401,6 +401,23 @@
                         <span class="help-block">{{ __('cruds.websiteSetting.fields.manufacturer_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
+                        <label for="reviewer_id">{{ __('cruds.websiteSetting.fields.reviewer') }}</label>
+                        <select class="form-control select2 {{ $errors->has('reviewer') ? 'is-invalid' : '' }}"
+                            name="reviewer_id" id="reviewer_id">
+                            @foreach ($reviewers as $id => $entry)
+                                <option value="{{ $id }}"
+                                    {{ (old('reviewer_id') ? old('reviewer_id') : $websiteSetting->reviewer->id ?? '') == $id ? 'selected' : '' }}>
+                                    {{ $entry }}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('reviewer'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('reviewer') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ __('cruds.websiteSetting.fields.reviewer_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-4">
                         <label for="shipmenter_id">{{ __('cruds.websiteSetting.fields.shipment') }}</label>
                         <select class="form-control select2 {{ $errors->has('shipment') ? 'is-invalid' : '' }}"
                             name="shipmenter_id" id="shipmenter_id">

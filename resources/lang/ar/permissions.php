@@ -275,6 +275,7 @@ return [
     'playlist_design' => 'قائمة التشغيل الديزاين ',
     'playlist_manufacturing' => 'قائمة التشغيل التصنيع ',
     'playlist_prepare' => 'قائمة التشغيل التجهيز ',
+    'playlist_review' => 'قائمة التشغيل المراجعة ',
     'playlist_shipment' => 'قائمة التشغيل الارسال للشحن ',
     'playlist_access' => 'قائمة التشغيل',
     'employee_managment_access' => 'قائمة إدارة الموظفين',

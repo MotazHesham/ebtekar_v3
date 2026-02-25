@@ -213,6 +213,17 @@
                             </a>
                         </li>
                     @endcan
+                    @can('playlist_review')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.playlists.index",'review') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/review") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-check-circle c-sidebar-nav-icon">
+
+                                </i>
+                                {{ __('cruds.playlist.menu.review') }}
+                                <span class="badge bg-info-gradient ms-auto playlist-counters" id="playlist-counter-review" onmouseover="playlistCounters(this)"><i class="far fa-eye"></i></span> 
+                            </a>
+                        </li>
+                    @endcan
                     @can('playlist_shipment')
                         <li class="c-sidebar-nav-item"> 
                             <a href="{{ route("admin.playlists.index",'shipment') }}" class="c-sidebar-nav-link {{ request()->is("admin/playlists/shipment") ? "c-active" : "" }}">

@@ -140,6 +140,7 @@ class Order extends Model
         'preparer_id',
         'manufacturer_id',
         'shipmenter_id',
+        'reviewer_id',
         'delivery_man_id',
         'website_setting_id',
         'social_user_id',
@@ -241,6 +242,11 @@ class Order extends Model
     public function delivery_man()
     {
         return $this->belongsTo(User::class, 'delivery_man_id')->withTrashed();
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewer_id')->withTrashed();
     }
 
     public function orderDetails()

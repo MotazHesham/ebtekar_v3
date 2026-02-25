@@ -382,6 +382,7 @@
                 $('#playlist-counter-design').html(data['design']);
                 $('#playlist-counter-manufacturing').html(data['manufacturing']);
                 $('#playlist-counter-prepare').html(data['prepare']);
+                $('#playlist-counter-review').html(data['review']);
                 $('#playlist-counter-shipment').html(data['shipment']); 
                 $('#playlist-counter-total').html(data['total']); 
             });

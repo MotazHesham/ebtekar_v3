@@ -682,6 +682,8 @@ return [
             'preparer_helper'           => ' ',
             'manufacturer'              => 'المصنع',
             'manufacturer_helper'       => ' ',
+            'reviewer'                  => 'المراجع',
+            'reviewer_helper'           => ' ',
             'shipment'                  => 'المجهز للشحن',
             'shipment_helper'           => ' ',
             'order_num_prefix'          => 'Order Num Prefix',
@@ -1530,6 +1532,7 @@ return [
             'design' => 'الديزاين',
             'manufacturing' => 'التصنيع',
             'prepare' => 'التجهيز',
+            'review' => 'المراجعة',
             'shipment' => 'الأرسال للشحن', 
         ],
         'fields' => [

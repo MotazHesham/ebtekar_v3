@@ -75,6 +75,28 @@
                 <div class="col-md-6">
                     <span>&nbsp;</span>
                     <div class="" style="min-width: 160px;margin-bottom: 10px">
+                        <select class="form-control" name="reviewer_id" id="reviewer_id" required>
+                            <option value="">اختر المراجع</option>
+                            @foreach($staffs as $staff)
+                            <option value="{{$staff->id}}"
+                                    @if($raw->reviewer_id)
+                                        @if($raw->reviewer_id == $staff->id)
+                                            selected 
+                                        @endif
+                                    @else 
+                                        @if($site_settings->reviewer_id == $staff->id)
+                                            selected
+                                        @endif
+                                    @endif>
+                                        {{$staff->name}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <span>&nbsp;</span>
+                    <div class="" style="min-width: 160px;margin-bottom: 10px">
                         <select class="form-control" name="shipmenter_id" id="shipmenter_id" required>
                             <option value="">اختر المرسل للشحن</option>
                             @foreach($staffs as $staff)

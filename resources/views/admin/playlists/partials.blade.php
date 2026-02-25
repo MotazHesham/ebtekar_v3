@@ -8,9 +8,11 @@
             $authenticated = $item['manufacturer_id'];
         } elseif ($type == 'prepare') {
             $authenticated = $item['preparer_id'];
-        } elseif ($type == 'shipment') {
+        } elseif ($type == 'review') {
+            $authenticated = $item['reviewer_id'];
+        }  elseif ($type == 'shipment') {
             $authenticated = $item['shipmenter_id'];
-        } 
+        }
         $assigned_to = $authenticated ? $staffs_array[$authenticated] : null; 
     @endphp
     

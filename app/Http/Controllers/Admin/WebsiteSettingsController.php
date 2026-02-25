@@ -101,9 +101,11 @@ class WebsiteSettingsController extends Controller
 
         $shipments = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        $websiteSetting->load('designer', 'preparer', 'manufacturer', 'shipment');
+        $reviewers = User::where('user_type','staff')->get()->pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        return view('admin.websiteSettings.edit', compact('designers', 'websiteSetting', 'manufacturers', 'preparers', 'shipments'));
+        $websiteSetting->load('designer', 'preparer', 'manufacturer', 'shipment', 'reviewer');
+
+        return view('admin.websiteSettings.edit', compact('designers', 'websiteSetting', 'manufacturers', 'preparers', 'shipments', 'reviewers'));
     }
 
     public function update(UpdateWebsiteSettingRequest $request, WebsiteSetting $websiteSetting)

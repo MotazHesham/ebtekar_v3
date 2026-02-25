@@ -1261,6 +1261,12 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'playlist_review',
+                'type' => 'playlist',
+                'parent' => 2,
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'playlist_shipment',
                 'type' => 'playlist',
                 'parent' => 2,
@@ -2179,6 +2185,14 @@ class PermissionsTableSeeder extends Seeder
             ],
         ];
 
-        Permission::insert($permissions);
+        foreach ($permissions as $permission) {
+            Permission::updateOrCreate(
+                ['title' => $permission['title']],
+                [
+                    'type' => $permission['type'],
+                    'parent' => $permission['parent']
+                ]
+            );
+        }
     }
 }

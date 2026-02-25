@@ -94,6 +94,7 @@ class WebsiteSetting extends Model implements HasMedia
         'preparer_id',
         'manufacturer_id',
         'shipmenter_id',
+        'reviewer_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -152,5 +153,10 @@ class WebsiteSetting extends Model implements HasMedia
     public function shipment()
     {
         return $this->belongsTo(User::class, 'shipmenter_id');
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewer_id');
     }
 }

@@ -1439,6 +1439,7 @@ return [
             'design' => 'الديزاين',
             'manufacturing' => 'التصنيع',
             'prepare' => 'التجهيز',
+            'review' => 'المراجعة',
             'shipment' => 'الأرسال للشحن', 
         ],
         'fields' => [

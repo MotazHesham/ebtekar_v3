@@ -124,16 +124,22 @@
             $back_type = 'design';
         } elseif ($type == 'prepare') {
             $title = 'التجهيز';
-            $title_send = 'أرسال للتجهيز للشحن';
-            $next_type = 'shipment';
+            $title_send = 'أرسال للمراجعة';
+            $next_type = 'review';
             $title_back = 'أرجاع لقائمة التصنيع';
             $back_type = 'manufacturing';
-        } elseif ($type == 'shipment') {
-            $title = 'التجهيز';
-            $title_send = 'أرسال للشحن';
-            $next_type = 'finish';
+        } elseif ($type == 'review') {
+            $title = 'المراجعة';
+            $title_send = 'أرسال للتجهيز للشحن';
+            $next_type = 'shipment';
             $title_back = 'أرجاع لقائمة التجهيز';
             $back_type = 'prepare';
+        } elseif ($type == 'shipment') {
+            $title = 'الأرسال للشحن';
+            $title_send = 'أرسال للشحن';
+            $next_type = 'finish';
+            $title_back = 'أرجاع لقائمة المراجعة';
+            $back_type = 'review';
         }
         
     @endphp
