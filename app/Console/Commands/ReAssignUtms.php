@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\RecalculateAdsAccountHistory;
-use App\Models\CombinedOrder;
+use App\Jobs\RecalculateAdsAccountHistory; 
+use App\Models\ReceiptSocial;
 use Illuminate\Console\Command;
 
 class ReAssignUtms extends Command
@@ -27,28 +27,25 @@ class ReAssignUtms extends Command
      */
     public function handle()
     {
-        $combinedOrders = CombinedOrder::where('ad_history_id', null)
-            ->with('marketPlace')
+        $receiptSocials = ReceiptSocial::where('ad_history_id', null)       
             ->whereNotNull('utm_details')->get();
 
         $count = 0;
-        foreach ($combinedOrders as $combinedOrder) { 
-            if(!$combinedOrder->created_at){
+        foreach ($receiptSocials as $receiptSocial) { 
+            if(!$receiptSocial->created_at){
                 continue;
             }
-            $date = explode(' ', $combinedOrder->created_at)[0];
-            if($combinedOrder->marketPlace->platform_type == 'easy_order'){
-                $utmDetails = $combinedOrder->utm_details ? json_decode($combinedOrder->utm_details, true) : null;
-                $adHistory = getAdHistoryByUtm('easy_orders',$utmDetails, $date);
-                $combinedOrder->ad_history_id = $adHistory->id ?? null;
-                $combinedOrder->save();
-                if($adHistory){ 
-                    RecalculateAdsAccountHistory::dispatch($adHistory);
-                }
+            $date = explode(' ', $receiptSocial->created_at)[0];
+            $utmDetails = $receiptSocial->utm_details ? json_decode($receiptSocial->utm_details, true) : null;
+            $adHistory = getAdHistoryByUtm('shopify',$utmDetails, $date);
+            $receiptSocial->ad_history_id = $adHistory->id ?? null;
+            $receiptSocial->save();
+            if($adHistory){ 
+                RecalculateAdsAccountHistory::dispatch($adHistory);
             }
             $count++;
         }
-        $this->info("Assigned ad_history_id to {$count} combined orders.");
+        $this->info("Assigned ad_history_id to {$count} receipt socials.");
         return 0;
     }
 }

@@ -35,7 +35,10 @@ class AdsAccountsController extends Controller
         $flatAccountDetails = collect();
         $totalSpent = 0;
         $totalRevenue = 0;
+        $totalOrders = 0;
         $overallRoas = 0;
+        $aov = 0.0;
+        $cpo = 0.0;
         $chartData = collect();
         $revenueBreakdown = [
             'pending' => 0,
@@ -51,7 +54,7 @@ class AdsAccountsController extends Controller
         ];
 
         if (!Schema::hasTable('ads_accounts')) {
-            return view('admin.ads.accounts', compact('accounts', 'selectedAccount', 'accountDetails', 'flatAccountDetails', 'totalSpent', 'totalRevenue', 'overallRoas', 'chartData', 'revenueBreakdown', 'roasBreakdown'));
+            return view('admin.ads.accounts', compact('accounts', 'selectedAccount', 'accountDetails', 'flatAccountDetails', 'totalSpent', 'totalRevenue', 'totalOrders', 'overallRoas', 'aov', 'cpo', 'chartData', 'revenueBreakdown', 'roasBreakdown'));
         }
 
         $query = $this->buildAccountsIndexQuery($request);
@@ -67,7 +70,10 @@ class AdsAccountsController extends Controller
         $stats = $this->getAggregateStatsAndChartData($accountId, $startDate, $endDate);
         $totalSpent = $stats['totalSpent'];
         $totalRevenue = $stats['totalRevenue'];
+        $totalOrders = $stats['totalOrders'];
         $overallRoas = $stats['overallRoas'];
+        $aov = $stats['aov'];
+        $cpo = $stats['cpo'];
         $chartData = $stats['chartData'];
         $revenueBreakdown = $stats['revenueBreakdown'];
         $roasBreakdown = $stats['roasBreakdown'];
@@ -80,7 +86,7 @@ class AdsAccountsController extends Controller
             }
         }
         
-        return view('admin.ads.accounts', compact('accounts', 'selectedAccount', 'accountDetails', 'flatAccountDetails', 'totalSpent', 'totalRevenue', 'overallRoas', 'chartData', 'revenueBreakdown', 'roasBreakdown'));
+        return view('admin.ads.accounts', compact('accounts', 'selectedAccount', 'accountDetails', 'flatAccountDetails', 'totalSpent', 'totalRevenue', 'totalOrders', 'overallRoas', 'aov', 'cpo', 'chartData', 'revenueBreakdown', 'roasBreakdown'));
     }
 
     /**
@@ -170,7 +176,10 @@ class AdsAccountsController extends Controller
     {
         $totalSpent = 0;
         $totalRevenue = 0;
+        $totalOrders = 0;
         $overallRoas = 0;
+        $aov = 0.0;
+        $cpo = 0.0;
         $chartData = collect();
         $revenueBreakdown = [
             'pending' => 0,
@@ -207,7 +216,8 @@ class AdsAccountsController extends Controller
                 ->whereIn('id', $accountHistoryIds)
                 ->get(['id', 'sales']);
             $totalRevenue = (float) $accountHistoryWithSales->sum(fn ($h) => $h->getRevenueFromSales() ?? 0);
-            
+            $totalOrders = (int) $accountHistoryWithSales->sum(fn ($h) => $h->getTotalCombinedOrdersFromSales());
+
             // Calculate revenue breakdown by status (Receipt Social: pending, confirmed, delivered, returned)
             foreach ($accountHistoryWithSales as $h) {
                 $breakdown = $h->getSalesBreakdownByStatus();
@@ -250,7 +260,8 @@ class AdsAccountsController extends Controller
             }
             $allHistoryInRange = $allHistoryInRange->get(['id', 'sales']);
             $totalRevenue = (float) $allHistoryInRange->sum(fn ($h) => $h->getRevenueFromSales() ?? 0);
-            
+            $totalOrders = (int) $allHistoryInRange->sum(fn ($h) => $h->getTotalCombinedOrdersFromSales());
+
             // Calculate revenue breakdown by status (Receipt Social: pending, confirmed, delivered, returned)
             foreach ($allHistoryInRange as $h) {
                 $breakdown = $h->getSalesBreakdownByStatus();
@@ -280,10 +291,19 @@ class AdsAccountsController extends Controller
             $chartData = $this->buildRoasChartData($chartQuery, $startDate, $endDate);
         }
 
+        // AOV = Average Order Value (total revenue / number of orders), CPO = Cost Per Order (total spent / number of orders)
+        if ($totalOrders > 0) {
+            $aov = (float) ($totalRevenue / $totalOrders);
+            $cpo = (float) ($totalSpent / $totalOrders);
+        }
+
         return [
             'totalSpent' => $totalSpent,
             'totalRevenue' => $totalRevenue,
+            'totalOrders' => $totalOrders,
             'overallRoas' => $overallRoas,
+            'aov' => $aov,
+            'cpo' => $cpo,
             'chartData' => $chartData,
             'revenueBreakdown' => $revenueBreakdown,
             'roasBreakdown' => $roasBreakdown,
@@ -425,6 +445,8 @@ class AdsAccountsController extends Controller
                 $detail->revenue = $revenue;
                 $detail->orders_count = $ordersCount;
                 $detail->roas = $detail->total_spent > 0 ? ($revenue / $detail->total_spent) : 0;
+                $detail->aov = $ordersCount > 0 ? ((float) $revenue / $ordersCount) : 0.0;
+                $detail->cpo = $ordersCount > 0 ? ((float) $detailTotalSpent / $ordersCount) : 0.0;
             }
         } else {
             $allAccountDetails->each(function ($detail) {
@@ -432,6 +454,8 @@ class AdsAccountsController extends Controller
                 $detail->revenue = 0;
                 $detail->orders_count = 0;
                 $detail->roas = 0;
+                $detail->aov = 0.0;
+                $detail->cpo = 0.0;
             });
         }
 
@@ -657,6 +681,7 @@ class AdsAccountsController extends Controller
         $attributedRevenue = 0;
         $totalSpent = 0;
         $totalCombinedOrders = 0;
+        $totalRevenueWithoutShipping = 0;
         $roasByStatus = [];
         $topProducts = [];
 

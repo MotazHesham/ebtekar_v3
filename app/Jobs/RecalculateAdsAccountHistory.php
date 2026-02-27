@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class RecalculateAdsAccountHistory implements ShouldQueue
 {
@@ -23,7 +24,7 @@ class RecalculateAdsAccountHistory implements ShouldQueue
 
     public function handle()
     {
-        $adHistory = $this->adHistory;
+        $adHistory = $this->adHistory; 
 
         // ReceiptSocial status: pending (confirm=0 done=0 returned=0), confirmed (confirm=1 done=0 return=0),
         // delivered (done=1), returned (returned=1). total_sales = total_cost + shipping_country_cost, total_sales_without_shipping = total_cost.
@@ -75,9 +76,18 @@ class RecalculateAdsAccountHistory implements ShouldQueue
         // Returned: returned=1
         $sales['returned_count'] = $stat('returned', 'count');
         $sales['returned_total_sales'] = $stat('returned', 'total_sales');
-        $sales['returned_total_sales_without_shipping'] = $stat('returned', 'total_sales_without_shipping'); 
-        
+        $sales['returned_total_sales_without_shipping'] = $stat('returned', 'total_sales_without_shipping');
+
         $adHistory->sales = $sales;
-        $adHistory->save();
+        $adHistory->save(); 
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('RecalculateAdsAccountHistory failed', [
+            'ad_history_id' => $this->adHistory->id ?? null,
+            'error' => $exception->getMessage(),
+            'trace' => $exception->getTraceAsString(),
+        ]);
     }
 }

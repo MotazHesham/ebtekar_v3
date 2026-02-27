@@ -1213,23 +1213,27 @@
             <thead>
                 <tr>
                     @if($isDetailsView)
-                        <th style="width:20%;">{{ trans('Detail Name') }}</th>
-                        <th style="width:12%;">{{ trans('UTM Key') }}</th>
-                        <th style="width:10%;">{{ trans('Type') }}</th>
-                        <th style="width:10%;">{{ trans('Orders') }}</th>
-                        <th style="width:12%;">{{ trans('Spend') }}</th>
-                        <th style="width:12%;">{{ trans('Revenue') }}</th>
-                        <th style="width:10%;">{{ trans('ROAS') }}</th>
-                        <th style="width:14%;">{{ trans('Actions') }}</th>
+                        <th style="width:18%;">{{ trans('Detail Name') }}</th>
+                        <th style="width:10%;">{{ trans('UTM Key') }}</th>
+                        <th style="width:8%;">{{ trans('Type') }}</th>
+                        <th style="width:8%;">{{ trans('Orders') }}</th>
+                        <th style="width:10%;">{{ trans('Spend') }}</th>
+                        <th style="width:10%;">{{ trans('Revenue') }}</th>
+                        <th style="width:8%;">{{ trans('ROAS') }}</th>
+                        <th style="width:8%;">{{ trans('AOV') }}</th>
+                        <th style="width:8%;">{{ trans('CPO') }}</th>
+                        <th style="width:12%;">{{ trans('Actions') }}</th>
                     @else
-                        <th style="width:28%;">{{ trans('Account Details') }}</th>
+                        <th style="width:24%;">{{ trans('Account Details') }}</th>
                         <th>{{ trans('Balance') }}</th>
                         <th>{{ trans('Orders') }}</th>
                         <th>{{ trans('Status Breakdown') }}</th>
                         <th>{{ trans('ROAS') }}</th>
                         <th>{{ trans('Spend') }}</th>
                         <th>{{ trans('Revenue') }}</th>
-                        <th style="width:14%;">{{ trans('Actions') }}</th>
+                        <th>{{ trans('AOV') }}</th>
+                        <th>{{ trans('CPO') }}</th>
+                        <th style="width:12%;">{{ trans('Actions') }}</th>
                     @endif
                 </tr>
             </thead>
@@ -1292,6 +1296,12 @@
                                 </span>
                             </td>
                             <td>
+                                <span style="color: var(--text); font-weight: 600;">{{ format_price($detail->aov ?? 0) }}</span>
+                            </td>
+                            <td>
+                                <span style="color: var(--text); font-weight: 600;">{{ format_price($detail->cpo ?? 0) }}</span>
+                            </td>
+                            <td>
                                 <div class="actions">
                                     @if($hasChildren)
                                         <a class="toggle-detail" data-toggle-detail="{{ $detail->id }}" data-expanded="0" href="javascript:void(0)">→</a>
@@ -1311,7 +1321,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" style="text-align:center; color: var(--muted); padding: 24px;">
+                            <td colspan="10" style="text-align:center; color: var(--muted); padding: 24px;">
                                 {{ trans('No account details found') }}
                             </td>
                         </tr>
@@ -1331,6 +1341,8 @@
                             $revenue = (float) ($account->revenue_sum ?? 0);
                             $ordersCount = (int) ($account->orders_count ?? 0);
                             $roas = $spent > 0 ? ($revenue / $spent) : 0;
+                            $aov = $ordersCount > 0 ? ($revenue / $ordersCount) : 0;
+                            $cpo = $ordersCount > 0 ? ($spent / $ordersCount) : 0;
                             $balance = (float) ($account->balance ?? 0);
 
                             $p = (int) ($account->status_pending ?? 0);
@@ -1395,6 +1407,8 @@
                             <td class="badge">{{ number_format($roas, 2) }}</td>
                             <td>{{ format_price($spent) }}</td>
                             <td>{{ format_price($revenue) }}</td>
+                            <td>{{ format_price($aov) }}</td>
+                            <td>{{ format_price($cpo) }}</td>
                             <td>
                                 <div class="actions">
                                     <span onclick="showRoasBreakdown({{ $account->id }}, '{{ addslashes(e($account->name ?? '')) }}')" style="cursor: pointer;" title="{{ trans('ROAS Breakdown') }}">📊</span>
@@ -1410,7 +1424,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" style="text-align:center; color: var(--muted); padding: 24px;">
+                            <td colspan="10" style="text-align:center; color: var(--muted); padding: 24px;">
                                 {{ trans('No accounts found') }}
                             </td>
                         </tr>

@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Ads\Console\Commands;
+namespace App\Console\Commands;
 
-use App\Jobs\RecalculateAdsAccountHistory;
-use App\Models\CombinedOrder;
+use App\Jobs\RecalculateAdsAccountHistory; 
+use App\Models\ReceiptSocial;
 use Illuminate\Console\Command;
 
 class ReCalculateAdsHistory extends Command
@@ -27,10 +27,11 @@ class ReCalculateAdsHistory extends Command
      */
     public function handle()
     {
-        $combinedOrders = CombinedOrder::whereNotNull('ad_history_id')->get();
-        foreach ($combinedOrders as $combinedOrder) {
-            if($combinedOrder->adHistory){
-                RecalculateAdsAccountHistory::dispatch($combinedOrder->adHistory);
+        $receiptSocials = ReceiptSocial::whereNotNull('ad_history_id')->with('adHistory')->get();
+        foreach ($receiptSocials as $receiptSocial) {
+            if($receiptSocial->adHistory){
+                RecalculateAdsAccountHistory::dispatch($receiptSocial->adHistory);
+                $this->info("Recalculated ad history for receipt social {$receiptSocial->id}");
             }
         }
     }

@@ -304,6 +304,10 @@ class ReceiptSocial extends Model
 		return $this->total_cost + $this->extra_commission + $this->shipping_country_cost  - $this->deposit - $this->discounted_amount;
 	}
 
+    public function adHistory()
+    {
+        return $this->belongsTo(AdsAccountHistory::class,  'ad_history_id');
+    }
     
     public function incomes()
     {
