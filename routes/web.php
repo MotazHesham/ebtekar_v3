@@ -392,6 +392,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('playlists/show_details', 'PlaylistController@show_details')->name('playlists.show_details');
     Route::post('playlists/required_items', 'PlaylistController@required_items')->name('playlists.required_items');
     Route::post('playlists/history', 'PlaylistController@history')->name('playlists.history');
+    Route::post('playlists/workflow_operations', 'PlaylistController@workflow_operations')->name('playlists.workflow_operations');
     Route::get('playlists/print/{id}/{model_type}', 'PlaylistController@print')->name('playlists.print');
     Route::get('playlists/airwaybill-pdf/{id}/{model_type}', 'PlaylistController@getAirwayBillPdf')->name('playlists.airwaybill-pdf');
     Route::post('playlists/assign_to_me', 'PlaylistController@assign_to_me')->name('playlists.assign_to_me');

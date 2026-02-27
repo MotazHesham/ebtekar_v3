@@ -120,6 +120,7 @@ class ReceiptSocial extends Model
         'shipping_address',
         'date_of_receiving_order',
         'deliver_date',
+        'playlist_started_at',
         'send_to_delivery_date',
         'send_to_playlist_date',
         'done_time',

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('ads_payments_requests', function (Blueprint $table) {
             $table->string('transaction_reference')->nullable()->after('status');
-            $table->string('receipt')->nullable()->after('transaction_reference');
+            $table->text('receipt')->nullable()->after('transaction_reference');
         });
     }
 

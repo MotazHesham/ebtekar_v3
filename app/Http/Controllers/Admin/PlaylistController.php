@@ -21,6 +21,7 @@ use App\Models\ViewPlaylistData;
 use App\Models\WebsiteSetting;
 use App\Models\Zone;
 use App\Models\PlaylistHistory;
+use App\Models\WorkflowOperation;
 use App\Support\Collection; 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response; 
@@ -194,10 +195,12 @@ class PlaylistController extends Controller
         $raw->shipmenter_id = $request->shipmenter_id ?? null; 
         $raw->returned_to_design += 1;  // increment the returned to design count
         if($request->model_type == 'social' && $old_status == 'pending'){
-            $raw->quickly_return = 0;
+            $raw->quickly_return = 0; 
+            $raw->playlist_started_at = date('Y-m-d H:i:s');
         }
         $raw->save();
-        $this->workflowStageService->moveToNextStage($raw, 'pending', 'design', $request->designer_id);
+        $nextUser = User::find($request->designer_id);
+        $this->workflowStageService->moveToNextStage($raw, 'pending', 'design', $nextUser);
 
         // Create airway bill if it doesn't exist and shipmenter is assigned
         if ($old_status == 'pending' && $raw->playlist_status == 'design' && $website_setting->shipping_integration) {
@@ -403,6 +406,27 @@ class PlaylistController extends Controller
             ->get();
 
         return view('admin.playlists.history', compact('histories'));
+    }
+
+    public function workflow_operations(Request $request)
+    {
+        if ($request->model_type == 'social') {
+            $modelClass = ReceiptSocial::class;
+        } elseif ($request->model_type == 'company') {
+            $modelClass = ReceiptCompany::class;
+        } elseif ($request->model_type == 'order') {
+            $modelClass = Order::class;
+        } else {
+            abort(404);
+        }
+
+        $operations = WorkflowOperation::with(['user', 'shift'])
+            ->where('model_type', $modelClass)
+            ->where('model_id', $request->id)
+            ->orderBy('started_at', 'asc')
+            ->get();
+
+        return view('admin.playlists.workflow_operations', compact('operations'));
     }
 
     public function show_details(Request $request){

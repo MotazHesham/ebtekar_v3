@@ -33,6 +33,7 @@
                             $transactionType = $paymentRequest->transaction_type ?? ($paymentRequest->isTransfer() ? 'transfer' : 'charge');
                             $status = strtolower($paymentRequest->status ?? 'pending');
                             $isPending = $status === 'pending';
+                            $receiptUrl = $paymentRequest->receipt ? asset('storage/' . $paymentRequest->receipt) : null;
                         @endphp
                         <tr>
                             <td>
@@ -70,6 +71,12 @@
                             <td>
                                 @if($isPending && $account)
                                     <a href="javascript:void(0)" class="btn btn-xs btn-info" onclick="showPaymentModal({{ $paymentRequest->id }}, '{{ addslashes($account->name ?? 'N/A') }}', {{ $paymentRequest->amount }})" title="{{ trans('Pay') }}"><i class="fa fa-credit-card"></i></a>
+                                @endif
+
+                                @if(!$isPending && $receiptUrl)
+                                    <a href="{{ $receiptUrl }}" class="btn btn-xs btn-secondary" target="_blank" title="{{ trans('View Receipt') }}">
+                                        <i class="fa fa-file"></i>
+                                    </a>
                                 @endif
                             </td>
                         </tr>

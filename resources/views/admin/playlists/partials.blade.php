@@ -77,6 +77,20 @@
                                     {{ __('cruds.playlist.fields.send_to_playlist_date') }}
                                 </div>
                             </div>
+                            @if(!empty($item['playlist_started_at']))
+                                <div class="vr"></div>
+                                <div class="col">
+                                    @php
+                                        $playlistStartedAt = \Carbon\Carbon::parse($item['playlist_started_at']);
+                                    @endphp
+                                    <small class="fw-semibold">
+                                        {{ $playlistStartedAt->diffForHumans(null, true) }}
+                                    </small>
+                                    <div class="text-uppercase text-medium-emphasis small badge badge-light">
+                                        مدة منذ بداية التشغيل
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -127,6 +141,11 @@
                         title="{{ __('Order Details') }}">
                         أظهارالصور
                     </a>
+                    <button class="btn btn-secondary btn-sm rounded-pill text-white"
+                        onclick="show_workflow_operations('{{ $item['id'] }}','{{ $item['model_type'] }}')"
+                        title="سجل مراحل العمل (Workflow Operations)">
+                        سجل المراحل
+                    </button>
                     <a class="btn btn-primary btn-sm rounded-pill text-white"
                         onclick="show_history('{{ $item['id'] }}','{{ $item['model_type'] }}')"
                         title="سجل حركة الفاتورة في البلاي ليست">

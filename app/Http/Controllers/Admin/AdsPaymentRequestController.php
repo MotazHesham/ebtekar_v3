@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class AdsPaymentRequestController extends Controller
 {
@@ -104,15 +105,17 @@ class AdsPaymentRequestController extends Controller
 
         $validated = $request->validate([
             'transaction_reference' => ['required', 'string', 'max:255'],
-            'receipt'               => ['required', 'string'],
+            'receipt'               => ['required', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:5120'],
         ]);
+
+        $receiptPath = $request->file('receipt')->store('ads_receipts', 'public');
 
         DB::beginTransaction();
         try {
             // Update payment request
             $paymentRequestModel->update([
                 'transaction_reference' => $validated['transaction_reference'],
-                'receipt'               => $validated['receipt'],
+                'receipt'               => $receiptPath,
                 'status'                => 'paid',
             ]);
 
