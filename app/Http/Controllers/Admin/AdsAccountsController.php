@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 
 class AdsAccountsController extends Controller
 {
@@ -25,6 +26,9 @@ class AdsAccountsController extends Controller
      */
     public function index(Request $request)
     {
+        if (! Gate::allows('ads_account_access')) {
+            abort(403, 'Unauthorized action.');
+        }
         $accounts = collect();
         $selectedAccount = null;
         $accountDetails = collect();

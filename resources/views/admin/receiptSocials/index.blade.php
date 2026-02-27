@@ -46,6 +46,41 @@
         </div>
     </div>
 
+    <div class="mb-4">
+        @if ($currentCreatorShift)
+            <div class="alert alert-success d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ __('Current  shift') }}:</strong>
+                    <span class="ml-2">
+                        {{ __('Shift date') }}: {{ $currentCreatorShift->shift_date }}
+                        |
+                        {{ __('Started at') }}: {{ $currentCreatorShift->started_at }}
+                        |
+                        {{ __('Status') }}: {{ $currentCreatorShift->status }}
+                    </span>
+                </div>
+                <form method="POST" action="{{ route('admin.shifts.end_creator') }}" class="mb-0">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">
+                        {{ __('End  Shift') }}
+                    </button>
+                </form>
+            </div>
+        @else
+            <div class="alert alert-warning d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ __('You do not have an open shift.') }}</strong>
+                </div>
+                <form method="POST" action="{{ route('admin.shifts.start_creator') }}" class="mb-0">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">
+                        {{ __('Start Shift') }}
+                    </button>
+                </form>
+            </div>
+        @endif
+    </div>
+
     <!-- Products Report Modal -->
     <div class="modal fade" id="productsReportModal" tabindex="-1" aria-labelledby="productsReportModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -1068,7 +1103,9 @@
                 } else if(data['status'] == '2') { 
                     $('#supplied-'+el.value).html(data['first']);
                     showAlert('success', 'Success', data['message']);
-                } 
+                } else if(data['status'] == '0') { 
+                    showAlert('error', 'Error', data['message']); 
+                }
             });
         }
 

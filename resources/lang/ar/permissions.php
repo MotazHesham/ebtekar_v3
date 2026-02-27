@@ -65,6 +65,8 @@ return [
         'receipt_price_view_product' => 'منتجات فواتير عرض سعر', 
         'receipt_branch_product' => 'منتجات فواتير الفروع', 
         'user_alert' => 'تنبيهات المستخدمين', 
+        'shift' => 'الشيفتات',
+        'ads_managment' => 'إدارة الإعلانات',
     ],
     'user_management_access' => 'قائمة المستخدمين', 
     'role_create' => 'أضافة دور مستخدم',
@@ -429,4 +431,8 @@ return [
     'receipt_branch_add_product' => 'أضافة منتج',
     'receipt_branch_edit_product' => 'تعديل منتج',
     'receipt_branch_delete_product' => 'حذف منتج',
+    'shift_access' => 'أمكانية الشيفتات',
+    'ads_account_access' => 'أمكانية الحسابات',
+    'ads_payment_request_access' => 'أمكانية التحويلات',
+    'ads_managment_access' => 'أمكانية الإعلانات',
 ];

@@ -304,6 +304,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('orders/upload_fedex', 'OrdersController@upload_fedex')->name('orders.upload_fedex');
     Route::resource('orders', 'OrdersController');
 
+    // Shifts
+    Route::get('shifts', 'ShiftController@index')->name('shifts.index');
+    Route::post('shifts/start-creator', 'ShiftController@startCreator')->name('shifts.start_creator');
+    Route::post('shifts/end-creator', 'ShiftController@endCreator')->name('shifts.end_creator');
+    Route::post('shifts/metrics', 'ShiftController@metrics')->name('shifts.metrics');
+
     // Receipt Outgoing
     Route::delete('receipt-outgoings/destroy_product/{id}', 'ReceiptOutgoingController@destroy_product')->name('receipt-outgoings.destroy_product');
     Route::get('receipt-outgoings/restore/{id}', 'ReceiptOutgoingController@restore')->name('receipt-outgoings.restore');

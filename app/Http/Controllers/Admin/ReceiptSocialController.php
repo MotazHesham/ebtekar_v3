@@ -18,6 +18,7 @@ use App\Models\AdsAccountDetail;
 use App\Models\AdsAccountHistory;
 use App\Models\Country;
 use App\Models\EgyptExpressAirwayBill;
+use App\Models\EmployeeShift;
 use App\Models\ExcelFile;
 use App\Models\FinancialAccount;
 use App\Models\GeneralSetting;
@@ -38,9 +39,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Services\ShiftService;
 
 class ReceiptSocialController extends Controller
 {
+    protected $shiftService;
+
+    public function __construct(ShiftService $shiftService)
+    {
+        $this->shiftService = $shiftService;
+    }
+
     public function upload_fedex(Request $request){
 
         $now_time = time();
@@ -132,6 +141,23 @@ class ReceiptSocialController extends Controller
     public function update_statuses(Request $request){ 
         $type = $request->type;
         $receipt = ReceiptSocial::findOrFail($request->id);
+
+        
+
+        if($type == 'confirm'){
+            $creatorShift = $this->shiftService->getOpenCreatorShift(auth()->user());
+    
+            if (! $creatorShift) {
+                return [
+                    'status' => '0',
+                    'message' => 'You must have an open shift to confirm a receipt.',
+                ];
+            }
+
+            if($request->status == 1 && $receipt->creator_shift_id == null){
+                $receipt->creator_shift_id = $creatorShift->id; 
+            }
+        }
         
         // Special handling for hold type when hold_in_playlist_status is set
         if($request->type == 'hold' && $request->has('hold_in_playlist_status') && $request->hold_in_playlist_status && $request->status == 1){
@@ -692,6 +718,13 @@ class ReceiptSocialController extends Controller
         $status_code = null;
         $quickly_return = null;
 
+
+        $currentCreatorShift = EmployeeShift::where('user_id', auth()->user()->id)
+            ->where('type', 'creator')
+            ->where('status', 'open')
+            ->latest('started_at')
+            ->first();
+            
         if(request('deleted')){ 
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
             $deleted = 1;
@@ -978,7 +1011,8 @@ class ReceiptSocialController extends Controller
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type', 
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup','shopify_order_num','status_code','quickly_return'));
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts',
+            'selectedProducts','has_followup','shopify_order_num','status_code','quickly_return','currentCreatorShift'));
         }
 
         return view('admin.receiptSocials.index', compact(
@@ -986,7 +1020,8 @@ class ReceiptSocialController extends Controller
             'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts','selectedProducts','has_followup','shopify_order_num','status_code','quickly_return'
+            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts',
+            'selectedProducts','has_followup','shopify_order_num','status_code','quickly_return','currentCreatorShift'
         ));
     }
 
@@ -1070,8 +1105,8 @@ class ReceiptSocialController extends Controller
         return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data' , 'websites','website_setting_id','financial_accounts' , 'adAccountDetails'));
     }
 
-    public function store(StoreReceiptSocialRequest $request)
-    {  
+    public function store(StoreReceiptSocialRequest $request )
+    {   
         $receiptSocial = ReceiptSocial::create($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
 

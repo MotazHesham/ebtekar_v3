@@ -17,6 +17,7 @@
             </a>
         </li>
 
+        @can('ads_managment_access')
         <li class="c-sidebar-nav-dropdown {{ request()->is("admin/ads/accounts*") ? "c-show" : "" }} {{ request()->is("admin/ads/payment-requests*") ? "c-show" : "" }}">
             <a class="c-sidebar-nav-dropdown-toggle" href="#">
                 <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
@@ -25,6 +26,7 @@
                 {{ __('cruds.adsManagment.title') }}
             </a>
             <ul class="c-sidebar-nav-dropdown-items"> 
+                @can('ads_account_access')
                 <li class="c-sidebar-nav-item">
                     <a href="{{ route("admin.ads.accounts.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/ads/accounts") || request()->is("admin/ads/accounts/*") ? "c-active" : "" }}">
                         <i class="fa-fw fas fa-truck-loading c-sidebar-nav-icon">
@@ -33,6 +35,8 @@
                         {{ __('cruds.adsAccount.title') }}
                     </a>
                 </li> 
+                @endcan
+                @can('ads_payment_request_access')
                 <li class="c-sidebar-nav-item">
                     <a href="{{ route("admin.ads.payment_requests.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/ads/payment-requests") || request()->is("admin/ads/payment-requests/*") ? "c-active" : "" }}">
                         <i class="fa-fw fas fa-user-clock c-sidebar-nav-icon">
@@ -41,9 +45,20 @@
                         {{ __('cruds.adsPaymentRequest.title') }}
                     </a>
                 </li> 
+                @endcan
             </ul>
         </li>
-            
+        @endcan
+        @can('shift_access')
+        <li class="c-sidebar-nav-item">
+            <a href="{{ route("admin.shifts.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/shifts") || request()->is("admin/shifts/*") ? "c-active" : "" }}">
+                <i class="fa-fw fas fa-user-clock c-sidebar-nav-icon">
+
+                </i>
+                الشيفتات
+            </a>
+        </li>
+        @endcan
         <li class="nav-title">الفواتير</li>
 
         @can('receipts_managment_access')

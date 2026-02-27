@@ -29,7 +29,7 @@
                     @elseif ($item['quickly'] == 1)background-image: linear-gradient(#9f1b2e,#1a1313);@endif">
                 
                 @if($assigned_to)
-                    @if(auth()->user()->is_admin)
+                    @if($authIsAdmin) 
                         <div class="assigned-badge-corner">
                             <span title="{{ $assigned_to }}">{{ $assigned_to }}</span>
                         </div> 
@@ -98,7 +98,7 @@
 
             {{-- action Buttons --}}
             <div class="order-card-actions" id="order-card-actions-{{ $item['id'] }}">
-                @if(!$item['hold'] || auth()->user()->is_admin)
+                @if(!$item['hold'] || $authIsAdmin)
                     
                     @if ($type == 'design') 
                         <a class="btn btn-info  btn-sm rounded-pill" 
@@ -106,7 +106,7 @@
                             @if($item['client_review']) تعديل جديد @else مراجعة العميل @endif
                         </a>
                     @endif
-                    @if (auth()->user()->is_admin || $authenticated == auth()->user()->id || Gate::allows('transfer_receipts'))
+                    @if ($authIsAdmin || $authenticated == auth()->user()->id || Gate::allows('transfer_receipts'))
                         <a class="btn btn-danger btn-sm rounded-pill text-white"
                             onclick="if(confirm('هل أنت متأكد من الإرجاع؟')) change_status('{{ $item['id'] }}','{{ $item['model_type'] }}','{{ $back_type }}','back')">
                             {{ $title_back }}

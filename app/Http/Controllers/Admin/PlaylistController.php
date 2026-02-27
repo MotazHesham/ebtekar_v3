@@ -29,9 +29,17 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use App\Services\WorkflowStageService;
 
 class PlaylistController extends Controller
 {
+    protected WorkflowStageService $workflowStageService;
+
+    public function __construct(WorkflowStageService $workflowStageService)
+    {
+        $this->workflowStageService = $workflowStageService;
+    }
+
     public function getCounters(){
         
         $playlists_counter = ViewPlaylistData::select('playlist_status', DB::raw('COUNT(*) as count'))
@@ -189,6 +197,7 @@ class PlaylistController extends Controller
             $raw->quickly_return = 0;
         }
         $raw->save();
+        $this->workflowStageService->moveToNextStage($raw, 'pending', 'design', $request->designer_id);
 
         // Create airway bill if it doesn't exist and shipmenter is assigned
         if ($old_status == 'pending' && $raw->playlist_status == 'design' && $website_setting->shipping_integration) {
@@ -264,6 +273,27 @@ class PlaylistController extends Controller
             $raw->client_review = 0;
         }
         $raw->save();  
+
+        // workflow operations tracking
+        $fromStage = $old_status != $request->status ? $old_status : null;
+        $toStage   = $request->status != $old_status ? $request->status : null;
+        
+        $nextUser = null;
+        if ($toStage === 'design') {
+            $nextUser = $raw->designer;
+        } elseif ($toStage === 'manufacturing') {
+            $nextUser = $raw->manufacturer;
+        } elseif ($toStage === 'prepare') {
+            $nextUser = $raw->preparer;
+        } elseif ($toStage === 'review') {
+            $nextUser = $raw->reviewer;
+        } elseif ($toStage === 'shipment') {
+            $nextUser = $raw->shipmenter;
+        }
+
+        if ($fromStage || $toStage) {
+            $this->workflowStageService->moveToNextStage($raw, $fromStage ?? '', $toStage, $nextUser);
+        }
 
         // store history of playlist flow
         PlaylistHistory::create([
@@ -463,7 +493,9 @@ class PlaylistController extends Controller
         $playlists = ViewPlaylistData::orderBy('client_review','desc')->orderBy('send_to_playlist_date','desc')->where('playlist_status',$type); 
         $websites = WebsiteSetting::pluck('site_name', 'id');
 
-        if(!auth()->user()->is_admin){
+        $authIsAdmin = auth()->user()->is_admin;
+
+        if(!$authIsAdmin){
             if($type == 'design'){
                 $playlists = $playlists->where(function($query){
                     $query->whereNull('designer_id')->orWhere('designer_id',auth()->user()->id);
@@ -567,7 +599,7 @@ class PlaylistController extends Controller
         } 
         // return $dates; 
         return view('admin.playlists.index',compact('dates','playlists','view','staffs','client_review','type', 'order_num','user_id','is_seasoned','quickly','website_setting_id',
-        'description','to_date','websites','client_type','zones','zone_id','designer_id','manufacturer_id','preparer_id','shipmenter_id','reviewer_id','staffs_array'));
+        'description','to_date','websites','client_type','zones','zone_id','designer_id','manufacturer_id','preparer_id','shipmenter_id','reviewer_id','staffs_array','authIsAdmin'));
 
     }
 

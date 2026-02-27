@@ -8,6 +8,7 @@ use App\Models\AdsPaymentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Gate;
 
 class AdsPaymentRequestController extends Controller
 {
@@ -16,6 +17,9 @@ class AdsPaymentRequestController extends Controller
      */
     public function index(Request $request)
     {
+        if (! Gate::allows('ads_payment_request_access')) {
+            abort(403, 'Unauthorized action.');
+        }
         $paymentRequests = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15, 1);
 
         if (Schema::hasTable('ads_payments_requests')) {

@@ -2183,6 +2183,30 @@ class PermissionsTableSeeder extends Seeder
                 'type' => 'receipt_branch',
                 'parent' => 0,
             ],
+            [
+                'id'    => $i++,
+                'title' => 'shift_access',
+                'type' => 'shift',
+                'parent' => 2,
+            ], 
+            [
+                'id'    => $i++,
+                'title' => 'ads_managment_access',
+                'type' => 'ads_managment',
+                'parent' => 2,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'ads_account_access',
+                'type' => 'ads_managment',
+                'parent' => 2,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'ads_payment_request_access',
+                'type' => 'ads_managment',
+                'parent' => 2,
+            ],
         ];
 
         foreach ($permissions as $permission) {

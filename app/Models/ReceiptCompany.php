@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use App\Models\WorkflowOperation;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -238,4 +239,9 @@ class ReceiptCompany extends Model implements HasMedia
 	public function calc_total_for_client(){
 		return $this->total_cost + $this->shipping_country_cost  - $this->deposit;
 	}
+
+    public function workflowOperations()
+    {
+        return $this->morphMany(WorkflowOperation::class, 'model');
+    }
 }

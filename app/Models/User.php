@@ -21,6 +21,8 @@ use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Models\EmployeeShift;
+use App\Models\WorkflowOperation;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -236,6 +238,16 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Cart::class);
     }
     
+    public function shifts()
+    {
+        return $this->hasMany(EmployeeShift::class);
+    }
+
+    public function workflowOperations()
+    {
+        return $this->hasMany(WorkflowOperation::class);
+    }
+
     public function website()
     {
         return $this->belongsTo(WebsiteSetting::class,'website_setting_id');

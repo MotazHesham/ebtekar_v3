@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use App\Models\WorkflowOperation;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -308,6 +309,10 @@ class ReceiptSocial extends Model
         return $this->morphMany(Income::class, 'model');
     }
     
+    public function workflowOperations()
+    {
+        return $this->morphMany(WorkflowOperation::class, 'model');
+    }
     public function add_income(){ 
         Income::create([ 
             'income_category_id' => 3,

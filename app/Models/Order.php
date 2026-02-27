@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use App\Models\WorkflowOperation;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -297,6 +298,11 @@ class Order extends Model
     public function incomes()
     {
         return $this->morphMany(Income::class, 'model');
+    }
+
+    public function workflowOperations()
+    {
+        return $this->morphMany(WorkflowOperation::class, 'model');
     }
     
     public function add_income(){ 
