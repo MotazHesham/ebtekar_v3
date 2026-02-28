@@ -23,6 +23,7 @@ use App\Models\SubCategory;
 use App\Models\SubSubCategory;
 use App\Models\User;
 use App\Models\ViewPlaylistData;
+use App\Services\WorkflowStageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -31,7 +32,13 @@ use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
 class HomeController extends Controller
-{    
+{     
+    protected WorkflowStageService $workflowStageService;
+
+    public function __construct(WorkflowStageService $workflowStageService)
+    {
+        $this->workflowStageService = $workflowStageService;
+    }
 
     public function generateSiteMap(){ 
         $site_settings = get_site_setting();
@@ -178,7 +185,9 @@ class HomeController extends Controller
                 }elseif($order->playlist_status == 'manufacturing'){
                     $next_type = 'prepare';
                 }elseif($order->playlist_status == 'prepare'){
-                    $next_type = 'shipment';
+                    $next_type = 'review';
+                }elseif($order->playlist_status == 'review'){
+                    $next_type = 'shipment';    
                 }elseif($order->playlist_status == 'shipment'){
                     $next_type = 'finish';
 
@@ -207,7 +216,7 @@ class HomeController extends Controller
         }
 
 
-        $playlistcontroller = new PlaylistController();
+        $playlistcontroller = new PlaylistController($this->workflowStageService);
         $array = ['model_type' => $model_type,'id' => $order->id , 'status' => $next_type , 'condition' => 'send'];
         $array0 = new \Illuminate\Http\Request($array);
         $status = $playlistcontroller->update_playlist_status($array0);
@@ -256,6 +265,8 @@ class HomeController extends Controller
             $authenticated = $order->manufacturer_id;
         } elseif ($request->type == 'prepare') {
             $authenticated = $order->preparer_id;
+        } elseif ($request->type == 'review') {
+            $authenticated = $order->reviewer_id;
         } elseif ($request->type == 'shipment') {
             $authenticated = $order->shipmenter_id;
         }
@@ -267,7 +278,9 @@ class HomeController extends Controller
                 }elseif($order->playlist_status == 'manufacturing'){
                     $next_type = 'prepare';
                 }elseif($order->playlist_status == 'prepare'){
-                    $next_type = 'shipment';
+                    $next_type = 'review';
+                }elseif($order->playlist_status == 'review'){
+                    $next_type = 'shipment';    
                 }elseif($order->playlist_status == 'shipment'){
                     $next_type = 'finish';
 
@@ -296,7 +309,7 @@ class HomeController extends Controller
         }
 
 
-        $playlistcontroller = new PlaylistController();
+        $playlistcontroller = new PlaylistController($this->workflowStageService);
         $array = ['model_type' => $model_type,'id' => $order->id , 'status' => $next_type , 'condition' => 'send'];
         $array0 = new \Illuminate\Http\Request($array);
         return [

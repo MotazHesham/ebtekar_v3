@@ -447,6 +447,7 @@ return [
             'manufacturing' => 'light',
             'prepare' => 'danger',
             'shipment' =>  'warning',
+            'review' => 'success',
             'finish' =>  'success',
         ],
         'status' => [
@@ -454,6 +455,7 @@ return [
             'design' => 'مرحلة الديزاين',
             'manufacturing' => 'مرحلة التصنيع',
             'prepare' => 'مرحلة التجهيز',
+            'review' => 'مرحلة المراجعة',
             'shipment' => 'مرحلة الأرسال للشحن',
             'finish' => 'تم الأرسال للشحن',
         ]

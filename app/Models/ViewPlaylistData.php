@@ -16,6 +16,7 @@ class ViewPlaylistData extends Model
         'design'     => 'الديزاين',
         'manufacturing'        => 'التصنيع',
         'prepare' => 'التجهيز',
+        'review' => 'المراجعة',
         'shipment'        => 'الارسال للشحن',
         'finish'       => 'التوصيل',
     ];
