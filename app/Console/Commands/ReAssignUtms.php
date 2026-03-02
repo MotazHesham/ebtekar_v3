@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\RecalculateAdsAccountHistory; 
 use App\Models\ReceiptSocial;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class ReAssignUtms extends Command
@@ -32,12 +33,12 @@ class ReAssignUtms extends Command
 
         $count = 0;
         foreach ($receiptSocials as $receiptSocial) { 
+            $createdAt = $receiptSocial->created_at ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $receiptSocial->created_at)->format('Y-m-d H:i:s') : null;
             if(!$receiptSocial->created_at){
                 continue;
             }
-            $date = explode(' ', $receiptSocial->created_at)[0];
-            $utmDetails = $receiptSocial->utm_details ? json_decode($receiptSocial->utm_details, true) : null;
-            $adHistory = getAdHistoryByUtm('shopify',$utmDetails, $date);
+            $date = explode(' ', $createdAt)[0]; 
+            $adHistory = getAdHistoryByUtm('shopify',$receiptSocial->utm_details, $date);
             $receiptSocial->ad_history_id = $adHistory->id ?? null;
             $receiptSocial->save();
             if($adHistory){ 

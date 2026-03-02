@@ -22,10 +22,85 @@ use Illuminate\Support\Facades\Session;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Str;
 
+
+if (!function_exists('extractUtm')) {
+    function extractUtm(string $url): array
+    {
+        $query = parse_url($url, PHP_URL_QUERY);
+
+        if (!$query) {
+            return [];
+        }
+
+        parse_str($query, $params);
+
+        return [
+            'utm_source'   => $params['utm_source']   ?? null,
+            'utm_medium'   => $params['utm_medium']   ?? null,
+            'utm_campaign' => $params['utm_campaign'] ?? null,
+        ];
+    }
+}
+
 if (!function_exists('getAdHistoryByUtm')) {
     function getAdHistoryByUtm($platform, $utmDetails, $orderDate)
     {
         if ($platform == 'shopify') { 
+            $utmDetails = extractUtm($utmDetails);
+            $campaignKey = $utmDetails['utm_source'] ?? 'NAN';
+            $adSetKey = $utmDetails['utm_medium'] ?? 'NAN';
+            $adKey = $utmDetails['utm_campaign'] ?? 'NAN';
+            
+            // Campaign
+            $campaign = AdsAccountDetail::where('type', 'campaign')
+                ->where('utm_key', $campaignKey)
+                ->first();
+            if(!$campaign){
+                $campaign = AdsAccountDetail::create([
+                    'name' => $campaignKey,
+                    'utm_key' => $campaignKey,
+                    'type' => 'campaign',
+                ]);
+            }
+
+            // Ad Set
+            $adSet = AdsAccountDetail::where('parent_id', $campaign->id)
+                ->where('type', 'ad_set')
+                ->where('utm_key', $adSetKey)
+                ->first();
+            if(!$adSet){
+                $adSet = AdsAccountDetail::create([
+                    'parent_id' => $campaign->id,
+                    'name' => $adSetKey,
+                    'utm_key' => $adSetKey,
+                    'type' => 'ad_set',
+                ]);
+            }
+
+            // Ad
+            $ad = AdsAccountDetail::where('parent_id', $adSet->id)
+                ->where('utm_key', $adKey)
+                ->where('type', 'ad')
+                ->first();
+            if(!$ad){
+                $ad = AdsAccountDetail::create([
+                    'parent_id' => $adSet->id,
+                    'name' => $adKey,
+                    'utm_key' => $adKey,
+                    'type' => 'ad',
+                ]);
+            }
+
+            $adHistory = AdsAccountHistory::where('ad_account_detail_id', $ad->id)
+                ->whereDate('date', $orderDate)
+                ->first();
+            if(!$adHistory){
+                $adHistory = AdsAccountHistory::create([
+                    'ad_account_detail_id' => $ad->id,
+                    'date' => $orderDate,
+                ]);
+            } 
+            return $adHistory;
         }
     }
 }

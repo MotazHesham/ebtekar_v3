@@ -9,6 +9,7 @@ use App\Services\ShiftAnalyticsService;
 use App\Services\ShiftService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -150,6 +151,28 @@ class ShiftController extends Controller
         return redirect()
             ->route('admin.shifts.index')
             ->with('status', __('Creator shift ended successfully.'));
+    }
+
+    public function recalculateOperationMetrics(Request $request)
+    {
+        if (! Gate::allows('shift_access')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'recalculate_date' => ['required', 'date_format:' . config('panel.date_format')],
+        ]);
+
+        $dateInput = $request->input('recalculate_date');
+        $date = Carbon::createFromFormat(config('panel.date_format'), $dateInput)->format('Y-m-d');
+
+        Artisan::call('shifts:calculate-operation-metrics', ['date' => $date]);
+
+        $output = trim(Artisan::output());
+
+        return redirect()
+            ->route('admin.shifts.index', $request->only(['from_date', 'to_date', 'employee_id', 'type']))
+            ->with('status', $output ?: __('Operation metrics recalculated successfully.'));
     }
 
     public function metrics(Request $request, ShiftAnalyticsService $analyticsService)

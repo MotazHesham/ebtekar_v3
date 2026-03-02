@@ -1,7 +1,9 @@
 @extends('layouts.admin')
 
 @section('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <style>
+        .daterangepicker { z-index: 99999 !important; }
         .ads-analytics {
             --bg: #ffffff;
             --panel: #ffffff;
@@ -995,7 +997,7 @@
                     @if(request('account_id'))
                         <input type="hidden" name="account_id" value="{{ request('account_id') }}">
                     @endif
-                    <div class="date-pill" style="display:flex; align-items:center; gap:8px; padding:8px 12px;">
+                    <div class="date-pill" style="display:flex; align-items:center; gap:8px; padding:8px 12px; cursor:pointer; border-radius:8px; border:1px solid rgba(0,0,0,0.1);" title="{{ trans('Select date range') }}">
                         <span style="opacity:.7;">📅</span>
                         <input type="text" 
                                class="aiz-date-range" 
@@ -1639,6 +1641,7 @@
 
 @section('scripts')
 @parent
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
     <script>
         // Delete: called from inline onclick (works without jQuery delegation)
@@ -2034,15 +2037,65 @@
             document.body.style.overflow = '';
         }
 
-        // Initialize date range picker
+        // Initialize date range picker (moment.js is loaded by admin layout)
         $(document).ready(function() {
-            if (typeof AIZ !== 'undefined' && AIZ.plugins && AIZ.plugins.dateRange) {
-                AIZ.plugins.dateRange();
+            var locale = {
+                format: 'DD-MM-YYYY',
+                separator: ' to ',
+                applyLabel: '{{ trans("Apply") }}',
+                cancelLabel: '{{ trans("Cancel") }}',
+                fromLabel: '{{ trans("From") }}',
+                toLabel: '{{ trans("To") }}',
+                customRangeLabel: '{{ trans("Custom") }}',
+                daysOfWeek: ['{{ trans("Su") }}','{{ trans("Mo") }}','{{ trans("Tu") }}','{{ trans("We") }}','{{ trans("Th") }}','{{ trans("Fr") }}','{{ trans("Sa") }}'],
+                monthNames: ['{{ trans("January") }}','{{ trans("February") }}','{{ trans("March") }}','{{ trans("April") }}','{{ trans("May") }}','{{ trans("June") }}','{{ trans("July") }}','{{ trans("August") }}','{{ trans("September") }}','{{ trans("October") }}','{{ trans("November") }}','{{ trans("December") }}'],
+                firstDay: 0
+            };
+            var opts = {
+                locale: locale,
+                autoUpdateInput: true,
+                showDropdowns: true,
+                opens: 'left',
+                parentEl: 'body'
+            };
+            if ($('.aiz-date-range').data('advanced-range') === true || $('.aiz-date-range').attr('data-advanced-range') === 'true') {
+                opts.ranges = {
+                    '{{ trans("Today") }}': [moment(), moment()],
+                    '{{ trans("Yesterday") }}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '{{ trans("Last 7 Days") }}': [moment().subtract(6, 'days'), moment()],
+                    '{{ trans("Last 30 Days") }}': [moment().subtract(29, 'days'), moment()],
+                    '{{ trans("This Month") }}': [moment().startOf('month'), moment().endOf('month')],
+                    '{{ trans("Last Month") }}': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                };
             }
-            
-            // Auto-submit form on date change
+            $('.aiz-date-range').each(function() {
+                var $el = $(this);
+                var start = null, end = null;
+                if ($el.val() && $el.val().indexOf(' to ') > -1) {
+                    var parts = $el.val().split(' to ');
+                    if (parts.length === 2) {
+                        start = moment(parts[0].trim(), 'DD-MM-YYYY');
+                        end = moment(parts[1].trim(), 'DD-MM-YYYY');
+                        if (!start.isValid()) start = null;
+                        if (!end.isValid()) end = null;
+                    }
+                }
+                var pickerOpts = $.extend({}, opts, {
+                    startDate: start || moment(),
+                    endDate: end || moment(),
+                    autoUpdateInput: !!(start && end)
+                });
+                $el.daterangepicker(pickerOpts);
+            });
+            $('.date-pill').on('click', function(e) {
+                if (!$(e.target).hasClass('aiz-date-range')) {
+                    $(this).find('.aiz-date-range').focus().trigger('click');
+                }
+            });
             $('.aiz-date-range').on('apply.daterangepicker', function(ev, picker) {
-                $(this).closest('form').submit();
+                var $input = $(this);
+                $input.val(picker.startDate.format('DD-MM-YYYY') + ' to ' + picker.endDate.format('DD-MM-YYYY'));
+                $input.closest('form').submit();
             });
             
             // Handle search input - submit on Enter key

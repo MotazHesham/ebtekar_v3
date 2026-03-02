@@ -309,6 +309,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('shifts/start-creator', 'ShiftController@startCreator')->name('shifts.start_creator');
     Route::post('shifts/end-creator', 'ShiftController@endCreator')->name('shifts.end_creator');
     Route::post('shifts/metrics', 'ShiftController@metrics')->name('shifts.metrics');
+    Route::post('shifts/recalculate-operation-metrics', 'ShiftController@recalculateOperationMetrics')->name('shifts.recalculate_operation_metrics');
 
     // Receipt Outgoing
     Route::delete('receipt-outgoings/destroy_product/{id}', 'ReceiptOutgoingController@destroy_product')->name('receipt-outgoings.destroy_product');

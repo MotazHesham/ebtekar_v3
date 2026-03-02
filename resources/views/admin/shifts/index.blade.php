@@ -69,6 +69,26 @@
                 </div>
             </form>
 
+            @if ($isAdmin && $selectedType === 'operation')
+            <form method="POST" action="{{ route('admin.shifts.recalculate_operation_metrics') }}" class="mb-4">
+                @csrf
+                <div class="row align-items-end">
+                    <div class="col-md-3">
+                        <div class="form-group mb-0">
+                            <label for="recalculate_date">{{ __('Date') }}</label>
+                            <input type="text" name="recalculate_date" id="recalculate_date" class="form-control date"
+                                   value="{{ $fromDate ?: date(config('panel.date_format')) }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-warning">
+                            {{ __('Recalculate operation metrics') }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+            @endif
+
             @if ($globalMetrics)
                 <div class="mb-4">
                     <h5>{{ __('Global metrics for filtered shifts') }}</h5>
