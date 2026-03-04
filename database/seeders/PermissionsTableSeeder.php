@@ -2191,6 +2191,12 @@ class PermissionsTableSeeder extends Seeder
             ], 
             [
                 'id'    => $i++,
+                'title' => 'view_all_shifts',
+                'type' => 'shift',
+                'parent' => 2,
+            ], 
+            [
+                'id'    => $i++,
                 'title' => 'ads_managment_access',
                 'type' => 'ads_managment',
                 'parent' => 2,

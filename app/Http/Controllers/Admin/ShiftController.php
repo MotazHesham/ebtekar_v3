@@ -38,7 +38,7 @@ class ShiftController extends Controller
         $shiftQuery = EmployeeShift::with('user')
             ->where('type', $selectedType);
 
-        if ($user->is_admin) {
+        if (Gate::allows('view_all_shifts')) {
             if ($employeeId) {
                 $shiftQuery->where('user_id', $employeeId);
             }
@@ -66,7 +66,7 @@ class ShiftController extends Controller
         $perShiftMetrics = [];
         $globalMetrics   = null;
 
-        if ($user->is_admin) {
+        if (Gate::allows('view_all_shifts')) {
             // Use pre-calculated JSON metrics on the shift itself
             foreach ($shifts as $shift) {
                 if (is_array($shift->metrics) && isset($shift->metrics['sales'])) {

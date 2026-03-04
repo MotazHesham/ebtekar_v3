@@ -29,7 +29,7 @@
                                    value="{{ $toDate }}">
                         </div>
                     </div>
-                    @if($isAdmin)
+                    @can('view_all_shifts')
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="employee_id">{{ __('Employee') }}</label>
@@ -44,7 +44,7 @@
                             </select>
                         </div>
                     </div>
-                    @endif
+                    @endcan
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="type">{{ __('Shift type') }}</label>
@@ -68,26 +68,27 @@
                     </a>
                 </div>
             </form>
-
-            @if ($isAdmin && $selectedType === 'operation')
-            <form method="POST" action="{{ route('admin.shifts.recalculate_operation_metrics') }}" class="mb-4">
-                @csrf
-                <div class="row align-items-end">
-                    <div class="col-md-3">
-                        <div class="form-group mb-0">
-                            <label for="recalculate_date">{{ __('Date') }}</label>
-                            <input type="text" name="recalculate_date" id="recalculate_date" class="form-control date"
-                                   value="{{ $fromDate ?: date(config('panel.date_format')) }}" required>
+            @can('view_all_shifts')
+                @if ($selectedType === 'operation')
+                    <form method="POST" action="{{ route('admin.shifts.recalculate_operation_metrics') }}" class="mb-4">
+                        @csrf
+                        <div class="row align-items-end">
+                            <div class="col-md-3">
+                                <div class="form-group mb-0">
+                                    <label for="recalculate_date">{{ __('Date') }}</label>
+                                    <input type="text" name="recalculate_date" id="recalculate_date" class="form-control date"
+                                        value="{{ $fromDate ?: date(config('panel.date_format')) }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-warning">
+                                    {{ __('Recalculate operation metrics') }}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-warning">
-                            {{ __('Recalculate operation metrics') }}
-                        </button>
-                    </div>
-                </div>
-            </form>
-            @endif
+                    </form>
+                @endif
+            @endcan
 
             @if ($globalMetrics)
                 <div class="mb-4">
@@ -109,7 +110,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($isAdmin)
+                        @can('view_all_shifts')
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-body">
@@ -118,7 +119,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        @endcan
                     </div>
                 </div>
             @endif
