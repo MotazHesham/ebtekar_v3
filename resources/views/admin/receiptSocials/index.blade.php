@@ -435,11 +435,10 @@
                                                 </span>
                                             @endforeach
                                         @endif
-                                        @if($receipt->utm_details)
-                                            <br>
-                                            <button type="button" class="btn btn-sm btn-outline-info mt-1" onclick="showUtmDetails({{ json_encode($receipt->utm_details) }})">
-                                                عرض بيانات UTM
-                                            </button>
+                                        @if($receipt->utm_details) 
+                                            <span style="cursor: pointer;" class="badge text-bg-primary text-white mb-1" onclick="showUtmDetails({{ json_encode($receipt->utm_details) }})">
+                                                UTM
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
