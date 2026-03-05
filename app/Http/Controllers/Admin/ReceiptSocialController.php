@@ -717,6 +717,7 @@ class ReceiptSocialController extends Controller
         $shopify_order_num = null;
         $status_code = null;
         $quickly_return = null;
+        $utm = null;
 
 
         $currentCreatorShift = EmployeeShift::where('user_id', auth()->user()->id)
@@ -773,6 +774,10 @@ class ReceiptSocialController extends Controller
             }else{
                 $receipts = $receipts->where('status_code', $status_code);
             } 
+        }
+        if ($request->utm != null) {
+            $utm = $request->utm;
+            $receipts = $receipts->where('utm_details', 'like', '%' . $utm . '%');
         }
         if ($request->quickly_return != null) {
             $quickly_return = $request->quickly_return;
@@ -1012,7 +1017,7 @@ class ReceiptSocialController extends Controller
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type', 
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts',
-            'selectedProducts','has_followup','shopify_order_num','status_code','quickly_return','currentCreatorShift'));
+            'selectedProducts','has_followup','shopify_order_num','status_code','quickly_return','utm','currentCreatorShift'));
         }
 
         return view('admin.receiptSocials.index', compact(
@@ -1021,7 +1026,7 @@ class ReceiptSocialController extends Controller
             'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
             'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
             'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts',
-            'selectedProducts','has_followup','shopify_order_num','status_code','quickly_return','currentCreatorShift'
+            'selectedProducts','has_followup','shopify_order_num','status_code','quickly_return','utm','currentCreatorShift'
         ));
     }
 

@@ -435,6 +435,12 @@
                                                 </span>
                                             @endforeach
                                         @endif
+                                        @if($receipt->utm_details)
+                                            <br>
+                                            <button type="button" class="btn btn-sm btn-outline-info mt-1" onclick="showUtmDetails({{ json_encode($receipt->utm_details) }})">
+                                                عرض بيانات UTM
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                                 @if($receipt->shopify_id)
@@ -892,6 +898,21 @@
         </div>
     </div>
 
+    <!-- UTM Details Modal -->
+    <div class="modal fade" id="utmDetailsModal" tabindex="-1" aria-labelledby="utmDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="utmDetailsModalLabel">بيانات UTM</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="utm-details-content" style="white-space: pre-wrap; word-break: break-word;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Client Review Comment Modal -->
     <div class="modal fade" id="clientReviewModal" tabindex="-1" aria-labelledby="clientReviewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -922,6 +943,29 @@
                 return confirm('are you sure?');
             });
         });
+
+        function showUtmDetails(details) {
+            var contentHtml = '';
+
+            if (!details) {
+                contentHtml = '<p>لا توجد بيانات UTM متاحة لهذا الأوردر.</p>';
+            } else {
+                try {
+                    var parsed = JSON.parse(details);
+                    if (typeof parsed === 'object') {
+                        contentHtml = '<pre class="mb-0">' + JSON.stringify(parsed, null, 2) + '</pre>';
+                    } else {
+                        contentHtml = '<pre class="mb-0">' + parsed + '</pre>';
+                    }
+                } catch (e) {
+                    var safeText = $('<div>').text(details).html();
+                    contentHtml = '<pre class="mb-0">' + safeText + '</pre>';
+                }
+            }
+
+            $('#utm-details-content').html(contentHtml);
+            $('#utmDetailsModal').modal('show');
+        }
 
         function products_report(){
             $.post('{{ route('admin.receipt-social-products.products_report') }}', {

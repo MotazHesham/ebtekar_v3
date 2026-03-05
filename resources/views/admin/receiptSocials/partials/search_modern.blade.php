@@ -500,6 +500,14 @@
                                 placeholder="{{ __('global.extra.description') }}">
                         </div>
                         <div class="filter-item">
+                            <label>UTM</label>
+                            <input type="text"
+                                class="form-control @isset($utm) isset @endisset"
+                                id="utm" name="utm"
+                                @isset($utm) value="{{ $utm }}" @endisset
+                                placeholder="ابحث في بيانات UTM">
+                        </div>
+                        <div class="filter-item">
                             <label>{{ __('global.extra.from_order') }}</label>
                             <input type="text"
                                 class="form-control @isset($from) isset @endisset"
