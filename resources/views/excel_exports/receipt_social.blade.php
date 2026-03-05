@@ -12,6 +12,9 @@
                 رقم الهاتف
             </th>
             <th>
+                UTM
+            </th>
+            <th>
                 العربون
             </th> 
             <th>
@@ -60,6 +63,7 @@
                 <td>{{ $receipt->order_num }}</td>
                 <td>{{ $receipt->client_name }}</td>
                 <td>{{ $receipt->phone_number }}</td>
+                <td>{{ $receipt->utm_details }}</td>
                 <td>{{ $receipt->deposit }}</td> 
                 <td>{{ $receipt->calc_total_for_client() }}</td>
                 <td>{{ $receipt->commission + $receipt->extra_commission }}</td>
