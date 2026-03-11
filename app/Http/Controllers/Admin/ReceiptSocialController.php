@@ -1105,7 +1105,7 @@ class ReceiptSocialController extends Controller
 
         $adAccounts = AdsAccount::where('type','messages')->get();
 
-        $adAccountDetails = AdsAccountDetail::with('parentRecursive')->whereIn('ad_account_id', $adAccounts->pluck('id'))->where('type','ad')->get();
+        $adAccountDetails = AdsAccountDetail::with('parentRecursive','parent')->whereIn('ad_account_id', $adAccounts->pluck('id'))->where('type','ad')->get();
         
         return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data' , 'websites','website_setting_id','financial_accounts' , 'adAccountDetails'));
     }
@@ -1145,6 +1145,10 @@ class ReceiptSocialController extends Controller
 
         $financial_accounts = FinancialAccount::where('active',1)->get();
 
+        $adAccounts = AdsAccount::where('type','messages')->get();
+
+        $adAccountDetails = AdsAccountDetail::with('parentRecursive','parent')->whereIn('ad_account_id', $adAccounts->pluck('id'))->where('type','ad')->get();
+
         $receiptSocial->load('delivery_man', 'shipping_country', 'socials');
 
         if($site_settings->delivery_system == 'wasla'){
@@ -1154,7 +1158,7 @@ class ReceiptSocialController extends Controller
             $response = '';
         }  
 
-        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response','financial_accounts'));
+        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response','financial_accounts','adAccountDetails'));
     }
 
     public function update(UpdateReceiptSocialRequest $request, ReceiptSocial $receiptSocial)
@@ -1165,6 +1169,31 @@ class ReceiptSocialController extends Controller
                 return redirect()->back();
             }
         }
+
+        
+        $oldAdHistory = AdsAccountHistory::find($receiptSocial->ad_history_id); 
+        $oldAdAccountId = $oldAdHistory->ad_account_detail_id ?? null;
+
+        if($request->ad_id != $oldAdAccountId){
+            if($oldAdHistory){ 
+                RecalculateAdsAccountHistory::dispatch($oldAdHistory);
+            }
+            $createdAt = $receiptSocial->created_at ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $receiptSocial->created_at)->format('Y-m-d H:i:s') : null;
+            $date = explode(' ', $createdAt)[0]; 
+            if($request->ad_id && $request->ad_id != ''){
+                $adAccountDetail = AdsAccountDetail::findOrFail($request->ad_id);
+                $adHistory = getAdHistoryForMessagesOrders($adAccountDetail, $date); 
+            }else{
+                $adAccount = AdsAccount::find(1);
+                $adHistory = getAdHistoryForOrganicOrders($adAccount, 'receipt-social', $date); 
+            }
+            $receiptSocial->ad_history_id = $adHistory->id;
+            $receiptSocial->save();
+
+            RecalculateAdsAccountHistory::dispatch($adHistory);
+            
+        }
+
         $receiptSocial->update($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
 

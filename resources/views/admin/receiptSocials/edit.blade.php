@@ -27,6 +27,28 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="required" for="ad_id">Ad</label>
+                                    <select class="form-control select2 {{ $errors->has('ad_id') ? 'is-invalid' : '' }}"
+                                        name="ad_id" id="ad_id">
+                                        <option value="">{{ __('global.pleaseSelect') }}</option>
+                                        @foreach ($adAccountDetails as $entry)
+                                            <option value="{{ $entry->id }}" {{ old('ad_id', ($receiptSocial->adHistory->ad_account_detail_id ?? null)) == $entry->id ? 'selected' : '' }}>
+                                                {{ $entry->name }} - 
+                                                @foreach ($entry->getAllParents() as $parent)
+                                                ({{ $parent->name }} {{ $parent->type}}) @if (!$loop->last) - @endif
+                                                @endforeach 
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('ad_id'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('ad_id') }}
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="col-md-6">
 
                                 <div class="form-group">
