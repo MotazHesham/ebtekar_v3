@@ -38,6 +38,13 @@ if (!function_exists('extractUtm')) {
             'utm_source'   => $params['utm_source']   ?? null,
             'utm_medium'   => $params['utm_medium']   ?? null,
             'utm_campaign' => $params['utm_campaign'] ?? null,
+            'utm_term'     => $params['utm_term']     ?? null,
+            'utm_content'  => $params['utm_content']  ?? null,
+            'fbclid'       => $params['fbclid']       ?? null,
+            'srsltid'      => $params['srsltid']      ?? null,
+            'gad_campaignid' => $params['gad_campaignid'] ?? null,
+            'gclid'        => $params['gclid']        ?? null,
+            'ttclid'       => $params['ttclid']       ?? null,
         ];
     }
 }
