@@ -47,10 +47,32 @@ if (!function_exists('getAdHistoryByUtm')) {
     {
         if ($platform == 'shopify') { 
             $utmDetails = extractUtm($utmDetails);
-            $campaignKey = $utmDetails['utm_source'] ?? 'NAN';
-            $adSetKey = $utmDetails['utm_medium'] ?? 'NAN';
-            $adKey = $utmDetails['utm_campaign'] ?? 'NAN';
+            $ttclid = $utmDetails['ttclid'] ?? null;
+            if(isset($ttclid)){
+                $ttclid = 'tiktok';
+            }
+
+            $fbclid = $utmDetails['fbclid'] ?? null;
+            if(isset($fbclid)){
+                $fbclid = 'fbclid';
+            }
             
+            $campaignKey = $utmDetails['utm_campaign'] ?? 'NAN';
+            $adSetKey = $utmDetails['utm_term'] ?? 'NAN';
+            $adKey = $utmDetails['utm_content'] ?? 'NAN';
+            
+            if($fbclid && $campaignKey == 'NAN'){
+                $campaignKey = $fbclid;
+                $adSetKey = $fbclid;
+                $adKey = $fbclid;
+            }
+
+            if($ttclid && $campaignKey == 'NAN'){
+                $campaignKey = $ttclid;
+                $adSetKey = $ttclid;
+                $adKey = $ttclid;
+            }
+
             // Campaign
             $campaign = AdsAccountDetail::where('type', 'campaign')
                 ->where('utm_key', $campaignKey)
@@ -74,6 +96,7 @@ if (!function_exists('getAdHistoryByUtm')) {
                     'name' => $adSetKey,
                     'utm_key' => $adSetKey,
                     'type' => 'ad_set',
+                    'ad_account_id' => $campaign->ad_account_id ?? null,
                 ]);
             }
 
@@ -88,6 +111,7 @@ if (!function_exists('getAdHistoryByUtm')) {
                     'name' => $adKey,
                     'utm_key' => $adKey,
                     'type' => 'ad',
+                    'ad_account_id' => $adSet->ad_account_id ?? null,
                 ]);
             }
 
