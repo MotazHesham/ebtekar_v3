@@ -47,6 +47,17 @@ if (!function_exists('getAdHistoryByUtm')) {
     {
         if ($platform == 'shopify') { 
             $utmDetails = extractUtm($utmDetails);
+
+            $gad_campaignid = $utmDetails['gad_campaignid'] ?? null;
+            if(isset($gad_campaignid)){
+                $gad_campaignid = 'sag_organic';
+            }
+
+            $gclid = $utmDetails['gclid'] ?? null;
+            if(isset($gclid)){
+                $gclid = 'sag_organic';
+            }
+
             $ttclid = $utmDetails['ttclid'] ?? null;
             if(isset($ttclid)){
                 $ttclid = 'tiktok';
@@ -56,9 +67,14 @@ if (!function_exists('getAdHistoryByUtm')) {
             if(isset($fbclid)){
                 $fbclid = 'fbclid';
             }
-            
+
+            $srsltid = $utmDetails['srsltid'] ?? null;
+            if(isset($srsltid)){
+                $srsltid = 'Google Shopping';
+            }
+
             $campaignKey = $utmDetails['utm_campaign'] ?? 'NAN';
-            $adSetKey = $utmDetails['utm_term'] ?? 'NAN';
+            $adSetKey = $utmDetails['utm_term'] ?? $utmDetails['utm_medium'] ?? 'NAN';
             $adKey = $utmDetails['utm_content'] ?? 'NAN';
             
             if($fbclid && $campaignKey == 'NAN'){
@@ -71,6 +87,18 @@ if (!function_exists('getAdHistoryByUtm')) {
                 $campaignKey = $ttclid;
                 $adSetKey = $ttclid;
                 $adKey = $ttclid;
+            }
+
+            if(($gad_campaignid || $gclid) && $campaignKey == 'NAN'){
+                $campaignKey = $gad_campaignid ?? $gclid;
+                $adSetKey = $gad_campaignid ?? $gclid;
+                $adKey = $gad_campaignid ?? $gclid;
+            } 
+
+            if($srsltid && $campaignKey == 'NAN'){
+                $campaignKey = $srsltid;
+                $adSetKey = $srsltid;
+                $adKey = $srsltid;
             }
 
             // Campaign
