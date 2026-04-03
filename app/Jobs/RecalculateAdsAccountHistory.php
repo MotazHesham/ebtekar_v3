@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 class RecalculateAdsAccountHistory implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
+    
     protected $adHistory;
 
     public function __construct($adHistory)
@@ -26,6 +26,10 @@ class RecalculateAdsAccountHistory implements ShouldQueue
     {
         $adHistory = $this->adHistory; 
 
+        if(!$adHistory){
+            return;
+        }
+        
         // ReceiptSocial status: pending (confirm=0 done=0 returned=0), confirmed (confirm=1 done=0 return=0),
         // delivered (done=1), returned (returned=1). total_sales = total_cost + shipping_country_cost, total_sales_without_shipping = total_cost.
         $statusCase = "CASE
