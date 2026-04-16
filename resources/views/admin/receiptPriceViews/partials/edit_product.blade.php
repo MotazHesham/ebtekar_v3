@@ -17,7 +17,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="">{{ __('global.extra.price') }}</label>
-                        <input class="form-control" type="number" name="price" value="{{ $receipt_price_view_product->price }}" step="1" min="1" placeholder="{{ __('global.extra.price') }}" required>
+                        <input class="form-control" type="number" name="price" value="{{ $receipt_price_view_product->price }}" step="0.01" min="1" placeholder="{{ __('global.extra.price') }}" required>
                     </div>
                 </div>
                 <div class="col-md-4">
