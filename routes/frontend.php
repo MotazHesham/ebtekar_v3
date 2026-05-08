@@ -101,6 +101,8 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
         Route::get('orders', 'OrderController@orders')->name('orders');
         Route::get('commission_requests', 'OrderController@commission_requests')->name('orders.commission_requests');
         Route::post('request_commission', 'OrderController@request_commission')->name('orders.request_commission.store');
+        Route::get('marketer/dashboard', 'MarketerController@dashboard')->name('marketer.dashboard');
+        Route::get('marketer/statement', 'MarketerController@statement')->name('marketer.statement');
 
         // profile
         Route::post('update_profile', 'ProfileController@update_profile')->name('update_profile');

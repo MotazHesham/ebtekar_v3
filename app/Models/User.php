@@ -58,7 +58,8 @@ class User extends Authenticatable implements HasMedia
         'delivery_man' => 'Delivery Man',
         'admin'        => 'Admin',
         'seller'       => 'Seller',
-        'designer'       => 'Designer',
+        'designer'     => 'Designer',
+        'marketer'     => 'Marketer',
     ];
 
     protected $fillable = [
@@ -216,6 +217,11 @@ class User extends Authenticatable implements HasMedia
     public function seller()
     {
         return $this->hasOne(Seller::class);
+    }
+
+    public function marketer()
+    {
+        return $this->hasOne(Marketer::class);
     }
 
     public function orders()

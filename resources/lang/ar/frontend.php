@@ -1,23 +1,23 @@
 <?php
 
-return [ 
+return [
     'home' => [
         'new_products' => 'المنتجات الجديدة',
-        'most_selling' =>'الأكثر مبيعا',
+        'most_selling' => 'الأكثر مبيعا',
         'customer_reviews' => 'تقييمات العملاء',
     ],
-    'app' => [ 
-        'favorites' =>' المفضلة',
-        'show_favorites' =>' عرض قائمتي المفضلة',
+    'app' => [
+        'favorites' => ' المفضلة',
+        'show_favorites' => ' عرض قائمتي المفضلة',
     ],
-    'header' => [ 
-        'favorites' =>' المفضلة',
-        'all_products' =>'   جميع المنتجات',
-        'search_product' =>'بحث عن منتج',
-        'cart' =>'سلة',
-        'shoping' =>'التسوق',
-        'back' =>'العودة',
-        'shoping_by_category' =>'تسوق حسب التصنيفات',
+    'header' => [
+        'favorites' => ' المفضلة',
+        'all_products' => '   جميع المنتجات',
+        'search_product' => 'بحث عن منتج',
+        'cart' => 'سلة',
+        'shoping' => 'التسوق',
+        'back' => 'العودة',
+        'shoping_by_category' => 'تسوق حسب التصنيفات',
         'home' => 'الرئيسية',
         'new_products' => 'أحدث المنتجات',
         'products' => 'منتجاتنا',
@@ -40,27 +40,27 @@ return [
         'subscribe_now' => 'اشترك الان',
         'privacy' => 'سياسة الخصوصية',
     ],
-    'about' => [ 
-        'ertgal' =>'عن أرتجار',
-        'figures' =>'عن فيجرز',
-        'shirti' =>'عن شيرتي',
-        'ebtekar' =>'عن أبتكار',
-        'home' =>'الرئيسية',
-        'dashboard' =>'لوحة التحكم',
+    'about' => [
+        'ertgal' => 'عن أرتجار',
+        'figures' => 'عن فيجرز',
+        'shirti' => 'عن شيرتي',
+        'ebtekar' => 'عن أبتكار',
+        'home' => 'الرئيسية',
+        'dashboard' => 'لوحة التحكم',
     ],
-    'cart' => [ 
-        'shoping_cart' =>'سلة التسوق',
-        'product_photos' =>'صورة المنتج',
-        'product_name' =>'اسم المنتج',
-        'price' =>'السعر',
-        'quantity' =>'العدد',
-        'total' =>'الأجمالي',
-        'total_cost' =>'إجمالي السعر',
-        'shoping' =>'استمر في التسوق',
-        'payment' =>'اتمام عملية الدفع',
+    'cart' => [
+        'shoping_cart' => 'سلة التسوق',
+        'product_photos' => 'صورة المنتج',
+        'product_name' => 'اسم المنتج',
+        'price' => 'السعر',
+        'quantity' => 'العدد',
+        'total' => 'الأجمالي',
+        'total_cost' => 'إجمالي السعر',
+        'shoping' => 'استمر في التسوق',
+        'payment' => 'اتمام عملية الدفع',
 
-        'show_cart' =>'عرض السلة',
-        'payment_direct' =>'الدفع',
+        'show_cart' => 'عرض السلة',
+        'payment_direct' => 'الدفع',
     ],
     'checkout' => [
         'payment' => 'الدفع',
@@ -118,6 +118,8 @@ return [
         'start_designs' => 'أبدأ التصميم',
         'wishlist' => 'قائمة الامنيات',
         'change_password' => 'تغيير  كلمة المرور',
+        'marketer_dashboard' => 'لوحة تحكم المسوق',
+        'statement' => 'بيان المسوق',
     ],
     'contact_us' => [
         'contact' => 'تواصل معنا',
@@ -137,7 +139,7 @@ return [
         'photo' => 'صورة البروفايل',
         'qualification' => 'المؤهل',
         'social_name' => 'أسم البيدج أو الجروب',
-        'social_link' => 'لينك البيدج أو الجروب', 
+        'social_link' => 'لينك البيدج أو الجروب',
         'identity_back' => 'صورة البطاقة من الخلف',
         'identity_front' => 'صورة البطاقة من الأمام',
         'submit' => 'تحديث',
@@ -152,7 +154,7 @@ return [
         'p_1' => 'تم ارسال طلبك بنجاح',
         'p_2' => 'رقم الطلب',
     ],
-    'orders' => [ 
+    'orders' => [
         'orders' => 'طلباتي السابقة',
         'product' => 'المنتج',
         'description' => 'التفاصيل',
@@ -215,11 +217,11 @@ return [
         'price_high' => ' السعر من الأعلي للأرخص',
     ],
     'wishlists' => [
-        'list' => 'قائمة الامنيات', 
+        'list' => 'قائمة الامنيات',
         'photo' => 'الصورة',
         'product_name' => 'اسم المنتج',
         'price' => 'السعر',
-        'shoping' =>'استمر في التسوق',
-        'cart' =>'  عربة التسوق',
+        'shoping' => 'استمر في التسوق',
+        'cart' => '  عربة التسوق',
     ]
 ];

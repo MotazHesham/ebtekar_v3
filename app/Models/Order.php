@@ -304,6 +304,11 @@ class Order extends Model
     {
         return $this->morphMany(WorkflowOperation::class, 'model');
     }
+
+    public function marketerAttribution()
+    {
+        return $this->hasOne(OrderMarketerAttribution::class, 'order_id');
+    }
     
     public function add_income(){ 
         Income::create([ 

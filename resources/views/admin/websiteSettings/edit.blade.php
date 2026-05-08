@@ -451,6 +451,40 @@
                             </div>
                         @endif
                     </div>
+                    <div class="form-group col-md-4">
+                        <label for="marketer_attribution_policy">Marketer Attribution Policy</label>
+                        <select name="marketer_attribution_policy" id="marketer_attribution_policy"
+                            class="form-control {{ $errors->has('marketer_attribution_policy') ? 'is-invalid' : '' }}">
+                            <option value="first_click"
+                                {{ old('marketer_attribution_policy', $websiteSetting->marketer_attribution_policy) === 'first_click' ? 'selected' : '' }}>
+                                First Click
+                            </option>
+                            <option value="last_click"
+                                {{ old('marketer_attribution_policy', $websiteSetting->marketer_attribution_policy) === 'last_click' ? 'selected' : '' }}>
+                                Last Click
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="marketer_attribution_window_days">Attribution Window (Days)</label>
+                        <input class="form-control {{ $errors->has('marketer_attribution_window_days') ? 'is-invalid' : '' }}"
+                            type="number" min="0" name="marketer_attribution_window_days"
+                            id="marketer_attribution_window_days"
+                            value="{{ old('marketer_attribution_window_days', $websiteSetting->marketer_attribution_window_days) }}"
+                            placeholder="e.g. 30 or 60, leave empty for no expiry">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="marketer_lock_on_first_order">Lock Attribution on First Order</label>
+                        <select name="marketer_lock_on_first_order" id="marketer_lock_on_first_order"
+                            class="form-control {{ $errors->has('marketer_lock_on_first_order') ? 'is-invalid' : '' }}">
+                            <option value="1"
+                                {{ old('marketer_lock_on_first_order', $websiteSetting->marketer_lock_on_first_order) == 1 ? 'selected' : '' }}>
+                                Enabled</option>
+                            <option value="0"
+                                {{ old('marketer_lock_on_first_order', $websiteSetting->marketer_lock_on_first_order) == 0 ? 'selected' : '' }}>
+                                Disabled</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-danger" type="submit">

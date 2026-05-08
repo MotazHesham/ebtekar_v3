@@ -21,6 +21,7 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 use App\Models\UserAlert;
+use App\Services\MarketerAttributionService;
 use App\Services\FacebookService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,13 @@ use Nafezly\Payments\Classes\PaymobWalletPayment;
 use Nafezly\Payments\Classes\PaymobPayment;
 class CheckoutController extends Controller
 {
+    protected $marketerAttributionService;
+
+    public function __construct(MarketerAttributionService $marketerAttributionService)
+    {
+        $this->marketerAttributionService = $marketerAttributionService;
+    }
+
     public function checkout_summary(Request $request){
         $discount_code = $request->discount_code;
         $wrong_disocunt_code = false; 
@@ -157,6 +165,7 @@ class CheckoutController extends Controller
             } 
             
             if ($request->payment_option != null) {
+                $marketerPayload = $this->marketerAttributionService->resolveForCheckout($request, $user, $site_settings);
 
                 if($user && $user->user_type == 'seller'){ 
                     $order_num = generateOrderNumber('seller#',$site_settings->id);
@@ -275,6 +284,16 @@ class CheckoutController extends Controller
                 $order->commission = $total_commission;
                 $order->total_cost = $total_cost; 
                 $order->save();
+
+                if ($marketerPayload && isset($marketerPayload['marketer'])) {
+                    $this->marketerAttributionService->attachOrderAttribution(
+                        $order,
+                        $marketerPayload['marketer'],
+                        $marketerPayload['attribution'] ?? null,
+                        $marketerPayload['source'] ?? 'link'
+                    );
+                    $this->marketerAttributionService->refreshOrderCommission($order);
+                }
 
 
                 if($user && $user->user_type == 'seller'){

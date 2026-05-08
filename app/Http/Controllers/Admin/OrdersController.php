@@ -21,6 +21,7 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 use App\Models\WebsiteSetting;
+use App\Services\MarketerAttributionService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrdersController extends Controller
 {
+    protected $marketerAttributionService;
+
+    public function __construct(MarketerAttributionService $marketerAttributionService)
+    {
+        $this->marketerAttributionService = $marketerAttributionService;
+    }
+
     public function products_report(Request $request){ 
         $website_setting_id = $request->website_setting_id; 
         $products = OrderDetail::whereHas('order',function($q) use($website_setting_id, $request){
@@ -158,6 +166,7 @@ class OrdersController extends Controller
             $order->hold_reason = $request->hold_reason;
         }
         $order->save(); 
+        $this->marketerAttributionService->refreshOrderCommission($order);
         if($request->ajax()){
             return [
                 'status' => $status,
@@ -184,6 +193,7 @@ class OrdersController extends Controller
         $order->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
         $order->delivery_status = 'on_delivery'; 
         $order->save();
+        $this->marketerAttributionService->refreshOrderCommission($order);
         toast(__('flash.global.success_title'),'success');
         return redirect()->route('admin.orders.show',$order->id);
     }
@@ -502,6 +512,7 @@ class OrdersController extends Controller
     public function update(Request $request, Order $order)
     {
         $order->update($request->all());
+        $this->marketerAttributionService->refreshOrderCommission($order->fresh());
 
         return redirect()->route('admin.orders.index');
     }

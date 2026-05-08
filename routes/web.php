@@ -199,6 +199,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('sellers/ckmedia', 'SellersController@storeCKEditorImages')->name('sellers.storeCKEditorImages');
     Route::resource('sellers', 'SellersController');
 
+    // Marketers
+    Route::post('marketers/update_statuses', 'MarketersController@update_statuses')->name('marketers.update_statuses');
+    Route::get('marketers/reports', 'MarketersController@reports')->name('marketers.reports');
+    Route::get('marketers/referral-dashboard', 'MarketersController@referralDashboard')->name('marketers.referral-dashboard');
+    Route::get('marketers/reports/pdf', 'MarketersController@reportsPdf')->name('marketers.reports.pdf');
+    Route::get('marketers/reports/excel', 'MarketersController@reportsExcel')->name('marketers.reports.excel');
+    Route::post('marketers/payout', 'MarketersController@payout')->name('marketers.payout');
+    Route::get('marketers/payout-history', 'MarketersController@payoutHistory')->name('marketers.payout-history');
+    Route::resource('marketers', 'MarketersController');
+
     // Commission Requests
     Route::delete('commission-requests/destroy', 'CommissionRequestsController@massDestroy')->name('commission-requests.massDestroy');
     Route::resource('commission-requests', 'CommissionRequestsController'); 

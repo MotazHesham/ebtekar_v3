@@ -1,23 +1,23 @@
 <?php
 
-return [ 
+return [
     'home' => [
         'new_products' => 'New Products',
-        'most_selling' =>'Best Selling',
+        'most_selling' => 'Best Selling',
         'customer_reviews' => 'Customer Reviews',
     ],
-    'app' => [ 
-        'favorites' =>' Favorites',
-        'show_favorites' =>'Show Favorites',
+    'app' => [
+        'favorites' => ' Favorites',
+        'show_favorites' => 'Show Favorites',
     ],
-    'header' => [ 
-        'favorites' =>' Favorites',
-        'all_products' =>'All Products',
-        'search_product' =>'Search for product',
-        'cart' =>'Cart',
-        'shoping' =>'Shopping',
-        'back' =>'Back',
-        'shoping_by_category' =>'Shopping By Category',
+    'header' => [
+        'favorites' => ' Favorites',
+        'all_products' => 'All Products',
+        'search_product' => 'Search for product',
+        'cart' => 'Cart',
+        'shoping' => 'Shopping',
+        'back' => 'Back',
+        'shoping_by_category' => 'Shopping By Category',
         'home' => 'Home',
         'new_products' => 'NewProducts',
         'products' => 'Products',
@@ -40,27 +40,27 @@ return [
         'subscribe_now' => 'Subscribe Now',
         'privacy' => 'Privacy Policy',
     ],
-    'about' => [ 
-        'ertgal' =>'About Ertgal',
-        'figures' =>'About Figures',
-        'shirti' =>'About Shirit',
-        'ebtekar' =>'About Ebtekar',
-        'home' =>'Home',
-        'dashboard' =>'Dashboard',
+    'about' => [
+        'ertgal' => 'About Ertgal',
+        'figures' => 'About Figures',
+        'shirti' => 'About Shirit',
+        'ebtekar' => 'About Ebtekar',
+        'home' => 'Home',
+        'dashboard' => 'Dashboard',
     ],
-    'cart' => [ 
-        'shoping_cart' =>'Shopping Cart',
-        'product_photos' =>'Product Photo',
-        'product_name' =>'Product Name',
-        'price' =>'Price',
-        'quantity' =>'Quantity',
-        'total' =>'Total',
-        'total_cost' =>'Total Cost',
-        'shoping' =>'Containue Shopping',
-        'payment' =>'Complete Payment',
+    'cart' => [
+        'shoping_cart' => 'Shopping Cart',
+        'product_photos' => 'Product Photo',
+        'product_name' => 'Product Name',
+        'price' => 'Price',
+        'quantity' => 'Quantity',
+        'total' => 'Total',
+        'total_cost' => 'Total Cost',
+        'shoping' => 'Containue Shopping',
+        'payment' => 'Complete Payment',
 
-        'show_cart' =>'Show Cart',
-        'payment_direct' =>'Payment',
+        'show_cart' => 'Show Cart',
+        'payment_direct' => 'Payment',
     ],
     'checkout' => [
         'payment' => 'Payment',
@@ -118,6 +118,8 @@ return [
         'start_designs' => 'Start Design',
         'wishlist' => 'Wishlists',
         'change_password' => 'Change Password',
+        'marketer_dashboard' => 'Marketer Dashboard',
+        'statement' => 'Marketer Statement',
     ],
     'contact_us' => [
         'contact' => 'ContactUs',
@@ -137,7 +139,7 @@ return [
         'photo' => 'Profile Photo',
         'qualification' => 'Qualification',
         'social_name' => 'Social Name',
-        'social_link' => 'Social Link', 
+        'social_link' => 'Social Link',
         'identity_back' => 'Identity Back',
         'identity_front' => 'Identity Front',
         'submit' => 'Update',
@@ -152,7 +154,7 @@ return [
         'p_1' => 'We Send You Email With The Order info',
         'p_2' => 'Order Number',
     ],
-    'orders' => [ 
+    'orders' => [
         'orders' => 'Latest Orders',
         'product' => 'Product',
         'description' => 'Description',
@@ -214,11 +216,11 @@ return [
         'price_high' => 'Hight To Low (Price)',
     ],
     'wishlists' => [
-        'list' => 'Wishlist', 
+        'list' => 'Wishlist',
         'photo' => 'Photo',
         'product_name' => 'Product Name',
         'price' => 'Price',
-        'shoping' =>'Continue Shopping',
-        'cart' =>'Shopping Cart',
+        'shoping' => 'Continue Shopping',
+        'cart' => 'Shopping Cart',
     ]
 ];

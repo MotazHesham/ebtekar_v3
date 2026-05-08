@@ -81,6 +81,19 @@ class UpdateWebsiteSettingRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'marketer_attribution_window_days' => [
+                'nullable',
+                'integer',
+                'min:0',
+            ],
+            'marketer_attribution_policy' => [
+                'nullable',
+                'in:first_click,last_click',
+            ],
+            'marketer_lock_on_first_order' => [
+                'nullable',
+                'boolean',
+            ],
         ];
     }
 }
