@@ -123,7 +123,7 @@ class MarketerAttributionService
             return null;
         }
 
-        $base = max(((float) $order->total_cost - (float) $order->shipping_country_cost), 0);
+        $base = max(((float) $order->calc_total_cost() - (float) $order->calc_discount()), 0);
         $rate = (float) $marketer->commission_rate;
         $amount = round($base * ($rate / 100), 2);
 
