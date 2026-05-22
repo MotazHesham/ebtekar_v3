@@ -1,0 +1,11 @@
+{
+    "Shipping": true,
+    "Courier": true,
+    "Dispatch": true,
+    "Tracking": true,
+    "Settlement": true,
+    "Returns": true,
+    "Timeline": true,
+    "Notifications": true,
+    "Reports": true
+}

@@ -18,7 +18,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(
+            \App\Contracts\Shipping\OrderSnapshotProviderContract::class,
+            \App\Integrations\Shipping\OrderSnapshotProvider::class
+        );
     }
 
     /**

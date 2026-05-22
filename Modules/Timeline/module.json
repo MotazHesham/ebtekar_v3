@@ -1,0 +1,10 @@
+{
+    "name": "Timeline",
+    "alias": "timeline",
+    "description": "Shipment timeline, notes, status history",
+    "priority": 1,
+    "providers": [
+        "Modules\\Timeline\\Providers\\TimelineServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,8 @@
+{
+    "name": "Dispatch",
+    "alias": "dispatch",
+    "description": "Courier assignment and batch dispatch",
+    "priority": 4,
+    "providers": ["Modules\\Dispatch\\Providers\\DispatchServiceProvider"],
+    "files": []
+}

@@ -1,0 +1,8 @@
+{
+    "name": "Tracking",
+    "alias": "tracking",
+    "description": "Barcode scans and live tracking",
+    "priority": 5,
+    "providers": ["Modules\\Tracking\\Providers\\TrackingServiceProvider"],
+    "files": []
+}

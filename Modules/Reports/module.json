@@ -1,0 +1,8 @@
+{
+    "name": "Reports",
+    "alias": "reports",
+    "description": "Shipping analytics and exports",
+    "priority": 9,
+    "providers": ["Modules\\Reports\\Providers\\ReportsServiceProvider"],
+    "files": []
+}

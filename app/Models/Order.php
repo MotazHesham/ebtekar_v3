@@ -245,6 +245,16 @@ class Order extends Model
         return $this->belongsTo(User::class, 'delivery_man_id')->withTrashed();
     }
 
+    public function deliveryOrders()
+    {
+        return $this->morphMany(\Modules\Shipping\Entities\Shipment::class, 'orderable');
+    }
+
+    public function deliveryOrder()
+    {
+        return $this->morphOne(\Modules\Shipping\Entities\Shipment::class, 'orderable');
+    }
+
     public function reviewer()
     {
         return $this->belongsTo(User::class, 'reviewer_id')->withTrashed();

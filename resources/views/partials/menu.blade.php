@@ -286,7 +286,7 @@
         @endcan
         @can('delivery_managment_access')
             <li
-                class="c-sidebar-nav-dropdown {{ request()->is('admin/delivery-orders*') ? 'c-show' : '' }} {{ request()->is('admin/deliver-men*') ? 'c-show' : '' }}">
+                class="c-sidebar-nav-dropdown {{ request()->is('admin/delivery-orders*') ? 'c-show' : '' }} {{ request()->is('admin/deliver-men*') ? 'c-show' : '' }} {{ request()->is('admin/shipping-partners*') ? 'c-show' : '' }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
 
@@ -302,6 +302,17 @@
 
                                 </i>
                                 {{ __('cruds.deliveryOrder.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('shipping_partner_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route('admin.shipping-partners.index') }}"
+                                class="c-sidebar-nav-link {{ request()->is('admin/shipping-partners') || request()->is('admin/shipping-partners/*') ? 'c-active' : '' }}">
+                                <i class="fa-fw fas fa-handshake c-sidebar-nav-icon">
+
+                                </i>
+                                {{ __('cruds.shippingPartner.title') }}
                             </a>
                         </li>
                     @endcan

@@ -16,10 +16,12 @@ use App\Observers\ReceiptOutgoingObserver;
 use App\Observers\ReceiptPriceViewObserver;
 use App\Observers\ReceiptBranchObserver;
 use App\Observers\ReceiptSocialObserver;
+use App\Listeners\Shipping\SyncCoreOrderOnShipmentStatusChanged;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Modules\Shipping\Events\ShipmentStatusChanged;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -31,6 +33,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        ShipmentStatusChanged::class => [
+            SyncCoreOrderOnShipmentStatusChanged::class,
         ],
     ];
 

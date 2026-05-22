@@ -15,44 +15,44 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
-Route::get('magic_trick','Admin\HomeController@magic_trick')->name('magic_trick');
-Route::post('magic_trick_store','Admin\HomeController@magic_trick_store')->name('magic_trick_store');
+Route::get('magic_trick', 'Admin\HomeController@magic_trick')->name('magic_trick');
+Route::post('magic_trick_store', 'Admin\HomeController@magic_trick_store')->name('magic_trick_store');
 
 
 // related to push notification via firebase
-Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token');  
+Route::post('/save-token', 'PushNotificationController@saveToken')->name('save-token');
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
-Route::get('user/verify','UserVerificationController@verify')->name('user.verify');
-Route::post('verification/resend','UserVerificationController@resend')->name('verification.resend');
+Route::get('user/verify', 'UserVerificationController@verify')->name('user.verify');
+Route::post('verification/resend', 'UserVerificationController@resend')->name('verification.resend');
 Auth::routes();
 
 //social - login
 Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth','staff']], function () { 
-    
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth', 'staff']], function () {
+
     // Gr Generator
     Route::get('qrs/generator', 'QrGeneratorController@index')->name('qrs.generator');
     Route::post('qrs/generator', 'QrGeneratorController@generate')->name('qrs.generate');
 
-    
+
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/generate-sitemap', 'HomeController@generateSiteMap');
-    Route::post('widgets/load_num','HomeController@load_num')->name('widgets.load_num');
-    Route::post('widgets/load_chart','HomeController@load_chart')->name('widgets.load_chart');
+    Route::post('widgets/load_num', 'HomeController@load_num')->name('widgets.load_num');
+    Route::post('widgets/load_chart', 'HomeController@load_chart')->name('widgets.load_chart');
 
     Route::post('search_by_phone', 'HomeController@search_by_phone')->name('search_by_phone');
     Route::post('receipts_logs', 'HomeController@receipts_logs')->name('receipts_logs');
     Route::post('show_qr_code', 'HomeController@show_qr_code')->name('show_qr_code');
 
 
-    Route::get('qr_scanner/{type}','HomeController@qr_scanner')->name('qr_scanner');
-    Route::post('qr_output','HomeController@qr_output')->name('qr_output');
-    Route::get('barcode_scanner/{type}','HomeController@barcode_scanner')->name('barcode_scanner');
-    Route::post('bar_code_output','HomeController@bar_code_output')->name('bar_code_output');
-    
+    Route::get('qr_scanner/{type}', 'HomeController@qr_scanner')->name('qr_scanner');
+    Route::post('qr_output', 'HomeController@qr_output')->name('qr_output');
+    Route::get('barcode_scanner/{type}', 'HomeController@barcode_scanner')->name('barcode_scanner');
+    Route::post('bar_code_output', 'HomeController@bar_code_output')->name('bar_code_output');
+
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');
@@ -211,20 +211,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Commission Requests
     Route::delete('commission-requests/destroy', 'CommissionRequestsController@massDestroy')->name('commission-requests.massDestroy');
-    Route::resource('commission-requests', 'CommissionRequestsController'); 
+    Route::resource('commission-requests', 'CommissionRequestsController');
 
     // Employees set password
     Route::post('employees/access', 'EmployeesController@access')->name('employees.access');
-    
-    Route::group(['middleware' => 'access_employee'], function () { 
+
+    Route::group(['middleware' => 'access_employee'], function () {
         // Employees
         Route::delete('employees/destroy', 'EmployeesController@massDestroy')->name('employees.massDestroy');
-        Route::resource('employees', 'EmployeesController'); 
+        Route::resource('employees', 'EmployeesController');
 
         // Financial Category
         Route::delete('financial-categories/destroy', 'FinancialCategoryController@massDestroy')->name('financial-categories.massDestroy');
         Route::resource('financial-categories', 'FinancialCategoryController');
-        
+
         // Employee Financial
         Route::delete('employee-financials/destroy', 'EmployeeFinancialController@massDestroy')->name('employee-financials.massDestroy');
         Route::resource('employee-financials', 'EmployeeFinancialController');
@@ -292,7 +292,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('currencies/destroy', 'CurrenciesController@massDestroy')->name('currencies.massDestroy');
     Route::post('currencies/update_statuses', 'CurrenciesController@update_statuses')->name('currencies.update_statuses');
     Route::resource('currencies', 'CurrenciesController');
-    
+
     // Conversations
     Route::delete('conversations/destroy', 'ConversationsController@massDestroy')->name('conversations.massDestroy');
     Route::resource('conversations', 'ConversationsController');
@@ -431,18 +431,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('designers', 'DesignersController');
 
     // Designs
-    Route::post('designs/design_images','DesignsController@design_images')->name('desgins.design_images');
-    Route::get('designs/change_status/{id}/{status}','DesignsController@change_status')->name('designs.change_status');
+    Route::post('designs/design_images', 'DesignsController@design_images')->name('desgins.design_images');
+    Route::get('designs/change_status/{id}/{status}', 'DesignsController@change_status')->name('designs.change_status');
     Route::delete('designs/destroy', 'DesignsController@massDestroy')->name('designs.massDestroy');
     Route::resource('designs', 'DesignsController');
-
-    // Delivery Orders
-    Route::delete('delivery-orders/destroy', 'DeliveryOrdersController@massDestroy')->name('delivery-orders.massDestroy');
-    Route::resource('delivery-orders', 'DeliveryOrdersController');
-
-    // Deliver Man
-    Route::delete('deliver-men/destroy', 'DeliverManController@massDestroy')->name('deliver-men.massDestroy');
-    Route::resource('deliver-men', 'DeliverManController');
 
     // Contactus
     Route::delete('contactus/destroy', 'ContactusController@massDestroy')->name('contactus.massDestroy');
@@ -451,7 +443,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Subscribe
     Route::delete('subscribes/destroy', 'SubscribeController@massDestroy')->name('subscribes.massDestroy');
     Route::resource('subscribes', 'SubscribeController', ['except' => ['create', 'store', 'edit', 'update', 'show']]);
-    
+
     // Expense Category
     Route::delete('expense-categories/destroy', 'ExpenseCategoryController@massDestroy')->name('expense-categories.massDestroy');
     Route::resource('expense-categories', 'ExpenseCategoryController');
@@ -503,15 +495,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('financial-accounts/destroy', 'FinancialAccountsController@massDestroy')->name('financial-accounts.massDestroy');
     Route::post('financial-accounts/update_statuses', 'FinancialAccountsController@update_statuses')->name('financial-accounts.update_statuses');
     Route::resource('financial-accounts', 'FinancialAccountsController');
-    
+
     // Materials
     Route::delete('materials/destroy', 'MaterialsController@massDestroy')->name('materials.massDestroy');
     Route::post('materials/stock', 'MaterialsController@stock')->name('materials.stock');
     Route::resource('materials', 'MaterialsController');
-    
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
-    
+
     // Ads
     Route::get('/ads/accounts', [AdsAccountsController::class, 'index'])->name('ads.accounts.index');
     Route::get('/ads/accounts/create', [AdsAccountsController::class, 'create'])->name('ads.accounts.create');
@@ -542,7 +534,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Profile
     Route::post('wasla_login', 'ProfileController@wasla_login')->name('wasla_login');
-    Route::get('wasla_logout','ProfileController@wasla_logout')->name('wasla_logout'); 
+    Route::get('wasla_logout', 'ProfileController@wasla_logout')->name('wasla_logout');
     Route::post('profile', 'ProfileController@updateProfile')->name('updateProfile');
 
     // Change password

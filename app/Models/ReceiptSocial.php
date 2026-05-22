@@ -255,6 +255,16 @@ class ReceiptSocial extends Model
         return $this->belongsTo(User::class, 'delivery_man_id')->withTrashed();
     }
 
+    public function deliveryOrders()
+    {
+        return $this->morphMany(\Modules\Shipping\Entities\Shipment::class, 'orderable');
+    }
+
+    public function deliveryOrder()
+    {
+        return $this->morphOne(\Modules\Shipping\Entities\Shipment::class, 'orderable');
+    }
+
     public function shipping_country()
     {
         return $this->belongsTo(Country::class, 'shipping_country_id')->withTrashed();

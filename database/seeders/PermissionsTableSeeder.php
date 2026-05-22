@@ -2213,6 +2213,54 @@ class PermissionsTableSeeder extends Seeder
                 'type' => 'ads_managment',
                 'parent' => 2,
             ],
+            [
+                'id'    => $i++,
+                'title' => 'shipping_partner_create',
+                'type' => 'shipping_partner',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'shipping_partner_edit',
+                'type' => 'shipping_partner',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'shipping_partner_show',
+                'type' => 'shipping_partner',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'shipping_partner_delete',
+                'type' => 'shipping_partner',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'shipping_partner_access',
+                'type' => 'shipping_partner',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'delivery_scan_handoff',
+                'type' => 'delivery_order',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'delivery_assign_courier',
+                'type' => 'delivery_order',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'delivery_settlement_access',
+                'type' => 'delivery_order',
+                'parent' => 0,
+            ],
         ];
 
         foreach ($permissions as $permission) {

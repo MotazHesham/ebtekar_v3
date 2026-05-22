@@ -1,0 +1,8 @@
+{
+    "name": "Settlement",
+    "alias": "settlement",
+    "description": "Courier cash settlement",
+    "priority": 6,
+    "providers": ["Modules\\Settlement\\Providers\\SettlementServiceProvider"],
+    "files": []
+}

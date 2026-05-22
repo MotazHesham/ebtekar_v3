@@ -1,0 +1,10 @@
+{
+    "name": "Courier",
+    "alias": "courier",
+    "description": "Courier profiles and fleet",
+    "priority": 3,
+    "providers": [
+        "Modules\\Courier\\Providers\\CourierServiceProvider"
+    ],
+    "files": []
+}

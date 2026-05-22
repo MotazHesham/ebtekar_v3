@@ -1,0 +1,8 @@
+{
+    "name": "Returns",
+    "alias": "returns",
+    "description": "Return workflow and reasons",
+    "priority": 5,
+    "providers": ["Modules\\Returns\\Providers\\ReturnsServiceProvider"],
+    "files": []
+}

@@ -1,0 +1,8 @@
+{
+    "name": "Notifications",
+    "alias": "notifications",
+    "description": "Async shipment notifications",
+    "priority": 8,
+    "providers": ["Modules\\Notifications\\Providers\\NotificationsServiceProvider"],
+    "files": []
+}

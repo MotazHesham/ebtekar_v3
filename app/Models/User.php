@@ -4,13 +4,9 @@ namespace App\Models;
 
 use App\Jobs\SendVerificationMail;
 use App\Mail\ResetPasswordMail;
-use App\Mail\VerifyUserMail;
-use App\Notifications\VerifyUserNotification;
 use App\Traits\Auditable;
 use Carbon\Carbon;
-use DateTimeInterface; 
-use App\Notifications\ResetPasswordNotification;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -53,13 +49,18 @@ class User extends Authenticatable implements HasMedia
     ];
 
     public const USER_TYPE_SELECT = [
-        'customer'     => 'Customer',
-        'staff'        => 'Staff',
-        'delivery_man' => 'Delivery Man',
-        'admin'        => 'Admin',
-        'seller'       => 'Seller',
-        'designer'     => 'Designer',
-        'marketer'     => 'Marketer',
+        'customer'          => 'Customer',
+        'staff'             => 'Staff',
+        'delivery_man'      => 'Delivery Man',
+        'courier'           => 'Courier',
+        'shipping_partner'  => 'Shipping Partner',
+        'dispatcher'        => 'Dispatcher',
+        'receiving_clerk'   => 'Receiving Clerk',
+        'delivery_cs'       => 'Delivery Customer Service',
+        'admin'             => 'Admin',
+        'seller'            => 'Seller',
+        'designer'          => 'Designer',
+        'marketer'          => 'Marketer',
     ];
 
     protected $fillable = [
@@ -95,6 +96,16 @@ class User extends Authenticatable implements HasMedia
         return $this->roles()->where('id', 1)->exists();
     }
 
+    public function shippingPartner()
+    {
+        return $this->hasOne(\Modules\Shipping\Entities\ShippingPartner::class, 'user_id');
+    }
+
+    public function deliverMan()
+    {
+        return $this->hasOne(\Modules\Courier\Entities\Courier::class, 'user_id');
+    }
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -104,7 +115,7 @@ class User extends Authenticatable implements HasMedia
                 $user->verified_at = Carbon::now()->format(config('panel.date_format') . ' ' . config('panel.time_format'));
                 $user->save();
             } elseif (!$user->verification_token) {
-                $site_settings = get_site_setting(); 
+                $site_settings = get_site_setting();
                 $token     = Str::random(64);
                 $usedToken = self::where('verification_token', $token)->first();
 
@@ -114,12 +125,12 @@ class User extends Authenticatable implements HasMedia
                 }
 
                 $user->verification_token = $token;
-                $user->save(); 
+                $user->save();
 
-                SendVerificationMail::dispatch($user,$site_settings,$user->email);  
+                SendVerificationMail::dispatch($user, $site_settings, $user->email);
             }
         });
-    } 
+    }
 
     public function registerMediaConversions(Media $media = null): void
     {
@@ -153,8 +164,8 @@ class User extends Authenticatable implements HasMedia
     {
         // $this->notify(new ResetPasswordNotification($token,$site_settings)); 
         $site_settings = get_site_setting();
-        $url = $site_settings->url . '/password/reset/' . $token . '?email=' . $this->email; 
-        Mail::to($this->email)->send(new ResetPasswordMail($url,$site_settings)); 
+        $url = $site_settings->url . '/password/reset/' . $token . '?email=' . $this->email;
+        Mail::to($this->email)->send(new ResetPasswordMail($url, $site_settings));
     }
 
     public function getPhotoAttribute()
@@ -194,21 +205,6 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Product::class);
     }
 
-    public function conversations()
-    {
-        return $this->hasMany(Conversation::class, 'sender_id');
-    }
-
-    public function conversations_2()
-    {
-        return $this->hasMany(Conversation::class, 'receiver_id');
-    }
-
-    public function staff()
-    {
-        return $this->hasOne(Staff::class);
-    }
-
     public function designer()
     {
         return $this->hasOne(Designer::class);
@@ -243,7 +239,7 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Cart::class);
     }
-    
+
     public function shifts()
     {
         return $this->hasMany(EmployeeShift::class);
@@ -256,40 +252,40 @@ class User extends Authenticatable implements HasMedia
 
     public function website()
     {
-        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+        return $this->belongsTo(WebsiteSetting::class, 'website_setting_id');
     }
 
     public function hashedFirstName()
     {
-        $Name = explode(' ',$this->name);
-        if(isset($Name[0])){
-            return hashedForConversionApi($Name[0]); 
-        }else{
+        $Name = explode(' ', $this->name);
+        if (isset($Name[0])) {
+            return hashedForConversionApi($Name[0]);
+        } else {
             return null;
         }
     }
     public function hashedLastName()
     {
-        $Name = explode(' ',$this->name);
-        if(isset($Name[1])){
-            return hashedForConversionApi($Name[1]); 
-        }else{
+        $Name = explode(' ', $this->name);
+        if (isset($Name[1])) {
+            return hashedForConversionApi($Name[1]);
+        } else {
             return hashedForConversionApi('LN');
         }
     }
     public function hashedEmail()
-    { 
-        if($this->email){
-            return hashedForConversionApi($this->email); 
-        }else{
+    {
+        if ($this->email) {
+            return hashedForConversionApi($this->email);
+        } else {
             return null;
         }
     }
     public function hashedPhone()
-    { 
-        if($this->phone_number){
+    {
+        if ($this->phone_number) {
             return hash('sha256', preg_replace('/\D/', '', $this->phone_number));
-        }else{
+        } else {
             return null;
         }
     }
