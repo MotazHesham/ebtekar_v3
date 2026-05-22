@@ -18,7 +18,10 @@ class ScanWebController extends Controller
 
         $partners = null;
         if (auth()->user()?->user_type !== 'shipping_partner') {
-            $partners = ShippingPartner::where('is_active', true)->orderBy('name')->get();
+            $partners = ShippingPartner::where('is_active', true)
+                ->requiresPartnerReceiveScan()
+                ->orderBy('name')
+                ->get();
         }
 
         $manualInput = app()->environment('local');

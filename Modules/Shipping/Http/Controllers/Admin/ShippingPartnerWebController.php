@@ -11,6 +11,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Modules\Shipping\Entities\ShippingPartner;
 use Modules\Shipping\Enums\ShipmentStatus;
+use Modules\Shipping\Enums\ShippingPartnerManagementType;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -38,6 +39,14 @@ class ShippingPartnerWebController extends Controller
                 return $row->is_active
                     ? '<span class="badge badge-success">' . __('cruds.shippingPartner.fields.active') . '</span>'
                     : '<span class="badge badge-secondary">' . __('cruds.shippingPartner.fields.inactive') . '</span>';
+            });
+            $table->addColumn('management_type_label', function ($row) {
+                $type = $row->management_type instanceof ShippingPartnerManagementType
+                    ? $row->management_type
+                    : ShippingPartnerManagementType::tryFrom((string) $row->management_type)
+                        ?? ShippingPartnerManagementType::Partner;
+
+                return __('cruds.shippingPartner.management_type.' . $type->value);
             });
             $table->addColumn('user_name', fn ($row) => $row->user?->name ?? '');
             $table->addColumn('user_email', fn ($row) => $row->user?->email ?? '');
@@ -69,13 +78,14 @@ class ShippingPartnerWebController extends Controller
         ]);
 
         ShippingPartner::create([
-            'name'           => $request->name,
-            'code'           => $request->code,
-            'user_id'        => $user->id,
-            'phone'          => $request->phone,
-            'address'        => $request->address,
-            'is_active'      => $request->boolean('is_active', true),
-            'internal_notes' => $request->internal_notes,
+            'name'             => $request->name,
+            'code'             => $request->code,
+            'user_id'          => $user->id,
+            'phone'            => $request->phone,
+            'address'          => $request->address,
+            'is_active'        => $request->boolean('is_active', true),
+            'management_type'  => $request->input('management_type', ShippingPartnerManagementType::Partner->value),
+            'internal_notes'   => $request->internal_notes,
         ]);
 
         toast(__('flash.global.success_title'), 'success');
@@ -94,12 +104,13 @@ class ShippingPartnerWebController extends Controller
     public function update(UpdateShippingPartnerRequest $request, ShippingPartner $shippingPartner)
     {
         $shippingPartner->update([
-            'name'           => $request->name,
-            'code'           => $request->code,
-            'phone'          => $request->phone,
-            'address'        => $request->address,
-            'is_active'      => $request->boolean('is_active', true),
-            'internal_notes' => $request->internal_notes,
+            'name'             => $request->name,
+            'code'             => $request->code,
+            'phone'            => $request->phone,
+            'address'          => $request->address,
+            'is_active'        => $request->boolean('is_active', true),
+            'management_type'  => $request->input('management_type', ShippingPartnerManagementType::Partner->value),
+            'internal_notes'   => $request->internal_notes,
         ]);
 
         if ($shippingPartner->user_id) {

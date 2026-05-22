@@ -4,6 +4,8 @@ namespace Modules\Shipping\Http\Requests;
 
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Modules\Shipping\Enums\ShippingPartnerManagementType;
 use Modules\Shipping\Support\ShippingTables as ST;
 
 class StoreShippingPartnerRequest extends FormRequest
@@ -22,8 +24,9 @@ class StoreShippingPartnerRequest extends FormRequest
             'address'        => ['nullable', 'string'],
             'email'          => ['required', 'email', 'unique:users,email'],
             'password'       => ['required', 'string', 'min:6'],
-            'internal_notes' => ['nullable', 'string'],
-            'is_active'      => ['nullable', 'boolean'],
+            'internal_notes'   => ['nullable', 'string'],
+            'is_active'        => ['nullable', 'boolean'],
+            'management_type'  => ['required', Rule::in(ShippingPartnerManagementType::values())],
         ];
     }
 }

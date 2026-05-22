@@ -23,6 +23,18 @@
     <input class="form-control" type="password" name="password" {{ isset($shippingPartner) ? '' : 'required' }}>
 </div>
 <div class="form-group">
+    <label class="required">{{ __('cruds.shippingPartner.fields.management_type') }}</label>
+    <select class="form-control" name="management_type" required>
+        @foreach (\Modules\Shipping\Enums\ShippingPartnerManagementType::cases() as $type)
+            <option value="{{ $type->value }}"
+                @selected(old('management_type', optional($shippingPartner ?? null)->management_type?->value ?? \Modules\Shipping\Enums\ShippingPartnerManagementType::Partner->value) === $type->value)>
+                {{ __('cruds.shippingPartner.management_type.' . $type->value) }}
+            </option>
+        @endforeach
+    </select>
+    <small class="form-text text-muted">{{ __('cruds.shippingPartner.fields.management_type_helper') }}</small>
+</div>
+<div class="form-group">
     <label>{{ __('cruds.shippingPartner.fields.internal_notes') }}</label>
     <textarea class="form-control" name="internal_notes" rows="3">{{ old('internal_notes', $shippingPartner->internal_notes ?? '') }}</textarea>
 </div>

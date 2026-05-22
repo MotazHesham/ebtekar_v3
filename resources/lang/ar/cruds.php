@@ -1724,7 +1724,13 @@ return [
             'is_active'      => 'نشط',
             'active'         => 'نشط',
             'inactive'       => 'غير نشط',
-            'internal_notes' => 'ملاحظات داخلية',
+            'internal_notes'       => 'ملاحظات داخلية',
+            'management_type'      => 'إدارة الطلبات',
+            'management_type_helper' => 'الشريك: يستلم الشريك الطلبات عبر المسح. الإدارة: تتخطى الطلبات مسح استلام الشريك وتصبح جاهزة للتوزيع بعد التسليم.',
+        ],
+        'management_type' => [
+            'partner' => 'إدارة الشريك',
+            'admin'   => 'إدارة الإدارة',
         ],
     ],
     'deliveryManagment' => [

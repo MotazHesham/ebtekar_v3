@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Shipping\Entities\Concerns\HasPrefixedTable;
+use Modules\Shipping\Enums\ShippingPartnerManagementType;
 use Modules\Shipping\Support\ShippingTables;
 
 class ShippingPartner extends Model
@@ -23,14 +24,26 @@ class ShippingPartner extends Model
         'phone',
         'address',
         'is_active',
+        'management_type',
         'settings',
         'internal_notes',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
-        'settings'  => 'array',
+        'is_active'        => 'boolean',
+        'management_type'  => ShippingPartnerManagementType::class,
+        'settings'         => 'array',
     ];
+
+    public function skipsPartnerReceiveScan(): bool
+    {
+        return $this->management_type === ShippingPartnerManagementType::Admin;
+    }
+
+    public function scopeRequiresPartnerReceiveScan($query)
+    {
+        return $query->where('management_type', ShippingPartnerManagementType::Partner->value);
+    }
 
     protected static function booted(): void
     {

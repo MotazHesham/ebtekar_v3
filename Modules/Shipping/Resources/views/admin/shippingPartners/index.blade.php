@@ -21,6 +21,7 @@
                         <th>{{ __('cruds.shippingPartner.fields.code') }}</th>
                         <th>{{ __('cruds.user.fields.email') }}</th>
                         <th>{{ __('cruds.shippingPartner.fields.phone') }}</th>
+                        <th>{{ __('cruds.shippingPartner.fields.management_type') }}</th>
                         <th>{{ __('cruds.shippingPartner.fields.is_active') }}</th>
                         <th></th>
                     </tr>
@@ -70,6 +71,7 @@
                     { data: 'code', name: 'code' },
                     { data: 'user_email', name: 'user.email' },
                     { data: 'phone', name: 'phone' },
+                    { data: 'management_type_label', name: 'management_type', orderable: false, searchable: false },
                     { data: 'is_active', name: 'is_active' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false },
                 ],

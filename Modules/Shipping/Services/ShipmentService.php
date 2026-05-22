@@ -6,11 +6,16 @@ use App\Contracts\Shipping\OrderReference;
 use App\Contracts\Shipping\OrderSnapshotProviderContract;
 use App\Contracts\Shipping\ShipmentServiceContract;
 use App\Contracts\Shipping\TimelineRecorderContract;
+use App\Models\Order;
+use App\Models\ReceiptCompany;
+use App\Models\ReceiptSocial;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Request;
 use Modules\Courier\Entities\Courier;
 use Modules\Shipping\Entities\Shipment;
+use Modules\Shipping\Entities\ShippingPartner;
 use Modules\Shipping\Enums\ShipmentStatus;
+use Modules\Shipping\Enums\ShippingPartnerManagementType;
 use Modules\Shipping\Events\ShipmentAssignedToCourier;
 use Modules\Shipping\Events\ShipmentCreated;
 use Modules\Shipping\Events\ShipmentStatusChanged;
@@ -22,8 +27,7 @@ class ShipmentService implements ShipmentServiceContract
         protected ShipmentRepository $shipments,
         protected OrderSnapshotProviderContract $orderSnapshots,
         protected TimelineRecorderContract $timeline,
-    ) {
-    }
+    ) {}
 
     public function createFromOrderReference(OrderReference $reference, ?int $shippingPartnerId = null, ?int $userId = null): Shipment
     {
@@ -66,7 +70,19 @@ class ShipmentService implements ShipmentServiceContract
         $shipment->shipping_partner_id = $shippingPartnerId;
         $shipment->save();
 
-        return $this->transitionStatus($shipment, ShipmentStatus::HandedToPartner->value, $userId);
+        $shipment = $this->transitionStatus($shipment, ShipmentStatus::HandedToPartner->value, $userId);
+
+        $partner = ShippingPartner::find($shippingPartnerId);
+        if ($partner?->management_type === ShippingPartnerManagementType::Admin) {
+            return $this->transitionStatus(
+                $shipment,
+                ShipmentStatus::ReceivedAtWarehouse->value,
+                $userId,
+                __('delivery.timeline.admin_managed_auto_received')
+            );
+        }
+
+        return $shipment;
     }
 
     public function transitionStatus(Shipment $shipment, string $newStatus, ?int $userId = null, ?string $note = null): Shipment
@@ -117,6 +133,18 @@ class ShipmentService implements ShipmentServiceContract
         $shipment->deliver_man_id        = $courierId;
         $shipment->assigned_by_user_id   = $userId ?: auth()->id();
         $shipment->save();
+
+        if ($shipment->orderable_type === Order::class) {
+            Order::withoutGlobalScope('completed')
+                ->where('id', $shipment->orderable_id)
+                ->update(['delivery_man_id' => $courier->user_id]);
+        } elseif ($shipment->orderable_type === ReceiptSocial::class) {
+            ReceiptSocial::where('id', $shipment->orderable_id)
+                ->update(['delivery_man_id' => $courier->user_id]);
+        } elseif ($shipment->orderable_type === ReceiptCompany::class) {
+            ReceiptCompany::where('id', $shipment->orderable_id)
+                ->update(['delivery_man_id' => $courier->user_id]);
+        }
 
         $label = $courier->user?->name ?? '#' . $courierId;
         $this->timeline->recordAssignment($shipment->id, $label, $userId);

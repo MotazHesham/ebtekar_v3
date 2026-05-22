@@ -1631,7 +1631,13 @@ return [
             'is_active'      => 'Active',
             'active'         => 'Active',
             'inactive'       => 'Inactive',
-            'internal_notes' => 'Internal Notes',
+            'internal_notes'       => 'Internal Notes',
+            'management_type'      => 'Order management',
+            'management_type_helper' => 'Partner: partner receives orders via scan. Admin: orders skip partner receive scan and go ready for dispatch after handoff.',
+        ],
+        'management_type' => [
+            'partner' => 'Managed by partner',
+            'admin'   => 'Managed by admin',
         ],
     ],
     'deliveryManagment' => [

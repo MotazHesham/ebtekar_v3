@@ -23,7 +23,8 @@ return [
     'invalid_status_receive' => 'Shipment status does not allow receive',
     'handoff_ok'           => 'Handed off to shipping partner',
     'receive_ok'           => 'Received at partner warehouse',
-    'receive_timeline'     => 'Received via scan',
+    'receive_timeline'       => 'Received via scan',
+    'admin_managed_no_receive' => 'This partner is admin-managed; partner receive scan is not required',
     'menu_handoff'         => 'Handoff scan (prepare)',
     'menu_receive'         => 'Partner receive scan',
 ];

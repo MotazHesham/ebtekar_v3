@@ -35,6 +35,11 @@ class ReceiveScanService
             return $this->fail($barcode, ScanResult::Error, __('tracking::scan.partner_required'), $userId, null);
         }
 
+        $partner = ShippingPartner::find($partnerId);
+        if ($partner?->skipsPartnerReceiveScan()) {
+            return $this->fail($barcode, ScanResult::Error, __('tracking::scan.admin_managed_no_receive'), $userId, $partnerId);
+        }
+
         $reference = $this->orderSnapshots->resolveByScanCode($barcode);
         if (! $reference) {
             return $this->fail($barcode, ScanResult::Missing, __('tracking::scan.order_not_found', ['code' => $barcode]), $userId, $partnerId);

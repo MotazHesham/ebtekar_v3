@@ -6,6 +6,9 @@
             <p><strong>{{ __('cruds.shippingPartner.fields.code') }}:</strong> {{ $shippingPartner->code }}</p>
             <p><strong>{{ __('cruds.user.fields.email') }}:</strong> {{ $shippingPartner->user?->email }}</p>
             <p><strong>{{ __('cruds.shippingPartner.fields.phone') }}:</strong> {{ $shippingPartner->phone }}</p>
+            <p><strong>{{ __('cruds.shippingPartner.fields.management_type') }}:</strong>
+                {{ __('cruds.shippingPartner.management_type.' . ($shippingPartner->management_type?->value ?? 'partner')) }}
+            </p>
             @if ($shippingPartner->internal_notes)
                 <p><strong>{{ __('cruds.shippingPartner.fields.internal_notes') }}:</strong> {{ $shippingPartner->internal_notes }}</p>
             @endif
