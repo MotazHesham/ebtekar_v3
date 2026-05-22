@@ -1,18 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:api')->get('/settlement', function (Request $request) {
-    return $request->user();
+Route::prefix('v1/settlements')->name('api.v1.settlements.')->group(function () {
+    Route::get('couriers/{courierId}/preview', 'Api\V1\SettlementApiController@previewToday')->name('courier.preview');
+    Route::post('open', 'Api\V1\SettlementApiController@open')->name('open');
+    Route::get('{settlement}', 'Api\V1\SettlementApiController@show')->name('show');
+    Route::post('{settlement}/confirm', 'Api\V1\SettlementApiController@confirm')->name('confirm');
 });

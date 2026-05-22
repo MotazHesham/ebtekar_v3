@@ -19,10 +19,10 @@
                         <div class="col-md-6"> 
                             <label for=""> </label>
                             <div @if($type != 'shipment') style="display:none" @endif>
-                                <select class="form-control demo-select2" name="delivery_man_id" id="delivery_man_id"   >
-                                    <option value="0">{{__('Select Delivery Man ...')}}</option>
-                                    @foreach($delivery_mans as $user)
-                                            <option value="{{$user->id}}">{{$user->email}}</option>
+                                <select class="form-control demo-select2" name="shipping_partner_id" id="shipping_partner_id">
+                                    <option value="0">{{ __('tracking::scan.select_partner') }}</option>
+                                    @foreach($shipping_partners as $partner)
+                                        <option value="{{ $partner->id }}">{{ $partner->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -50,8 +50,8 @@
         var bar_code = $(this).val();
 
         @if($type == 'shipment')
-            if($('#delivery_man_id').val() == 0){
-                alert('برجاء اختيار المندوب'); 
+            if($('#shipping_partner_id').val() == 0){
+                alert('{{ __('tracking::scan.select_partner_alert') }}'); 
                 return 0;
             }
         @endif
@@ -60,7 +60,7 @@
             _token: '{{ csrf_token() }}',
             code: bar_code,
             type: '{{$type}}',
-            delivery_man_id : $('#delivery_man_id').val()
+            shipping_partner_id : $('#shipping_partner_id').val()
         }, function(data) {
             console.log(data); 
             $('#order_scanned').prepend(data.message); 

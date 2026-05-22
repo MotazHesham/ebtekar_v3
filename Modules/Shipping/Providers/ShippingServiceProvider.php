@@ -44,19 +44,32 @@ class ShippingServiceProvider extends ServiceProvider
             foreach (glob("{$path}/*.php") as $file) {
                 $group = basename($file, '.php');
                 $lines = require $file;
-                $flat  = [];
-                foreach ($lines as $key => $value) {
-                    if (is_array($value)) {
-                        foreach ($value as $sub => $text) {
-                            $flat["{$group}.{$sub}"] = $text;
-                        }
-                    } else {
-                        $flat["{$group}.{$key}"] = $value;
-                    }
-                }
-                $this->app['translator']->addLines($flat, $locale);
+                $this->app['translator']->addLines(
+                    $this->flattenTranslationLines($group, $lines),
+                    $locale
+                );
             }
         }
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function flattenTranslationLines(string $group, array $lines, string $prefix = ''): array
+    {
+        $flat = [];
+
+        foreach ($lines as $key => $value) {
+            $segment = $prefix === '' ? (string) $key : "{$prefix}.{$key}";
+
+            if (is_array($value)) {
+                $flat = array_merge($flat, $this->flattenTranslationLines($group, $value, $segment));
+            } else {
+                $flat["{$group}.{$segment}"] = $value;
+            }
+        }
+
+        return $flat;
     }
 
     /**

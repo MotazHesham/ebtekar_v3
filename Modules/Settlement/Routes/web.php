@@ -1,16 +1,12 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
 
-Route::prefix('settlement')->group(function() {
-    Route::get('/', 'SettlementController@index');
+Route::prefix('settlements')->name('settlements.')->group(function () {
+    Route::get('preview', 'SettlementWebController@preview')->name('preview');
+    Route::get('create', 'SettlementWebController@create')->name('create');
+    Route::post('/', 'SettlementWebController@store')->name('store');
+    Route::get('/', 'SettlementWebController@index')->name('index');
+    Route::get('{settlement}', 'SettlementWebController@show')->name('show');
+    Route::post('{settlement}/confirm', 'SettlementWebController@confirm')->name('confirm');
 });

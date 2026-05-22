@@ -5,12 +5,15 @@ namespace Modules\Shipping\Entities;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Shipping\Entities\Concerns\HasPrefixedTable;
+use Modules\Shipping\Support\ShippingTables;
 
 class ShippingPartner extends Model
 {
+    use HasPrefixedTable;
     use SoftDeletes;
 
-    protected $table = 'shipping_partners';
+    protected static string $shippingTableBase = ShippingTables::SHIPPING_PARTNERS;
 
     protected $fillable = [
         'uuid',

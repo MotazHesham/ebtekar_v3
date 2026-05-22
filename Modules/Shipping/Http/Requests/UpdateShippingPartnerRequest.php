@@ -4,6 +4,7 @@ namespace Modules\Shipping\Http\Requests;
 
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Shipping\Support\ShippingTables as ST;
 
 class UpdateShippingPartnerRequest extends FormRequest
 {
@@ -18,7 +19,7 @@ class UpdateShippingPartnerRequest extends FormRequest
 
         return [
             'name'           => ['required', 'string', 'max:255'],
-            'code'           => ['nullable', 'string', 'max:50', 'unique:shipping_partners,code,' . $partner->id],
+            'code'           => ['nullable', 'string', 'max:50', ST::unique(ST::SHIPPING_PARTNERS, 'code')->ignore($partner->id)],
             'phone'          => ['nullable', 'string', 'max:50'],
             'address'        => ['nullable', 'string'],
             'email'          => ['required', 'email', 'unique:users,email,' . ($partner->user_id ?? 0)],

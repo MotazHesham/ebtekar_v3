@@ -12,16 +12,25 @@ enum ReturnReason: string
     case NoAnswer            = 'no_answer';
     case Other               = 'other';
 
+    public function label(): string
+    {
+        $key = 'returns::reasons.' . $this->value;
+
+        return trans()->has($key) ? __($key) : $this->value;
+    }
+
     public static function labels(): array
     {
-        return [
-            self::CustomerUnavailable->value => 'Customer Unavailable',
-            self::CustomerRefused->value     => 'Customer Refused',
-            self::WrongNumber->value         => 'Wrong Number',
-            self::UnclearAddress->value      => 'Unclear Address',
-            self::ShippingDelay->value       => 'Shipping Delay',
-            self::NoAnswer->value            => 'No Answer',
-            self::Other->value               => 'Other',
-        ];
+        $out = [];
+        foreach (self::cases() as $case) {
+            $out[$case->value] = $case->label();
+        }
+
+        return $out;
+    }
+
+    public static function shipmentStatusFor(string $reason): string
+    {
+        return $reason === self::CustomerRefused->value ? 'refused' : 'returned';
     }
 }

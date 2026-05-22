@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Jobs\SendVerificationMail;
 use App\Mail\ResetPasswordMail;
+use App\Services\ShippingRoleAssigner;
 use App\Traits\Auditable;
 use Carbon\Carbon;
 use DateTimeInterface;
@@ -128,6 +129,14 @@ class User extends Authenticatable implements HasMedia
                 $user->save();
 
                 SendVerificationMail::dispatch($user, $site_settings, $user->email);
+            }
+
+            ShippingRoleAssigner::assign($user);
+        });
+
+        self::updated(function (self $user) {
+            if ($user->wasChanged('user_type')) {
+                ShippingRoleAssigner::assign($user);
             }
         });
     }

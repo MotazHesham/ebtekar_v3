@@ -16,6 +16,7 @@ return [
     'emailVerificationSuccess'       => 'تم التحقق من بريد المستخدم الإلكتروني بنجاح',
     'entries'                        => 'المدخلات',
     'filterDate'                     => 'فرز حسب التاريخ',
+    'filter'                         => 'فلترة',
     'forgot_password'                => 'نسيت كلمة المرور؟',
     'home'                           => 'الرئيسية',
     'list'                           => 'قائمة',
@@ -333,7 +334,7 @@ return [
     'team_disband_notice'            => 'سيتم الغاء ربط جميع الاعضاء',
     'leave'                          => 'مغادرة',
     'calendar'                       => 'التقويم',
-    'messenger'                      => 'مراسل', 
+    'messenger'                      => 'مراسل',
 
     // New Keys
     'download_for_delivery'          => 'تحميل للشحن',
@@ -349,7 +350,7 @@ return [
     'pay'                  => 'دفع',
     'refused'                  => 'رفض',
     'accept'                  => 'قبول',
-    
+
     'extra'          => [
         'total_records' => 'المجموع',
         'per_page' => 'الصفحة',
@@ -363,7 +364,7 @@ return [
         'description' => 'الوصف',
         'from_date' => 'من تاريخ',
         'to_date' => 'إلي تاريخ',
-        'date_type' => 'نوع التاريخ', 
+        'date_type' => 'نوع التاريخ',
         'from_order' => 'من فاتورة',
         'to_order' => 'إلي فاتورة',
         'exclude_orders' => 'معادا فاتورة',
@@ -399,9 +400,9 @@ return [
         'quantity' => 'الكمية',
         'price' => 'السعر',
         'photo_note' => 'ملحوظة علي الصورة',
-        'add_more' => 'أضف المزيد', 
-        'delete_photo' => 'حذف الصورة', 
-        'website_setting_id' => 'الموقع', 
+        'add_more' => 'أضف المزيد',
+        'delete_photo' => 'حذف الصورة',
+        'website_setting_id' => 'الموقع',
     ],
 
     'delivery_status' => [
@@ -432,7 +433,7 @@ return [
     'payment_status' => [
         'colors' => [
             'paid' =>  'dark',
-            'unpaid' =>  'light', 
+            'unpaid' =>  'light',
         ],
         'status' => [
             'paid' => 'تم السداد',
@@ -465,12 +466,12 @@ return [
         'colors' => [
             'cash_on_delivery' =>  'light',
             'paymob' =>  'warning',
-            'wallet' => 'info', 
+            'wallet' => 'info',
         ],
         'status' => [
             'cash_on_delivery' => 'الدفع عند الأستلام',
             'paymob' => 'دفع بطاقة إئتمان',
             'wallet' => 'محفظة ألكترونية',
         ]
-    ],   
+    ],
 ];

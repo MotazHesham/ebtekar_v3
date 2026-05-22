@@ -2251,6 +2251,12 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => $i++,
+                'title' => 'delivery_scan_receive',
+                'type' => 'delivery_order',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
                 'title' => 'delivery_assign_courier',
                 'type' => 'delivery_order',
                 'parent' => 0,
@@ -2258,6 +2264,24 @@ class PermissionsTableSeeder extends Seeder
             [
                 'id'    => $i++,
                 'title' => 'delivery_settlement_access',
+                'type' => 'delivery_order',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'delivery_return_access',
+                'type' => 'delivery_order',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'delivery_notifications_access',
+                'type' => 'delivery_order',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'delivery_reports_access',
                 'type' => 'delivery_order',
                 'parent' => 0,
             ],

@@ -484,12 +484,12 @@
             });
         }
 
-        function showAlert(type, title, message,seconds = 3000) {
+        function showAlert(type, title, message, seconds = 3000) {
             swal({
                 title: title,
-                text: message,
+                text: message || title,
                 type: type,
-                showConfirmButton: 'Okay',
+                showConfirmButton: true,
                 timer: seconds
             });
         }

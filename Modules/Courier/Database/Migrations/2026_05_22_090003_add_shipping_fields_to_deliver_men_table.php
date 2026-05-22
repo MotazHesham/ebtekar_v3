@@ -3,18 +3,26 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\Shipping\Support\ShippingTables as ST;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('deliver_men', function (Blueprint $table) {
+        $partners = ST::name(ST::SHIPPING_PARTNERS);
+        $partnersTable = Schema::hasTable($partners)
+            ? $partners
+            : (Schema::hasTable(ST::SHIPPING_PARTNERS) ? ST::SHIPPING_PARTNERS : null);
+
+        Schema::table('deliver_men', function (Blueprint $table) use ($partnersTable) {
             if (! Schema::hasColumn('deliver_men', 'uuid')) {
                 $table->uuid('uuid')->nullable()->unique()->after('id');
             }
             if (! Schema::hasColumn('deliver_men', 'shipping_partner_id')) {
                 $table->unsignedBigInteger('shipping_partner_id')->nullable()->after('user_id');
-                $table->foreign('shipping_partner_id')->references('id')->on('shipping_partners')->onDelete('set null');
+                if ($partnersTable) {
+                    $table->foreign('shipping_partner_id')->references('id')->on($partnersTable)->onDelete('set null');
+                }
             }
             if (! Schema::hasColumn('deliver_men', 'status')) {
                 $table->string('status')->default('active')->after('user_id');

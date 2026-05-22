@@ -1,18 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:api')->get('/dispatch', function (Request $request) {
-    return $request->user();
+Route::prefix('v1/dispatch')->name('api.v1.dispatch.')->group(function () {
+    Route::post('assign', 'Api\V1\DispatchApiController@assign')->name('assign');
+    Route::post('assign-bulk', 'Api\V1\DispatchApiController@assignBulk')->name('assign-bulk');
+    Route::post('auto-assign', 'Api\V1\DispatchApiController@autoAssign')->name('auto-assign');
 });

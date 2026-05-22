@@ -3,29 +3,37 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\Shipping\Support\ShippingTables as ST;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('shipment_status_histories', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('delivery_order_id');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('old_status')->nullable();
-            $table->string('new_status');
-            $table->unsignedInteger('duration_seconds')->nullable();
-            $table->json('meta')->nullable();
-            $table->timestamp('created_at')->useCurrent();
+        $table  = ST::name(ST::SHIPMENT_STATUS_HISTORIES);
+        $orders = ST::name(ST::DELIVERY_ORDERS);
 
-            $table->index(['delivery_order_id', 'created_at']);
-            $table->foreign('delivery_order_id')->references('id')->on('delivery_orders')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+        if (Schema::hasTable($table) || Schema::hasTable(ST::SHIPMENT_STATUS_HISTORIES)) {
+            return;
+        }
+
+        Schema::create($table, function (Blueprint $blueprint) use ($orders) {
+            $blueprint->bigIncrements('id');
+            $blueprint->unsignedBigInteger('delivery_order_id');
+            $blueprint->unsignedBigInteger('user_id')->nullable();
+            $blueprint->string('old_status')->nullable();
+            $blueprint->string('new_status');
+            $blueprint->json('meta')->nullable();
+            $blueprint->timestamp('created_at')->useCurrent();
+
+            $blueprint->index(['delivery_order_id', 'created_at']);
+            $blueprint->foreign('delivery_order_id')->references('id')->on($orders)->onDelete('cascade');
+            $blueprint->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('shipment_status_histories');
+        Schema::dropIfExists(ST::name(ST::SHIPMENT_STATUS_HISTORIES));
+        Schema::dropIfExists(ST::SHIPMENT_STATUS_HISTORIES);
     }
 };

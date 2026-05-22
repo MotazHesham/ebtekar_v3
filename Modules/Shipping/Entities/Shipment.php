@@ -6,13 +6,16 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Courier\Entities\Courier;
+use Modules\Shipping\Entities\Concerns\HasPrefixedTable;
 use Modules\Shipping\Enums\ShipmentStatus;
+use Modules\Shipping\Support\ShippingTables;
 
 class Shipment extends Model
 {
+    use HasPrefixedTable;
     use SoftDeletes;
 
-    protected $table = 'delivery_orders';
+    protected static string $shippingTableBase = ShippingTables::DELIVERY_ORDERS;
 
     protected $fillable = [
         'uuid',

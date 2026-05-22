@@ -39,8 +39,8 @@ Internal shipping is implemented as a **Modular Monolith** using [`nwidart/larav
 
 ### Existing tables (Phase 1 — kept)
 
-- `shipping_partners`
-- `delivery_orders` — aggregate root for shipment (class: `Shipment`)
+- `sh_shipping_partners` (configurable prefix via `SHIPPING_TABLE_PREFIX`, default `sh_`)
+- `sh_delivery_orders` — aggregate root for shipment (class: `Shipment`)
 - `deliver_men` — courier profiles
 - `delivery_timeline_events`
 - `delivery_notes`
@@ -104,6 +104,9 @@ uuid CHAR(36) UNIQUE NOT NULL
 | `OrderSnapshotProviderContract` | `App\Integrations\Shipping\OrderSnapshotProvider` |
 | `ShipmentServiceContract` | `Modules\Shipping\Services\ShipmentService` |
 | `CourierQueryContract` | `Modules\Courier\Services\CourierQueryService` |
+| `DispatchAssignmentContract` | `Modules\Dispatch\Services\DispatchAssignmentService` |
+| `SettlementServiceContract` | `Modules\Settlement\Services\SettlementService` |
+| `ReturnServiceContract` | `Modules\Returns\Services\ReturnService` |
 | `TimelineRecorderContract` | `Modules\Timeline\Services\TimelineRecorder` |
 
 ---
@@ -115,9 +118,12 @@ uuid CHAR(36) UNIQUE NOT NULL
 | `shipping_partner_*` | Shipping |
 | `delivery_order_*` (legacy name) | Shipping (alias `shipment_*` later) |
 | `deliver_man_*` | Courier |
-| `delivery_scan_handoff` | Tracking |
+| `delivery_scan_handoff` | Tracking (playlist shipment → finish) |
+| `delivery_scan_receive` | Tracking (partner warehouse receive) |
 | `delivery_assign_courier` | Dispatch |
 | `delivery_settlement_access` | Settlement |
+| `delivery_return_access` | Returns |
+| `delivery_notifications_access` | Notifications (delivery log) |
 | `delivery_reports_access` | Reports |
 
 ---
@@ -146,6 +152,22 @@ Registered per module under `admin` + middleware `auth`, `staff`:
 - `admin/delivery-orders` → Shipping (backward compatible)
 - `admin/shipping-partners` → Shipping
 - `admin/deliver-men` → Courier
+- `admin/dispatch` → Dispatch (assignment queue)
+- `admin/settlements` → Settlement (COD reconciliation)
+- `admin/returns` → Returns (return cases + proof photos)
+- `admin/notification-deliveries` → Notifications log
+- `admin/shipping/dashboard/{role}` → Reports / role dashboards
+
+### Role portals (operational users)
+
+| Role | Dashboard | Primary actions |
+|------|-----------|-----------------|
+| **Shipping Partner** | `admin/shipping/dashboard/partner` | View own shipments, **receive scan**, status KPIs |
+| **Dispatcher** | `admin/shipping/dashboard/dispatcher` | Full shipment list, **dispatch board**, settlements, returns |
+| **Courier** | `admin/shipping/dashboard/courier` | **My deliveries** only (`Shipment::forUser`), COD to collect |
+| **Staff / Admin** | `admin/shipping/dashboard/admin` + full menu | All modules + reports |
+
+Access uses middleware `shipping.portal` (not `staff`). Permissions are assigned via Spatie roles seeded in `ShippingRolesTableSeeder`, `ShippingPermissionRoleTableSeeder`, and synced to users by `user_type` in `AssignShippingRolesByUserTypeSeeder` / `ShippingRoleAssigner` (also on user create/update).
 
 ---
 
@@ -193,9 +215,12 @@ Core-only (stays in `app/`): `Integrations/Shipping/OrderSnapshotProvider`, `Con
 2. **Shipping** — entities, repo, service, events, web/API routes
 3. **Timeline** — recorder + listeners for shipment events
 4. **Courier** — profile module + media
-5. **Dispatch** — assignment service + listener
-6. **Tracking** — scan endpoints (Phase 2)
-7. **Returns**, **Settlement**, **Notifications**, **Reports** — incremental
+5. ✅ **Dispatch** — `dispatch_batches`, assign/bulk/auto, `admin/dispatch`, API `api/v1/dispatch/*`
+6. ✅ **Tracking** — `tracking_scans`, handoff/receive services, playlist integration, `admin/tracking/scan/receive`, API `api/v1/tracking/scan/*`
+7. ✅ **Settlement** — `courier_settlement_lines`, daily open/confirm, `admin/settlements`, API `api/v1/settlements/*`
+8. ✅ **Returns** — `return_cases`, reasons, media proofs, warehouse receipt, `admin/returns`, API `api/v1/returns/*`
+9. ✅ **Notifications** — `notification_deliveries`, FCM via `SendPushNotification`, listeners for shipping events, `admin/notification-deliveries`
+10. ✅ **Reports** — role dashboards (partner / dispatcher / courier / admin), `shipping.portal` middleware
 
 ---
 

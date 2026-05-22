@@ -1,16 +1,10 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
 
-Route::prefix('dispatch')->group(function() {
-    Route::get('/', 'DispatchController@index');
+Route::prefix('dispatch')->name('dispatch.')->group(function () {
+    Route::get('/', 'DispatchWebController@index')->name('index');
+    Route::post('assign', 'DispatchWebController@assign')->name('assign');
+    Route::post('assign-bulk', 'DispatchWebController@assignBulk')->name('assign-bulk');
+    Route::post('auto-assign', 'DispatchWebController@autoAssign')->name('auto-assign');
 });

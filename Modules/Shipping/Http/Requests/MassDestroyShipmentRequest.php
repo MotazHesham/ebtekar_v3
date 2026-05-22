@@ -4,6 +4,7 @@ namespace Modules\Shipping\Http\Requests;
 
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Shipping\Support\ShippingTables as ST;
 
 class MassDestroyShipmentRequest extends FormRequest
 {
@@ -16,7 +17,7 @@ class MassDestroyShipmentRequest extends FormRequest
     {
         return [
             'ids'   => 'required|array',
-            'ids.*' => 'exists:delivery_orders,id',
+            'ids.*' => ST::exists(ST::DELIVERY_ORDERS),
         ];
     }
 }

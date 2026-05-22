@@ -4,6 +4,7 @@ namespace Modules\Courier\Http\Requests;
 
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Shipping\Support\ShippingTables as ST;
 
 class UpdateCourierRequest extends FormRequest
 {
@@ -22,7 +23,7 @@ class UpdateCourierRequest extends FormRequest
                 config('panel.phone_number_language'),
                 'required',
             ],
-            'shipping_partner_id' => ['nullable', 'exists:shipping_partners,id'],
+            'shipping_partner_id' => ['nullable', ST::exists(ST::SHIPPING_PARTNERS)],
             'status'              => ['nullable', 'in:active,inactive'],
             'internal_notes'      => ['nullable', 'string'],
             'photo'               => ['nullable', 'image'],

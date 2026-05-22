@@ -2,6 +2,8 @@
 
 namespace Modules\Shipping\Http\Controllers\Admin;
 
+use App\Contracts\Shipping\DispatchAssignmentContract;
+use App\Contracts\Shipping\ReturnServiceContract;
 use App\Contracts\Shipping\ShipmentServiceContract;
 use App\Contracts\Shipping\TimelineRecorderContract;
 use App\Http\Controllers\Controller;
@@ -25,11 +27,12 @@ class ShipmentWebController extends Controller
 {
     public function __construct(
         protected ShipmentServiceContract $shipmentService,
+        protected DispatchAssignmentContract $dispatchAssignment,
+        protected ReturnServiceContract $returnService,
         protected TimelineRecorderContract $timeline,
         protected CourierRepository $couriers,
         protected ShippingPartnerRepository $partners,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
@@ -59,15 +62,15 @@ class ShipmentWebController extends Controller
             $table->editColumn('actions', function ($row) {
                 return view('partials.datatablesActions', [
                     'viewGate'      => 'delivery_order_show',
-                    'editGate'      => 'delivery_order_edit',
+                    'editGate'      => '',
                     'deleteGate'    => 'delivery_order_delete',
                     'crudRoutePart' => 'delivery-orders',
                     'row'           => $row,
                 ]);
             });
-            $table->editColumn('status', fn ($row) => '<span class="badge badge-info">' . e($row->status_label) . '</span>');
-            $table->addColumn('partner_name', fn ($row) => $row->shippingPartner?->name ?? '-');
-            $table->addColumn('courier_name', fn ($row) => $row->courier?->user?->name ?? '-');
+            $table->editColumn('status', fn($row) => '<span class="badge badge-info">' . e($row->status_label) . '</span>');
+            $table->addColumn('partner_name', fn($row) => $row->shippingPartner?->name ?? '-');
+            $table->addColumn('courier_name', fn($row) => $row->courier?->user?->name ?? '-');
             $table->editColumn('last_status_at', function ($row) {
                 if (! $row->getRawOriginal('last_status_at')) {
                     return '-';
@@ -76,8 +79,8 @@ class ShipmentWebController extends Controller
                 return Carbon::parse($row->getRawOriginal('last_status_at'))
                     ->format(config('panel.date_format') . ' ' . config('panel.time_format'));
             });
-            $table->editColumn('pending_since', fn ($row) => $row->pending_since ?? '-');
-            $table->editColumn('remaining_cod', fn ($row) => number_format((float) $row->remaining_cod, 2));
+            $table->editColumn('pending_since', fn($row) => $row->pending_since ?? '-');
+            $table->editColumn('remaining_cod', fn($row) => number_format((float) $row->remaining_cod, 2));
             $table->rawColumns(['actions', 'placeholder', 'status']);
 
             return $table->make(true);
@@ -85,7 +88,7 @@ class ShipmentWebController extends Controller
 
         return view('shipping::admin.deliveryOrders.index', [
             'shippingPartners' => $this->partners->activePluck(),
-            'deliverMen'       => $this->couriers->activeWithUsers()->mapWithKeys(fn ($d) => [$d->id => $d->user?->name]),
+            'deliverMen'       => $this->couriers->activeWithUsers()->mapWithKeys(fn($d) => [$d->id => $d->user?->name]),
             'dashboardStats'   => $this->dashboardStats(),
         ]);
     }
@@ -110,7 +113,7 @@ class ShipmentWebController extends Controller
             'statuses'         => ShipmentStatus::values(),
             'returnReasons'    => ReturnReason::labels(),
             'shippingPartners' => ShippingPartner::where('is_active', true)->pluck('name', 'id'),
-            'deliverMen'       => Courier::with('user')->active()->get()->mapWithKeys(fn ($d) => [$d->id => $d->user?->name]),
+            'deliverMen'       => Courier::with('user')->active()->get()->mapWithKeys(fn($d) => [$d->id => $d->user?->name]),
         ]);
     }
 
@@ -122,14 +125,34 @@ class ShipmentWebController extends Controller
         }
 
         if ($request->filled('deliver_man_id') && (int) $request->deliver_man_id !== (int) $shipment->deliver_man_id) {
-            $shipment = $this->shipmentService->assignCourier($shipment, (int) $request->deliver_man_id);
+            $result = $this->dispatchAssignment->assignOne($shipment, (int) $request->deliver_man_id);
+            if (! $result->ok) {
+                toast($result->message, 'error');
+
+                return redirect()->route('admin.delivery-orders.show', $shipment);
+            }
+            $shipment = $result->shipment ?? $shipment->fresh();
         }
 
         if ($request->status !== $shipment->status) {
-            $shipment = $this->shipmentService->transitionStatus($shipment, $request->status);
-        }
+            if (in_array($request->status, ['returned', 'refused'], true)) {
+                try {
+                    $this->returnService->registerReturn(
+                        $shipment,
+                        $request->return_reason ?: 'other',
+                        $request->return_note,
+                        $request->status
+                    );
+                    $shipment = $shipment->fresh();
+                } catch (\InvalidArgumentException $e) {
+                    toast($e->getMessage(), 'error');
 
-        if (in_array($request->status, ['returned', 'refused'], true)) {
+                    return redirect()->route('admin.delivery-orders.show', $shipment);
+                }
+            } else {
+                $shipment = $this->shipmentService->transitionStatus($shipment, $request->status);
+            }
+        } elseif (in_array($request->status, ['returned', 'refused'], true)) {
             $shipment->update([
                 'return_reason' => $request->return_reason,
                 'return_note'   => $request->return_note,

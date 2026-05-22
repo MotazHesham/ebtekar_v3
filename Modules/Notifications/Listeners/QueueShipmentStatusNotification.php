@@ -13,7 +13,8 @@ class QueueShipmentStatusNotification implements ShouldQueue
         SendShipmentStatusNotificationJob::dispatch(
             $event->shipment->id,
             $event->newStatus,
-            $event->actorUserId
+            $event->actorUserId,
+            $event->note
         );
     }
 }

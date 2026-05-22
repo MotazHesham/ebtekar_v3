@@ -3,34 +3,39 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Modules\Shipping\Support\ShippingTables as ST;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        if (Schema::hasTable('delivery_timeline_events')) {
+        $table  = ST::name(ST::DELIVERY_TIMELINE_EVENTS);
+        $orders = ST::name(ST::DELIVERY_ORDERS);
+
+        if (Schema::hasTable($table) || Schema::hasTable(ST::DELIVERY_TIMELINE_EVENTS)) {
             return;
         }
 
-        Schema::create('delivery_timeline_events', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('delivery_order_id');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('event_type');
-            $table->string('old_status')->nullable();
-            $table->string('new_status')->nullable();
-            $table->text('body')->nullable();
-            $table->json('meta')->nullable();
-            $table->timestamp('created_at')->useCurrent();
+        Schema::create($table, function (Blueprint $blueprint) use ($orders) {
+            $blueprint->bigIncrements('id');
+            $blueprint->unsignedBigInteger('delivery_order_id');
+            $blueprint->unsignedBigInteger('user_id')->nullable();
+            $blueprint->string('event_type');
+            $blueprint->string('old_status')->nullable();
+            $blueprint->string('new_status')->nullable();
+            $blueprint->text('body')->nullable();
+            $blueprint->json('meta')->nullable();
+            $blueprint->timestamp('created_at')->useCurrent();
 
-            $table->index(['delivery_order_id', 'created_at']);
-            $table->foreign('delivery_order_id')->references('id')->on('delivery_orders')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $blueprint->index(['delivery_order_id', 'created_at']);
+            $blueprint->foreign('delivery_order_id')->references('id')->on($orders)->onDelete('cascade');
+            $blueprint->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('delivery_timeline_events');
+        Schema::dropIfExists(ST::name(ST::DELIVERY_TIMELINE_EVENTS));
+        Schema::dropIfExists(ST::DELIVERY_TIMELINE_EVENTS);
     }
 };

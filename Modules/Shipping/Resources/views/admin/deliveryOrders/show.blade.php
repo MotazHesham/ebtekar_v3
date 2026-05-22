@@ -5,7 +5,15 @@
             <div class="card mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>{{ __('cruds.deliveryOrder.title_singular') }} #{{ $deliveryOrder->order_num }}</span>
-                    <span class="badge badge-info">{{ $deliveryOrder->status_label }}</span>
+                    <div>
+                        @can('delivery_return_access')
+                            @if (!in_array($deliveryOrder->status, ['returned', 'refused', 'closed']))
+                                <a href="{{ route('admin.returns.create', ['shipment_id' => $deliveryOrder->id]) }}"
+                                    class="btn btn-sm btn-warning mr-2">{{ __('returns::actions.register') }}</a>
+                            @endif
+                        @endcan
+                        <span class="badge badge-info">{{ $deliveryOrder->status_label }}</span>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">

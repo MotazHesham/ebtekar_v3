@@ -17,13 +17,20 @@ class OrderSnapshotProvider implements OrderSnapshotProviderContract
 {
     public function resolveByBarcode(string $barcode): ?OrderReference
     {
-        $parts = explode('-', $barcode);
+        $parts = explode('-', trim($barcode), 2);
         if (count($parts) < 2) {
             return null;
         }
 
-        $prefix = $parts[0];
-        $id     = (int) $parts[1];
+        $prefix = strtoupper($parts[0]);
+        if (! in_array($prefix, ['O', 'S', 'C'], true)) {
+            return null;
+        }
+
+        $id = (int) $parts[1];
+        if ($id < 1) {
+            return null;
+        }
 
         $model = match ($prefix) {
             'O'     => Order::withoutGlobalScope('completed')->find($id),
@@ -37,6 +44,36 @@ class OrderSnapshotProvider implements OrderSnapshotProviderContract
         }
 
         return new OrderReference(get_class($model), $model->id, $prefix);
+    }
+
+    public function resolveByScanCode(string $code): ?OrderReference
+    {
+        $code = trim($code);
+        if ($code === '') {
+            return null;
+        }
+
+        return $this->resolveByBarcode($code) ?? $this->resolveByOrderNum($code);
+    }
+
+    protected function resolveByOrderNum(string $orderNum): ?OrderReference
+    {
+        $order = ReceiptCompany::where('order_num', $orderNum)->first();
+        if ($order) {
+            return new OrderReference(ReceiptCompany::class, $order->id, 'C');
+        }
+
+        $order = Order::withoutGlobalScope('completed')->where('order_num', $orderNum)->first();
+        if ($order) {
+            return new OrderReference(Order::class, $order->id, 'O');
+        }
+
+        $order = ReceiptSocial::where('order_num', $orderNum)->first();
+        if ($order) {
+            return new OrderReference(ReceiptSocial::class, $order->id, 'S');
+        }
+
+        return null;
     }
 
     public function snapshot(OrderReference $reference): ?OrderSnapshot

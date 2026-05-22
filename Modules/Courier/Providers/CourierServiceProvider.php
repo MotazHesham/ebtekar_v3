@@ -17,5 +17,10 @@ class CourierServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+
+        $this->app->bind(
+            \App\Contracts\Shipping\CourierQueryContract::class,
+            \Modules\Courier\Services\CourierQueryService::class
+        );
     }
 }

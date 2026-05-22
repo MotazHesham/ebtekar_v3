@@ -3,11 +3,13 @@
         {{ __('global.view') }}
     </a>
 @endcan
-@can($editGate)
-    <a class="btn btn-xs btn-info" href="{{ route('admin.' . $crudRoutePart . '.edit', $row->id) }}">
-        {{ __('global.edit') }}
-    </a>
-@endcan
+@if(!empty($editGate))
+    @can($editGate)
+        <a class="btn btn-xs btn-info" href="{{ route('admin.' . $crudRoutePart . '.edit', $row->id) }}">
+            {{ __('global.edit') }}
+        </a>
+    @endcan
+@endif
 @can($deleteGate) 
     <?php $route = route('admin.' . $crudRoutePart . '.destroy', $row->id); ?>
     <a class="btn btn-xs btn-danger" href="#" onclick="deleteConfirmation('{{$route}}')">

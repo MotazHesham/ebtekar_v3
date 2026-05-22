@@ -25,6 +25,8 @@ use App\Models\User;
 use App\Models\ViewPlaylistData;
 use App\Services\WorkflowStageService;
 use Illuminate\Http\Request;
+use Modules\Shipping\Entities\ShippingPartner;
+use Modules\Tracking\Services\HandoffScanService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Gate;
@@ -32,7 +34,7 @@ use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
 class HomeController extends Controller
-{     
+{
     protected WorkflowStageService $workflowStageService;
 
     public function __construct(WorkflowStageService $workflowStageService)
@@ -40,7 +42,8 @@ class HomeController extends Controller
         $this->workflowStageService = $workflowStageService;
     }
 
-    public function generateSiteMap(){ 
+    public function generateSiteMap()
+    {
         $site_settings = get_site_setting();
 
         $sitemap = Sitemap::create();
@@ -48,7 +51,7 @@ class HomeController extends Controller
         $sitemap->add(Url::create('/'));
         $sitemap->add(Url::create('/login'));
 
-        $categories = Category::where('website_setting_id',$site_settings->id)->where('published',1)->get();
+        $categories = Category::where('website_setting_id', $site_settings->id)->where('published', 1)->get();
         foreach ($categories as $category) {
             $sitemap->add(
                 Url::create("/search?category={$category->slug}")
@@ -58,7 +61,7 @@ class HomeController extends Controller
             );
         }
 
-        $subCategories = SubCategory::where('website_setting_id',$site_settings->id)->where('published',1)->get();
+        $subCategories = SubCategory::where('website_setting_id', $site_settings->id)->where('published', 1)->get();
         foreach ($subCategories as $subCategory) {
             $sitemap->add(
                 Url::create("/search?sub_category={$subCategory->slug}")
@@ -67,7 +70,7 @@ class HomeController extends Controller
                     ->setPriority(0.9)
             );
         }
-        $subSubCategories = SubSubCategory::where('website_setting_id',$site_settings->id)->where('published',1)->get();
+        $subSubCategories = SubSubCategory::where('website_setting_id', $site_settings->id)->where('published', 1)->get();
         foreach ($subSubCategories as $subSubCategory) {
             $sitemap->add(
                 Url::create("/search?sub_sub_category={$subSubCategory->slug}")
@@ -77,7 +80,7 @@ class HomeController extends Controller
             );
         }
 
-        $products = Product::where('website_setting_id',$site_settings->id)->where('published',1)->get();
+        $products = Product::where('website_setting_id', $site_settings->id)->where('published', 1)->get();
         foreach ($products as $product) {
             $sitemap->add(
                 Url::create("/product/{$product->slug}")
@@ -89,17 +92,19 @@ class HomeController extends Controller
 
         $sitemap->writeToFile(public_path($site_settings->sitemap_link_seo));
 
-        return 'Sitemap Generated To ' . $site_settings->site_name . ' Successfully'; 
+        return 'Sitemap Generated To ' . $site_settings->site_name . ' Successfully';
     }
 
-    public function magic_trick(Request $request){
-        if($request->has('reset')){ 
+    public function magic_trick(Request $request)
+    {
+        if ($request->has('reset')) {
             session(['orders' => null]);
         }
         return view('magic_trick');
     }
-    public function magic_trick_store(Request $request){
-        
+    public function magic_trick_store(Request $request)
+    {
+
         $order = [
             'name' => $request->name,
             'phone' => $request->phone,
@@ -107,7 +112,7 @@ class HomeController extends Controller
             'model' => $request->model,
             'cost' => $request->cost,
         ];
-        
+
         // Retrieve the existing orders array from the session
         $orders = session('orders', []);
 
@@ -117,58 +122,68 @@ class HomeController extends Controller
         // Store the updated orders array in the session
         session(['orders' => $orders]);
 
-        return view('magic_trick_table'); 
-    }
-    
-    public function show_qr_code(Request $request){
-        $order_num = $request->order_num;
-        $bar_code = $request->bar_code;
-        return view('partials.qr_code',compact('order_num','bar_code'));
-    }
-    public function qr_scanner($type){
-        $delivery_mans = User::where('user_type','delivery_man')->get();
-        return view('admin.playlists.qr_code_scanner',compact('type','delivery_mans'));
-    }
-    public function barcode_scanner($type){
-        $delivery_mans = User::where('user_type','delivery_man')->get();
-        return view('admin.playlists.bar_code_scanner',compact('type','delivery_mans'));
+        return view('magic_trick_table');
     }
 
-    public function bar_code_output(Request $request){
+    public function show_qr_code(Request $request)
+    {
+        $order_num = $request->order_num;
+        $bar_code = $request->bar_code;
+        return view('partials.qr_code', compact('order_num', 'bar_code'));
+    }
+    public function qr_scanner($type)
+    {
+        $shipping_partners = $type === 'shipment'
+            ? ShippingPartner::where('is_active', true)->orderBy('name')->get()
+            : collect();
+
+        return view('admin.playlists.qr_code_scanner', compact('type', 'shipping_partners'));
+    }
+    public function barcode_scanner($type)
+    {
+        $shipping_partners = $type === 'shipment'
+            ? ShippingPartner::where('is_active', true)->orderBy('name')->get()
+            : collect();
+
+        return view('admin.playlists.bar_code_scanner', compact('type', 'shipping_partners'));
+    }
+
+    public function bar_code_output(Request $request)
+    {
         // s => for receipt social model
         // c => for receipt company model
         // o => for Order model
-        $bar_code =  explode('-',$request->code); 
+        $bar_code =  explode('-', $request->code);
 
-        if($bar_code[0] == 'S'){
-            $order = ReceiptSocial::find($bar_code[1]); 
+        if ($bar_code[0] == 'S') {
+            $order = ReceiptSocial::find($bar_code[1]);
             $model_type = 'social';
-        }elseif($bar_code[0] == 'C'){
-            $order = ReceiptCompany::find($bar_code[1]); 
+        } elseif ($bar_code[0] == 'C') {
+            $order = ReceiptCompany::find($bar_code[1]);
             $model_type = 'company';
-        }elseif($bar_code[0] == 'O'){
-            $order = Order::find($bar_code[1]); 
+        } elseif ($bar_code[0] == 'O') {
+            $order = Order::find($bar_code[1]);
             $model_type = 'order';
-        }else{
+        } else {
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$request->code." Order Not Found</div>"
-            ];
-        }  
-        if(!$order){ 
-            return [
-                'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$request->code." Order Not Found</div>"
+                'message' => "<div class='alert alert-danger'>" . $request->code . " Order Not Found</div>"
             ];
         }
-        if($order->hold){
+        if (!$order) {
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$request->code." Order Is Hold - Reason: ".($order->hold_reason ?? "No Reason") ."</div>"
+                'message' => "<div class='alert alert-danger'>" . $request->code . " Order Not Found</div>"
+            ];
+        }
+        if ($order->hold) {
+            return [
+                'status' => 0,
+                'message' => "<div class='alert alert-danger'>" . $request->code . " Order Is Hold - Reason: " . ($order->hold_reason ?? "No Reason") . "</div>"
             ];
         }
 
-        if ($request->type == 'design') { 
+        if ($request->type == 'design') {
             $authenticated = $order->designer_id;
         } elseif ($request->type == 'manufacturing') {
             $authenticated = $order->manufacturer_id;
@@ -178,88 +193,99 @@ class HomeController extends Controller
             $authenticated = $order->shipmenter_id;
         }
 
-        if($order->playlist_status == $request->type){
-            if($authenticated == auth()->user()->id || auth()->user()->is_admin  || Gate::allows('transfer_receipts')){
-                if($order->playlist_status == 'design'){
+        if ($order->playlist_status == $request->type) {
+            if ($authenticated == auth()->user()->id || auth()->user()->is_admin  || Gate::allows('transfer_receipts')) {
+                if ($order->playlist_status == 'design') {
                     $next_type = 'manufacturing';
-                }elseif($order->playlist_status == 'manufacturing'){
+                } elseif ($order->playlist_status == 'manufacturing') {
                     $next_type = 'prepare';
-                }elseif($order->playlist_status == 'prepare'){
+                } elseif ($order->playlist_status == 'prepare') {
                     $next_type = 'review';
-                }elseif($order->playlist_status == 'review'){
-                    $next_type = 'shipment';    
-                }elseif($order->playlist_status == 'shipment'){
+                } elseif ($order->playlist_status == 'review') {
+                    $next_type = 'shipment';
+                } elseif ($order->playlist_status == 'shipment') {
                     $next_type = 'finish';
 
-                    $order->delivery_man_id = $request->delivery_man_id;
-                    $order->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
-                    $order->delivery_status = 'on_delivery';
-
-                    $order->save();
-                }else{
+                    if (! $request->shipping_partner_id) {
+                        return [
+                            'status'  => 0,
+                            'message' => "<div class='alert alert-danger'>" . __('tracking::scan.select_partner_alert') . '</div>',
+                        ];
+                    }
+                } else {
                     return [
                         'status' => 0,
-                        'message' => "<div class='alert alert-danger'>".$order->order_num." SomeThing Went Wrong</div>"
+                        'message' => "<div class='alert alert-danger'>" . $order->order_num . " SomeThing Went Wrong</div>"
                     ];
                 }
-            }else{
+            } else {
                 return [
                     'status' => 0,
-                    'message' => "<div class='alert alert-danger'>".$order->order_num." Not Authenticated</div>"
+                    'message' => "<div class='alert alert-danger'>" . $order->order_num . " Not Authenticated</div>"
                 ];
             }
-        }else{ 
+        } else {
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$order->order_num." الطلب في مرحلة مختلفة ".ViewPlaylistData::PLAYLIST_STATUS_SELECT[$order->playlist_status]."</div>"
+                'message' => "<div class='alert alert-danger'>" . $order->order_num . " الطلب في مرحلة مختلفة " . ViewPlaylistData::PLAYLIST_STATUS_SELECT[$order->playlist_status] . "</div>"
             ];
         }
 
 
         $playlistcontroller = new PlaylistController($this->workflowStageService);
-        $array = ['model_type' => $model_type,'id' => $order->id , 'status' => $next_type , 'condition' => 'send'];
+        $array = ['model_type' => $model_type, 'id' => $order->id, 'status' => $next_type, 'condition' => 'send'];
         $array0 = new \Illuminate\Http\Request($array);
         $status = $playlistcontroller->update_playlist_status($array0);
-        if($status == 1){
-            $message = "<div class='alert alert-success'>".$order->order_num." تم الأرسال <a class='btn btn-success btn-sm rounded-pill text-white'
+        if ($status == 1 && $request->type === 'shipment' && $next_type === 'finish') {
+            $scan = app(HandoffScanService::class)->process(
+                $request->code,
+                (int) $request->shipping_partner_id
+            );
+
+            return $scan->toArray();
+        }
+
+        if ($status == 1) {
+            $message = "<div class='alert alert-success'>" . $order->order_num . " تم الأرسال <a class='btn btn-success btn-sm rounded-pill text-white'
                         onclick='show_details(" . $order->id . ",\"" . $model_type . "\")' title='" . __('Order Details') . "'>
                         أظهارالصور
                     </a></div>";
-        }else{
-            $message = "<div class='alert alert-danger'>".$order->order_num." لم يتم الطباعة بعد</div>";
+        } else {
+            $message = "<div class='alert alert-danger'>" . $order->order_num . " لم يتم الطباعة بعد</div>";
         }
         return [
             'status' => $status,
             'message' => $message
         ];
     }
-    public function qr_output(Request $request){
+    public function qr_output(Request $request)
+    {
 
-        $order = ReceiptCompany::where('order_num',$request->code)->first(); 
+        $order = ReceiptCompany::where('order_num', $request->code)->first();
         $model_type = 'company';
-        if(!$order){
-            $order = Order::where('order_num',$request->code)->first(); 
+        if (!$order) {
+            $order = Order::where('order_num', $request->code)->first();
             $model_type = 'order';
-            if(!$order){
-                $order = ReceiptSocial::where('order_num',$request->code)->first(); 
+            if (!$order) {
+                $order = ReceiptSocial::where('order_num', $request->code)->first();
                 $model_type = 'social';
-                if(!$order){
+                if (!$order) {
                     return [
                         'status' => 0,
-                        'message' => "<div class='alert alert-danger'>".$request->code." Order Not Found</div>"
+                        'message' => "<div class='alert alert-danger'>" . $request->code . " Order Not Found</div>"
                     ];
                 }
             }
-        } 
-        
-        if($order->hold){
+        }
+
+        if ($order->hold) {
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$request->code." Order Is Hold - Reason: ".($order->hold_reason ?? "No Reason") ."</div>"
+                'message' => "<div class='alert alert-danger'>" . $request->code . " Order Is Hold - Reason: " . ($order->hold_reason ?? "No Reason") . "</div>"
             ];
         }
 
-        if ($request->type == 'design') { 
+        if ($request->type == 'design') {
             $authenticated = $order->designer_id;
         } elseif ($request->type == 'manufacturing') {
             $authenticated = $order->manufacturer_id;
@@ -271,104 +297,119 @@ class HomeController extends Controller
             $authenticated = $order->shipmenter_id;
         }
 
-        if($order->playlist_status == $request->type){
-            if($authenticated == auth()->user()->id || auth()->user()->is_admin){
-                if($order->playlist_status == 'design'){
+        if ($order->playlist_status == $request->type) {
+            if ($authenticated == auth()->user()->id || auth()->user()->is_admin) {
+                if ($order->playlist_status == 'design') {
                     $next_type = 'manufacturing';
-                }elseif($order->playlist_status == 'manufacturing'){
+                } elseif ($order->playlist_status == 'manufacturing') {
                     $next_type = 'prepare';
-                }elseif($order->playlist_status == 'prepare'){
+                } elseif ($order->playlist_status == 'prepare') {
                     $next_type = 'review';
-                }elseif($order->playlist_status == 'review'){
-                    $next_type = 'shipment';    
-                }elseif($order->playlist_status == 'shipment'){
+                } elseif ($order->playlist_status == 'review') {
+                    $next_type = 'shipment';
+                } elseif ($order->playlist_status == 'shipment') {
                     $next_type = 'finish';
 
-                    $order->delivery_man_id = $request->delivery_man_id;
-                    $order->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
-                    $order->delivery_status = 'on_delivery';
-
-                    $order->save();
-                }else{
+                    if (! $request->shipping_partner_id) {
+                        return [
+                            'status'  => 0,
+                            'message' => "<div class='alert alert-danger'>" . __('tracking::scan.select_partner_alert') . '</div>',
+                        ];
+                    }
+                } else {
                     return [
                         'status' => 0,
-                        'message' => "<div class='alert alert-danger'>".$request->code." SomeThing Went Wrong</div>"
+                        'message' => "<div class='alert alert-danger'>" . $request->code . " SomeThing Went Wrong</div>"
                     ];
                 }
-            }else{
+            } else {
                 return [
                     'status' => 0,
-                    'message' => "<div class='alert alert-danger'>".$request->code." Not Authenticated</div>"
+                    'message' => "<div class='alert alert-danger'>" . $request->code . " Not Authenticated</div>"
                 ];
             }
-        }else{
+        } else {
             return [
                 'status' => 0,
-                'message' => "<div class='alert alert-danger'>".$request->code." الطلب في مرحلة مختلفة ".ViewPlaylistData::PLAYLIST_STATUS_SELECT[$order->playlist_status]."</div>"
+                'message' => "<div class='alert alert-danger'>" . $request->code . " الطلب في مرحلة مختلفة " . ViewPlaylistData::PLAYLIST_STATUS_SELECT[$order->playlist_status] . "</div>"
             ];
         }
 
 
         $playlistcontroller = new PlaylistController($this->workflowStageService);
-        $array = ['model_type' => $model_type,'id' => $order->id , 'status' => $next_type , 'condition' => 'send'];
+        $array = ['model_type' => $model_type, 'id' => $order->id, 'status' => $next_type, 'condition' => 'send'];
         $array0 = new \Illuminate\Http\Request($array);
+        $status = $playlistcontroller->update_playlist_status($array0);
+
+        if ($status == 1 && $request->type === 'shipment' && $next_type === 'finish') {
+            $barcode = match ($model_type) {
+                'social'  => 'S-' . $order->id,
+                'company' => 'C-' . $order->id,
+                default   => 'O-' . $order->id,
+            };
+
+            return app(HandoffScanService::class)->process($barcode, (int) $request->shipping_partner_id)->toArray();
+        }
+
         return [
-            'status' => $playlistcontroller->update_playlist_status($array0),
-            'message' => "<div class='alert alert-success'>".$request->code." تم الأرسال</div>"
+            'status' => $status,
+            'message' => "<div class='alert alert-success'>" . $request->code . " تم الأرسال</div>"
         ];
     }
 
-    public function receipts_logs(Request $request){
+    public function receipts_logs(Request $request)
+    {
         $crud_name = $request->crud_name;
-        $logs = AuditLog::where('subject_type',$request->model)->where('subject_id',$request->subject_id)->orderBy('created_at','asc')->get()->reverse();
-        return view('partials.logs',compact('logs','crud_name'));
+        $logs = AuditLog::where('subject_type', $request->model)->where('subject_id', $request->subject_id)->orderBy('created_at', 'asc')->get()->reverse();
+        return view('partials.logs', compact('logs', 'crud_name'));
     }
 
-    public function search_by_phone(Request $request){
+    public function search_by_phone(Request $request)
+    {
         global $phone;
         $phone = $request->phone;
         $are_you_sure = false;
         $receipt_social = ReceiptSocial::where(function ($query) {
-                                            $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
-                                                    ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
-                                        })->count();
+            $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+        })->count();
         $last_receipt_social = ReceiptSocial::where(function ($query) {
-                                            $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
-                                                    ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
-                                        })->latest('created_at')->first();
+            $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+        })->latest('created_at')->first();
         $receipt_company = ReceiptCompany::where(function ($query) {
-                                            $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
-                                                    ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
-                                        })->count();
+            $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+        })->count();
         $last_receipt_company = ReceiptCompany::where(function ($query) {
-                                            $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
-                                                    ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
-                                        })->latest('created_at')->first();
+            $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+        })->latest('created_at')->first();
 
-        $receipt_client = ReceiptClient::where('phone_number', 'like', '%'.$phone.'%')->count();
-        $last_receipt_client = ReceiptClient::where('phone_number', 'like', '%'.$phone.'%')->latest('created_at')->first();
-        $customers_orders = Order::where('order_type','customer')->where(function ($query) {
-                                                                        $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
-                                                                                ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
-                                                                    })->count();
-        $last_customer_order = Order::where('order_type','customer')->where(function ($query) {
-                                                                        $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
-                                                                                ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
-                                                                    })->latest('created_at')->first();
-        $sellers_orders = Order::where('order_type','seller')->where(function ($query) {
-                                                                        $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
-                                                                                ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
-                                                                    })->count();
-        $last_seller_order = Order::where('order_type','seller')->where(function ($query) {
-                                                                        $query->where('phone_number', 'like', '%'.$GLOBALS['phone'].'%')
-                                                                                ->orWhere('phone_number_2', 'like', '%'.$GLOBALS['phone'].'%');
-                                                                    })->latest('created_at')->first();
+        $receipt_client = ReceiptClient::where('phone_number', 'like', '%' . $phone . '%')->count();
+        $last_receipt_client = ReceiptClient::where('phone_number', 'like', '%' . $phone . '%')->latest('created_at')->first();
+        $customers_orders = Order::where('order_type', 'customer')->where(function ($query) {
+            $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+        })->count();
+        $last_customer_order = Order::where('order_type', 'customer')->where(function ($query) {
+            $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+        })->latest('created_at')->first();
+        $sellers_orders = Order::where('order_type', 'seller')->where(function ($query) {
+            $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+        })->count();
+        $last_seller_order = Order::where('order_type', 'seller')->where(function ($query) {
+            $query->where('phone_number', 'like', '%' . $GLOBALS['phone'] . '%')
+                ->orWhere('phone_number_2', 'like', '%' . $GLOBALS['phone'] . '%');
+        })->latest('created_at')->first();
 
-        $banned_phones = BannedPhone::where('phone',$phone)->first();
-        if($receipt_social > 0 || $receipt_company > 0 || $receipt_client > 0 || $customers_orders > 0 || $sellers_orders > 0 || $banned_phones > 0 ){
+        $banned_phones = BannedPhone::where('phone', $phone)->first();
+        if ($receipt_social > 0 || $receipt_company > 0 || $receipt_client > 0 || $customers_orders > 0 || $sellers_orders > 0 || $banned_phones > 0) {
             $are_you_sure = true;
         }
-        return view('partials.search_phone',compact(
+        return view('partials.search_phone', compact(
             'receipt_social',
             'receipt_company',
             'receipt_client',
@@ -384,8 +425,9 @@ class HomeController extends Controller
         ));
     }
 
-    public function load_num(Request $request){
-        
+    public function load_num(Request $request)
+    {
+
         $settings1 = [
             'chart_title'           => $request->type,
             'chart_type'            => 'number_block',
@@ -405,16 +447,22 @@ class HomeController extends Controller
         if (class_exists($settings1['model'])) {
             $settings1['total_number'] = $settings1['model']::when(isset($settings1['filter_field']), function ($query) use ($settings1) {
                 if (isset($settings1['filter_days'])) {
-                    return $query->where($settings1['filter_field'], '>=',
-                        now()->subDays($settings1['filter_days'])->format('Y-m-d'));
+                    return $query->where(
+                        $settings1['filter_field'],
+                        '>=',
+                        now()->subDays($settings1['filter_days'])->format('Y-m-d')
+                    );
                 } elseif (isset($settings1['filter_period'])) {
                     switch ($settings1['filter_period']) {
-                        case 'week': $start = date('Y-m-d', strtotime('last Monday'));
-                        break;
-                        case 'month': $start = date('Y-m') . '-01';
-                        break;
-                        case 'year': $start = date('Y') . '-01-01';
-                        break;
+                        case 'week':
+                            $start = date('Y-m-d', strtotime('last Monday'));
+                            break;
+                        case 'month':
+                            $start = date('Y-m') . '-01';
+                            break;
+                        case 'year':
+                            $start = date('Y') . '-01-01';
+                            break;
                     }
                     if (isset($start)) {
                         return $query->where($settings1['filter_field'], '>=', $start);
@@ -424,26 +472,27 @@ class HomeController extends Controller
                 ->{$settings1['aggregate_function'] ?? 'count'}($settings1['aggregate_field'] ?? '*');
         }
 
-        return response()->json($settings1['total_number'],200);
+        return response()->json($settings1['total_number'], 200);
     }
 
-    public function load_chart(Request $request){
-        if($request->type == 'first-chart'){
+    public function load_chart(Request $request)
+    {
+        if ($request->type == 'first-chart') {
             $setting = [
                 'chart_title'           => __('cruds.order.extra.chart_by_order_type'),
                 'chart_type'            => 'doughnut',
                 'report_type'           => 'group_by_string',
                 'model'                 => 'App\Models\Order',
-                'group_by_field'        => 'website_setting_id', 
+                'group_by_field'        => 'website_setting_id',
                 'aggregate_function'    => 'count',
-                'filter_field'          => 'created_at', 
+                'filter_field'          => 'created_at',
                 'column_class'          => 'col-md-4',
                 'entries_number'        => '5',
                 'translation_key'       => 'order',
             ];
-    
-            $chart = new LaravelChart($setting); 
-        }elseif($request->type == 'second-chart'){
+
+            $chart = new LaravelChart($setting);
+        } elseif ($request->type == 'second-chart') {
             $setting = [
                 'chart_title'           => __('cruds.receiptSocial.extra.chart_by_month'),
                 'chart_type'            => 'radar',
@@ -460,29 +509,32 @@ class HomeController extends Controller
                 'entries_number'        => '5',
                 'translation_key'       => 'receiptSocial',
             ];
-    
+
             $chart = new LaravelChart($setting);
-        }elseif($request->type == 'third-chart'){
+        } elseif ($request->type == 'third-chart') {
             $setting = [
                 'chart_title'           => __('cruds.receiptSocial.extra.chart_by_website'),
                 'chart_type'            => 'doughnut',
                 'report_type'           => 'group_by_string',
                 'model'                 => 'App\Models\ReceiptSocial',
-                'group_by_field'        => 'website_setting_id', 
-                'aggregate_function'    => 'count', 
-                'filter_field'          => 'created_at', 
+                'group_by_field'        => 'website_setting_id',
+                'aggregate_function'    => 'count',
+                'filter_field'          => 'created_at',
                 'column_class'          => 'col-md-4',
                 'entries_number'        => '5',
                 'translation_key'       => 'ReceiptSocial',
             ];
-    
+
             $chart = new LaravelChart($setting);
         }
 
-        return view('partials.chart',compact('chart'));
+        return view('partials.chart', compact('chart'));
     }
     public function index()
-    {   
+    {
+        if (in_array(auth()->user()->user_type, ['shipping_partner', 'courier', 'delivery_man', 'dispatcher', 'receiving_clerk', 'delivery_cs'])) {
+            return redirect()->route('admin.shipping.dashboard.home');
+        }
 
         $settings10 = [
             'chart_title'           => __('cruds.order.extra.latest_orders'),
@@ -516,6 +568,6 @@ class HomeController extends Controller
             $settings10['fields'] = [];
         }
 
-        return view('home', compact( 'settings10'));
+        return view('home', compact('settings10'));
     }
 }

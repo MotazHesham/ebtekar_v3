@@ -31,6 +31,7 @@ class TimelineRecorder implements TimelineRecorderContract
             'old_status'        => $oldStatus,
             'new_status'        => $newStatus,
             'meta'              => $meta,
+            'created_at'        => Carbon::now(),
         ]);
     }
 

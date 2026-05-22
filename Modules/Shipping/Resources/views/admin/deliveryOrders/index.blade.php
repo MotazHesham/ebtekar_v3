@@ -108,7 +108,9 @@
                     url: "{{ route('admin.delivery-orders.massDestroy') }}",
                     className: 'btn-danger',
                     action: function(e, dt, node, config) {
-                        var ids = $.map(dt.rows({ selected: true }).data(), function(entry) {
+                        var ids = $.map(dt.rows({
+                            selected: true
+                        }).data(), function(entry) {
                             return entry.id
                         });
                         if (ids.length === 0) {
@@ -117,11 +119,18 @@
                         }
                         if (confirm('{{ __('global.areYouSure') }}')) {
                             $.ajax({
-                                headers: { 'x-csrf-token': _token },
+                                headers: {
+                                    'x-csrf-token': _token
+                                },
                                 method: 'POST',
                                 url: config.url,
-                                data: { ids: ids, _method: 'DELETE' }
-                            }).done(function() { location.reload() })
+                                data: {
+                                    ids: ids,
+                                    _method: 'DELETE'
+                                }
+                            }).done(function() {
+                                location.reload()
+                            })
                         }
                     }
                 }
@@ -142,20 +151,57 @@
                         });
                     }
                 },
-                columns: [
-                    { data: 'placeholder', name: 'placeholder', orderable: false, searchable: false },
-                    { data: 'order_num', name: 'order_num' },
-                    { data: 'client_name', name: 'client_name' },
-                    { data: 'status', name: 'status' },
-                    { data: 'partner_name', name: 'shipping_partner.name' },
-                    { data: 'courier_name', name: 'deliver_man.user.name' },
-                    { data: 'remaining_cod', name: 'remaining_cod' },
-                    { data: 'last_status_at', name: 'last_status_at' },
-                    { data: 'pending_since', name: 'last_status_at', orderable: false, searchable: false },
-                    { data: 'actions', name: 'actions', orderable: false, searchable: false },
+                columns: [{
+                        data: 'placeholder',
+                        name: 'placeholder',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'order_num',
+                        name: 'order_num'
+                    },
+                    {
+                        data: 'client_name',
+                        name: 'client_name'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'partner_name',
+                        name: 'shipping_partner.name'
+                    },
+                    {
+                        data: 'courier_name',
+                        name: 'deliver_man.user.name'
+                    },
+                    {
+                        data: 'remaining_cod',
+                        name: 'remaining_cod'
+                    },
+                    {
+                        data: 'last_status_at',
+                        name: 'last_status_at'
+                    },
+                    {
+                        data: 'pending_since',
+                        name: 'last_status_at',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'actions',
+                        name: 'actions',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
                 orderCellsTop: true,
-                order: [[7, 'desc']],
+                order: [
+                    [7, 'desc']
+                ],
                 pageLength: 25,
             });
 

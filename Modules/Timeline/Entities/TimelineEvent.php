@@ -4,10 +4,14 @@ namespace Modules\Timeline\Entities;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Shipping\Entities\Concerns\HasPrefixedTable;
+use Modules\Shipping\Support\ShippingTables;
 
 class TimelineEvent extends Model
 {
-    public $table = 'delivery_timeline_events';
+    use HasPrefixedTable;
+
+    protected static string $shippingTableBase = ShippingTables::DELIVERY_TIMELINE_EVENTS;
 
     public $timestamps = false;
 
