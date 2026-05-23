@@ -171,11 +171,11 @@
                     },
                     {
                         data: 'partner_name',
-                        name: 'shipping_partner.name'
+                        name: 'shippingPartner.name'
                     },
                     {
                         data: 'courier_name',
-                        name: 'deliver_man.user.name'
+                        name: 'courier.user.name'
                     },
                     {
                         data: 'remaining_cod',

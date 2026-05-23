@@ -99,7 +99,7 @@
                 columns: [
                     { data: 'select', name: 'select', orderable: false, searchable: false },
                     { data: 'order_num', name: 'order_num' },
-                    { data: 'partner_name', name: 'shipping_partner.name', orderable: false },
+                    { data: 'partner_name', name: 'shippingPartner.name', orderable: false },
                     { data: 'governorate', name: 'governorate' },
                     { data: 'remaining_cod', name: 'remaining_cod' },
                     { data: 'status', name: 'status', orderable: false },
