@@ -44,7 +44,7 @@
             <table class="table table-bordered table-striped table-hover ajaxTable datatable datatable-Settlement">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th width="40">#</th>
                         <th>{{ __('cruds.deliveryOrder.fields.courier') }}</th>
                         <th>{{ __('settlement::fields.date') }}</th>
                         <th>{{ __('settlement::fields.lines') }}</th>
@@ -77,7 +77,7 @@
                     }
                 },
                 columns: [
-                    { data: 'id', name: 'id' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'courier_name', name: 'courier.user.name', orderable: false },
                     { data: 'settlement_date', name: 'settlement_date' },
                     { data: 'lines_count', name: 'lines_count', searchable: false },
@@ -87,7 +87,7 @@
                     { data: 'status', name: 'status', orderable: false },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false }
                 ],
-                order: [[0, 'desc']]
+                order: [[2, 'desc']]
             });
 
             $('#settlement-filters .filter-input').on('change', function () {

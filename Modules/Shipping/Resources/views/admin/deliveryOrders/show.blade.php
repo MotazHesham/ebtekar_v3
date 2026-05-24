@@ -22,6 +22,7 @@
                             <p><strong>{{ __('cruds.deliveryOrder.fields.phone_number') }}:</strong> {{ $deliveryOrder->phone_number }}</p>
                             <p><strong>{{ __('cruds.deliveryOrder.fields.governorate') }}:</strong> {{ $deliveryOrder->governorate }}</p>
                             <p><strong>{{ __('cruds.deliveryOrder.fields.region') }}:</strong> {{ $deliveryOrder->region }}</p>
+                            <p><strong>{{ __('delivery.fields.full_address') }}:</strong> {{ $deliveryOrder->full_address ?? '-' }}</p>
                         </div>
                         <div class="col-md-6">
                             <p><strong>{{ __('cruds.deliveryOrder.fields.cod_amount') }}:</strong> {{ number_format((float) $deliveryOrder->cod_amount, 2) }}</p>
@@ -100,6 +101,29 @@
         </div>
 
         <div class="col-lg-4">
+            @if ($canCancelDelivered || $canCancelReturn || $canRevertHandoff)
+                <div class="card mb-3">
+                    <div class="card-header">{{ __('delivery.admin_actions.title') }}</div>
+                    <div class="card-body">
+                        @if ($canRevertHandoff && $deliveryOrder->status === 'handed_to_partner')
+                            <button type="button" class="btn btn-warning btn-sm btn-admin-action" data-action="revert_handoff">
+                                {{ __('delivery.actions.revert_handoff') }}
+                            </button>
+                        @endif
+                        @if ($canCancelDelivered && $deliveryOrder->status === 'delivered')
+                            <button type="button" class="btn btn-danger btn-sm btn-admin-action" data-action="cancel_delivered">
+                                {{ __('delivery.admin_actions.cancel_delivered') }}
+                            </button>
+                        @endif
+                        @if ($canCancelReturn && in_array($deliveryOrder->status, ['returned', 'refused']))
+                            <button type="button" class="btn btn-danger btn-sm btn-admin-action" data-action="cancel_return">
+                                {{ __('delivery.admin_actions.cancel_return') }}
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             @can('delivery_order_edit')
                 <div class="card mb-3">
                     <div class="card-header">{{ __('global.edit') }}</div>
@@ -159,6 +183,32 @@
         $('select[name=status]').on('change', function() {
             const show = ['returned', 'refused'].includes($(this).val());
             $('.return-fields').toggle(show);
+        });
+
+        $('.btn-admin-action').on('click', function () {
+            const action = $(this).data('action');
+            Swal.fire({
+                title: @json(__('delivery.messages.confirm_status')),
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: @json(__('delivery.messages.confirm_ok')),
+                cancelButtonText: @json(__('delivery.messages.confirm_cancel')),
+            }).then(function (result) {
+                if (!result.value) return;
+                $.post(@json(route('admin.delivery-orders.quick-status')), {
+                    _token: @json(csrf_token()),
+                    shipment_id: {{ $deliveryOrder->id }},
+                    action: action
+                }, function (res) {
+                    if (res.success) {
+                        window.location.reload();
+                    } else {
+                        showAlert('error', res.message || 'Error', res.message || 'Error');
+                    }
+                }).fail(function (xhr) {
+                    showAlert('error', xhr.responseJSON?.message || 'Error', xhr.responseJSON?.message || 'Error');
+                });
+            });
         });
     </script>
 @endsection

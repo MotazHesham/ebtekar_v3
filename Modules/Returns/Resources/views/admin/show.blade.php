@@ -42,6 +42,15 @@
                     <button type="submit" class="btn btn-success btn-sm">{{ __('returns::actions.close') }}</button>
                 </form>
             @endif
+            @if ($canManage ?? false)
+                <a href="{{ route('admin.returns.edit', $returnCase) }}" class="btn btn-info btn-sm">{{ __('global.edit') }}</a>
+                @if ($returnCase->status === 'closed')
+                    <form method="POST" action="{{ route('admin.returns.reopen', $returnCase) }}" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-warning btn-sm">{{ __('returns::actions.reopen') }}</button>
+                    </form>
+                @endif
+            @endif
         </div>
     </div>
 

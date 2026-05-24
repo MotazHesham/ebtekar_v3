@@ -16,6 +16,8 @@ class ShipmentResource extends JsonResource
             'client_name'     => $this->client_name,
             'phone_number'    => $this->phone_number,
             'governorate'     => $this->governorate,
+            'region'          => $this->region,
+            'full_address'    => $this->full_address,
             'remaining_cod'   => $this->remaining_cod,
             'last_status_at'  => $this->last_status_at?->toIso8601String(),
             'pending_since'   => $this->pending_since,

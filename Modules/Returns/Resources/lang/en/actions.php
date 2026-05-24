@@ -6,4 +6,5 @@ return [
     'close'     => 'Close case',
     'upload'    => 'Upload photos',
     'menu'      => 'Returns',
+    'reopen'    => 'Reopen',
 ];

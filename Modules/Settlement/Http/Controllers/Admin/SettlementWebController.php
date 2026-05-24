@@ -6,8 +6,10 @@ use App\Contracts\Shipping\SettlementServiceContract;
 use App\Http\Controllers\Controller;
 use Gate;
 use Illuminate\Http\Request;
+use Modules\Courier\Entities\Courier;
 use Modules\Courier\Repositories\CourierRepository;
 use Modules\Settlement\Entities\Settlement;
+use Modules\Shipping\Entities\ShippingPartner;
 use Modules\Settlement\Enums\SettlementStatus;
 use Modules\Settlement\Http\Requests\ConfirmSettlementRequest;
 use Modules\Settlement\Http\Requests\OpenSettlementRequest;
@@ -47,6 +49,7 @@ class SettlementWebController extends Controller
             }
 
             $table = Datatables::of($query);
+            $table->addIndexColumn();
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
             $table->editColumn('actions', function ($row) {
@@ -71,7 +74,7 @@ class SettlementWebController extends Controller
         }
 
         return view('settlement::admin.index', [
-            'couriers' => $this->couriers->activeWithUsers()->mapWithKeys(fn ($c) => [$c->id => $c->user?->name]),
+            'couriers' => $this->couriersPluckForUser(),
         ]);
     }
 
@@ -148,5 +151,18 @@ class SettlementWebController extends Controller
         toast(__('settlement::messages.confirmed'), 'success');
 
         return redirect()->route('admin.settlements.show', $settlement);
+    }
+
+    protected function couriersPluckForUser(): \Illuminate\Support\Collection
+    {
+        $user  = auth()->user();
+        $query = Courier::with('user')->active();
+
+        if ($user && $user->user_type === 'shipping_partner') {
+            $partnerId = ShippingPartner::where('user_id', $user->id)->value('id');
+            $query->where('shipping_partner_id', $partnerId);
+        }
+
+        return $query->get()->mapWithKeys(fn ($c) => [$c->id => $c->user?->name]);
     }
 }

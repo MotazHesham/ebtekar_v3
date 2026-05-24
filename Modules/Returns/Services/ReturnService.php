@@ -131,4 +131,106 @@ class ReturnService implements ReturnServiceContract
 
         return $case->fresh(['shipment', 'media']);
     }
+
+    public function updateCase(int $returnCaseId, array $data, ?int $userId = null): ReturnCase
+    {
+        $userId = $userId ?: auth()->id();
+        $case   = ReturnCase::with('shipment')->findOrFail($returnCaseId);
+        $changes = [];
+
+        foreach (['reason', 'note', 'status'] as $field) {
+            if (! array_key_exists($field, $data) || $data[$field] === null || $data[$field] === '') {
+                continue;
+            }
+            if ($case->{$field} !== $data[$field]) {
+                $changes[$field] = ['old' => $case->{$field}, 'new' => $data[$field]];
+            }
+        }
+
+        if ($changes === []) {
+            return $case;
+        }
+
+        return DB::transaction(function () use ($case, $data, $changes, $userId) {
+            $payload = [];
+            foreach (['reason', 'note', 'status'] as $field) {
+                if (array_key_exists($field, $data) && $data[$field] !== null && $data[$field] !== '') {
+                    $payload[$field] = $data[$field];
+                }
+            }
+            $case->update($payload);
+
+            if ($case->shipment && isset($changes['reason'])) {
+                $case->shipment->update(['return_reason' => $case->reason]);
+            }
+
+            $this->logCaseActivity(
+                $case,
+                __('returns::messages.admin_updated', [
+                    'changes' => collect($changes)->map(fn ($c, $f) => "{$f}: {$c['old']} → {$c['new']}")->implode(', '),
+                ]),
+                $userId
+            );
+
+            return $case->fresh(['shipment', 'courier.user', 'shippingPartner']);
+        });
+    }
+
+    public function deleteCase(int $returnCaseId, ?int $userId = null): void
+    {
+        $userId = $userId ?: auth()->id();
+        $case   = ReturnCase::with('shipment')->findOrFail($returnCaseId);
+
+        DB::transaction(function () use ($case, $userId) {
+            if ($case->shipment && in_array($case->shipment->status, [ShipmentStatus::Returned->value, ShipmentStatus::Refused->value], true)) {
+                $case->shipment->update([
+                    'return_reason' => null,
+                    'return_note'   => null,
+                    'returned_at'   => null,
+                ]);
+                $this->shipments->transitionStatus(
+                    $case->shipment->fresh(),
+                    ShipmentStatus::OutWithCourier->value,
+                    $userId,
+                    __('returns::messages.admin_deleted_case')
+                );
+            }
+
+            $this->logCaseActivity($case, __('returns::messages.admin_deleted'), $userId);
+            $case->delete();
+        });
+    }
+
+    public function reopenCase(int $returnCaseId, ?int $userId = null): ReturnCase
+    {
+        $userId = $userId ?: auth()->id();
+        $case   = ReturnCase::with('shipment')->findOrFail($returnCaseId);
+
+        if ($case->status !== ReturnCaseStatus::Closed->value) {
+            throw new \InvalidArgumentException(__('returns::messages.cannot_reopen'));
+        }
+
+        $oldStatus = $case->status;
+        $case->update([
+            'status'    => ReturnCaseStatus::Open->value,
+            'closed_at' => null,
+        ]);
+
+        $this->logCaseActivity(
+            $case,
+            __('returns::messages.admin_reopened', ['from' => $oldStatus, 'to' => ReturnCaseStatus::Open->value]),
+            $userId
+        );
+
+        return $case->fresh(['shipment', 'courier.user']);
+    }
+
+    protected function logCaseActivity(ReturnCase $case, string $message, ?int $userId): void
+    {
+        if (! $case->shipment) {
+            return;
+        }
+
+        $this->timeline->recordNote($case->shipment->id, $message, $userId);
+    }
 }

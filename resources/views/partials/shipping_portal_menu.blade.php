@@ -40,6 +40,15 @@
         </a>
     </li>
 @endcan
+@can('delivery_order_mark_delivered')
+    <li class="c-sidebar-nav-item">
+        <a href="{{ route('admin.courier.scan') }}"
+            class="c-sidebar-nav-link {{ request()->is('admin/courier/scan*') ? 'c-active' : '' }}">
+            <i class="fa-fw fas fa-qrcode c-sidebar-nav-icon"></i>
+            {{ __('delivery.scan.menu') }}
+        </a>
+    </li>
+@endcan
 
 @can('delivery_order_access')
     <li class="c-sidebar-nav-item">

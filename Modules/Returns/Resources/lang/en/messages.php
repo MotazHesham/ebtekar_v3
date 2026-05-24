@@ -11,4 +11,11 @@ return [
     'closed'                     => 'Return case closed',
     'attachment_uploaded'        => 'Attachments uploaded',
     'no_attachments'             => 'No attachments yet',
+    'updated'                    => 'Return case updated',
+    'reopened'                   => 'Return case reopened',
+    'cannot_reopen'              => 'Only closed cases can be reopened',
+    'admin_updated'              => 'Admin return update: :changes',
+    'admin_deleted'              => 'Return case deleted (admin)',
+    'admin_deleted_case'         => 'Return status cleared after case deletion',
+    'admin_reopened'             => 'Return reopened: :from → :to',
 ];

@@ -15,7 +15,7 @@
             <table class="table table-bordered table-striped table-hover ajaxTable datatable datatable-Return">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th width="40">#</th>
                         <th>{{ __('cruds.deliveryOrder.fields.order_num') }}</th>
                         <th>{{ __('cruds.deliveryOrder.fields.courier') }}</th>
                         <th>{{ __('cruds.deliveryOrder.fields.return_reason') }}</th>
@@ -38,7 +38,7 @@
                 serverSide: true,
                 ajax: '{{ route('admin.returns.index') }}',
                 columns: [
-                    { data: 'id', name: 'id' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'order_num', name: 'shipment.order_num', orderable: false },
                     { data: 'courier_name', name: 'courier.user.name', orderable: false },
                     { data: 'reason', name: 'reason' },
@@ -46,7 +46,7 @@
                     { data: 'created_at', name: 'created_at' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false }
                 ],
-                order: [[0, 'desc']]
+                order: [[5, 'desc']]
             });
         });
     </script>

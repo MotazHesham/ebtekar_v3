@@ -85,6 +85,10 @@ class ShippingServiceProvider extends ServiceProvider
             \App\Contracts\Shipping\ShipmentServiceContract::class,
             \Modules\Shipping\Services\ShipmentService::class
         );
+
+        $this->app->singleton(
+            \Modules\Shipping\Services\ShipmentStatusOperationsService::class
+        );
     }
 
     /**

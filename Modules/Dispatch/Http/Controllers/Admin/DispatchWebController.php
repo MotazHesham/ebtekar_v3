@@ -12,6 +12,7 @@ use Modules\Dispatch\Http\Requests\AssignCourierRequest;
 use Modules\Dispatch\Http\Requests\AutoAssignCourierRequest;
 use Modules\Dispatch\Http\Requests\BulkAssignCourierRequest;
 use Modules\Shipping\Entities\Shipment;
+use Modules\Shipping\Entities\ShippingPartner;
 use Modules\Shipping\Enums\ShipmentStatus;
 use Modules\Shipping\Repositories\ShippingPartnerRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,10 @@ class DispatchWebController extends Controller
                 ->where('status', ShipmentStatus::ReceivedAtWarehouse->value)
                 ->select(sprintf('%s.*', (new Shipment)->getTable()));
 
-            if ($request->filled('shipping_partner_id')) {
+            $partnerId = $this->resolvePartnerFilterId($request);
+            if ($partnerId) {
+                $query->where('shipping_partner_id', $partnerId);
+            } elseif ($request->filled('shipping_partner_id')) {
                 $query->where('shipping_partner_id', $request->shipping_partner_id);
             }
             if ($request->filled('governorate')) {
@@ -45,6 +49,7 @@ class DispatchWebController extends Controller
             }
 
             $table = Datatables::of($query);
+            $table->addIndexColumn();
             $table->addColumn('select', fn ($row) => '<input type="checkbox" class="shipment-select" value="' . $row->id . '">');
             $table->editColumn('status', fn ($row) => '<span class="badge badge-info">' . e($row->status_label) . '</span>');
             $table->addColumn('partner_name', fn ($row) => $row->shippingPartner?->name ?? '-');
@@ -63,12 +68,20 @@ class DispatchWebController extends Controller
             return $table->make(true);
         }
 
-        $partnerId = $request->integer('shipping_partner_id') ?: null;
+        $user      = auth()->user();
+        $partnerId = $this->resolvePartnerFilterId($request);
+
+        $couriers = $this->couriers->eligibleForDispatch($partnerId);
+        if ($user && $user->user_type === 'shipping_partner' && $partnerId) {
+            $couriers = $couriers->where('shipping_partner_id', $partnerId)->values();
+        }
 
         return view('dispatch::admin.index', [
-            'shippingPartners' => $this->partners->activePluck(),
-            'couriers'         => $this->couriers->eligibleForDispatch($partnerId),
-            'courierLoads'     => $this->couriers->activeLoadCounts($partnerId),
+            'shippingPartners'  => $this->partners->activePluck(),
+            'couriers'          => $couriers,
+            'courierLoads'      => $this->couriers->activeLoadCounts($partnerId),
+            'lockedPartnerId'   => ($user && $user->user_type === 'shipping_partner') ? $partnerId : null,
+            'showPartnerFilter' => ! $user || $user->user_type !== 'shipping_partner',
             'queueCount'       => Shipment::query()->forUser()
                 ->where('status', ShipmentStatus::ReceivedAtWarehouse->value)
                 ->count(),
@@ -142,5 +155,16 @@ class DispatchWebController extends Controller
         toast($message, $batch->success_count > 0 ? 'success' : 'error');
 
         return redirect()->route('admin.dispatch.index');
+    }
+
+    protected function resolvePartnerFilterId(Request $request): ?int
+    {
+        $user = auth()->user();
+
+        if ($user && $user->user_type === 'shipping_partner') {
+            return ShippingPartner::where('user_id', $user->id)->value('id');
+        }
+
+        return $request->integer('shipping_partner_id') ?: null;
     }
 }

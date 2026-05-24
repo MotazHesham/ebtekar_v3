@@ -135,6 +135,17 @@ class Shipment extends Model
         return Carbon::parse($this->last_status_at)->diffForHumans();
     }
 
+    public function getFullAddressAttribute(): ?string
+    {
+        $orderable = $this->relationLoaded('orderable') ? $this->orderable : $this->orderable()->first();
+
+        if ($orderable && ! empty($orderable->shipping_address)) {
+            return $orderable->shipping_address;
+        }
+
+        return $this->region;
+    }
+
     public function scopeForUser($query, $user = null)
     {
         $user = $user ?: auth()->user();

@@ -20,6 +20,7 @@
         </div>
         <div class="card-body">
             <form id="dispatch-filters" class="form-row mb-3">
+                @if($showPartnerFilter ?? true)
                 <div class="col-md-3">
                     <select name="shipping_partner_id" class="form-control filter-input">
                         <option value="">{{ __('cruds.deliveryOrder.fields.shipping_partner') }}</option>
@@ -28,6 +29,9 @@
                         @endforeach
                     </select>
                 </div>
+                @elseif(!empty($lockedPartnerId))
+                    <input type="hidden" name="shipping_partner_id" class="filter-input" value="{{ $lockedPartnerId }}">
+                @endif
                 <div class="col-md-3">
                     <input type="text" name="governorate" class="form-control filter-input"
                         placeholder="{{ __('cruds.deliveryOrder.fields.governorate') }}">
@@ -54,6 +58,7 @@
                 <thead>
                     <tr>
                         <th width="30"><input type="checkbox" id="select-all"></th>
+                        <th width="40">#</th>
                         <th>{{ __('cruds.deliveryOrder.fields.order_num') }}</th>
                         <th>{{ __('cruds.deliveryOrder.fields.shipping_partner') }}</th>
                         <th>{{ __('cruds.deliveryOrder.fields.governorate') }}</th>
@@ -86,7 +91,7 @@
                 retrieve: true,
                 select: false,
                 columnDefs: [
-                    { orderable: false, searchable: false, targets: 0 }
+                    { orderable: false, searchable: false, targets: [0, 1] }
                 ],
                 ajax: {
                     url: '{{ route('admin.dispatch.index') }}',
@@ -98,6 +103,7 @@
                 },
                 columns: [
                     { data: 'select', name: 'select', orderable: false, searchable: false },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'order_num', name: 'order_num' },
                     { data: 'partner_name', name: 'shippingPartner.name', orderable: false },
                     { data: 'governorate', name: 'governorate' },
@@ -105,7 +111,7 @@
                     { data: 'status', name: 'status', orderable: false },
                     { data: 'last_status_at', name: 'last_status_at' }
                 ],
-                order: [[1, 'desc']],
+                order: [[2, 'desc']],
                 pageLength: 25,
                 dom: 'lBfrtip',
                 buttons: []

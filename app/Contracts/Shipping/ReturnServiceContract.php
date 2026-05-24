@@ -18,4 +18,13 @@ interface ReturnServiceContract
     public function markWarehouseReceived(int $returnCaseId, ?int $userId = null): ReturnCase;
 
     public function closeReturn(int $returnCaseId, ?int $userId = null): ReturnCase;
+
+    /**
+     * @param  array{reason?: string, note?: string, status?: string}  $data
+     */
+    public function updateCase(int $returnCaseId, array $data, ?int $userId = null): ReturnCase;
+
+    public function deleteCase(int $returnCaseId, ?int $userId = null): void;
+
+    public function reopenCase(int $returnCaseId, ?int $userId = null): ReturnCase;
 }

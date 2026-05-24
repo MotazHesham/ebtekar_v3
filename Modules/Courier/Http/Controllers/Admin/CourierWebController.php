@@ -22,6 +22,12 @@ class CourierWebController extends Controller
 
         if ($request->ajax()) {
             $query = Courier::query()->with('user')->select(sprintf('%s.*', (new Courier)->getTable()));
+
+            $user = auth()->user();
+            if ($user && $user->user_type === 'shipping_partner') {
+                $partnerId = ShippingPartner::where('user_id', $user->id)->value('id');
+                $query->where('shipping_partner_id', $partnerId);
+            }
             $table = Datatables::of($query);
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
