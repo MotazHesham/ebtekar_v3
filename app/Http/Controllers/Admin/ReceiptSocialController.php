@@ -22,7 +22,7 @@ use App\Models\EmployeeShift;
 use App\Models\ExcelFile;
 use App\Models\FinancialAccount;
 use App\Models\GeneralSetting;
-use App\Models\ReceiptSocial; 
+use App\Models\ReceiptSocial;
 use App\Models\ReceiptSocialProduct;
 use App\Models\ReceiptSocialProductPivot;
 use App\Models\ReceiptSocialBoxDetail;
@@ -35,7 +35,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\Response; 
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -50,38 +50,39 @@ class ReceiptSocialController extends Controller
         $this->shiftService = $shiftService;
     }
 
-    public function upload_fedex(Request $request){
+    public function upload_fedex(Request $request)
+    {
 
         $now_time = time();
         $excelFile = new ExcelFile();
         $excelFile->type = 'social_delivery';
-        
-        $excelFile->addMedia(storage_path('tmp/uploads/' . basename($request->input('uploaded_file'))))->toMediaCollection('uploaded_file'); 
+
+        $excelFile->addMedia(storage_path('tmp/uploads/' . basename($request->input('uploaded_file'))))->toMediaCollection('uploaded_file');
 
         $sheets = (new ReceiptSocialImport)->toCollection(storage_path('tmp/uploads/' . basename($request->input('uploaded_file'))));
         $accepted = [];
-        $rejected = []; 
-        foreach($sheets[0] as $key => $row){
-            if($key != 0){
-                $receipt_social = ReceiptSocial::where('order_num',$row[1])->first();
-                if($receipt_social){
+        $rejected = [];
+        foreach ($sheets[0] as $key => $row) {
+            if ($key != 0) {
+                $receipt_social = ReceiptSocial::where('order_num', $row[1])->first();
+                if ($receipt_social) {
                     $code_cost = $receipt_social->shipping_country->code_cost ?? 0;
-                    if($request->type == 'done'){
-                        if($receipt_social->done){
+                    if ($request->type == 'done') {
+                        if ($receipt_social->done) {
                             $row[] = 'تم التسليم من قبل';
                             $rejected[] = $row;
-                        }else{ 
+                        } else {
                             $row[] = $code_cost;
                             $row[] = $row[3] - $code_cost;
                             $accepted[] = $row;
                             $receipt_social->done = 1;
                             $receipt_social->save();
                         }
-                    }elseif($request->type == 'supplied'){
-                        if($receipt_social->supplied){
+                    } elseif ($request->type == 'supplied') {
+                        if ($receipt_social->supplied) {
                             $row[] = 'تم التوريد من قبل';
                             $rejected[] = $row;
-                        }else{ 
+                        } else {
                             $row[] = $code_cost;
                             $row[] = $row[3] - $code_cost;
                             $accepted[] = $row;
@@ -90,8 +91,8 @@ class ReceiptSocialController extends Controller
                             $receipt_social->add_income();
                         }
                     }
-                }else{
-                    $row [] = 'Not Found';
+                } else {
+                    $row[] = 'Not Found';
                     $rejected[] = $row;
                 }
             }
@@ -105,48 +106,51 @@ class ReceiptSocialController extends Controller
         $rows = [
             'accepted' => $accepted,
             'rejected' => $rejected,
-        ]; 
-        $path = 'tmp/uploads/'.$now_time . '_social_receipts_results.xlsx';
-        Excel::store(new ReceiptSocialResultsExport($rows), $path);  
-        $excelFile->addMedia(storage_path('app/' . $path))->toMediaCollection('result_file'); 
+        ];
+        $path = 'tmp/uploads/' . $now_time . '_social_receipts_results.xlsx';
+        Excel::store(new ReceiptSocialResultsExport($rows), $path);
+        $excelFile->addMedia(storage_path('app/' . $path))->toMediaCollection('result_file');
         $excelFile->save();
         return redirect()->route('admin.excel-files.index');
-
     }
 
-    public function update_delivery_man(Request $request){ 
+    public function update_delivery_man(Request $request)
+    {
         $receipt = ReceiptSocial::find($request->row_id);
         $receipt->delivery_man_id = $request->delivery_man_id;
         $receipt->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
-        $receipt->delivery_status = 'on_delivery'; 
+        $receipt->delivery_status = 'on_delivery';
         $receipt->save();
-        toast(__('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'), 'success');
         return redirect()->route('admin.receipt-socials.index');
     }
 
-    public function receive_money($id){
-        $receipt = ReceiptSocial::find($id); 
-        return view('partials.receive_money',compact('receipt'));
+    public function receive_money($id)
+    {
+        $receipt = ReceiptSocial::find($id);
+        return view('partials.receive_money', compact('receipt'));
     }
 
-    public function print($id){
-        $receipts = ReceiptSocial::with('receiptsReceiptSocialProducts','staff','designer','manufacturer','preparer','shipmenter')->whereIn('id',[$id])->get(); 
-        foreach($receipts as $receipt){
+    public function print($id)
+    {
+        $receipts = ReceiptSocial::with('receiptsReceiptSocialProducts', 'staff', 'designer', 'manufacturer', 'preparer', 'shipmenter')->whereIn('id', [$id])->get();
+        foreach ($receipts as $receipt) {
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptSocials.print',compact('receipts'));
+        return view('admin.receiptSocials.print', compact('receipts'));
     }
 
-    public function update_statuses(Request $request){ 
+    public function update_statuses(Request $request)
+    {
         $type = $request->type;
         $receipt = ReceiptSocial::findOrFail($request->id);
 
-        
 
-        if($type == 'confirm'){
+
+        if ($type == 'confirm') {
             $creatorShift = $this->shiftService->getOpenCreatorShift(auth()->user());
-    
+
             if (! $creatorShift) {
                 return [
                     'status' => '0',
@@ -154,13 +158,13 @@ class ReceiptSocialController extends Controller
                 ];
             }
 
-            if($request->status == 1 && $receipt->creator_shift_id == null){
-                $receipt->creator_shift_id = $creatorShift->id; 
+            if ($request->status == 1 && $receipt->creator_shift_id == null) {
+                $receipt->creator_shift_id = $creatorShift->id;
             }
         }
-        
+
         // Special handling for hold type when hold_in_playlist_status is set
-        if($request->type == 'hold' && $request->has('hold_in_playlist_status') && $request->hold_in_playlist_status && $request->status == 1){
+        if ($request->type == 'hold' && $request->has('hold_in_playlist_status') && $request->hold_in_playlist_status && $request->status == 1) {
             // Hold on playlist status - don't set hold = 1 immediately
             // It will be set automatically when playlist status reaches hold_in_playlist_status
             $receipt->hold_in_playlist_status = $request->hold_in_playlist_status;
@@ -169,25 +173,25 @@ class ReceiptSocialController extends Controller
         } else {
             // Normal status update
             $receipt->$type = $request->status;
-            
-            if($request->type == 'hold'){
+
+            if ($request->type == 'hold') {
                 $receipt->hold_reason = $request->hold_reason;
                 // Hold now or UnHold - clear hold_in_playlist_status
                 $receipt->hold_in_playlist_status = null;
             }
         }
-        
+
         $status = '1';
-        if (in_array($request->type,['done','returned']) && $request->status == 1) {
+        if (in_array($request->type, ['done', 'returned']) && $request->status == 1) {
             $receipt->quickly = 0;
             $receipt->delivery_status = $type == 'done' ? 'delivered' : 'cancel';
             $receipt->payment_status = $type == 'done' ? 'paid' : 'unpaid';
 
-            if($type == 'done'){
+            if ($type == 'done') {
                 $receipt->done_time = date(config('panel.date_format') . ' ' . config('panel.time_format'));
             }
         }
-        
+
         if (($type == 'supplied') && $request->status == 1) {
             $status = '2';
             $receipt->add_income();
@@ -195,40 +199,42 @@ class ReceiptSocialController extends Controller
 
         $receipt->save();
 
-        if (in_array($request->type,['done','returned','confirm'])){
+        if (in_array($request->type, ['done', 'returned', 'confirm'])) {
             $adHistory = AdsAccountHistory::find($receipt->ad_history_id);
-            if($adHistory){
-                RecalculateAdsAccountHistory::dispatch($adHistory); 
+            if ($adHistory) {
+                RecalculateAdsAccountHistory::dispatch($adHistory);
             }
         }
 
-        if($request->ajax()){
+        if ($request->ajax()) {
             return [
                 'status' => $status,
-                'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>', 
+                'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>',
                 'message' => '',
             ];
-        }else{
+        } else {
             return redirect()->back();
         }
     }
 
-    public function update_client_review_comment(Request $request){
+    public function update_client_review_comment(Request $request)
+    {
         $receipt = ReceiptSocial::findOrFail($request->id);
         $receipt->client_review_comment = $request->client_review_comment;
         $receipt->save();
-        
+
         return response()->json([
             'success' => true,
             'message' => __('flash.global.update_title')
         ]);
     }
 
-    public function duplicate($id){
+    public function duplicate($id)
+    {
 
-        $receipt_social = ReceiptSocial::findOrFail($id); 
-        
-        $new_receipt = new ReceiptSocial; 
+        $receipt_social = ReceiptSocial::findOrFail($id);
+
+        $new_receipt = new ReceiptSocial;
         $new_receipt->client_name = $receipt_social->client_name;
         $new_receipt->phone_number = $receipt_social->phone_number;
         $new_receipt->phone_number_2 = $receipt_social->phone_number_2;
@@ -236,40 +242,42 @@ class ReceiptSocialController extends Controller
         $new_receipt->commission = $receipt_social->commission;
         $new_receipt->extra_commission = $receipt_social->extra_commission;
         $new_receipt->note = $receipt_social->note;
-        $new_receipt->shipping_country_id = $receipt_social->shipping_country_id; 
+        $new_receipt->shipping_country_id = $receipt_social->shipping_country_id;
         $new_receipt->shipping_country_cost = $receipt_social->shipping_country_cost;
         $new_receipt->shipping_address = $receipt_social->shipping_address;
         $new_receipt->client_type = $receipt_social->client_type;
         $new_receipt->website_setting_id = $receipt_social->website_setting_id;
         $new_receipt->save();
 
-        $receipt_products = ReceiptSocialProductPivot::where('receipt_social_id',$receipt_social->id)->get();
-        
-        foreach($receipt_products as $row){
+        $receipt_products = ReceiptSocialProductPivot::where('receipt_social_id', $receipt_social->id)->get();
+
+        foreach ($receipt_products as $row) {
             $new_receipt_product = $row->replicate();
             $new_receipt_product->receipt_social_id = $new_receipt->id;
             $new_receipt_product->save();
         }
-        alert('Receipt has been inserted successfully','','success');
+        alert('Receipt has been inserted successfully', '', 'success');
         return redirect()->back();
     }
 
-    public function view_products(Request $request){
-        if($request->ajax()){
+    public function view_products(Request $request)
+    {
+        if ($request->ajax()) {
             $receipt = ReceiptSocial::withTrashed()->find($request->id);
-            $products = ReceiptSocialProductPivot::where('receipt_social_id',$request->id)->latest()->get(); 
-            return view('admin.receiptSocials.partials.view_products',compact('products','receipt'));
-        }else{
+            $products = ReceiptSocialProductPivot::where('receipt_social_id', $request->id)->latest()->get();
+            return view('admin.receiptSocials.partials.view_products', compact('products', 'receipt'));
+        } else {
             return '';
         }
     }
 
-    public function destroy_product($id){
+    public function destroy_product($id)
+    {
         $receipt_social_product_pivot = ReceiptSocialProductPivot::find($id);
         $receipt = ReceiptSocial::find($receipt_social_product_pivot->receipt_social_id);
         if (!auth()->user()->is_admin) {
             if ($receipt->playlist_status != 'pending') {
-                alert('لايمكن حذف منتج من هذه الفاتورة','','error');
+                alert('لايمكن حذف منتج من هذه الفاتورة', '', 'error');
                 return 1;
             }
         }
@@ -290,54 +298,55 @@ class ReceiptSocialController extends Controller
         $receipt->extra_commission = $sum3;
         $receipt->save();
 
-            
-        // store the receipt social id in session so when redirect to the table open the popup to view products after delete
-        session()->put('update_receipt_socail_id',$receipt->id);
 
-        toast(__('flash.deleted'),'success'); 
+        // store the receipt social id in session so when redirect to the table open the popup to view products after delete
+        session()->put('update_receipt_socail_id', $receipt->id);
+
+        toast(__('flash.deleted'), 'success');
         return 1;
     }
 
-    public function edit_product(Request $request){
-        if($request->ajax()){
-            $receipt_social_product_pivot = ReceiptSocialProductPivot::with('boxDetails.product')->find($request->id); 
+    public function edit_product(Request $request)
+    {
+        if ($request->ajax()) {
+            $receipt_social_product_pivot = ReceiptSocialProductPivot::with('boxDetails.product')->find($request->id);
             $receipt = ReceiptSocial::find($receipt_social_product_pivot->receipt_social_id);
-            $products = ReceiptSocialProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get(); 
-            return view('admin.receiptSocials.partials.edit_product',compact('receipt_social_product_pivot','products'));
-        }else{ 
+            $products = ReceiptSocialProduct::where('website_setting_id', $receipt->website_setting_id)->latest()->get();
+            return view('admin.receiptSocials.partials.edit_product', compact('receipt_social_product_pivot', 'products'));
+        } else {
 
             $receipt_product_pivot = ReceiptSocialProductPivot::find($request->receipt_product_pivot_id);
             $receipt = ReceiptSocial::find($receipt_product_pivot->receipt_social_id);
 
             if (!auth()->user()->is_admin) {
                 if ($receipt->playlist_status != 'pending') {
-                    alert('لايمكن تعديل منتج في هذه الفاتورة','','error');
+                    alert('لايمكن تعديل منتج في هذه الفاتورة', '', 'error');
                     return redirect()->back();
                 }
             }
-            
+
             $type = $request->type ?? $receipt_product_pivot->type ?? 'single';
             $receipt_product_pivot->type = $type;
-            
+
             if ($type == 'single') {
-                $product = ReceiptSocialProduct::findOrFail($request->product_id); 
+                $product = ReceiptSocialProduct::findOrFail($request->product_id);
                 $receipt_product_pivot->receipt_social_product_id = $request->product_id;
                 $receipt_product_pivot->title = $product->name;
                 $receipt_product_pivot->description = $request->description;
                 if (!auth()->user()->is_admin) {
                     $receipt_product_pivot->price = $product->price;
                     $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
-                }else{ 
+                } else {
                     $receipt_product_pivot->price = $request->price;
                     $receipt_product_pivot->total_cost = ($request->quantity * $request->price);
                 }
                 $receipt_product_pivot->quantity = $request->quantity;
-                if($request->extra_commission != null){ 
+                if ($request->extra_commission != null) {
                     $receipt_product_pivot->extra_commission = $request->extra_commission;
                 }
                 $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
                 $product_for_season = $product;
-                
+
                 // Delete box details if switching from box to single
                 $receipt_product_pivot->boxDetails()->delete();
             } else {
@@ -347,12 +356,12 @@ class ReceiptSocialController extends Controller
                 $receipt_product_pivot->title = $request->box_title ?? 'بوكس';
                 $receipt_product_pivot->description = $request->description;
                 $receipt_product_pivot->quantity = $request->quantity ?? 1;
-                
+
                 // Calculate totals from box details ONLY
                 $total_box_cost = 0;
                 $total_box_quantity = 0;
                 $total_box_commission = 0;
-                
+
                 if ($request->has('box_products') && is_array($request->box_products)) {
                     foreach ($request->box_products as $boxProduct) {
                         if (!empty($boxProduct['product_id']) && !empty($boxProduct['quantity'])) {
@@ -361,7 +370,7 @@ class ReceiptSocialController extends Controller
                             // Use box_price if provided, otherwise fall back to regular price
                             $boxPrice = $boxProduct['price'] ?? ($boxProd->box_price ?? $boxProd->price);
                             $boxTotal = $boxQuantity * $boxPrice;
-                            
+
                             $total_box_cost += $boxTotal;
                             $total_box_commission += ($boxQuantity * ($boxProd->commission ?? 0));
                             $total_box_quantity += $boxQuantity;
@@ -371,20 +380,20 @@ class ReceiptSocialController extends Controller
                         }
                     }
                 }
-                
+
                 // Set pivot totals based on calculated box details
                 if (!auth()->user()->is_admin) {
                     $receipt_product_pivot->price = $total_box_cost > 0 ? $total_box_cost : 0;
-                    $receipt_product_pivot->total_cost =  $total_box_cost ;
-                    $receipt_product_pivot->commission =  $total_box_commission ;
+                    $receipt_product_pivot->total_cost =  $total_box_cost;
+                    $receipt_product_pivot->commission =  $total_box_commission;
                 } else {
                     // Admin can override price
                     $receipt_product_pivot->price = $total_box_cost > 0 ? $total_box_cost : 0;
-                    $receipt_product_pivot->total_cost =  $total_box_cost ;
-                    $receipt_product_pivot->commission =  $total_box_commission ;
+                    $receipt_product_pivot->total_cost =  $total_box_cost;
+                    $receipt_product_pivot->commission =  $total_box_commission;
                 }
-                
-                if($request->extra_commission != null){ 
+
+                if ($request->extra_commission != null) {
                     $receipt_product_pivot->extra_commission = $request->extra_commission;
                 }
                 $receipt_product_pivot->quantity = $total_box_quantity;
@@ -427,25 +436,25 @@ class ReceiptSocialController extends Controller
                 $photos = array();
             }
 
-            if ($request->has('photos')) { 
+            if ($request->has('photos')) {
                 foreach ($request->photos as $key => $photo) {
-                    if(isset($photo['photo'])){
+                    if (isset($photo['photo'])) {
                         $new['photo'] = $photo['photo']->store('uploads/receipt_social/photos');
                         $new['note'] = $photo['note'];
-                        array_push($photos,$new);
+                        array_push($photos, $new);
                     }
                 }
-            }     
+            }
 
-            $receipt_product_pivot->photos = json_encode($photos);   
+            $receipt_product_pivot->photos = json_encode($photos);
 
             $receipt_product_pivot->save();
-            
+
             // Update box details if type is box - ALL products go to ReceiptSocialBoxDetail
             if ($type == 'box') {
                 // Delete existing box details
                 $receipt_product_pivot->boxDetails()->delete();
-                
+
                 // Save new box details - each selected product goes here
                 if ($request->has('box_products') && is_array($request->box_products)) {
                     foreach ($request->box_products as $boxProduct) {
@@ -455,7 +464,7 @@ class ReceiptSocialController extends Controller
                             // Use box_price if provided, otherwise fall back to regular price
                             $boxPrice = $boxProduct['price'] ?? ($boxProd->box_price ?? $boxProd->price);
                             $boxTotal = $boxQuantity * $boxPrice;
-                            
+
                             // Store each product in ReceiptSocialBoxDetail
                             $boxDetail = new ReceiptSocialBoxDetail();
                             $boxDetail->receipt_social_product_pivot_id = $receipt_product_pivot->id;
@@ -484,32 +493,33 @@ class ReceiptSocialController extends Controller
             $receipt->total_cost = $sum;
             $receipt->commission = $sum2;
             $receipt->extra_commission = $sum3;
-            if(!$receipt->is_seasoned && isset($product_for_season)){
+            if (!$receipt->is_seasoned && isset($product_for_season)) {
                 $receipt->is_seasoned = $product_for_season->product_type == 'season' ? 1 : 0;
             }
-            $receipt->save(); 
-            
-            // store the receipt social id in session so when redirect to the table open the popup to view products after edit
-            session()->put('update_receipt_socail_id',$receipt->id);
+            $receipt->save();
 
-            toast(__('flash.global.update_title'),'success');
+            // store the receipt social id in session so when redirect to the table open the popup to view products after edit
+            session()->put('update_receipt_socail_id', $receipt->id);
+
+            toast(__('flash.global.update_title'), 'success');
             return redirect()->back();
         }
     }
 
-    public function add_product(Request $request){
-        if($request->ajax()){
+    public function add_product(Request $request)
+    {
+        if ($request->ajax()) {
             $receipt = ReceiptSocial::findOrFail($request->id);
-            $products = ReceiptSocialProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
+            $products = ReceiptSocialProduct::where('website_setting_id', $receipt->website_setting_id)->latest()->get();
             $receipt_id = $request->id;
             $order_num = $receipt->order_num;
-            return view('admin.receiptSocials.partials.add_product',compact('products','receipt_id','order_num'));
-        }else{  
+            return view('admin.receiptSocials.partials.add_product', compact('products', 'receipt_id', 'order_num'));
+        } else {
             $receipt = ReceiptSocial::findOrFail($request->receipt_id);
-            
+
             if (!auth()->user()->is_admin) {
-                if ($receipt->playlist_status != 'pending'){
-                    alert('لايمكن أضافة منتج في هذه الفاتورة','','error');
+                if ($receipt->playlist_status != 'pending') {
+                    alert('لايمكن أضافة منتج في هذه الفاتورة', '', 'error');
                     return redirect()->back();
                 }
             }
@@ -517,10 +527,10 @@ class ReceiptSocialController extends Controller
             $box_title = '';
 
             $type = $request->type ?? 'single';
-            $receipt_product_pivot = new ReceiptSocialProductPivot(); 
+            $receipt_product_pivot = new ReceiptSocialProductPivot();
             $receipt_product_pivot->receipt_social_id = $request->receipt_id;
             $receipt_product_pivot->type = $type;
-            
+
             if ($type == 'single') {
                 $product = ReceiptSocialProduct::findOrFail($request->product_id);
                 $receipt_product_pivot->receipt_social_product_id = $request->product_id;
@@ -530,7 +540,7 @@ class ReceiptSocialController extends Controller
                 $receipt_product_pivot->quantity = $request->quantity;
                 $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
                 $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
-                
+
                 $product_for_season = $product;
             } else {
                 // Box type - ONE pivot record, all products go to ReceiptSocialBoxDetail
@@ -538,37 +548,37 @@ class ReceiptSocialController extends Controller
                 $receipt_product_pivot->receipt_social_product_id = null;
                 $receipt_product_pivot->title = 'بوكس';
                 $receipt_product_pivot->description = $request->description;
-                
+
                 // Calculate totals from box details ONLY
                 $total_box_cost = 0;
                 $total_quantity = 0;
                 $total_box_commission = 0;
-                
+
                 if ($request->has('box_products') && is_array($request->box_products)) {
                     $boxProducts = $request->box_products;
-                    $lastBox = end($boxProducts); 
+                    $lastBox = end($boxProducts);
                     foreach ($request->box_products as $boxProduct) {
                         if (!empty($boxProduct['product_id']) && !empty($boxProduct['quantity'])) {
                             $boxProd = ReceiptSocialProduct::findOrFail($boxProduct['product_id']);
                             // Check if current one is last
                             $isLast = ($boxProduct === $lastBox);
-                            $box_title .= $boxProd->name . ( $isLast ? '' : ' + ' );
+                            $box_title .= $boxProd->name . ($isLast ? '' : ' + ');
                             $boxQuantity = (int)$boxProduct['quantity'];
                             $total_quantity += $boxQuantity;
                             // Use box_price if provided, otherwise fall back to regular price
                             $boxPrice = $boxProduct['price'] ?? ($boxProd->box_price ?? $boxProd->price);
                             $boxTotal = $boxQuantity * $boxPrice;
-                            
+
                             $total_box_cost += $boxTotal;
                             $total_box_commission += ($boxQuantity * ($boxProd->commission ?? 0));
-                            
+
                             if (!isset($product_for_season)) {
                                 $product_for_season = $boxProd;
                             }
                         }
                     }
                 }
-                
+
                 // Set pivot totals based on calculated box details
                 $receipt_product_pivot->quantity = $total_quantity;
                 $receipt_product_pivot->price = $total_box_cost;
@@ -589,16 +599,16 @@ class ReceiptSocialController extends Controller
 
             if ($request->has('photos')) {
                 foreach ($request->photos as $key => $photo) {
-                    if(isset($photo['photo'])){
-                        $photos[$key]['photo'] = $photo['photo']->store('uploads/receipt_social/photos'); 
+                    if (isset($photo['photo'])) {
+                        $photos[$key]['photo'] = $photo['photo']->store('uploads/receipt_social/photos');
                         $photos[$key]['note'] = $photo['note'];
                     }
                 }
                 $receipt_product_pivot->photos = json_encode($photos);
-            }  
+            }
 
             $receipt_product_pivot->save();
-            
+
             // Save box details if type is box - ALL products go to ReceiptSocialBoxDetail
             if ($type == 'box' && $request->has('box_products') && is_array($request->box_products)) {
                 foreach ($request->box_products as $boxProduct) {
@@ -608,7 +618,7 @@ class ReceiptSocialController extends Controller
                         // Use box_price if provided, otherwise fall back to regular price
                         $boxPrice = $boxProduct['price'] ?? ($boxProd->box_price ?? $boxProd->price);
                         $boxTotal = $boxQuantity * $boxPrice;
-                        
+
                         // Store each product in ReceiptSocialBoxDetail
                         $boxDetail = new ReceiptSocialBoxDetail();
                         $boxDetail->receipt_social_product_pivot_id = $receipt_product_pivot->id;
@@ -620,7 +630,7 @@ class ReceiptSocialController extends Controller
                     }
                 }
             }
-            
+
             $receipt_products = ReceiptSocialProductPivot::where('receipt_social_id', $request->receipt_id)->get();
             $sum = 0;
             $sum2 = 0;
@@ -633,47 +643,48 @@ class ReceiptSocialController extends Controller
             $receipt->total_cost = $sum;
             $receipt->commission = $sum2;
             $receipt->extra_commission = $sum3;
-            if(!$receipt->is_seasoned && isset($product_for_season)){
+            if (!$receipt->is_seasoned && isset($product_for_season)) {
                 $receipt->is_seasoned = $product_for_season->product_type == 'season' ? 1 : 0;
             }
 
-            if(isset($product_for_season) && $product_for_season->has_shipping_offer){ 
-                $zone = Zone::whereHas('countries',function($q) use($receipt){
-                    $q->where('country_id',$receipt->shipping_country_id);
+            if (isset($product_for_season) && $product_for_season->has_shipping_offer) {
+                $zone = Zone::whereHas('countries', function ($q) use ($receipt) {
+                    $q->where('country_id', $receipt->shipping_country_id);
                 })->first();
-                if($zone){
+                if ($zone) {
                     $receipt->shipping_country_cost = $zone->delivery_cost_offer;
                 }
             }
             $receipt->save();
-            if($request->has('add_more')){
-                session()->put('store_receipt_socail_id',$receipt->id);
-                session()->put('update_receipt_socail_id',null);
+            if ($request->has('add_more')) {
+                session()->put('store_receipt_socail_id', $receipt->id);
+                session()->put('update_receipt_socail_id', null);
             }
-            if($request->has('save_close')){
-                session()->put('store_receipt_socail_id',null);
-                session()->put('update_receipt_socail_id',$receipt->id);
+            if ($request->has('save_close')) {
+                session()->put('store_receipt_socail_id', null);
+                session()->put('update_receipt_socail_id', $receipt->id);
             }
-            toast(__('flash.global.success_title'),'success');
+            toast(__('flash.global.success_title'), 'success');
             return redirect()->back();
         }
     }
 
-    public function index(Request $request){ 
+    public function index(Request $request)
+    {
         abort_if(Gate::denies('receipt_social_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        
+
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->get();
-        $delivery_mans = User::where('user_type', 'delivery_man')->get();
+        $delivery_mans = User::whereIn('user_type', ['delivery_man', 'courier'])->get();
         $socials = Social::all();
-        $countries = Country::where('status',1)->get()->groupBy('type'); 
+        $countries = Country::where('status', 1)->get()->groupBy('type');
         $websites = WebsiteSetting::pluck('site_name', 'id');
         $financial_accounts = FinancialAccount::get();
         $receiptSocialProducts = ReceiptSocialProduct::all();
         $zones = Zone::all();
-        
-        if($request->has('cancel_popup')){
-            session()->put('store_receipt_socail_id',null);
-            session()->put('update_receipt_socail_id',null);
+
+        if ($request->has('cancel_popup')) {
+            session()->put('store_receipt_socail_id', null);
+            session()->put('update_receipt_socail_id', null);
         }
 
         $phone = null;
@@ -692,15 +703,15 @@ class ReceiptSocialController extends Controller
         $social_id = null;
         $exclude = null;
         $include = null;
-        $sent_to_delivery = null; 
-        $confirm = null; 
+        $sent_to_delivery = null;
+        $confirm = null;
         $quickly = null;
         $done = null;
         $supplied = null;
         $returned = null;
         $country_id = null;
         $playlist_status = null;
-        $description = null; 
+        $description = null;
         $deleted = null;
         $deposit_type = null;
         $total_cost = null;
@@ -725,22 +736,22 @@ class ReceiptSocialController extends Controller
             ->where('status', 'open')
             ->latest('started_at')
             ->first();
-            
-        if(request('deleted')){ 
+
+        if (request('deleted')) {
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
             $deleted = 1;
-            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts')->withCount('followups')->onlyTrashed(); 
-        }else{
-            $receipts = ReceiptSocial::with(['staff:id,name','delivery_man:id,name', 'socials','shipping_country','financial_account'])->withCount('receiptsReceiptSocialProducts')->withCount('followups'); 
+            $receipts = ReceiptSocial::with(['staff:id,name', 'delivery_man:id,name', 'socials', 'shipping_country', 'financial_account'])->withCount('receiptsReceiptSocialProducts')->withCount('followups')->onlyTrashed();
+        } else {
+            $receipts = ReceiptSocial::with(['staff:id,name', 'delivery_man:id,name', 'socials', 'shipping_country', 'financial_account'])->withCount('receiptsReceiptSocialProducts')->withCount('followups');
         }
-        if($request->general_search != null){
+        if ($request->general_search != null) {
             $general_search = $request->general_search;
             $receipts = $receipts->where(function ($query) use ($general_search) {
                 $query->where('order_num', 'like', '%' . $general_search . '%')
                     ->orWhere('phone_number', 'like', '%' . $general_search . '%')
                     ->orWhere('phone_number_2', 'like', '%' . $general_search . '%')
                     ->orWhere('client_name', 'like', '%' . $general_search . '%')
-                    ->orWhere('shopify_order_num', 'like', '%' . $general_search . '%'); 
+                    ->orWhere('shopify_order_num', 'like', '%' . $general_search . '%');
             });
         }
 
@@ -761,19 +772,19 @@ class ReceiptSocialController extends Controller
         }
         if ($request->has_followup != null) {
             $has_followup = $request->has_followup;
-            if($has_followup == 1){
+            if ($has_followup == 1) {
                 $receipts = $receipts->whereHas('followups');
-            }else{
+            } else {
                 $receipts = $receipts->whereDoesntHave('followups');
             }
         }
         if ($request->status_code != null) {
             $status_code = $request->status_code;
-            if($status_code == 'other'){
+            if ($status_code == 'other') {
                 $receipts = $receipts->whereNotIn('status_code', ['OFD', 'POD', 'AH']);
-            }else{
+            } else {
                 $receipts = $receipts->where('status_code', $status_code);
-            } 
+            }
         }
         if ($request->utm != null) {
             $utm = $request->utm;
@@ -781,9 +792,9 @@ class ReceiptSocialController extends Controller
         }
         if ($request->quickly_return != null) {
             $quickly_return = $request->quickly_return;
-            if($quickly_return == 1){
+            if ($quickly_return == 1) {
                 $receipts = $receipts->where('quickly_return', 1);
-            }else{
+            } else {
                 $receipts = $receipts->where('quickly_return', 0);
             }
         }
@@ -802,30 +813,30 @@ class ReceiptSocialController extends Controller
         }
         if ($request->isShopify != null) {
             $isShopify = $request->isShopify;
-            if($isShopify == 1){
+            if ($isShopify == 1) {
                 $receipts = $receipts->whereNotNull('shopify_id');
-            }else{
+            } else {
                 $receipts = $receipts->whereNull('shopify_id');
             }
         }
 
         if ($request->sent_to_delivery != null) {
             $sent_to_delivery = $request->sent_to_delivery;
-            if($sent_to_delivery){
+            if ($sent_to_delivery) {
                 $receipts = $receipts->whereNotNull('send_to_delivery_date');
-            }else{
+            } else {
                 $receipts = $receipts->whereNull('send_to_delivery_date');
             }
         }
 
         if ($request->product_type != null) {
             $product_type = $request->product_type;
-            if($product_type == 1){
-                $receipts = $receipts->whereHas('receiptsReceiptSocialProducts.products', function($query) {
+            if ($product_type == 1) {
+                $receipts = $receipts->whereHas('receiptsReceiptSocialProducts.products', function ($query) {
                     $query->where('product_type', 'season');
                 });
-            }else{
-                $receipts = $receipts->whereHas('receiptsReceiptSocialProducts.products', function($query) {
+            } else {
+                $receipts = $receipts->whereHas('receiptsReceiptSocialProducts.products', function ($query) {
                     $query->where('product_type', '!=', 'season')->orWhereNull('product_type');
                 });
             }
@@ -845,7 +856,7 @@ class ReceiptSocialController extends Controller
         }
 
         if ($request->total_cost != null) {
-            $receipts = $receipts->where('total_cost','>=', $request->total_cost);
+            $receipts = $receipts->where('total_cost', '>=', $request->total_cost);
             $total_cost = $request->total_cost;
         }
 
@@ -877,7 +888,7 @@ class ReceiptSocialController extends Controller
         if ($request->playlist_status != null) {
             $receipts = $receipts->where('playlist_status', $request->playlist_status);
             $playlist_status = $request->playlist_status;
-        } 
+        }
         if ($request->quickly != null) {
             $receipts = $receipts->where('quickly', $request->quickly);
             $quickly = $request->quickly;
@@ -933,36 +944,36 @@ class ReceiptSocialController extends Controller
         if ($request->from != null && $request->to != null) {
             $from = $request->from;
             $to = $request->to;
-            $receipts = $receipts->whereBetween('order_num', [ 'receipt-social#' . $from,  'receipt-social#' . $to]);
+            $receipts = $receipts->whereBetween('order_num', ['receipt-social#' . $from,  'receipt-social#' . $to]);
         }
-        if ($request->from_date != null && $request->to_date != null && $request->date_type != null) {  
+        if ($request->from_date != null && $request->to_date != null && $request->date_type != null) {
             $from_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->from_date . ' ' . '12:00 am')->format('Y-m-d H:i:s');
-            $to_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->to_date . ' ' . '11:59 pm')->format('Y-m-d H:i:s'); 
+            $to_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->to_date . ' ' . '11:59 pm')->format('Y-m-d H:i:s');
             $date_type = $request->date_type;
             $receipts = $receipts->whereBetween($date_type, [$from_date, $to_date]);
         }
         if ($request->exclude != null) {
-            $exclude = $request->exclude; 
-            foreach(explode(',',$exclude) as $exc){
+            $exclude = $request->exclude;
+            foreach (explode(',', $exclude) as $exc) {
                 $exclude2[] = $exc;
             }
-            $receipts = $receipts->where(function ($query) use($exclude2) {
-                for ($i = 0; $i < count($exclude2); $i++){
-                    $query->orwhere('order_num', 'not like',  '%' . $exclude2[$i] .'%');
-                }      
+            $receipts = $receipts->where(function ($query) use ($exclude2) {
+                for ($i = 0; $i < count($exclude2); $i++) {
+                    $query->orwhere('order_num', 'not like',  '%' . $exclude2[$i] . '%');
+                }
             });
         }
         if ($request->include != null) {
-            $include = $request->include; 
-            foreach(explode(',',$include) as $inc){ 
-                foreach(explode(' ',$inc) as $inccc){
+            $include = $request->include;
+            foreach (explode(',', $include) as $inc) {
+                foreach (explode(' ', $inc) as $inccc) {
                     $include2[] = $inccc;
                 }
             }
-            $receipts = $receipts->where(function ($query) use($include2) {
-                for ($i = 0; $i < count($include2); $i++){
+            $receipts = $receipts->where(function ($query) use ($include2) {
+                for ($i = 0; $i < count($include2); $i++) {
                     $query->orwhere('order_num', 'like',  '%#' . $include2[$i]);
-                }      
+                }
             });
         }
 
@@ -971,23 +982,23 @@ class ReceiptSocialController extends Controller
         }
 
         if ($request->has('download_delivery_fedex')) {
-            return Excel::download(new ReceiptSocialDeliveryExport($receipts->with('receiptsReceiptSocialProducts')->get(),'fedex'), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
+            return Excel::download(new ReceiptSocialDeliveryExport($receipts->with('receiptsReceiptSocialProducts')->get(), 'fedex'), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
         }
 
         if ($request->has('download_delivery_smsa')) {
-            return Excel::download(new ReceiptSocialDeliveryExport($receipts->with('receiptsReceiptSocialProducts')->get(),'smsa'), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
+            return Excel::download(new ReceiptSocialDeliveryExport($receipts->with('receiptsReceiptSocialProducts')->get(), 'smsa'), 'social_receipts_delivery_(' . $from_date . ')_(' . $to_date . ')_(' . $request->client_name . ').xlsx');
         }
 
         if ($request->has('print')) {
-            $receipts = $receipts->with('receiptsReceiptSocialProducts','designer','manufacturer','preparer','shipmenter')->get();
-            foreach($receipts as $receipt){
+            $receipts = $receipts->with('receiptsReceiptSocialProducts', 'designer', 'manufacturer', 'preparer', 'shipmenter')->get();
+            foreach ($receipts as $receipt) {
                 $receipt->printing_times += 1;
                 $receipt->save();
             }
             return view('admin.receiptSocials.print', compact('receipts'));
         }
-        
-        
+
+
         // Clone the query for statistics
         $statisticsQuery = clone $receipts;
 
@@ -1000,7 +1011,7 @@ class ReceiptSocialController extends Controller
                 SUM(total_cost) as total_total_cost,
                 SUM(discounted_amount) as total_discounted_amount
             ')->first();
-        
+
         $statistics = [
             'total_total_cost_without_deposit' => $statisticsData->total_total_cost + $statisticsData->total_extra_commission - $statisticsData->total_deposit - $statisticsData->total_discounted_amount,
             'total_shipping_country_cost' => $statisticsData->total_shipping_country_cost,
@@ -1011,27 +1022,122 @@ class ReceiptSocialController extends Controller
 
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('quickly_return', 'desc')->orderBy('client_review', 'desc')->orderBy('created_at', 'desc')->paginate(15);
 
-        if($request->has('new_design')){
-            return view('admin.receiptSocials.index_modern', compact('countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
-            'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
-            'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type', 
-            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts',
-            'selectedProducts','has_followup','shopify_order_num','status_code','quickly_return','utm','currentCreatorShift'));
+        if ($request->has('new_design')) {
+            return view('admin.receiptSocials.index_modern', compact(
+                'countries',
+                'statistics',
+                'receipts',
+                'done',
+                'client_type',
+                'exclude',
+                'enable_multiple_form_submit',
+                'delivery_status',
+                'payment_status',
+                'sent_to_delivery',
+                'social_id',
+                'websites',
+                'website_setting_id',
+                'total_cost',
+                'country_id',
+                'returned',
+                'date_type',
+                'phone',
+                'client_name',
+                'order_num',
+                'deleted',
+                'financial_accounts',
+                'product_type',
+                'quickly',
+                'playlist_status',
+                'description',
+                'include',
+                'socials',
+                'delivery_mans',
+                'deposit_type',
+                'supplied',
+                'isShopify',
+                'zones',
+                'zone_id',
+                'delivery_man_id',
+                'staff_id',
+                'from',
+                'to',
+                'from_date',
+                'to_date',
+                'staffs',
+                'confirm',
+                'financial_account_id',
+                'general_search',
+                'receiptSocialProducts',
+                'selectedProducts',
+                'has_followup',
+                'shopify_order_num',
+                'status_code',
+                'quickly_return',
+                'utm',
+                'currentCreatorShift'
+            ));
         }
 
         return view('admin.receiptSocials.index', compact(
-            'countries', 'statistics','receipts','done','client_type','exclude','enable_multiple_form_submit',
-            'delivery_status','payment_status','sent_to_delivery','social_id','websites','website_setting_id','total_cost',
-            'country_id','returned','date_type','phone','client_name','order_num', 'deleted','financial_accounts','product_type',
-            'quickly','playlist_status','description', 'include','socials','delivery_mans','deposit_type','supplied','isShopify', 'zones', 'zone_id',
-            'delivery_man_id','staff_id','from','to','from_date','to_date', 'staffs','confirm',  'financial_account_id','general_search','receiptSocialProducts',
-            'selectedProducts','has_followup','shopify_order_num','status_code','quickly_return','utm','currentCreatorShift'
+            'countries',
+            'statistics',
+            'receipts',
+            'done',
+            'client_type',
+            'exclude',
+            'enable_multiple_form_submit',
+            'delivery_status',
+            'payment_status',
+            'sent_to_delivery',
+            'social_id',
+            'websites',
+            'website_setting_id',
+            'total_cost',
+            'country_id',
+            'returned',
+            'date_type',
+            'phone',
+            'client_name',
+            'order_num',
+            'deleted',
+            'financial_accounts',
+            'product_type',
+            'quickly',
+            'playlist_status',
+            'description',
+            'include',
+            'socials',
+            'delivery_mans',
+            'deposit_type',
+            'supplied',
+            'isShopify',
+            'zones',
+            'zone_id',
+            'delivery_man_id',
+            'staff_id',
+            'from',
+            'to',
+            'from_date',
+            'to_date',
+            'staffs',
+            'confirm',
+            'financial_account_id',
+            'general_search',
+            'receiptSocialProducts',
+            'selectedProducts',
+            'has_followup',
+            'shopify_order_num',
+            'status_code',
+            'quickly_return',
+            'utm',
+            'currentCreatorShift'
         ));
     }
 
-    
-    public function send_to_wasla(Request $request){
+
+    public function send_to_wasla(Request $request)
+    {
         $receipt = ReceiptSocial::findOrFail($request->row_id);
         $company_id = Auth::user()->wasla_company_id;
 
@@ -1073,29 +1179,29 @@ class ReceiptSocialController extends Controller
         if ($response) {
             if ($response['errNum'] == 200) {
                 $receipt->send_to_delivery_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
-                $receipt->delivery_status = 'on_delivery'; 
+                $receipt->delivery_status = 'on_delivery';
                 $receipt->save();
                 alert('تم أرسال الأوردر لواصلة بنجاح');
             } elseif ($response['errNum'] == 401) {
-                alert('',$response['msg'],'error'); 
+                alert('', $response['msg'], 'error');
             } else {
-                alert('SomeThing Went Wrong000','','error');
+                alert('SomeThing Went Wrong000', '', 'error');
             }
         } else {
-            alert('SomeThing Went Wrong','','error');
+            alert('SomeThing Went Wrong', '', 'error');
         }
         return redirect()->route('admin.receipt-socials.index');
     }
 
     public function create(Request $request)
-    {   
-        abort_if(Gate::denies('receipt_social_create'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
+    {
+        abort_if(Gate::denies('receipt_social_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $shipping_countries = Country::select('cost','name', 'id')->get();
+        $shipping_countries = Country::select('cost', 'name', 'id')->get();
 
         $socials = Social::pluck('name', 'id');
 
-        $financial_accounts = FinancialAccount::where('active',1)->get();
+        $financial_accounts = FinancialAccount::where('active', 1)->get();
 
         $previous_data = searchByPhone($request->phone_number);
 
@@ -1103,24 +1209,24 @@ class ReceiptSocialController extends Controller
 
         $websites = WebsiteSetting::pluck('site_name', 'id');
 
-        $adAccounts = AdsAccount::where('type','messages')->get();
+        $adAccounts = AdsAccount::where('type', 'messages')->get();
 
-        $adAccountDetails = AdsAccountDetail::with('parentRecursive','parent')->whereIn('ad_account_id', $adAccounts->pluck('id'))->where('type','ad')->get();
-        
-        return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data' , 'websites','website_setting_id','financial_accounts' , 'adAccountDetails'));
+        $adAccountDetails = AdsAccountDetail::with('parentRecursive', 'parent')->whereIn('ad_account_id', $adAccounts->pluck('id'))->where('type', 'ad')->get();
+
+        return view('admin.receiptSocials.create', compact('shipping_countries', 'socials', 'previous_data', 'websites', 'website_setting_id', 'financial_accounts', 'adAccountDetails'));
     }
 
-    public function store(StoreReceiptSocialRequest $request )
-    {   
+    public function store(StoreReceiptSocialRequest $request)
+    {
         $receiptSocial = ReceiptSocial::create($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
 
-        if($request->ad_id && $request->ad_id != ''){
+        if ($request->ad_id && $request->ad_id != '') {
             $adAccountDetail = AdsAccountDetail::findOrFail($request->ad_id);
-            $adHistory = getAdHistoryForMessagesOrders($adAccountDetail, date('Y-m-d')); 
-        }else{
+            $adHistory = getAdHistoryForMessagesOrders($adAccountDetail, date('Y-m-d'));
+        } else {
             $adAccount = AdsAccount::find(1);
-            $adHistory = getAdHistoryForOrganicOrders($adAccount, 'receipt-social', date('Y-m-d')); 
+            $adHistory = getAdHistoryForOrganicOrders($adAccount, 'receipt-social', date('Y-m-d'));
         }
         $receiptSocial->ad_history_id = $adHistory->id;
         $receiptSocial->save();
@@ -1128,78 +1234,77 @@ class ReceiptSocialController extends Controller
         RecalculateAdsAccountHistory::dispatch($adHistory);
 
         // store the receipt social id in session so when redirect to the table open the popup to add products
-        session()->put('store_receipt_socail_id',$receiptSocial->id);
+        session()->put('store_receipt_socail_id', $receiptSocial->id);
 
-        toast(__('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'), 'success');
         return redirect()->route('admin.receipt-socials.index');
     }
 
     public function edit(ReceiptSocial $receiptSocial)
     {
         abort_if(Gate::denies('receipt_social_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $site_settings = get_site_setting(); 
+        $site_settings = get_site_setting();
 
-        $shipping_countries = Country::select('cost','name', 'id')->get();
+        $shipping_countries = Country::select('cost', 'name', 'id')->get();
 
-        $socials = Social::pluck('name', 'id'); 
+        $socials = Social::pluck('name', 'id');
 
-        $financial_accounts = FinancialAccount::where('active',1)->get();
+        $financial_accounts = FinancialAccount::where('active', 1)->get();
 
-        $adAccounts = AdsAccount::where('type','messages')->get();
+        $adAccounts = AdsAccount::where('type', 'messages')->get();
 
-        $adAccountDetails = AdsAccountDetail::with('parentRecursive','parent')->whereIn('ad_account_id', $adAccounts->pluck('id'))->where('type','ad')->get();
+        $adAccountDetails = AdsAccountDetail::with('parentRecursive', 'parent')->whereIn('ad_account_id', $adAccounts->pluck('id'))->where('type', 'ad')->get();
 
         $receiptSocial->load('delivery_man', 'shipping_country', 'socials');
 
-        if($site_settings->delivery_system == 'wasla'){
+        if ($site_settings->delivery_system == 'wasla') {
             $waslaController = new WaslaController;
             $response = $waslaController->countries();
-        }else{
+        } else {
             $response = '';
-        }  
+        }
 
-        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response','financial_accounts','adAccountDetails'));
+        return view('admin.receiptSocials.edit', compact('receiptSocial', 'shipping_countries', 'socials', 'site_settings', 'response', 'financial_accounts', 'adAccountDetails'));
     }
 
     public function update(UpdateReceiptSocialRequest $request, ReceiptSocial $receiptSocial)
     {
-        if (!auth()->user()->is_admin) { 
-            if ($receiptSocial->playlist_status != 'pending'){
-                alert('لايمكن التعديل في هذه الفاتورة','','error');
+        if (!auth()->user()->is_admin) {
+            if ($receiptSocial->playlist_status != 'pending') {
+                alert('لايمكن التعديل في هذه الفاتورة', '', 'error');
                 return redirect()->back();
             }
         }
 
-        
-        $oldAdHistory = AdsAccountHistory::find($receiptSocial->ad_history_id); 
+
+        $oldAdHistory = AdsAccountHistory::find($receiptSocial->ad_history_id);
         $oldAdAccountId = $oldAdHistory->ad_account_detail_id ?? null;
 
-        if($request->ad_id != $oldAdAccountId){
-            if($oldAdHistory){ 
+        if ($request->ad_id != $oldAdAccountId) {
+            if ($oldAdHistory) {
                 RecalculateAdsAccountHistory::dispatch($oldAdHistory);
             }
             $createdAt = $receiptSocial->created_at ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $receiptSocial->created_at)->format('Y-m-d H:i:s') : null;
-            $date = explode(' ', $createdAt)[0]; 
-            if($request->ad_id && $request->ad_id != ''){
+            $date = explode(' ', $createdAt)[0];
+            if ($request->ad_id && $request->ad_id != '') {
                 $adAccountDetail = AdsAccountDetail::findOrFail($request->ad_id);
-                $adHistory = getAdHistoryForMessagesOrders($adAccountDetail, $date); 
-            }else{
+                $adHistory = getAdHistoryForMessagesOrders($adAccountDetail, $date);
+            } else {
                 $adAccount = AdsAccount::find(1);
-                $adHistory = getAdHistoryForOrganicOrders($adAccount, 'receipt-social', $date); 
+                $adHistory = getAdHistoryForOrganicOrders($adAccount, 'receipt-social', $date);
             }
             $receiptSocial->ad_history_id = $adHistory->id;
             $receiptSocial->save();
 
             RecalculateAdsAccountHistory::dispatch($adHistory);
-            
         }
 
         $receiptSocial->update($request->all());
         $receiptSocial->socials()->sync($request->input('socials', []));
 
-        toast(__('flash.global.update_title'),'success');
-        
-        if($request->has('refresh')){
+        toast(__('flash.global.update_title'), 'success');
+
+        if ($request->has('refresh')) {
             return redirect()->route('admin.receipt-socials.edit', $receiptSocial->id);
         }
         return redirect()->route('admin.receipt-socials.index');
@@ -1218,23 +1323,23 @@ class ReceiptSocialController extends Controller
     {
         abort_if(Gate::denies('receipt_social_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $receiptSocial = ReceiptSocial::withTrashed()->find($id); 
-        if($receiptSocial->playlist_status != 'pending'){ 
-            if(!auth()->user()->is_admin){ 
-                alert('Cant delete','Contact Ur Adminstrator','warning'); 
+        $receiptSocial = ReceiptSocial::withTrashed()->find($id);
+        if ($receiptSocial->playlist_status != 'pending') {
+            if (!auth()->user()->is_admin) {
+                alert('Cant delete', 'Contact Ur Adminstrator', 'warning');
                 return 1;
             }
         }
-        if($receiptSocial->deleted_at != null){
+        if ($receiptSocial->deleted_at != null) {
             $receiptSocial->forceDelete();
-        }else{
+        } else {
             $receiptSocial->delete();
-        } 
+        }
 
-        alert(__('flash.deleted'),'','success');
+        alert(__('flash.deleted'), '', 'success');
 
         return 1;
-    } 
+    }
 
     public function restore($id)
     {
@@ -1243,10 +1348,10 @@ class ReceiptSocialController extends Controller
         $receiptSocial = ReceiptSocial::withTrashed()->find($id);
         $receiptSocial->restore();
 
-        alert(__('flash.restored'),'','success');
+        alert(__('flash.restored'), '', 'success');
 
         return redirect()->route('admin.receipt-socials.index');
-    } 
+    }
 
     public function customerReport()
     {
@@ -1262,18 +1367,18 @@ class ReceiptSocialController extends Controller
             ->having('order_count', '>', 1)
             ->get()
             ->groupBy('order_count')
-            ->map(function($group) {
+            ->map(function ($group) {
                 return $group->count();
             });
 
         // Prepare data for chart
         $labels = [];
         $values = [];
-        
+
         // Sort by order count
         $customerOrders = $customerOrders->sortKeys();
-        
-        foreach($customerOrders as $orderCount => $customerCount) {
+
+        foreach ($customerOrders as $orderCount => $customerCount) {
             $labels[] = $orderCount . ' طلبات';
             $values[] = $customerCount;
         }
@@ -1287,7 +1392,7 @@ class ReceiptSocialController extends Controller
     public function getAirwayBillPdf(Request $request, $id)
     {
         $receipt = ReceiptSocial::findOrFail($id);
-        
+
         // Find the airway bill for this receipt
         $airwayBill = EgyptExpressAirwayBill::where('model_type', ReceiptSocial::class)
             ->where('model_id', $receipt->id)
@@ -1304,7 +1409,7 @@ class ReceiptSocialController extends Controller
         }
 
         $pdfPath = $airwayBill->airwaybillpdf;
-        
+
         // Check if file exists
         if (!file_exists($pdfPath)) {
             return response()->json([
