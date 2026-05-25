@@ -187,7 +187,7 @@
 
         $('.btn-admin-action').on('click', function () {
             const action = $(this).data('action');
-            Swal.fire({
+            swal({
                 title: @json(__('delivery.messages.confirm_status')),
                 type: 'warning',
                 showCancelButton: true,

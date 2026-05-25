@@ -95,7 +95,7 @@
                     return;
                 }
 
-                Swal.fire({
+                swal({
                     title: confirmMsg,
                     type: 'warning',
                     showCancelButton: true,

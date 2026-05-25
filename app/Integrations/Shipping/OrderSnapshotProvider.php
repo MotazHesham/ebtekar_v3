@@ -8,6 +8,7 @@ use App\Contracts\Shipping\OrderSnapshotProviderContract;
 use App\Models\Order;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -140,7 +141,9 @@ class OrderSnapshotProvider implements OrderSnapshotProviderContract
 
         if ($shipmentStatus === 'delivered') {
             $model->done      = 1;
-            $model->done_time = now()->format('Y-m-d H:i:s');
+            $model->done_time = Carbon::now()->format(
+                config('panel.date_format') . ' ' . config('panel.time_format')
+            );
         }
 
         $model->save();

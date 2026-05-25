@@ -10,6 +10,23 @@
             <input type="hidden" name="id" value="{{$id}}">
             <input type="hidden" name="model_type" value="{{$model_type}}">
             <div class="row">
+                @if(auth()->user()->is_admin)
+                <div class="col-md-12">
+                    <label for="playlist_status">{{ __('cruds.order.fields.playlist_status') }}</label>
+                    <div class="" style="min-width: 160px;margin-bottom: 10px">
+                        <select class="form-control" name="playlist_status" id="playlist_status">
+                            @foreach(\App\Models\ViewPlaylistData::PLAYLIST_STATUS_SELECT as $key => $label)
+                                <option value="{{ $key }}" @if($raw->playlist_status == $key) selected @endif>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                @else
+                <div class="col-md-12 mb-2">
+                    <strong>{{ __('cruds.order.fields.playlist_status') }}:</strong>
+                    {{ \App\Models\ViewPlaylistData::PLAYLIST_STATUS_SELECT[$raw->playlist_status] ?? $raw->playlist_status }}
+                </div>
+                @endif
                 <div class="col-md-6">
                     <span>&nbsp;</span>
                     <div class="" style="min-width: 160px;margin-bottom: 10px">

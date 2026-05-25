@@ -122,7 +122,41 @@ class PlaylistController extends Controller
         
         $old_status = $raw->playlist_status;
 
-        if ($old_status == 'pending') {
+        if (auth()->user()->is_admin && $request->filled('playlist_status') && $request->playlist_status !== $old_status) {
+            if ($old_status == 'pending') {
+                $raw->send_to_playlist_date = date(config('panel.date_format') . ' ' . config('panel.time_format'));
+            }
+            $raw->playlist_status = $request->playlist_status;
+
+            if ($request->model_type == 'social' && $raw->hold_in_playlist_status == $request->playlist_status) {
+                $raw->hold = 1;
+            }
+
+            PlaylistHistory::create([
+                'model_type'  => $request->model_type,
+                'model_id'    => $raw->id,
+                'action_type' => 'status_change',
+                'from_status' => $old_status,
+                'to_status'   => $request->playlist_status,
+                'is_return'   => false,
+                'reason'      => null,
+                'user_id'     => Auth::id(),
+            ]);
+
+            $nextUser = null;
+            if ($request->playlist_status === 'design') {
+                $nextUser = User::find($request->designer_id);
+            } elseif ($request->playlist_status === 'manufacturing') {
+                $nextUser = User::find($request->manufacturer_id);
+            } elseif ($request->playlist_status === 'prepare') {
+                $nextUser = User::find($request->preparer_id);
+            } elseif ($request->playlist_status === 'review') {
+                $nextUser = User::find($request->reviewer_id);
+            } elseif ($request->playlist_status === 'shipment') {
+                $nextUser = User::find($request->shipmenter_id);
+            }
+            $this->workflowStageService->moveToNextStage($raw, $old_status, $request->playlist_status, $nextUser);
+        } elseif ($old_status == 'pending') {
             $raw->send_to_playlist_date = date(config('panel.date_format') . ' ' . config('panel.time_format')); 
             $raw->playlist_status = $website_setting->playlist_status ? $website_setting->playlist_status : 'design';
         }
@@ -199,8 +233,11 @@ class PlaylistController extends Controller
             $raw->playlist_started_at = date('Y-m-d H:i:s');
         }
         $raw->save();
-        $nextUser = User::find($request->designer_id);
-        $this->workflowStageService->moveToNextStage($raw, 'pending', 'design', $nextUser);
+
+        if (!auth()->user()->is_admin || !$request->filled('playlist_status') || $request->playlist_status === $old_status) {
+            $nextUser = User::find($request->designer_id);
+            $this->workflowStageService->moveToNextStage($raw, 'pending', 'design', $nextUser);
+        }
 
         // Create airway bill if it doesn't exist and shipmenter is assigned
         if ($old_status == 'pending' && $raw->playlist_status == 'design' && $website_setting->shipping_integration) {
@@ -208,21 +245,26 @@ class PlaylistController extends Controller
         }
 
         if ($old_status == 'pending') {
-            // store history of playlist flow
-            PlaylistHistory::create([
-                'model_type'  => $request->model_type,
-                'model_id'    => $raw->id,
-                'action_type' => 'status_change',
-                'from_status' => $old_status,
-                'to_status'   => 'design',
-                'is_return'   => false,
-                'reason'      => null,
-                'user_id'     => Auth::id(),
-            ]);
-            $body = 'فاتورة جديدة';   
+            if (!auth()->user()->is_admin || !$request->filled('playlist_status') || $request->playlist_status === $old_status) {
+                // store history of playlist flow
+                PlaylistHistory::create([
+                    'model_type'  => $request->model_type,
+                    'model_id'    => $raw->id,
+                    'action_type' => 'status_change',
+                    'from_status' => $old_status,
+                    'to_status'   => $raw->playlist_status,
+                    'is_return'   => false,
+                    'reason'      => null,
+                    'user_id'     => Auth::id(),
+                ]);
+            }
+            $body = 'فاتورة جديدة';
+            $playlistIndexStatus = in_array($raw->playlist_status, ['design', 'manufacturing', 'prepare', 'review', 'shipment'], true)
+                ? $raw->playlist_status
+                : 'design';
             $userAlert = UserAlert::create([
                 'alert_text' => $raw->order_num . ' ' . $body,
-                'alert_link' => route('admin.playlists.index', 'design'),
+                'alert_link' => route('admin.playlists.index', $playlistIndexStatus),
                 'data' => $raw->id . '&' . $request->model_type,
                 'type' => 'private', 
             ]);
@@ -233,7 +275,7 @@ class PlaylistController extends Controller
                     $tokens = array();
                     array_push($tokens, $user->device_token); 
                     $site_settings = get_site_setting();
-                    SendPushNotification::dispatch($raw->order_num, $body, $tokens,route('admin.playlists.index', 'design'),$site_settings);  // job for sending push notification
+                    SendPushNotification::dispatch($raw->order_num, $body, $tokens, route('admin.playlists.index', $playlistIndexStatus), $site_settings);
                 }
             }
 
