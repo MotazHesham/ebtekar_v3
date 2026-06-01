@@ -3,63 +3,68 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\ReceiptBranchExport;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReceiptBranchRequest;
-use App\Http\Requests\UpdateReceiptBranchRequest; 
+use App\Http\Requests\UpdateReceiptBranchRequest;
 use App\Models\RClient;
 use App\Models\RBranch;
 use App\Models\ReceiptBranch;
 use App\Models\ReceiptBranchProduct;
 use App\Models\ReceiptBranchProductPivot;
 use App\Models\User;
-use App\Models\WebsiteSetting; 
-use Illuminate\Http\Request; 
+use App\Models\WebsiteSetting;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\Response; 
+use Symfony\Component\HttpFoundation\Response;
 
 class ReceiptBranchController extends Controller
 {
-    
-    public function receive_money($id){
-        $receipt = ReceiptBranch::find($id); 
-        return view('partials.receive_money',compact('receipt'));
+
+    public function receive_money($id)
+    {
+        $receipt = ReceiptBranch::find($id);
+        return view('partials.receive_money', compact('receipt'));
     }
 
-    public function print($id){
-        $receipts = ReceiptBranch::with('receiptsReceiptBranchProducts','staff')->whereIn('id',[$id])->get(); 
-        foreach($receipts as $receipt){
+    public function print($id)
+    {
+        $receipts = ReceiptBranch::with('receiptsReceiptBranchProducts', 'staff')->whereIn('id', [$id])->get();
+        foreach ($receipts as $receipt) {
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptBranches.print',compact('receipts'));
+        return view('admin.receiptBranches.print', compact('receipts'));
     }
 
-    public function add_income(Request $request){ 
-        $receipt = ReceiptBranch::find($request->id);  
-        return view('admin.receiptBranches.partials.income',compact('receipt'));
+    public function add_income(Request $request)
+    {
+        $receipt = ReceiptBranch::find($request->id);
+        return view('admin.receiptBranches.partials.income', compact('receipt'));
     }
 
-    public function branches(Request $request){ 
-        $branches = RBranch::where('r_client_id',$request->id)->get();  
-        return view('admin.receiptBranches.partials.branches',compact('branches'));
+    public function branches(Request $request)
+    {
+        $branches = RBranch::where('r_client_id', $request->id)->get();
+        return view('admin.receiptBranches.partials.branches', compact('branches'));
     }
 
-    public function permission_status(Request $request){
+    public function permission_status(Request $request)
+    {
         $receipt = ReceiptBranch::findOrFail($request->id);
-        if($request->has('receive_premission')){
+        if ($request->has('receive_premission')) {
             $receipt->permission_status = 'receive_premission';
-        }elseif($request->has('permission_complete')){
+        } elseif ($request->has('permission_complete')) {
             $receipt->permission_status = 'permission_complete';
             $receipt->add_income();
-        }elseif($request->has('permission_complete_2')){
+        } elseif ($request->has('permission_complete_2')) {
             $receipt->permission_status = 'permission_complete_2';
-            if($receipt->branch->r_client->manage_type == 'seperate'){
+            if ($receipt->branch->r_client->manage_type == 'seperate') {
                 $message = 'المديونية السابقة ' . $receipt->branch->remaining . ' ,,,,';
-                $receipt->branch->remaining += $receipt->calc_total_cost(); 
+                $receipt->branch->remaining += $receipt->calc_total_cost();
                 $receipt->branch->save();
                 $message .= 'تم أضافة مديونية ' . $receipt->calc_total_cost() . ' إلي ' . $receipt->branch->name . ' وأصبح أجمالي المديونية ' . $receipt->branch->remaining;
-            }elseif($receipt->branch->r_client->manage_type == 'unified'){
+            } elseif ($receipt->branch->r_client->manage_type == 'unified') {
                 $message = 'المديونية السابقة ' . $receipt->branch->r_client->remaining . ' ,,,,';
                 $receipt->branch->r_client->remaining += $receipt->calc_total_cost();
                 $receipt->branch->r_client->save();
@@ -70,77 +75,80 @@ class ReceiptBranchController extends Controller
         return redirect()->back();
     }
 
-    public function update_statuses(Request $request){ 
+    public function update_statuses(Request $request)
+    {
         $type = $request->type;
         $receipt = ReceiptBranch::findOrFail($request->id);
         $receipt->$type = $request->status;
         $message = '';
         if (($type == 'done') && $request->status == 1) {
-            $receipt->quickly = 0; 
-            $status = '2'; 
-            if($receipt->branch){
-                if($receipt->branch->payment_type == 'permissions'){
+            $receipt->quickly = 0;
+            $status = '2';
+            if ($receipt->branch) {
+                if ($receipt->branch->payment_type == 'permissions') {
                     $status = '3';
                     $receipt->permission_status = 'deliverd';
-                }elseif($receipt->branch->payment_type == 'cash'){ 
+                } elseif ($receipt->branch->payment_type == 'cash') {
                     $receipt->add_income();
-                }elseif($receipt->branch->payment_type == 'parts'){ 
-                    if($receipt->branch->r_client->manage_type == 'seperate'){
+                } elseif ($receipt->branch->payment_type == 'parts') {
+                    if ($receipt->branch->r_client->manage_type == 'seperate') {
                         $message = 'المديونية السابقة ' . $receipt->branch->remaining . ' ,,,,';
-                        $receipt->branch->remaining += $receipt->calc_total_cost(); 
+                        $receipt->branch->remaining += $receipt->calc_total_cost();
                         $receipt->branch->save();
                         $message .= 'تم أضافة مديونية ' . $receipt->calc_total_cost() . ' إلي ' . $receipt->branch->name . ' وأصبح أجمالي المديونية ' . $receipt->branch->remaining;
-                    }elseif($receipt->branch->r_client->manage_type == 'unified'){
+                    } elseif ($receipt->branch->r_client->manage_type == 'unified') {
                         $message = 'المديونية السابقة ' . $receipt->branch->r_client->remaining . ' ,,,,';
                         $receipt->branch->r_client->remaining += $receipt->calc_total_cost();
                         $receipt->branch->r_client->save();
                         $message .= 'تم أضافة مديونية ' . $receipt->calc_total_cost() . ' إلي ' . $receipt->branch->r_client->name . ' وأصبح أجمالي المديونية ' . $receipt->branch->r_client->remaining;
                     }
-                }elseif($receipt->branch->payment_type == 'permissions_parts'){
-                    $status = '4'; 
+                } elseif ($receipt->branch->payment_type == 'permissions_parts') {
+                    $status = '4';
                 }
-            } 
-        }else{ 
+            }
+        } else {
             $status = '1';
         }
-        
+
         $receipt->save();
         return [
             'status' => $status,
             'first' => '<i class="far fa-check-circle" style="padding: 5px; font-size: 20px; color: green;"></i>',
-            'second' => view('admin.receiptBranches.partials.permission_status',compact('receipt'))->render(),
+            'second' => view('admin.receiptBranches.partials.permission_status', compact('receipt'))->render(),
             'message' => $message,
         ];
     }
 
-    public function duplicate($id){
+    public function duplicate($id)
+    {
 
-        $receipt_branch = ReceiptBranch::findOrFail($id); 
-        
-        $new_receipt = new ReceiptBranch; 
+        $receipt_branch = ReceiptBranch::findOrFail($id);
+
+        $new_receipt = new ReceiptBranch;
         $new_receipt->client_name = $receipt_branch->client_name;
         $new_receipt->phone_number = $receipt_branch->phone_number;
         $new_receipt->total_cost = $receipt_branch->total_cost;
         $new_receipt->note = $receipt_branch->note;
         $new_receipt->save();
 
-        $receipt_products = ReceiptBranchProductPivot::where('receipt_branch_id',$receipt_branch->id)->get();
-        
-        foreach($receipt_products as $row){
+        $receipt_products = ReceiptBranchProductPivot::where('receipt_branch_id', $receipt_branch->id)->get();
+
+        foreach ($receipt_products as $row) {
             $new_receipt_product = $row->replicate();
             $new_receipt_product->receipt_branch_id = $new_receipt->id;
             $new_receipt_product->save();
         }
-        alert('Receipt has been inserted successfully','','success');
+        alert('Receipt has been inserted successfully', '', 'success');
         return redirect()->back();
     }
 
-    public function view_products(Request $request){
-        if($request->ajax()){
+    public function view_products(Request $request)
+    {
+        if ($request->ajax()) {
             $receipt = ReceiptBranch::withTrashed()->find($request->id);
-            $products = ReceiptBranchProductPivot::where('receipt_branch_id',$request->id)->latest()->get(); 
-            return view('admin.receiptBranches.partials.view_products',compact('products','receipt'));
-        }else{
+            $products = ReceiptBranchProductPivot::where('receipt_branch_id', $request->id)->latest()->get();
+            return view('admin.receiptBranches.partials.view_products', compact('products', 'receipt'));
+        } else {
             return '';
         }
     }
@@ -148,7 +156,7 @@ class ReceiptBranchController extends Controller
     public function destroy_product($id)
     {
         $receipt_branch_product_pivot = ReceiptBranchProductPivot::find($id);
-        $receipt = ReceiptBranch::find($receipt_branch_product_pivot->receipt_branch_id); 
+        $receipt = ReceiptBranch::find($receipt_branch_product_pivot->receipt_branch_id);
         $oldTotalCost = $receipt->total_cost;
 
         $receipt_branch_product_pivot->delete();
@@ -156,12 +164,12 @@ class ReceiptBranchController extends Controller
         $receipt_branch_products = ReceiptBranchProductPivot::where('receipt_branch_id', $receipt->id)->get();
         $sum = 0;
         foreach ($receipt_branch_products as $row) {
-            $sum += $row->total_cost; 
+            $sum += $row->total_cost;
         }
-        $receipt->total_cost = $sum; 
+        $receipt->total_cost = $sum;
         $receipt->save();
 
-        if($receipt->done){
+        if ($receipt->done) {
             $receipt->is_updated_after_done = 1;
             $receipt->save();
 
@@ -169,26 +177,27 @@ class ReceiptBranchController extends Controller
         }
 
         // store the receipt social id in session so when redirect to the table open the popup to view products after delete
-        session()->put('update_receipt_branch_id',$receipt->id);
+        session()->put('update_receipt_branch_id', $receipt->id);
 
-        toast(__('flash.deleted'),'success'); 
+        toast(__('flash.deleted'), 'success');
         return 1;
     }
-    public function edit_product(Request $request){
-        if($request->ajax()){
-            $receipt_branch_product_pivot = ReceiptBranchProductPivot::find($request->id); 
+    public function edit_product(Request $request)
+    {
+        if ($request->ajax()) {
+            $receipt_branch_product_pivot = ReceiptBranchProductPivot::find($request->id);
             $receipt = ReceiptBranch::find($receipt_branch_product_pivot->receipt_branch_id);
-            $products = ReceiptBranchProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
+            $products = ReceiptBranchProduct::where('website_setting_id', $receipt->website_setting_id)->latest()->get();
             $price_type = $receipt->price_type();
-            return view('admin.receiptBranches.partials.edit_product',compact('receipt_branch_product_pivot','products','price_type'));
-        }else{ 
+            return view('admin.receiptBranches.partials.edit_product', compact('receipt_branch_product_pivot', 'products', 'price_type'));
+        } else {
 
             $receipt_product_pivot = ReceiptBranchProductPivot::find($request->receipt_product_pivot_id);
             $receipt = ReceiptBranch::find($receipt_product_pivot->receipt_branch_id);
             $oldTotalCost = $receipt->total_cost;
             $price_type = $receipt->price_type();
-            
-            $product = ReceiptBranchProduct::findOrFail($request->product_id); 
+
+            $product = ReceiptBranchProduct::findOrFail($request->product_id);
 
             $receipt_product_pivot->receipt_branch_product_id = $request->product_id;
             $receipt_product_pivot->description = $product->name;
@@ -206,47 +215,48 @@ class ReceiptBranchController extends Controller
 
             // update the main receipt with new costing after calculation of its products
             $receipt->total_cost = $sum;
-            $receipt->save(); 
+            $receipt->save();
 
-            
-            if($receipt->done){
+
+            if ($receipt->done) {
                 $receipt->is_updated_after_done = 1;
                 $receipt->save();
                 $receipt->update_total_cost($oldTotalCost);
             }
             // store the receipt social id in session so when redirect to the table open the popup to view products after edit
-            session()->put('update_receipt_branch_id',$receipt->id);
+            session()->put('update_receipt_branch_id', $receipt->id);
 
-            toast(__('flash.global.update_title'),'success'); 
+            toast(__('flash.global.update_title'), 'success');
             return redirect()->back();
         }
     }
 
-    public function add_product(Request $request){
-        if($request->ajax()){
+    public function add_product(Request $request)
+    {
+        if ($request->ajax()) {
             $receipt = ReceiptBranch::find($request->id);
-            $products = ReceiptBranchProduct::where('website_setting_id',$receipt->website_setting_id)->latest()->get();
+            $products = ReceiptBranchProduct::where('website_setting_id', $receipt->website_setting_id)->latest()->get();
             $receipt_id = $request->id;
             $order_num = $receipt->order_num;
             $price_type = $receipt->price_type();
-            return view('admin.receiptBranches.partials.add_product',compact('products','receipt_id','order_num','price_type'));
-        }else{
-            $receipt = ReceiptBranch::find($request->receipt_id);  
+            return view('admin.receiptBranches.partials.add_product', compact('products', 'receipt_id', 'order_num', 'price_type'));
+        } else {
+            $receipt = ReceiptBranch::find($request->receipt_id);
             $oldTotalCost = $receipt->total_cost;
-            
+
             $price_type = $receipt->price_type();
 
             $product = ReceiptBranchProduct::findOrFail($request->product_id);
 
-            $receipt_product_pivot = new ReceiptBranchProductPivot(); 
+            $receipt_product_pivot = new ReceiptBranchProductPivot();
             $receipt_product_pivot->receipt_branch_id = $request->receipt_id;
-            $receipt_product_pivot->receipt_branch_product_id = $request->product_id; 
+            $receipt_product_pivot->receipt_branch_product_id = $request->product_id;
             $receipt_product_pivot->description = $product->name;
             $receipt_product_pivot->price = $product->$price_type;
-            $receipt_product_pivot->quantity = $request->quantity; 
+            $receipt_product_pivot->quantity = $request->quantity;
             $receipt_product_pivot->total_cost = ($request->quantity * $product->$price_type);
             $receipt_product_pivot->save();
-            
+
             $receipt_products = ReceiptBranchProductPivot::where('receipt_branch_id', $request->receipt_id)->get();
             $sum = 0;
             foreach ($receipt_products as $row) {
@@ -255,38 +265,38 @@ class ReceiptBranchController extends Controller
             $receipt->total_cost = $sum;
             $receipt->save();
 
-            if($receipt->done){
+            if ($receipt->done) {
                 $receipt->is_updated_after_done = 1;
                 $receipt->save();
                 $receipt->update_total_cost($oldTotalCost);
             }
 
-            if($request->has('add_more')){
-                session()->put('store_receipt_branch_id',$receipt->id);
-                session()->put('update_receipt_branch_id',null);
+            if ($request->has('add_more')) {
+                session()->put('store_receipt_branch_id', $receipt->id);
+                session()->put('update_receipt_branch_id', null);
             }
-            if($request->has('save_close')){
-                session()->put('store_receipt_branch_id',null);
-                session()->put('update_receipt_branch_id',$receipt->id);
+            if ($request->has('save_close')) {
+                session()->put('store_receipt_branch_id', null);
+                session()->put('update_receipt_branch_id', $receipt->id);
             }
 
-            toast(__('flash.global.success_title'),'success');
+            toast(__('flash.global.success_title'), 'success');
             return redirect()->back();
         }
     }
 
     public function index(Request $request)
-    { 
+    {
         abort_if(Gate::denies('receipt_branch_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $staffs = User::whereIn('user_type', ['staff', 'admin'])->get(); 
+        $staffs = User::whereIn('user_type', ['staff', 'admin'])->get();
         $websites = WebsiteSetting::pluck('site_name', 'id');
         $rClients = RClient::pluck('name', 'id');
         $rBranches = RBranch::pluck('name', 'id');
 
-        if($request->has('cancel_popup')){
-            session()->put('store_receipt_branch_id',null);
-            session()->put('update_receipt_branch_id',null);
+        if ($request->has('cancel_popup')) {
+            session()->put('store_receipt_branch_id', null);
+            session()->put('update_receipt_branch_id', null);
         }
 
         $phone = null;
@@ -302,22 +312,22 @@ class ReceiptBranchController extends Controller
         $include = null;
         $quickly = null;
         $done = null;
-        $description = null; 
-        $deleted = null; 
-        $website_setting_id = null; 
-        $r_client_id = null; 
-        $r_branch_id = null; 
-        $permission_status = null; 
+        $description = null;
+        $deleted = null;
+        $website_setting_id = null;
+        $r_client_id = null;
+        $r_branch_id = null;
+        $permission_status = null;
 
-        
+
         $enable_multiple_form_submit = true;
 
-        if(request('deleted')){
+        if (request('deleted')) {
             abort_if(Gate::denies('soft_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-            $deleted = 1; 
-            $receipts = ReceiptBranch::with(['staff:id,name','branch','incomes'])->onlyTrashed();  
-        }else{
-            $receipts = ReceiptBranch::with(['staff:id,name','branch','incomes']);  
+            $deleted = 1;
+            $receipts = ReceiptBranch::with(['staff:id,name', 'branch', 'incomes'])->onlyTrashed();
+        } else {
+            $receipts = ReceiptBranch::with(['staff:id,name', 'branch', 'incomes']);
         }
 
         if ($request->done != null) {
@@ -325,7 +335,7 @@ class ReceiptBranchController extends Controller
             $done = $request->done;
         }
         if ($request->r_client_id != null) {
-            $related_branches = RBranch::where('r_client_id',$request->r_client_id)->get()->pluck('id');
+            $related_branches = RBranch::where('r_client_id', $request->r_client_id)->get()->pluck('id');
             $receipts = $receipts->whereIn('r_branch_id', $related_branches);
             $r_client_id = $request->r_client_id;
         }
@@ -334,10 +344,19 @@ class ReceiptBranchController extends Controller
             $r_branch_id = $request->r_branch_id;
         }
         if ($request->permission_status != null) {
-            $receipts = $receipts->where('permission_status', $request->permission_status);
+            if ($request->permission_status == 'deliverd') {
+
+                $receipts = $receipts->where(function ($query) {
+                    $query->where('permission_status', 'deliverd')
+                        ->orWhere('permission_status', null);
+                });
+            } else {
+
+                $receipts = $receipts->where('permission_status', $request->permission_status);
+            }
             $permission_status = $request->permission_status;
         }
-        
+
         if ($request->quickly != null) {
             $receipts = $receipts->where('quickly', $request->quickly);
             $quickly = $request->quickly;
@@ -375,61 +394,85 @@ class ReceiptBranchController extends Controller
         if ($request->from != null && $request->to != null) {
             $from = $request->from;
             $to = $request->to;
-            $receipts = $receipts->whereBetween('order_num', [ 'receipt-branch#' . $from,  'receipt-branch#' . $to]);
+            $receipts = $receipts->whereBetween('order_num', ['receipt-branch#' . $from,  'receipt-branch#' . $to]);
         }
-        if ($request->from_date != null && $request->to_date != null && $request->date_type != null) {  
+        if ($request->from_date != null && $request->to_date != null && $request->date_type != null) {
             $from_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->from_date . ' ' . '12:00 am')->format('Y-m-d H:i:s');
-            $to_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->to_date . ' ' . '11:59 pm')->format('Y-m-d H:i:s'); 
+            $to_date = \Carbon\Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->to_date . ' ' . '11:59 pm')->format('Y-m-d H:i:s');
             $date_type = $request->date_type;
             $receipts = $receipts->whereBetween($date_type, [$from_date, $to_date]);
         }
         if ($request->exclude != null) {
-            $exclude = $request->exclude; 
-            foreach(explode(',',$exclude) as $exc){
+            $exclude = $request->exclude;
+            foreach (explode(',', $exclude) as $exc) {
                 $exclude2[] = $exc;
             }
-            $receipts = $receipts->where(function ($query) use($exclude2) {
-                for ($i = 0; $i < count($exclude2); $i++){
-                    $query->orwhere('order_num', 'not like',  '%' . $exclude2[$i] .'%');
-                }      
+            $receipts = $receipts->where(function ($query) use ($exclude2) {
+                for ($i = 0; $i < count($exclude2); $i++) {
+                    $query->orwhere('order_num', 'not like',  '%' . $exclude2[$i] . '%');
+                }
             });
         }
         if ($request->include != null) {
-            $include = $request->include; 
-            foreach(explode(',',$include) as $inc){
+            $include = $request->include;
+            foreach (explode(',', $include) as $inc) {
                 $include2[] = $inc;
             }
-            $receipts = $receipts->where(function ($query) use($include2) {
-                for ($i = 0; $i < count($include2); $i++){
-                    $query->orwhere('order_num', 'like',  '%' . $include2[$i] .'%');
-                }      
+            $receipts = $receipts->where(function ($query) use ($include2) {
+                for ($i = 0; $i < count($include2); $i++) {
+                    $query->orwhere('order_num', 'like',  '%' . $include2[$i] . '%');
+                }
             });
         }
 
         if ($request->has('print')) {
             $receipts = $receipts->with('receiptsReceiptBranchProducts')->get();
-            foreach($receipts as $receipt){
+            foreach ($receipts as $receipt) {
                 $receipt->printing_times += 1;
                 $receipt->save();
             }
             return view('admin.receiptBranches.print', compact('receipts'));
         }
-        
-        if($request->has('download')){
-            return Excel::download(new ReceiptBranchExport($receipts->with('receiptsReceiptBranchProducts')->get()), 'branch_receipts_('.$from.')_('.$to.')_('. $request->client_name .').xlsx');
+
+        if ($request->has('download')) {
+            return Excel::download(new ReceiptBranchExport($receipts->with('receiptsReceiptBranchProducts')->get()), 'branch_receipts_(' . $from . ')_(' . $to . ')_(' . $request->client_name . ').xlsx');
         }
-        
-        $statistics = [  
+
+        $statistics = [
             'total_deposit' => $receipts->sum('deposit'),
             'total_total_cost' => $receipts->sum('total_cost'),
         ];
-        
+
         $receipts = $receipts->orderBy('quickly', 'desc')->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.receiptBranches.index',compact(
-            'staffs', 'phone', 'client_name', 'order_num', 'staff_id', 'from','websites','rClients','rBranches',
-            'to', 'from_date', 'to_date', 'date_type', 'exclude', 'include', 'quickly','enable_multiple_form_submit',
-            'done', 'description', 'receipts', 'statistics','deleted','website_setting_id','r_client_id','r_branch_id','permission_status'));
+        return view('admin.receiptBranches.index', compact(
+            'staffs',
+            'phone',
+            'client_name',
+            'order_num',
+            'staff_id',
+            'from',
+            'websites',
+            'rClients',
+            'rBranches',
+            'to',
+            'from_date',
+            'to_date',
+            'date_type',
+            'exclude',
+            'include',
+            'quickly',
+            'enable_multiple_form_submit',
+            'done',
+            'description',
+            'receipts',
+            'statistics',
+            'deleted',
+            'website_setting_id',
+            'r_client_id',
+            'r_branch_id',
+            'permission_status'
+        ));
     }
 
     public function create(Request $request)
@@ -444,7 +487,7 @@ class ReceiptBranchController extends Controller
 
         $website_setting_id = $request->website_setting_id;
 
-        return view('admin.receiptBranches.create', compact('previous_data' , 'websites','website_setting_id','rclients'));
+        return view('admin.receiptBranches.create', compact('previous_data', 'websites', 'website_setting_id', 'rclients'));
     }
 
     public function store(StoreReceiptBranchRequest $request)
@@ -452,9 +495,9 @@ class ReceiptBranchController extends Controller
         $receiptBranch = ReceiptBranch::create($request->all());
 
         // store the receipt social id in session so when redirect to the table open the popup to add products
-        session()->put('store_receipt_branch_id',$receiptBranch->id);
+        session()->put('store_receipt_branch_id', $receiptBranch->id);
 
-        toast(__('flash.global.success_title'),'success');
+        toast(__('flash.global.success_title'), 'success');
         return redirect()->route('admin.receipt-branches.index');
     }
 
@@ -464,24 +507,24 @@ class ReceiptBranchController extends Controller
 
         $receiptBranch->load('staff');
 
-        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), ''); 
+        $websites = WebsiteSetting::pluck('site_name', 'id')->prepend(__('global.pleaseSelect'), '');
 
         $rclients = RClient::pluck('name', 'id')->prepend(__('global.pleaseSelect'), '');
 
-        return view('admin.receiptBranches.edit', compact('receiptBranch','websites','rclients'));
+        return view('admin.receiptBranches.edit', compact('receiptBranch', 'websites', 'rclients'));
     }
 
     public function update(UpdateReceiptBranchRequest $request, ReceiptBranch $receiptBranch)
     {
         $oldTotalCost = $receiptBranch->total_cost;
         $receiptBranch->update($request->all());
-        if($receiptBranch->done){ 
+        if ($receiptBranch->done) {
             $receiptBranch->is_updated_after_done = 1;
             $receiptBranch->save();
             $receiptBranch->update_total_cost($oldTotalCost);
         }
 
-        toast(__('flash.global.update_title'),'success');
+        toast(__('flash.global.update_title'), 'success');
         return redirect()->route('admin.receipt-branches.index');
     }
 
@@ -492,28 +535,28 @@ class ReceiptBranchController extends Controller
         $receiptBranch->load('staff', 'receiptsReceiptBranchProducts');
 
         return view('admin.receiptBranches.show', compact('receiptBranch'));
-    } 
+    }
 
     public function destroy($id)
     {
         abort_if(Gate::denies('receipt_branch_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $receiptBranch = ReceiptBranch::withTrashed()->find($id); 
-        if($receiptBranch->done){
-            toast('لا يمكن حذف الفاتورة بعد الإنتهاء من الفاتورة','error');
+        $receiptBranch = ReceiptBranch::withTrashed()->find($id);
+        if ($receiptBranch->done) {
+            toast('لا يمكن حذف الفاتورة بعد الإنتهاء من الفاتورة', 'error');
             return redirect()->back();
         }
-        if($receiptBranch->deleted_at != null){
+        if ($receiptBranch->deleted_at != null) {
             // $receiptBranch->forceDelete();
-        }else{
+        } else {
             $receiptBranch->delete();
         }
-        
 
-        alert(__('flash.deleted'),'','success');
+
+        alert(__('flash.deleted'), '', 'success');
 
         return 1;
-    } 
+    }
 
     public function restore($id)
     {
@@ -522,8 +565,8 @@ class ReceiptBranchController extends Controller
         $receiptBranch = ReceiptBranch::withTrashed()->find($id);
         $receiptBranch->restore();
 
-        alert(__('flash.restored'),'','success');
+        alert(__('flash.restored'), '', 'success');
 
         return redirect()->route('admin.receipt-branches.index');
-    } 
+    }
 }
