@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -106,8 +107,23 @@ class Product extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')->fit('crop', 84, 108);
         $this->addMediaConversion('preview')->fit('crop', 123, 123);
-        $this->addMediaConversion('preview2')->fit('crop', 203, 203); 
-        $this->addMediaConversion('preview3')->fit('crop', 254, 254); 
+        $this->addMediaConversion('preview2')->fit('crop', 203, 203);
+        $this->addMediaConversion('preview3')->fit('crop', 254, 254);
+    }
+
+    public function getMainPhotoAttribute()
+    {
+        return $this->getMedia('photos')->first();
+    }
+
+    public function isInFavorites($customer)
+    {
+        return $customer && in_array($this->id, Cache::get('customer-' . $customer->id . '-fav-products', []));
+    }
+
+    public function wishlists()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'product_id', 'user_id');
     }
 
     public function getPhotosAttribute()
@@ -128,24 +144,25 @@ class Product extends Model implements HasMedia
     {
         return $this->getMedia('object_3d')->last();
     }
-    
+
     public function getPdfAttribute()
     {
         return $this->getMedia('pdf')->last();
     }
 
-    public function duplicate(){
-        
+    public function duplicate()
+    {
+
         $newProduct = $this->replicate();
-        $newProduct->slug = Str::slug($this->name, '-',null) . '-' . Str::random(7);
+        $newProduct->slug = Str::slug($this->name, '-', null) . '-' . Str::random(7);
         $newProduct->save();
 
-        foreach($this->stocks as $stock){
+        foreach ($this->stocks as $stock) {
             $newStock = $stock->replicate();
             $newStock->product_id = $newProduct->id;
             $newStock->save();
         }
-        
+
         return $newProduct;
     }
 
@@ -158,7 +175,7 @@ class Product extends Model implements HasMedia
     {
         return $this->hasMany(Review::class, 'product_id');
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id')->withTrashed();
@@ -183,9 +200,10 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Design::class, 'design_id');
     }
-    
-    public function website(){
-        return $this->belongsTo(WebsiteSetting::class,'website_setting_id');
+
+    public function website()
+    {
+        return $this->belongsTo(WebsiteSetting::class, 'website_setting_id');
     }
     //operations
     public function calc_discount($unit_price)
@@ -197,20 +215,30 @@ class Product extends Model implements HasMedia
                 $amount = ($unit_price / 100) * $this->discount;
                 return $unit_price - $amount;
             }
-        }else{
+        } else {
             return $unit_price;
         }
     }
 
-    
-    public function calc_price_as_text(){
+    public function basePrice()
+    {
+        return front_calc_product_currency($this->unit_price, $this->weight)['value'] ?? '';
+    }
+
+    public function baseDiscountedPrice()
+    {
+        return front_calc_product_currency($this->calc_discount($this->unit_price), $this->weight)['value'] ?? '';
+    }
+
+    public function calc_price_as_text()
+    {
         $price = '';
-        if($this->discount > 0){
-            $price .= front_calc_product_currency($this->calc_discount($this->unit_price),$this->weight)['as_text'];
-            $price .= ' <span>' . front_calc_product_currency($this->unit_price,$this->weight)['as_text'] . '</span>';
-        }else{
-            $price .= front_calc_product_currency($this->unit_price,$this->weight)['as_text'];
-        } 
+        if ($this->discount > 0) {
+            $price .= front_calc_product_currency($this->calc_discount($this->unit_price), $this->weight)['as_text'];
+            $price .= ' <span>' . front_calc_product_currency($this->unit_price, $this->weight)['as_text'] . '</span>';
+        } else {
+            $price .= front_calc_product_currency($this->unit_price, $this->weight)['as_text'];
+        }
         return $price;
-    } 
+    }
 }

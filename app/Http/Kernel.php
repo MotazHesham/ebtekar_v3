@@ -18,19 +18,20 @@ class Kernel extends HttpKernel
     ];
 
     protected $middlewareAliases = [
-        'auth'             => \App\Http\Middleware\Authenticate::class,
-        'auth.basic'       => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'auth.session'     => \Illuminate\Session\Middleware\AuthenticateSession::class,
-        'cache.headers'    => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'can'              => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest'            => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'signed'           => \App\Http\Middleware\ValidateSignature::class,
-        'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'staff'            => \App\Http\Middleware\Staff::class,
-        'shipping.portal'  => \App\Http\Middleware\ShippingPortal::class,
-        'access_employee'  => \App\Http\Middleware\AccessEmployee::class,
+        'auth'              => \App\Http\Middleware\Authenticate::class,
+        'auth.basic'        => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth.session'      => \Illuminate\Session\Middleware\AuthenticateSession::class,
+        'cache.headers'     => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can'               => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'             => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'password.confirm'  => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'signed'            => \App\Http\Middleware\ValidateSignature::class,
+        'throttle'          => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified'          => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'staff'             => \App\Http\Middleware\Staff::class,
+        'shipping.portal'   => \App\Http\Middleware\ShippingPortal::class,
+        'access_employee'   => \App\Http\Middleware\AccessEmployee::class,
+        'customer-auth-api' => \App\Http\Middleware\CustomerAuthApi::class,
     ];
 
     protected $middlewareGroups = [
@@ -46,17 +47,18 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\ApprovalMiddleware::class,
             \App\Http\Middleware\VerificationMiddleware::class,
-            \App\Http\Middleware\SetCurrency::class, 
+            \App\Http\Middleware\SetCurrency::class,
         ],
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\ApiSetLocale::class,
         ],
 
-        'shopify' => [ 
+        'shopify' => [
             'throttle:api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class, 
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
 }

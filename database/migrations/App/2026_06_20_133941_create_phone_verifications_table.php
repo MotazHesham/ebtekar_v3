@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('phone_verifications', function (Blueprint $table) {
+            $table->id();
+            $table->string('application')->default('customer');
+            $table->string('scope')->default('register');
+            $table->string('phone');
+            $table->string('otp_code');
+            $table->datetime('expires_at');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('phone_verifications');
+    }
+};

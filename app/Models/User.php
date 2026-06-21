@@ -20,10 +20,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use App\Models\EmployeeShift;
 use App\Models\WorkflowOperation;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements HasMedia
 {
-    use SoftDeletes, Notifiable, InteractsWithMedia, Auditable, HasFactory;
+    use SoftDeletes, Notifiable, InteractsWithMedia, HasApiTokens, Auditable, HasFactory;
 
     public $table = 'users';
 
@@ -128,10 +129,12 @@ class User extends Authenticatable implements HasMedia
                 $user->verification_token = $token;
                 $user->save();
 
-                SendVerificationMail::dispatch($user, $site_settings, $user->email);
+                // SendVerificationMail::dispatch($user, $site_settings, $user->email);
             }
 
-            ShippingRoleAssigner::assign($user);
+            if (!in_array($user->user_type, ['customer', 'staff', 'admin', 'seller', 'designer', 'marketer'])) {
+                ShippingRoleAssigner::assign($user);
+            }
         });
 
         self::updated(function (self $user) {
@@ -297,5 +300,21 @@ class User extends Authenticatable implements HasMedia
         } else {
             return null;
         }
+    }
+
+
+    public function userAddresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function defaultUserAddress()
+    {
+        $user = $this;
+        $userAddress = $user->userAddresses()->orderBy('is_default', 'desc')->first();
+        if ($userAddress && !$userAddress->is_default) {
+            $userAddress->update(['is_default' => 1]);
+        }
+        return $userAddress;
     }
 }

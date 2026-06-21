@@ -4,16 +4,20 @@
 
 use App\Models\AdsAccountDetail;
 use App\Models\AdsAccountHistory;
+use App\Models\Color;
 use App\Models\Country;
-use App\Models\Currency; 
+use App\Models\Currency;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\PhoneVerification;
 use App\Models\Product;
 use App\Models\ReceiptClient;
 use App\Models\ReceiptCompany;
 use App\Models\ReceiptSocial;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\WebsiteSetting;
+use App\Utils\SmsUtility;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -52,57 +56,57 @@ if (!function_exists('extractUtm')) {
 if (!function_exists('getAdHistoryByUtm')) {
     function getAdHistoryByUtm($platform, $utmDetails, $orderDate)
     {
-        if ($platform == 'shopify') { 
+        if ($platform == 'shopify') {
             $utmDetails = extractUtm($utmDetails);
 
             $gad_campaignid = $utmDetails['gad_campaignid'] ?? null;
-            if(isset($gad_campaignid)){
+            if (isset($gad_campaignid)) {
                 $gad_campaignid = 'sag_organic';
             }
 
             $gclid = $utmDetails['gclid'] ?? null;
-            if(isset($gclid)){
+            if (isset($gclid)) {
                 $gclid = 'sag_organic';
             }
 
             $ttclid = $utmDetails['ttclid'] ?? null;
-            if(isset($ttclid)){
+            if (isset($ttclid)) {
                 $ttclid = 'tiktok';
             }
 
             $fbclid = $utmDetails['fbclid'] ?? null;
-            if(isset($fbclid)){
+            if (isset($fbclid)) {
                 $fbclid = 'fbclid';
             }
 
             $srsltid = $utmDetails['srsltid'] ?? null;
-            if(isset($srsltid)){
+            if (isset($srsltid)) {
                 $srsltid = 'Google Shopping';
             }
 
             $campaignKey = $utmDetails['utm_campaign'] ?? 'NAN';
             $adSetKey = $utmDetails['utm_term'] ?? $utmDetails['utm_medium'] ?? 'NAN';
             $adKey = $utmDetails['utm_content'] ?? 'NAN';
-            
-            if($fbclid && $campaignKey == 'NAN'){
+
+            if ($fbclid && $campaignKey == 'NAN') {
                 $campaignKey = $fbclid;
                 $adSetKey = $fbclid;
                 $adKey = $fbclid;
             }
 
-            if($ttclid && $campaignKey == 'NAN'){
+            if ($ttclid && $campaignKey == 'NAN') {
                 $campaignKey = $ttclid;
                 $adSetKey = $ttclid;
                 $adKey = $ttclid;
             }
 
-            if(($gad_campaignid || $gclid) && $campaignKey == 'NAN'){
+            if (($gad_campaignid || $gclid) && $campaignKey == 'NAN') {
                 $campaignKey = $gad_campaignid ?? $gclid;
                 $adSetKey = $gad_campaignid ?? $gclid;
                 $adKey = $gad_campaignid ?? $gclid;
-            } 
+            }
 
-            if($srsltid && $campaignKey == 'NAN'){
+            if ($srsltid && $campaignKey == 'NAN') {
                 $campaignKey = $srsltid;
                 $adSetKey = $srsltid;
                 $adKey = $srsltid;
@@ -112,7 +116,7 @@ if (!function_exists('getAdHistoryByUtm')) {
             $campaign = AdsAccountDetail::where('type', 'campaign')
                 ->where('utm_key', $campaignKey)
                 ->first();
-            if(!$campaign){
+            if (!$campaign) {
                 $campaign = AdsAccountDetail::create([
                     'name' => $campaignKey,
                     'utm_key' => $campaignKey,
@@ -125,7 +129,7 @@ if (!function_exists('getAdHistoryByUtm')) {
                 ->where('type', 'ad_set')
                 ->where('utm_key', $adSetKey)
                 ->first();
-            if(!$adSet){
+            if (!$adSet) {
                 $adSet = AdsAccountDetail::create([
                     'parent_id' => $campaign->id,
                     'name' => $adSetKey,
@@ -140,7 +144,7 @@ if (!function_exists('getAdHistoryByUtm')) {
                 ->where('utm_key', $adKey)
                 ->where('type', 'ad')
                 ->first();
-            if(!$ad){
+            if (!$ad) {
                 $ad = AdsAccountDetail::create([
                     'parent_id' => $adSet->id,
                     'name' => $adKey,
@@ -153,43 +157,43 @@ if (!function_exists('getAdHistoryByUtm')) {
             $adHistory = AdsAccountHistory::where('ad_account_detail_id', $ad->id)
                 ->whereDate('date', $orderDate)
                 ->first();
-            if(!$adHistory){
+            if (!$adHistory) {
                 $adHistory = AdsAccountHistory::create([
                     'ad_account_detail_id' => $ad->id,
                     'date' => $orderDate,
                 ]);
-            } 
+            }
             return $adHistory;
         }
     }
 }
 if (!function_exists('getAdHistoryForMessagesOrders')) {
     function getAdHistoryForMessagesOrders($ad, $orderDate)
-    {   
+    {
         $adHistory = AdsAccountHistory::where('ad_account_detail_id', $ad->id)
             ->whereDate('date', $orderDate)
             ->first();
-        if(!$adHistory){
+        if (!$adHistory) {
             $adHistory = AdsAccountHistory::create([
                 'ad_account_detail_id' => $ad->id,
                 'date' => $orderDate,
             ]);
-        } 
+        }
 
-        return $adHistory; 
+        return $adHistory;
     }
-} 
+}
 
 if (!function_exists('getAdHistoryForOrganicOrders')) {
     function getAdHistoryForOrganicOrders($adAccount, $orderFrom, $orderDate)
-    {  
+    {
 
         // Campaign
         $campaign = AdsAccountDetail::where('ad_account_id', $adAccount->id)
             ->where('type', 'campaign')
             ->where('utm_key', $orderFrom)
             ->first();
-        if(!$campaign){
+        if (!$campaign) {
             $campaign = AdsAccountDetail::create([
                 'ad_account_id' => $adAccount->id,
                 'name' => $orderFrom,
@@ -203,7 +207,7 @@ if (!function_exists('getAdHistoryForOrganicOrders')) {
             ->where('type', 'ad_set')
             ->where('utm_key', 'organic')
             ->first();
-        if(!$adSet){
+        if (!$adSet) {
             $adSet = AdsAccountDetail::create([
                 'parent_id' => $campaign->id,
                 'ad_account_id' => $adAccount->id,
@@ -218,7 +222,7 @@ if (!function_exists('getAdHistoryForOrganicOrders')) {
             ->where('utm_key', 'organic')
             ->where('type', 'ad')
             ->first();
-        if(!$ad){
+        if (!$ad) {
             $ad = AdsAccountDetail::create([
                 'parent_id' => $adSet->id,
                 'ad_account_id' => $adAccount->id,
@@ -231,16 +235,16 @@ if (!function_exists('getAdHistoryForOrganicOrders')) {
         $adHistory = AdsAccountHistory::where('ad_account_detail_id', $ad->id)
             ->whereDate('date', $orderDate)
             ->first();
-        if(!$adHistory){
+        if (!$adHistory) {
             $adHistory = AdsAccountHistory::create([
                 'ad_account_detail_id' => $ad->id,
                 'date' => $orderDate,
             ]);
-        } 
+        }
 
-        return $adHistory; 
+        return $adHistory;
     }
-} 
+}
 
 if (!function_exists('format_price')) {
     function format_price($price)
@@ -253,38 +257,38 @@ if (!function_exists('validateCart')) {
     {
 
         $cart = session()->get('cart', []); // Retrieve cart from session 
-        if($cart){
-            if(count($cart) > 0){
+        if ($cart) {
+            if (count($cart) > 0) {
                 foreach ($cart as $item) {
-                    $product = Product::find($item['product_id']); 
+                    $product = Product::find($item['product_id']);
 
-                    if(!$product){
-                        $cart = $cart->where('id','!=',$item['id']);
-                        session()->put('cart',$cart);  
+                    if (!$product) {
+                        $cart = $cart->where('id', '!=', $item['id']);
+                        session()->put('cart', $cart);
                         $alert_text = "منتج غير متوفر";
                         $route = 'frontend.payment_select';
                         $return = true;
                     }
 
                     $available_quantity = $product->current_stock;
-                    if($product->variant_product == 1 && $item['variation'] != null){ 
+                    if ($product->variant_product == 1 && $item['variation'] != null) {
                         $product_stock = $product->stocks()->where('variant', $item['variation'])->first();
-                        if($product_stock){
+                        if ($product_stock) {
                             $available_quantity = $product_stock->stock;
                         }
                     }
 
                     if (!$product->published || $available_quantity < $item['quantity']) {
-                        $cart = $cart->where('id','!=',$item['id']);
-                        session()->put('cart',$cart);  
+                        $cart = $cart->where('id', '!=', $item['id']);
+                        session()->put('cart', $cart);
                         $alert_text = "عذرا المنتج " . $product->name . " غير متوفر حاليا";
                         $route = 'frontend.payment_select';
                         $return = true;
                     }
                 }
-            } 
+            }
         }
-        return [ 
+        return [
             'alert_text' => $alert_text ?? '',
             'return' => $return ?? false,
             'route' => $route ?? 'home',
@@ -292,12 +296,126 @@ if (!function_exists('validateCart')) {
     }
 }
 
+if (!function_exists('getRequestHelper')) {
+    function getRequestHelper($key, $default = false)
+    {
+        $request = request();
+        $value = $request->input($key);
+        if (is_array($value)) {
+            return !empty(array_filter($value, function ($v) {
+                return $v !== null;
+            })) ? $value : false;
+        }
+        return request()->has($key) && request()->filled($key) ? $value : $default;
+    }
+}
+
+if (!function_exists('getAuthUser')) {
+    function getAuthUser()
+    {
+        return request()->user('sanctum');
+    }
+}
 if (!function_exists('get_site_setting')) {
     function get_site_setting()
     {
-        return WebsiteSetting::where('domains','like','%' . request()->getHost() . '%')->first() ?? WebsiteSetting::first(); 
+        return WebsiteSetting::where('domains', 'like', '%' . request()->getHost() . '%')->first() ?? WebsiteSetting::first();
     }
-} 
+}
+
+if (!function_exists('get_single_attribute_name')) {
+    function get_single_attribute_name($attribute)
+    {
+        return \App\Models\Attribute::find($attribute)?->name;
+    }
+}
+
+if (!function_exists('get_single_color_name')) {
+    function get_single_color_name($color)
+    {
+        return Color::where('code', $color)->first()?->name;
+    }
+}
+
+
+if (!function_exists('loggerAction')) {
+    function loggerAction($log_type, $loger_status, $message, $context = null)
+    {
+        $logs = [
+            'sms' => [
+                'path' => 'logs/sms.log',
+                'driver' => 'daily',
+                'slack' => true,
+            ],
+            'firebase' => [
+                'path' => 'logs/firebase.log',
+                'driver' => 'daily',
+                'slack' => true,
+            ],
+            'email' => [
+                'path' => 'logs/email.log',
+                'driver' => 'daily',
+                'slack' => true,
+            ],
+            'error' => [
+                'path' => 'logs/error.log',
+                'driver' => 'daily',
+                'slack' => true,
+            ],
+        ];
+        // Define a custom log channel
+        $logger = Log::build([
+            'driver' => $logs[$log_type]['driver'],
+            'path' => storage_path($logs[$log_type]['path']), // Path to the custom log file
+            'level' => 'debug', // Set the log level
+        ]);
+
+        $logger->{$loger_status}($message, [$context]);
+    }
+}
+
+if (!function_exists('settingEnabled')) {
+    function settingEnabled(string $key, bool $default = false): bool
+    {
+        return filter_var(getSetting($key, $default ? '1' : '0'), FILTER_VALIDATE_BOOLEAN);
+    }
+}
+
+if (!function_exists('getSetting')) {
+    function getSetting($key, $default = null, $lang = false)
+    {
+        // Cache settings indexed by "key_lang" for instant lookup
+        $settings = Cache::remember('business_settings', config('panel.cache_time_long'), function () {
+            $grouped = [];
+
+            foreach (Setting::all() as $setting) {
+                // Index by "key" for lang-less access
+                $grouped[$setting->key] = $setting;
+
+                // Index by "key_lang" for language-specific access
+                if (!empty($setting->lang)) {
+                    $grouped["{$setting->key}_{$setting->lang}"] = $setting;
+                }
+            }
+
+            return $grouped;
+        });
+
+        // Resolve the correct setting
+        if ($lang !== false) {
+            // Try language-specific first, fall back to default key
+            $setting = $settings["{$key}_{$lang}"] ?? $settings[$key] ?? null;
+        } else {
+            $setting = $settings[$key] ?? null;
+        }
+
+        if ($setting && $setting->data_type == 'file') {
+            return $setting->file ? $setting->file->getUrl() : $default;
+        }
+
+        return $setting === null ? $default : $setting->value;
+    }
+}
 
 if (!function_exists('dashboard_currency')) {
     function dashboard_currency($value)
@@ -306,10 +424,74 @@ if (!function_exists('dashboard_currency')) {
     }
 }
 
+if (!function_exists('randomOtpCode')) {
+    function randomOtpCode()
+    {
+        if (settingEnabled('otp_use_fixed_code')) {
+            return (int) getSetting('otp_fixed_code', '1111');
+        }
+
+        return rand(1111, 9999);
+    }
+}
+
+if (!function_exists('otpExpiryMinutes')) {
+    function otpExpiryMinutes(): int
+    {
+        return max(1, (int) getSetting('otp_expiry_minutes', 5));
+    }
+}
+
+if (!function_exists('sendRegisterOtpCode')) {
+    function sendRegisterOtpCode($phone, $application, $messageKey = 'phone_number_verification', $scope = 'register')
+    {
+        $otp_code = randomOtpCode();
+
+        $phoneVerification = PhoneVerification::where('phone', $phone)
+            ->where('application', $application)
+            ->where('scope', $scope)
+            ->latest()
+            ->first();
+        if ($phoneVerification && $phoneVerification->expires_at > now()) {
+            return now()->diffInSeconds($phoneVerification->expires_at);
+        } else {
+            $phoneVerification = PhoneVerification::updateOrCreate(
+                [
+                    'phone' => $phone,
+                    'application' => $application,
+                    'scope' => $scope,
+                ],
+                [
+                    'otp_code' => $otp_code,
+                    'expires_at' => now()->addMinutes(otpExpiryMinutes()),
+                ]
+            );
+
+            SmsUtility::$messageKey($phone, $otp_code);
+
+            return now()->diffInSeconds($phoneVerification->expires_at);
+        }
+    }
+}
+
+if (!function_exists('currentEditingLang')) {
+    function currentEditingLang()
+    {
+        return request('lang', app()->getLocale());
+    }
+}
+
+if (!function_exists('getNonImage')) {
+    function getNonImage()
+    {
+        return url('no-image.png');
+    }
+}
+
 if (!function_exists('getCountryNameById')) {
     function getCountryNameById($id)
     {
-        $countries = Cache::remember('countries', 60*24, function() {
+        $countries = Cache::remember('countries', 60 * 24, function () {
             return Country::pluck('name', 'id');
         });
         return $countries[$id] ?? '';
@@ -319,28 +501,27 @@ if (!function_exists('getCountryNameById')) {
 if (!function_exists('setCurrencyRate')) {
     function setCurrencyRate()
     {
-        if(app()->isProduction()){
+        if (app()->isProduction()) {
             Cache::remember('currency_rates', 21600, function () {  // 6 hours
-                $response = Http::get('https://api.currencyfreaks.com/v2.0/rates/latest?apikey='.config('app.currencyfreaks_api_key').'&symbols=EGP,SAR,KWD,AED'); 
+                $response = Http::get('https://api.currencyfreaks.com/v2.0/rates/latest?apikey=' . config('app.currencyfreaks_api_key') . '&symbols=EGP,SAR,KWD,AED');
                 if ($response->successful()) {
-                    $jsonData = $response->json(); 
-        
+                    $jsonData = $response->json();
+
                     // Extract the base currency and rates
                     $baseCurrency = $jsonData['base'];
                     $rates = $jsonData['rates'];
-        
+
                     // Convert the base currency to EGP
                     if ($baseCurrency !== 'EGP') {
                         $newRates = [];
                         foreach ($rates as $currency => $rate) {
-                            $newRates[$currency] =  round($rates['EGP'] / $rate,2);
+                            $newRates[$currency] =  round($rates['EGP'] / $rate, 2);
                         }
                         $rates = $newRates;
                     }
-        
+
                     return $rates;
-        
-                } else { 
+                } else {
                     return [
                         'AED' => 13,
                         'SAR' => 13,
@@ -348,9 +529,8 @@ if (!function_exists('setCurrencyRate')) {
                         'EGP' => 1
                     ];
                 }
-            });    
-                
-        }else{
+            });
+        } else {
             Cache::remember('currency_rates', 21600, function () {  // 6 hours
                 return [
                     'AED' => 13,
@@ -358,13 +538,14 @@ if (!function_exists('setCurrencyRate')) {
                     'KWD' => 160,
                     'EGP' => 1
                 ];
-            });    
+            });
         }
     }
 }
 
 if (!function_exists('generateRandomString')) {
-    function generateRandomString($length = 10) {
+    function generateRandomString($length = 10)
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ=#%$@&';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -375,27 +556,27 @@ if (!function_exists('generateRandomString')) {
     }
 }
 if (! function_exists('calculate_commission')) {
-    function calculate_commission($orders) {
-        $pending = 0 ;
-        $available = 0 ;
-        $requested = 0 ;
-        $delivered = 0 ;
+    function calculate_commission($orders)
+    {
+        $pending = 0;
+        $available = 0;
+        $requested = 0;
+        $delivered = 0;
 
-        foreach($orders as $order){
-            if($order->delivery_status != 'cancel'){
+        foreach ($orders as $order) {
+            if ($order->delivery_status != 'cancel') {
 
-                if($order->commission_status == 'pending'){
-                    if($order->delivery_status == 'delivered'){
+                if ($order->commission_status == 'pending') {
+                    if ($order->delivery_status == 'delivered') {
                         $available += $order->commission + $order->extra_commission;
-                    }else{
+                    } else {
                         $pending += $order->commission + $order->extra_commission;
                     }
-                }else if($order->commission_status == 'requested'){
+                } else if ($order->commission_status == 'requested') {
                     $requested += $order->commission + $order->extra_commission;
-                }else if($order->commission_status == 'delivered'){
+                } else if ($order->commission_status == 'delivered') {
                     $delivered += $order->commission + $order->extra_commission;
                 }
-
             }
         }
 
@@ -410,12 +591,13 @@ if (! function_exists('calculate_commission')) {
     }
 }
 if (! function_exists('designs_calculations')) {
-    function designs_calculations($designs) {
-        $pending = 0 ;
-        $available = 0 ; 
+    function designs_calculations($designs)
+    {
+        $pending = 0;
+        $available = 0;
 
 
-        foreach($designs as $design){ 
+        foreach ($designs as $design) {
             $single_desing_calculations = single_design_calcualtions($design);
             $pending += $single_desing_calculations['pending'];
             $available += $single_desing_calculations['available'];
@@ -423,40 +605,41 @@ if (! function_exists('designs_calculations')) {
 
         $data = [
             'pending' => $pending,
-            'available' => $available, 
+            'available' => $available,
         ];
 
         return $data;
     }
 }
 if (! function_exists('single_design_calcualtions')) {
-    function single_design_calcualtions($design) { 
+    function single_design_calcualtions($design)
+    {
         $pending = 0;
         $pending_quantity = 0;
-        $available = 0; 
-        $available_quantity = 0; 
+        $available = 0;
+        $available_quantity = 0;
 
-        $product = Product::where('design_id',$design->id)->first();
-        if($product){
-            $order_details = OrderDetail::with('order')->where('product_id',$product->id)->get();
+        $product = Product::where('design_id', $design->id)->first();
+        if ($product) {
+            $order_details = OrderDetail::with('order')->where('product_id', $product->id)->get();
 
-            foreach($order_details as $raw){
-                if($raw->order->delivery_status != 'cancel'){
-                    if($raw->order->delivery_status == 'delivered'){
-                        $available += $raw->quantity * $design->profit;  
-                        $available_quantity += $raw->quantity;  
-                    }else{
-                        $pending += $raw->quantity * $design->profit;  
-                        $pending_quantity += $raw->quantity;  
+            foreach ($order_details as $raw) {
+                if ($raw->order->delivery_status != 'cancel') {
+                    if ($raw->order->delivery_status == 'delivered') {
+                        $available += $raw->quantity * $design->profit;
+                        $available_quantity += $raw->quantity;
+                    } else {
+                        $pending += $raw->quantity * $design->profit;
+                        $pending_quantity += $raw->quantity;
                     }
                 }
             }
-        } 
+        }
         $data = [
             'pending' => $pending,
-            'available' => $available, 
-            'pending_quantity' => $pending_quantity, 
-            'available_quantity' => $available_quantity, 
+            'available' => $available,
+            'pending_quantity' => $pending_quantity,
+            'available_quantity' => $available_quantity,
         ];
 
         return $data;
@@ -465,13 +648,14 @@ if (! function_exists('single_design_calcualtions')) {
 
 
 if (!function_exists('calc_product_cost')) {
-    function calc_product_cost($product, $variation){
+    function calc_product_cost($product, $variation)
+    {
 
-        $product_stock = \App\Models\ProductStock::where('variant', $variation)->where('product_id',$product->id)->first(); 
+        $product_stock = \App\Models\ProductStock::where('variant', $variation)->where('product_id', $product->id)->first();
 
         $unit_price =  $product_stock ? $product_stock->unit_price : $product->unit_price;
-        $purchase_price = $product_stock ? $product_stock->purchase_price : $product->purchase_price;  
-        
+        $purchase_price = $product_stock ? $product_stock->purchase_price : $product->purchase_price;
+
         return [
             'price_before_discount' => $unit_price,
             'price' => $product->calc_discount($unit_price),
@@ -481,27 +665,27 @@ if (!function_exists('calc_product_cost')) {
 }
 
 if (!function_exists('product_price_in_cart')) {
-    function product_price_in_cart($quantity,$variation,$product)
+    function product_price_in_cart($quantity, $variation, $product)
     {
-        $product_stock = \App\Models\ProductStock::where('variant', $variation)->where('product_id',$product->id)->first(); 
+        $product_stock = \App\Models\ProductStock::where('variant', $variation)->where('product_id', $product->id)->first();
 
         $unit_price =  $product_stock ? $product_stock->unit_price : $product->unit_price;
-        $purchase_price = $product_stock ? $product_stock->purchase_price : $product->purchase_price; 
-        
-        $price_before_discount = front_calc_product_currency($unit_price,$product->weight);
-        $price = front_calc_product_currency($product->calc_discount($unit_price),$product->weight); 
+        $purchase_price = $product_stock ? $product_stock->purchase_price : $product->purchase_price;
+
+        $price_before_discount = front_calc_product_currency($unit_price, $product->weight);
+        $price = front_calc_product_currency($product->calc_discount($unit_price), $product->weight);
         $commission = front_calc_commission_currency($unit_price, $purchase_price)['value'] * $quantity;
 
         $h2 = '';
-        
-        if($product->discount > 0){
-            $h2 .= $price['as_text'] ;
-            $h2 .= ' <span style="text-decoration:line-through">' . $price_before_discount['as_text'] . '</span>';
-        }else{
+
+        if ($product->discount > 0) {
             $h2 .= $price['as_text'];
-        } 
-        
-        return [ 
+            $h2 .= ' <span style="text-decoration:line-through">' . $price_before_discount['as_text'] . '</span>';
+        } else {
+            $h2 .= $price['as_text'];
+        }
+
+        return [
             'commission' => $commission,
             'price' => $price,
             'price_before_discount' => $price_before_discount,
@@ -511,99 +695,101 @@ if (!function_exists('product_price_in_cart')) {
 }
 
 if (!function_exists('front_calc_commission_currency')) {
-    function front_calc_commission_currency($unit_price,$purchase_price){
+    function front_calc_commission_currency($unit_price, $purchase_price)
+    {
         $currency = session('currency');
-        if($currency){
-            $product_unit_price = exchange_rate($unit_price,$currency->exchange_rate); 
-            $product_purchase_price = exchange_rate($purchase_price,$currency->exchange_rate); 
-            $commission = $product_unit_price - $product_purchase_price; 
+        if ($currency) {
+            $product_unit_price = exchange_rate($unit_price, $currency->exchange_rate);
+            $product_purchase_price = exchange_rate($purchase_price, $currency->exchange_rate);
+            $commission = $product_unit_price - $product_purchase_price;
             return [
                 'as_text' => $currency->symbol . ' ' . $commission,
                 'value' => $commission,
                 'symbol' =>  ' ' . $currency->symbol,
             ];
-        }else{
+        } else {
             return [
                 'as_text' => 'EGP ' . ($unit_price - $purchase_price),
                 'value' => ($unit_price - $purchase_price),
                 'symbol' => 'EGP '
             ];
-        } 
+        }
     }
 }
 if (!function_exists('front_calc_product_currency')) {
-    function front_calc_product_currency($value,$weight)
+    function front_calc_product_currency($value, $weight)
     {
         $currency = session('currency');
-        if($currency){
-            $product_price = exchange_rate($value,$currency->exchange_rate);
-            $product_weight = exchange_rate($currency->$weight,$currency->exchange_rate);
-            $price = $product_price + $product_weight; 
+        if ($currency) {
+            $product_price = exchange_rate($value, $currency->exchange_rate);
+            $product_weight = exchange_rate($currency->$weight, $currency->exchange_rate);
+            $price = $product_price + $product_weight;
             return [
                 'as_text' => $currency->symbol . ' ' . $price,
                 'value' => $price,
                 'symbol' =>  ' ' . $currency->symbol,
             ];
-        }else{
+        } else {
             return [
                 'as_text' => 'EGP ' . $value,
                 'value' => $value,
                 'symbol' => 'EGP '
             ];
-        } 
+        }
     }
-}    
+}
 
 if (!function_exists('exchange_rate')) {
-    function exchange_rate($value,$exchange_rate){
-        if($exchange_rate == 0){
+    function exchange_rate($value, $exchange_rate)
+    {
+        if ($exchange_rate == 0) {
             $exchange_rate = 1;
         }
-        return round($value / $exchange_rate,2); 
+        return round($value / $exchange_rate, 2);
     }
-} 
+}
 
 if (!function_exists('get_currency_info')) {
-    function get_currency_info($value,$weight)
+    function get_currency_info($value, $weight)
     {
-        $country_code = Session::get('country_code') ?? 'EG'; 
-        $currency = Currency::where('code',$country_code)->first();
-        if($currency){ 
+        $country_code = Session::get('country_code') ?? 'EG';
+        $currency = Currency::where('code', $country_code)->first();
+        if ($currency) {
             $price = ($value / $currency->exchange_rate) + $currency->$weight;
-            return [ 
+            return [
                 'price' => round($price),
                 'exchange_rate' => $currency->exchange_rate,
                 'weight_price' => $currency->$weight,
                 'symbol' => $currency->symbol,
             ];
-        }else{ 
-            return [ 
+        } else {
+            return [
                 'price' => round($value),
                 'weight_price' => 0,
                 'exchange_rate' => 1,
                 'symbol' => 'EGP',
             ];
-        } 
+        }
     }
-}   
+}
 
 if (!function_exists('getWebsiteSettingPrefix')) {
     function getWebsiteSettingPrefix($id)
     {
         $website_setting = WebsiteSetting::find($id);
-        if($website_setting){
+        if ($website_setting) {
             return $website_setting->order_num_prefix . '-';
-        }else{
+        } else {
             return 'ebtekar-';
-        } 
+        }
     }
 }
 
 if (!function_exists('generateOrderNumber')) {
-    function generateOrderNumber($type,$website_setting_id = null)
+    function generateOrderNumber($type, $website_setting_id = null)
     {
         $prefix = $website_setting_id ? getWebsiteSettingPrefix($website_setting_id) : null;
-        return DB::transaction(function () use ($type,$prefix) {
+        return DB::transaction(function () use ($type, $prefix) {
             // This locks only the selected row(s) matching the where condition
             // lockForUpdate() acquires a row-level lock on the rows that match the query
             $counter = DB::table('order_number_counters')
@@ -612,7 +798,7 @@ if (!function_exists('generateOrderNumber')) {
                 ->lockForUpdate()
                 ->first();
 
-            if (!$counter) { 
+            if (!$counter) {
                 DB::table('order_number_counters')->insert([
                     'type' => $type,
                     'prefix' => $prefix,
@@ -647,7 +833,7 @@ if (!function_exists('combinations')) {
         }
         return $result;
     }
-} 
+}
 
 // search by phone number
 if (!function_exists('searchByPhone')) {
@@ -701,11 +887,11 @@ if (!function_exists('searchByPhone')) {
             if ($fbp = request()->cookie('_fbp')) {
                 return $fbp;
             }
-            
+
 
             // 2. Generate new FBP if doesn't exist
             $fbp = 'fb.1.' . getSafeEventTime() . '.' . bin2hex(random_bytes(6)); // More reliable than uniqid()
-            
+
             // Set cookie with proper attributes
             cookie()->queue(
                 name: '_fbp',
@@ -715,7 +901,7 @@ if (!function_exists('searchByPhone')) {
                 httpOnly: true,         // Better security
                 sameSite: 'Lax'         // Recommended for tracking cookies
             );
-    
+
             return $fbp;
         }
     }
@@ -726,12 +912,12 @@ if (!function_exists('searchByPhone')) {
             if ($fbc = request()->cookie('_fbc')) {
                 return $fbc;
             }
-            
+
             // 2. Check for fbclid parameter
-            if ($fbclid = request()->input('fbclid')) { 
-                
+            if ($fbclid = request()->input('fbclid')) {
+
                 $fbc = 'fb.1.' . getSafeEventTime() . '.' . $fbclid;
-                
+
                 // Set cookie with proper attributes
                 cookie()->queue(
                     name: '_fbc',
@@ -741,16 +927,16 @@ if (!function_exists('searchByPhone')) {
                     httpOnly: true,
                     sameSite: 'Lax'
                 );
-                
+
                 return $fbc;
             }
-            
+
             return null;
         }
     }
     if (!function_exists('getUserDataForConersionApi')) {
-        function getUserDataForConersionApi($user = null,$data = null)
-        {  
+        function getUserDataForConersionApi($user = null, $data = null)
+        {
             $userData = [
                 'ip' => request()->ip(),
                 'userAgent' => request()->userAgent(),
@@ -758,75 +944,73 @@ if (!function_exists('searchByPhone')) {
                 'fbc' => getFbc(),
             ];
 
-            if(auth()->check()){ 
+            if (auth()->check()) {
                 $user = User::find(auth()->id());
             }
-            if($user){
+            if ($user) {
                 $userData['external_id'] =  getHashedExternalIdForCAPI();
                 $userData['email'] =  $user->hashedEmail();
                 $userData['phone'] =  $user->hashedPhone();
                 $userData['firstName'] =  $user->hashedFirstName();
-                $userData['lastName'] =  $user->hashedLastName(); 
-            }elseif($data){
+                $userData['lastName'] =  $user->hashedLastName();
+            } elseif ($data) {
                 $userData['external_id'] =  getHashedExternalIdForCAPI();
                 $userData['email'] =  hashedForConversionApi($data['email']);
                 $userData['phone'] =  hash('sha256', preg_replace('/\D/', '', $data['phone']));
                 $userData['firstName'] =  hashedForConversionApi($data['firstName']);
-                $userData['lastName'] =  hashedForConversionApi($data['lastName']); 
+                $userData['lastName'] =  hashedForConversionApi($data['lastName']);
             }
 
             $userData['city'] = getHashedCityForCAPI();
             $userData['state'] = getHashedStateForCAPI();
             $userData['countryCode'] = getHashedCountryForCAPI();
-            if($data){
+            if ($data) {
                 $userData['countryCode'] = $data['countryCode'] ? hashedForConversionApi($data['countryCode']) : $userData['countryCode'];
-                $userData['city'] = $data['city'] ? hash('sha256',strtolower(trim($data['city']))) : $userData['city'];
+                $userData['city'] = $data['city'] ? hash('sha256', strtolower(trim($data['city']))) : $userData['city'];
             }
-            
+
             return $userData;
         }
-    }   
+    }
     if (!function_exists('hashedForConversionApi')) {
         function hashedForConversionApi($text = null)
-        {  
-            return $text ? hash("sha256",strtolower(trim( $text))) : null;
+        {
+            return $text ? hash("sha256", strtolower(trim($text))) : null;
         }
     }
     if (!function_exists('getHashedStateForCAPI')) {
         function getHashedStateForCAPI()
-        {  
-            $state = Session::get('state_by_ip','Cairo'); 
-            return $state ? hashedForConversionApi($state) : null; 
+        {
+            $state = Session::get('state_by_ip', 'Cairo');
+            return $state ? hashedForConversionApi($state) : null;
         }
     }
     if (!function_exists('getHashedCityForCAPI')) {
         function getHashedCityForCAPI()
-        {  
-            $city = Session::get('city_by_ip','Cairo'); 
-            return $city ?  hashedForConversionApi($city) : null; 
+        {
+            $city = Session::get('city_by_ip', 'Cairo');
+            return $city ?  hashedForConversionApi($city) : null;
         }
     }
     if (!function_exists('getHashedCountryForCAPI')) {
         function getHashedCountryForCAPI()
-        {  
-            $country = Session::get('country_code','EG'); 
-            return $country ? hashedForConversionApi($country) : null; 
+        {
+            $country = Session::get('country_code', 'EG');
+            return $country ? hashedForConversionApi($country) : null;
         }
     }
     if (!function_exists('getHashedExternalIdForCAPI')) {
         function getHashedExternalIdForCAPI()
-        {  
+        {
             $external_id = auth()->check() ? auth()->id() : Session::get('external_id', 'rand_ext_' . Str::random(8));
-    
+
             return $external_id ? hashedForConversionApi($external_id) : null;
         }
     }
     if (!function_exists('getSafeEventTime')) {
         function getSafeEventTime()
-        {  
+        {
             return time() - 5;
         }
     }
-
-
 }

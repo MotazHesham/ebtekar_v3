@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdsAccountsController;
 use App\Http\Controllers\Admin\AdsHistoryController;
 use App\Http\Controllers\Admin\AdsPaymentRequestController;
+use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdsAccountDetailController;
@@ -60,6 +61,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Roles
     Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
     Route::resource('roles', 'RolesController');
+
+    // Settings
+    Route::post('settings/media', [SettingsController::class, 'storeMedia'])->name('settings.storeMedia');
+    Route::post('settings/ckmedia', [SettingsController::class, 'storeCKEditorImages'])->name('settings.storeCKEditorImages');
+    Route::post('settings/update', [SettingsController::class, 'update'])->name('settings.update');
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
 
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
