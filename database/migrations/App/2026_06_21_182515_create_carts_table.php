@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('coupon_code')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id', 'user_fk_10500614')->references('id')->on('users');
-            $table->unsignedBigInteger('address_id')->nullable();
-            $table->foreign('address_id', 'address_fk_10500615')->references('id')->on('addresses');
             $table->timestamp('reminder_sent_at')->nullable();
             $table->timestamps();
         });
