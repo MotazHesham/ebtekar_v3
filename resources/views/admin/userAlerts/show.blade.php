@@ -25,7 +25,15 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ __('cruds.userAlert.fields.alert_text') }}
+                            {{ __('cruds.userAlert.fields.title_field') }}
+                        </th>
+                        <td>
+                            {{ $userAlert->title }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ __('cruds.userAlert.fields.alert_body') }}
                         </th>
                         <td>
                             {{ $userAlert->alert_text }}
@@ -37,6 +45,14 @@
                         </th>
                         <td>
                             {{ $userAlert->alert_link }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ __('cruds.userAlert.fields.user_type') }}
+                        </th>
+                        <td>
+                            {{ $userAlert->user_type ? (\App\Models\User::USER_TYPE_SELECT[$userAlert->user_type] ?? $userAlert->user_type) : '' }}
                         </td>
                     </tr>
                     <tr>

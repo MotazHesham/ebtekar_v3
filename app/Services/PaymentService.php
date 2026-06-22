@@ -8,7 +8,7 @@ class PaymentService
 {
     public function processPayment(PaymentMethod $paymentMethod, string $paymentType, int $paymentId)
     {
-        $decorator = $this->getPaymentDecorator($paymentMethod->name);
+        $decorator = $this->getPaymentDecorator($paymentMethod->key);
         return (new $decorator)->pay($paymentType, $paymentId);
     }
 

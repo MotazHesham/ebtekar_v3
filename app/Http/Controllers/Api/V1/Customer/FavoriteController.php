@@ -17,7 +17,7 @@ class FavoriteController extends Controller
         $favs = Cache::remember('customer-' . auth()->user()->id . '-fav-products', config('panel.cache_time_long'), function () {
             return Wishlist::where('user_id', auth()->user()->id)->get()->pluck('product_id')->toArray();
         });
-        $products = Product::whereIn('id', $favs)->orderBy('num_of_sale', 'desc')->paginate(10);
+        $products = Product::whereIn('id', $favs)->orderBy('num_of_sale', 'desc')->cursorPaginate(10);
         return ResponseHelper::returnResource(ProductListResource::collection($products));
     }
     public function toggle(ProductFavoriteRequest $request)
@@ -29,10 +29,16 @@ class FavoriteController extends Controller
         if ($product->wishlists()->where('user_id', $user->id)->exists()) {
             $product->wishlists()->detach($user->id);
             Cache::forget('customer-' . $user->id . '-fav-products');
+            Cache::remember('customer-' . auth()->user()->id . '-fav-products', config('panel.cache_time_long'), function () {
+                return Wishlist::where('user_id', auth()->user()->id)->get()->pluck('product_id')->toArray();
+            });
             return ResponseHelper::returnResponse(trans('api.success.removedFromFavorites'));
         } else {
             $product->wishlists()->attach($user->id);
             Cache::forget('customer-' . $user->id . '-fav-products');
+            Cache::remember('customer-' . auth()->user()->id . '-fav-products', config('panel.cache_time_long'), function () {
+                return Wishlist::where('user_id', auth()->user()->id)->get()->pluck('product_id')->toArray();
+            });
             return ResponseHelper::returnResponse(trans('api.success.addedToFavorites'));
         }
     }

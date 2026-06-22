@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\UserAlert;
+use App\Models\User;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 
 class StoreUserAlertRequest extends FormRequest
 {
@@ -17,6 +17,11 @@ class StoreUserAlertRequest extends FormRequest
     public function rules()
     {
         return [
+            'title' => [
+                'string',
+                'required',
+                'max:255',
+            ],
             'alert_text' => [
                 'string',
                 'required',
@@ -25,11 +30,29 @@ class StoreUserAlertRequest extends FormRequest
                 'string',
                 'nullable',
             ],
-            'users.*' => [
-                'integer',
+            'user_type' => [
+                'string',
+                'required',
+                Rule::in(array_keys(User::USER_TYPE_SELECT)),
+            ],
+            'recipient_mode' => [
+                'string',
+                'required',
+                Rule::in(['all', 'specific']),
             ],
             'users' => [
+                'required_if:recipient_mode,specific',
                 'array',
+                'min:1',
+            ],
+            'users.*' => [
+                'integer',
+                Rule::exists('users', 'id')->where(function ($query) {
+                    $query->where('user_type', $this->input('user_type'));
+                }),
+            ],
+            'send_push_notification' => [
+                'boolean',
             ],
         ];
     }

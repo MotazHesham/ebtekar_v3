@@ -74,8 +74,8 @@ class ProductController extends Controller
 
             return ResponseHelper::returnResponse('', [
                 'max_quantity' => $productStock->stock,
-                'base_price' => round($productStock->basePrice()),
-                'discounted_price' => round($productStock->baseDiscountedPrice()),
+                'base_price' => round($productStock->basePrice($product)),
+                'discounted_price' => round($productStock->baseDiscountedPrice($product)),
                 'product_stock_id' => $productStock->id,
             ]);
         } else {

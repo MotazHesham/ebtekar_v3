@@ -233,22 +233,6 @@ class SettingSeeder extends Seeder
             'group_name' => 'policies',
         ];
         $settings[] = [
-            'key' => 'shipping_policy',
-            'value' => 'Shipping Policy',
-            'data_type' => 'textarea',
-            'options' => null,
-            'lang' => 'en',
-            'group_name' => 'policies',
-        ];
-        $settings[] = [
-            'key' => 'refund_policy',
-            'value' => 'سياسة الاسترجاع',
-            'data_type' => 'textarea',
-            'options' => null,
-            'lang' => 'ar',
-            'group_name' => 'policies',
-        ];
-        $settings[] = [
             'key' => 'payment_policy',
             'value' => 'Payment Policy',
             'data_type' => 'textarea',
@@ -275,22 +259,6 @@ class SettingSeeder extends Seeder
         $settings[] = [
             'key' => 'delivery_policy',
             'value' => 'سياسة التوصيل',
-            'data_type' => 'textarea',
-            'options' => null,
-            'lang' => 'ar',
-            'group_name' => 'policies',
-        ];
-        $settings[] = [
-            'key' => 'return_policy',
-            'value' => 'Return Policy',
-            'data_type' => 'textarea',
-            'options' => null,
-            'lang' => 'en',
-            'group_name' => 'policies',
-        ];
-        $settings[] = [
-            'key' => 'return_policy',
-            'value' => 'سياسة الإرجاع',
             'data_type' => 'textarea',
             'options' => null,
             'lang' => 'ar',
@@ -347,6 +315,16 @@ class SettingSeeder extends Seeder
             'options' => null,
             'group_name' => 'features',
             'order_level' => 5,
+            'grid_col' => 4,
+            'lang' => null,
+        ];
+        $settings[] = [
+            'key' => 'calendar_default_reminder_days',
+            'value' => '7',
+            'data_type' => 'number',
+            'options' => null,
+            'group_name' => 'features',
+            'order_level' => 6,
             'grid_col' => 4,
             'lang' => null,
         ];

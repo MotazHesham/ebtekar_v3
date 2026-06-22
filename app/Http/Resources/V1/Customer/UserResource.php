@@ -22,6 +22,8 @@ class UserResource extends JsonResource
             'phone_number' => $this->phone_number,
             'token' => $this->whenNotNull($this->token),
             'photo' => $this->photo ? $this->photo->getUrl() : getNonImage(),
+            'notification_count' => $this->userUserAlerts()->where('read', false)->count(),
+            'cart_items_count' => $this->cart?->cartItems()->count() ?? 0,
         ];
     }
 }

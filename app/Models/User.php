@@ -202,6 +202,21 @@ class User extends Authenticatable implements HasMedia
         $this->attributes['email_verified_at'] = $value ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $value)->format('Y-m-d H:i:s') : null;
     }
 
+    public function deviceTokens()
+    {
+        return $this->hasMany(DeviceToken::class);
+    }
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class);
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -306,6 +321,11 @@ class User extends Authenticatable implements HasMedia
     public function userAddresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function calendarDates()
+    {
+        return $this->hasMany(CalendarDate::class);
     }
 
     public function defaultUserAddress()

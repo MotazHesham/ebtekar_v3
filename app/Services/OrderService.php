@@ -52,8 +52,6 @@ class OrderService
             $user = $cart->user;
         }
 
-        $cartSummary = $this->orderSummaryService->cartSummary($cart);
-
         $order_num = generateOrderNumber('customer-app#', $site_settings->id);
         $order = Order::create([
             'order_num' => $order_num,
@@ -61,6 +59,7 @@ class OrderService
             'shipping_country_id'  => $country->id,
             'shipping_country_cost' => $country->cost,
             'website_setting_id' => $site_settings->id,
+            'client_name' => $address->client_name,
             'phone_number' => $address->phone,
             'shipping_address' => $address->address,
             'symbol' => $defaultCurrency->symbol,
@@ -71,6 +70,7 @@ class OrderService
         $orderDetails = [];
         $productIds = [];
         $total_cost = 0;
+        $total_commission = 0;
         $numOfItems = 0;
 
         foreach ($cartItems as $cartItem) {
@@ -96,31 +96,41 @@ class OrderService
                 $product->save();
             }
 
-            $price = $cartItem->baseDiscountedCartPrice();
+            $prices = calc_product_cost($product, $cartItem['variation']);
+            $calc_total_for_product = ($prices['price'] + $defaultCurrency->$weight) * $cartItem['quantity'];
+            $total_cost += $calc_total_for_product;
+            $total_commission += $prices['commission'] ?? 0;
+
             $orderDetails[] = [
                 'order_id' => $order->id,
                 'product_id' => $cartItem->product_id,
-                'product_stock_id' => $cartItem->product_stock_id,
-                'price' => $price * $cartItem->quantity,
                 'variation' => $cartItem->variant,
+                'commission' => $prices['commission'] ?? 0,
                 'quantity' => $cartItem->quantity,
-                'description' => $cartItem->description,
-                'photos' => $cartItem->photos,
-                'pdf' => $cartItem->pdf,
-                'link' => $cartItem->link,
-                'email_sent' => $cartItem->email_sent,
+                'price' => $prices['price'],
+                'total_cost' => $calc_total_for_product,
+                'weight_price' =>  $defaultCurrency->$weight,
+                'description' => $cartItem->description ?? null,
+                'photos' => $cartItem->photos ?? null,
+                'pdf' => $cartItem->pdf ?? null,
+                'link' => $cartItem->link ?? null,
+                'email_sent' => $cartItem->email_sent ?? 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
         }
         OrderDetail::insert($orderDetails);
 
-        $order = $order->fresh();
+        $order->total_cost = $total_cost;
+        $order->commission = $total_commission;
+        $order->save();
+
         return $order;
     }
     public function createUser(Address $address): User
     {
         $user = User::create([
+            'name' => $address->client_name,
             'phone_number' => $address->phone,
             'user_type' => 'customer',
             'approved' => 1,
@@ -129,6 +139,9 @@ class OrderService
         Customer::create([
             'user_id' => $user->id
         ]);
+
+        // turn address to that user
+        Address::where('temp_user_uid', $address->temp_user_uid)->update(['user_id' => $user->id]);
         return $user;
     }
 

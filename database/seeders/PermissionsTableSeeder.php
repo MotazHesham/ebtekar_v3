@@ -2285,6 +2285,24 @@ class PermissionsTableSeeder extends Seeder
                 'type' => 'delivery_order',
                 'parent' => 0,
             ],
+            [
+                'id'    => $i++,
+                'title' => 'calendar_date_show',
+                'type' => 'calendar_date',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'calendar_date_delete',
+                'type' => 'calendar_date',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'calendar_date_access',
+                'type' => 'calendar_date',
+                'parent' => 0,
+            ],
         ];
 
         foreach ($permissions as $permission) {

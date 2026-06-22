@@ -22,6 +22,10 @@ class SettingsController extends Controller
             'contact_phone' => getSetting('contact_phone'),
             'about_us' => getSetting('about_us'),
             'terms_and_conditions' => getSetting('terms_and_conditions'),
+            'privacy_policy' => getSetting('privacy_policy'),
+            'refund_policy' => getSetting('refund_policy'),
+            'payment_policy' => getSetting('payment_policy'),
+            'delivery_policy' => getSetting('delivery_policy'),
             'facebook' => getSetting('facebook'),
             'instagram' => getSetting('instagram'),
             'twitter' => getSetting('twitter'),
@@ -30,13 +34,14 @@ class SettingsController extends Controller
             'tiktok' => getSetting('tiktok'),
             'snapchat' => getSetting('snapchat'),
             'whatsapp' => getSetting('whatsapp'),
+            'calendar_default_reminder_days' => (int) getSetting('calendar_default_reminder_days', 7),
         ]);
     }
 
-    public function countires()
+    public function countries()
     {
-        $countires = Country::where('website', 1)->where('status', 1)->where('type', 'countries')->get();
-        return ResponseHelper::returnResource(CountryResource::collection($countires));
+        $countries = Country::where('website', 1)->where('status', 1)->where('type', 'countries')->get();
+        return ResponseHelper::returnResource(CountryResource::collection($countries));
     }
 
     public function categories()
@@ -55,7 +60,7 @@ class SettingsController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:' . config('panel.max_characters_short'),
-            'phone' => 'required|' . config('panel.phone_validation'),
+            'phone' => 'required',
             'message' => 'required|string|max:' . config('panel.max_characters_long'),
         ]);
         $contactMassage = Contactu::create($request->merge([

@@ -16,13 +16,19 @@ class OrderDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'product_id' => $this->whenLoaded('product', fn() => $this->product->id),
+            'product_id' => $this->product_id,
             'product_name' => $this->whenLoaded('product', fn() => $this->product->name),
             'product_main_photo' => $this->whenLoaded('product', fn() => $this->product->main_photo ? $this->product->main_photo->getUrl() : getNonImage()),
-            'product_categories' => $this->whenLoaded('product', fn() => $this->product->product_categories->pluck('name')),
             'quantity' => $this->quantity,
-            'price' => formatPrice($this->price),
+            'price' => round($this->price),
+            'total_cost' => round($this->total_cost),
             'variation' => $this->variation,
+            'description' => $this->description,
+            'photos' => $this->photos,
+            'pdf' => $this->pdf,
+            'link' => $this->link,
+            'email_sent' => $this->email_sent,
+            'created_at' => $this->created_at ?? null,
         ];
     }
 }

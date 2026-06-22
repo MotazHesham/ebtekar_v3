@@ -4,6 +4,7 @@ return [
     'type' => [
         'order' => 'طلبات الموقع',
         'customer' => 'عملاء الموقع',
+        'calendar_date' => 'تقويم المناسبات',
         'material' => 'الخامات',
         'role' => 'المجموعات',
         'user' => 'المستخدمين',
@@ -150,6 +151,9 @@ return [
     'customer_show' => 'عرض عميل',
     'customer_delete' => 'حذف عميل',
     'customer_access' => 'قائمة العملاء',
+    'calendar_date_show' => 'عرض مناسبة',
+    'calendar_date_delete' => 'حذف مناسبة',
+    'calendar_date_access' => 'قائمة تقويم المناسبات',
     'seller_managment_access' => 'قائمة إدارة البائعين',
     'seller_create' => 'أضافة بائع',
     'seller_edit' => 'تعديل بائع',

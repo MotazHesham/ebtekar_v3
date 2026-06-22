@@ -23,6 +23,7 @@ class Address extends Model
     protected $fillable = [
         'temp_user_uid',
         'name',
+        'client_name',
         'phone',
         'address',
         'latitude',

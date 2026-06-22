@@ -99,6 +99,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('tasks-calendars', 'TasksCalendarController', ['except' => ['create', 'store', 'edit', 'update', 'show', 'destroy']]);
 
     // User Alerts
+    Route::get('user-alerts/users-by-type', 'UserAlertsController@usersByType')->name('user-alerts.usersByType');
     Route::delete('user-alerts/destroy', 'UserAlertsController@massDestroy')->name('user-alerts.massDestroy');
     Route::get('user-alerts/history', 'UserAlertsController@history')->name('user-alerts.history');
     Route::get('user-alerts/playlist', 'UserAlertsController@playlist')->name('user-alerts.playlist');
@@ -199,6 +200,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Customers
     Route::delete('customers/destroy', 'CustomersController@massDestroy')->name('customers.massDestroy');
     Route::resource('customers', 'CustomersController');
+
+    // Calendar dates (customer gifting reminders)
+    Route::delete('calendar-dates/destroy', 'CalendarDatesController@massDestroy')->name('calendar-dates.massDestroy');
+    Route::resource('calendar-dates', 'CalendarDatesController', ['except' => ['create', 'store', 'edit', 'update']]);
 
     // Sellers
     Route::delete('sellers/destroy', 'SellersController@massDestroy')->name('sellers.massDestroy');

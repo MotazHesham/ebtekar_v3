@@ -36,13 +36,13 @@ class ProductStock extends Model
     {
         return $this->belongsTo(Product::class);
     }
-    public function basePrice()
+    public function basePrice($product)
     {
-        return front_calc_product_currency($this->unit_price, $this->product->weight)['value'] ?? '';
+        return front_calc_product_currency($this->unit_price, $product->weight)['value'] ?? '';
     }
 
-    public function baseDiscountedPrice()
+    public function baseDiscountedPrice($product)
     {
-        return front_calc_product_currency($this->product->calc_discount($this->unit_price), $this->product->weight)['value'] ?? '';
+        return front_calc_product_currency($product->calc_discount($this->unit_price), $product->weight)['value'] ?? '';
     }
 }

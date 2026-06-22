@@ -5,20 +5,20 @@ namespace App\Http\Controllers\Api\V1\Customer;
 use App\Exceptions\UserFriendlyException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Customer\BeSellerRequest;
-use App\Http\Requests\Api\V1\Customer\UpdateProfileRequest; 
+use App\Http\Requests\Api\V1\Customer\UpdateProfileRequest;
 use App\Http\Resources\V1\Customer\UserResource;
-use App\Http\ResponseHelper; 
-use App\Services\ProfileService; 
-use Illuminate\Http\Request; 
-use Illuminate\Support\Facades\Log; 
+use App\Http\ResponseHelper;
+use App\Models\DeviceToken;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
-{ 
-    public function __construct(
-        protected ProfileService $profileService
-    ) { }
+{
 
-    public function info(){
+    public function info()
+    {
         return ResponseHelper::returnResource(new UserResource(auth()->user()), trans('api.success.info'));
     }
 
@@ -28,35 +28,47 @@ class ProfileController extends Controller
             'device_token' => 'required'
         ]);
 
-        $this->profileService->updateDeviceToken($request->device_token, 'customer', auth()->user());
+        DeviceToken::updateOrCreate([
+            'application' => 'customer',
+            'device_token' => $request->device_token,
+            'user_id' => auth()->user()->id,
+        ], []);
 
-        return ResponseHelper::returnResponse( trans('api.success.updated'));
+        return ResponseHelper::returnResponse(trans('api.success.updated'));
     }
 
-    public function update(UpdateProfileRequest $request){
-        return $this->profileService->updateProfile($request, auth()->user());
+    public function update(UpdateProfileRequest $request)
+    {
+        $user = User::find(auth()->user()->id);
+        $user->update($request->validated());
+        return ResponseHelper::returnResponse(trans('api.success.updated'));
     }
 
-    public function updatePassword(Request $request){
+    public function updatePassword(Request $request)
+    {
         $data = $request->validate([
             'old_password' => 'required',
-            'new_password' => 'required|min:6',
-        ]);
+            'new_password' => [
+                'required',
+                'min:' . (config('panel.min_password_length') ?? 8),
+                'max:' . (config('panel.max_password_length') ?? 32),
+            ],
 
-        $this->profileService->updatePassword($data, auth()->user());
+        ]);
+        $user = User::find(auth()->user()->id);
+        if (!Hash::check($request->old_password, $user->password)) {
+            throw new UserFriendlyException(trans('api.errors.oldPassword'));
+        }
+        $user->update(['password' => $request->new_password]);
         return ResponseHelper::returnResponse(trans('api.success.passwordUpdated'));
     }
 
     public function deleteAccount()
     {
-        $this->profileService->deleteUser(auth()->user());
-        return ResponseHelper::returnResponse( trans('api.success.accountDeleted'));
-    }
-
-    public function beSeller(BeSellerRequest $request)
-    {
-        $user = manuallyCheckAuthUser(request()->bearerToken());
-        $this->profileService->beSeller($request, $user);
-        return ResponseHelper::returnResponse( trans('api.success.requestSent'));
+        $user = User::find(auth()->user()->id);
+        $user->deviceTokens()->delete();
+        $user->customer()->delete();
+        $user->delete();
+        return ResponseHelper::returnResponse(trans('api.success.accountDeleted'));
     }
 }

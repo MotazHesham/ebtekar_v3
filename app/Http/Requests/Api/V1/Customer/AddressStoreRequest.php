@@ -23,6 +23,7 @@ class AddressStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|max:' . config('panel.max_characters_short'),
+            'client_name' => 'required|max:' . config('panel.max_characters_short'),
             'country_id' => 'required|exists:countries,id',
             'address' => 'required|max:' . config('panel.max_characters_medium'),
             'phone' => 'required|max:' . config('panel.max_characters_short'),

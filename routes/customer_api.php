@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\Api\V1\Customer\AddressController;
 use App\Http\Controllers\Api\V1\Customer\AuthController;
+use App\Http\Controllers\Api\V1\Customer\CalendarDateController;
 use App\Http\Controllers\Api\V1\Customer\CartController;
 use App\Http\Controllers\Api\V1\Customer\CatalogController;
 use App\Http\Controllers\Api\V1\Customer\FavoriteController;
 use App\Http\Controllers\Api\V1\Customer\ForgetPasswordController;
 use App\Http\Controllers\Api\V1\Customer\HomeController;
+use App\Http\Controllers\Api\V1\Customer\NotificationController;
+use App\Http\Controllers\Api\V1\Customer\OrderController;
 use App\Http\Controllers\Api\V1\Customer\ProductController;
 use App\Http\Controllers\Api\V1\Customer\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +35,7 @@ Route::group(['prefix' => 'v1/customer', 'as' => 'api.', 'namespace' => 'Api\V1\
         Route::get('home-categories', [HomeController::class, 'homeCategories']);
         Route::get('best-selling-products', [HomeController::class, 'bestSellingProducts']);
         Route::get('new-products', [HomeController::class, 'newProducts']);
+        Route::get('flash-deals-products', [HomeController::class, 'flashDealsProducts']);
         Route::get('banner', [HomeController::class, 'banner']);
     });
 
@@ -87,6 +91,27 @@ Route::group(['prefix' => 'v1/customer', 'as' => 'api.', 'namespace' => 'Api\V1\
             Route::post('update-password', [ProfileController::class, 'updatePassword']);
             Route::post('delete-account', [ProfileController::class, 'deleteAccount']);
             Route::post('device-token', [ProfileController::class, 'deviceToken']);
+        });
+
+        // Notifications
+        Route::group(['prefix' => 'notifications'], function () {
+            Route::get('list', [NotificationController::class, 'list']);
+        });
+
+        // Orders
+        Route::group(['prefix' => 'orders'], function () {
+            Route::get('list', [OrderController::class, 'list']);
+            Route::get('show/{id}', [OrderController::class, 'show']);
+            Route::get('track/{id}', [OrderController::class, 'track']);
+        });
+
+        // Calendar dates (gifting reminders)
+        Route::group(['prefix' => 'calendar-dates'], function () {
+            Route::get('types', [CalendarDateController::class, 'types']);
+            Route::get('list', [CalendarDateController::class, 'list']);
+            Route::post('add', [CalendarDateController::class, 'add']);
+            Route::post('update', [CalendarDateController::class, 'update']);
+            Route::get('delete/{id}', [CalendarDateController::class, 'delete']);
         });
     });
 });

@@ -220,14 +220,14 @@ class Product extends Model implements HasMedia
         }
     }
 
-    public function basePrice()
+    public function basePrice($product)
     {
-        return front_calc_product_currency($this->unit_price, $this->weight)['value'] ?? '';
+        return front_calc_product_currency($product->unit_price, $product->weight)['value'] ?? '';
     }
 
-    public function baseDiscountedPrice()
+    public function baseDiscountedPrice($product)
     {
-        return front_calc_product_currency($this->calc_discount($this->unit_price), $this->weight)['value'] ?? '';
+        return front_calc_product_currency($product->calc_discount($product->unit_price), $product->weight)['value'] ?? '';
     }
 
     public function calc_price_as_text()

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\UserFriendlyException;
 use App\Models\Cart;
+use App\Models\PaymentMethod;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\UnauthorizedException;
@@ -33,6 +34,7 @@ class CartService
             ]);
         }
 
+        $cart->load('cartItems', 'cartItems.product', 'cartItems.productStock');
         return $cart;
     }
 
@@ -68,9 +70,10 @@ class CartService
             $order = $this->orderService->createOrder($cart, $cartItems);
             $this->emptyCart($cart);
 
-            $order->payment_method = strtolower($paymentMethodKey);
+            $paymentMethod = PaymentMethod::where('key', $paymentMethodKey)->first();
+            $order->payment_type = $paymentMethod->name;
             $order->save();
-            return $this->paymentService->processPayment($paymentMethodKey, 'order', $order->id);
+            return $this->paymentService->processPayment($paymentMethod, 'order', $order->id);
         });
     }
 }

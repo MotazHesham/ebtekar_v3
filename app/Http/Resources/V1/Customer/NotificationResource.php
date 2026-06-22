@@ -16,14 +16,12 @@ class NotificationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->getTitle(),
-            'content' => $this->getContent(),
-            'icon' => $this->getIcon(),
-            'icon_color' => $this->getIconColor(),
-            'created_at' => $this->created_at->diffForHumans(),
-            'read_at' => $this->read_at,
+            'title' => $this->title,
+            'alert_text' => $this->alert_text,
+            'alert_link' => $this->alert_link,
+            'data' => $this->data,
             'type' => $this->type,
-            'extra_data' => json_decode($this->data),
+            'created_at' => $this->created_at,
         ];
     }
 }

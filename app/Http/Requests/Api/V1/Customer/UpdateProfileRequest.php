@@ -25,27 +25,18 @@ class UpdateProfileRequest extends FormRequest
             'name' => [
                 'string',
                 'required',
-                'max:'.config('panel.max_characters_short'),
+                'max:' . config('panel.max_characters_short'),
             ],
             'email' => [
                 'nullable',
                 'unique:users,email,' . auth()->user()->id,
-                'max:'.config('panel.max_characters_short'),
-            ], 
-            'phone' => [ 
+                'max:' . config('panel.max_characters_short'),
+            ],
+            'phone_number' => [
                 'required',
-                'unique:users,phone,' . auth()->user()->id,
-                config('panel.phone_validation'),
-            ],
-            'photo' => [
-                'nullable',
-                'image',
-                'mimes:jpeg,png,jpg,gif,svg',
-                'max:' . config('panel.max_file_size'),
-            ],
-            'city_id' => [
-                'nullable',
-                'exists:cities,id',
+                'unique:users,phone_number,' . auth()->user()->id,
+                'regex:' . config('panel.phone_number_format'),
+                'size:' . config('panel.phone_number_size'),
             ],
         ];
     }

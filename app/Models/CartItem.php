@@ -55,18 +55,18 @@ class CartItem extends Model
     public function baseCartPrice()
     {
         if ($this->productStock) {
-            return $this->productStock->basePrice();
+            return $this->productStock->basePrice($this->product);
         } else {
-            return $this->product->basePrice();
+            return $this->product->basePrice($this->product);
         }
     }
 
     public function baseDiscountedCartPrice()
     {
         if ($this->productStock) {
-            return $this->productStock->baseDiscountedPrice();
+            return $this->productStock->baseDiscountedPrice($this->product);
         } else {
-            return $this->product->baseDiscountedPrice();
+            return $this->product->baseDiscountedPrice($this->product);
         }
     }
 }

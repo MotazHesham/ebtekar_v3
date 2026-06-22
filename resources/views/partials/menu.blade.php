@@ -744,6 +744,15 @@
                     </a>
                 </li>
             @endcan
+            @can('calendar_date_access')
+                <li class="c-sidebar-nav-item">
+                    <a href="{{ route('admin.calendar-dates.index') }}"
+                        class="c-sidebar-nav-link {{ request()->is('admin/calendar-dates') || request()->is('admin/calendar-dates/*') ? 'c-active' : '' }}">
+                        <i class="fa-fw fas fa-calendar-alt c-sidebar-nav-icon"></i>
+                        {{ __('cruds.calendarDate.title') }}
+                    </a>
+                </li>
+            @endcan
             @can('seller_managment_access')
                 <li
                     class="c-sidebar-nav-dropdown {{ request()->is('admin/sellers*') ? 'c-show' : '' }} {{ request()->is('admin/commission-requests*') ? 'c-show' : '' }}">

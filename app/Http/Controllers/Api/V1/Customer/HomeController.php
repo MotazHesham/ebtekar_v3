@@ -119,6 +119,22 @@ class HomeController extends Controller
         );
     }
 
+    public function flashDealsProducts()
+    {
+        $site_settings = get_site_setting();
+        $products = Product::where('published', 1)
+            ->with('media', 'category')
+            ->where('website_setting_id', $site_settings->id)
+            ->where('flash_deal', 1)
+            ->orderBy('created_at', 'desc')
+            ->take(8)
+            ->get();
+
+        return ResponseHelper::returnResource(
+            ProductListResource::collection($products)
+        );
+    }
+
     public function banner()
     {
         $site_settings = get_site_setting();

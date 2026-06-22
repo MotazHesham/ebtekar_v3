@@ -26,6 +26,7 @@ return [
         'messageOrFilesRequired' => 'يجب إدخال نص الرسالة أو إرفاق ملف',
         'productStockIdRequired' => 'يجب إدخال اختيار واحد علي الأقل',
         'couponNotFound' => 'كود الخصم غير موجود',
+        'oldPassword' => 'كلمة المرور الحالية غير صحيحة',
     ],
     'notifications' => [
         'messageAttachment' => 'أرسل مرفقاً',
