@@ -16,7 +16,7 @@ class Staff
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->user_type == 'customer') {
+        if (in_array(Auth::user()->user_type, ['customer', 'marketer'])) {
             return redirect()->route('frontend.dashboard');
         }
         return $next($request);
