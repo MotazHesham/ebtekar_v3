@@ -27,6 +27,7 @@ use App\Models\ReceiptSocialProduct;
 use App\Models\ReceiptSocialProductPivot;
 use App\Models\ReceiptSocialBoxDetail;
 use App\Models\Social;
+use App\Models\Season;
 use App\Models\User;
 use App\Models\WebsiteSetting;
 use App\Models\Zone;
@@ -676,6 +677,7 @@ class ReceiptSocialController extends Controller
         $staffs = User::whereIn('user_type', ['staff', 'admin'])->get();
         $delivery_mans = User::whereIn('user_type', ['delivery_man', 'courier'])->get();
         $socials = Social::all();
+        $seasons = Season::orderByDesc('year')->orderByDesc('start_date')->get();
         $countries = Country::where('status', 1)->get()->groupBy('type');
         $websites = WebsiteSetting::pluck('site_name', 'id');
         $financial_accounts = FinancialAccount::get();
@@ -729,6 +731,7 @@ class ReceiptSocialController extends Controller
         $status_code = null;
         $quickly_return = null;
         $utm = null;
+        $season_ids = null;
 
 
         $currentCreatorShift = EmployeeShift::where('user_id', auth()->user()->id)
@@ -952,6 +955,19 @@ class ReceiptSocialController extends Controller
             $date_type = $request->date_type;
             $receipts = $receipts->whereBetween($date_type, [$from_date, $to_date]);
         }
+        if ($request->season_ids != null) {
+            $season_ids = array_filter((array) $request->season_ids);
+            if (!empty($season_ids)) {
+                $selectedSeasons = Season::whereIn('id', $season_ids)->get();
+                $receipts = $receipts->where(function ($query) use ($selectedSeasons) {
+                    foreach ($selectedSeasons as $season) {
+                        $start = Carbon::parse($season->getRawStartDate())->startOfDay()->format('Y-m-d H:i:s');
+                        $end = Carbon::parse($season->getRawEndDate())->endOfDay()->format('Y-m-d H:i:s');
+                        $query->orWhereBetween('created_at', [$start, $end]);
+                    }
+                });
+            }
+        }
         if ($request->exclude != null) {
             $exclude = $request->exclude;
             foreach (explode(',', $exclude) as $exc) {
@@ -1075,6 +1091,8 @@ class ReceiptSocialController extends Controller
                 'status_code',
                 'quickly_return',
                 'utm',
+                'seasons',
+                'season_ids',
                 'currentCreatorShift'
             ));
         }
@@ -1131,6 +1149,8 @@ class ReceiptSocialController extends Controller
             'status_code',
             'quickly_return',
             'utm',
+            'seasons',
+            'season_ids',
             'currentCreatorShift'
         ));
     }

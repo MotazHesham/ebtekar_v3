@@ -263,6 +263,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('banned-phones/destroy', 'BannedPhonesController@massDestroy')->name('banned-phones.massDestroy');
     Route::resource('banned-phones', 'BannedPhonesController');
 
+    Route::delete('seasons/destroy', 'SeasonsController@massDestroy')->name('seasons.massDestroy');
+    Route::resource('seasons', 'SeasonsController');
+
     // Polices
     Route::delete('polices/destroy', 'PolicesController@massDestroy')->name('polices.massDestroy');
     Route::post('polices/media', 'PolicesController@storeMedia')->name('polices.storeMedia');

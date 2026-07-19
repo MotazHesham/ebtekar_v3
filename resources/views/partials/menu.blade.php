@@ -82,7 +82,7 @@
 
             @can('receipts_managment_access')
                 <li
-                    class="c-sidebar-nav-dropdown {{ request()->is('admin/receipt-socials*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-social-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-clients*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-client-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-companies*') ? 'c-show' : '' }} {{ request()->is('admin/banned-phones*') ? 'c-show' : '' }}  {{ request()->is('admin/receipt-outgoings*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-outgoing-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-price-views*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-price-view-products*') ? 'c-show' : '' }} {{ request()->is('admin/excel-files*') ? 'c-show' : '' }}   {{ request()->is('admin/r-clients*') ? 'c-show' : '' }} {{ request()->is('admin/r-branches*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-branches*') ? 'c-show' : '' }}">
+                    class="c-sidebar-nav-dropdown {{ request()->is('admin/receipt-socials*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-social-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-clients*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-client-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-companies*') ? 'c-show' : '' }} {{ request()->is('admin/banned-phones*') ? 'c-show' : '' }} {{ request()->is('admin/seasons*') ? 'c-show' : '' }}  {{ request()->is('admin/receipt-outgoings*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-outgoing-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-price-views*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-price-view-products*') ? 'c-show' : '' }} {{ request()->is('admin/excel-files*') ? 'c-show' : '' }}   {{ request()->is('admin/r-clients*') ? 'c-show' : '' }} {{ request()->is('admin/r-branches*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-branches*') ? 'c-show' : '' }}">
                     <a class="c-sidebar-nav-dropdown-toggle" href="#">
                         <i class="fa-fw fas fa-receipt c-sidebar-nav-icon">
 
@@ -199,6 +199,17 @@
 
                                     </i>
                                     {{ __('cruds.bannedPhone.title') }}
+                                </a>
+                            </li>
+                        @endcan
+                        @can('season_access')
+                            <li class="c-sidebar-nav-item">
+                                <a href="{{ route('admin.seasons.index') }}"
+                                    class="c-sidebar-nav-link {{ request()->is('admin/seasons') || request()->is('admin/seasons/*') ? 'c-active' : '' }}">
+                                    <i class="fa-fw fas fa-calendar-alt c-sidebar-nav-icon">
+
+                                    </i>
+                                    {{ __('cruds.season.title') }}
                                 </a>
                             </li>
                         @endcan
