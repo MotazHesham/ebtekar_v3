@@ -60,7 +60,7 @@
         .order_num_ebtekar {
             background: #FBAC00
         }
-        
+
         .order_num_martobia {
             background: #6e1554
         }
@@ -106,6 +106,7 @@
             background: linear-gradient(283deg, #8d8df3 0%, #ffffff 57%);
             border: 1px #b2b98d double;
         }
+
         .client_review {
             background: linear-gradient(283deg, #81e3ef 0%, #ffffff 57%);
             border: 1px #81e3ef double;
@@ -135,7 +136,8 @@
 
 
     {{-- for printing purpose --}}
-    <iframe name="print-frame" id="print-frame" frameborder="0" style="width: 100%; position: absolute; z-index: -1; top: -14%;"></iframe>
+    <iframe name="print-frame" id="print-frame" frameborder="0"
+        style="width: 100%; position: absolute; z-index: -1; top: -14%;"></iframe>
     @include('partials.menu')
 
     <div class="c-wrapper">
@@ -176,21 +178,24 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="AjaxModal" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="AjaxModalLabel" aria-hidden="true">
+    <div class="modal fade" id="AjaxModal" tabindex="-1" data-backdrop="static" data-keyboard="false"
+        aria-labelledby="AjaxModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             {{-- ajax call --}}
         </div>
     </div>
 
     <!-- Modal2 -->
-    <div class="modal fade" id="AjaxModal2" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="AjaxModal2Label" aria-hidden="true">
+    <div class="modal fade" id="AjaxModal2" tabindex="-1" data-backdrop="static" data-keyboard="false"
+        aria-labelledby="AjaxModal2Label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             {{-- ajax call --}}
         </div>
     </div>
 
     <!-- Modal Employee -->
-    <div class="modal fade" id="employeeModal" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="employeeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="employeeModal" tabindex="-1" data-backdrop="static" data-keyboard="false"
+        aria-labelledby="employeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content">
                 <div class="modal-header">
@@ -198,7 +203,7 @@
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.employees.access')}}" method="POST">
+                    <form action="{{ route('admin.employees.access') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
@@ -246,7 +251,8 @@
     <script src="{{ asset('js/main.js') }}"></script>
 
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
 
@@ -360,16 +366,16 @@
 
 
         function playlistCounters(element) {
-            
+
             if ($(element).data('loaded')) {
                 return; // Exit the function if already loaded
-            } 
+            }
 
             // Mark this element as loaded
             $(element).data('loaded', true);
 
             $('.playlist-counters').each(function() {
-                var $this = $(this); 
+                var $this = $(this);
 
                 // Replace the content with a spinner
                 $this.html('<div class="spinner-border spinner-border-sm text-dark" role="status"></div>');
@@ -377,14 +383,14 @@
             });
 
             $.post('{{ route('admin.playlists.getCounters') }}', {
-                _token: '{{ csrf_token() }}', 
+                _token: '{{ csrf_token() }}',
             }, function(data) {
                 $('#playlist-counter-design').html(data['design']);
                 $('#playlist-counter-manufacturing').html(data['manufacturing']);
                 $('#playlist-counter-prepare').html(data['prepare']);
                 $('#playlist-counter-review').html(data['review']);
-                $('#playlist-counter-shipment').html(data['shipment']); 
-                $('#playlist-counter-total').html(data['total']); 
+                $('#playlist-counter-shipment').html(data['shipment']);
+                $('#playlist-counter-total').html(data['total']);
             });
         }
 
@@ -399,6 +405,7 @@
                 $('#AjaxModal .modal-dialog').html(data);
             });
         }
+
         function show_history(id, model_type) {
             $.post('{{ route('admin.playlists.history') }}', {
                 _token: '{{ csrf_token() }}',
@@ -410,6 +417,7 @@
                 $('#AjaxModal .modal-dialog').html(data);
             });
         }
+
         function show_workflow_operations(id, model_type) {
             $.post('{{ route('admin.playlists.workflow_operations') }}', {
                 _token: '{{ csrf_token() }}',
@@ -421,6 +429,7 @@
                 $('#AjaxModal .modal-dialog').html(data);
             });
         }
+
         function get_categories_by_website(call_others = null) {
             var website_setting_id = $('#website_setting_id').val();
             $.post('{{ route('admin.website-settings.get_categories_by_website') }}', {
@@ -742,6 +751,7 @@
         });
     </script>
     @yield('scripts')
+    @stack('stack-scripts')
 </body>
 
 </html>

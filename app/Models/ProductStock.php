@@ -10,16 +10,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ProductStock extends Model
 {
     public $table = 'product_stocks';
-    
+
     protected $dates = [
         'created_at',
-        'updated_at', 
+        'updated_at',
     ];
 
 
     protected $fillable = [
         'product_id',
-        'variant', 
+        'variant',
         'stock',
         'unit_price',
         'purchase_price',
@@ -31,8 +31,18 @@ class ProductStock extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
-    
-    public function product(){
+
+    public function product()
+    {
         return $this->belongsTo(Product::class);
+    }
+    public function basePrice($product)
+    {
+        return front_calc_product_currency($this->unit_price, $product->weight)['value'] ?? '';
+    }
+
+    public function baseDiscountedPrice($product)
+    {
+        return front_calc_product_currency($product->calc_discount($this->unit_price), $product->weight)['value'] ?? '';
     }
 }

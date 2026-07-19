@@ -412,6 +412,19 @@
                                 @isset($to_date) value="{{ request('to_date') }}" @endisset
                                 name="to_date" id="to_date" placeholder="{{ __('global.extra.to_date') }}">
                         </div>
+                        <div class="filter-item">
+                            <label>{{ __('cruds.season.title') }}</label>
+                            <select class="form-control select2 @isset($season_ids) isset @endisset"
+                                name="season_ids[]" id="season_ids" multiple
+                                data-placeholder="{{ __('cruds.season.title') }}">
+                                @foreach ($seasons ?? [] as $season)
+                                    <option value="{{ $season->id }}"
+                                        @if(isset($season_ids) && in_array($season->id, (array) $season_ids)) selected @endif>
+                                        {{ $season->display_name }} ({{ $season->start_date }} - {{ $season->end_date }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
 

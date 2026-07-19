@@ -149,7 +149,16 @@
                             <span>نوع التاريخ:</span> {{ __('cruds.receiptSocial.fields.' . $date_type) }}
                             <button type="button" class="btn-close btn-close-dark ms-1" onclick="removeFilter('date_type')" aria-label="Remove filter"></button>
                         </span>
-                    @endisset 
+                    @endisset
+                    @isset($season_ids)
+                        <span class="badge bg-primary filter-badge">
+                            <span>{{ __('cruds.season.title') }}:</span>
+                            @foreach(($seasons ?? collect())->whereIn('id', (array) $season_ids) as $season)
+                                {{ $season->display_name }}@if(!$loop->last), @endif
+                            @endforeach
+                            <button type="button" class="btn-close btn-close-white ms-1" onclick="removeFilter('season_ids[]')" aria-label="Remove filter"></button>
+                        </span>
+                    @endisset
                     @isset($exclude)
                         <span class="badge bg-danger filter-badge">
                             <span>استثناء:</span> {{ $exclude }}
@@ -1250,8 +1259,13 @@ function removeFilter(filterName) {
     // Get current URL
     const currentUrl = new URL(window.location);
     
-    // Remove the specific filter parameter
+    // Remove the specific filter parameter (including array params like season_ids[])
     currentUrl.searchParams.delete(filterName);
+    if (filterName.endsWith('[]')) {
+        currentUrl.searchParams.delete(filterName.replace('[]', ''));
+    } else {
+        currentUrl.searchParams.delete(filterName + '[]');
+    }
     
     // Redirect to the new URL
     window.location.href = currentUrl.toString();

@@ -109,14 +109,20 @@ return [
     'url'         => ':attribute نوعة غير صحيح',
     'uuid'        => ':attribute يجب أن يكون UUID صالحًا.',
     'custom'      => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'phone_number' => [
+            'regex' => 'رقم الهاتف يجب أن يكون 11 رقم ويبدأ ب 01',
+            'size' => 'رقم الهاتف يجب أن يكون 11 رقم ويبدأ ب 01',
         ],
     ],
     'reserved_word'                  => ':attribute  يحتوي على كلمة محجوزة',
     'dont_allow_first_letter_number' => 'حقل الادخال \":input\" لايمكن ان يكون اول خانة رقم',
     'exceeds_maximum_number'         => 'ال :attribute وصل الحد الاقصى للمودل',
     'db_column'                      => 'ال :attribute يمكن ان يحتوى فقط على ترميز الايزو للاحراف اللاتينية وارقام وعلامة الداش ولايمكن ان يبدأ برقم',
-    'attributes'                     => [],
+    'attributes'                     => [
+        'phone_number' => 'رقم الهاتف',
+        'email' => 'البريد الإلكتروني',
+        'name' => 'الاسم',
+        'password' => 'كلمة المرور',
+    ],
 
 ];

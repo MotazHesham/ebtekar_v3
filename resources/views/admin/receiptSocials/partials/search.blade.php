@@ -338,6 +338,20 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <select class="form-control select2 mb-2 @isset($season_ids) isset @endisset"
+                        name="season_ids[]" id="season_ids" multiple
+                        data-placeholder="{{ __('cruds.season.title') }}">
+                        @foreach ($seasons ?? [] as $season)
+                            <option value="{{ $season->id }}"
+                                @if(isset($season_ids) && in_array($season->id, (array) $season_ids)) selected @endif>
+                                {{ $season->display_name }} ({{ $season->start_date }} - {{ $season->end_date }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3">
                     <input type="submit" value="{{ __('global.search') }}" name="search" class="btn btn-success btn-rounded btn-block">
                 </div>

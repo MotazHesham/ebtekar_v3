@@ -82,7 +82,7 @@
 
             @can('receipts_managment_access')
                 <li
-                    class="c-sidebar-nav-dropdown {{ request()->is('admin/receipt-socials*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-social-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-clients*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-client-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-companies*') ? 'c-show' : '' }} {{ request()->is('admin/banned-phones*') ? 'c-show' : '' }}  {{ request()->is('admin/receipt-outgoings*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-outgoing-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-price-views*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-price-view-products*') ? 'c-show' : '' }} {{ request()->is('admin/excel-files*') ? 'c-show' : '' }}   {{ request()->is('admin/r-clients*') ? 'c-show' : '' }} {{ request()->is('admin/r-branches*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-branches*') ? 'c-show' : '' }}">
+                    class="c-sidebar-nav-dropdown {{ request()->is('admin/receipt-socials*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-social-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-clients*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-client-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-companies*') ? 'c-show' : '' }} {{ request()->is('admin/banned-phones*') ? 'c-show' : '' }} {{ request()->is('admin/seasons*') ? 'c-show' : '' }}  {{ request()->is('admin/receipt-outgoings*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-outgoing-products*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-price-views*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-price-view-products*') ? 'c-show' : '' }} {{ request()->is('admin/excel-files*') ? 'c-show' : '' }}   {{ request()->is('admin/r-clients*') ? 'c-show' : '' }} {{ request()->is('admin/r-branches*') ? 'c-show' : '' }} {{ request()->is('admin/receipt-branches*') ? 'c-show' : '' }}">
                     <a class="c-sidebar-nav-dropdown-toggle" href="#">
                         <i class="fa-fw fas fa-receipt c-sidebar-nav-icon">
 
@@ -199,6 +199,17 @@
 
                                     </i>
                                     {{ __('cruds.bannedPhone.title') }}
+                                </a>
+                            </li>
+                        @endcan
+                        @can('season_access')
+                            <li class="c-sidebar-nav-item">
+                                <a href="{{ route('admin.seasons.index') }}"
+                                    class="c-sidebar-nav-link {{ request()->is('admin/seasons') || request()->is('admin/seasons/*') ? 'c-active' : '' }}">
+                                    <i class="fa-fw fas fa-calendar-alt c-sidebar-nav-icon">
+
+                                    </i>
+                                    {{ __('cruds.season.title') }}
                                 </a>
                             </li>
                         @endcan
@@ -744,6 +755,15 @@
                     </a>
                 </li>
             @endcan
+            @can('calendar_date_access')
+                <li class="c-sidebar-nav-item">
+                    <a href="{{ route('admin.calendar-dates.index') }}"
+                        class="c-sidebar-nav-link {{ request()->is('admin/calendar-dates') || request()->is('admin/calendar-dates/*') ? 'c-active' : '' }}">
+                        <i class="fa-fw fas fa-calendar-alt c-sidebar-nav-icon"></i>
+                        {{ __('cruds.calendarDate.title') }}
+                    </a>
+                </li>
+            @endcan
             @can('seller_managment_access')
                 <li
                     class="c-sidebar-nav-dropdown {{ request()->is('admin/sellers*') ? 'c-show' : '' }} {{ request()->is('admin/commission-requests*') ? 'c-show' : '' }}">
@@ -928,6 +948,15 @@
                         {{ __('cruds.setting.title') }}
                     </a>
                     <ul class="c-sidebar-nav-dropdown-items">
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route('admin.settings.index') }}"
+                                class="c-sidebar-nav-link {{ request()->is('admin/settings') || request()->is('admin/settings/*') ? 'c-active' : '' }}">
+                                <i class="fa-fw fas fa-cog c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.setting.title') }}
+                            </a>
+                        </li>
                         @can('website_setting_access')
                             <li class="c-sidebar-nav-item">
                                 <a href="{{ route('admin.website-settings.index') }}"

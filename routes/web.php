@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdsAccountsController;
 use App\Http\Controllers\Admin\AdsHistoryController;
 use App\Http\Controllers\Admin\AdsPaymentRequestController;
+use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdsAccountDetailController;
@@ -61,6 +62,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
     Route::resource('roles', 'RolesController');
 
+    // Settings
+    Route::post('settings/media', [SettingsController::class, 'storeMedia'])->name('settings.storeMedia');
+    Route::post('settings/ckmedia', [SettingsController::class, 'storeCKEditorImages'])->name('settings.storeCKEditorImages');
+    Route::post('settings/update', [SettingsController::class, 'update'])->name('settings.update');
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
     Route::post('users/update_statuses', 'UsersController@update_statuses')->name('users.update_statuses');
@@ -92,6 +99,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('tasks-calendars', 'TasksCalendarController', ['except' => ['create', 'store', 'edit', 'update', 'show', 'destroy']]);
 
     // User Alerts
+    Route::get('user-alerts/users-by-type', 'UserAlertsController@usersByType')->name('user-alerts.usersByType');
     Route::delete('user-alerts/destroy', 'UserAlertsController@massDestroy')->name('user-alerts.massDestroy');
     Route::get('user-alerts/history', 'UserAlertsController@history')->name('user-alerts.history');
     Route::get('user-alerts/playlist', 'UserAlertsController@playlist')->name('user-alerts.playlist');
@@ -193,6 +201,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('customers/destroy', 'CustomersController@massDestroy')->name('customers.massDestroy');
     Route::resource('customers', 'CustomersController');
 
+    // Calendar dates (customer gifting reminders)
+    Route::delete('calendar-dates/destroy', 'CalendarDatesController@massDestroy')->name('calendar-dates.massDestroy');
+    Route::resource('calendar-dates', 'CalendarDatesController', ['except' => ['create', 'store', 'edit', 'update']]);
+
     // Sellers
     Route::delete('sellers/destroy', 'SellersController@massDestroy')->name('sellers.massDestroy');
     Route::post('sellers/media', 'SellersController@storeMedia')->name('sellers.storeMedia');
@@ -250,6 +262,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Banned Phones
     Route::delete('banned-phones/destroy', 'BannedPhonesController@massDestroy')->name('banned-phones.massDestroy');
     Route::resource('banned-phones', 'BannedPhonesController');
+
+    Route::delete('seasons/destroy', 'SeasonsController@massDestroy')->name('seasons.massDestroy');
+    Route::resource('seasons', 'SeasonsController');
 
     // Polices
     Route::delete('polices/destroy', 'PolicesController@massDestroy')->name('polices.massDestroy');

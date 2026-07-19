@@ -43,6 +43,11 @@ return [
         'redirect'      => env('APP_URL').'/social-login/facebook/callback',
     ],
 
+    'firebase' => [
+        'url' => env('FIREBASE_URL'),
+        'credentials_file' => env('FIREBASE_CREDENTIALS_FILE', 'config/service-account-customer.json'),
+    ],
+
     'egyptexpress' => [
         'base_url' => env('EGYPTEXPRESS_BASE_URL', ''),
         'username' => env('EGYPTEXPRESS_USERNAME', ''),

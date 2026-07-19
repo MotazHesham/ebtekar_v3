@@ -13,11 +13,11 @@ class UserAlert extends Model
 
     public $table = 'user_alerts';
 
-    
+
     public const TYPE_SELECT = [
         'private'     => 'users notifiacations ',
         'history'        => 'assign the transfer between stages in playlist to the user.... to be in his history list',
-        'playlist' => 'This is for tracking playlist by admin', 
+        'playlist' => 'This is for tracking playlist by admin',
         'public' => 'when the admin need send notification to specfic users or all',
         'orders' => 'for orders get from websites',
         'request_commission' => 'for request_commissions',
@@ -30,10 +30,12 @@ class UserAlert extends Model
     ];
 
     protected $fillable = [
+        'title',
         'alert_text',
         'alert_link',
         'data',
         'type',
+        'user_type',
         'created_at',
         'updated_at',
     ];
@@ -42,7 +44,7 @@ class UserAlert extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
-    
+
     public function getCreatedAtAttribute($value)
     {
         return $value ? Carbon::parse($value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
