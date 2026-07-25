@@ -53,17 +53,19 @@
             <div style="padding: 1.5rem;postition:relative">
                 <table style="position: absolute;top:80px;left:150px" class="text-center">
                     <tr>
-                        <td class="gry-color small">{{ $site_settings->address }}</td>
+                        <td class=" small" style="color:black;font-weight:bolder">{{ $site_settings->address }}</td>
                         <td class="text-right"></td>
                     </tr>
                     <tr>
-                        <td class="gry-color small">Email: {{ $site_settings->email }}</td>
+                        <td class=" small" style="color:black;font-weight:bolder">Email: {{ $site_settings->email }}
+                        </td>
                     </tr>
                     <tr>
-                        <td class="gry-color small">Phone: {{ $site_settings->phone_number }}</td>
+                        <td class=" small" style="color:black;font-weight:bolder">Phone:
+                            {{ $site_settings->phone_number }}</td>
                     </tr>
                     <tr>
-                        <td class="gry-color">{{ $receipt->created_at }}</td>
+                        <td class="" style="color:black">{{ $receipt->created_at }}</td>
                     </tr>
                 </table>
                 <table>
@@ -126,11 +128,9 @@
                             <td>
                                 @if ($receipt->receiptsReceiptSocialProducts != null)
                                     @foreach ($receipt->receiptsReceiptSocialProducts as $key => $product)
-                                        <span
-                                            style="color: white;background: black;padding: 5px;border-radius: 5px;">{{ $product->title }}
+                                        <span style="padding: 5px;border-radius: 5px;">{{ $product->title }}
                                             -</span>
-                                        <span
-                                            style="color: white;background: black;padding: 5px;border-radius: 5px;">[{{ $product->quantity }}X]
+                                        <span style="padding: 5px;border-radius: 5px;">[{{ $product->quantity }}X]
                                         </span>
                                         <br>
                                         <span> @php echo $product->description; @endphp </span>
