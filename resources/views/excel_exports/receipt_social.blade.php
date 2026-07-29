@@ -55,7 +55,7 @@
                 $description = '';
                 foreach($receipt->receiptsReceiptSocialProducts as $key => $product){
                     $description .= $product->title . " - [ (" . $product->price . "x" . $product->quantity . ") = " . $product->total_cost . "] ";
-                    $description .= '<br> --------- <br>';
+                    $description .= "\n---------\n";
                 }
             @endphp
 
@@ -67,7 +67,7 @@
                 <td>{{ $receipt->deposit }}</td> 
                 <td>{{ $receipt->calc_total_for_client() }}</td>
                 <td>{{ $receipt->commission + $receipt->extra_commission }}</td>
-                <td><?php echo nl2br($description ?? ''); ?></td>
+                <td>{!! nl2br(e($description ?? '')) !!}</td>
                 <td>{{ $receipt->staff ? $receipt->staff->name : '' }}</td>
                 <td> 
                     {{ $receipt->deposit_type ? \App\Models\ReceiptSocial::DEPOSIT_TYPE_SELECT[$receipt->deposit_type] : '' }}
