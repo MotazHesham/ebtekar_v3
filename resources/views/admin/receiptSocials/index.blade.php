@@ -724,9 +724,15 @@
                                 <div class="c-header" style="background: #ffffff00;height: fit-content;min-height:20px;border-bottom:0px">
                                     <div class="dropdown text-center">
                                         <a style="cursor: pointer" class="dropdown-button" id="dropdown-menu-{{ $receipt->id }}" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
-                                            <span>
+                                            <span style="position:relative; display:inline-block;">
                                                 <i class="far fa-edit" style="font-size:28px;color:black"></i>
                                                 أجراءات
+                                                @if($receipt->followups_count > 0)
+                                                    <span class="badge"
+                                                        style="position:absolute; top:-8px; left:-10px; background:#b31262; color:#fff; border-radius:10px; font-size:10px; line-height:1; padding:2px 5px;">
+                                                        {{ $receipt->followups_count }}
+                                                    </span>
+                                                @endif
                                             </span>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdown-menu-{{ $receipt->id }}">

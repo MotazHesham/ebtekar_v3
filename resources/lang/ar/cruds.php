@@ -388,6 +388,8 @@ return [
             'client_review_helper'            => ' ',
             'client_review_comment'          => 'تعليق مراجعة العميل',
             'client_review_comment_helper'   => ' ',
+            'tracking_number'                => 'رقم التتبع',
+            'tracking_number_helper'         => ' ',
         ],
     ],
     'receiptSocialProduct' => [

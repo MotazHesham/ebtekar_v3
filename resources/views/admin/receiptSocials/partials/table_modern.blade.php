@@ -18,6 +18,18 @@
                             <button type="button" class="btn-close btn-close-white ms-1" onclick="removeFilter('order_num')" aria-label="Remove filter"></button>
                         </span>
                     @endisset 
+                    @isset($shopify_order_num)
+                        <span class="badge bg-info filter-badge">
+                            <span>رقم أوردر شوبيفاي:</span> {{ $shopify_order_num }}
+                            <button type="button" class="btn-close btn-close-white ms-1" onclick="removeFilter('shopify_order_num')" aria-label="Remove filter"></button>
+                        </span>
+                    @endisset
+                    @isset($tracking_number)
+                        <span class="badge bg-danger filter-badge">
+                            <span>رقم التتبع:</span> {{ $tracking_number }}
+                            <button type="button" class="btn-close btn-close-white ms-1" onclick="removeFilter('tracking_number')" aria-label="Remove filter"></button>
+                        </span>
+                    @endisset
                     @isset($client_name)
                         <span class="badge bg-info filter-badge">
                             <span>اسم العميل:</span> {{ $client_name }}

@@ -728,6 +728,7 @@ class ReceiptSocialController extends Controller
         $zone_id = null;
         $has_followup = null;
         $shopify_order_num = null;
+        $tracking_number = null;
         $status_code = null;
         $quickly_return = null;
         $utm = null;
@@ -754,13 +755,18 @@ class ReceiptSocialController extends Controller
                     ->orWhere('phone_number', 'like', '%' . $general_search . '%')
                     ->orWhere('phone_number_2', 'like', '%' . $general_search . '%')
                     ->orWhere('client_name', 'like', '%' . $general_search . '%')
-                    ->orWhere('shopify_order_num', 'like', '%' . $general_search . '%');
+                    ->orWhere('shopify_order_num', 'like', '%' . $general_search . '%')
+                    ->orWhere('tracking_number', 'like', '%' . $general_search . '%');
             });
         }
 
         if ($request->shopify_order_num != null) {
             $shopify_order_num = $request->shopify_order_num;
             $receipts = $receipts->where('shopify_order_num', 'like', '%' . $shopify_order_num . '%');
+        }
+        if ($request->tracking_number != null) {
+            $tracking_number = $request->tracking_number;
+            $receipts = $receipts->where('tracking_number', 'like', '%' . $tracking_number . '%');
         }
         if ($request->selectedProducts != null) {
             $selectedProducts = $request->selectedProducts;
@@ -1088,6 +1094,7 @@ class ReceiptSocialController extends Controller
                 'selectedProducts',
                 'has_followup',
                 'shopify_order_num',
+                'tracking_number',
                 'status_code',
                 'quickly_return',
                 'utm',
@@ -1146,6 +1153,7 @@ class ReceiptSocialController extends Controller
             'selectedProducts',
             'has_followup',
             'shopify_order_num',
+            'tracking_number',
             'status_code',
             'quickly_return',
             'utm',

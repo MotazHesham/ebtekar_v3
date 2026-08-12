@@ -77,6 +77,14 @@
                                 placeholder="رقم أوردر شوبيفاي">
                         </div>
                         <div class="filter-item">
+                            <label>رقم التتبع</label>
+                            <input type="text"
+                                class="form-control @isset($tracking_number) isset @endisset" id="tracking_number"
+                                name="tracking_number"
+                                @isset($tracking_number) value="{{ $tracking_number }}" @endisset
+                                placeholder="رقم التتبع">
+                        </div>
+                        <div class="filter-item">
                             <label>{{ __('cruds.receiptSocial.fields.client_name') }}</label>
                             <input type="text"
                                 class="form-control @isset($client_name) isset @endisset"
