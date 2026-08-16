@@ -613,7 +613,7 @@ class PlaylistController extends Controller
             $quickly = $request->quickly;
             $playlists = $playlists->where('quickly', $request->quickly);
         }
-        if ($request->is_seasoned != null) {
+        if ($request->filled('is_seasoned')) {
             $is_seasoned = $request->is_seasoned;
             $playlists = $playlists->where('is_seasoned', $request->is_seasoned);
         }

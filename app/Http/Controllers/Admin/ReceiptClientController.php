@@ -119,14 +119,14 @@ class ReceiptClientController extends Controller
 
             $receipt_product_pivot = ReceiptClientProductPivot::find($request->receipt_product_pivot_id);
             $receipt = ReceiptClient::find($receipt_product_pivot->receipt_client_id);
-            
-            $product = ReceiptClientProduct::findOrFail($request->product_id); 
 
-            $receipt_product_pivot->receipt_client_product_id = $request->product_id;
-            $receipt_product_pivot->description = $product->name;
-            $receipt_product_pivot->price = $product->price;
+            $productData = $this->resolveReceiptClientProductData($request);
+
+            $receipt_product_pivot->receipt_client_product_id = $productData['product_id'];
+            $receipt_product_pivot->description = $productData['description'];
+            $receipt_product_pivot->price = $productData['price'];
             $receipt_product_pivot->quantity = $request->quantity;
-            $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
+            $receipt_product_pivot->total_cost = ($request->quantity * $productData['price']);
             $receipt_product_pivot->save();
 
             // calculate the costing of products in receipt
@@ -155,17 +155,17 @@ class ReceiptClientController extends Controller
             $order_num = $receipt->order_num;
             return view('admin.receiptClients.partials.add_product',compact('products','receipt_id','order_num'));
         }else{
-            $receipt = ReceiptClient::find($request->receipt_id);  
+            $receipt = ReceiptClient::find($request->receipt_id);
 
-            $product = ReceiptClientProduct::findOrFail($request->product_id);
+            $productData = $this->resolveReceiptClientProductData($request);
 
             $receipt_product_pivot = new ReceiptClientProductPivot(); 
             $receipt_product_pivot->receipt_client_id = $request->receipt_id;
-            $receipt_product_pivot->receipt_client_product_id = $request->product_id; 
-            $receipt_product_pivot->description = $product->name;
-            $receipt_product_pivot->price = $product->price;
+            $receipt_product_pivot->receipt_client_product_id = $productData['product_id']; 
+            $receipt_product_pivot->description = $productData['description'];
+            $receipt_product_pivot->price = $productData['price'];
             $receipt_product_pivot->quantity = $request->quantity; 
-            $receipt_product_pivot->total_cost = ($request->quantity * $product->price);
+            $receipt_product_pivot->total_cost = ($request->quantity * $productData['price']);
             $receipt_product_pivot->save();
             
             $receipt_products = ReceiptClientProductPivot::where('receipt_client_id', $request->receipt_id)->get();
@@ -425,5 +425,27 @@ class ReceiptClientController extends Controller
         alert(__('flash.restored'),'','success');
 
         return redirect()->route('admin.receipt-clients.index');
-    } 
+    }
+
+    protected function resolveReceiptClientProductData(Request $request): array
+    {
+        $description = trim((string) $request->description);
+        $price = (float) $request->price;
+
+        if ($request->input('add_type') === 'custom') {
+            return [
+                'product_id' => null,
+                'description' => $description,
+                'price' => $price,
+            ];
+        }
+
+        $product = ReceiptClientProduct::findOrFail($request->product_id);
+
+        return [
+            'product_id' => $product->id,
+            'description' => $description !== '' ? $description : $product->name,
+            'price' => $request->filled('price') ? $price : (float) $product->price,
+        ];
+    }
 }

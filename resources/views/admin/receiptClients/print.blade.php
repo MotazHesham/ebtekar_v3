@@ -143,7 +143,7 @@
                     <tbody class="strong">
                         @foreach ($receipt->receiptsReceiptClientProducts as $key => $product) 
                             <tr class="">
-                                <td>{{ $product->description }}</td>
+                                <td>{!! nl2br(e($product->description)) !!}</td>
                                 <td class="gry-color">{{ $product->quantity }}</td>
                                 <td class="gry-color currency">{{ dashboard_currency($product->price) }}</td>
                                 <td class="text-right currency">{{ dashboard_currency($product->total_cost) }} </td>
