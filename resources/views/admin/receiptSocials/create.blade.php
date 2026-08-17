@@ -20,14 +20,18 @@
                                 <div class="form-group">
                                     <label class="required" for="ad_id">Ad</label>
                                     <select class="form-control select2 {{ $errors->has('ad_id') ? 'is-invalid' : '' }}"
-                                        name="ad_id" id="ad_id">
+                                        name="ad_id" id="ad_id" required>
                                         <option value="">{{ __('global.pleaseSelect') }}</option>
                                         @foreach ($adAccountDetails as $entry)
-                                            <option value="{{ $entry->id }}" {{ old('ad_id') == $entry->id || $loop->first ? 'selected' : '' }}>
-                                                {{ $entry->name }} - 
+                                            <option value="{{ $entry->id }}"
+                                                {{ old('ad_id') == $entry->id ? 'selected' : '' }}>
+                                                {{ $entry->name }} -
                                                 @foreach ($entry->getAllParents() as $parent)
-                                                ({{ $parent->name }} {{ $parent->type}}) @if (!$loop->last) - @endif
-                                                @endforeach 
+                                                    ({{ $parent->name }} {{ $parent->type }})
+                                                    @if (!$loop->last)
+                                                        -
+                                                    @endif
+                                                @endforeach
                                             </option>
                                         @endforeach
                                     </select>
@@ -209,7 +213,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="deliver_date">{{ __('cruds.receiptSocial.fields.deliver_date') }}</label>
-                                    <input class="form-control date {{ $errors->has('deliver_date') ? 'is-invalid' : '' }}"
+                                    <input
+                                        class="form-control date {{ $errors->has('deliver_date') ? 'is-invalid' : '' }}"
                                         type="text" name="deliver_date" id="deliver_date"
                                         value="{{ old('deliver_date') }}">
                                     @if ($errors->has('deliver_date'))
@@ -280,7 +285,9 @@
                                         name="hold_in_playlist_status" id="hold_in_playlist_status">
                                         <option value="">{{ __('global.pleaseSelect') }}</option>
                                         @foreach (App\Models\ReceiptSocial::HOLD_IN_PLAYLIST_STATUS_SELECT as $key => $label)
-                                            <option value="{{ $key }}" {{ old('hold_in_playlist_status') == $key ? 'selected' : '' }}>{{ __('global.playlist_status.status.' . $key) }}</option>
+                                            <option value="{{ $key }}"
+                                                {{ old('hold_in_playlist_status') == $key ? 'selected' : '' }}>
+                                                {{ __('global.playlist_status.status.' . $key) }}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('hold_in_playlist_status'))
@@ -295,7 +302,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="hold_reason">{{ __('cruds.receiptSocial.fields.hold_reason') }}</label>
-                                    <textarea class="form-control {{ $errors->has('hold_reason') ? 'is-invalid' : '' }}" name="hold_reason" id="hold_reason" rows="3">{{ old('hold_reason') }}</textarea>
+                                    <textarea class="form-control {{ $errors->has('hold_reason') ? 'is-invalid' : '' }}" name="hold_reason"
+                                        id="hold_reason" rows="3">{{ old('hold_reason') }}</textarea>
                                 </div>
                                 @if ($errors->has('hold_reason'))
                                     <div class="invalid-feedback">
