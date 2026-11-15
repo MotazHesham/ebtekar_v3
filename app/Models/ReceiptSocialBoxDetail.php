@@ -21,6 +21,8 @@ class ReceiptSocialBoxDetail extends Model
         'receipt_social_product_pivot_id',
         'receipt_social_product_id',
         'quantity',
+        'stock_applied_qty',
+        'stock_baseline_qty',
         'price',
         'total_cost',
         'created_at',

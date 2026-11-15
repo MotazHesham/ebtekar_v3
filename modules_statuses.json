@@ -7,5 +7,6 @@
     "Returns": true,
     "Timeline": true,
     "Notifications": true,
-    "Reports": true
+    "Reports": true,
+    "Inventory": true
 }

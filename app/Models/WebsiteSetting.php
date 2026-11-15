@@ -79,6 +79,7 @@ class WebsiteSetting extends Model implements HasMedia
         'shopify_api_key',
         'shopify_access_token',
         'shopify_domain',
+        'shopify_location_id',
         'shopify_api_secret',
         'shopify_webhook_sign',
         'shopify_integration_status',

@@ -1,0 +1,10 @@
+{
+    "name": "Inventory",
+    "alias": "inventory",
+    "description": "Shared warehouse ledger and Shopify on-hand sync",
+    "priority": 6,
+    "providers": [
+        "Modules\\Inventory\\Providers\\InventoryServiceProvider"
+    ],
+    "files": []
+}

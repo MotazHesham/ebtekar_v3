@@ -14,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Modules\Inventory\Services\InventoryLedger;
 
 class ProcessShopifyOrderJob implements ShouldQueue
 {
@@ -149,14 +150,31 @@ class ProcessShopifyOrderJob implements ShouldQueue
                         $receiptSocialProductPivot->description = $propertiesString;
                         $receiptSocialProductPivot->save();
                     }
+
+                    app(InventoryLedger::class)->syncPivot($receiptSocialProductPivot->fresh(['boxDetails', 'receipt']), [
+                        'allow_negative' => true,
+                        'allow_unmapped' => true,
+                        'quantity' => (int) $product['current_quantity'],
+                        'shopify_variant_id' => (string) $product['variant_id'],
+                        'website_setting_id' => $this->siteSettings->id,
+                    ]);
                 }
             }
 
             // Delete Products that are not in the request
-            $receiptSocialProducts = ReceiptSocialProductPivot::where('receipt_social_id', $receiptSocial->id)
-                ->whereNotIn('shopify_id', $updatedOrCreatedProducts)->get();
+            $removedProducts = ReceiptSocialProductPivot::where('receipt_social_id', $receiptSocial->id)
+                ->whereNotNull('shopify_id');
+            if ($updatedOrCreatedProducts !== []) {
+                $removedProducts->whereNotIn('shopify_id', $updatedOrCreatedProducts);
+            }
+            $receiptSocialProducts = $removedProducts->get();
 
             foreach ($receiptSocialProducts as $receiptSocialProduct) {
+                app(InventoryLedger::class)->releasePivot($receiptSocialProduct, [
+                    'allow_negative' => true,
+                    'allow_unmapped' => true,
+                    'website_setting_id' => $this->siteSettings->id,
+                ]);
                 $receiptSocialProduct->delete();
             }
 

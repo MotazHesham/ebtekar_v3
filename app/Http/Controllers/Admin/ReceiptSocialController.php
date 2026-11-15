@@ -32,6 +32,8 @@ use App\Models\User;
 use App\Models\WebsiteSetting;
 use App\Models\Zone;
 use Carbon\Carbon;
+use Modules\Inventory\Exceptions\InventoryException;
+use Modules\Inventory\Services\InventoryLedger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -198,7 +200,31 @@ class ReceiptSocialController extends Controller
             $receipt->add_income();
         }
 
-        $receipt->save();
+        try {
+            DB::transaction(function () use ($receipt, $request, $type) {
+                $receipt->save();
+
+                if ($type === 'returned') {
+                    $ledger = app(InventoryLedger::class);
+                    if ((int) $request->status === 1) {
+                        $ledger->reverseReceipt($receipt);
+                    } else {
+                        $ledger->reapplyReceipt($receipt);
+                    }
+                }
+            });
+        } catch (InventoryException $exception) {
+            if ($request->ajax()) {
+                return [
+                    'status' => '0',
+                    'message' => $exception->getMessage(),
+                ];
+            }
+
+            alert($exception->getMessage(), '', 'error');
+
+            return redirect()->back();
+        }
 
         if (in_array($request->type, ['done', 'returned', 'confirm'])) {
             $adHistory = AdsAccountHistory::find($receipt->ad_history_id);
@@ -250,13 +276,35 @@ class ReceiptSocialController extends Controller
         $new_receipt->website_setting_id = $receipt_social->website_setting_id;
         $new_receipt->save();
 
-        $receipt_products = ReceiptSocialProductPivot::where('receipt_social_id', $receipt_social->id)->get();
+        try {
+            DB::transaction(function () use ($receipt_social, $new_receipt) {
+                $receipt_products = ReceiptSocialProductPivot::with('boxDetails')->where('receipt_social_id', $receipt_social->id)->get();
+                $ledger = app(InventoryLedger::class);
 
-        foreach ($receipt_products as $row) {
-            $new_receipt_product = $row->replicate();
-            $new_receipt_product->receipt_social_id = $new_receipt->id;
-            $new_receipt_product->save();
+                foreach ($receipt_products as $row) {
+                    $new_receipt_product = $row->replicate();
+                    $new_receipt_product->receipt_social_id = $new_receipt->id;
+                    $new_receipt_product->stock_applied_qty = 0;
+                    $new_receipt_product->stock_baseline_qty = 0;
+                    $new_receipt_product->save();
+
+                    foreach ($row->boxDetails as $detail) {
+                        $copy = $detail->replicate();
+                        $copy->receipt_social_product_pivot_id = $new_receipt_product->id;
+                        $copy->stock_applied_qty = 0;
+                        $copy->stock_baseline_qty = 0;
+                        $copy->save();
+                    }
+
+                    $ledger->syncPivot($new_receipt_product->fresh(['boxDetails', 'receipt']));
+                }
+            });
+        } catch (InventoryException $exception) {
+            $new_receipt->forceDelete();
+            alert($exception->getMessage(), '', 'error');
+            return redirect()->back();
         }
+
         alert('Receipt has been inserted successfully', '', 'success');
         return redirect()->back();
     }
@@ -283,7 +331,16 @@ class ReceiptSocialController extends Controller
             }
         }
 
-        $receipt_social_product_pivot->delete();
+        try {
+            DB::transaction(function () use ($receipt_social_product_pivot) {
+                app(InventoryLedger::class)->releasePivot($receipt_social_product_pivot);
+                $receipt_social_product_pivot->boxDetails()->delete();
+                $receipt_social_product_pivot->delete();
+            });
+        } catch (InventoryException $exception) {
+            alert($exception->getMessage(), '', 'error');
+            return 1;
+        }
 
         $receipt_social_products = ReceiptSocialProductPivot::where('receipt_social_id', $receipt->id)->get();
         $sum = 0;
@@ -326,6 +383,8 @@ class ReceiptSocialController extends Controller
                 }
             }
 
+            DB::beginTransaction();
+            try {
             $type = $request->type ?? $receipt_product_pivot->type ?? 'single';
             $receipt_product_pivot->type = $type;
 
@@ -348,8 +407,7 @@ class ReceiptSocialController extends Controller
                 $receipt_product_pivot->commission = ($request->quantity *  $product->commission);
                 $product_for_season = $product;
 
-                // Delete box details if switching from box to single
-                $receipt_product_pivot->boxDetails()->delete();
+                app(InventoryLedger::class)->clearBoxDetails($receipt_product_pivot);
             } else {
                 // Box type - ONE pivot record, all products go to ReceiptSocialBoxDetail
                 // Box pivot does NOT reference a single product - it's a container
@@ -453,8 +511,9 @@ class ReceiptSocialController extends Controller
 
             // Update box details if type is box - ALL products go to ReceiptSocialBoxDetail
             if ($type == 'box') {
-                // Delete existing box details
-                $receipt_product_pivot->boxDetails()->delete();
+                $baselines = $receipt_product_pivot->boxDetails()
+                    ->pluck('stock_baseline_qty', 'receipt_social_product_id');
+                app(InventoryLedger::class)->clearBoxDetails($receipt_product_pivot);
 
                 // Save new box details - each selected product goes here
                 if ($request->has('box_products') && is_array($request->box_products)) {
@@ -471,6 +530,8 @@ class ReceiptSocialController extends Controller
                             $boxDetail->receipt_social_product_pivot_id = $receipt_product_pivot->id;
                             $boxDetail->receipt_social_product_id = $boxProduct['product_id'];
                             $boxDetail->quantity = $boxQuantity;
+                            $boxDetail->stock_baseline_qty = (int) ($baselines[$boxProduct['product_id']] ?? 0);
+                            $boxDetail->stock_applied_qty = 0;
                             $boxDetail->price = $boxPrice;
                             $boxDetail->total_cost = $boxTotal;
                             $boxDetail->save();
@@ -499,6 +560,18 @@ class ReceiptSocialController extends Controller
             }
             $receipt->save();
 
+            app(InventoryLedger::class)->syncPivot($receipt_product_pivot->fresh(['boxDetails', 'receipt']));
+
+            DB::commit();
+            } catch (InventoryException $exception) {
+                DB::rollBack();
+                alert($exception->getMessage(), '', 'error');
+                return redirect()->back()->withInput();
+            } catch (\Throwable $exception) {
+                DB::rollBack();
+                throw $exception;
+            }
+
             // store the receipt social id in session so when redirect to the table open the popup to view products after edit
             session()->put('update_receipt_socail_id', $receipt->id);
 
@@ -525,6 +598,8 @@ class ReceiptSocialController extends Controller
                 }
             }
 
+            DB::beginTransaction();
+            try {
             $box_title = '';
 
             $type = $request->type ?? 'single';
@@ -657,6 +732,16 @@ class ReceiptSocialController extends Controller
                 }
             }
             $receipt->save();
+            app(InventoryLedger::class)->syncPivot($receipt_product_pivot->fresh(['boxDetails', 'receipt']));
+            DB::commit();
+            } catch (InventoryException $exception) {
+                DB::rollBack();
+                alert($exception->getMessage(), '', 'error');
+                return redirect()->back()->withInput();
+            } catch (\Throwable $exception) {
+                DB::rollBack();
+                throw $exception;
+            }
             if ($request->has('add_more')) {
                 session()->put('store_receipt_socail_id', $receipt->id);
                 session()->put('update_receipt_socail_id', null);
@@ -1358,10 +1443,22 @@ class ReceiptSocialController extends Controller
                 return 1;
             }
         }
-        if ($receiptSocial->deleted_at != null) {
-            $receiptSocial->forceDelete();
-        } else {
-            $receiptSocial->delete();
+        try {
+            DB::transaction(function () use ($receiptSocial) {
+                app(InventoryLedger::class)->releaseReceipt($receiptSocial, [
+                    'allow_negative' => true,
+                    'allow_unmapped' => true,
+                ]);
+
+                if ($receiptSocial->deleted_at != null) {
+                    $receiptSocial->forceDelete();
+                } else {
+                    $receiptSocial->delete();
+                }
+            });
+        } catch (InventoryException $exception) {
+            alert($exception->getMessage(), '', 'error');
+            return 1;
         }
 
         alert(__('flash.deleted'), '', 'success');
@@ -1374,7 +1471,19 @@ class ReceiptSocialController extends Controller
         abort_if(Gate::denies('receipt_social_restore'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $receiptSocial = ReceiptSocial::withTrashed()->find($id);
-        $receiptSocial->restore();
+
+        try {
+            DB::transaction(function () use ($receiptSocial) {
+                $receiptSocial->restore();
+                $receiptSocial->refresh();
+                if (! $receiptSocial->inventory_reversed) {
+                    app(InventoryLedger::class)->reapplyReceipt($receiptSocial);
+                }
+            });
+        } catch (InventoryException $exception) {
+            alert($exception->getMessage(), '', 'error');
+            return redirect()->back();
+        }
 
         alert(__('flash.restored'), '', 'success');
 

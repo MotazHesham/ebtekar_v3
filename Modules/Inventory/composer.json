@@ -1,0 +1,15 @@
+{
+    "name": "nwidart/inventory",
+    "description": "Shared warehouse ledger and Shopify inventory sync",
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Inventory\\": ""
+        }
+    }
+}

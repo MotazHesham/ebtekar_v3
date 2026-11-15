@@ -107,6 +107,7 @@ class ReceiptSocial extends Model
         'quickly_return',
         'confirm',
         'returned',
+        'inventory_reversed',
         'supplied',
         'active_editing',
         'returned_to_design',
