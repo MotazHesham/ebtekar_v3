@@ -27,6 +27,7 @@ use App\Models\ReceiptSocialProduct;
 use App\Models\ReceiptSocialProductPivot;
 use App\Models\ReceiptSocialBoxDetail;
 use App\Models\Social;
+use App\Support\OneTimePrint;
 use App\Models\Season;
 use App\Models\User;
 use App\Models\WebsiteSetting;
@@ -134,14 +135,18 @@ class ReceiptSocialController extends Controller
         return view('partials.receive_money', compact('receipt'));
     }
 
-    public function print($id)
+    public function print(Request $request, $id)
     {
+        if ($blocked = OneTimePrint::blocked($request, (int) $id, ReceiptSocial::class)) {
+            return $blocked;
+        }
+
         $receipts = ReceiptSocial::with('receiptsReceiptSocialProducts', 'staff', 'designer', 'manufacturer', 'preparer', 'shipmenter')->whereIn('id', [$id])->get();
         foreach ($receipts as $receipt) {
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptSocials.print', compact('receipts'));
+        return OneTimePrint::response('admin.receiptSocials.print', compact('receipts'), $request);
     }
 
     public function update_statuses(Request $request)

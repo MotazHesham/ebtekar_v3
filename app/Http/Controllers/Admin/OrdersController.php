@@ -22,6 +22,7 @@ use App\Models\Seller;
 use App\Models\User;
 use App\Models\WebsiteSetting;
 use App\Services\MarketerAttributionService;
+use App\Support\OneTimePrint;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -178,13 +179,17 @@ class OrdersController extends Controller
         }
     }
 
-    public function print($id){
+    public function print(Request $request, $id){
+        if ($blocked = OneTimePrint::blocked($request, (int) $id, Order::class)) {
+            return $blocked;
+        }
+
         $orders = Order::with('orderDetails.product','user')->whereIn('id',[$id])->get(); 
         foreach($orders as $order){
             $order->printing_times += 1;
             $order->save();
         }
-        return view('admin.orders.print',compact('orders'));
+        return OneTimePrint::response('admin.orders.print', compact('orders'), $request);
     }
 
     public function update_delivery_man(Request $request){ 

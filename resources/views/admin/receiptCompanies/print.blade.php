@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>فاتورة
         أبتكار</title>
+    @include('admin.playlists.one_time_print_guard')
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<style media="all">
 		@font-face {
