@@ -211,9 +211,13 @@ class InventoryLedger
             throw new InventoryException('المنتج غير مربوط بكارت مخزون: '.$this->productName($source, $context));
         }
 
+        if ($this->isOpenStock($item) && empty($context['note'])) {
+            $context['note'] = 'منتج غير مربوط، اتخصم من Open stock';
+        }
+
         $balance = $this->lockedBalance($item->id);
         $newOnHand = (int) $balance->on_hand - $deltaLedger;
-        if ($newOnHand < 0 && empty($context['allow_negative'])) {
+        if ($newOnHand < 0 && empty($context['allow_negative']) && ! $this->isOpenStock($item)) {
             throw new InventoryException(
                 'الرصيد غير كافٍ للصنف '.$item->name.'. المتاح '.$balance->on_hand.' والمطلوب خصمه '.max($deltaLedger, 0).'.'
             );
@@ -270,7 +274,35 @@ class InventoryLedger
         $productId = $context['receipt_social_product_id'] ?? ($source->receipt_social_product_id ?? null);
 
         return $this->itemFromSocialProduct($productId)
-            ?? $this->itemFromMovements($sourceType, (int) $source->getKey());
+            ?? $this->itemFromMovements($sourceType, (int) $source->getKey())
+            ?? $this->openStockItem();
+    }
+
+    private function openStockItem(): InventoryItem
+    {
+        $sku = (string) config('inventory.open_stock_sku', 'open-stock');
+        $item = InventoryItem::withTrashed()->where('sku', $sku)->first();
+
+        if ($item) {
+            if ($item->trashed()) {
+                $item->restore();
+            }
+
+            return $item;
+        }
+
+        $item = InventoryItem::create([
+            'name' => 'Open stock',
+            'sku' => $sku,
+        ]);
+        $this->lockedBalance($item->id);
+
+        return $item;
+    }
+
+    private function isOpenStock(InventoryItem $item): bool
+    {
+        return $item->sku === (string) config('inventory.open_stock_sku', 'open-stock');
     }
 
     private function itemFromSocialProduct($productId): ?InventoryItem

@@ -3,6 +3,7 @@
     <div class="card">
         <div class="card-header">ربط منتجات فواتير السوشيال</div>
         <div class="card-body">
+            <p>المنتج من غير كارت يتخصم من كارت Open stock، والفواتير اليدوية ما بتقفش. اربط المنتج بكارت خاص لو عايز رصيده يتفصل.</p>
             <form method="GET" class="form-row mb-3">
                 <div class="col-md-4">
                     <input class="form-control" name="search" value="{{ request('search') }}" placeholder="اسم المنتج">

@@ -78,9 +78,14 @@ class ItemWebController extends Controller
             'sku' => ['nullable', 'string', 'max:255', 'unique:inv_items,sku,'.$item->id],
         ]);
 
+        $sku = ($data['sku'] ?? '') !== '' ? $data['sku'] : null;
+        if ($item->sku === (string) config('inventory.open_stock_sku', 'open-stock')) {
+            $sku = $item->sku;
+        }
+
         $item->update([
             'name' => $data['name'],
-            'sku' => ($data['sku'] ?? '') !== '' ? $data['sku'] : null,
+            'sku' => $sku,
         ]);
 
         toast('تم تحديث كارت الصنف', 'success');
@@ -126,6 +131,12 @@ class ItemWebController extends Controller
     public function destroy(InventoryItem $item)
     {
         abort_if(Gate::denies('inventory_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if ($item->sku === (string) config('inventory.open_stock_sku', 'open-stock')) {
+            alert('كارت Open stock هو الاحتياطي للمنتجات غير المربوطة، ومش بيتشال.', '', 'error');
+
+            return redirect()->back();
+        }
 
         $onHand = (int) ($item->balance->on_hand ?? 0);
         if ($onHand !== 0) {

@@ -6,6 +6,9 @@
             <span>الرصيد: {{ $item->balance->on_hand ?? 0 }}</span>
         </div>
         <div class="card-body">
+            @if ($item->sku === config('inventory.open_stock_sku', 'open-stock'))
+                <div class="alert alert-info">أي منتج سوشيال مش مربوط بكارت بيتخصم من هنا، من غير حد للرصيد. أوردر شوبيفاي غير المربوط ما بيتخصمش من الكارت ده.</div>
+            @endif
             @can('inventory_edit')
                 <form method="POST" action="{{ route('admin.inventory.items.update', $item) }}" class="mb-4">
                     @csrf
