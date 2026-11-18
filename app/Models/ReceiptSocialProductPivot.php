@@ -32,6 +32,8 @@ class ReceiptSocialProductPivot extends Model
         'title',
         'description',
         'quantity',
+        'stock_applied_qty',
+        'stock_baseline_qty',
         'price',
         'total_cost',
         'commission',

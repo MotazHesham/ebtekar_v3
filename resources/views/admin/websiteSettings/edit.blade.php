@@ -169,6 +169,12 @@
                             value="{{ old('shopify_domain', $websiteSetting->shopify_domain) }}">
                     </div>
                     <div class="form-group col-md-4">
+                        <label for="shopify_location_id">Shopify Location ID</label>
+                        <input class="form-control" type="text" name="shopify_location_id" id="shopify_location_id"
+                            value="{{ old('shopify_location_id', $websiteSetting->shopify_location_id) }}">
+                        <span class="help-block">الموقع اللي يتحدث رصيده من المخزن. يمكن اختياره أيضاً من شاشة ربط شوبيفاي.</span>
+                    </div>
+                    <div class="form-group col-md-4">
                         <label for="shopify_integration_status">Shopify Integration Status</label>
                         <select name="shopify_integration_status" id="shopify_integration_status"
                             class="form-control {{ $errors->has('shopify_integration_status') ? 'is-invalid' : '' }}">

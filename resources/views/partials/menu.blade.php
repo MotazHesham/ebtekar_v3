@@ -78,6 +78,48 @@
                     </a>
                 </li>
             @endcan
+            @can('inventory_access')
+                <li class="c-sidebar-nav-dropdown {{ request()->is('admin/inventory*') ? 'c-show' : '' }}">
+                    <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                        <i class="fa-fw fas fa-warehouse c-sidebar-nav-icon"></i>
+                        المخزن
+                    </a>
+                    <ul class="c-sidebar-nav-dropdown-items">
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route('admin.inventory.items.index') }}" class="c-sidebar-nav-link {{ request()->is('admin/inventory/items*') ? 'c-active' : '' }}">
+                                <i class="fa-fw fas fa-boxes c-sidebar-nav-icon"></i>
+                                كروت الأصناف
+                            </a>
+                        </li>
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route('admin.inventory.social-links.index') }}" class="c-sidebar-nav-link {{ request()->is('admin/inventory/social-links*') ? 'c-active' : '' }}">
+                                <i class="fa-fw fas fa-link c-sidebar-nav-icon"></i>
+                                منتجات السوشيال
+                            </a>
+                        </li>
+                        @can('inventory_shopify')
+                            <li class="c-sidebar-nav-item">
+                                <a href="{{ route('admin.inventory.shopify.index') }}" class="c-sidebar-nav-link {{ request()->is('admin/inventory/shopify*') ? 'c-active' : '' }}">
+                                    <i class="fa-fw fab fa-shopify c-sidebar-nav-icon"></i>
+                                    شوبيفاي
+                                </a>
+                            </li>
+                            <li class="c-sidebar-nav-item">
+                                <a href="{{ route('admin.inventory.sync-failures.index') }}" class="c-sidebar-nav-link {{ request()->is('admin/inventory/sync-failures*') ? 'c-active' : '' }}">
+                                    <i class="fa-fw fas fa-exclamation-triangle c-sidebar-nav-icon"></i>
+                                    فشل المزامنة
+                                </a>
+                            </li>
+                        @endcan
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route('admin.inventory.unmapped.index') }}" class="c-sidebar-nav-link {{ request()->is('admin/inventory/unmapped*') ? 'c-active' : '' }}">
+                                <i class="fa-fw fas fa-unlink c-sidebar-nav-icon"></i>
+                                غير مربوط
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
             <li class="nav-title">الفواتير</li>
 
             @can('receipts_managment_access')

@@ -2309,6 +2309,36 @@ class PermissionsTableSeeder extends Seeder
                 'type' => 'calendar_date',
                 'parent' => 0,
             ],
+            [
+                'id'    => $i++,
+                'title' => 'inventory_access',
+                'type' => 'inventory',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'inventory_create',
+                'type' => 'inventory',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'inventory_edit',
+                'type' => 'inventory',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'inventory_adjust',
+                'type' => 'inventory',
+                'parent' => 0,
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'inventory_shopify',
+                'type' => 'inventory',
+                'parent' => 0,
+            ],
         ];
 
         foreach ($permissions as $permission) {

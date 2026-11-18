@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>فاتورة سوشيال</title>
+    @include('admin.playlists.one_time_print_guard')
 
     <link rel="stylesheet" href="{{ asset('dashboard_offline/css/bootstrap.min.css') }}">
     <script src="{{ asset('dashboard_offline/js/jquery.min.js') }}"></script>

@@ -23,6 +23,7 @@ use App\Models\Zone;
 use App\Models\PlaylistHistory;
 use App\Models\WorkflowOperation;
 use App\Support\Collection;
+use App\Support\OneTimePrint;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
@@ -532,7 +533,9 @@ class PlaylistController extends Controller
                     'printable_model' => $printable_model
                 ]);
             }
-            return redirect()->route($print_route, $id);
+            $token = OneTimePrint::issue((int) Auth::id(), (int) $raw->id, $printable_model);
+
+            return redirect()->route($print_route, ['id' => $id, 'once' => $token]);
         }
     }
     public function check_printable(Request $request)

@@ -243,6 +243,17 @@
             }); 
         }
 
+        window.addEventListener('pageshow', function (event) {
+            if (!event.persisted) {
+                return;
+            }
+            var iframe = document.getElementById('print-frame');
+            if (iframe) {
+                iframe.onload = null;
+                iframe.src = 'about:blank';
+            }
+        });
+
         function check_printable(button,id,model_type){  
 
             // Store the original button content
@@ -273,14 +284,26 @@
 
                     // Set an onload event to trigger printing when the iframe's content is loaded
                     iframe.onload = function() {
-                        iframe.contentWindow.focus();  // Ensure iframe is focused before printing
-                        iframe.contentWindow.print();  // Trigger print dialog for the iframe
+                        var doc = iframe.contentDocument;
+                        if (!doc || !doc.querySelector('meta[name="playlist-print"]')) {
+                            resetButton(button, originalButtonContent);
+                            return;
+                        }
 
-                        // getAirwayBillPdf(id, model_type);
-                        // Add an event listener for the print completion
-                        iframe.contentWindow.onafterprint = function() {
-                            resetButton(button, originalButtonContent); // Reset button after printing
-                        };
+                        var win = iframe.contentWindow;
+                        var finished = false;
+                        function finishPrint() {
+                            if (finished) {
+                                return;
+                            }
+                            finished = true;
+                            iframe.onload = null;
+                            iframe.src = 'about:blank';
+                            resetButton(button, originalButtonContent);
+                        }
+
+                        // The receipt page prints itself once. Do not call print() again here.
+                        win.addEventListener('afterprint', finishPrint);
                     };
                 }
             }).fail(function() {

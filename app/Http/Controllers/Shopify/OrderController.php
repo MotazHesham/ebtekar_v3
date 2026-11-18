@@ -7,7 +7,9 @@ use App\Jobs\ProcessShopifyOrderJob;
 use App\Models\ReceiptSocial;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Modules\Inventory\Services\InventoryLedger;
 
 class OrderController extends Controller
 {
@@ -82,7 +84,13 @@ class OrderController extends Controller
             $shopify_id = 'gid://shopify/Order/' . $request->id;
             $receiptSocial = ReceiptSocial::where('shopify_id', $shopify_id)->where('website_setting_id', $site_settings->id)->first();
             if ($receiptSocial) {
-                $receiptSocial->delete();
+                DB::transaction(function () use ($receiptSocial) {
+                    app(InventoryLedger::class)->releaseReceipt($receiptSocial, [
+                        'allow_negative' => true,
+                        'allow_unmapped' => true,
+                    ]);
+                    $receiptSocial->delete();
+                });
                 $logger->debug('shopify:', ['success' => 'Success Shopify WebHook Order Deleted ' . $shopify_id]);
             } else {
                 $logger->debug('shopify:', ['error' => 'Shopify WebHook Order Not Found']);

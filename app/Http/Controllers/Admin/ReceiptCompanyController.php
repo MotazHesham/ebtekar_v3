@@ -11,6 +11,7 @@ use App\Http\Requests\StoreReceiptCompanyRequest;
 use App\Http\Requests\UpdateReceiptCompanyRequest;
 use App\Models\Country; 
 use App\Models\ReceiptCompany;
+use App\Support\OneTimePrint;
 use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
@@ -34,13 +35,17 @@ class ReceiptCompanyController extends Controller
         return redirect()->route('admin.receipt-companies.index');
     } 
 
-    public function print($id){
+    public function print(Request $request, $id){
+        if ($blocked = OneTimePrint::blocked($request, (int) $id, ReceiptCompany::class)) {
+            return $blocked;
+        }
+
         $receipts = ReceiptCompany::with('staff','designer','manufacturer','preparer','shipmenter')->whereIn('id',[$id])->get();
         foreach($receipts as $receipt){
             $receipt->printing_times += 1;
             $receipt->save();
         }
-        return view('admin.receiptCompanies.print',compact('receipts'));
+        return OneTimePrint::response('admin.receiptCompanies.print', compact('receipts'), $request);
     }
 
     public function update_statuses(Request $request){ 

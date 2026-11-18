@@ -89,4 +89,9 @@ class ReceiptSocialProduct extends Model implements HasMedia
     {
         return $this->hasMany(ReceiptSocialProductPivot::class,'receipt_social_product_id');
     }
+
+    public function inventorySocialLink()
+    {
+        return $this->hasOne(\Modules\Inventory\Entities\InventorySocialLink::class, 'receipt_social_product_id');
+    }
 }
