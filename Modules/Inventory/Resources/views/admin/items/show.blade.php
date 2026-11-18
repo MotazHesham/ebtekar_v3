@@ -7,7 +7,7 @@
         </div>
         <div class="card-body">
             @if ($item->sku === config('inventory.open_stock_sku', 'open-stock'))
-                <div class="alert alert-info">أي منتج سوشيال مش مربوط بكارت بيتخصم من هنا، من غير حد للرصيد. أوردر شوبيفاي غير المربوط ما بيتخصمش من الكارت ده.</div>
+                <div class="alert alert-info">أي منتج من غير كارت حقيقي، بما فيه سطر شوبيفاي غير المربوط، بيتخصم من هنا ومن غير حد للرصيد. رسالة عدم الربط ما بتظهرش. الرفض بيحصل فقط لو المنتج مربوط بكارت آخر والرصيد أقل من الكمية.</div>
             @endif
             @can('inventory_edit')
                 <form method="POST" action="{{ route('admin.inventory.items.update', $item) }}" class="mb-4">

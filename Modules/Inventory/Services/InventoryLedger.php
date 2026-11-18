@@ -260,15 +260,17 @@ class InventoryLedger
             }
 
             if ($applied > 0) {
-                return $this->itemFromMovements($sourceType, (int) $source->getKey());
+                return $this->itemFromMovements($sourceType, (int) $source->getKey())
+                    ?? $this->openStockItem();
             }
 
-            return null;
+            return $this->openStockItem();
         }
 
         if ($sourceType === 'pivot' && ! empty($source->shopify_id)) {
             return $this->itemFromMovements($sourceType, (int) $source->getKey())
-                ?? $this->itemFromSocialProduct($source->receipt_social_product_id ?? null);
+                ?? $this->itemFromSocialProduct($source->receipt_social_product_id ?? null)
+                ?? $this->openStockItem();
         }
 
         $productId = $context['receipt_social_product_id'] ?? ($source->receipt_social_product_id ?? null);
